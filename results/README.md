@@ -7,3 +7,4 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 
 | run_id | mechanism | backbone | dataset | compute_steps | accuracy | seed | stage | author |
 |---|---|---|---|---|---|---|---|---|
+| [20260916-045350_baseline_last_number_in_question_gsm8k-aug-sample](20260916-045350_baseline_last_number_in_question_gsm8k-aug-sample/) | baseline_last_number_in_question | none | test (n=30) | 0 | 0.033 | None | pilot | Henning Lindig |

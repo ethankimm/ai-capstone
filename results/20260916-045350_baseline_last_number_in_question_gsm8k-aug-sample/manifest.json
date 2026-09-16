@@ -1,0 +1,32 @@
+{
+  "run_id": "20260916-045350_baseline_last_number_in_question_gsm8k-aug-sample",
+  "mechanism": "baseline_last_number_in_question",
+  "stage": "pilot",
+  "model": {
+    "backbone": "none",
+    "checkpoint": "none",
+    "n_params": null
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 30,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.03333333333333333,
+    "unparseable_rate": 0.0,
+    "sec_per_example": 1.29930655627201e-05,
+    "compute_steps": 0
+  },
+  "hyperparams": {},
+  "seed": null,
+  "hardware": "local-cpu",
+  "author": "Henning Lindig",
+  "notes": "Sanity-floor baseline over the bundled offline GSM8K-Aug sample.",
+  "timestamp_utc": "2026-09-16T04:53:50.965591+00:00",
+  "git": {
+    "commit": "254e4c2",
+    "dirty": false
+  }
+}
