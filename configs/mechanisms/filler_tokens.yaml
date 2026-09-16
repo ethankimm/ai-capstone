@@ -1,0 +1,23 @@
+mechanism: filler_tokens
+model: gpt2_edited
+dataset:
+  name: gsm8k-aug
+  variant: cot
+  train_split: train
+  eval_split: test
+  eval_n: 200
+  eval_seed: 0
+compute_steps: 32        # filler-token count -- sweep this (e.g. 0/8/16/32/64) and log
+                          # each value as its own run; 0 = "no_think" control
+filler_token: "."
+training:
+  epochs: 3
+  batch_size: 16
+  lr: 5e-5
+generation:
+  max_new_tokens: 32
+  do_sample: false
+notes: >
+  Pfau, Merrill & Bowman 2024 (arXiv:2404.15758). compute_steps=0 is the no-filler
+  control -- always log it alongside any nonzero sweep point so the effect of filler
+  length is visible in results/README.md, not just the raw accuracy at one setting.

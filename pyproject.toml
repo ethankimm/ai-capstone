@@ -1,0 +1,36 @@
+[project]
+name = "ai-capstone"
+version = "0.1.0"
+description = "Do Different Latent Scratchpads Think Alike? -- comparing filler tokens, CODI, recurrent depth, and explicit CoT as latent reasoning mechanisms on GSM8K-Aug"
+requires-python = ">=3.10"
+dependencies = [
+    "datasets>=2.20",
+    "pyyaml>=6.0",
+    "tqdm>=4.66",
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+# Needed for anything that loads/trains an actual model (gpt2-edited + any mechanism).
+# Not installed by default locally -- pull in with `uv sync --extra train` on RunPod or
+# wherever you're actually running a model.
+train = [
+    "torch>=2.3",
+    "transformers>=4.44",
+    "accelerate>=0.33",
+]
+dev = [
+    "pytest>=8.0",
+]
+
+# `latentreasoning` is installed as an editable package by `uv sync`, so `import latentreasoning` works
+# from scripts, notebooks, and any cwd (on a pod or locally) without sys.path hacks.
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["latentreasoning"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

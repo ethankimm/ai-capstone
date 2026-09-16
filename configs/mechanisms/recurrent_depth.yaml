@@ -1,0 +1,24 @@
+mechanism: recurrent_depth
+model: gpt2_edited
+dataset:
+  name: gsm8k-aug
+  variant: cot
+  train_split: train
+  eval_split: test
+  eval_n: 200
+  eval_seed: 0
+compute_steps: null        # TODO(owner): loop iterations r -- fill in once
+                            # latentreasoning/mechanisms/recurrent_depth.py is implemented.
+looped_block: null          # TODO(owner): which block(s) of gpt2-edited loop
+training:
+  epochs: null              # TODO(owner)
+  batch_size: null
+  lr: null
+notes: >
+  Geiping et al. arXiv:2502.05171 -- loop a recurrent block r times per token instead of
+  stacking r distinct layers. Reference implementation + pretrained model (huginn-0125,
+  3.5B -- too big to reuse directly): github.com/seal-rg/recurrent-pretraining,
+  huggingface.co/tomg-group-umd/huginn-0125. Before choosing how to decode intermediate
+  states, see "Looped Transformers under the Jacobian Lens" (reading list) -- loop
+  iterations largely overwrite rather than accumulate state. Stub config --
+  latentreasoning/mechanisms/recurrent_depth.py is unimplemented; fill in alongside it.

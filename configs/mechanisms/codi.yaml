@@ -1,0 +1,23 @@
+mechanism: codi
+model: gpt2_edited
+dataset:
+  name: gsm8k-aug
+  variant: cot
+  train_split: train
+  eval_split: test
+  eval_n: 200
+  eval_seed: 0
+compute_steps: null       # TODO(owner): number of continuous-thought tokens -- fill in
+                           # once latentreasoning/mechanisms/codi.py is implemented; keep it a
+                           # named, swept knob like filler_tokens.compute_steps so
+                           # cross-mechanism budget-matched comparisons are possible.
+training:
+  epochs: null             # TODO(owner)
+  batch_size: null
+  lr: null
+notes: >
+  Shao et al. arXiv:2502.21074 -- self-distillation between an explicit-CoT teacher pass
+  and continuous-thought student pass sharing one model, aligning hidden activations on
+  the final-answer token. Reference implementation: github.com/zhenyi4/codi (GPT-2 scale
+  is the paper's own setting). Stub config -- latentreasoning/mechanisms/codi.py is unimplemented;
+  fill in alongside it.

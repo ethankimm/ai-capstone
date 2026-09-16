@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Env / caches
+.venv/
+.env
+.pytest_cache/
+.ipynb_checkpoints/
+.ruff_cache/
+.cache/
+
+# Run artifacts: everything inside results/<run_id>/ is ignored EXCEPT the small record
+# files below. Checkpoints, raw generation dumps, etc. stay on the pod volume; reference
+# them by path in manifest.json.
+results/*/*
+!results/*/manifest.json
+!results/*/notes.md
+!results/*/predictions.jsonl
+!results/*/train_log.json
+
+# Model artifacts anywhere else
+checkpoints/
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.safetensors
+wandb/
+
+# OS
+.DS_Store

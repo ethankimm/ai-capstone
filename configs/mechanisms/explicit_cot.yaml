@@ -1,0 +1,20 @@
+mechanism: explicit_cot
+model: gpt2_edited
+dataset:
+  name: gsm8k-aug
+  variant: cot          # "cot" (calculator-annotated) or "nl" (natural-language rationale)
+  train_split: train
+  eval_split: test
+  eval_n: 200            # fixed eval subset size -- keep identical across mechanisms
+  eval_seed: 0           # fixed shuffle seed -- keep identical across mechanisms
+training:
+  epochs: 3
+  batch_size: 16
+  lr: 5e-5
+generation:
+  max_new_tokens: 256
+  do_sample: false
+notes: >
+  Baseline mechanism -- immediate-answer / explicit-CoT reference every other mechanism
+  is compared against. compute_steps is not fixed here (see latentreasoning/mechanisms/base.py);
+  report actual CoT token count post-hoc under metrics.extra.cot_tokens.

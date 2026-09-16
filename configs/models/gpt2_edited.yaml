@@ -1,0 +1,15 @@
+# Shared backbone config. "GPT-2 (edited)" = HF gpt2 (124M) as a starting point, with
+# per-mechanism architectural edits (special tokens, loop hooks, continuous-embedding
+# feedback, etc.) layered on by whichever mechanism needs them -- the edits themselves
+# live in code, not here; this file is just the shared starting point + bookkeeping so
+# every mechanism reports the same backbone identity in its run manifest.
+backbone: gpt2          # HF model id (124M). Swap to gpt2-medium if compute allows and
+                         # all four mechanisms re-run at the new scale together.
+tokenizer: gpt2
+context_length: 1024
+notes: >
+  If a mechanism adds special tokens (e.g. filler_tokens, or CODI's continuous-thought
+  markers), resize embeddings via tokenizer.add_special_tokens + model.resize_token_embeddings
+  and record the new vocab size in that run's manifest.hyperparams -- don't silently grow
+  the vocab without logging it, since it changes n_params slightly and breaks
+  apples-to-apples param-count comparisons otherwise.
