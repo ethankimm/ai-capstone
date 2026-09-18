@@ -162,7 +162,7 @@ def main() -> None:
         },
         seed=seed,
         hardware=args.hardware,
-        notes=f"explicit_cot pilot fine-tune on {len(train_examples)} train examples",
+        notes=f"explicit_cot {args.stage} fine-tune on {len(train_examples)} train examples",
     )
     record.save(predictions=result.records)
     (out_dir / "train_log.json").write_text(json.dumps(trainer.state.log_history, indent=2))
