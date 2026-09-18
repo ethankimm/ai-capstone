@@ -96,8 +96,12 @@ steps:
   is known to need billions of tokens of uptraining (Bae et al. 2024, Relaxed Recursive
   Transformers), so expect the same curve. Do it later only for a quotable accuracy
   against the 13.0% full-scale direct-answer control.
-- (e) **Step-supervised loop** (planned, not Geiping et al. -- a new mechanism, to be
-  named as such): set r = number of `<<a+b=c>>` steps in the example
+- (e) **Step-supervised loop** (implemented: `--step-supervised`; pilot
+  `20260918-194143_..._stepsup-split4-4-4-pilot` -- the loop is alive (state change 43% /
+  20% / 7% over iterations 2-4 vs 7% / 0.3% / 0.01% answer-only) and the step read-out beats
+  trivial baselines 3x (10.6% vs 3.5%), but at pilot scale the steps are ~90% wrong and
+  the answer is unchanged; needs the full 384k set, as explicit CoT did. Not Geiping et
+  al. -- a new mechanism, to be named as such): set r = number of `<<a+b=c>>` steps in the example
   (`Example.intermediate_values`); at iteration i the coda + LM head read-out at the
   last prompt position must produce intermediate value i, and the final answer at
   iteration r. The vertical analogue of CODI (which supervises its latent tokens by
