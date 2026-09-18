@@ -1,0 +1,25 @@
+diff --git a/train.py b/train.py
+index 7dd4e06..456f281 100644
+--- a/train.py
++++ b/train.py
+@@ -366,9 +366,9 @@ def train():
+         logging.warning("Downloading Data")
+         if "icot" in data_args.data_name:
+             if 'full' in data_args.data_name:
+-                dataset = load_dataset("zen-E/GSM8k-Aug-NL")["train"]
++                dataset = load_dataset("zen-E/GSM8k-Aug-NL", streaming=True)["train"]  # streaming=True: datasets' non-streaming pyarrow JSON reader false-positives ArrowInvalid on this file (latentreasoning/data/gsm8k_aug.py)
+             else:
+-                dataset = load_dataset("zen-E/GSM8k-Aug")["train"]
++                dataset = load_dataset("zen-E/GSM8k-Aug", streaming=True)["train"]  # streaming=True: datasets' non-streaming pyarrow JSON reader false-positives ArrowInvalid on this file (latentreasoning/data/gsm8k_aug.py)
+             train_dataset = SupervisedDataset(data_name=data_args.data_name, raw_data=dataset, tokenizer=tokenizer, bot=model.bot_id, eot=model.eot_id)
+             data_collator = DataCollatorForSupervisedDataset(tokenizer=tokenizer)
+             return dict(train_dataset=train_dataset, eval_dataset=None, data_collator=data_collator)
+@@ -402,7 +402,7 @@ def train():
+ 
+     data_module = make_supervised_data_module(tokenizer=tokenizer, data_args=data_args)
+     trainer = CustomTrainer(model=model, tokenizer=tokenizer, args=training_args, **data_module)
+-    trainer.train()
++    trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)  # honor --resume_from_checkpoint (None unless passed -> identical to bare trainer.train())
+ 
+     # to avoid the error of saving the model
+     #if "llama" in model_args.model_name_or_path:

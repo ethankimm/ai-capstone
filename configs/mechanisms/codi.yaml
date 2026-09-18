@@ -7,17 +7,37 @@ dataset:
   eval_split: test
   eval_n: 200
   eval_seed: 0
-compute_steps: null       # TODO(owner): number of continuous-thought tokens -- fill in
-                           # once latentreasoning/mechanisms/codi.py is implemented; keep it a
-                           # named, swept knob like filler_tokens.compute_steps so
-                           # cross-mechanism budget-matched comparisons are possible.
+compute_steps: 6           # continuous-thought tokens generated at inference
+                           # (--inf_latent_iterations; paper: 6, = --num_latent at train).
+                           # Each is one extra single-token forward pass with KV cache.
+# Paper recipe, verbatim from the reference repo's scripts/train_gpt2_gsm8k-aug.sh
+# (commit 2c23146) and paper Appendix A -- see latentreasoning/mechanisms/codi.py for
+# the cross-check. Run via scripts/train_codi.sh; nothing loads this file.
 training:
-  epochs: null             # TODO(owner)
-  batch_size: null
-  lr: null
+  epochs: 40               # Table A5: 20 epochs -> 38.4%, 40 -> 43.7% (gamma=1)
+  batch_size: 128          # 64 per device x 2 grad-accum
+  lr: 3e-3
+  lora: {r: 128, alpha: 32, dropout: 0.1, targets: [c_attn, c_proj, c_fc]}
+  num_latent: 6
+  projection: {dim: 768, layernorm: true, dropout: 0.0}
+  distill_loss: {type: smooth_l1, div_teacher_std: true, factor: 1.0}
+  ref_loss_factor: 1.0
+  optimizer: adamw_torch
+  scheduler: cosine
+  warmup_ratio: 0.03
+  weight_decay: 0.1
+  max_grad_norm: 2.0
+  precision: bf16
+  seed: 11
+  hardware_in_paper: "1x A100 80GB, ~36h"
+generation:
+  inf_latent_iterations: 6
+  greedy: true
+  max_new_tokens: 256
+  batch_size: 128          # paper protocol; outputs depend on batching (see codi.py gotchas)
+released_weights: zen-E/CODI-gpt2   # HF; the paper's own GPT-2 checkpoint, pytorch_model.bin
 notes: >
   Shao et al. arXiv:2502.21074 -- self-distillation between an explicit-CoT teacher pass
   and continuous-thought student pass sharing one model, aligning hidden activations on
-  the final-answer token. Reference implementation: github.com/zhenyi4/codi (GPT-2 scale
-  is the paper's own setting). Stub config -- latentreasoning/mechanisms/codi.py is unimplemented;
-  fill in alongside it.
+  the final-answer token. Reference implementation github.com/zhenyi4/codi is run as-is
+  (isolated venv, scripts/codi_setup.sh); reported 43.7% on GSM8K test for GPT-2.

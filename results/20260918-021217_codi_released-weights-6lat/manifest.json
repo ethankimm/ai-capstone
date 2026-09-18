@@ -1,0 +1,90 @@
+{
+  "run_id": "20260918-021217_codi_released-weights-6lat",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3 (sha256 fd223b14\u2026)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.415,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "sec_per_example": 0.0032017269430200516,
+    "extra": {
+      "paper_metric_accuracy_slice": 0.415,
+      "full_test_n": 1319,
+      "full_test_accuracy": 0.43669446550416985,
+      "full_test_unparseable_rate": 0.0,
+      "full_test_paper_metric_accuracy": 0.43669446550416985,
+      "avg_output_tokens": 5.255496588324489,
+      "num_latent_train": 6,
+      "n_trainable_params": 20057088,
+      "state_dict_missing_keys": 0,
+      "state_dict_unexpected_keys": 0,
+      "gsm8k_main_check": {
+        "gsm8k_main_test_n": 1319,
+        "question_text_mismatches": 0,
+        "answer_mismatches": 0
+      }
+    }
+  },
+  "hyperparams": {
+    "lr": 0.003,
+    "epochs": 40,
+    "per_device_train_batch_size": 64,
+    "gradient_accumulation_steps": 2,
+    "effective_batch_size": 128,
+    "lora_r": 128,
+    "lora_alpha": 32,
+    "lora_dropout": 0.1,
+    "lora_target_modules": [
+      "c_attn",
+      "c_proj",
+      "c_fc"
+    ],
+    "num_latent": 6,
+    "use_prj": true,
+    "prj_dim": 768,
+    "prj_layernorm": true,
+    "distill_loss_type": "smooth_l1",
+    "distill_loss_div_std": true,
+    "distill_loss_factor": 1.0,
+    "ref_loss_factor": 1.0,
+    "weight_decay": 0.1,
+    "warmup_ratio": 0.03,
+    "lr_scheduler_type": "cosine",
+    "max_grad_norm": 2.0,
+    "bf16": true,
+    "remove_eos": true,
+    "train_seed": 11,
+    "train_data": "zen-E/GSM8k-Aug train (385,620)",
+    "source": "paper script scripts/train_gpt2_gsm8k-aug.sh (no training_args.bin in ckpt_dir)",
+    "inference": {
+      "inf_latent_iterations": 6,
+      "greedy": true,
+      "batch_size": 128,
+      "max_new_tokens": 256,
+      "num_latent": 6,
+      "use_prj": true,
+      "prj_dim": 768,
+      "remove_eos": true
+    }
+  },
+  "seed": null,
+  "hardware": "RunPod RTX A5000 (secure) / NVIDIA RTX A5000",
+  "author": "Henning Lindig",
+  "notes": "Authors released GPT-2 CODI checkpoint (zen-E/CODI-gpt2), paper inference protocol: 6 latents, greedy, batch 128 in file order. Verifies the paper number; not a training reproduction.",
+  "timestamp_utc": "2026-09-18T02:12:17.081061+00:00",
+  "git": {
+    "commit": "c59ef94",
+    "dirty": true
+  }
+}
