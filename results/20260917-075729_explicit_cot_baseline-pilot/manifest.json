@@ -1,0 +1,41 @@
+{
+  "run_id": "20260917-075729_explicit_cot_baseline-pilot",
+  "mechanism": "explicit_cot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "results/20260917-075729_explicit_cot_baseline-pilot/ckpt",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.045,
+    "unparseable_rate": 0.0,
+    "train_loss": 0.7122905415852865,
+    "sec_per_example": 0.313754740039999,
+    "extra": {
+      "cot_tokens": 34.32
+    }
+  },
+  "hyperparams": {
+    "lr": 5e-05,
+    "epochs": 3,
+    "batch_size": 16,
+    "train_n": 20000,
+    "max_new_tokens": 256
+  },
+  "seed": 42,
+  "hardware": "RunPod RTX A4000 (community)",
+  "author": "Henning Lindig",
+  "notes": "explicit_cot pilot fine-tune on 20000 train examples",
+  "timestamp_utc": "2026-09-17T08:05:57.883389+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}
