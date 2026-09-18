@@ -1,0 +1,42 @@
+{
+  "run_id": "20260918-011303_filler_tokens_budget-32-faithful-pilot",
+  "mechanism": "filler_tokens",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "results/20260918-011303_filler_tokens_budget-32-faithful-pilot/ckpt",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.025,
+    "unparseable_rate": 0.0,
+    "compute_steps": 32,
+    "train_loss": 0.4594859878540039,
+    "sec_per_example": 0.04129741154960356
+  },
+  "hyperparams": {
+    "lr": 5e-05,
+    "epochs": 3,
+    "batch_size": 16,
+    "filler_token": ".",
+    "train_n": 20000,
+    "faithful": true,
+    "cot_rate": 0.5,
+    "mask_filler_loss": false
+  },
+  "seed": 42,
+  "hardware": "RunPod RTX 2000 Ada (secure)",
+  "author": "Henning Lindig",
+  "notes": "filler_tokens compute_steps=32 paper-faithful (50/50 CoT/filler mix, unmasked filler loss) fine-tune on 20000 train examples",
+  "timestamp_utc": "2026-09-18T01:24:02.221686+00:00",
+  "git": {
+    "commit": "c59ef94",
+    "dirty": true
+  }
+}

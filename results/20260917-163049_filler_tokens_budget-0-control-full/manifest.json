@@ -1,0 +1,39 @@
+{
+  "run_id": "20260917-163049_filler_tokens_budget-0-control-full",
+  "mechanism": "filler_tokens",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "results/20260917-163049_filler_tokens_budget-0-control-full/ckpt",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.13,
+    "unparseable_rate": 0.0,
+    "compute_steps": 0,
+    "train_loss": 0.8347234449835287,
+    "sec_per_example": 0.04583743935450912
+  },
+  "hyperparams": {
+    "lr": 5e-05,
+    "epochs": 3,
+    "batch_size": 16,
+    "filler_token": ".",
+    "train_n": 384620
+  },
+  "seed": 42,
+  "hardware": "RunPod RTX 2000 Ada (secure)",
+  "author": "Henning Lindig",
+  "notes": "filler_tokens compute_steps=0 pilot fine-tune on 384620 train examples",
+  "timestamp_utc": "2026-09-17T19:03:33.136154+00:00",
+  "git": {
+    "commit": "c59ef94",
+    "dirty": true
+  }
+}
