@@ -1,0 +1,42 @@
+{
+  "run_id": "20260918-045031_filler_tokens_budget-32-faithful-full",
+  "mechanism": "filler_tokens",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "results/20260918-045031_filler_tokens_budget-32-faithful-full/ckpt",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.095,
+    "unparseable_rate": 0.0,
+    "compute_steps": 32,
+    "train_loss": 0.2465840534754134,
+    "sec_per_example": 0.04180389721528627
+  },
+  "hyperparams": {
+    "lr": 5e-05,
+    "epochs": 3,
+    "batch_size": 16,
+    "filler_token": ".",
+    "train_n": 384620,
+    "faithful": true,
+    "cot_rate": 0.5,
+    "mask_filler_loss": false
+  },
+  "seed": 42,
+  "hardware": "RunPod GPU",
+  "author": "Henning Lindig",
+  "notes": "filler_tokens compute_steps=32 paper-faithful (50/50 CoT/filler mix, unmasked filler loss) fine-tune on 384620 train examples",
+  "timestamp_utc": "2026-09-18T08:17:29.249255+00:00",
+  "git": {
+    "commit": "c59ef94",
+    "dirty": true
+  }
+}

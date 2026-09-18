@@ -17,5 +17,7 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260918-011303_filler_tokens_budget-32-faithful-pilot](20260918-011303_filler_tokens_budget-32-faithful-pilot/) | filler_tokens | gpt2 | test (n=200) | 32 | 0.025 | 42 | pilot | Henning Lindig |
 | [20260918-021217_codi_released-weights-6lat](20260918-021217_codi_released-weights-6lat/) | codi | gpt2 | test (n=200) | 6 | 0.415 | None | full_run | Henning Lindig |
 | [20260918-021435_explicit_cot_baseline-full](20260918-021435_explicit_cot_baseline-full/) | explicit_cot | gpt2 | test (n=200) | - | 0.345 | 42 | full_run | Henning Lindig |
+| [20260918-013552_filler_tokens_budget-0-control-faithful-full](20260918-013552_filler_tokens_budget-0-control-faithful-full/) | filler_tokens | gpt2 | test (n=200) | 0 | 0.105 | 42 | full_run | Henning Lindig |
 | [20260918-052821_recurrent_depth_split4-4-4-rbar32-pilot](20260918-052821_recurrent_depth_split4-4-4-rbar32-pilot/) | recurrent_depth | gpt2 | test (n=200) | 32 | 0.040 | 42 | pilot | Henning Lindig |
 | [20260918-055006_recurrent_depth_split4-4-4-rbar32-fullbptt-pilot](20260918-055006_recurrent_depth_split4-4-4-rbar32-fullbptt-pilot/) | recurrent_depth | gpt2 | test (n=200) | 32 | 0.040 | 42 | pilot | Henning Lindig |
+| [20260918-045031_filler_tokens_budget-32-faithful-full](20260918-045031_filler_tokens_budget-32-faithful-full/) | filler_tokens | gpt2 | test (n=200) | 32 | 0.095 | 42 | full_run | Henning Lindig |
