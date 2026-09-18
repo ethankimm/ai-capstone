@@ -28,9 +28,13 @@ def extract_final_number(text: str) -> str | None:
 
 
 def is_correct(predicted: str | None, gold: str) -> bool:
-    """Numeric-equal comparison (18 == 18.0 == "18"), not string-equal."""
+    """Numeric-equal comparison (18 == 18.0 == "18"), not string-equal. Thousands
+    separators are stripped from both sides first: 14 of the 1,319 GSM8K-Aug test
+    golds are written like "2,125", and `float("2,125")` raises, which used to drop
+    those examples to a string compare that a correct "2125" could never pass."""
     if predicted is None:
         return False
+    predicted, gold = predicted.replace(",", ""), gold.replace(",", "")
     try:
         return float(predicted) == float(gold)
     except ValueError:

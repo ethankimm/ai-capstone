@@ -28,3 +28,11 @@ def test_accuracy():
     preds = ["18", "3", None, "999"]
     golds = ["18", "3", "70000", "540"]
     assert accuracy(preds, golds) == 0.5
+
+
+def test_is_correct_strips_thousands_separators_from_gold():
+    # 14 of the GSM8K-Aug test golds are written like "2,125"; float("2,125") raises.
+    assert is_correct("2125", "2,125")
+    assert is_correct("2,125", "2125")
+    assert is_correct("1450000.0", "1,450,000")
+    assert not is_correct("2124", "2,125")
