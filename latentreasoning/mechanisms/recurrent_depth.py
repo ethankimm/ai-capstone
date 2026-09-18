@@ -67,18 +67,30 @@ Gotchas:
 
 ---
 
-**Status (2026-09-18) and plan.** Two pilots (paper-faithful k=8 and full BPTT; see
-`results/20260918-05*_recurrent_depth_*`) fine-tune into a loop that reaches its fixed
-point by iteration 3 (KL between consecutive read-outs exactly 0 from iteration 2) so
-accuracy is flat in r: the paper's path independence reproduces, its test-time scaling
-does not, under fine-tune-from-pretrained. Pilots (a)-(c) below attack the collapse
-directly; (e) and (f) are the fallbacks that give the project a *working* vertical
-scratchpad for the Oct 9 decoding / Oct 16 causality + transplant steps regardless.
+**Status (2026-09-18) and plan.** Five pilots (`results/20260918-05*` and `-16*
+_recurrent_depth_*`, 20k train examples x 3 epochs each) all fine-tune into a loop that is
+an exact geometric contraction (state change ~1/30 per iteration, fixed point to the fp32
+floor by iteration ~5), acts on the answer distribution once (iteration 2 reshuffles the
+guess on 10-70/200 examples, gold log-prob moves by <= 0.01 nats) and is frozen after,
+so accuracy is flat in test-time r and train loss equals the no-loop control's. The
+paper's path independence reproduces; its test-time scaling does not, under
+fine-tune-from-pretrained. Eliminated as causes, one variable at a time:
 
-- (a) `--adapter-init random_state`: break the collapsed init (single-variable).
-- (b) `--mean-recurrence 4 --backprop-last-k 8`: every iteration on-distribution and
-  supervised; if a 4-iteration loop still collapses to 2, depth mismatch isn't it.
-- (c) `--core-init random --core-lr 5e-4`: no pretrained shortcut to fall back on.
+- truncated backprop -- full-BPTT pilot: same collapse, same loss.
+- (a) collapsed init -- `--adapter-init random_state`: slower contraction (1/6), same
+  collapse, same loss; the adapter's state half never moved from init.
+- (b) r mismatch -- `--mean-recurrence 4 --backprop-last-k 8`: indistinguishable from r=32.
+- (c) pretrained shortcut -- `--core-init random --core-lr 5e-4`: same collapse, *worse*
+  loss (1.234 vs 1.163) -- removing the feed-forward path does not make the loop step in.
+
+What remains is shared by all five and absent in the paper: ~6M tokens of fine-tuning vs
+800B from scratch, and a task (direct numeric answers, GPT-2 at the guessing floor) on
+which extra depth of these weights does not lower the loss, so there is no gradient
+pressure for iterations to do work. Measure convergence at the number-predicting
+position in fp32 (the script does now) -- the bare prompt's last position predicts
+`" ####"` with p~1 and its KL is uninformative. (e) and (f) are the routes to a
+*working* vertical scratchpad for the Oct 9 decoding / Oct 16 causality + transplant
+steps:
 - (d) Full-scale run of the paper-faithful recipe (~4.6 h / ~$1.25 on an A5000):
   deferred -- 3750 steps is ~6M tokens and converting pretrained models to looped ones
   is known to need billions of tokens of uptraining (Bae et al. 2024, Relaxed Recursive

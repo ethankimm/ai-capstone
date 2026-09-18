@@ -710,6 +710,20 @@ r=32 adds 3.
 (`20260918-055006_recurrent_depth_split4-4-4-rbar32-fullbptt-pilot`) shows the same
 collapse (fixed point by iteration 3, flat accuracy 3.5–4.5% across r, train loss
 1.1619) — the truncated backprop is not the cause.
+**Correction (added 2026-09-18, after pilots a–c):** the "KL exactly 0.0 from i=2" claim above
+over-reads `metrics.extra.next_token_kl`: it was measured at the bare prompt's last position,
+where this model emits `" ####"` with p ≈ 1, so KL ≈ 0 there says nothing about the state (a
+same-norm random perturbation of the state also gives KL ~1e-9). Re-measured in fp32 at the
+position predicting the first answer-number token (n=200, s_0 seed 42): state change per
+iteration 1.0, 0.075, 0.0026, 1.4e-4, 9e-6 … 7e-7 at i=16 (exact geometric fixed point, ratio
+≈ 1/30); KL between consecutive number distributions 8.0e-3 (i=2), 3.0e-5, 1.3e-7, ~0; top-1
+number flips 45, 3, 0, 0 (of 200); mean log p(gold first token) −4.463 → −4.473 → −4.474 →
+−4.474; top-1 = gold 12/200 at every iteration. So the loop *does* act once (iteration 2
+reshuffles the guess on 45/200 examples) and is frozen from iteration 4 — the fixed-point and
+flat-accuracy conclusions stand; the "read-out identical from iteration 2" wording does not.
+The "~20/200 flips between r=32 and r=64 are bf16 noise" remark stands (fp32: 0 flips).
+Follow-ups (a)–(c) (`20260918-16*_recurrent_depth_*`) eliminated the collapsed init, r
+mismatch and pretrained-shortcut hypotheses as well; see (c)'s notes for the synthesis.
 
 ---
 
@@ -792,6 +806,10 @@ beyond ~90 never get gradient — immaterial given the state is stationary from 
 - Decide what "reproduced" means for this mechanism in the write-up: the paper's
   fixed-point/path-independence behaviour is reproduced; its test-time scaling is not,
   under a fine-tune-from-pretrained regime the paper never ran.
+**Correction (added 2026-09-18):** same diagnostics-position issue as the first pilot (see its
+correction). fp32 at the number-predicting position, n=200: state change 1.0, 0.073, 0.0026,
+1.3e-4, … 7.5e-7; KL 8.3e-3, 3.1e-5, 1.0e-7, ~0; top-1 flips 30, 2, 0, 0; log p(gold)
+−4.466 → −4.480 → −4.481; top-1 = gold 11 → 12 → 12 of 200. Conclusions unchanged.
 
 ---
 
@@ -863,3 +881,209 @@ cells above.
   than relying on citing the paper's own serial-vs-parallel comparison.
 - If anyone wants to chase the faithful-vs-non-faithful absolute-accuracy gap above,
   an epoch-matched-per-format ablation would test the "halved exposure" hypothesis.
+
+---
+
+## 2026-09-18 — Pilot (a): break the collapsed init — state channel random at init (recurrent_depth, run_id: 20260918-160346_recurrent_depth_split4-4-4-rbar32-randstate-adapter-pilot)
+
+**Goal:** Single-variable follow-up to the two collapsed pilots
+(`20260918-052821_…-rbar32-pilot`, `…-fullbptt-pilot`), which fine-tune into a loop that reaches
+its fixed point within ~3 iterations so accuracy is flat in test-time r. Hypothesis under test:
+the identity adapter init `A = [I, 0]` makes `s_i = R(e)` for every i at step 0 — training
+*starts* at a collapsed fixed point and never leaves. Here the state half of the adapter is
+drawn `N(0, 2/(5h))` at init (`--adapter-init random_state`; `e` path still identity), so
+iterations differ from the first step (at init the state moves 35% → 8% → 1.7% over
+iterations 2–4, CPU check). Everything else identical to the first pilot.
+**Mechanism / model:** `recurrent_depth`, gpt2 (125,621,760 params) /
+`results/20260918-160346_recurrent_depth_split4-4-4-rbar32-randstate-adapter-pilot/ckpt`
+(`model.pt`, synced to this machine). (4, 4, 4) split, `s_i = core(A[e ; LN(s_{i-1})])`,
+`s_0 ~ N(0, 2/5)`; see `latentreasoning/mechanisms/recurrent_depth.py`. `compute_steps` = r at
+eval; manifest reports r=32, sweep in `metrics.extra.sweep_by_r` / `predictions_r{r}.jsonl`.
+**Data:** gsm8k-aug train 20,000-example subset (seed 42, excludes the validation carve-out);
+eval gsm8k-aug test n=200 seed=0; run seed=42 (same r sequence and example order as the first
+pilot).
+**Hyperparams:** first pilot's except `adapter_init=random_state`: {'lr': 5e-05, 'epochs': 3,
+'batch_size': 16, 'train_n': 20000, 'n_prelude': 4, 'n_core': 4, 'n_coda': 4,
+'mean_recurrence': 32, 'lognormal_sigma': 0.5, 'backprop_last_k': 8, 'init_state_std': 0.632,
+'core_init': 'pretrained', 'core_lr': 5e-05, 'eval_recurrences': [1, 2, 4, 8, 16, 32, 64],
+'max_new_tokens': 32}.
+**Command:** `uv run python scripts/train_recurrent_depth.py --train-n 20000 --stage pilot --hardware "RunPod RTX A5000 (secure)" --adapter-init random_state --slug split4-4-4-rbar32-randstate-adapter-pilot`
+(pod `id24tq987niiqv`, EU-SE-1, $0.27/hr; 16:03–16:19 UTC; 3750 steps in 861 s = 4.4 it/s;
+≈$0.07 of pod time. Stdout in `pod_stdout.log`, not committed.)
+**Headline results:** `final_answer_accuracy=0.030` (6/200) at r=32, `unparseable_rate=0.000`,
+`train_loss=1.1636` (first pilot 1.1625; no-loop control 1.1693).
+
+| r | 1 | 2 | 4 | 8 | 16 | 32 | 64 |
+|---|---|---|---|---|---|---|---|
+| accuracy (this run) | 0.035 | 0.025 | 0.025 | 0.025 | 0.025 | 0.030 | 0.025 |
+| accuracy (first pilot, identity init) | 0.025 | 0.040 | 0.040 | 0.035 | 0.035 | 0.040 | 0.040 |
+
+Convergence, re-measured after the run in fp32 on CPU at the position that predicts the first
+answer-number token (prompt + `" ####"`; n=200 eval prompts, s_0 seed 42; the manifest's
+`metrics.extra.state_rel_delta/next_token_kl` are the in-run bf16 numbers at the bare prompt's
+last position — see Gotchas): relative state change per iteration 1.0, 0.25, 0.041, 0.0069,
+0.0012, … 9e-7 at i=16 (geometric, ratio ≈ 1/6); KL between consecutive number distributions
+5.7e-2 (i=2), 1.1e-3, 3.1e-5, 9.6e-7, … ~0; top-1 number flips between iterations 70, 12, 1, 1,
+0 … (of 200); mean log p(gold first token) −4.461 (i=1) → −4.454 → −4.450 → −4.449 (i=16);
+top-1 = gold on 9 → 10 → 10 of 200. The trained adapter's state half is essentially its init
+(‖A_s‖_F 17.6 at init and after training; ‖A_e − I‖_F = 1.5). Ablating A_s := 0 on the trained
+model changes 9/30 outputs on the bundled sample, accuracy unchanged.
+**Interpretation:** The collapsed init is **not** the cause. Started away from the fixed point,
+the loop is a slower contraction (1/6 per iteration vs 1/30 with the identity init — set by the
+init, and training did not change it) but converges just the same, and the iterations it does
+take don't help: the gold answer's log-probability moves by +0.01 nats over the whole
+trajectory, top-1 = gold stays at 9–10/200, and the sweep is flat (5–7/200 at every r). The
+second iteration reshuffles the model's guess among wrong numbers on 70/200 examples; from the
+fourth iteration on nothing changes. Same train loss as the identity-init pilot and as the
+no-loop control: the loop is not being used to fit the data better. Together with (b) and (c)
+(logged next), the four candidate mechanisms — truncated backprop, collapsed init, r
+mismatch, pretrained shortcut — are all eliminated; see the interpretation in (c)'s notes and
+the status section of `recurrent_depth.py`.
+**Gotchas hit:**
+- The in-run convergence KL (`metrics.extra.next_token_kl`, also in the first two pilots) was
+  measured at the bare prompt's last position, where the fine-tuned model emits `" ####"` with
+  p ≈ 1 — KL between two near-one-hot distributions is ~0 whatever the state does (a same-norm
+  *random* perturbation of the state also gave KL ~1e-9). It is uninformative and was
+  over-read in the first pilot's notes ("read-out identical from iteration 2"). The
+  diagnostics above are re-measured at the number-predicting position in fp32; the script now
+  does that (`scripts/train_recurrent_depth.py:diagnostics`). The state-convergence numbers
+  were and are fine.
+- `transformers` 5 no-ops `_init_weights` on already-loaded params (needed for (c)); see
+  `reinit_gpt2_block`.
+**Caveats:** all of the first pilot's (pilot scale — every same-recipe pilot sits at 1–4.5%;
+n=200 → nothing in the sweep is significant; one seed; one split). 6 vs 8 correct is noise.
+**Next:** see (c)'s notes and the plan in `recurrent_depth.py` — (e) step-supervised loop and
+(f) released Huginn-0125 are the routes to a working vertical scratchpad.
+
+---
+
+## 2026-09-18 — Pilot (b): small r̄ = 4 with every iteration supervised (recurrent_depth, run_id: 20260918-161937_recurrent_depth_split4-4-4-rbar4-pilot)
+
+**Goal:** Second single-variable follow-up to the collapsed pilots. Hypothesis: with r̄ = 32 and
+k = 8, most iterations are never on the gradient path and r=1…4 are never sampled, so the loop
+is neither supervised nor needed at small depth. Here r is sampled from the same log-normal
+Poisson with r̄ = 4 (τ ~ N(log 4 − ⅛, ½), r = Poisson(e^τ)+1 → mean ≈ 5, range ~2–12) and k = 8 ≥
+almost every r, so every iteration is on-distribution and gets gradient. If a 4-iteration
+loop still collapses to a fixed point in 2, depth mismatch is not the story.
+**Mechanism / model:** `recurrent_depth`, gpt2 (125,621,760 params) /
+`results/20260918-161937_recurrent_depth_split4-4-4-rbar4-pilot/ckpt` (`model.pt`, synced).
+Same (4, 4, 4) split, identity adapter init, state LN, s_0 noise as the first pilot.
+`compute_steps` = r at eval; **the manifest reports r = 4** (= r̄ for this run, not 32), so
+compare its `final_answer_accuracy` with other runs' `sweep_by_r["4"]`, not their headline.
+**Data:** identical to the first pilot (train 20k subset seed 42, eval test n=200 seed 0, run
+seed 42).
+**Hyperparams:** first pilot's except `mean_recurrence=4`: {'lr': 5e-05, 'epochs': 3,
+'batch_size': 16, 'train_n': 20000, 'n_prelude': 4, 'n_core': 4, 'n_coda': 4,
+'lognormal_sigma': 0.5, 'backprop_last_k': 8, 'init_state_std': 0.632, 'adapter_init':
+'identity', 'core_init': 'pretrained', 'eval_recurrences': [1, 2, 4, 8, 16, 32, 64],
+'max_new_tokens': 32}.
+**Command:** `uv run python scripts/train_recurrent_depth.py --train-n 20000 --stage pilot --hardware "RunPod RTX A5000 (secure)" --mean-recurrence 4 --backprop-last-k 8 --slug split4-4-4-rbar4-pilot`
+(pod `id24tq987niiqv`, 16:19–16:27 UTC; 3750 steps in 395 s = 9.5 it/s — 2.2× faster than
+r̄ = 32; ≈$0.04 of pod time.)
+**Headline results:** `final_answer_accuracy=0.025` (5/200) at r=4, `unparseable_rate=0.000`,
+`train_loss=1.1638`.
+
+| r | 1 | 2 | 4 | 8 | 16 | 32 | 64 |
+|---|---|---|---|---|---|---|---|
+| accuracy | 0.025 | 0.020 | 0.025 | 0.025 | 0.025 | 0.025 | 0.025 |
+
+fp32 convergence at the number-predicting position (n=200; see (a)'s Gotchas for why the
+manifest's in-run KL is not this): state change 1.0, 0.064, 0.0022, 1.2e-4, 7.4e-6, … 7e-7;
+KL between consecutive number distributions 5.8e-3, 2.6e-5, 1.1e-7, ~0; top-1 flips 19, 1, 0,
+0 (of 200); mean log p(gold) −4.448 → −4.451 → −4.451; top-1 = gold 8 → 7 → 7 of 200.
+**Interpretation:** Depth / r mismatch is **not** the cause. Trained at r ≈ 2–12 with gradient
+through every iteration, the loop is *indistinguishable* from the r̄ = 32 pilot's: same
+contraction ratio (~1/30 per iteration), fixed point by iteration 3, same train loss to three
+decimals (1.1638 vs 1.1625), flat sweep — and it generalises to r = 64 (16× the training mean)
+with no change at all, which is the paper's path independence in its trivial form. Fewer
+iterations to "waste" did not make any of them useful.
+**Gotchas hit:** none new (see (a) for the diagnostics-position issue, which applies to this
+manifest's `next_token_kl` too).
+**Caveats:** as (a). Note r̄ = 4 also means ~2× less compute per step, so this run saw the same
+data with the same optimiser steps but a shallower unrolled network (mean 4 + 4·5 + 4 = 28
+layers vs ~136) and still matched the loss — more evidence that the extra depth was never
+doing anything.
+**Next:** see (c).
+
+---
+
+## 2026-09-18 — Pilot (c): random-init core, no pretrained 12-layer shortcut (recurrent_depth, run_id: 20260918-162743_recurrent_depth_split4-4-4-rbar32-randcore-pilot)
+
+**Goal:** Third single-variable follow-up to the collapsed pilots. Hypothesis: with pretrained
+blocks 4–7 as the looped core, a 12-layer GPT-2 solution exists at r=1 and fine-tuning has no
+reason to make iterations do anything. Here blocks 4–7 are re-drawn with GPT-2's own init
+(`--core-init random`: Conv1D ~ N(0, 0.02), `c_proj` scaled by 1/√24, LayerNorms reset) so the
+core has to be learned; it gets a 10× larger lr (`--core-lr 5e-4`) since 3750 steps at 5e-5
+would barely move a fresh block. Prelude and coda stay pretrained, adapter identity init.
+**Mechanism / model:** `recurrent_depth`, gpt2 prelude/coda + fresh core (125,621,760 params) /
+`results/20260918-162743_recurrent_depth_split4-4-4-rbar32-randcore-pilot/ckpt` (`model.pt`,
+synced). At init the fresh residual blocks are near-identity, so r=1 ≈ an 8-layer GPT-2 with
+blocks 4–7 removed (CPU check: finite logits, plausible top-1). `compute_steps` = r at eval;
+manifest reports r=32.
+**Data:** identical to the first pilot.
+**Hyperparams:** first pilot's except `core_init=random`, `core_lr=5e-4` (all other params
+5e-5): {'lr': 5e-05, 'epochs': 3, 'batch_size': 16, 'train_n': 20000, 'n_prelude': 4,
+'n_core': 4, 'n_coda': 4, 'mean_recurrence': 32, 'lognormal_sigma': 0.5, 'backprop_last_k': 8,
+'init_state_std': 0.632, 'adapter_init': 'identity', 'eval_recurrences': [1, 2, 4, 8, 16, 32,
+64], 'max_new_tokens': 32}.
+**Command:** `uv run python scripts/train_recurrent_depth.py --train-n 20000 --stage pilot --hardware "RunPod RTX A5000 (secure)" --core-init random --core-lr 5e-4 --slug split4-4-4-rbar32-randcore-pilot`
+(pod `id24tq987niiqv`, 16:27–16:43 UTC; 3750 steps in 862 s = 4.4 it/s; ≈$0.07 of pod time.
+Whole (a)+(b)+(c) session incl. setup: pod up 16:00–16:47, ≈$0.21.)
+**Headline results:** `final_answer_accuracy=0.015` (3/200) at r=32, `unparseable_rate=0.000`,
+`train_loss=1.2340` — **worse** than every pretrained-core run (1.162–1.164) and than the
+no-loop control (1.169).
+
+| r | 1 | 2 | 4 | 8 | 16 | 32 | 64 |
+|---|---|---|---|---|---|---|---|
+| accuracy | 0.010 | 0.015 | 0.020 | 0.020 | 0.020 | 0.015 | 0.025 |
+
+fp32 convergence at the number-predicting position (n=200): state change 1.0, 0.049, 0.0036,
+4.4e-4, 1.6e-4, … 7.6e-5 at i=16 (slightly slower tail than the pretrained cores, still a
+fixed point); KL 2.5e-3, 1.9e-5, 7.8e-7, ~5e-7; top-1 flips 11, 0, 0, 0 (of 200); mean
+log p(gold) −4.513 → −4.521 → −4.521; top-1 = gold 7 → 7 → 7.
+**Interpretation:** The pretrained shortcut is **not** the cause either. A freshly initialised
+core with a 10× lr, which has *no* option but to learn something in the loop, learns a
+contraction to a fixed point just as fast (ratio ~1/20 per iteration) and ends up fitting the
+data *worse* — the model does not discover an iterative solution when the feed-forward one is
+taken away; it just has 4 fewer useful layers. Taken with pilots 1–2, (a) and (b), every
+specific mechanism proposed for the collapse has now been tested and eliminated at this scale:
+
+| suspect | run | result |
+|---|---|---|
+| truncated backprop (k=8) | full BPTT pilot | same collapse, same loss |
+| collapsed init A=[I,0] | (a) random_state | slower contraction, same collapse, same loss, loop adds +0.01 nats |
+| r̄=32 too deep / r=1–4 never trained | (b) r̄=4 | identical to r̄=32 |
+| pretrained 12-layer shortcut | (c) random core | same collapse, worse loss |
+
+What all five share and what the paper does not: (i) **training budget** — 3750 steps × 16 ×
+~100 tokens ≈ 6M tokens vs 800B from scratch, and converting a pretrained model into a looped
+one is known to need billions of tokens of uptraining (Bae et al. 2024, Relaxed Recursive
+Transformers); the adapter barely moved (‖ΔA‖_F ≈ 1.5 over 3750 steps in every run). (ii) **no
+usable signal from the task** — direct numeric answers on GSM8K at GPT-2 scale sit at the
+guessing floor (number-readout entropy 4.1 nats, top-1 = gold 7–12/200), the loss is the same
+as the no-loop control's in every run, and (c) shows that when a feed-forward path is removed
+the loss goes *up* rather than the loop stepping in: extra depth of these weights does not
+lower the loss on this task at this data size, so there is nothing for the loop to learn.
+Under an r-invariant loss with fresh s_0 every pass, a fast contraction to a point that equals
+the feed-forward answer is then the optimum, and it is reached within a few hundred steps.
+So "pretrained vs from scratch" is part of it, but via the budget and the task, not via any
+of the specific mechanisms tested. What is reproduced: fixed-point convergence from random
+s_0 and path independence (exact, geometric, to the fp32 floor). What is not: test-time
+scaling — under a regime the paper never ran.
+**Gotchas hit:**
+- `gpt2._init_weights` / `block.apply(...)` silently no-ops in transformers 5.17 on modules
+  loaded from a checkpoint (params carry `_is_hf_initialized`); the first attempt left the
+  core pretrained (caught by a CPU equality check). `reinit_gpt2_block` spells the scheme out
+  with `torch.nn.init`.
+- Diagnostics position, as (a).
+**Caveats:** as (a), plus: one lr for the fresh core (5e-4); a from-scratch GPT-2 lr (6e-4)
+with warmup and more steps might train the core further, but the loss gap to the pretrained
+core (0.07 nats) is the wrong direction for the hypothesis regardless. The paper's sandwich
+norms / embedding scale were not tried — unlikely to matter given the contraction appears
+with a fresh core too.
+**Next:** stop attacking the collapse at pilot scale. Per `recurrent_depth.py` status/plan:
+(e) step-supervised loop (r = number of rationale steps, iteration i supervised on
+`intermediate_values[i]`) is the one route that creates per-iteration gradient pressure at
+this data size and doubles as the Oct 9 decoding target; (f) released Huginn-0125 eval gives a
+genuine recurrent-depth model with test-time scaling to probe. (d) full-scale run of this
+recipe deferred — would give a quotable accuracy vs the 13.0% control but the same curve.

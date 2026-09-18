@@ -77,3 +77,7 @@ beyond ~90 never get gradient — immaterial given the state is stationary from 
 - Decide what "reproduced" means for this mechanism in the write-up: the paper's
   fixed-point/path-independence behaviour is reproduced; its test-time scaling is not,
   under a fine-tune-from-pretrained regime the paper never ran.
+**Correction (added 2026-09-18):** same diagnostics-position issue as the first pilot (see its
+correction). fp32 at the number-predicting position, n=200: state change 1.0, 0.073, 0.0026,
+1.3e-4, … 7.5e-7; KL 8.3e-3, 3.1e-5, 1.0e-7, ~0; top-1 flips 30, 2, 0, 0; log p(gold)
+−4.466 → −4.480 → −4.481; top-1 = gold 11 → 12 → 12 of 200. Conclusions unchanged.

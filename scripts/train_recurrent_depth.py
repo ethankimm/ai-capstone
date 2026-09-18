@@ -33,6 +33,7 @@ from transformers import AutoTokenizer, GPT2LMHeadModel
 from latentreasoning.data.gsm8k_aug import Example, load_gsm8k_aug, load_local_sample
 from latentreasoning.eval.harness import score_outputs
 from latentreasoning.mechanisms.recurrent_depth import (
+    ANSWER_TEMPLATE,
     DEFAULT_BACKPROP_LAST_K,
     DEFAULT_INIT_STATE_STD,
     DEFAULT_LOGNORMAL_SIGMA,
@@ -165,19 +166,27 @@ def evaluate(model: LoopedGPT2, tokenizer, examples: list[Example], r: int, args
 
 @torch.no_grad()
 def diagnostics(model: LoopedGPT2, tokenizer, examples: list[Example], r: int, args, device: str) -> dict:
+    """Per-iteration convergence, fp32, measured at the position that predicts the *first
+    answer-number token* (prompt + " ####"). Measuring at the bare prompt's last position is
+    uninformative: the fine-tuned model emits " ####" there with p~1, so the KL between
+    iterations is ~0 whatever the state does (the first two pilots' `next_token_kl` was
+    measured that way -- see their notes). fp32 because bf16 can't resolve the sub-1%
+    state changes once the loop has converged."""
     model.eval()
-    prompts = [build_eval_prompt_ids(tokenizer, ex.question) for ex in examples]
+    suffix = tokenizer(ANSWER_TEMPLATE.split("{")[0].rstrip(), add_special_tokens=False)["input_ids"]  # " ####"
+    prompts = [build_eval_prompt_ids(tokenizer, ex.question) + suffix for ex in examples]
     gen = torch.Generator(device=device).manual_seed(args.seed)
     acc: dict[str, list[list[float]]] = {}
     for b in range(0, len(prompts), args.eval_batch_size):
         input_ids, attn = collate_left(prompts[b : b + args.eval_batch_size], tokenizer.pad_token_id, device)
-        with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=device == "cuda"):
-            d = model.iteration_diagnostics(input_ids, attn, r, generator=gen)
+        d = model.iteration_diagnostics(input_ids, attn, r, generator=gen)  # no autocast: fp32
         for k, v in d.items():
             acc.setdefault(k, []).append(v)
     # batch-size-weighted mean per iteration
     weights = [min(args.eval_batch_size, len(prompts) - b) for b in range(0, len(prompts), args.eval_batch_size)]
-    return {k: [round(float(np.average([v[i] for v in vs], weights=weights)), 5) for i in range(r)] for k, vs in acc.items()}
+    out = {k: [float(np.average([v[i] for v in vs], weights=weights)) for i in range(r)] for k, vs in acc.items()}
+    out["diagnostics_position"] = "first answer-number token (prompt + ' ####'), fp32"
+    return out
 
 
 def main() -> None:
@@ -282,9 +291,10 @@ def main() -> None:
                     f.write(json.dumps(rec) + "\n")
 
     diag = diagnostics(model, tokenizer, eval_examples, max(eval_rs), args, device)
-    show = [round(x, 5) for x in diag["state_rel_delta"][:3]] + [round(diag["state_rel_delta"][-1], 5)]
-    print(f"convergence at r={max(eval_rs)}: state_rel_delta[0,1,2,-1]={show} "
-          f"next_token_kl[-1]={diag['next_token_kl'][-1]:.4g}")
+    fmt = lambda xs: [f"{x:.2e}" for x in xs]
+    print(f"convergence at r={max(eval_rs)} ({diag['diagnostics_position']}): "
+          f"state_rel_delta[1..4,-1]={fmt(diag['state_rel_delta'][:4] + diag['state_rel_delta'][-1:])} "
+          f"next_token_kl[2..4,-1]={fmt(diag['next_token_kl'][1:4] + diag['next_token_kl'][-1:])}")
 
     if args.no_save:
         print("--no-save: not recording a run")

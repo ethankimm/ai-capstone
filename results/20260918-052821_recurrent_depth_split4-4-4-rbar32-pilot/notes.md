@@ -122,3 +122,17 @@ r=32 adds 3.
 (`20260918-055006_recurrent_depth_split4-4-4-rbar32-fullbptt-pilot`) shows the same
 collapse (fixed point by iteration 3, flat accuracy 3.5–4.5% across r, train loss
 1.1619) — the truncated backprop is not the cause.
+**Correction (added 2026-09-18, after pilots a–c):** the "KL exactly 0.0 from i=2" claim above
+over-reads `metrics.extra.next_token_kl`: it was measured at the bare prompt's last position,
+where this model emits `" ####"` with p ≈ 1, so KL ≈ 0 there says nothing about the state (a
+same-norm random perturbation of the state also gives KL ~1e-9). Re-measured in fp32 at the
+position predicting the first answer-number token (n=200, s_0 seed 42): state change per
+iteration 1.0, 0.075, 0.0026, 1.4e-4, 9e-6 … 7e-7 at i=16 (exact geometric fixed point, ratio
+≈ 1/30); KL between consecutive number distributions 8.0e-3 (i=2), 3.0e-5, 1.3e-7, ~0; top-1
+number flips 45, 3, 0, 0 (of 200); mean log p(gold first token) −4.463 → −4.473 → −4.474 →
+−4.474; top-1 = gold 12/200 at every iteration. So the loop *does* act once (iteration 2
+reshuffles the guess on 45/200 examples) and is frozen from iteration 4 — the fixed-point and
+flat-accuracy conclusions stand; the "read-out identical from iteration 2" wording does not.
+The "~20/200 flips between r=32 and r=64 are bf16 noise" remark stands (fp32: 0 flips).
+Follow-ups (a)–(c) (`20260918-16*_recurrent_depth_*`) eliminated the collapsed init, r
+mismatch and pretrained-shortcut hypotheses as well; see (c)'s notes for the synthesis.
