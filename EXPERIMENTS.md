@@ -27,3 +27,451 @@ against the pre-squash scaffold; re-logged here on the initial commit (same data
 same deterministic result).
 **Next:** `explicit_cot` or `filler_tokens` on GPT-2 + real GSM8K-Aug on RunPod, logged
 against this floor.
+
+---
+
+## 2026-09-17 — Pilot: filler_tokens no-filler control (filler_tokens, run_id: 20260917-074147_filler_tokens_budget-0-control)
+
+**Goal:** First reproduction pass for the filler_tokens mechanism (Pfau, Merrill &
+Bowman 2024) on GPT-2 / GSM8K-Aug — verify the train/eval pipeline works end to end on
+RunPod and get an initial read on whether filler tokens help over no scratchpad at
+all, before committing to a full-scale run.
+**Mechanism / model:** `filler_tokens`, gpt2 / results/20260917-074147_filler_tokens_budget-0-control/ckpt, compute_steps=0.
+**Data:** gsm8k-aug test n=200 seed=0; run seed=42.
+**Hyperparams:** {'lr': 5e-05, 'epochs': 3, 'batch_size': 16, 'filler_token': '.', 'train_n': 20000}
+**Command:** `uv run python scripts/train_filler_tokens.py --compute-steps 0 --train-n 20000 --stage pilot --hardware "RunPod RTX A4000 (community)" --slug budget-0-control`
+**Headline results:** `final_answer_accuracy=0.010`, `unparseable_rate=0.000`, `compute_steps=0`
+**Interpretation:** No-filler control at pilot scale — 2/200 correct. Compare against
+`20260917-074839_filler_tokens_budget-32` (same scale, compute_steps=32: 2.5%) — at
+this pilot scale filler tokens looked like they helped. **But see the full-scale
+runs** (`*-full`): that ordering reverses once trained on the full dataset, so this
+pilot gap should be read as noisy, not a confirmed effect.
+**Gotchas hit:** `load_gsm8k_aug` had two real bugs discovered and fixed during this
+run (not filler_tokens-specific — affects every mechanism using the shared loader):
+(1) `datasets`' pyarrow batch JSON reader throws a false-positive `ArrowInvalid` on
+the train file; fixed with `streaming=True`. (2) the HF repo's *test* split ships as a
+differently-shaped file (one JSON object of column arrays, not JSON-lines) and needed
+a dedicated loader path (`_load_test_split`). See `latentreasoning/data/gsm8k_aug.py`.
+**Caveats:** Pilot scale only — 20,000 of 384,620 available train examples (~5%), 3
+epochs. Not representative of the mechanism's real ceiling.
+**Theory (added 2026-09-18):** the full pattern across all filler_tokens runs this
+session (this pair, the full-scale pair, and the paper-faithful pilot pair) is
+explained by a structural mismatch between GSM8K-Aug and the task class the filler-
+tokens paper actually tested — see
+`20260917-190640_filler_tokens_budget-32-full`'s notes for the full writeup, or
+`HANDOFF.md`'s "Paper-faithful methodology audit" section for the citation trail.
+**Next:** Full-scale run done, see `20260917-163049_filler_tokens_budget-0-control-full`.
+
+---
+
+## 2026-09-17 — Pilot: filler_tokens compute_steps=32 (filler_tokens, run_id: 20260917-074839_filler_tokens_budget-32)
+
+**Goal:** Same pilot pass as the compute_steps=0 control, at the config's default
+nonzero sweep point (32 forced filler tokens) — initial read on whether filler tokens
+help over no scratchpad at all, before committing to a full-scale run.
+**Mechanism / model:** `filler_tokens`, gpt2 / results/20260917-074839_filler_tokens_budget-32/ckpt, compute_steps=32.
+**Data:** gsm8k-aug test n=200 seed=0; run seed=42.
+**Hyperparams:** {'lr': 5e-05, 'epochs': 3, 'batch_size': 16, 'filler_token': '.', 'train_n': 20000}
+**Command:** `uv run python scripts/train_filler_tokens.py --compute-steps 32 --train-n 20000 --stage pilot --hardware "RunPod RTX A4000 (community)" --slug budget-32`
+**Headline results:** `final_answer_accuracy=0.025`, `unparseable_rate=0.000`, `compute_steps=32`
+**Interpretation:** 5/200 correct vs. the control's 2/200 at this pilot scale — looked
+like filler tokens more than doubled accuracy. **This did not hold up at full scale**
+(see `20260917-190640_filler_tokens_budget-32-full`, 12.0% vs. the full-scale
+control's 13.0% — the ordering flips). At n=200 with single-digit correct counts,
+this pilot gap (2 vs 5) is not a reliable signal on its own.
+**Gotchas hit:** Same `load_gsm8k_aug` bugs as the compute_steps=0 pilot run — see that
+run's notes.md for detail.
+**Caveats:** Pilot scale only — 20,000/384,620 train examples (~5%), 3 epochs.
+**Theory (added 2026-09-18):** see `20260917-190640_filler_tokens_budget-32-full`'s
+notes for the full explanation of why the null holds up across pilot/full/faithful —
+short version: GSM8K-Aug arithmetic chains are a sequential/instance-adaptive task
+(each step needs the previous step's numeric result), and the paper's own reference
+code tests exactly this task shape (`dot_filler_serial`/`serial_cot` in their
+`src/match3.py`) and reports filler tokens fail on it too, staying at baseline. Our
+result replicates that, in a new domain (natural language) and model (pretrained
+GPT-2 vs. their from-scratch ~30M-param model).
+**Next:** Full-scale run done, see `20260917-190640_filler_tokens_budget-32-full` — that's
+the number that actually matters for comparing against the paper.
+
+---
+
+## 2026-09-17 — Pilot: explicit_cot baseline (explicit_cot, run_id: 20260917-075729_explicit_cot_baseline-pilot)
+
+**Goal:** Pilot reproduction of the explicit-CoT baseline (visible calculator-annotated
+rationale + answer) — the reference every other latent-reasoning mechanism gets
+compared against.
+**Mechanism / model:** `explicit_cot`, gpt2 / results/20260917-075729_explicit_cot_baseline-pilot/ckpt, compute_steps=- (unbudgeted).
+**Data:** gsm8k-aug test n=200 seed=0; run seed=42.
+**Hyperparams:** {'lr': 5e-05, 'epochs': 3, 'batch_size': 16, 'train_n': 20000, 'max_new_tokens': 256}
+**Command:** `uv run python scripts/train_explicit_cot.py --train-n 20000 --stage pilot --hardware "RunPod RTX A4000 (community)" --slug baseline-pilot`
+**Headline results:** `final_answer_accuracy=0.045`, `unparseable_rate=0.000`, `extra.cot_tokens=34.3`
+**Interpretation:** 9/200 correct — clearly ahead of both filler_tokens pilot
+conditions at the same scale (control 1.0%, compute_steps=32 2.5%), consistent with
+explicit CoT being a stronger mechanism than filler tokens for this task, as expected
+going in.
+**Gotchas hit:** Depends on the same `load_gsm8k_aug` fixes described in the
+filler_tokens pilot runs' notes (pyarrow streaming bug + test-split file format).
+**Caveats:** Pilot scale only (20,000/384,620 train examples, ~5%, 3 epochs). No
+full-scale explicit_cot run has been done yet, so this number isn't yet on equal
+footing with the full-scale filler_tokens runs (`*-full`, trained on the entire
+384,620-example split) — don't quote 4.5% against 13.0%/12.0% as a fair comparison.
+**Theory (added 2026-09-18):** explicit CoT's advantage over filler_tokens on this task
+isn't just "more training signal" — it's the natural contrast case for the theory that
+explains filler_tokens' null result (see
+`20260917-190640_filler_tokens_budget-32-full`'s notes). GSM8K arithmetic chains are
+sequential/instance-adaptive (each step needs the *previous step's specific numeric
+result*); explicit CoT tokens carry that content forward explicitly (the rationale
+literally writes out each intermediate value), while filler tokens are content-free
+and have no channel to relay it. That's consistent with the paper's own reference code
+(`github.com/JacobPfau/fillerTokens`) reporting filler tokens fail specifically on
+their serial/instance-adaptive task variant while presumably still being comparable to
+CoT on their parallel/dense variant (not verified against their parallel numbers this
+session — see `HANDOFF.md`).
+**Next:** Run explicit_cot at full scale (`--train-n -1`) to match the filler_tokens
+full runs before drawing a three-way comparison. (As of this writing, a full-scale
+explicit_cot run is in progress on a separate pod — check `results/README.md` for
+whether it has landed.)
+
+---
+
+## 2026-09-17 — Full-scale: filler_tokens no-filler control (filler_tokens, run_id: 20260917-163049_filler_tokens_budget-0-control-full)
+
+**Goal:** Full-scale (matching `configs/mechanisms/filler_tokens.yaml` exactly: entire
+384,620-example train split, 3 epochs) run of the no-filler control, after the pilot
+run (5% of the data) suggested — inconclusively — that filler tokens might help. This
+is the number actually comparable to the paper.
+**Mechanism / model:** `filler_tokens`, gpt2 / results/20260917-163049_filler_tokens_budget-0-control-full/ckpt, compute_steps=0.
+**Data:** gsm8k-aug test n=200 seed=0; run seed=42.
+**Hyperparams:** {'lr': 5e-05, 'epochs': 3, 'batch_size': 16, 'filler_token': '.', 'train_n': 384620}
+**Command:** `uv run python scripts/train_filler_tokens.py --compute-steps 0 --train-n -1 --stage full_run --hardware "RunPod RTX 2000 Ada (secure)" --slug budget-0-control-full`
+**Headline results:** `final_answer_accuracy=0.130`, `unparseable_rate=0.000`, `compute_steps=0`
+**Interpretation:** 13.0% at full scale, vs. 1.0% at pilot scale (20k examples) — full
+data clearly matters a lot, as expected. Compare against
+`20260917-190640_filler_tokens_budget-32-full` (compute_steps=32, full scale: 12.0%)
+— the no-filler control is now *slightly ahead* of the filler-token condition, which
+reverses the pilot's apparent ordering. See that run's notes for the fuller
+interpretation of what this means for the mechanism overall.
+**Gotchas hit:** Ran on a **Secure Cloud** pod (RTX 2000 Ada, `EU-RO-1`), not the
+Community Cloud A4000 used for the pilots — the community pod had already silently
+restarted mid-job once during an unrelated CODI attempt earlier the same day (host
+preemption with zero warning/traceback), and this run's ~2.6h+3.5h combined
+unattended duration felt too risky to trust on preemptible hardware. Took ~2h36m to
+train (72,117 steps, ~8.3 it/s on this GPU tier — slower than the A4000's ~11 it/s).
+**Caveats:** Still only `eval_n=200` — see the compute_steps=32 full run's notes for
+why the 13.0% vs 12.0% gap isn't statistically distinguishable at this n.
+**Theory (added 2026-09-18):** see `20260917-190640_filler_tokens_budget-32-full`'s
+notes for the full explanation — this run's control number is the anchor the filler
+condition is compared against there.
+**Next:** See `20260917-190640_filler_tokens_budget-32-full` for the combined
+interpretation and next-steps recommendation.
+
+---
+
+## 2026-09-17 — Full-scale: filler_tokens compute_steps=32 (filler_tokens, run_id: 20260917-190640_filler_tokens_budget-32-full)
+
+**Goal:** Full-scale counterpart to the compute_steps=0 full run — the config's
+default nonzero sweep point (32 forced filler tokens), trained on the entire
+384,620-example split to get a number actually comparable to Pfau, Merrill & Bowman
+2024's own setting.
+**Mechanism / model:** `filler_tokens`, gpt2 / results/20260917-190640_filler_tokens_budget-32-full/ckpt, compute_steps=32.
+**Data:** gsm8k-aug test n=200 seed=0; run seed=42.
+**Hyperparams:** {'lr': 5e-05, 'epochs': 3, 'batch_size': 16, 'filler_token': '.', 'train_n': 384620}
+**Command:** `uv run python scripts/train_filler_tokens.py --compute-steps 32 --train-n -1 --stage full_run --hardware "RunPod RTX 2000 Ada (secure)" --slug budget-32-full`
+**Headline results:** `final_answer_accuracy=0.120`, `unparseable_rate=0.000`, `compute_steps=32`
+**Interpretation:** 12.0% (24/200 correct), essentially tied with the no-filler
+control's 13.0% (26/200) from `20260917-163049_filler_tokens_budget-0-control-full`
+run at the same full scale. At the pilot scale (20k examples) filler tokens appeared
+to help (2.5% vs. 1.0%), but that ordering does **not** hold once trained on the full
+dataset — if anything the control is marginally ahead. Binomial 95% CI at this base
+rate (n=200) is roughly ±4.5pp, so the 1pp gap is well within noise either direction.
+**Honest conclusion: filler tokens show no measurable benefit over no scratchpad at
+all on GSM8K-Aug at this scale — a null result, not a negative one.** This actually
+matches Pfau et al.'s own caveat (see `latentreasoning/mechanisms/filler_tokens.py`'s
+docstring): they found filler tokens mainly help under dense/parallel synthetic-task
+supervision, and a null result on a real reasoning benchmark like GSM8K is plausible
+and expected, not a sign anything is broken. Per `CLAUDE.md`, we plan for null
+findings — this is one.
+**Gotchas hit:** Same Secure Cloud move as the compute_steps=0 full run (see its
+notes). Took ~3h28m to train (72,117 steps, ~5.8 it/s average — noticeably slower per
+step than compute_steps=0's ~8.3 it/s, since every batch now carries 32 extra filler
+positions through the forward/backward pass).
+**Caveats:** Single seed, single eval_n=200 per condition — not enough to rule out a
+*small* real effect in either direction, just enough to rule out the pilot's
+apparently large one. `unparseable_rate=0.000` for both full runs, so the null result
+isn't hiding behind formatting/extraction failures — it's genuinely about correctness.
+**Theory — why the null result is expected, not just plausible (added 2026-09-18):**
+Prompted by the question "isn't this exactly what the paper did?", I audited this
+implementation against the paper's actual released training code
+(`github.com/JacobPfau/fillerTokens`, not just its abstract/prose) and found two
+fixable methodology gaps (training-data mixture, filler-span loss masking — see the
+faithful pilot runs below) plus several **structural** differences that explain the
+persistent null more directly than any training-recipe bug could:
+
+1. **Task class mismatch — the likely dominant factor.** The paper's tasks are a
+   synthetic "Match3" problem (`src/match3.py`): find an index triple among rows of
+   small integers whose values sum to zero mod `m` — a vector 3SUM. Their code has
+   both a parallel/dense variant (`dot_filler_parallel`, any-match search) and a
+   serial/instance-adaptive variant (`dot_filler_serial`, `serial_cot`). **On the
+   serial variant, their own reported result is that filler tokens fail — stay at
+   baseline**, same as no intermediate tokens at all. Their stated mechanism: serial/
+   instance-adaptive computation needs an actual intermediate result cached and
+   carried forward token-to-token, and filler tokens are content-free, so there's no
+   channel to carry that forward. GSM8K-Aug arithmetic chains are exactly this shape
+   (each step needs the previous step's specific numeric result — "she had 3, bought
+   5, gave away 2..."). **So this null result is a replication of an effect the paper
+   already demonstrated on its own synthetic serial task, not a new finding** — what's
+   new is that it holds in a different domain (natural language, not symbolic
+   strings) and a different model class (pretrained GPT-2, not a from-scratch
+   synthetic-task model).
+2. **Model.** They train a randomly-initialized tiny Llama (4 layers, hidden=384,
+   ~30M params, `misc/llama_d384l4h6.json` + `scripts/run_match3.py`,
+   `AutoModelForCausalLM.from_config`, no `from_pretrained`) from scratch, directly on
+   the synthetic task. We fine-tune pretrained GPT-2 (124M, 12 layers). Their model
+   has zero prior to unlearn; GPT-2 already has a strong pretrained prior for `.`
+   specifically (sentence-final punctuation, decimal point) that plausibly resists
+   being repurposed as a content-free compute placeholder.
+3. **Scale.** Their data-generation default is `--train_samples 1e7`, 5 epochs, batch
+   256 — up to ~195k optimizer steps on a narrow, low-diversity task. Our full run is
+   ~385k examples, batch 16, 3 epochs ≈ 72k steps, on a much higher-diversity natural-
+   language task — comparable or fewer steps on a harder problem, and "filler tokens
+   require specific, dense supervision to converge" per their own abstract.
+4. **Filler-budget coupling.** Theirs: `filler_length = length**2`, derived per-
+   instance from the task's own difficulty parameter. Ours: a fixed `compute_steps=32`
+   for every GSM8K problem regardless of whether it needs 1 op or 8+ — no per-example
+   scaling.
+
+Full citation trail (exact code excerpts, argparse defaults, the fetched
+`misc/llama_d384l4h6.json`) is in `HANDOFF.md`'s "Paper-faithful methodology audit and
+rerun" section and `latentreasoning/mechanisms/filler_tokens.py`'s module docstring —
+both written 2026-09-18, before `HANDOFF.md` is folded in and deleted per its own
+convention. **Recommended write-up framing:** "replicating the paper's own serial-task
+failure mode in a new domain and model class," not "reproducing a paper result" (no
+paper-reported number exists for GSM8K-Aug/GPT-2 to match) and not "we discovered
+filler tokens fail on sequential tasks" (the paper already reported that on its own
+synthetic serial task — we're extending it, not originating it). One live gap: we
+have not run a positive control (a parallelizable task on GPT-2, the kind filler
+tokens *do* help with per the paper) ourselves, so the causal claim about
+sequentiality specifically rests on citing the paper's own serial-vs-parallel
+comparison, not on an ablation we ran independently.
+
+**Paper-faithful reruns (added 2026-09-18):** fixed the two methodology gaps (50/50
+CoT/filler training mixture, unmasked filler-span loss — see
+`latentreasoning/mechanisms/filler_tokens.py`'s "Paper-faithful mode" docstring and
+`scripts/train_filler_tokens.py --faithful`) and reran at pilot scale:
+`20260918-010048_filler_tokens_budget-0-control-faithful-pilot` (5.0%) vs.
+`20260918-011303_filler_tokens_budget-32-faithful-pilot` (2.5%) — control still wins,
+now even at pilot scale, matching this full-scale run's direction rather than
+overturning it. Full-scale faithful pair was launched next; check those runs'
+`notes.md` / `results/README.md` for whether it landed and what it showed.
+
+**Next:**
+- Run `explicit_cot` at full scale (`--train-n -1`) for a fair three-way comparison —
+  right now only the pilot number (4.5%) exists for it.
+- If the team wants a real dose-response curve rather than two points, sweep more
+  `compute_steps` values (e.g. 8, 16, 64) at full scale.
+- Consider a larger `eval_n` or multiple seeds before treating any future
+  compute_steps comparison as conclusive at these low base rates.
+- If the write-up wants to isolate sequentiality as the causal variable independently
+  (not just by citing the paper), the next experiment is a positive-control
+  parallelizable/combinatorial task on the same GPT-2 setup — not attempted this
+  session.
+- CODI: paper number verified from released weights (43.67% on full test, matches
+  paper's 43.7% exactly) — see `HANDOFF.md` and
+  `results/20260918-021217_codi_released-weights-6lat/` (separate agent's work, not
+  detailed further here).
+
+---
+
+## 2026-09-18 — Paper-faithful control pilot: 50/50 CoT/filler mix, no filler tokens (filler_tokens, run_id: 20260918-010048_filler_tokens_budget-0-control-faithful-pilot)
+
+**Goal:** Re-run the `compute_steps=0` control under paper-faithful training (see
+`latentreasoning/mechanisms/filler_tokens.py`'s "Paper-faithful mode" note) after
+auditing against Pfau et al.'s released code (`github.com/JacobPfau/fillerTokens`)
+found two deviations in the original simplified implementation: (1) filler-only
+training data instead of their 50/50 CoT/filler mixture (`cot_rate=0.5`), and (2)
+masked filler-span loss instead of their unmasked scheme. This is the control half of
+that faithful pair; see the sibling run
+[20260918-011303_filler_tokens_budget-32-faithful-pilot](../20260918-011303_filler_tokens_budget-32-faithful-pilot/notes.md)
+for the `compute_steps=32` arm.
+**Mechanism / model:** `filler_tokens`, gpt2 / results/20260918-010048_filler_tokens_budget-0-control-faithful-pilot/ckpt, compute_steps=0.
+**Data:** gsm8k-aug test n=200 seed=0; run seed=42. Train: pilot subset, n=20000 from train split (same subset draw as the earlier non-faithful pilots, `--seed 42`).
+**Hyperparams:** {'lr': 5e-05, 'epochs': 3, 'batch_size': 16, 'filler_token': '.', 'train_n': 20000, 'faithful': True, 'cot_rate': 0.5, 'mask_filler_loss': False}
+**Command:** `uv run python scripts/train_filler_tokens.py --compute-steps 0 --train-n 20000 --faithful --slug budget-0-control-faithful-pilot --stage pilot`
+**Headline results:** `final_answer_accuracy=0.050`, `unparseable_rate=0.000`, `compute_steps=0`, `train_loss=0.9031`
+**Interpretation:** Note that even with `compute_steps=0` (no forced filler tokens), the
+`--faithful` flag still applies the 50/50 mixture: half the examples are real
+explicit-CoT sequences, half are direct question→answer with zero filler splice. So
+this is **not** a no-training control — it's "control conditioned on the same CoT
+co-training as the filler arm." Under that matched comparison, this control
+(5.0%) beats the faithful compute_steps=32 arm (2.5%, sibling run) at pilot scale — the
+same direction as the full-scale non-faithful result (13.0% control vs 12.0% filler,
+see `20260917-163049_filler_tokens_budget-0-control-full`). It's also a large jump over
+the original non-faithful compute_steps=0 pilot (1.0%,
+`20260917-074147_filler_tokens_budget-0-control`) — expected, since that arm had zero
+CoT exposure at all while this one gets 50% real rationales in training.
+**Gotchas hit:** None beyond what's already documented in `filler_tokens.py` and
+`HANDOFF.md`. `author` field was empty in the raw manifest (pod never had
+`git config user.name` set) — patched by hand post-hoc, same fix as the prior 5 runs.
+**Caveats:** Pilot scale only (n=20000 train, not the full ~385k-example train split) —
+same caveat as the earlier pilot-vs-full reversal (filler beat control at pilot scale,
+lost at full scale, in the non-faithful runs). Whether the faithful control's lead over
+faithful filler holds, narrows, or reverses at full scale is untested — see Task #2 in
+the active session tracking (decide with the team whether to spend the ~2.6-3.5h+
+budget on a full-scale faithful run).
+**Theory (added 2026-09-18):** this control-beats-filler ordering, even under
+paper-faithful training, turns out to match the paper's own reported result on its own
+serial/instance-adaptive task variant (filler tokens fail there too, staying at
+baseline) — see `20260917-190640_filler_tokens_budget-32-full`'s notes for the full
+writeup, or `HANDOFF.md`'s "Paper-faithful methodology audit" section.
+**Next:** Decided to run this pair at full scale — see
+`20260918-*_filler_tokens_budget-*-faithful-full` (or `results/README.md` if those
+runs haven't landed as of this reading) for the result.
+
+---
+
+## 2026-09-18 — Paper-faithful filler pilot: 50/50 CoT/filler mix, unmasked filler loss, compute_steps=32 (filler_tokens, run_id: 20260918-011303_filler_tokens_budget-32-faithful-pilot)
+
+**Goal:** Re-run the `compute_steps=32` arm under paper-faithful training (50/50
+CoT/filler data mixture + unmasked filler-span loss, matching
+`github.com/JacobPfau/fillerTokens`'s reference training code rather than the
+simplified default) to test whether the two identified methodological deviations
+explain the full-scale null result
+(`20260917-163049_filler_tokens_budget-0-control-full` vs
+`20260917-190640_filler_tokens_budget-32-full`, 13.0% vs 12.0%). See sibling control run
+[20260918-010048_filler_tokens_budget-0-control-faithful-pilot](../20260918-010048_filler_tokens_budget-0-control-faithful-pilot/notes.md).
+**Mechanism / model:** `filler_tokens`, gpt2 / results/20260918-011303_filler_tokens_budget-32-faithful-pilot/ckpt, compute_steps=32.
+**Data:** gsm8k-aug test n=200 seed=0; run seed=42. Train: pilot subset, n=20000 from train split (`--seed 42`), 50% real CoT rationales / 50% filler-formatted with 32 forced filler tokens and unmasked filler-span loss.
+**Hyperparams:** {'lr': 5e-05, 'epochs': 3, 'batch_size': 16, 'filler_token': '.', 'train_n': 20000, 'faithful': True, 'cot_rate': 0.5, 'mask_filler_loss': False}
+**Command:** `uv run python scripts/train_filler_tokens.py --compute-steps 32 --train-n 20000 --faithful --slug budget-32-faithful-pilot --stage pilot`
+**Headline results:** `final_answer_accuracy=0.025`, `unparseable_rate=0.000`, `compute_steps=32`, `train_loss=0.4595`
+**Interpretation:** Paper-faithful training does **not** flip the result at pilot
+scale: this arm (2.5%) is flat vs. the original non-faithful compute_steps=32 pilot
+(2.5%, `20260917-074839_filler_tokens_budget-32`) and now trails its own faithful
+control sibling (5.0%, `20260918-010048_...-control-faithful-pilot`) rather than
+beating it — reversing the pilot-scale direction seen in the non-faithful runs (there,
+filler 2.5% > control 1.0%) but matching the direction of the full-scale non-faithful
+result (control 13.0% > filler 12.0%). Train loss is much lower here (0.4595 vs 0.9031
+for the control) because unmasked filler-span loss gives the model 32 extra easy-to-predict
+positions per filler example to drive loss down on, which is not directly comparable to
+the control's train_loss — don't read the loss gap as "this arm learned more."
+**Gotchas hit:** Same `author`-field patch as the sibling run (empty in the raw
+manifest, hand-patched to `Henning Lindig`).
+**Caveats:** Pilot scale (n=20000), same caveat as sibling control run — non-faithful
+filler_tokens reversed from beating control at pilot scale to losing at full scale, so
+this pilot result alone should not be read as confirming or refuting the mechanism;
+a full-scale faithful run is the natural next step before drawing conclusions for the
+write-up. `unparseable_rate=0.000` for both faithful arms at pilot scale (vs. some
+unparseable outputs in earlier non-faithful pilots) suggests the CoT half of the
+training mixture is teaching the `#### <answer>` format more reliably regardless of
+the filler arm — a plausible secondary effect of `--faithful` worth noting if it
+recurs at full scale.
+**Theory (added 2026-09-18):** see `20260917-190640_filler_tokens_budget-32-full`'s
+notes for the full writeup of why this null result is expected — short version: the
+paper's own reference code tests a serial/instance-adaptive task variant matching
+GSM8K's sequential-arithmetic shape, and reports filler tokens fail on it too
+(baseline performance), for the same reason (no channel to carry an intermediate
+value forward between content-free filler positions). This pilot result is consistent
+with that, not a contradiction of it.
+**Next:** Decided to run this pair at full scale (`--train-n -1`) — see
+`20260918-*_filler_tokens_budget-*-faithful-full` (or `results/README.md` if those
+runs haven't landed as of this reading) for the result.
+
+---
+
+## 2026-09-18 — CODI: authors' released GPT-2 weights, paper inference protocol (codi, run_id: 20260918-021217_codi_released-weights-6lat)
+
+**Goal:** Step 1 of the plan for CODI — "reproduce that number first" (paper reports
+43.7% on GSM8K test for GPT-2). Verify the paper's claim on our backbone/benchmark at
+~zero cost by evaluating their *released* checkpoint under their *own* protocol, and
+get the shared 200-slice number for cross-mechanism comparison. This is an
+**inference-only verification of the released weights, not a training reproduction**
+— see Caveats and `latentreasoning/mechanisms/codi.py` for what a training rerun
+would cost and when it becomes necessary.
+**Mechanism / model:** `codi`, gpt2 / HF `zen-E/CODI-gpt2` @ `fd641b3` (single
+`pytorch_model.bin`, sha256 `fd223b14…d8417`, 406 MB; 144,499,200 params of which
+20,057,088 LoRA+projection, loaded with 0 missing / 0 unexpected keys),
+compute_steps=6 (continuous-thought tokens at inference, `--inf_latent_iterations 6`).
+**Data:** gsm8k-aug test n=200 seed=0 (the shared slice); run seed=None (greedy
+decoding, no RNG on our side; the checkpoint's training seed is 11 per the paper
+script but unverifiable for released weights).
+**Hyperparams:** the paper recipe, recorded in `manifest.json` from the reference
+repo's `scripts/train_gpt2_gsm8k-aug.sh` @ `2c23146` (not from a `training_args.bin`
+— the released weights don't ship one): lr 3e-3, 40 epochs, eff. batch 128, LoRA
+r=128/α=32 on c_attn/c_proj/c_fc, 6 latents, projection 768+LN, smooth-L1 distill
+÷ teacher std, α=β=γ=1. Inference: greedy, 6 latents, batch 128 in file order,
+max_new_tokens 256.
+**Command:**
+```
+# env: bash scripts/codi_setup.sh /workspace/codi   (pinned commit + their requirements.txt + codi_streaming.patch)
+# weights: snapshot_download("zen-E/CODI-gpt2", revision="fd641b3d3edc59e4f534b55588e906588c9e36bb") -> /workspace/codi_released
+# (a) their test.py, verbatim per scripts/test_gpt2.sh (flags below) -> "GSM8K test accuracy: 43.67%"
+# (b) ours, same model loading + decode loop, scored through score_outputs:
+cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/eval_codi.py \
+  --ckpt_dir /workspace/codi_released --checkpoint_label "hf:zen-E/CODI-gpt2@fd641b3 (sha256 fd223b14…)" \
+  --slug released-weights-6lat --stage full_run --hardware "RunPod RTX A5000 (secure)" \
+  --output_dir /tmp/codi_eval_unused \
+  --model_name_or_path gpt2 --seed 11 --model_max_length 512 --bf16 \
+  --lora_r 128 --lora_alpha 32 --lora_init --batch_size 128 --greedy True \
+  --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 \
+  --inf_latent_iterations 6 --inf_num_iterations 1 --remove_eos True --use_lora True
+```
+(full argv in `eval_command.txt`)
+**Headline results:** `final_answer_accuracy=0.415` (83/200), `unparseable_rate=0.000`,
+`compute_steps=6`. Full test split (1319): **0.4367 = 43.67%** vs paper's 43.7% —
+and identical to what their unmodified `test.py` prints on the same weights
+(`/workspace/codi_test_released.log` on the pod; `predictions_full_test.jsonl` here,
+gitignored, holds all 1319 outputs). Paper's own last-number metric and ours agree on
+every example (`paper_metric_accuracy_slice` = ours). Avg output length 5.3 tokens
+("The answer is: N" — CODI emits no visible reasoning). `sec_per_example=0.0032`
+(batched 128, A5000).
+**Interpretation:** The paper's GPT-2 number reproduces exactly from the released
+weights, so the claim is verified for our exact setting. The 200-slice number (41.5%)
+is ~2 points under the full-split number — sampling noise on n=200 (95% CI roughly
+±7 points), not a discrepancy; quote 43.67%/1319 when comparing to the paper and
+41.5%/200 when comparing to our other mechanisms. Against our current full-scale
+numbers on the same slice: filler_tokens compute_steps=0 (no-CoT fine-tune) 13.0%,
+compute_steps=32 12.0%, explicit_cot full-scale pending (pilot 4.5%). CODI at
+compute_steps=6 is far above the no-CoT control — but see Caveats before reading
+that as a like-for-like mechanism comparison.
+**Gotchas hit:**
+- Found and fixed a **shared-scorer bug** while building this: 14/1319 test golds are
+  written with thousands separators ("2,125"; 3 of them in the 200-slice), and
+  `is_correct` did `float(gold)` → ValueError → fell back to a string compare a
+  correct "2125" could never pass. Fixed in `latentreasoning/eval/metrics.py`
+  (+ regression test). Re-scored every existing `predictions.jsonl`: **no past number
+  changes** (no model had those three right). This run's 3 comma-gold examples are
+  all wrong on their merits (875000 vs 1,450,000; 2600 vs 5,600; 51500 vs 43,500).
+- The reference repo evaluates on `gsm8k/main` test; we generate from GSM8k-Aug's
+  test file. Checked: 0 question-text and 0 answer mismatches across all 1319, so the
+  two are the same benchmark.
+- Their `load_dataset("zen-E/GSM8k-Aug")` in train.py hits the same pyarrow
+  false-positive as our loader did → `scripts/codi_streaming.patch`. Not exercised by
+  this inference-only run, but applied by `codi_setup.sh` so the training path is
+  ready.
+- Upstream attention-mask quirk (`fix_attn_mask=False` in the paper): left-padding is
+  attended after the question step, so outputs depend on batch composition. We use
+  their exact batching (128, file order) — that's *why* the numbers are identical.
+**Caveats:**
+- **Not a training reproduction.** We verified inference on their weights; we did not
+  retrain (paper: ~36h on one A100 80GB ≈ $57 on RunPod — deferred for budget;
+  `scripts/train_codi.sh` is ready, and the paper's Table A5 gives a cheaper
+  verifiable target: 38.4% at 20 epochs). Retraining becomes necessary for (a) seed
+  variance, (b) `compute_steps` sweeps that change `num_latent` at *training* time,
+  or (c) if this verification had failed.
+- **Recipe asymmetry vs our other mechanisms:** CODI = 40 epochs LoRA(r=128) on the
+  full 385k at lr 3e-3; our filler_tokens / explicit_cot = 3 epochs full fine-tune at
+  lr 5e-5. The paper's own No-CoT-SFT baseline (their recipe) is 19.1% vs our 13.0%
+  no-CoT control — the gap between those two is the recipe, not the mechanism.
+  Budget-matched comparison needs the consolidation discussion CLAUDE.md defers to
+  after Sep 25; don't quote 41.5% vs 12.0% as "CODI beats filler tokens" without it.
+- `compute_steps=6` here ≈ 6 extra single-token forward passes with KV cache, so it
+  is FLOP-comparable to 6 filler tokens, not to recurrent-depth loops.
+**Next:**
+- explicit_cot full-scale (running on the same pod as of this note) to complete the
+  same-recipe baseline set.
+- Oct 9: this checkpoint is the CODI model for intermediate-state decoding — the 6
+  latent hidden states (per layer, `output_hidden_states=True` in the decode loop)
+  are the scratchpad positions. `inf_latent_iterations` < 6 on this model gives the
+  `early_termination_necessity` measurement for free.
+- If budget allows: `EXTRA_ARGS="--num_train_epochs 20" bash scripts/train_codi.sh`
+  on an A100 80GB (~18h, ~$29) against the 38.4% Table A5 target.

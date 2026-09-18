@@ -8,3 +8,11 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | run_id | mechanism | backbone | dataset | compute_steps | accuracy | seed | stage | author |
 |---|---|---|---|---|---|---|---|---|
 | [20260916-045350_baseline_last_number_in_question_gsm8k-aug-sample](20260916-045350_baseline_last_number_in_question_gsm8k-aug-sample/) | baseline_last_number_in_question | none | test (n=30) | 0 | 0.033 | None | pilot | Henning Lindig |
+| [20260917-074147_filler_tokens_budget-0-control](20260917-074147_filler_tokens_budget-0-control/) | filler_tokens | gpt2 | test (n=200) | 0 | 0.010 | 42 | pilot | Henning Lindig |
+| [20260917-074839_filler_tokens_budget-32](20260917-074839_filler_tokens_budget-32/) | filler_tokens | gpt2 | test (n=200) | 32 | 0.025 | 42 | pilot | Henning Lindig |
+| [20260917-075729_explicit_cot_baseline-pilot](20260917-075729_explicit_cot_baseline-pilot/) | explicit_cot | gpt2 | test (n=200) | - | 0.045 | 42 | pilot | Henning Lindig |
+| [20260917-163049_filler_tokens_budget-0-control-full](20260917-163049_filler_tokens_budget-0-control-full/) | filler_tokens | gpt2 | test (n=200) | 0 | 0.130 | 42 | full_run | Henning Lindig |
+| [20260917-190640_filler_tokens_budget-32-full](20260917-190640_filler_tokens_budget-32-full/) | filler_tokens | gpt2 | test (n=200) | 32 | 0.120 | 42 | full_run | Henning Lindig |
+| [20260918-010048_filler_tokens_budget-0-control-faithful-pilot](20260918-010048_filler_tokens_budget-0-control-faithful-pilot/) | filler_tokens | gpt2 | test (n=200) | 0 | 0.050 | 42 | pilot | Henning Lindig |
+| [20260918-011303_filler_tokens_budget-32-faithful-pilot](20260918-011303_filler_tokens_budget-32-faithful-pilot/) | filler_tokens | gpt2 | test (n=200) | 32 | 0.025 | 42 | pilot | Henning Lindig |
+| [20260918-021217_codi_released-weights-6lat](20260918-021217_codi_released-weights-6lat/) | codi | gpt2 | test (n=200) | 6 | 0.415 | None | full_run | Henning Lindig |
