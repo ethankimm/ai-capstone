@@ -96,7 +96,7 @@ def make_optimizer(model: LoopedGPT2, args, total_steps: int):
     return optimizer, schedule
 
 
-def train(model: LoopedGPT2, rows, args, pad_id: int, device: str) -> tuple[float, list[dict]]:
+def train(model: LoopedGPT2, rows, args, pad_id: int, device: str, ckpt_dir: Path | None = None) -> tuple[float, list[dict]]:
     """Returns (mean loss over all steps, log_history) -- same shape as Trainer's."""
     steps_per_epoch = math.ceil(len(rows) / args.batch_size)
     total_steps = int(math.ceil(args.epochs * steps_per_epoch))
@@ -152,6 +152,8 @@ def train(model: LoopedGPT2, rows, args, pad_id: int, device: str) -> tuple[floa
                 print(f"step {step}/{total_steps} loss={entry['loss']} r~{entry['mean_r_in_window']} "
                       f"lr={entry['learning_rate']:.2e} {entry['elapsed_s']:.0f}s", flush=True)
                 window_sum, window_n, window_r = 0.0, 0, []
+        if ckpt_dir is not None:  # epoch-end safety copy for long runs (overwritten at the end)
+            model.save(ckpt_dir)
     return loss_sum / max(step, 1), log_history
 
 
@@ -199,7 +201,7 @@ def stepsup_iteration(model: LoopedGPT2, e, s, causal_mask, position_ids, labels
     return s_new, loss_mid, loss_fin
 
 
-def train_step_supervised(model: LoopedGPT2, rows: list[dict], args, pad_id: int, device: str) -> tuple[float, list[dict]]:
+def train_step_supervised(model: LoopedGPT2, rows: list[dict], args, pad_id: int, device: str, ckpt_dir: Path | None = None) -> tuple[float, list[dict]]:
     """r = each example's n_steps; iteration i < n is supervised on step i's first token at the
     number position, iteration n on the answer span. Full backprop through every iteration
     (r <= --stepsup-max-steps). Loss = token mean with intermediate tokens weighted by
@@ -273,6 +275,8 @@ def train_step_supervised(model: LoopedGPT2, rows: list[dict], args, pad_id: int
                       f"ans_tok={entry['answer_token_loss']} r_max~{entry['mean_r_in_window']} "
                       f"lr={entry['learning_rate']:.2e} {entry['elapsed_s']:.0f}s", flush=True)
                 win = {"loss": 0.0, "n": 0, "mid": 0.0, "mid_n": 0, "fin": 0.0, "fin_n": 0, "r": []}
+        if ckpt_dir is not None:  # epoch-end safety copy for long runs (overwritten at the end)
+            model.save(ckpt_dir)
     return loss_sum / max(step, 1), log_history
 
 
@@ -502,13 +506,14 @@ def main() -> None:
           f"k={args.backprop_last_k} eval_r={eval_rs} primary={primary_r} adapter_init={args.adapter_init} "
           f"core_init={args.core_init} core_lr={args.core_lr or args.lr}", flush=True)
 
+    ckpt_dir = out_dir / "ckpt"
+    epoch_ckpt = None if args.no_save else ckpt_dir
     if args.step_supervised:
-        train_loss, log_history = train_step_supervised(model, rows, args, tokenizer.pad_token_id, device)
+        train_loss, log_history = train_step_supervised(model, rows, args, tokenizer.pad_token_id, device, epoch_ckpt)
     else:
-        train_loss, log_history = train(model, rows, args, tokenizer.pad_token_id, device)
+        train_loss, log_history = train(model, rows, args, tokenizer.pad_token_id, device, epoch_ckpt)
     train_seconds = log_history[-1]["elapsed_s"] if log_history else 0.0
 
-    ckpt_dir = out_dir / "ckpt"
     if not args.no_save:
         model.save(ckpt_dir)
         tokenizer.save_pretrained(ckpt_dir)
