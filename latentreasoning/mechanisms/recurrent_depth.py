@@ -130,7 +130,8 @@ import numpy as np
 name = "recurrent_depth"
 
 PROMPT_TEMPLATE = "Question: {question}\nAnswer:"
-ANSWER_TEMPLATE = " #### {answer}"
+ANSWER_PREFIX = " ####"
+ANSWER_TEMPLATE = ANSWER_PREFIX + " {answer}"
 
 # Paper defaults (Sec. 3.3): r_bar = 32, sigma = 1/2, backprop through last k = 8.
 DEFAULT_MEAN_RECURRENCE = 32
@@ -152,6 +153,34 @@ def build_example_ids(tokenizer: Any, question: str, answer: str) -> tuple[list[
 
 def build_eval_prompt_ids(tokenizer: Any, question: str) -> list[int]:
     return tokenizer(PROMPT_TEMPLATE.format(question=question), add_special_tokens=False)["input_ids"]
+
+
+def build_step_supervised_row(tokenizer: Any, question: str, answer: str, intermediate_values: list[str]) -> dict:
+    """Training row for the *step-supervised* objective (plan item (e) above; not Geiping
+    et al.). Same `input_ids`/`labels` as `build_example_ids`, plus:
+    `n_steps` = number of `<<..=v>>` rationale steps (>= 1) = the number of loop iterations
+    this example gets; `hash_pos` = position of the last ANSWER_PREFIX token, whose next-token
+    read-out is the first answer-number token; `step_targets[i-1]` = first token of " v_i"
+    for i = 1..n_steps-1 -- iteration i's read-out at `hash_pos` is supervised on it, and
+    iteration n_steps on the answer span (`labels`) as usual. 84% of GSM8K-Aug step values
+    are a single GPT-2 token, so the first token is the whole value for most steps."""
+    input_ids, labels = build_example_ids(tokenizer, question, answer)
+    prompt_len = len(tokenizer(PROMPT_TEMPLATE.format(question=question), add_special_tokens=False)["input_ids"])
+    prefix_ids = tokenizer(ANSWER_PREFIX, add_special_tokens=False)["input_ids"]
+    hash_pos = prompt_len + len(prefix_ids) - 1
+    assert input_ids[hash_pos] == prefix_ids[-1], "ANSWER_PREFIX tokenises differently in context"
+    n_steps = max(1, len(intermediate_values))
+    step_targets = [tokenizer(" " + v, add_special_tokens=False)["input_ids"][0] for v in intermediate_values[:-1]]
+    return {"input_ids": input_ids, "labels": labels, "hash_pos": hash_pos, "n_steps": n_steps,
+            "step_targets": step_targets}
+
+
+def first_value_token(tokenizer: Any, value: str) -> int:
+    return tokenizer(" " + value, add_special_tokens=False)["input_ids"][0]
+
+
+def is_single_token_value(tokenizer: Any, value: str) -> bool:
+    return len(tokenizer(" " + value, add_special_tokens=False)["input_ids"]) == 1
 
 
 def sample_num_recurrences(

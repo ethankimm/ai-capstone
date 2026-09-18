@@ -21,6 +21,8 @@ results/*/*
 !results/*/notes.md
 !results/*/predictions.jsonl
 !results/*/predictions_r*.jsonl
+!results/*/predictions_oracle*.jsonl
+!results/*/step_readouts.jsonl
 !results/*/train_log.json
 
 # Model artifacts anywhere else
