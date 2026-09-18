@@ -14,6 +14,12 @@ fi
 # default locally since local dev machines here don't have CUDA.
 uv sync --extra train --extra dev
 
+# RunRecord.author reads this on the machine that saves the record -- a fresh pod has it unset.
+if ! git config user.name >/dev/null 2>&1; then
+    echo "WARNING: git user.name is unset on this pod -- RunRecord.author will be empty."
+    echo "         Fix: git config --global user.name 'Your Name'"
+fi
+
 echo
 echo "Done. Sanity-check GPU visibility:"
 uv run python -c "import torch; print('cuda available:', torch.cuda.is_available(), '| device:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'none')"

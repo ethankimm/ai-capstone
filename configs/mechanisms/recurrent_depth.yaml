@@ -7,18 +7,35 @@ dataset:
   eval_split: test
   eval_n: 200
   eval_seed: 0
-compute_steps: null        # TODO(owner): loop iterations r -- fill in once
-                            # latentreasoning/mechanisms/recurrent_depth.py is implemented.
-looped_block: null          # TODO(owner): which block(s) of gpt2-edited loop
+compute_steps: 32           # eval-time loop iterations r reported as the run's compute_steps
+                            # (= r_bar, the training mean); one checkpoint is swept over
+                            # eval_recurrences and the sweep is logged under metrics.extra.sweep_by_r
+eval_recurrences: [1, 2, 4, 8, 16, 32, 64]
+looped_block:               # pretrained gpt2 blocks, (prelude, core, coda) = (4, 4, 4):
+  prelude: [0, 1, 2, 3]     #   r=1 is plain 12-layer GPT-2; r=32 unrolls to 4 + 4*32 + 4 = 136
+  core: [4, 5, 6, 7]        #   the core is the looped block, fed adapter([e ; LN(s)])
+  coda: [8, 9, 10, 11]
+recurrence:                 # Geiping et al. Sec. 3.3 defaults
+  mean_recurrence: 32       # r_bar of the log-normal Poisson r is sampled from, per batch
+  lognormal_sigma: 0.5
+  backprop_last_k: 8        # truncated backprop: gradient through the last k iterations only
+  init_state_std: 0.6325    # s_0 ~ N(0, 2/5)
 training:
-  epochs: null              # TODO(owner)
-  batch_size: null
-  lr: null
+  epochs: 3
+  batch_size: 16
+  lr: 5e-5
+generation:
+  max_new_tokens: 32
+  do_sample: false
+prompt_format: "direct answer: Question: ...\nAnswer: -> ' #### N' (same as filler_tokens compute_steps=0)"
 notes: >
   Geiping et al. arXiv:2502.05171 -- loop a recurrent block r times per token instead of
   stacking r distinct layers. Reference implementation + pretrained model (huginn-0125,
   3.5B -- too big to reuse directly): github.com/seal-rg/recurrent-pretraining,
-  huggingface.co/tomg-group-umd/huginn-0125. Before choosing how to decode intermediate
-  states, see "Looped Transformers under the Jacobian Lens" (reading list) -- loop
-  iterations largely overwrite rather than accumulate state. Stub config --
-  latentreasoning/mechanisms/recurrent_depth.py is unimplemented; fill in alongside it.
+  huggingface.co/tomg-group-umd/huginn-0125. Here pretrained gpt2 is re-wired into the
+  paper's prelude/looped-core/coda form (latentreasoning/mechanisms/recurrent_depth.py
+  has the mapping and every deviation from the paper) and fine-tuned with the paper's
+  r distribution; the claim under test is that accuracy rises with test-time r and
+  saturates. Before choosing how to decode intermediate states, see "Looped Transformers
+  under the Jacobian Lens" (reading list) -- loop iterations largely overwrite rather
+  than accumulate state. Script: scripts/train_recurrent_depth.py.

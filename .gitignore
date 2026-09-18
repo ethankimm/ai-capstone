@@ -20,6 +20,7 @@ results/*/*
 !results/*/manifest.json
 !results/*/notes.md
 !results/*/predictions.jsonl
+!results/*/predictions_r*.jsonl
 !results/*/train_log.json
 
 # Model artifacts anywhere else
