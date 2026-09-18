@@ -30,7 +30,11 @@ r is a free knob: accuracy improves with r and saturates -- that is the claim to
   half), so at init the model *is* GPT-2 for any r (every iteration returns R(e)) and
   training has to learn to use the loop -- a null result (flat accuracy in r) is
   therefore a real finding about fine-tuning a pretrained net into a looped one, not
-  an init artefact.
+  an init artefact. The flip side: training *starts* at a collapsed fixed point, so
+  `adapter_init="random_state"` ([I, N(0, 2/(5h))] -- state injected from step one, e
+  path intact) and `"random"` (fresh adapter, as in the paper) exist to test whether
+  that is the attractor. `core_init="random"` re-draws the looped blocks with GPT-2's
+  init so no pretrained 12-layer shortcut exists (pair with a larger `--core-lr`).
 - The state is LayerNorm'd before it enters the adapter (`A[e; LN(s)]`). The paper
   RMSNorms the adapter *output* and uses sandwich-norm blocks; GPT-2 blocks are pre-LN
   only and can't be retrofitted without changing the pretrained function, so the norm
@@ -60,6 +64,49 @@ Gotchas:
   verify padded == unpadded outputs in a smoke test whenever transformers is bumped.
 
 `scripts/train_recurrent_depth.py` is the training/eval loop that uses these.
+
+---
+
+**Status (2026-09-18) and plan.** Two pilots (paper-faithful k=8 and full BPTT; see
+`results/20260918-05*_recurrent_depth_*`) fine-tune into a loop that reaches its fixed
+point by iteration 3 (KL between consecutive read-outs exactly 0 from iteration 2) so
+accuracy is flat in r: the paper's path independence reproduces, its test-time scaling
+does not, under fine-tune-from-pretrained. Pilots (a)-(c) below attack the collapse
+directly; (e) and (f) are the fallbacks that give the project a *working* vertical
+scratchpad for the Oct 9 decoding / Oct 16 causality + transplant steps regardless.
+
+- (a) `--adapter-init random_state`: break the collapsed init (single-variable).
+- (b) `--mean-recurrence 4 --backprop-last-k 8`: every iteration on-distribution and
+  supervised; if a 4-iteration loop still collapses to 2, depth mismatch isn't it.
+- (c) `--core-init random --core-lr 5e-4`: no pretrained shortcut to fall back on.
+- (d) Full-scale run of the paper-faithful recipe (~4.6 h / ~$1.25 on an A5000):
+  deferred -- 3750 steps is ~6M tokens and converting pretrained models to looped ones
+  is known to need billions of tokens of uptraining (Bae et al. 2024, Relaxed Recursive
+  Transformers), so expect the same curve. Do it later only for a quotable accuracy
+  against the 13.0% full-scale direct-answer control.
+- (e) **Step-supervised loop** (planned, not Geiping et al. -- a new mechanism, to be
+  named as such): set r = number of `<<a+b=c>>` steps in the example
+  (`Example.intermediate_values`); at iteration i the coda + LM head read-out at the
+  last prompt position must produce intermediate value i, and the final answer at
+  iteration r. The vertical analogue of CODI (which supervises its latent tokens by
+  distilling the CoT teacher). Guarantees distinct, contentful s_i with a known label
+  each -- exactly the Oct 9 decoding target -- so for RQ1 ("what is encoded") it is a
+  *positive control*, not evidence; RQ2 (patch s_i -> predicted downstream change) and
+  RQ3 (transplant a CODI latent-token state into iteration i) remain real tests.
+  Variant (e'): CODI-style distillation of the explicit-CoT checkpoint's step-i hidden
+  state into s_i instead of hard targets -- keeps the scratchpad latent and makes the
+  individual-vs-shared-decoder question directly askable across CODI <-> looped, since
+  both would be trained against the same teacher. Implementation: a `--step-supervised`
+  training mode in the script; `LoopedGPT2.forward(return_states=True)` already exposes
+  every s_i and `readout()` reads any of them.
+- (f) **Released Huginn-0125** (3.5B, `tomg-group-umd/huginn-0125`; planned): eval on
+  GSM8K-Aug test n=200 sweeping r in {4, 8, 16, 32, 64}, bf16 (~7 GB) fits the A5000,
+  ~1-2 h / ~$0.50. Same move as CODI's released-weights run: verifies the paper's
+  mechanism exists and provides real recurrent-depth states with test-time scaling to
+  probe. Cost: not the shared GPT-2 backbone, so transplant to/from it goes through the
+  Step-4 lightweight mapping (768-d <-> 5280-d) -- confirm with Ethan/Kevin that a
+  second backbone is acceptable for that leg before spending the time. Log it as
+  `recurrent_depth` with `model.backbone="huginn-0125"`, stage `full_run`.
 """
 from __future__ import annotations
 

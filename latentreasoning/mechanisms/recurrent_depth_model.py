@@ -15,6 +15,7 @@ intermediate states the Oct 9 decoding work will probe.
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
 import torch
@@ -23,6 +24,7 @@ import torch.nn.functional as F
 from torch.utils.checkpoint import checkpoint
 from transformers import GPT2LMHeadModel
 from transformers.masking_utils import create_causal_mask
+from transformers.pytorch_utils import Conv1D
 
 from latentreasoning.mechanisms.recurrent_depth import DEFAULT_INIT_STATE_STD
 
@@ -30,6 +32,8 @@ from latentreasoning.mechanisms.recurrent_depth import DEFAULT_INIT_STATE_STD
 class LoopedGPT2(nn.Module):
     CONFIG_FILE = "looped_config.json"
     WEIGHTS_FILE = "model.pt"
+    ADAPTER_INITS = ("identity", "random_state", "random")
+    CORE_INITS = ("pretrained", "random")
 
     def __init__(
         self,
@@ -38,14 +42,26 @@ class LoopedGPT2(nn.Module):
         n_core: int = 4,
         n_coda: int = 4,
         init_state_std: float = DEFAULT_INIT_STATE_STD,
+        adapter_init: str = "identity",
+        core_init: str = "pretrained",
     ):
+        """`adapter_init`: how A[e; LN(s)] starts. `identity` = [I, 0] (the model is GPT-2
+        for every r and every s_i = R(e) -- training starts *at* a collapsed fixed point);
+        `random_state` = [I, N(0, init_state_std^2 / h)] (pretrained path intact, but the
+        state is injected from step one so iterations differ); `random` = both halves
+        N(0, init_state_std^2 / h) (a fresh adapter, as in the paper). `core_init`:
+        `pretrained` keeps GPT-2 blocks [n_prelude, n_prelude+n_core); `random` re-draws
+        them with GPT-2's own init so no 12-layer shortcut exists."""
         super().__init__()
         t = gpt2.transformer
         if n_prelude + n_core + n_coda > len(t.h):
             raise ValueError(f"{n_prelude}+{n_core}+{n_coda} blocks requested, backbone has {len(t.h)}")
+        if adapter_init not in self.ADAPTER_INITS or core_init not in self.CORE_INITS:
+            raise ValueError(f"adapter_init={adapter_init!r} core_init={core_init!r}")
         self.config = gpt2.config
         self.n_prelude, self.n_core, self.n_coda = n_prelude, n_core, n_coda
         self.init_state_std = init_state_std
+        self.adapter_init, self.core_init = adapter_init, core_init
 
         self.wte, self.wpe, self.drop = t.wte, t.wpe, t.drop
         self.prelude = nn.ModuleList(t.h[:n_prelude])
@@ -53,14 +69,25 @@ class LoopedGPT2(nn.Module):
         self.coda = nn.ModuleList(t.h[n_prelude + n_core : n_prelude + n_core + n_coda])
         self.ln_f = t.ln_f
         self.lm_head = gpt2.lm_head  # weight-tied to wte, as in GPT2LMHeadModel
+        if core_init == "random":
+            for block in self.core:
+                reinit_gpt2_block(block, self.config)
 
         h = self.config.n_embd
         self.state_norm = nn.LayerNorm(h, eps=self.config.layer_norm_epsilon)
         self.adapter = nn.Linear(2 * h, h)
-        with torch.no_grad():  # A[e; s] = e at init -> r=1 (and any r) is plain GPT-2
-            self.adapter.weight.zero_()
+        # LN(s) has unit per-dim variance, so N(0, std^2/h) weights on the state half give
+        # the injected state term per-dim std ~ init_state_std at init -- same scale as s_0.
+        std = init_state_std / math.sqrt(h)
+        with torch.no_grad():
             self.adapter.bias.zero_()
-            self.adapter.weight[:, :h].copy_(torch.eye(h))
+            if adapter_init == "random":
+                self.adapter.weight.normal_(0.0, std)
+            else:
+                self.adapter.weight.zero_()
+                self.adapter.weight[:, :h].copy_(torch.eye(h))
+                if adapter_init == "random_state":
+                    self.adapter.weight[:, h:].normal_(0.0, std)
 
     # ---- pieces -------------------------------------------------------------------
     def embed(self, input_ids: torch.Tensor, attention_mask: torch.Tensor):
@@ -204,6 +231,7 @@ class LoopedGPT2(nn.Module):
         return {
             "n_prelude": self.n_prelude, "n_core": self.n_core, "n_coda": self.n_coda,
             "init_state_std": self.init_state_std,
+            "adapter_init": self.adapter_init, "core_init": self.core_init,
         }
 
     def save(self, ckpt_dir: str | Path) -> None:
@@ -219,6 +247,25 @@ class LoopedGPT2(nn.Module):
         model = cls(GPT2LMHeadModel.from_pretrained(backbone, **from_pretrained_kwargs), **cfg)
         model.load_state_dict(torch.load(ckpt_dir / cls.WEIGHTS_FILE, map_location="cpu"))
         return model
+
+
+@torch.no_grad()
+def reinit_gpt2_block(block: nn.Module, config) -> None:
+    """Re-draw one GPT2Block with GPT-2's own init scheme: N(0, initializer_range) on every
+    Conv1D, zero biases, LayerNorm reset to (1, 0), and the two residual-path projections
+    (`attn.c_proj`, `mlp.c_proj`) scaled down by 1/sqrt(2 * n_layer). Mirrors
+    `GPT2PreTrainedModel._init_weights`, which transformers 5 no-ops on already-loaded
+    weights (the params carry `_is_hf_initialized`), so it is spelled out here."""
+    std = config.initializer_range
+    for mod in block.modules():
+        if isinstance(mod, Conv1D):
+            nn.init.normal_(mod.weight, 0.0, std)
+            nn.init.zeros_(mod.bias)
+        elif isinstance(mod, nn.LayerNorm):
+            nn.init.ones_(mod.weight)
+            nn.init.zeros_(mod.bias)
+    for mod in (block.attn, block.mlp):
+        nn.init.normal_(mod.c_proj.weight, 0.0, std / math.sqrt(2 * config.n_layer))
 
 
 def unrolled_depth(n_prelude: int, n_core: int, n_coda: int, r: int) -> int:

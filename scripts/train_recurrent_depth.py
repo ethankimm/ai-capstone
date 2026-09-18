@@ -76,7 +76,15 @@ def train(model: LoopedGPT2, rows, args, pad_id: int, device: str) -> tuple[floa
     """Returns (mean loss over all steps, log_history) -- same shape as Trainer's."""
     steps_per_epoch = math.ceil(len(rows) / args.batch_size)
     total_steps = int(math.ceil(args.epochs * steps_per_epoch))
-    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.0)
+    core_lr = args.core_lr if args.core_lr is not None else args.lr
+    core_params = set(id(p) for p in model.core.parameters())
+    optimizer = torch.optim.AdamW(
+        [
+            {"params": [p for p in model.parameters() if id(p) not in core_params], "lr": args.lr},
+            {"params": list(model.core.parameters()), "lr": core_lr},
+        ],
+        weight_decay=0.0,
+    )
     schedule = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda s: max(0.0, 1 - s / total_steps))
     r_rng = np.random.default_rng(args.seed)
     order_gen = torch.Generator().manual_seed(args.seed)
@@ -181,6 +189,12 @@ def main() -> None:
     parser.add_argument("--lognormal-sigma", type=float, default=DEFAULT_LOGNORMAL_SIGMA)
     parser.add_argument("--backprop-last-k", type=int, default=DEFAULT_BACKPROP_LAST_K)
     parser.add_argument("--init-state-std", type=float, default=DEFAULT_INIT_STATE_STD)
+    parser.add_argument("--adapter-init", default="identity", choices=LoopedGPT2.ADAPTER_INITS,
+                        help="identity=[I,0] (GPT-2 at init, collapsed from step 0); random_state=[I,N(0,std^2/h)]; random=fresh adapter")
+    parser.add_argument("--core-init", default="pretrained", choices=LoopedGPT2.CORE_INITS,
+                        help="random re-draws the looped blocks with GPT-2's init (no pretrained 12-layer shortcut)")
+    parser.add_argument("--core-lr", type=float, default=None,
+                        help="separate lr for the looped blocks (default = --lr); use with --core-init random")
     parser.add_argument("--checkpoint-iterations", action="store_true",
                         help="activation-checkpoint each with-grad loop iteration (needed for large --backprop-last-k)")
     parser.add_argument("--eval-recurrences", default="1,2,4,8,16,32,64", help="comma-separated test-time r sweep")
@@ -213,7 +227,8 @@ def main() -> None:
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
     tokenizer.pad_token = tokenizer.eos_token
     model = LoopedGPT2(
-        GPT2LMHeadModel.from_pretrained(MODEL_ID), args.n_prelude, args.n_core, args.n_coda, args.init_state_std
+        GPT2LMHeadModel.from_pretrained(MODEL_ID), args.n_prelude, args.n_core, args.n_coda, args.init_state_std,
+        adapter_init=args.adapter_init, core_init=args.core_init,
     ).to(device)
 
     if args.local_sample:
@@ -232,7 +247,8 @@ def main() -> None:
     if not args.no_save:
         out_dir.mkdir(parents=True, exist_ok=True)
     print(f"run_id={run_id} device={device} train_n={len(rows)} eval_n={len(eval_examples)} "
-          f"split={split} r_bar={args.mean_recurrence} k={args.backprop_last_k} eval_r={eval_rs}", flush=True)
+          f"split={split} r_bar={args.mean_recurrence} k={args.backprop_last_k} eval_r={eval_rs} "
+          f"adapter_init={args.adapter_init} core_init={args.core_init} core_lr={args.core_lr or args.lr}", flush=True)
 
     train_loss, log_history = train(model, rows, args, tokenizer.pad_token_id, device)
     train_seconds = log_history[-1]["elapsed_s"] if log_history else 0.0
@@ -266,8 +282,9 @@ def main() -> None:
                     f.write(json.dumps(rec) + "\n")
 
     diag = diagnostics(model, tokenizer, eval_examples, max(eval_rs), args, device)
-    print(f"convergence at r={max(eval_rs)}: state_rel_delta[0,1,2,-1]="
-          f"{[diag['state_rel_delta'][i] for i in (0, 1, 2, -1)]} next_token_kl[-1]={diag['next_token_kl'][-1]}")
+    show = [round(x, 5) for x in diag["state_rel_delta"][:3]] + [round(diag["state_rel_delta"][-1], 5)]
+    print(f"convergence at r={max(eval_rs)}: state_rel_delta[0,1,2,-1]={show} "
+          f"next_token_kl[-1]={diag['next_token_kl'][-1]:.4g}")
 
     if args.no_save:
         print("--no-save: not recording a run")
@@ -311,6 +328,9 @@ def main() -> None:
             "backprop_last_k": args.backprop_last_k,
             "checkpoint_iterations": args.checkpoint_iterations,
             "init_state_std": args.init_state_std,
+            "adapter_init": args.adapter_init,
+            "core_init": args.core_init,
+            "core_lr": args.core_lr if args.core_lr is not None else args.lr,
             "eval_recurrences": eval_rs,
             "max_new_tokens": args.max_new_tokens,
             "prompt_format": "direct answer (no rationale), same as filler_tokens compute_steps=0",
@@ -318,7 +338,8 @@ def main() -> None:
         seed=seed,
         hardware=args.hardware,
         notes=(
-            f"recurrent_depth {args.stage}: gpt2 split {split} (core looped), trained with "
+            f"recurrent_depth {args.stage}: gpt2 split {split} (core looped; adapter_init={args.adapter_init}, "
+            f"core_init={args.core_init}), trained with "
             f"r~lognormal-Poisson(r_bar={args.mean_recurrence}, sigma={args.lognormal_sigma}), "
             f"k={args.backprop_last_k}, on {len(rows)} train examples; eval sweep r={eval_rs}, "
             f"compute_steps reports r={primary_r}"

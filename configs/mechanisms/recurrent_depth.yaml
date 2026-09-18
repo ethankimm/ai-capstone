@@ -20,6 +20,8 @@ recurrence:                 # Geiping et al. Sec. 3.3 defaults
   lognormal_sigma: 0.5
   backprop_last_k: 8        # truncated backprop: gradient through the last k iterations only
   init_state_std: 0.6325    # s_0 ~ N(0, 2/5)
+  adapter_init: identity    # identity | random_state | random  (pilots a-c vary these; see the
+  core_init: pretrained     # pretrained | random               module docstring's status/plan)
 training:
   epochs: 3
   batch_size: 16
