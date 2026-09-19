@@ -24,6 +24,7 @@ results/*/*
 !results/*/predictions_oracle*.jsonl
 !results/*/step_readouts.jsonl
 !results/*/patch_pairs.jsonl
+!results/*/ablation_pairs.jsonl
 !results/*/train_log.json
 
 # Model artifacts anywhere else

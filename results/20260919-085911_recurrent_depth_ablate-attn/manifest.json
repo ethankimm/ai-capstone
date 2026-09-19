@@ -1,0 +1,100 @@
+{
+  "run_id": "20260919-085911_recurrent_depth_ablate-attn",
+  "mechanism": "recurrent_depth",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "local:20260918-214656_recurrent_depth_stepsup-split4-4-4-full/ckpt",
+    "n_params": 125621760
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": 0.0,
+    "compute_steps": null,
+    "extra": {
+      "ablation": {
+        "n_pairs": 200,
+        "answer_proxy_changed": {
+          "real": 0.025,
+          "control": 0.035,
+          "zero_ablation": 0.095,
+          "mean_ablation": 0.025,
+          "wilson_zero": [
+            0.095,
+            0.06166261364986359,
+            0.14360265114397636
+          ],
+          "wilson_mean": [
+            0.025,
+            0.010724561470787711,
+            0.05717914415161715
+          ]
+        },
+        "mcnemar_zero_vs_real": {
+          "both": 4,
+          "a_only": 15,
+          "b_only": 1,
+          "p_value": 0.000518798828125
+        },
+        "mcnemar_mean_vs_real": {
+          "both": 4,
+          "a_only": 1,
+          "b_only": 1,
+          "p_value": 1.0
+        },
+        "mcnemar_zero_vs_control": {
+          "both": 6,
+          "a_only": 13,
+          "b_only": 1,
+          "p_value": 0.0018310546875
+        },
+        "mcnemar_mean_vs_control": {
+          "both": 3,
+          "a_only": 2,
+          "b_only": 4,
+          "p_value": 0.6875
+        }
+      },
+      "attention": {
+        "n_examples": 80,
+        "self_attention_mass_by_coda_layer": [
+          0.023425444797612726,
+          0.02275026239803992,
+          0.015273104791413061,
+          0.008718364767264574
+        ],
+        "other_positions_mass_by_coda_layer": [
+          0.9765745542943478,
+          0.9772497422993183,
+          0.9847268976271153,
+          0.9912816382944584
+        ]
+      },
+      "source_run_id": "20260918-214656_recurrent_depth_stepsup-split4-4-4-full",
+      "patch_run_id": "20260919-075647_recurrent_depth_patch-pilot",
+      "design": "zero/mean ablation replaying patch-pilot pairs; coda self-attention diagnostic"
+    }
+  },
+  "hyperparams": {
+    "n_pairs": 200,
+    "attn_n": 80,
+    "eval_n": 200,
+    "eval_seed": 0,
+    "seed": 42
+  },
+  "seed": 42,
+  "hardware": "RunPod RTX A5000 (secure) / NVIDIA RTX A5000",
+  "author": "Henning Lindig",
+  "notes": "recurrent_depth ablation+attention diagnostics ablate-attn: 200 ablation pairs, 80 attention examples",
+  "timestamp_utc": "2026-09-19T08:59:11.605193+00:00",
+  "git": {
+    "commit": "f4aab59",
+    "dirty": null
+  }
+}
