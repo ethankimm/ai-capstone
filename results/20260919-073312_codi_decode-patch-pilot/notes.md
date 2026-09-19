@@ -183,3 +183,17 @@ pair rather than a matched donor.
   different training regime (curriculum vs. self-distillation), and would test whether
   the faithfulness gap found here is specific to self-distillation or general to
   horizontal continuous-thought mechanisms.
+
+**Correction (2026-09-19, appended by `20260919-090132_codi_ablate-attn`'s write-up):** this
+run's model was never put in eval mode — `eval_codi.build_model` didn't call `model.eval()`,
+and unlike `eval_codi.py`'s own main (which does, so the accuracy reproduction stands),
+`decode_patch_codi.py` never added it. `get_peft_model` injects fresh LoRA layers whose
+`Dropout(0.1)` modules default to training mode, so **LoRA dropout was active in every
+forward pass here** (verified locally on peft 0.21.0; GPT-2's own dropouts were in eval).
+Symptom: the greedy baseline decode of the same recipient disagrees with itself ~14-20% of
+the time across repeats. Consequences: every "answer changed" rate above sits on a ~14-20%
+re-decode noise floor (absolute rates inflated, power reduced); the real-vs-control
+contrasts remain valid as paired comparisons (both conditions share the noise) and the
+qualitative null is unchanged; decoding accuracy is if anything underestimated. Numbers
+above are left as run. Fixed in `build_model` in commit for `20260919-090132_codi_ablate-attn`;
+re-run in eval mode before citing these numbers (~$0.11 on an A5000).

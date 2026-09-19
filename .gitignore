@@ -25,6 +25,7 @@ results/*/*
 !results/*/step_readouts.jsonl
 !results/*/patch_pairs.jsonl
 !results/*/ablation_pairs.jsonl
+!results/*/attention_mass.jsonl
 !results/*/train_log.json
 
 # Model artifacts anywhere else

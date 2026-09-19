@@ -128,6 +128,12 @@ def build_model(model_args, training_args):
             tokenizer.pad_token_id = tokenizer.convert_tokens_to_ids('[PAD]')
     model = model.to('cuda')
     model.to(torch.bfloat16)
+    # get_peft_model() injects fresh LoRA layers whose Dropout(0.1) modules default to
+    # training mode even though from_pretrained() returned the backbone in eval mode --
+    # every importer of build_model must get a deterministic model, so set eval here.
+    # (decode_patch_codi.py / ablate_attention_codi.py ran without this before 2026-09-19;
+    # see those runs' notes.md corrections.)
+    model.eval()
     return model, tokenizer, load_result
 
 
