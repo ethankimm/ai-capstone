@@ -1,0 +1,189 @@
+{"idx": 0, "n_steps": 4, "step_values": ["8", "28", "16", "16"], "answer": "16", "readout_by_iteration": [" 24", " 37", " 29"], "hit_by_iteration": [false, false, false]}
+{"idx": 1, "n_steps": 2, "step_values": ["60", "240"], "answer": "240", "readout_by_iteration": [" 60"], "hit_by_iteration": [true]}
+{"idx": 3, "n_steps": 2, "step_values": ["90", "15"], "answer": "15", "readout_by_iteration": [" 90"], "hit_by_iteration": [true]}
+{"idx": 4, "n_steps": 5, "step_values": ["8", "80", "130", "39", "91"], "answer": "91", "readout_by_iteration": [" 20", " 20", " 30", " 70"], "hit_by_iteration": [false, false, false, false]}
+{"idx": 5, "n_steps": 3, "step_values": ["10", "12", "22"], "answer": "22", "readout_by_iteration": [" 10", " 18"], "hit_by_iteration": [true, false]}
+{"idx": 7, "n_steps": 3, "step_values": ["2", "9", "11"], "answer": "11", "readout_by_iteration": [" 2", " 9"], "hit_by_iteration": [true, true]}
+{"idx": 8, "n_steps": 2, "step_values": ["50", "25"], "answer": "25", "readout_by_iteration": [" 65"], "hit_by_iteration": [false]}
+{"idx": 9, "n_steps": 5, "step_values": [".5", "150", "120", "12", "482"], "answer": "482", "readout_by_iteration": [" 300", " 120", " 12", " 8"], "hit_by_iteration": [false, false, false, false]}
+{"idx": 10, "n_steps": 3, "step_values": ["6", "2", "4"], "answer": "4", "readout_by_iteration": [" 1", " 1"], "hit_by_iteration": [false, false]}
+{"idx": 11, "n_steps": 2, "step_values": ["7", "14.00"], "answer": "14", "readout_by_iteration": [" 7"], "hit_by_iteration": [true]}
+{"idx": 12, "n_steps": 4, "step_values": ["6", "6.00", "3", "18.00"], "answer": "18", "readout_by_iteration": [" 6", " 3", " 12"], "hit_by_iteration": [true, false, false]}
+{"idx": 14, "n_steps": 4, "step_values": ["3", "300", "18", "319"], "answer": "319", "readout_by_iteration": [" 200", " 120", " 8"], "hit_by_iteration": [false, false, false]}
+{"idx": 15, "n_steps": 4, "step_values": ["48", "50", "10", "2"], "answer": "2", "readout_by_iteration": [" 48", " 50", " 50"], "hit_by_iteration": [true, true, false]}
+{"idx": 16, "n_steps": 4, "step_values": ["6", "30", "42", "72"], "answer": "72", "readout_by_iteration": [" 6", " 60", " 84"], "hit_by_iteration": [true, false, false]}
+{"idx": 17, "n_steps": 3, "step_values": ["17500", "42000", "9500"], "answer": "9500", "readout_by_iteration": [" 17", " 42"], "hit_by_iteration": [true, true]}
+{"idx": 18, "n_steps": 5, "step_values": ["10", "5", "5", "5", "15"], "answer": "15", "readout_by_iteration": [" 5", " 50", " 10", " 30"], "hit_by_iteration": [false, false, false, false]}
+{"idx": 19, "n_steps": 4, "step_values": ["16", "48", "102", "54"], "answer": "54", "readout_by_iteration": [" 24", " 36", " 36"], "hit_by_iteration": [false, false, false]}
+{"idx": 20, "n_steps": 6, "step_values": ["40", "10", "50", "30", "90", "170"], "answer": "170", "readout_by_iteration": [" 40", " 10", " 15", " 150", " 150"], "hit_by_iteration": [true, true, false, false, false]}
+{"idx": 21, "n_steps": 2, "step_values": ["200", "160"], "answer": "160", "readout_by_iteration": [" 200"], "hit_by_iteration": [true]}
+{"idx": 22, "n_steps": 5, "step_values": ["7.50", "30", "6", "12", "42"], "answer": "42", "readout_by_iteration": [" 7", " 3", " 6", " 18"], "hit_by_iteration": [true, false, true, false]}
+{"idx": 23, "n_steps": 2, "step_values": ["310", "250"], "answer": "60", "readout_by_iteration": [" 250"], "hit_by_iteration": [false]}
+{"idx": 24, "n_steps": 4, "step_values": ["32", "54", "12", "98"], "answer": "98", "readout_by_iteration": [" 108", " 12", " 54"], "hit_by_iteration": [false, false, false]}
+{"idx": 25, "n_steps": 3, "step_values": ["12", "20", "4"], "answer": "4", "readout_by_iteration": [" 32", " 4"], "hit_by_iteration": [false, false]}
+{"idx": 26, "n_steps": 2, "step_values": ["17509", "6277"], "answer": "6277", "readout_by_iteration": [" 5"], "hit_by_iteration": [false]}
+{"idx": 28, "n_steps": 2, "step_values": ["4", "8"], "answer": "8", "readout_by_iteration": [" 4"], "hit_by_iteration": [true]}
+{"idx": 29, "n_steps": 4, "step_values": ["5", "40", "132", "68"], "answer": "68", "readout_by_iteration": [" 33", " 6", " 5"], "hit_by_iteration": [false, false, false]}
+{"idx": 30, "n_steps": 4, "step_values": ["30", "40", "32", "2"], "answer": "2", "readout_by_iteration": [" 40", " 24", " 8"], "hit_by_iteration": [false, false, false]}
+{"idx": 31, "n_steps": 5, "step_values": ["140", "90", "100", "190", "110"], "answer": "110", "readout_by_iteration": [" 140", " 100", " 180", " 220"], "hit_by_iteration": [true, false, false, false]}
+{"idx": 32, "n_steps": 4, "step_values": ["4", "3", "12", "360"], "answer": "360", "readout_by_iteration": [" 4", " 240", " 240"], "hit_by_iteration": [true, false, false]}
+{"idx": 33, "n_steps": 2, "step_values": ["10", "7"], "answer": "7", "readout_by_iteration": [" 10"], "hit_by_iteration": [true]}
+{"idx": 34, "n_steps": 3, "step_values": ["1", "14", "14"], "answer": "14", "readout_by_iteration": [" 28", " 14"], "hit_by_iteration": [false, true]}
+{"idx": 35, "n_steps": 2, "step_values": ["25", "5"], "answer": "5", "readout_by_iteration": [" 35"], "hit_by_iteration": [false]}
+{"idx": 36, "n_steps": 3, "step_values": ["644", "865", "1509"], "answer": "1509", "readout_by_iteration": [" 7", " 15"], "hit_by_iteration": [false, false]}
+{"idx": 37, "n_steps": 2, "step_values": ["0.3", "6"], "answer": "6", "readout_by_iteration": [" 16"], "hit_by_iteration": [false]}
+{"idx": 38, "n_steps": 4, "step_values": ["400", "420", "820", "410"], "answer": "410", "readout_by_iteration": [" 400", " 420", " 7"], "hit_by_iteration": [true, true, false]}
+{"idx": 39, "n_steps": 5, "step_values": ["75", "15", "60", "30", "90"], "answer": "90", "readout_by_iteration": [" 7", " 16", " 32", " 48"], "hit_by_iteration": [false, false, false, false]}
+{"idx": 40, "n_steps": 3, "step_values": ["35", "42", "12"], "answer": "12", "readout_by_iteration": [" 35", " 22"], "hit_by_iteration": [true, false]}
+{"idx": 41, "n_steps": 4, "step_values": ["4200", "3", "12600", "7400"], "answer": "7400", "readout_by_iteration": [" 14", " 14", " 14"], "hit_by_iteration": [false, false, false]}
+{"idx": 42, "n_steps": 3, "step_values": ["9", "720", "20"], "answer": "20", "readout_by_iteration": [" 640", " 640"], "hit_by_iteration": [false, false]}
+{"idx": 43, "n_steps": 4, "step_values": ["5", "15", "13", "8"], "answer": "8", "readout_by_iteration": [" 9", " 9", " 10"], "hit_by_iteration": [false, false, false]}
+{"idx": 44, "n_steps": 3, "step_values": ["30", "48", "84"], "answer": "84", "readout_by_iteration": [" 30", " 48"], "hit_by_iteration": [true, true]}
+{"idx": 45, "n_steps": 2, "step_values": ["20", "80"], "answer": "80", "readout_by_iteration": [" 20"], "hit_by_iteration": [true]}
+{"idx": 46, "n_steps": 5, "step_values": ["44", "96", "24", "72", "168"], "answer": "168", "readout_by_iteration": [" 60", " 20", " 52", " 72"], "hit_by_iteration": [false, false, false, true]}
+{"idx": 47, "n_steps": 2, "step_values": ["9", "45"], "answer": "45", "readout_by_iteration": [" 9"], "hit_by_iteration": [true]}
+{"idx": 48, "n_steps": 4, "step_values": ["16", "64", "88", "12"], "answer": "12", "readout_by_iteration": [" 16", " 64", " 64"], "hit_by_iteration": [true, true, false]}
+{"idx": 49, "n_steps": 5, "step_values": ["150", "200", "350", "300", "30"], "answer": "30", "readout_by_iteration": [" 150", " 200", " 410", " 130"], "hit_by_iteration": [true, true, false, false]}
+{"idx": 50, "n_steps": 8, "step_values": ["4500", "3375", "7875", "3000", "1125", "4125", "12000", "6000"], "answer": "6000", "readout_by_iteration": [" 13", " 13", " 6000", " 5000", " 12", " 12", " 12"], "hit_by_iteration": [false, false, false, false, false, false, true]}
+{"idx": 51, "n_steps": 4, "step_values": ["18", "54", "80", "26"], "answer": "26", "readout_by_iteration": [" 18", " 12", " 8"], "hit_by_iteration": [true, false, false]}
+{"idx": 52, "n_steps": 5, "step_values": ["180", "185", "370", "550", "5"], "answer": "5", "readout_by_iteration": [" 180", " 6", " 6", " 3"], "hit_by_iteration": [true, false, false, false]}
+{"idx": 53, "n_steps": 4, "step_values": ["4", "8", "15", "1200"], "answer": "1200", "readout_by_iteration": [" 4", " 160", " 320"], "hit_by_iteration": [true, false, false]}
+{"idx": 54, "n_steps": 5, "step_values": ["800", "1200", "240", "960", "1110"], "answer": "1110", "readout_by_iteration": [" 800", " 1200", " 160", " 13"], "hit_by_iteration": [true, true, false, false]}
+{"idx": 55, "n_steps": 2, "step_values": ["11", "15"], "answer": "15", "readout_by_iteration": [" 11"], "hit_by_iteration": [true]}
+{"idx": 56, "n_steps": 2, "step_values": ["8000", "14000"], "answer": "14000", "readout_by_iteration": [" 12"], "hit_by_iteration": [false]}
+{"idx": 57, "n_steps": 2, "step_values": ["1300", "655"], "answer": "655", "readout_by_iteration": [" 9"], "hit_by_iteration": [false]}
+{"idx": 59, "n_steps": 3, "step_values": ["4", "12", "3"], "answer": "3", "readout_by_iteration": [" 4", " 6"], "hit_by_iteration": [true, false]}
+{"idx": 60, "n_steps": 2, "step_values": ["20", "120"], "answer": "120", "readout_by_iteration": [" 20"], "hit_by_iteration": [true]}
+{"idx": 61, "n_steps": 6, "step_values": ["50", "45", "20000", "30000", "1350000", "1450000"], "answer": "1,450,000", "readout_by_iteration": [" 5", " 5", " 15", " 15", " 15"], "hit_by_iteration": [false, false, false, false, false]}
+{"idx": 62, "n_steps": 3, "step_values": ["3", "30", "5"], "answer": "5", "readout_by_iteration": [" -", " 4"], "hit_by_iteration": [false, false]}
+{"idx": 63, "n_steps": 4, "step_values": ["35", "6", "120", "155"], "answer": "155", "readout_by_iteration": [" 12", " 42", " 84"], "hit_by_iteration": [false, false, false]}
+{"idx": 64, "n_steps": 5, "step_values": ["16", "8", "24", "30", "6"], "answer": "6", "readout_by_iteration": [" 120", " 15", " 30", " 30"], "hit_by_iteration": [false, false, false, true]}
+{"idx": 65, "n_steps": 2, "step_values": ["20", "5"], "answer": "5", "readout_by_iteration": [" 20"], "hit_by_iteration": [true]}
+{"idx": 66, "n_steps": 3, "step_values": ["12", "10", "5"], "answer": "5", "readout_by_iteration": [" 12", " 12"], "hit_by_iteration": [true, false]}
+{"idx": 67, "n_steps": 2, "step_values": ["25", "50"], "answer": "50", "readout_by_iteration": [" 25"], "hit_by_iteration": [true]}
+{"idx": 68, "n_steps": 2, "step_values": ["11", "132"], "answer": "132", "readout_by_iteration": [" 9"], "hit_by_iteration": [false]}
+{"idx": 69, "n_steps": 5, "step_values": ["7.50", "0.50", "30", "3", "27"], "answer": "27", "readout_by_iteration": [" 7", " 1", " 24", " 2"], "hit_by_iteration": [true, false, false, false]}
+{"idx": 70, "n_steps": 4, "step_values": ["90", "77", "87", "3"], "answer": "3", "readout_by_iteration": [" 67", " 87", " -"], "hit_by_iteration": [false, false, false]}
+{"idx": 71, "n_steps": 7, "step_values": ["30", "210", "840", "14", "5", "20", "34"], "answer": "34", "readout_by_iteration": [" 30", " 300", " 600", " 900", " 900", " 1800"], "hit_by_iteration": [true, false, false, false, false, false]}
+{"idx": 72, "n_steps": 4, "step_values": ["25", "200", "400", "25"], "answer": "25", "readout_by_iteration": [" 25", " 100", " 2"], "hit_by_iteration": [true, false, false]}
+{"idx": 73, "n_steps": 2, "step_values": ["8000", "12000"], "answer": "17000", "readout_by_iteration": [" 8000"], "hit_by_iteration": [true]}
+{"idx": 74, "n_steps": 3, "step_values": ["24", "6", "38"], "answer": "38", "readout_by_iteration": [" 24", " 16"], "hit_by_iteration": [true, false]}
+{"idx": 75, "n_steps": 4, "step_values": ["20", "40", "200", "4"], "answer": "4", "readout_by_iteration": [" 20", " 40", " 200"], "hit_by_iteration": [true, true, true]}
+{"idx": 76, "n_steps": 3, "step_values": ["115", "100", "50"], "answer": "50", "readout_by_iteration": [" 65", " 30"], "hit_by_iteration": [false, false]}
+{"idx": 77, "n_steps": 4, "step_values": ["70", "140", "240", "500"], "answer": "500", "readout_by_iteration": [" 70", " 120", " 180"], "hit_by_iteration": [true, false, false]}
+{"idx": 78, "n_steps": 4, "step_values": ["40", "160", "320", "160"], "answer": "160", "readout_by_iteration": [" 40", " 64", " 32"], "hit_by_iteration": [true, false, false]}
+{"idx": 79, "n_steps": 2, "step_values": ["34", "17"], "answer": "17", "readout_by_iteration": [" 40"], "hit_by_iteration": [false]}
+{"idx": 81, "n_steps": 2, "step_values": ["15", "5"], "answer": "5", "readout_by_iteration": [" 16"], "hit_by_iteration": [false]}
+{"idx": 82, "n_steps": 2, "step_values": ["96", "32"], "answer": "32", "readout_by_iteration": [" 70"], "hit_by_iteration": [false]}
+{"idx": 83, "n_steps": 2, "step_values": ["6", "2"], "answer": "2", "readout_by_iteration": [" 6"], "hit_by_iteration": [true]}
+{"idx": 84, "n_steps": 4, "step_values": ["4", "4", "6", "14"], "answer": "14", "readout_by_iteration": [" 4", " 6", " 14"], "hit_by_iteration": [true, false, false]}
+{"idx": 85, "n_steps": 4, "step_values": ["33", "32", "36", "101"], "answer": "101", "readout_by_iteration": [" 33", " 32", " 36"], "hit_by_iteration": [true, true, true]}
+{"idx": 86, "n_steps": 3, "step_values": ["560", "280", "840"], "answer": "840", "readout_by_iteration": [" 30", " 560"], "hit_by_iteration": [false, false]}
+{"idx": 87, "n_steps": 4, "step_values": ["120", "180", "3", "2"], "answer": "2", "readout_by_iteration": [" 50", " 60", " 10"], "hit_by_iteration": [false, false, false]}
+{"idx": 88, "n_steps": 4, "step_values": ["80", "98", "40", "58"], "answer": "58", "readout_by_iteration": [" 80", " 80", " 40"], "hit_by_iteration": [true, false, true]}
+{"idx": 89, "n_steps": 6, "step_values": ["2", "4", "24", "28", "32", "8"], "answer": "8", "readout_by_iteration": [" 18", " 36", " 12", " 12", " 12"], "hit_by_iteration": [false, false, false, false, false]}
+{"idx": 90, "n_steps": 6, "step_values": ["20", "26", "46", "18", "28", "5600"], "answer": "5,600", "readout_by_iteration": [" 20", " 20", " 13", " 800", " -"], "hit_by_iteration": [true, false, false, false, false]}
+{"idx": 91, "n_steps": 2, "step_values": ["14", "168"], "answer": "168", "readout_by_iteration": [" 24"], "hit_by_iteration": [false]}
+{"idx": 92, "n_steps": 7, "step_values": ["12", "6", "3", "8", "1", "8", "17"], "answer": "17", "readout_by_iteration": [" 12", " 2", " 1", " 1", " 2", " 2"], "hit_by_iteration": [true, false, false, false, false, false]}
+{"idx": 93, "n_steps": 4, "step_values": ["6", "5", "7", "3"], "answer": "3", "readout_by_iteration": [" 6", " 7", " 5"], "hit_by_iteration": [true, false, false]}
+{"idx": 94, "n_steps": 3, "step_values": ["300", "150", "450"], "answer": "450", "readout_by_iteration": [" 300", " 500"], "hit_by_iteration": [true, false]}
+{"idx": 95, "n_steps": 2, "step_values": ["6", "30"], "answer": "30", "readout_by_iteration": [" 6"], "hit_by_iteration": [true]}
+{"idx": 96, "n_steps": 3, "step_values": ["4", "3/4", "15"], "answer": "15", "readout_by_iteration": [" 9", " 18"], "hit_by_iteration": [false, false]}
+{"idx": 97, "n_steps": 3, "step_values": ["120", "180", "36"], "answer": "36", "readout_by_iteration": [" 120", " 180"], "hit_by_iteration": [true, true]}
+{"idx": 98, "n_steps": 4, "step_values": ["36", "52", "13", "39"], "answer": "39", "readout_by_iteration": [" 36", " 48", " 18"], "hit_by_iteration": [true, false, false]}
+{"idx": 99, "n_steps": 2, "step_values": ["20", "7"], "answer": "35", "readout_by_iteration": [" 5"], "hit_by_iteration": [false]}
+{"idx": 100, "n_steps": 5, "step_values": ["20", "3", "10", "33", "17"], "answer": "17", "readout_by_iteration": [" 20", " 3", " 10", " 35"], "hit_by_iteration": [true, true, true, false]}
+{"idx": 101, "n_steps": 4, "step_values": ["14", "56", "14", "70"], "answer": "70", "readout_by_iteration": [" 14", " 8", " 20"], "hit_by_iteration": [true, false, false]}
+{"idx": 102, "n_steps": 3, "step_values": ["12", "24", "576"], "answer": "576", "readout_by_iteration": [" 24", " 288"], "hit_by_iteration": [false, false]}
+{"idx": 103, "n_steps": 2, "step_values": ["16", "8"], "answer": "8", "readout_by_iteration": [" 8"], "hit_by_iteration": [false]}
+{"idx": 104, "n_steps": 4, "step_values": ["6", "32", "38", "48"], "answer": "12", "readout_by_iteration": [" 6", " 32", " 36"], "hit_by_iteration": [true, true, false]}
+{"idx": 105, "n_steps": 3, "step_values": ["80", "20", "20"], "answer": "20", "readout_by_iteration": [" 75", " 60"], "hit_by_iteration": [false, false]}
+{"idx": 106, "n_steps": 2, "step_values": ["6", "60"], "answer": "60", "readout_by_iteration": [" 40"], "hit_by_iteration": [false]}
+{"idx": 107, "n_steps": 2, "step_values": ["12", "4"], "answer": "4", "readout_by_iteration": [" 12"], "hit_by_iteration": [true]}
+{"idx": 108, "n_steps": 3, "step_values": ["10", "30", "25"], "answer": "25", "readout_by_iteration": [" 7", " 10"], "hit_by_iteration": [false, false]}
+{"idx": 109, "n_steps": 4, "step_values": ["14", "42", "56", "448"], "answer": "448", "readout_by_iteration": [" 42", " 56", " 336"], "hit_by_iteration": [false, false, false]}
+{"idx": 110, "n_steps": 5, "step_values": ["40", "40", "80", "20", "60"], "answer": "60", "readout_by_iteration": [" 40", " 40", " 100", " 20"], "hit_by_iteration": [true, true, false, true]}
+{"idx": 111, "n_steps": 3, "step_values": [".3", ".24", "24"], "answer": "24", "readout_by_iteration": [" 40", " 40"], "hit_by_iteration": [false, false]}
+{"idx": 112, "n_steps": 2, "step_values": ["7", "175"], "answer": "175", "readout_by_iteration": [" 7"], "hit_by_iteration": [true]}
+{"idx": 113, "n_steps": 6, "step_values": ["18", "15", "13", "11", "12", "23"], "answer": "23", "readout_by_iteration": [" 3", " 3", " 5", " 8", " 8"], "hit_by_iteration": [false, false, false, false, false]}
+{"idx": 114, "n_steps": 5, "step_values": ["100", "20", "2000", "1200", "3200"], "answer": "3200", "readout_by_iteration": [" 50", " 500", " 3000", " 6000"], "hit_by_iteration": [false, false, false, false]}
+{"idx": 115, "n_steps": 5, "step_values": ["216", "2592", "432", "864", "7344"], "answer": "11232", "readout_by_iteration": [" 216", " 12", " 6", " 6"], "hit_by_iteration": [true, false, false, false]}
+{"idx": 116, "n_steps": 4, "step_values": ["6", "40", "8", "14"], "answer": "14", "readout_by_iteration": [" 14", " 28", " 16"], "hit_by_iteration": [false, false, false]}
+{"idx": 117, "n_steps": 2, "step_values": ["10", "13"], "answer": "13", "readout_by_iteration": [" 10"], "hit_by_iteration": [true]}
+{"idx": 118, "n_steps": 3, "step_values": ["8", "7", "15"], "answer": "15", "readout_by_iteration": [" 6", " 6"], "hit_by_iteration": [false, false]}
+{"idx": 119, "n_steps": 2, "step_values": ["6", "48"], "answer": "48", "readout_by_iteration": [" 48"], "hit_by_iteration": [false]}
+{"idx": 120, "n_steps": 3, "step_values": ["48", "140", "92"], "answer": "92", "readout_by_iteration": [" 48", " 140"], "hit_by_iteration": [true, true]}
+{"idx": 121, "n_steps": 2, "step_values": ["8", "4"], "answer": "4", "readout_by_iteration": [" 68"], "hit_by_iteration": [false]}
+{"idx": 123, "n_steps": 2, "step_values": ["16", "4"], "answer": "20", "readout_by_iteration": [" 8"], "hit_by_iteration": [false]}
+{"idx": 125, "n_steps": 5, "step_values": ["72", "18", "54", "18", "36"], "answer": "36", "readout_by_iteration": [" 72", " 18", " 54", " 36"], "hit_by_iteration": [true, true, true, false]}
+{"idx": 126, "n_steps": 2, "step_values": ["2500", "43500"], "answer": "43,500", "readout_by_iteration": [" 10000"], "hit_by_iteration": [false]}
+{"idx": 127, "n_steps": 6, "step_values": ["40", "120", "160", "80", "48", "32"], "answer": "32", "readout_by_iteration": [" 40", " 120", " 140", " 140", " 60"], "hit_by_iteration": [true, true, false, false, false]}
+{"idx": 128, "n_steps": 4, "step_values": ["204", "160", "330", "694"], "answer": "694", "readout_by_iteration": [" 234", " 160", " 330"], "hit_by_iteration": [false, true, true]}
+{"idx": 129, "n_steps": 2, "step_values": ["4800", "2800"], "answer": "2800", "readout_by_iteration": [" 3"], "hit_by_iteration": [false]}
+{"idx": 130, "n_steps": 2, "step_values": ["90", "95"], "answer": "95", "readout_by_iteration": [" 30"], "hit_by_iteration": [false]}
+{"idx": 131, "n_steps": 2, "step_values": ["56", "280"], "answer": "280", "readout_by_iteration": [" 56"], "hit_by_iteration": [true]}
+{"idx": 132, "n_steps": 3, "step_values": ["78", "300", "60"], "answer": "60", "readout_by_iteration": [" 114", " 108"], "hit_by_iteration": [false, false]}
+{"idx": 133, "n_steps": 2, "step_values": ["700", "9"], "answer": "9", "readout_by_iteration": [" 2100"], "hit_by_iteration": [false]}
+{"idx": 134, "n_steps": 3, "step_values": ["90", "60", "360"], "answer": "360", "readout_by_iteration": [" 90", " 60"], "hit_by_iteration": [true, true]}
+{"idx": 135, "n_steps": 4, "step_values": ["30", "20", "50", "100"], "answer": "100", "readout_by_iteration": [" 50", " 150", " 150"], "hit_by_iteration": [false, false, false]}
+{"idx": 136, "n_steps": 3, "step_values": ["15.00", "27.00", "13.00"], "answer": "13", "readout_by_iteration": [" 20", " 30"], "hit_by_iteration": [false, false]}
+{"idx": 137, "n_steps": 4, "step_values": ["640", "540", "30", "1210"], "answer": "1210", "readout_by_iteration": [" 640", " 540", " 30"], "hit_by_iteration": [true, true, true]}
+{"idx": 138, "n_steps": 3, "step_values": ["6", "12", "48"], "answer": "48", "readout_by_iteration": [" 6", " 1"], "hit_by_iteration": [true, false]}
+{"idx": 140, "n_steps": 3, "step_values": ["40", "80", "140"], "answer": "140", "readout_by_iteration": [" 30", " 60"], "hit_by_iteration": [false, false]}
+{"idx": 141, "n_steps": 8, "step_values": ["2", "4", "24", "12", "2", "14", "60", "5"], "answer": "5", "readout_by_iteration": [" 20", " 20", " 12", " 2", " 14", " -", " -"], "hit_by_iteration": [false, false, false, false, false, false, false]}
+{"idx": 142, "n_steps": 3, "step_values": ["6", "8", "34"], "answer": "34", "readout_by_iteration": [" 6", " 8"], "hit_by_iteration": [true, true]}
+{"idx": 143, "n_steps": 2, "step_values": ["1245", "83"], "answer": "83", "readout_by_iteration": [" 12"], "hit_by_iteration": [true]}
+{"idx": 144, "n_steps": 2, "step_values": ["240", "15"], "answer": "15", "readout_by_iteration": [" 240"], "hit_by_iteration": [true]}
+{"idx": 145, "n_steps": 6, "step_values": ["84", "126", "14", "98", "147", "21"], "answer": "21", "readout_by_iteration": [" 14", " 42", " 42", " 63", " 63"], "hit_by_iteration": [false, false, false, false, false]}
+{"idx": 146, "n_steps": 3, "step_values": ["2.5", "150", "75"], "answer": "75", "readout_by_iteration": [" -", " 30"], "hit_by_iteration": [false, false]}
+{"idx": 147, "n_steps": 3, "step_values": ["2", "8", "2"], "answer": "2", "readout_by_iteration": [" 2", " 1"], "hit_by_iteration": [true, false]}
+{"idx": 148, "n_steps": 6, "step_values": ["400", "240", "640", "1040", "3120", "1248"], "answer": "1248", "readout_by_iteration": [" 400", " 480", " 480", " 1440", " 5"], "hit_by_iteration": [true, false, false, false, false]}
+{"idx": 149, "n_steps": 6, "step_values": ["12", "24", "48", "15", "99", "104"], "answer": "104", "readout_by_iteration": [" 24", " 24", " 48", " 60", " 96"], "hit_by_iteration": [false, true, true, false, false]}
+{"idx": 150, "n_steps": 4, "step_values": ["2", "8", "6", "16"], "answer": "16", "readout_by_iteration": [" 2", " 8", " 6"], "hit_by_iteration": [true, true, true]}
+{"idx": 152, "n_steps": 4, "step_values": ["200", "145000", "72", "6"], "answer": "6", "readout_by_iteration": [" 5", " 5", " 5"], "hit_by_iteration": [false, false, false]}
+{"idx": 153, "n_steps": 2, "step_values": ["54", "37"], "answer": "17", "readout_by_iteration": [" 50"], "hit_by_iteration": [false]}
+{"idx": 154, "n_steps": 4, "step_values": ["10", "40", "24", "16"], "answer": "16", "readout_by_iteration": [" 10", " 40", " 16"], "hit_by_iteration": [true, true, false]}
+{"idx": 155, "n_steps": 6, "step_values": ["8", "320", "1600", "100", "1800", "30"], "answer": "30", "readout_by_iteration": [" 8", " 80", " 10", " 5", " 5"], "hit_by_iteration": [true, false, false, false, false]}
+{"idx": 156, "n_steps": 2, "step_values": ["8", "24"], "answer": "16", "readout_by_iteration": [" 14"], "hit_by_iteration": [false]}
+{"idx": 157, "n_steps": 2, "step_values": ["12", "3"], "answer": "3", "readout_by_iteration": [" 12"], "hit_by_iteration": [true]}
+{"idx": 158, "n_steps": 6, "step_values": ["80", "60", "120", "260", "160", "100"], "answer": "100", "readout_by_iteration": [" 65", " 60", " 120", " 80", " 80"], "hit_by_iteration": [false, true, true, false, false]}
+{"idx": 159, "n_steps": 4, "step_values": ["90", "150", "240", "4"], "answer": "4", "readout_by_iteration": [" 90", " 150", " 165"], "hit_by_iteration": [true, true, false]}
+{"idx": 160, "n_steps": 3, "step_values": ["30", "750", "250"], "answer": "250", "readout_by_iteration": [" 30", " 750"], "hit_by_iteration": [true, true]}
+{"idx": 161, "n_steps": 3, "step_values": ["4", "6", "4"], "answer": "4", "readout_by_iteration": [" 4", " 6"], "hit_by_iteration": [true, true]}
+{"idx": 162, "n_steps": 3, "step_values": ["25", "30", "15"], "answer": "15", "readout_by_iteration": [" 25", " 25"], "hit_by_iteration": [true, false]}
+{"idx": 163, "n_steps": 3, "step_values": ["10", "40", "60"], "answer": "60", "readout_by_iteration": [" 10", " 60"], "hit_by_iteration": [true, false]}
+{"idx": 164, "n_steps": 5, "step_values": ["24", "12", "36", "40", "8"], "answer": "8", "readout_by_iteration": [" 24", " 12", " 6", " 8"], "hit_by_iteration": [true, true, false, false]}
+{"idx": 165, "n_steps": 3, "step_values": ["375", "4500", "12"], "answer": "12", "readout_by_iteration": [" 375", " 225"], "hit_by_iteration": [true, false]}
+{"idx": 166, "n_steps": 6, "step_values": ["170", "120", "40", "40", "200", "370"], "answer": "370", "readout_by_iteration": [" 120", " 90", " 40", " 180", " 420"], "hit_by_iteration": [false, false, true, false, false]}
+{"idx": 167, "n_steps": 3, "step_values": ["2", "12", "144"], "answer": "144", "readout_by_iteration": [" 24", " 48"], "hit_by_iteration": [false, false]}
+{"idx": 168, "n_steps": 2, "step_values": ["25", "10"], "answer": "10", "readout_by_iteration": [" 30"], "hit_by_iteration": [false]}
+{"idx": 169, "n_steps": 2, "step_values": ["9", "63"], "answer": "63", "readout_by_iteration": [" 9"], "hit_by_iteration": [true]}
+{"idx": 170, "n_steps": 3, "step_values": ["3", "8", "13"], "answer": "13", "readout_by_iteration": [" 3", " 9"], "hit_by_iteration": [true, false]}
+{"idx": 171, "n_steps": 5, "step_values": ["6", "4", "10", "1", "4"], "answer": "4", "readout_by_iteration": [" 20", " 40", " 40", " 80"], "hit_by_iteration": [false, false, false, false]}
+{"idx": 172, "n_steps": 6, "step_values": ["4", "3", "15", "30", "60", "75"], "answer": "75", "readout_by_iteration": [" 30", " 30", " 60", " 60", " 60"], "hit_by_iteration": [false, false, false, false, true]}
+{"idx": 173, "n_steps": 2, "step_values": ["48", "720"], "answer": "720", "readout_by_iteration": [" 60"], "hit_by_iteration": [false]}
+{"idx": 174, "n_steps": 2, "step_values": ["16", "48"], "answer": "48", "readout_by_iteration": [" 16"], "hit_by_iteration": [true]}
+{"idx": 175, "n_steps": 2, "step_values": ["10", "60"], "answer": "60", "readout_by_iteration": [" 10"], "hit_by_iteration": [true]}
+{"idx": 176, "n_steps": 3, "step_values": ["24", "32", "18"], "answer": "18", "readout_by_iteration": [" 24", " 56"], "hit_by_iteration": [true, false]}
+{"idx": 177, "n_steps": 4, "step_values": ["50", "70", "120", "40"], "answer": "40", "readout_by_iteration": [" 50", " 50", " 90"], "hit_by_iteration": [true, false, false]}
+{"idx": 178, "n_steps": 7, "step_values": ["600", "2400", "96000", "10", "30", "72000", "168000"], "answer": "168000", "readout_by_iteration": [" 1200", " 10", " 600", " 6000", " 9000", " 9000"], "hit_by_iteration": [false, false, false, false, false, false]}
+{"idx": 179, "n_steps": 2, "step_values": ["10", "30"], "answer": "30", "readout_by_iteration": [" 10"], "hit_by_iteration": [true]}
+{"idx": 180, "n_steps": 2, "step_values": ["400", "398"], "answer": "398", "readout_by_iteration": [" 400"], "hit_by_iteration": [true]}
+{"idx": 181, "n_steps": 5, "step_values": ["22", "18", "9", "15", "75"], "answer": "75", "readout_by_iteration": [" 22", " 11", " 4", " 16"], "hit_by_iteration": [true, false, false, false]}
+{"idx": 182, "n_steps": 4, "step_values": ["5", "200", "25", "225"], "answer": "225", "readout_by_iteration": [" 5", " 10", " 50"], "hit_by_iteration": [true, false, false]}
+{"idx": 183, "n_steps": 3, "step_values": ["6.00", "10.00", "520.00"], "answer": "520", "readout_by_iteration": [" 6", " 9"], "hit_by_iteration": [true, false]}
+{"idx": 185, "n_steps": 4, "step_values": ["10", "15", "90", "180"], "answer": "180", "readout_by_iteration": [" 10", " 15", " 20"], "hit_by_iteration": [true, true, false]}
+{"idx": 186, "n_steps": 4, "step_values": ["20", "8000", "2400", "5600"], "answer": "5600", "readout_by_iteration": [" 40", " 600", " 1400"], "hit_by_iteration": [false, false, false]}
+{"idx": 187, "n_steps": 2, "step_values": ["42", "38"], "answer": "38", "readout_by_iteration": [" 16"], "hit_by_iteration": [false]}
+{"idx": 188, "n_steps": 4, "step_values": ["240", "8", "56", "296"], "answer": "296", "readout_by_iteration": [" 320", " 64", " 5"], "hit_by_iteration": [false, false, false]}
+{"idx": 189, "n_steps": 4, "step_values": ["5", "4000", "2400", "6400"], "answer": "6400", "readout_by_iteration": [" 2", " 3", " 3"], "hit_by_iteration": [false, false, false]}
+{"idx": 190, "n_steps": 5, "step_values": ["108", "36", "60", "48", "138"], "answer": "138", "readout_by_iteration": [" 18", " 24", " 30", " 64"], "hit_by_iteration": [false, false, false, false]}
+{"idx": 191, "n_steps": 4, "step_values": ["10", "6", "54", "108"], "answer": "108", "readout_by_iteration": [" 18", " 6", " 54"], "hit_by_iteration": [false, true, true]}
+{"idx": 192, "n_steps": 4, "step_values": ["16", "2", "6", "30"], "answer": "30", "readout_by_iteration": [" 16", " 6", " 12"], "hit_by_iteration": [true, false, false]}
+{"idx": 193, "n_steps": 4, "step_values": ["3", "1", "6", "6"], "answer": "6", "readout_by_iteration": [" 3", " 4", " 3"], "hit_by_iteration": [true, false, false]}
+{"idx": 194, "n_steps": 5, "step_values": ["90", "60", "720", "1080", "1800"], "answer": "1800", "readout_by_iteration": [" 90", " 270", " 900", " 1080"], "hit_by_iteration": [true, false, false, true]}
+{"idx": 195, "n_steps": 3, "step_values": ["3.00", "1.00", "6"], "answer": "6", "readout_by_iteration": [" 4", " 4"], "hit_by_iteration": [false, false]}
+{"idx": 196, "n_steps": 3, "step_values": ["88", "22", "11"], "answer": "11", "readout_by_iteration": [" 22", " 11"], "hit_by_iteration": [false, false]}
+{"idx": 197, "n_steps": 4, "step_values": ["40000", "800000", "20000", "40"], "answer": "40", "readout_by_iteration": [" 8000", " 16", " 4000"], "hit_by_iteration": [false, false, false]}
+{"idx": 198, "n_steps": 2, "step_values": ["4", "7"], "answer": "7", "readout_by_iteration": [" 3"], "hit_by_iteration": [false]}
+{"idx": 199, "n_steps": 5, "step_values": ["45", "41", "21", "126", "251"], "answer": "251", "readout_by_iteration": [" 78", " 15", " 6", " 6"], "hit_by_iteration": [false, false, false, false]}

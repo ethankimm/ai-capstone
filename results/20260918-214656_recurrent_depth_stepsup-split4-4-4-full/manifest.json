@@ -1,0 +1,301 @@
+{
+  "run_id": "20260918-214656_recurrent_depth_stepsup-split4-4-4-full",
+  "mechanism": "recurrent_depth",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "results/20260918-214656_recurrent_depth_stepsup-split4-4-4-full/ckpt",
+    "n_params": 125621760
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.145,
+    "unparseable_rate": 0.0,
+    "compute_steps": 3.395,
+    "train_loss": 1.2602281133888678,
+    "sec_per_example": 0.012201814004220069,
+    "extra": {
+      "primary_eval": "oracle",
+      "sweep_by_r": {
+        "1": {
+          "final_answer_accuracy": 0.025,
+          "unparseable_rate": 0.0,
+          "sec_per_example": 0.0063,
+          "mean_r": 1.0,
+          "unrolled_depth": 12.0
+        },
+        "2": {
+          "final_answer_accuracy": 0.11,
+          "unparseable_rate": 0.0,
+          "sec_per_example": 0.0084,
+          "mean_r": 2.0,
+          "unrolled_depth": 16.0
+        },
+        "3": {
+          "final_answer_accuracy": 0.085,
+          "unparseable_rate": 0.0,
+          "sec_per_example": 0.0105,
+          "mean_r": 3.0,
+          "unrolled_depth": 20.0
+        },
+        "4": {
+          "final_answer_accuracy": 0.055,
+          "unparseable_rate": 0.0,
+          "sec_per_example": 0.0123,
+          "mean_r": 4.0,
+          "unrolled_depth": 24.0
+        },
+        "6": {
+          "final_answer_accuracy": 0.06,
+          "unparseable_rate": 0.0,
+          "sec_per_example": 0.016,
+          "mean_r": 6.0,
+          "unrolled_depth": 32.0
+        },
+        "8": {
+          "final_answer_accuracy": 0.065,
+          "unparseable_rate": 0.0,
+          "sec_per_example": 0.0213,
+          "mean_r": 8.0,
+          "unrolled_depth": 40.0
+        },
+        "oracle": {
+          "final_answer_accuracy": 0.145,
+          "unparseable_rate": 0.0,
+          "sec_per_example": 0.0122,
+          "mean_r": 3.395,
+          "unrolled_depth": 21.6
+        },
+        "oracle+1": {
+          "final_answer_accuracy": 0.09,
+          "unparseable_rate": 0.0,
+          "sec_per_example": 0.0148,
+          "mean_r": 4.395,
+          "unrolled_depth": 25.6
+        },
+        "oracle+2": {
+          "final_answer_accuracy": 0.075,
+          "unparseable_rate": 0.0,
+          "sec_per_example": 0.0164,
+          "mean_r": 5.395,
+          "unrolled_depth": 29.6
+        }
+      },
+      "train_mean_recurrence": null,
+      "train_seconds": 16097.2,
+      "diagnostics_r": 8,
+      "state_rel_delta": [
+        1.0110629498958588,
+        0.41651781648397446,
+        0.29983485490083694,
+        0.20854956656694412,
+        0.12421579845249653,
+        0.06604783236980438,
+        0.03221730887889862,
+        0.014357165899127722
+      ],
+      "next_token_kl": [
+        14.181084871292114,
+        3.2830698490142822,
+        1.4687817692756653,
+        0.7261440083384514,
+        0.18185014463961124,
+        0.05733983404934406,
+        0.015008453279733658,
+        0.003964374307543039
+      ],
+      "diagnostics_position": "first answer-number token (prompt + ' ####'), fp32",
+      "step_readout": {
+        "n_examples": 189,
+        "n_step_readouts": 479,
+        "step_readout_accuracy": 0.3132,
+        "step_readout_accuracy_single_token_values": 0.3295,
+        "n_single_token_values": 434,
+        "by_iteration": [
+          0.5185,
+          0.2463,
+          0.1444,
+          0.0976,
+          0.0556,
+          0.0,
+          0.5
+        ],
+        "matrix_iteration_x_step": [
+          [
+            0.5185,
+            0.0746,
+            0.0444,
+            0.0488,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0597,
+            0.2463,
+            0.1,
+            0.0732,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0444,
+            0.0444,
+            0.1444,
+            0.0976,
+            0.1111,
+            0.0,
+            0.0
+          ],
+          [
+            0.0488,
+            0.0,
+            0.0,
+            0.0976,
+            0.1667,
+            0.0,
+            0.0
+          ],
+          [
+            0.0556,
+            0.0,
+            0.0,
+            0.0,
+            0.0556,
+            0.2,
+            0.5
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.5
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.5
+          ]
+        ],
+        "matrix_support": [
+          [
+            189,
+            134,
+            90,
+            41,
+            18,
+            5,
+            2
+          ],
+          [
+            134,
+            134,
+            90,
+            41,
+            18,
+            5,
+            2
+          ],
+          [
+            90,
+            90,
+            90,
+            41,
+            18,
+            5,
+            2
+          ],
+          [
+            41,
+            41,
+            41,
+            41,
+            18,
+            5,
+            2
+          ],
+          [
+            18,
+            18,
+            18,
+            18,
+            18,
+            5,
+            2
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        ]
+      }
+    }
+  },
+  "hyperparams": {
+    "objective": "step_supervised",
+    "lr": 5e-05,
+    "epochs": 3,
+    "batch_size": 16,
+    "train_n": 384442,
+    "train_n_dropped_over_max_steps": 178,
+    "n_prelude": 4,
+    "n_core": 4,
+    "n_coda": 4,
+    "mean_recurrence": null,
+    "lognormal_sigma": null,
+    "backprop_last_k": null,
+    "step_loss_weight": 1.0,
+    "stepsup_max_steps": 8,
+    "checkpoint_iterations": true,
+    "init_state_std": 0.6324555320336759,
+    "adapter_init": "identity",
+    "core_init": "pretrained",
+    "core_lr": 5e-05,
+    "eval_recurrences": [
+      1,
+      2,
+      3,
+      4,
+      6,
+      8
+    ],
+    "max_new_tokens": 32,
+    "prompt_format": "direct answer (no rationale), same as filler_tokens compute_steps=0"
+  },
+  "seed": 42,
+  "hardware": "RunPod RTX A5000 (secure)",
+  "author": "Henning Lindig",
+  "notes": "recurrent_depth full_run [step_supervised]: gpt2 split 4-4-4 (core looped; adapter_init=identity, core_init=pretrained), trained with r = example's rationale step count, iteration i supervised on step i (step_loss_weight=1.0), on 384442 train examples; eval sweep r=[1, 2, 3, 4, 6, 8], plus oracle r = test example's step count (+0/+1/+2); compute_steps reports oracle",
+  "timestamp_utc": "2026-09-19T02:15:44.643138+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

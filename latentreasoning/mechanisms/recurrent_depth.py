@@ -67,7 +67,7 @@ Gotchas:
 
 ---
 
-**Status (2026-09-18) and plan.** Five pilots (`results/20260918-05*` and `-16*
+**Status (2026-09-19) and plan.** Five pilots (`results/20260918-05*` and `-16*
 _recurrent_depth_*`, 20k train examples x 3 epochs each) all fine-tune into a loop that is
 an exact geometric contraction (state change ~1/30 per iteration, fixed point to the fp32
 floor by iteration ~5), acts on the answer distribution once (iteration 2 reshuffles the
@@ -97,24 +97,33 @@ steps:
   Transformers), so expect the same curve. Do it later only for a quotable accuracy
   against the 13.0% full-scale direct-answer control.
 - (e) **Step-supervised loop** (implemented: `--step-supervised`; pilot
-  `20260918-194143_..._stepsup-split4-4-4-pilot` -- the loop is alive (state change 43% /
-  20% / 7% over iterations 2-4 vs 7% / 0.3% / 0.01% answer-only) and the step read-out beats
-  trivial baselines 3x (10.6% vs 3.5%), but at pilot scale the steps are ~90% wrong and
-  the answer is unchanged; needs the full 384k set, as explicit CoT did. Not Geiping et
-  al. -- a new mechanism, to be named as such): set r = number of `<<a+b=c>>` steps in the example
+  `20260918-194143_..._stepsup-split4-4-4-pilot`, full run
+  `20260918-214656_..._stepsup-split4-4-4-full` -- **this is the recurrent-depth entry to
+  probe.** On all 384k examples the loop is alive (state change 42% / 30% / 21% over
+  iterations 2-4, KL 3.3 / 1.5 / 0.7 nats on the number distribution, no fixed point by
+  r=8) and iteration i's read-out is step i: 31.3% top-1 over 479 (example, step) pairs vs
+  3.5% majority baseline, 52% / 25% / 14% for steps 1 / 2 / 3, diagonal iteration x step
+  matrix. Final answer 14.5% at r = the example's step count = the 13.0% no-scratchpad
+  control; accuracy peaks at r = n and falls on either side (at r < n it emits step r's
+  value), so it needs a halt signal for fixed-r deployment and is not the paper's
+  monotone test-time scaling. Not Geiping et al. -- a new mechanism, to be named as
+  such): set r = number of `<<a+b=c>>` steps in the example
   (`Example.intermediate_values`); at iteration i the coda + LM head read-out at the
   last prompt position must produce intermediate value i, and the final answer at
   iteration r. The vertical analogue of CODI (which supervises its latent tokens by
   distilling the CoT teacher). Guarantees distinct, contentful s_i with a known label
   each -- exactly the Oct 9 decoding target -- so for RQ1 ("what is encoded") it is a
-  *positive control*, not evidence; RQ2 (patch s_i -> predicted downstream change) and
+  *positive control*, not evidence (the trained read-out head is the probe ceiling:
+  report probes relative to it); RQ2 (patch s_i -> predicted downstream change) and
   RQ3 (transplant a CODI latent-token state into iteration i) remain real tests.
   Variant (e'): CODI-style distillation of the explicit-CoT checkpoint's step-i hidden
   state into s_i instead of hard targets -- keeps the scratchpad latent and makes the
   individual-vs-shared-decoder question directly askable across CODI <-> looped, since
-  both would be trained against the same teacher. Implementation: a `--step-supervised`
-  training mode in the script; `LoopedGPT2.forward(return_states=True)` already exposes
-  every s_i and `readout()` reads any of them.
+  both would be trained against the same teacher. Cheap improvements if a stronger
+  looped model is needed: more epochs (both losses still falling at lr 0),
+  `--step-loss-weight 3`, an "answer-ready" target at iterations >= n.
+  `LoopedGPT2.forward(return_states=True)` exposes every s_i and `readout()` reads any
+  of them.
 - (f) **Released Huginn-0125** (3.5B, `tomg-group-umd/huginn-0125`; planned): eval on
   GSM8K-Aug test n=200 sweeping r in {4, 8, 16, 32, 64}, bf16 (~7 GB) fits the A5000,
   ~1-2 h / ~$0.50. Same move as CODI's released-weights run: verifies the paper's

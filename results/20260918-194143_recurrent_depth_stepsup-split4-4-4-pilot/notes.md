@@ -109,3 +109,7 @@ deployment numbers.
 - Cheaper variants if the full run is borderline: `--step-loss-weight 3` (the step tokens are
   ~25% of the loss mass now), an extra unsupervised iteration before the answer (r = n+1),
   and a distillation target from the explicit-CoT checkpoint instead of hard tokens (e′).
+**Correction (added 2026-09-19):** the 479 read-out pairs come from the **189** test examples
+with ≥ 2 steps (`metrics.extra.step_readout.n_examples`), not 155 as written above. Numbers
+are unaffected. Full-scale result: `20260918-214656_..._stepsup-split4-4-4-full` — read-out
+31.3%, criterion met.
