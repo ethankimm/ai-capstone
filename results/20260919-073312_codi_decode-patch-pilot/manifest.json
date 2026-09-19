@@ -1,0 +1,189 @@
+{
+  "run_id": "20260919-073312_codi_decode-patch-pilot",
+  "mechanism": "codi",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.4,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "sec_per_example": 0.20226703502237797,
+    "decoding_accuracy": 0.1861152141802068,
+    "intervention_accuracy": 0.04,
+    "extra": {
+      "decoding_accuracy_matched_top1": 0.1861152141802068,
+      "decoding_accuracy_matched_top5": 0.25406203840472674,
+      "decoding_accuracy_unconditional_top1": 0.07385524372230429,
+      "decoding_accuracy_unconditional_top5": 0.11029049729197439,
+      "decoding_matrix_top1_by_iter_step": {
+        "1": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "2": {
+          "1": 0.227,
+          "2": 0.238,
+          "3": 0.104,
+          "4": 0.022,
+          "5": 0.0,
+          "6": 0.056,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "3": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "4": {
+          "1": 0.227,
+          "2": 0.111,
+          "3": 0.172,
+          "4": 0.056,
+          "5": 0.073,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "5": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "6": {
+          "1": 0.207,
+          "2": 0.122,
+          "3": 0.164,
+          "4": 0.1,
+          "5": 0.024,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        }
+      },
+      "decoding_matrix_top5_by_iter_step": {
+        "1": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "2": {
+          "1": 0.313,
+          "2": 0.317,
+          "3": 0.179,
+          "4": 0.122,
+          "5": 0.024,
+          "6": 0.111,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "3": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "4": {
+          "1": 0.303,
+          "2": 0.18,
+          "3": 0.216,
+          "4": 0.156,
+          "5": 0.122,
+          "6": 0.056,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "5": {
+          "1": 0.005,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "6": {
+          "1": 0.323,
+          "2": 0.18,
+          "3": 0.209,
+          "4": 0.156,
+          "5": 0.098,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        }
+      },
+      "best_iter_for_step": {
+        "1": 2,
+        "2": 2,
+        "3": 4,
+        "4": 6,
+        "5": 4,
+        "6": 2,
+        "7": 1,
+        "8": 1
+      },
+      "paper_style_metric_correct_only_by_step_count": {
+        "1": 0.4,
+        "2": 0.058823529411764705,
+        "3": 0.0
+      },
+      "intervention_accuracy_answer_changed_by_patch": 0.6,
+      "intervention_accuracy_answer_changed_by_control": 0.6333333333333333,
+      "intervention_readout_moved_toward_donor": 0.04,
+      "n_patch_pairs": 30,
+      "n_trainable_params": 20057088
+    }
+  },
+  "hyperparams": {
+    "inf_latent_iterations": 6,
+    "greedy": true,
+    "num_latent": 6,
+    "n_patch_pairs": 30
+  },
+  "seed": null,
+  "hardware": "RunPod RTX A5000 (secure) / NVIDIA RTX A5000",
+  "author": "Henning Lindig",
+  "notes": "CODI decoding (logit-lens on pre-projection hidden state, all 6 iterations) + causal patching pilot (post-projection latent swap vs. random control).",
+  "timestamp_utc": "2026-09-19T07:33:12.943086+00:00",
+  "git": {
+    "commit": "47d1aa6",
+    "dirty": true
+  }
+}
