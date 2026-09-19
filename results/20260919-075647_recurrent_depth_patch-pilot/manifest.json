@@ -1,0 +1,74 @@
+{
+  "run_id": "20260919-075647_recurrent_depth_patch-pilot",
+  "mechanism": "recurrent_depth",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "local:20260918-214656_recurrent_depth_stepsup-split4-4-4-full/ckpt",
+    "n_params": 125621760
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": 0.0,
+    "compute_steps": null,
+    "intervention_accuracy": 0.015384615384615385,
+    "extra": {
+      "n_pairs": 200,
+      "n_with_next_target": 130,
+      "readout_next_moved_to_donor": {
+        "real": 0.015384615384615385,
+        "baseline_coincidence": 0.015384615384615385,
+        "wilson_real": [
+          0.015384615384615385,
+          0.0042291172310416104,
+          0.054359542796931754
+        ]
+      },
+      "answer_proxy_changed": {
+        "real": 0.025,
+        "control": 0.035,
+        "wilson_real": [
+          0.025,
+          0.010724561470787711,
+          0.05717914415161715
+        ],
+        "wilson_control": [
+          0.035,
+          0.017055324637357105,
+          0.07047146086668134
+        ]
+      },
+      "mcnemar_2x2": {
+        "both_changed": 2,
+        "real_only": 3,
+        "control_only": 5,
+        "neither": 190,
+        "p_value": 0.7265625
+      },
+      "elapsed_s": 8.83071875013411,
+      "source_run_id": "20260918-214656_recurrent_depth_stepsup-split4-4-4-full",
+      "design": "causal patching, step-supervised checkpoint, per-pair batch=1"
+    }
+  },
+  "hyperparams": {
+    "n_pairs": 200,
+    "eval_n": 200,
+    "eval_seed": 0,
+    "patch_seed": 42
+  },
+  "seed": 42,
+  "hardware": "RunPod RTX A5000 (secure) / NVIDIA RTX A5000",
+  "author": "Henning Lindig",
+  "notes": "recurrent_depth causal-patching patch-pilot: 200 pairs against 20260918-214656_recurrent_depth_stepsup-split4-4-4-full",
+  "timestamp_utc": "2026-09-19T07:56:47.974167+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}
