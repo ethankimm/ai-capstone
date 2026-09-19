@@ -26,3 +26,4 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260918-162743_recurrent_depth_split4-4-4-rbar32-randcore-pilot](20260918-162743_recurrent_depth_split4-4-4-rbar32-randcore-pilot/) | recurrent_depth | gpt2 | test (n=200) | 32 | 0.015 | 42 | pilot | Henning Lindig |
 | [20260918-194143_recurrent_depth_stepsup-split4-4-4-pilot](20260918-194143_recurrent_depth_stepsup-split4-4-4-pilot/) | recurrent_depth | gpt2 | test (n=200) | 3.395 | 0.025 | 42 | pilot | Henning Lindig |
 | [20260918-214656_recurrent_depth_stepsup-split4-4-4-full](20260918-214656_recurrent_depth_stepsup-split4-4-4-full/) | recurrent_depth | gpt2 | test (n=200) | 3.395 | 0.145 | 42 | full_run | Henning Lindig |
+| [20260919-031852_recurrent_depth_cot-split4-4-4-rbar32-pilot](20260919-031852_recurrent_depth_cot-split4-4-4-rbar32-pilot/) | recurrent_depth | gpt2 | test (n=200) | 32 | 0.050 | 42 | pilot | Henning Lindig |

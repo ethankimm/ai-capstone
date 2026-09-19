@@ -82,15 +82,19 @@ fine-tune-from-pretrained. Eliminated as causes, one variable at a time:
 - (b) r mismatch -- `--mean-recurrence 4 --backprop-last-k 8`: indistinguishable from r=32.
 - (c) pretrained shortcut -- `--core-init random --core-lr 5e-4`: same collapse, *worse*
   loss (1.234 vs 1.163) -- removing the feed-forward path does not make the loop step in.
+- task signal -- `--cot` pilot (`20260919-031852_..._cot-split4-4-4-rbar32-pilot`, the paper's
+  own GSM8K setting: loop + visible rationale, loss 0.55 with headroom): same collapse
+  (state change 6% / 0.4% / 0.06% at iterations 2-4), accuracy 5.0-6.5% flat over r = 1..64
+  vs the no-loop explicit-CoT pilot's 4.5%, loss 0.547 vs 0.558.
 
-What remains is shared by all five and absent in the paper: ~6M tokens of fine-tuning vs
-800B from scratch, and a task (direct numeric answers, GPT-2 at the guessing floor) on
-which extra depth of these weights does not lower the loss, so there is no gradient
-pressure for iterations to do work. Measure convergence at the number-predicting
-position in fp32 (the script does now) -- the bare prompt's last position predicts
-`" ####"` with p~1 and its KL is uninformative. (e) and (f) are the routes to a
-*working* vertical scratchpad for the Oct 9 decoding / Oct 16 causality + transplant
-steps:
+What remains is shared by all six and absent in the paper: pretrained fixed-depth weights
+whose one-pass path already fits the target, fine-tuned for ~7M tokens vs 800B from
+scratch with random r. The loop converges to the nearest solution -- the pretrained one --
+whatever the task. Measure convergence at the number-predicting position in fp32 (the
+script does now) -- the bare prompt's last position predicts `" ####"` with p~1 and its
+KL is uninformative. (e) is the route to a *working* vertical scratchpad on GPT-2 for the
+Oct 9 decoding / Oct 16 causality + transplant steps; (f) is the only route to the
+paper's own test-time scaling:
 - (d) Full-scale run of the paper-faithful recipe (~4.6 h / ~$1.25 on an A5000):
   deferred -- 3750 steps is ~6M tokens and converting pretrained models to looped ones
   is known to need billions of tokens of uptraining (Bae et al. 2024, Relaxed Recursive
