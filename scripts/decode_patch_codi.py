@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CODI decodability + causal-patching pilot -- the faithfulness-spine contrast case to
+"""CODI decodability + causal-patching -- the faithfulness-spine contrast case to
 recurrent_depth's step-supervised run (results/20260918-214656_recurrent_depth_stepsup-*).
 
 Reuses `scripts/eval_codi.py`'s model loading exactly (same released checkpoint, same
@@ -9,36 +9,43 @@ paper protocol). Two things eval_codi.py doesn't do:
    that SAME forward pass IS the paper's own decode method (Sec 5.1: "projecting its
    last hidden state into vocabulary space via the model's word embeddings") -- GPT-2
    ties wte/lm_head and LoRA doesn't touch either, so `logits = lm_head(hidden_state)`
-   is exactly that projection, already computed, no extra work. We report both the
-   paper's own metric (top-5, conditioned on correct final answer, by step count -- a
-   sanity check against their 97.1/83.9/75.0) and the metric comparable to
-   recurrent_depth's 31.3% (top-1 and top-5, UNCONDITIONAL on correctness, broken down
-   by iteration x step-count, to find the iteration<->step mapping empirically -- the
-   paper's own case study suggests placeholder tokens interleave with real ones, not a
-   clean 1:1 diagonal like recurrent_depth's loop).
+   is exactly that projection, already computed, no extra work.
 
 2. Causal patching: swap one thought z_i (post-projection -- the actual value fed
    forward, per generate_batches) for a donor example's z_i computed from the donor's
    own independent context, keep the recipient's own KV cache/trajectory otherwise
    unchanged, let iterations i+1..6 and the final answer proceed from the patched
-   value. Control: patch with a latent from a random unrelated (example, iteration)
-   pair instead of a real donor at the matched step, to separate "any perturbation
-   moves the answer" from "this specific counterfactual content moves the answer".
+   value. Two controls: a latent from a random unrelated (example, ANY iteration)
+   pair, and a random unrelated (example, LIVE iteration only) pair -- separating "any
+   perturbation moves the answer" from "this specific counterfactual content moves the
+   answer", and checking whether restricting the control to in-distribution (live)
+   activations changes anything.
+
+v2 (this run) vs the pilot (`results/20260919-073312_codi_decode-patch-pilot/`):
+full 1319-example test set instead of the 200-slice; a held-out split so the
+iteration<->step mapping is fit on half A and all headline numbers (decoding AND
+patch-pair selection) are computed on half B only (the pilot fit and evaluated on the
+same 200 examples -- flagged as circular in its own caveats); a train-corpus
+most-common-value baseline instead of a same-slice one; patch pairs scaled to ~350 and
+stratified toward the single strongest decode iteration instead of spread evenly;
+both control variants (any-iteration / live-iteration-only); paired exact McNemar test
+and Wilson CIs on the headline proportions instead of raw fractions alone.
 
 Run inside the CODI venv, from the CODI checkout (same convention as eval_codi.py):
 
   cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/decode_patch_codi.py \\
       --ckpt_dir /workspace/codi_released --checkpoint_label "hf:zen-E/CODI-gpt2@fd641b3" \\
-      --slug decode-patch-pilot --stage pilot --hardware "RunPod RTX A5000 (secure)" \\
+      --slug decode-patch-full --stage full_run --hardware "RunPod RTX A5000 (secure)" \\
       --model_name_or_path gpt2 --seed 11 --model_max_length 512 --bf16 \\
       --lora_r 128 --lora_alpha 32 --lora_init --greedy True \\
       --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 \\
       --inf_latent_iterations 6 --inf_num_iterations 1 --remove_eos True --use_lora True \\
-      --n_patch_pairs 30
+      --full_test True --mapping_split True --n_patch_pairs 350
 """
 from __future__ import annotations
 
 import json
+import math
 import os
 import random
 import sys
@@ -65,15 +72,22 @@ ORIG_VOCAB = 50257  # GPT-2's real vocab; indices >= this are the added pad/bot/
 
 @dataclass
 class DecodeArguments:
-    slug: str = field(default="decode-patch-pilot")
-    stage: str = field(default="pilot")
-    eval_n: int = field(default=200)
+    slug: str = field(default="decode-patch-full")
+    stage: str = field(default="full_run")
+    eval_n: int = field(default=200)  # only used if full_test=False
     eval_seed: int = field(default=0)
+    full_test: bool = field(default=True, metadata={"help": "decode all 1319 test examples instead of the 200-slice"})
+    mapping_split: bool = field(default=True, metadata={"help": "fit best_iter_for_step on half A, report/patch on half B"})
     hardware: str = field(default="RunPod GPU")
     checkpoint_label: Optional[str] = field(default=None)
-    n_patch_pairs: int = field(default=30)
+    n_patch_pairs: int = field(default=350)
+    patch_iter_focus: Optional[int] = field(default=None, metadata={"help": "defaults to best_iter_for_step[1] from half A"})
+    patch_focus_frac: float = field(default=0.65)
+    train_baseline_n: int = field(default=20000)
     max_new_tokens: int = field(default=64)
 
+
+# ---- generation primitives (unchanged from the pilot) -----------------------------------
 
 def encode_question(model, tokenizer, question: str, device: str):
     batch = tokenizer([question], return_tensors="pt", padding="longest")
@@ -160,6 +174,51 @@ def num_match(candidates: list[str], gold: str) -> bool:
     return False
 
 
+# ---- stats helpers (pure python -- no scipy/statsmodels dependency in the CODI venv) ----
+
+def wilson_ci(x: int, n: int, z: float = 1.96) -> tuple[float, float]:
+    if n == 0:
+        return (0.0, 0.0)
+    phat = x / n
+    denom = 1 + z * z / n
+    center = (phat + z * z / (2 * n)) / denom
+    margin = z * ((phat * (1 - phat) / n + z * z / (4 * n * n)) ** 0.5) / denom
+    return (max(0.0, center - margin), min(1.0, center + margin))
+
+
+def mcnemar_exact_p(b: int, c: int) -> float:
+    """Exact two-sided McNemar test on discordant pairs b, c (b+c = n_discordant),
+    X ~ Binomial(b+c, 0.5) under H0. Equivalent to statsmodels' mcnemar(exact=True)."""
+    n = b + c
+    if n == 0:
+        return 1.0
+    k = min(b, c)
+    p_le_k = sum(math.comb(n, i) for i in range(0, k + 1)) / (2 ** n)
+    return min(1.0, 2 * p_le_k)
+
+
+def rate(hits: dict, it: int, s: int) -> float:
+    c, n = hits[it][s]
+    return c / n if n else 0.0
+
+
+def build_matrix(decode_records: list[dict], n_latents: int, max_step: int):
+    """Unconditional top1/top5 hit-count matrices over the given decode_records."""
+    hits1 = {i: {s: [0, 0] for s in range(1, max_step + 1)} for i in range(1, n_latents + 1)}
+    hits5 = {i: {s: [0, 0] for s in range(1, max_step + 1)} for i in range(1, n_latents + 1)}
+    for r in decode_records:
+        for s_idx, gold_val in enumerate(r["step_values"], start=1):
+            for pi in r["per_iter"]:
+                it = pi["iter"]
+                hits1[it][s_idx][1] += 1
+                hits5[it][s_idx][1] += 1
+                if num_match([pi["top1"]], gold_val):
+                    hits1[it][s_idx][0] += 1
+                if num_match(pi["top5"], gold_val):
+                    hits5[it][s_idx][0] += 1
+    return hits1, hits5
+
+
 def main() -> None:
     parser = transformers.HfArgumentParser((ModelArguments, DataArguments, TrainingArguments, DecodeArguments))
     model_args, data_args, training_args, dec_args = parser.parse_args_into_dataclasses()
@@ -171,115 +230,129 @@ def main() -> None:
     n_trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"loaded {model_args.ckpt_dir}: missing={len(load_result.missing_keys)} unexpected={len(load_result.unexpected_keys)}")
 
-    examples = load_gsm8k_aug(split="test", n=dec_args.eval_n, seed=dec_args.eval_seed)
+    if dec_args.full_test:
+        examples = load_gsm8k_aug(split="test", n=None, seed=None)
+    else:
+        examples = load_gsm8k_aug(split="test", n=dec_args.eval_n, seed=dec_args.eval_seed)
     n_latents = training_args.inf_latent_iterations
+    print(f"decoding {len(examples)} examples")
 
-    # ---- Task 1: decode all 200 examples ------------------------------------------------
+    # ---- Task 1: decode every example -----------------------------------------------------
     t0 = time.perf_counter()
     decode_records = []
-    for ex in examples:
-        question = ex.question.strip().replace("  ", " ")
-        pkv, thoughts, latent = run_thoughts(model, tokenizer, question, device, n_latents)
-        raw_output = decode_answer(model, tokenizer, pkv, latent, device, dec_args.max_new_tokens)
-        pred = extract_final_number(raw_output)
-        correct = is_correct(pred, ex.answer)
-        steps = ex.intermediate_values
-        per_iter = []
-        for rec in thoughts:
-            logits = rec["logits"][0]
-            top1 = topk_token_strings(tokenizer, logits, 1)
-            top5 = topk_token_strings(tokenizer, logits, 5)
-            per_iter.append({"iter": rec["iter"], "top1": top1[0], "top5": top5})
-        decode_records.append({
-            "idx": ex.idx, "n_steps": len(steps), "step_values": steps,
-            "gold_answer": ex.answer, "raw_output": raw_output, "predicted_answer": pred,
-            "correct": correct, "per_iter": per_iter,
-        })
-        if len(decode_records) % 25 == 0:
-            print(f"decoded {len(decode_records)}/{len(examples)}", flush=True)
+    out_dir_placeholder = Path("/tmp/codi_decode_patch_progress.jsonl")
+    with out_dir_placeholder.open("w") as progress_f:
+        for ex in examples:
+            question = ex.question.strip().replace("  ", " ")
+            pkv, thoughts, latent = run_thoughts(model, tokenizer, question, device, n_latents)
+            raw_output = decode_answer(model, tokenizer, pkv, latent, device, dec_args.max_new_tokens)
+            pred = extract_final_number(raw_output)
+            correct = is_correct(pred, ex.answer)
+            steps = ex.intermediate_values
+            per_iter = []
+            for rec in thoughts:
+                logits = rec["logits"][0]
+                top1 = topk_token_strings(tokenizer, logits, 1)
+                top5 = topk_token_strings(tokenizer, logits, 5)
+                per_iter.append({"iter": rec["iter"], "top1": top1[0], "top5": top5})
+            rec_out = {
+                "idx": ex.idx, "n_steps": len(steps), "step_values": steps,
+                "gold_answer": ex.answer, "raw_output": raw_output, "predicted_answer": pred,
+                "correct": correct, "per_iter": per_iter,
+            }
+            decode_records.append(rec_out)
+            progress_f.write(json.dumps({"idx": ex.idx, "correct": correct}) + "\n")
+            if len(decode_records) % 100 == 0:
+                progress_f.flush()
+                print(f"decoded {len(decode_records)}/{len(examples)}", flush=True)
     decode_elapsed = time.perf_counter() - t0
     accuracy = sum(r["correct"] for r in decode_records) / len(decode_records)
     print(f"decode pass done in {decode_elapsed:.1f}s, final_answer_accuracy={accuracy:.3f}")
 
-    # ---- Task 1 analysis: iteration x step-index confusion matrix (unconditional) -------
+    # ---- held-out split: half A fits the mapping, half B reports headline numbers ---------
+    if dec_args.mapping_split:
+        half_a = [r for r in decode_records if r["idx"] % 2 == 0]
+        half_b = [r for r in decode_records if r["idx"] % 2 == 1]
+    else:
+        half_a = decode_records
+        half_b = decode_records
+    print(f"mapping_split={dec_args.mapping_split}: half_a n={len(half_a)}, half_b n={len(half_b)}")
+
     max_step = max((r["n_steps"] for r in decode_records), default=0)
-    hits_uncond_top1 = {i: {s: [0, 0] for s in range(1, max_step + 1)} for i in range(1, n_latents + 1)}
-    hits_uncond_top5 = {i: {s: [0, 0] for s in range(1, max_step + 1)} for i in range(1, n_latents + 1)}
-    for r in decode_records:
-        for s_idx, gold_val in enumerate(r["step_values"], start=1):
-            for pi in r["per_iter"]:
-                it = pi["iter"]
-                hits_uncond_top1[it][s_idx][1] += 1
-                hits_uncond_top5[it][s_idx][1] += 1
-                if num_match([pi["top1"]], gold_val):
-                    hits_uncond_top1[it][s_idx][0] += 1
-                if num_match(pi["top5"], gold_val):
-                    hits_uncond_top5[it][s_idx][0] += 1
+    # full-population matrix, for the descriptive structural finding (odd/even iterations) --
+    # not used for any mapping fit or metric that gets compared against a baseline.
+    hits_full_1, hits_full_5 = build_matrix(decode_records, n_latents, max_step)
+    matrix_top1_full = {it: {s: round(rate(hits_full_1, it, s), 4) for s in range(1, max_step + 1)} for it in range(1, n_latents + 1)}
+    matrix_top5_full = {it: {s: round(rate(hits_full_5, it, s), 4) for s in range(1, max_step + 1)} for it in range(1, n_latents + 1)}
 
-    def rate(hits, it, s):
-        c, n = hits[it][s]
-        return c / n if n else 0.0
-
-    matrix_top1 = {it: {s: round(rate(hits_uncond_top1, it, s), 3) for s in range(1, max_step + 1)} for it in range(1, n_latents + 1)}
-    matrix_top5 = {it: {s: round(rate(hits_uncond_top5, it, s), 3) for s in range(1, max_step + 1)} for it in range(1, n_latents + 1)}
-    # empirical best iteration per step index (top-1 unconditional match rate), for patching target selection
+    # fit on half A only
+    hits_a_1, hits_a_5 = build_matrix(half_a, n_latents, max_step)
     best_iter_for_step = {}
     for s in range(1, max_step + 1):
-        best_it = max(range(1, n_latents + 1), key=lambda it: rate(hits_uncond_top1, it, s))
+        best_it = max(range(1, n_latents + 1), key=lambda it: rate(hits_a_1, it, s))
         best_iter_for_step[s] = best_it
+    live_iterations = sorted(set(best_iter_for_step.values()))
+    iter_to_primary_step = {}
+    for s in sorted(best_iter_for_step):
+        it = best_iter_for_step[s]
+        iter_to_primary_step.setdefault(it, s)  # lowest step index that maps to this iteration
+    print(f"best_iter_for_step (fit on half A): {best_iter_for_step}, live_iterations={live_iterations}")
 
-    # unconditional overall top1/top5 (all iters, all steps, all examples) -- the number
-    # comparable to recurrent_depth's 31.3%
-    total_c1 = sum(hits_uncond_top1[it][s][0] for it in hits_uncond_top1 for s in hits_uncond_top1[it])
-    total_n1 = sum(hits_uncond_top1[it][s][1] for it in hits_uncond_top1 for s in hits_uncond_top1[it])
-    total_c5 = sum(hits_uncond_top5[it][s][0] for it in hits_uncond_top5 for s in hits_uncond_top5[it])
-    overall_uncond_top1 = total_c1 / total_n1 if total_n1 else 0.0
-    overall_uncond_top5 = total_c5 / total_n1 if total_n1 else 0.0
-
-    # "matched" variant: only the empirically-best iteration per step (best_iter_for_step),
-    # not averaged over the full 6-iter x n-step grid -- CODI has structurally dead cells
-    # (placeholder iterations that never decode to a number, and step counts beyond what 6
-    # latents can encode at all), which dilute the unconditional-over-everything number
-    # above into something NOT comparable to recurrent_depth's 31.3% (which has no such
-    # dead cells). This is the number to actually put next to it.
-    matched_c1 = sum(hits_uncond_top1[best_iter_for_step[s]][s][0] for s in best_iter_for_step)
-    matched_n1 = sum(hits_uncond_top1[best_iter_for_step[s]][s][1] for s in best_iter_for_step)
-    matched_c5 = sum(hits_uncond_top5[best_iter_for_step[s]][s][0] for s in best_iter_for_step)
+    # report on half B only, using half A's mapping
+    hits_b_1, hits_b_5 = build_matrix(half_b, n_latents, max_step)
+    matched_c1 = sum(hits_b_1[best_iter_for_step[s]][s][0] for s in best_iter_for_step)
+    matched_n1 = sum(hits_b_1[best_iter_for_step[s]][s][1] for s in best_iter_for_step)
+    matched_c5 = sum(hits_b_5[best_iter_for_step[s]][s][0] for s in best_iter_for_step)
     overall_matched_top1 = matched_c1 / matched_n1 if matched_n1 else 0.0
     overall_matched_top5 = matched_c5 / matched_n1 if matched_n1 else 0.0
+    matched_top1_ci = wilson_ci(matched_c1, matched_n1)
+    print(f"HELD-OUT matched-iteration top1={overall_matched_top1:.4f} (95% CI {matched_top1_ci}) "
+          f"top5={overall_matched_top5:.4f}  n={matched_n1}")
 
-    # ---- Task 1 sanity check: paper's own metric (top-5, correct-answer-conditioned) ----
+    # paper's own metric, correct-answers-only, on half B with half A's mapping
     paper_metric = {}
     for target_steps in (1, 2, 3):
-        subset = [r for r in decode_records if r["correct"] and r["n_steps"] == target_steps]
+        subset = [r for r in half_b if r["correct"] and r["n_steps"] == target_steps]
         if not subset:
-            paper_metric[target_steps] = None
+            paper_metric[target_steps] = {"value": None, "n": 0}
             continue
         hits = 0
         for r in subset:
-            # paper matches "top-5 intermediate results" against reference -- interpret as:
-            # every gold step value appears in SOME iteration's top-5, using the empirical
-            # best-iteration-per-step mapping found above.
             all_hit = all(num_match(r["per_iter"][best_iter_for_step[s] - 1]["top5"], v)
                            for s, v in enumerate(r["step_values"], start=1))
             hits += all_hit
-        paper_metric[target_steps] = hits / len(subset)
+        paper_metric[target_steps] = {"value": hits / len(subset), "n": len(subset)}
+    print("paper-style metric (held-out, correct-only, all-steps-in-top5):", paper_metric)
 
-    print("iteration x step top1 matrix:", json.dumps(matrix_top1))
-    print("iteration x step top5 matrix:", json.dumps(matrix_top5))
-    print("best_iter_for_step:", best_iter_for_step)
-    print(f"overall unconditional top1={overall_uncond_top1:.3f} top5={overall_uncond_top5:.3f}")
-    print(f"overall matched-iteration top1={overall_matched_top1:.3f} top5={overall_matched_top5:.3f} "
-          f"(the number comparable to recurrent_depth's 31.3%)")
-    print("paper-style metric (correct-only, all-steps-in-top5):", paper_metric)
+    # ---- train-corpus baseline (mirrors recurrent_depth's "most common step value in train") --
+    train_sample = load_gsm8k_aug(split="train", n=dec_args.train_baseline_n, seed=0)
+    from collections import Counter
+    value_counts = Counter(v for ex in train_sample for v in ex.intermediate_values)
+    mode_value, mode_count = value_counts.most_common(1)[0]
+    baseline_hits = sum(
+        1 for r in half_b for s, gold_val in enumerate(r["step_values"], start=1)
+        if s in best_iter_for_step and num_match([mode_value], gold_val)
+    )
+    baseline_n = sum(1 for r in half_b for s in range(1, r["n_steps"] + 1) if s in best_iter_for_step)
+    train_baseline_rate = baseline_hits / baseline_n if baseline_n else 0.0
+    print(f"train-corpus baseline: mode_value={mode_value!r} (count {mode_count}/{sum(value_counts.values())} "
+          f"step-positions in {len(train_sample)} train examples), matched-population rate={train_baseline_rate:.4f} "
+          f"(n={baseline_n}) -- compare to matched top1={overall_matched_top1:.4f}")
 
-    # ---- Task 2: causal patching ---------------------------------------------------------
+    # ---- Task 2: causal patching, on half B only, stratified toward the strongest iteration --
+    patch_iter_focus = dec_args.patch_iter_focus if dec_args.patch_iter_focus is not None else best_iter_for_step[1]
+    print(f"patch_iter_focus={patch_iter_focus}")
+
     rng = random.Random(0)
+    half_b_examples = {r["idx"] for r in half_b}
+    examples_by_idx = {ex.idx: ex for ex in examples}
     by_steps: dict[int, list] = {}
     for ex in examples:
+        if ex.idx not in half_b_examples:
+            continue
         by_steps.setdefault(len(ex.intermediate_values), []).append(ex)
 
-    pairs = []
+    focus_pairs, other_pairs = [], []
     for n_steps, exs in by_steps.items():
         if n_steps < 1 or n_steps > max_step or n_steps not in best_iter_for_step:
             continue
@@ -290,15 +363,22 @@ def main() -> None:
                 ea, eb = exs[a], exs[b]
                 for s in range(1, n_steps + 1):
                     if ea.intermediate_values[s - 1] != eb.intermediate_values[s - 1]:
-                        pairs.append((ea, eb, s))
-        if len(pairs) >= dec_args.n_patch_pairs * 3:
+                        pair = (ea, eb, s)
+                        if best_iter_for_step[s] == patch_iter_focus:
+                            focus_pairs.append(pair)
+                        else:
+                            other_pairs.append(pair)
+        if len(focus_pairs) >= dec_args.n_patch_pairs * 2 and len(other_pairs) >= dec_args.n_patch_pairs:
             break
+    rng.shuffle(focus_pairs)
+    rng.shuffle(other_pairs)
+    focus_quota = int(dec_args.n_patch_pairs * dec_args.patch_focus_frac)
+    n_focus = min(focus_quota, len(focus_pairs))
+    n_other = min(dec_args.n_patch_pairs - n_focus, len(other_pairs))
+    pairs = focus_pairs[:n_focus] + other_pairs[:n_other]
     rng.shuffle(pairs)
-    pairs = pairs[: dec_args.n_patch_pairs]
-    print(f"selected {len(pairs)} patch pairs")
+    print(f"selected {len(pairs)} patch pairs ({n_focus} at focus iter {patch_iter_focus}, {n_other} at other live iters)")
 
-    # cache full 6-iteration decode of every example touched, to reuse post-proj latents as
-    # donor values without recomputing per pair
     latent_cache: dict[int, list] = {}
     def get_thought_records(ex):
         if ex.idx not in latent_cache:
@@ -307,90 +387,176 @@ def main() -> None:
             latent_cache[ex.idx] = recs
         return latent_cache[ex.idx]
 
-    all_examples_by_idx = {ex.idx: ex for ex in examples}
+    def control_donor(live_only: bool):
+        pool = live_iterations if live_only else list(range(1, n_latents + 1))
+        rand_ex = rng.choice(list(half_b_examples))
+        rand_ex = examples_by_idx[rand_ex]
+        rand_it = rng.choice(pool)
+        recs = get_thought_records(rand_ex)
+        return rand_ex, rand_it, recs[rand_it - 1]["post"]
+
     patch_records = []
-    for recipient, donor, s in pairs:
+    t1 = time.perf_counter()
+    for pi, (recipient, donor, s) in enumerate(pairs):
         it = best_iter_for_step[s]
         q_r = recipient.question.strip().replace("  ", " ")
 
-        # baseline: recipient's own unpatched trajectory
         pkv_base, thoughts_base, latent_base = run_thoughts(model, tokenizer, q_r, device, n_latents)
         out_base = decode_answer(model, tokenizer, pkv_base, latent_base, device, dec_args.max_new_tokens)
 
-        # donor's post-proj z_it, from the donor's own independent context
         donor_recs = get_thought_records(donor)
         donor_post = donor_recs[it - 1]["post"]
-
-        # real patch: recipient's own cache through iter it-1, donor's z_it as input to iter it
         pkv_p, thoughts_p, latent_p = run_thoughts(model, tokenizer, q_r, device, n_latents,
                                                      override_input_at={it: donor_post})
         out_patched = decode_answer(model, tokenizer, pkv_p, latent_p, device, dec_args.max_new_tokens)
 
-        # control: unrelated random (example, iteration) post-proj latent, not the matched donor
-        rand_ex = rng.choice(examples)
-        rand_it = rng.randint(1, n_latents)
-        rand_recs = get_thought_records(rand_ex)
-        rand_post = rand_recs[rand_it - 1]["post"]
-        pkv_c, thoughts_c, latent_c = run_thoughts(model, tokenizer, q_r, device, n_latents,
-                                                     override_input_at={it: rand_post})
-        out_control = decode_answer(model, tokenizer, pkv_c, latent_c, device, dec_args.max_new_tokens)
+        rand_ex_any, rand_it_any, rand_post_any = control_donor(live_only=False)
+        pkv_ca, thoughts_ca, latent_ca = run_thoughts(model, tokenizer, q_r, device, n_latents,
+                                                        override_input_at={it: rand_post_any})
+        out_control_any = decode_answer(model, tokenizer, pkv_ca, latent_ca, device, dec_args.max_new_tokens)
 
-        # read-out shift check: iteration it+1's top1 (if it exists), before/after patch
-        readout_shift = None
-        if it < n_latents:
+        rand_ex_live, rand_it_live, rand_post_live = control_donor(live_only=True)
+        pkv_cl, thoughts_cl, latent_cl = run_thoughts(model, tokenizer, q_r, device, n_latents,
+                                                        override_input_at={it: rand_post_live})
+        out_control_live = decode_answer(model, tokenizer, pkv_cl, latent_cl, device, dec_args.max_new_tokens)
+
+        def readout_move(thoughts_variant, target_val):
+            # target_val is the specific gold value the injected activation is
+            # supposed to represent; None if that's undefined (e.g. control drew a
+            # structurally-dead iteration with no corresponding step).
+            if it >= n_latents or target_val is None:
+                return None
             base_r = topk_token_strings(tokenizer, thoughts_base[it]["logits"][0], 1)[0]
-            patch_r = topk_token_strings(tokenizer, thoughts_p[it]["logits"][0], 1)[0]
-            readout_shift = {"base_next_readout": base_r, "patched_next_readout": patch_r,
-                              "donor_value": donor.intermediate_values[s - 1],
-                              "moved_toward_donor": num_match([patch_r], donor.intermediate_values[s - 1]) and not num_match([base_r], donor.intermediate_values[s - 1])}
+            var_r = topk_token_strings(tokenizer, thoughts_variant[it]["logits"][0], 1)[0]
+            return num_match([var_r], target_val) and not num_match([base_r], target_val)
+
+        def value_for_iter(ex, iteration):
+            step = iter_to_primary_step.get(iteration)
+            if step is None or step > len(ex.intermediate_values):
+                return None
+            return ex.intermediate_values[step - 1]
+
+        # real patch: target value is the donor's value at the ACTUAL matched step s
+        # (not re-derived via iter_to_primary_step, which can point to a different step
+        # when >1 step maps to the same live iteration -- s is already known exactly).
+        readout_moved_real = readout_move(thoughts_p, donor.intermediate_values[s - 1])
+        readout_moved_control_any = readout_move(thoughts_ca, value_for_iter(rand_ex_any, rand_it_any))
+        readout_moved_control_live = readout_move(thoughts_cl, value_for_iter(rand_ex_live, rand_it_live))
 
         pred_base = extract_final_number(out_base)
         pred_patched = extract_final_number(out_patched)
-        pred_control = extract_final_number(out_control)
+        pred_control_any = extract_final_number(out_control_any)
+        pred_control_live = extract_final_number(out_control_live)
         patch_records.append({
             "recipient_idx": recipient.idx, "donor_idx": donor.idx, "step": s, "iter": it,
+            "is_focus_iter": it == patch_iter_focus,
             "recipient_gold": recipient.answer, "recipient_value_at_step": recipient.intermediate_values[s - 1],
             "donor_value_at_step": donor.intermediate_values[s - 1],
-            "answer_base": pred_base, "answer_patched": pred_patched, "answer_control": pred_control,
+            "answer_base": pred_base, "answer_patched": pred_patched,
+            "answer_control_any": pred_control_any, "answer_control_live": pred_control_live,
             "answer_changed_by_patch": pred_patched != pred_base,
-            "answer_changed_by_control": pred_control != pred_base,
-            "readout_shift": readout_shift,
+            "answer_changed_by_control_any": pred_control_any != pred_base,
+            "answer_changed_by_control_live": pred_control_live != pred_base,
+            "readout_moved_toward_donor_real": readout_moved_real,
+            "readout_moved_toward_donor_control_any": readout_moved_control_any,
+            "readout_moved_toward_donor_control_live": readout_moved_control_live,
         })
+        if (pi + 1) % 25 == 0:
+            with open("/tmp/codi_patch_progress.jsonl", "w") as f:
+                for r in patch_records:
+                    f.write(json.dumps(r, default=str) + "\n")
+            elapsed = time.perf_counter() - t1
+            print(f"patched {pi + 1}/{len(pairs)} ({elapsed:.0f}s elapsed)", flush=True)
 
     n_pairs = len(patch_records)
-    frac_answer_changed_patch = sum(r["answer_changed_by_patch"] for r in patch_records) / n_pairs if n_pairs else 0.0
-    frac_answer_changed_control = sum(r["answer_changed_by_control"] for r in patch_records) / n_pairs if n_pairs else 0.0
-    readouts_with_shift = [r["readout_shift"] for r in patch_records if r["readout_shift"] is not None]
-    frac_readout_moved_toward_donor = (
-        sum(rs["moved_toward_donor"] for rs in readouts_with_shift) / len(readouts_with_shift)
-        if readouts_with_shift else None
-    )
-    print(f"patch pairs n={n_pairs}: answer changed by real patch = {frac_answer_changed_patch:.3f}, "
-          f"by control patch = {frac_answer_changed_control:.3f}, "
-          f"next-readout moved toward donor = {frac_readout_moved_toward_donor}")
 
-    # ---- Log the run ----------------------------------------------------------------------
+    def frac(key):
+        return sum(r[key] for r in patch_records) / n_pairs if n_pairs else 0.0
+
+    def wilson_for(key):
+        x = sum(r[key] for r in patch_records)
+        return x, n_pairs, wilson_ci(x, n_pairs)
+
+    frac_patch, frac_ctrl_any, frac_ctrl_live = frac("answer_changed_by_patch"), frac("answer_changed_by_control_any"), frac("answer_changed_by_control_live")
+
+    def mcnemar_for(key_a, key_b):
+        b = sum(1 for r in patch_records if r[key_a] and not r[key_b])
+        c = sum(1 for r in patch_records if r[key_b] and not r[key_a])
+        return b, c, mcnemar_exact_p(b, c)
+
+    b_any, c_any, p_any = mcnemar_for("answer_changed_by_patch", "answer_changed_by_control_any")
+    b_live, c_live, p_live = mcnemar_for("answer_changed_by_patch", "answer_changed_by_control_live")
+
+    def readout_frac(key):
+        vals = [r[key] for r in patch_records if r[key] is not None]
+        return (sum(vals) / len(vals) if vals else None), len(vals)
+
+    ro_real, n_ro_real = readout_frac("readout_moved_toward_donor_real")
+    ro_ctrl_any, n_ro_ctrl_any = readout_frac("readout_moved_toward_donor_control_any")
+    ro_ctrl_live, n_ro_ctrl_live = readout_frac("readout_moved_toward_donor_control_live")
+
+    focus_records = [r for r in patch_records if r["is_focus_iter"]]
+    other_records = [r for r in patch_records if not r["is_focus_iter"]]
+    def sub_frac(records, key):
+        return (sum(r[key] for r in records) / len(records)) if records else None
+
+    print(f"n_pairs={n_pairs}  answer_changed: patch={frac_patch:.3f} (x={wilson_for('answer_changed_by_patch')}), "
+          f"control_any={frac_ctrl_any:.3f}, control_live={frac_ctrl_live:.3f}")
+    print(f"McNemar patch-vs-control_any: b={b_any} c={c_any} p={p_any:.4f}")
+    print(f"McNemar patch-vs-control_live: b={b_live} c={c_live} p={p_live:.4f}")
+    print(f"readout_moved_toward_donor: real={ro_real} (n={n_ro_real}), control_any={ro_ctrl_any} (n={n_ro_ctrl_any}), "
+          f"control_live={ro_ctrl_live} (n={n_ro_ctrl_live})")
+    print(f"focus-iter ({patch_iter_focus}) n={len(focus_records)}: answer_changed patch={sub_frac(focus_records, 'answer_changed_by_patch')}, "
+          f"control_any={sub_frac(focus_records, 'answer_changed_by_control_any')}")
+    print(f"other-iters n={len(other_records)}: answer_changed patch={sub_frac(other_records, 'answer_changed_by_patch')}, "
+          f"control_any={sub_frac(other_records, 'answer_changed_by_control_any')}")
+
+    # ---- Log the run ------------------------------------------------------------------------
     metrics = {
         "final_answer_accuracy": accuracy,
         "unparseable_rate": sum(r["predicted_answer"] is None for r in decode_records) / len(decode_records),
         "compute_steps": n_latents,
         "sec_per_example": decode_elapsed / len(decode_records),
-        "decoding_accuracy": overall_matched_top1,  # canonical top-level key, per record-run SKILL.md
-        "intervention_accuracy": frac_readout_moved_toward_donor,  # canonical top-level key
+        "decoding_accuracy": overall_matched_top1,
+        "intervention_accuracy": ro_real,
         "extra": {
+            "held_out_split": dec_args.mapping_split,
+            "half_a_n": len(half_a), "half_b_n": len(half_b),
             "decoding_accuracy_matched_top1": overall_matched_top1,
+            "decoding_accuracy_matched_top1_wilson_ci": list(matched_top1_ci),
             "decoding_accuracy_matched_top5": overall_matched_top5,
-            "decoding_accuracy_unconditional_top1": overall_uncond_top1,
-            "decoding_accuracy_unconditional_top5": overall_uncond_top5,
-            "decoding_matrix_top1_by_iter_step": matrix_top1,
-            "decoding_matrix_top5_by_iter_step": matrix_top5,
-            "best_iter_for_step": best_iter_for_step,
-            "paper_style_metric_correct_only_by_step_count": paper_metric,
-            "intervention_accuracy_answer_changed_by_patch": frac_answer_changed_patch,
-            "intervention_accuracy_answer_changed_by_control": frac_answer_changed_control,
-            "intervention_readout_moved_toward_donor": frac_readout_moved_toward_donor,
+            "decoding_accuracy_matched_n": matched_n1,
+            "decoding_matrix_top1_by_iter_step_FULL_POPULATION": matrix_top1_full,
+            "decoding_matrix_top5_by_iter_step_FULL_POPULATION": matrix_top5_full,
+            "best_iter_for_step_fit_on_half_A": best_iter_for_step,
+            "live_iterations": live_iterations,
+            "paper_style_metric_held_out_correct_only_by_step_count": paper_metric,
+            "train_baseline_mode_value": mode_value,
+            "train_baseline_mode_count": mode_count,
+            "train_baseline_sample_n": len(train_sample),
+            "train_baseline_rate_matched_population": train_baseline_rate,
+            "patch_iter_focus": patch_iter_focus,
+            "patch_focus_frac_requested": dec_args.patch_focus_frac,
             "n_patch_pairs": n_pairs,
+            "n_patch_pairs_focus": len(focus_records),
+            "n_patch_pairs_other": len(other_records),
+            "answer_changed_by_patch": frac_patch,
+            "answer_changed_by_control_any": frac_ctrl_any,
+            "answer_changed_by_control_live": frac_ctrl_live,
+            "answer_changed_wilson_ci_patch": list(wilson_ci(sum(r["answer_changed_by_patch"] for r in patch_records), n_pairs)),
+            "answer_changed_wilson_ci_control_any": list(wilson_ci(sum(r["answer_changed_by_control_any"] for r in patch_records), n_pairs)),
+            "answer_changed_wilson_ci_control_live": list(wilson_ci(sum(r["answer_changed_by_control_live"] for r in patch_records), n_pairs)),
+            "mcnemar_patch_vs_control_any": {"b": b_any, "c": c_any, "p_exact": p_any},
+            "mcnemar_patch_vs_control_live": {"b": b_live, "c": c_live, "p_exact": p_live},
+            "readout_moved_toward_donor_real": ro_real,
+            "readout_moved_toward_donor_control_any": ro_ctrl_any,
+            "readout_moved_toward_donor_control_live": ro_ctrl_live,
+            "answer_changed_patch_focus_iter": sub_frac(focus_records, "answer_changed_by_patch"),
+            "answer_changed_control_any_focus_iter": sub_frac(focus_records, "answer_changed_by_control_any"),
+            "answer_changed_patch_other_iters": sub_frac(other_records, "answer_changed_by_patch"),
+            "answer_changed_control_any_other_iters": sub_frac(other_records, "answer_changed_by_control_any"),
             "n_trainable_params": n_trainable,
+            "pilot_run_id": "20260919-073312_codi_decode-patch-pilot",
         },
     }
 
@@ -402,11 +568,13 @@ def main() -> None:
         dataset=DatasetInfo(name="gsm8k-aug", split="test", n_examples=len(examples), seed=dec_args.eval_seed),
         metrics=metrics,
         hyperparams={"inf_latent_iterations": n_latents, "greedy": training_args.greedy,
-                     "num_latent": training_args.num_latent, "n_patch_pairs": dec_args.n_patch_pairs},
+                     "num_latent": training_args.num_latent, "n_patch_pairs": dec_args.n_patch_pairs,
+                     "patch_iter_focus": patch_iter_focus, "mapping_split": dec_args.mapping_split},
         seed=None,
         hardware=f"{dec_args.hardware} / {torch.cuda.get_device_name(0)}",
-        notes="CODI decoding (logit-lens on pre-projection hidden state, all 6 iterations) "
-              "+ causal patching pilot (post-projection latent swap vs. random control).",
+        notes="CODI decoding (full test set, held-out mapping split) + causal patching "
+              "(scaled, stratified, two control variants, McNemar + Wilson CIs). "
+              "Follow-up to the pilot run.",
     )
     manifest = record.save(predictions=decode_records)
     out_dir = manifest.parent

@@ -29,3 +29,4 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260919-031852_recurrent_depth_cot-split4-4-4-rbar32-pilot](20260919-031852_recurrent_depth_cot-split4-4-4-rbar32-pilot/) | recurrent_depth | gpt2 | test (n=200) | 32 | 0.050 | 42 | pilot | Henning Lindig |
 | [20260919-073312_codi_decode-patch-pilot](20260919-073312_codi_decode-patch-pilot/) | codi | gpt2 | test (n=200) | 6 | 0.400 | None | pilot | Henning Lindig |
 | [20260919-075647_recurrent_depth_patch-pilot](20260919-075647_recurrent_depth_patch-pilot/) | recurrent_depth | gpt2 | test (n=200) | None | - | 42 | pilot | Henning Lindig |
+| [20260919-080349_codi_decode-patch-full](20260919-080349_codi_decode-patch-full/) | codi | gpt2 | test (n=1319) | 6 | 0.409 | None | full_run | Henning Lindig |
