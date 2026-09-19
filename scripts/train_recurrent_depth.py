@@ -17,10 +17,17 @@ Usage:
   uv run python scripts/train_recurrent_depth.py --local-sample --train-n 8 --eval-n 4 \
       --epochs 1 --mean-recurrence 2 --eval-recurrences 1,2 --stage smoke_test          # CPU smoke
   uv run python scripts/train_recurrent_depth.py --step-supervised --train-n 20000       # plan item (e)
+  uv run python scripts/train_recurrent_depth.py --cot --train-n 20000                   # paper-faithful eval
 
 `--step-supervised` swaps the objective (not the architecture): r = the example's number of
 rationale steps, iteration i's read-out at the number position is trained on step i's value,
 iteration n on the answer. See `build_step_supervised_row` and the mechanism module's plan.
+
+`--cot` keeps the paper's recipe (random r, truncated backprop) but trains and decodes the
+explicit-CoT format (`explicit_cot.TARGET_TEMPLATE`: rationale, then `#### answer`) instead
+of the direct answer -- the setting Geiping et al. actually report GSM8K in (8-shot CoT),
+where the loop adds per-token compute to a visible rationale. Not a latent scratchpad;
+`extra.cot_tokens` holds the generated rationale length per r.
 """
 from __future__ import annotations
 
@@ -38,6 +45,8 @@ from transformers import AutoTokenizer, GPT2LMHeadModel
 
 from latentreasoning.data.gsm8k_aug import Example, load_gsm8k_aug, load_local_sample
 from latentreasoning.eval.harness import score_outputs
+from latentreasoning.mechanisms.explicit_cot import TARGET_TEMPLATE as COT_TARGET_TEMPLATE
+from latentreasoning.mechanisms.explicit_cot import build_example_ids as build_cot_example_ids
 from latentreasoning.mechanisms.recurrent_depth import (
     ANSWER_PREFIX,
     DEFAULT_BACKPROP_LAST_K,
@@ -281,13 +290,17 @@ def train_step_supervised(model: LoopedGPT2, rows: list[dict], args, pad_id: int
 
 
 def _decode_new_tokens(tokenizer, out: torch.Tensor) -> list[str]:
-    raw = []
+    return [tokenizer.decode(t, skip_special_tokens=True) for t in _new_tokens(tokenizer, out)]
+
+
+def _new_tokens(tokenizer, out: torch.Tensor) -> list[list[int]]:
+    rows = []
     for row in out:
         toks = row.tolist()
         if tokenizer.eos_token_id in toks:
             toks = toks[: toks.index(tokenizer.eos_token_id)]
-        raw.append(tokenizer.decode(toks, skip_special_tokens=True))
-    return raw
+        rows.append(toks)
+    return rows
 
 
 @torch.no_grad()
@@ -375,11 +388,13 @@ def step_readout(model: LoopedGPT2, tokenizer, examples: list[Example], args, de
 
 @torch.no_grad()
 def evaluate(model: LoopedGPT2, tokenizer, examples: list[Example], r: int, args, device: str):
-    """Greedy answers for every example at `r` loop iterations; returns (raw_outputs, seconds)."""
+    """Greedy answers for every example at `r` loop iterations; returns (raw_outputs, seconds,
+    mean generated tokens before EOS -- the CoT length in `--cot` mode)."""
     model.eval()
     prompts = [build_eval_prompt_ids(tokenizer, ex.question) for ex in examples]
     gen = torch.Generator(device=device).manual_seed(args.seed)
     raw: list[str] = []
+    n_new: list[int] = []
     start = time.perf_counter()
     for b in range(0, len(prompts), args.eval_batch_size):
         input_ids, attn = collate_left(prompts[b : b + args.eval_batch_size], tokenizer.pad_token_id, device)
@@ -388,21 +403,23 @@ def evaluate(model: LoopedGPT2, tokenizer, examples: list[Example], r: int, args
                 input_ids, attn, num_recurrences=r, max_new_tokens=args.max_new_tokens,
                 eos_token_id=tokenizer.eos_token_id, generator=gen,
             )
-        raw.extend(_decode_new_tokens(tokenizer, out))
-    return raw, time.perf_counter() - start
+        toks = _new_tokens(tokenizer, out)
+        raw.extend(tokenizer.decode(t, skip_special_tokens=True) for t in toks)
+        n_new.extend(len(t) for t in toks)
+    return raw, time.perf_counter() - start, float(np.mean(n_new)) if n_new else 0.0
 
 
 @torch.no_grad()
-def diagnostics(model: LoopedGPT2, tokenizer, examples: list[Example], r: int, args, device: str) -> dict:
-    """Per-iteration convergence, fp32, measured at the position that predicts the *first
-    answer-number token* (prompt + " ####"). Measuring at the bare prompt's last position is
-    uninformative: the fine-tuned model emits " ####" there with p~1, so the KL between
-    iterations is ~0 whatever the state does (the first two pilots' `next_token_kl` was
-    measured that way -- see their notes). fp32 because bf16 can't resolve the sub-1%
-    state changes once the loop has converged."""
+def diagnostics(model: LoopedGPT2, tokenizer, prompts: list[list[int]], position: str, r: int, args, device: str) -> dict:
+    """Per-iteration convergence, fp32, measured at the last position of each `prompts` row
+    (`position` names it in the record). Default callers use the position that predicts the
+    *first answer-number token* (prompt + " ####"; in `--cot` mode prompt + gold rationale +
+    "\\n####"). Measuring at the bare prompt's last position is uninformative: the fine-tuned
+    model emits " ####" (or " <<") there with p~1, so the KL between iterations is ~0
+    whatever the state does (the first two pilots' `next_token_kl` was measured that way --
+    see their notes). fp32 because bf16 can't resolve the sub-1% state changes once the
+    loop has converged."""
     model.eval()
-    suffix = tokenizer(ANSWER_PREFIX, add_special_tokens=False)["input_ids"]  # " ####"
-    prompts = [build_eval_prompt_ids(tokenizer, ex.question) + suffix for ex in examples]
     gen = torch.Generator(device=device).manual_seed(args.seed)
     acc: dict[str, list[list[float]]] = {}
     for b in range(0, len(prompts), args.eval_batch_size):
@@ -413,8 +430,26 @@ def diagnostics(model: LoopedGPT2, tokenizer, examples: list[Example], r: int, a
     # batch-size-weighted mean per iteration
     weights = [min(args.eval_batch_size, len(prompts) - b) for b in range(0, len(prompts), args.eval_batch_size)]
     out = {k: [float(np.average([v[i] for v in vs], weights=weights)) for i in range(r)] for k, vs in acc.items()}
-    out["diagnostics_position"] = "first answer-number token (prompt + ' ####'), fp32"
+    out["diagnostics_position"] = position
     return out
+
+
+def diagnostic_prompts(tokenizer, examples: list[Example], cot: bool) -> list[tuple[str, list[list[int]]]]:
+    """(position description, prompts) pairs for `diagnostics`; the first is the record's main one."""
+    if not cot:
+        suffix = tokenizer(ANSWER_PREFIX, add_special_tokens=False)["input_ids"]  # " ####"
+        return [("first answer-number token (prompt + ' ####'), fp32",
+                 [build_eval_prompt_ids(tokenizer, ex.question) + suffix for ex in examples])]
+    answer_pos, step_pos = [], []
+    for ex in examples:
+        prompt = build_eval_prompt_ids(tokenizer, ex.question)
+        pre = tokenizer(COT_TARGET_TEMPLATE.format(rationale=ex.rationale, answer="").rstrip(), add_special_tokens=False)["input_ids"]
+        full, _ = build_cot_example_ids(tokenizer, ex.question, ex.rationale, ex.answer)
+        assert full[: len(prompt) + len(pre)] == prompt + pre, "CoT target tokenises differently in context"
+        answer_pos.append(prompt + pre)
+        step_pos.append(prompt + tokenizer(" <<", add_special_tokens=False)["input_ids"])
+    return [("first answer-number token given the gold rationale (prompt + rationale + '\\n####'), fp32", answer_pos),
+            ("first operand of rationale step 1 (prompt + ' <<'), fp32", step_pos)]
 
 
 def main() -> None:
@@ -434,6 +469,9 @@ def main() -> None:
                         help="separate lr for the looped blocks (default = --lr); use with --core-init random")
     parser.add_argument("--checkpoint-iterations", action="store_true",
                         help="activation-checkpoint each with-grad loop iteration (needed for large --backprop-last-k)")
+    parser.add_argument("--cot", action="store_true",
+                        help="train/decode the explicit-CoT format (rationale then '#### answer') with the paper's "
+                             "random-r recipe -- the setting Geiping et al. report GSM8K in; not a latent scratchpad")
     parser.add_argument("--step-supervised", action="store_true",
                         help="plan item (e): r = example's rationale step count, iteration i supervised on step i (see module docstring)")
     parser.add_argument("--step-loss-weight", type=float, default=1.0, help="weight of intermediate-step tokens in the token-mean loss")
@@ -448,7 +486,7 @@ def main() -> None:
     parser.add_argument("--eval-n", type=int, default=200)
     parser.add_argument("--eval-seed", type=int, default=0)
     parser.add_argument("--eval-batch-size", type=int, default=50)
-    parser.add_argument("--max-new-tokens", type=int, default=32)
+    parser.add_argument("--max-new-tokens", type=int, default=None, help="default 32; 128 with --cot")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--stage", default="pilot", choices=["smoke_test", "pilot", "full_run"])
     parser.add_argument("--hardware", default="RunPod GPU")
@@ -456,6 +494,10 @@ def main() -> None:
     parser.add_argument("--local-sample", action="store_true", help="smoke test: bundled 30-example sample for train AND eval, no network")
     parser.add_argument("--no-save", action="store_true", help="skip the run record (smoke tests)")
     args = parser.parse_args()
+    if args.cot and args.step_supervised:
+        parser.error("--cot and --step-supervised are different objectives; pick one")
+    if args.max_new_tokens is None:
+        args.max_new_tokens = 128 if args.cot else 32
     train_n = None if args.train_n < 0 else args.train_n
     if args.eval_recurrences is None:
         args.eval_recurrences = "1,2,3,4,6,8" if args.step_supervised else "1,2,4,8,16,32,64"
@@ -491,16 +533,19 @@ def main() -> None:
         kept = [r for r in rows if r["n_steps"] <= args.stepsup_max_steps]
         n_dropped = len(rows) - len(kept)
         rows = kept
+    elif args.cot:
+        rows = [build_cot_example_ids(tokenizer, ex.question, ex.rationale, ex.answer) for ex in train_examples]
     else:
         rows = [build_example_ids(tokenizer, ex.question, ex.answer) for ex in train_examples]
 
     split = f"{args.n_prelude}-{args.n_core}-{args.n_coda}"
-    slug = args.slug or (f"stepsup-split{split}" if args.step_supervised else f"split{split}-rbar{int(args.mean_recurrence)}")
+    slug = args.slug or (f"stepsup-split{split}" if args.step_supervised
+                         else f"{'cot-' if args.cot else ''}split{split}-rbar{int(args.mean_recurrence)}")
     run_id = new_run_id(mechanism_name, slug)
     out_dir = Path("results") / run_id
     if not args.no_save:
         out_dir.mkdir(parents=True, exist_ok=True)
-    objective = "step_supervised" if args.step_supervised else "answer_only"
+    objective = "step_supervised" if args.step_supervised else ("cot" if args.cot else "answer_only")
     print(f"run_id={run_id} device={device} objective={objective} train_n={len(rows)} (dropped {n_dropped} with "
           f">{args.stepsup_max_steps} steps) eval_n={len(eval_examples)} split={split} r_bar={args.mean_recurrence} "
           f"k={args.backprop_last_k} eval_r={eval_rs} primary={primary_r} adapter_init={args.adapter_init} "
@@ -528,9 +573,10 @@ def main() -> None:
         evals += [("oracle", "oracle"), ("oracle+1", "oracle_plus1"), ("oracle+2", "oracle_plus2")]
     for key, fname in evals:
         if isinstance(key, int):
-            raw, elapsed = evaluate(model, tokenizer, eval_examples, key, args, device)
+            raw, elapsed, gen_tokens = evaluate(model, tokenizer, eval_examples, key, args, device)
             rs = [key] * len(eval_examples)
         else:
+            gen_tokens = None
             raw, elapsed, rs = evaluate_oracle_r(model, tokenizer, eval_examples, int(key[6:] or 0), args, device)
         res = score_outputs(eval_examples, raw)
         res.sec_per_example = elapsed / max(len(eval_examples), 1)
@@ -544,9 +590,11 @@ def main() -> None:
             "sec_per_example": round(res.sec_per_example, 4),
             "mean_r": round(mean_r, 3),
             "unrolled_depth": round(unrolled_depth(args.n_prelude, args.n_core, args.n_coda, mean_r), 1),
+            **({"cot_tokens": round(gen_tokens, 1)} if args.cot else {}),
         }
         print(f"eval r={key!s:>8}: acc={res.final_answer_accuracy:.3f} unparseable={res.unparseable_rate:.3f} "
-              f"mean_r={mean_r:.2f} ({res.sec_per_example:.3f}s/ex)", flush=True)
+              f"mean_r={mean_r:.2f} ({res.sec_per_example:.3f}s/ex)"
+              + (f" cot_tokens={gen_tokens:.1f}" if args.cot else ""), flush=True)
         if not args.no_save:
             with (out_dir / f"predictions_{fname}.jsonl").open("w") as f:
                 for rec in res.records:
@@ -563,11 +611,15 @@ def main() -> None:
                 for rec in readout_records:
                     f.write(json.dumps(rec) + "\n")
 
-    diag = diagnostics(model, tokenizer, eval_examples, max(eval_rs), args, device)
     fmt = lambda xs: [f"{x:.2e}" for x in xs]
-    print(f"convergence at r={max(eval_rs)} ({diag['diagnostics_position']}): "
-          f"state_rel_delta[1..4,-1]={fmt(diag['state_rel_delta'][:4] + diag['state_rel_delta'][-1:])} "
-          f"next_token_kl[2..4,-1]={fmt(diag['next_token_kl'][1:4] + diag['next_token_kl'][-1:])}")
+    diags = []
+    for position, prompts in diagnostic_prompts(tokenizer, eval_examples, args.cot):
+        d = diagnostics(model, tokenizer, prompts, position, max(eval_rs), args, device)
+        print(f"convergence at r={max(eval_rs)} ({d['diagnostics_position']}): "
+              f"state_rel_delta[1..4,-1]={fmt(d['state_rel_delta'][:4] + d['state_rel_delta'][-1:])} "
+              f"next_token_kl[2..4,-1]={fmt(d['next_token_kl'][1:4] + d['next_token_kl'][-1:])}")
+        diags.append(d)
+    diag = diags[0]
 
     if args.no_save:
         print("--no-save: not recording a run")
@@ -599,7 +651,9 @@ def main() -> None:
                 "train_seconds": train_seconds,
                 "diagnostics_r": max(eval_rs),
                 **diag,
+                **({"diagnostics_first_step": diags[1]} if args.cot else {}),
                 **({"step_readout": readout_summary} if args.step_supervised else {}),
+                **({"cot_tokens": sweep[primary_r]["cot_tokens"]} if args.cot else {}),
             },
         },
         hyperparams={
@@ -624,7 +678,8 @@ def main() -> None:
             "core_lr": args.core_lr if args.core_lr is not None else args.lr,
             "eval_recurrences": eval_rs,
             "max_new_tokens": args.max_new_tokens,
-            "prompt_format": "direct answer (no rationale), same as filler_tokens compute_steps=0",
+            "prompt_format": ("explicit CoT (rationale, then '#### answer'), same as explicit_cot" if args.cot
+                              else "direct answer (no rationale), same as filler_tokens compute_steps=0"),
         },
         seed=seed,
         hardware=args.hardware,
@@ -634,6 +689,7 @@ def main() -> None:
             + (f"r = example's rationale step count, iteration i supervised on step i (step_loss_weight={args.step_loss_weight})"
                if args.step_supervised else
                f"r~lognormal-Poisson(r_bar={args.mean_recurrence}, sigma={args.lognormal_sigma}), k={args.backprop_last_k}")
+            + (" in the explicit-CoT format (rationale then answer)" if args.cot else "")
             + f", on {len(rows)} train examples; eval sweep r={eval_rs}"
             + (", plus oracle r = test example's step count (+0/+1/+2)" if args.step_supervised else "")
             + f"; compute_steps reports {primary_r}"
