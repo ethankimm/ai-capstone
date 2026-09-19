@@ -1,0 +1,250 @@
+{
+  "run_id": "20260919-184323_codi_decode-patch-full-eval",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.41925701288855194,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "sec_per_example": 0.17154415528529335,
+    "decoding_accuracy": 0.1839134524929445,
+    "intervention_accuracy": 0.004405286343612335,
+    "extra": {
+      "held_out_split": true,
+      "half_a_n": 660,
+      "half_b_n": 659,
+      "decoding_accuracy_matched_top1": 0.1839134524929445,
+      "decoding_accuracy_matched_top1_wilson_ci": [
+        0.16802024239049,
+        0.20094691460372024
+      ],
+      "decoding_accuracy_matched_top5": 0.26575729068673565,
+      "decoding_accuracy_matched_n": 2126,
+      "decoding_matrix_top1_by_iter_step_FULL_POPULATION": {
+        "1": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "2": {
+          "1": 0.2229,
+          "2": 0.2848,
+          "3": 0.0842,
+          "4": 0.0427,
+          "5": 0.0178,
+          "6": 0.023,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "3": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "4": {
+          "1": 0.2083,
+          "2": 0.1699,
+          "3": 0.1149,
+          "4": 0.066,
+          "5": 0.0267,
+          "6": 0.023,
+          "7": 0.0333,
+          "8": 0.0
+        },
+        "5": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "6": {
+          "1": 0.2037,
+          "2": 0.1707,
+          "3": 0.1115,
+          "4": 0.0699,
+          "5": 0.0222,
+          "6": 0.0345,
+          "7": 0.0,
+          "8": 0.0
+        }
+      },
+      "decoding_matrix_top5_by_iter_step_FULL_POPULATION": {
+        "1": {
+          "1": 0.0023,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0044,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "2": {
+          "1": 0.309,
+          "2": 0.3625,
+          "3": 0.1581,
+          "4": 0.1204,
+          "5": 0.0711,
+          "6": 0.046,
+          "7": 0.0667,
+          "8": 0.0
+        },
+        "3": {
+          "1": 0.0008,
+          "2": 0.0008,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "4": {
+          "1": 0.2813,
+          "2": 0.2411,
+          "3": 0.1889,
+          "4": 0.1359,
+          "5": 0.1022,
+          "6": 0.046,
+          "7": 0.0333,
+          "8": 0.0
+        },
+        "5": {
+          "1": 0.0008,
+          "2": 0.0008,
+          "3": 0.0,
+          "4": 0.0019,
+          "5": 0.0044,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "6": {
+          "1": 0.279,
+          "2": 0.2427,
+          "3": 0.1957,
+          "4": 0.1398,
+          "5": 0.0978,
+          "6": 0.0575,
+          "7": 0.0667,
+          "8": 0.0
+        }
+      },
+      "best_iter_for_step_fit_on_half_A": {
+        "1": 2,
+        "2": 2,
+        "3": 6,
+        "4": 6,
+        "5": 2,
+        "6": 2,
+        "7": 4,
+        "8": 1
+      },
+      "live_iterations": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "paper_style_metric_held_out_correct_only_by_step_count": {
+        "1": {
+          "value": 0.6666666666666666,
+          "n": 9
+        },
+        "2": {
+          "value": 0.06722689075630252,
+          "n": 119
+        },
+        "3": {
+          "value": 0.0,
+          "n": 82
+        }
+      },
+      "train_baseline_mode_value": "20",
+      "train_baseline_mode_count": 1599,
+      "train_baseline_sample_n": 20000,
+      "train_baseline_rate_matched_population": 0.028222013170272814,
+      "patch_iter_focus": 2,
+      "patch_focus_frac_requested": 0.65,
+      "n_patch_pairs": 350,
+      "n_patch_pairs_focus": 227,
+      "n_patch_pairs_other": 123,
+      "answer_changed_by_patch": 0.4085714285714286,
+      "answer_changed_by_control_any": 0.3057142857142857,
+      "answer_changed_by_control_live": 0.3742857142857143,
+      "answer_changed_wilson_ci_patch": [
+        0.35833476632011,
+        0.46079334071987615
+      ],
+      "answer_changed_wilson_ci_control_any": [
+        0.2597731630742845,
+        0.3558740643856862
+      ],
+      "answer_changed_wilson_ci_control_live": [
+        0.3252076417549545,
+        0.4260935054250265
+      ],
+      "mcnemar_patch_vs_control_any": {
+        "b": 77,
+        "c": 41,
+        "p_exact": 0.001178393103085455
+      },
+      "mcnemar_patch_vs_control_live": {
+        "b": 56,
+        "c": 44,
+        "p_exact": 0.2712530240738347
+      },
+      "readout_moved_toward_donor_real": 0.004405286343612335,
+      "readout_moved_toward_donor_control_any": 0.015873015873015872,
+      "readout_moved_toward_donor_control_live": 0.04395604395604396,
+      "answer_changed_patch_focus_iter": 0.31277533039647576,
+      "answer_changed_control_any_focus_iter": 0.2907488986784141,
+      "answer_changed_patch_other_iters": 0.5853658536585366,
+      "answer_changed_control_any_other_iters": 0.3333333333333333,
+      "n_trainable_params": 20057088,
+      "pilot_run_id": "20260919-073312_codi_decode-patch-pilot"
+    }
+  },
+  "hyperparams": {
+    "inf_latent_iterations": 6,
+    "greedy": true,
+    "num_latent": 6,
+    "n_patch_pairs": 350,
+    "patch_iter_focus": 2,
+    "mapping_split": true
+  },
+  "seed": null,
+  "hardware": "RunPod RTX A4500 (secure) / NVIDIA RTX A4500",
+  "author": "Henning Lindig",
+  "notes": "CODI decoding (full test set, held-out mapping split) + causal patching (scaled, stratified, two control variants, McNemar + Wilson CIs). Follow-up to the pilot run.",
+  "timestamp_utc": "2026-09-19T18:43:23.897372+00:00",
+  "git": {
+    "commit": "9485853",
+    "dirty": null
+  }
+}

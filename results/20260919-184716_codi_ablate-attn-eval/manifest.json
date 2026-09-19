@@ -1,0 +1,95 @@
+{
+  "run_id": "20260919-184716_codi_ablate-attn-eval",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 227,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": null,
+    "compute_steps": 6,
+    "sec_per_example": null,
+    "extra": {
+      "prior_run_id": "20260919-184323_codi_decode-patch-full-eval",
+      "focus_iter": 2,
+      "n_ablate_pairs": 227,
+      "n_unique_recipients": 152,
+      "answer_changed_by_mean_in_ablate": 0.14096916299559473,
+      "mcnemar_mean_in_vs_patch": {
+        "b": 9,
+        "c": 48,
+        "p_exact": 1.520195229143262e-07
+      },
+      "mcnemar_mean_in_vs_control_any": {
+        "b": 6,
+        "c": 40,
+        "p_exact": 3.1028037028590916e-07
+      },
+      "dedup_per_recipient": {
+        "n_unique_recipients": 152,
+        "answer_changed_by_zero": 0.23026315789473684,
+        "answer_changed_by_mean": 0.15789473684210525,
+        "answer_changed_by_mean_in": 0.14473684210526316,
+        "answer_changed_by_patch_any_pair": 0.375
+      },
+      "answer_changed_by_patch": 0.31277533039647576,
+      "answer_changed_by_control_any": 0.2907488986784141,
+      "answer_changed_by_zero_ablate": 0.21145374449339208,
+      "answer_changed_by_mean_ablate": 0.15418502202643172,
+      "mcnemar_zero_vs_patch": {
+        "b": 17,
+        "c": 40,
+        "p_exact": 0.003201543767450382
+      },
+      "mcnemar_mean_vs_patch": {
+        "b": 8,
+        "c": 44,
+        "p_exact": 4.0393217393130953e-07
+      },
+      "mcnemar_zero_vs_control_any": {
+        "b": 20,
+        "c": 38,
+        "p_exact": 0.024746035842440797
+      },
+      "readout_changed_at_all_zero": 0.5770925110132159,
+      "readout_changed_at_all_mean": 1.0,
+      "ablate_elapsed_sec": 153.5398315936327,
+      "n_attn_examples_requested": 80,
+      "n_attn_examples_ok": 80,
+      "n_attn_generated_tokens": 429,
+      "attention_mass_question": 0.7501504246171538,
+      "attention_mass_focus_thought": 0.017802909511577834,
+      "attention_mass_other_thoughts": 0.12486902988539675,
+      "attention_mass_eot": 0.013756412198649837,
+      "attention_mass_prior_answer": 0.09342274686325958,
+      "attention_mass_focus_thought_first_token_only": 0.020876652630977332,
+      "attn_elapsed_sec": 14.891290608793497,
+      "mean_sample_n": 300
+    }
+  },
+  "hyperparams": {
+    "inf_latent_iterations": 6,
+    "focus_iter": 2,
+    "n_ablate_pairs": 227,
+    "n_attn_examples": 80,
+    "mean_sample_n": 300
+  },
+  "seed": null,
+  "hardware": "RunPod RTX A4500 (secure) / NVIDIA RTX A4500",
+  "author": "Henning Lindig",
+  "notes": "Ablation (zero/mean/mean_in at focus iter, paired against 20260919-184323_codi_decode-patch-full-eval's real/control patches) + attention-mass check (does answer generation attend to the focus thought position at all).",
+  "timestamp_utc": "2026-09-19T18:47:16.953343+00:00",
+  "git": {
+    "commit": "9485853",
+    "dirty": null
+  }
+}

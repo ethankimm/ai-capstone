@@ -2,9 +2,12 @@
 """CODI diagnostics for the causal-patching null (results/20260919-080349_codi_decode-patch-full):
 does the focus position (iteration 2, the strongest decode position) matter AT ALL
 independent of content (ablation), and does the model even attend to it when answering
-(attention check)? Reuses the exact 227 focus-iteration pairs from that run's
-patch_pairs.jsonl so the ablation conditions are paired with the already-known
-real-donor / control-any / control-live outcomes on the SAME recipients.
+(attention check)? Reuses the exact focus-iteration pairs from that run's patch_pairs.jsonl
+(`--prior_run`, default the original dropout-affected run) so the ablation conditions are
+paired with the already-known real-donor / control-any / control-live outcomes on the SAME
+recipients. Conditions: zero vector; mean of the focus iteration's output (`mean`); mean of
+what the focus iteration's input slot normally receives (`mean_in`). Per-recipient
+deduplicated numbers are reported too, since a recipient recurs once per matched step.
 
 Run inside the CODI venv, from the CODI checkout (same convention as decode_patch_codi.py):
 
@@ -57,6 +60,7 @@ class DiagArguments:
     mean_sample_n: int = field(default=300)
     n_attn_examples: int = field(default=80)
     max_new_tokens: int = field(default=64)
+    prior_run: str = field(default=PRIOR_RUN, metadata={"help": "run_id of the decode_patch_codi.py run whose focus-iteration patch_pairs.jsonl to replay"})
 
 
 @torch.no_grad()
@@ -152,13 +156,16 @@ def main() -> None:
     print(f"loaded {model_args.ckpt_dir}: missing={len(load_result.missing_keys)} unexpected={len(load_result.unexpected_keys)}")
     n_latents = training_args.inf_latent_iterations
 
-    prior_dir = Path(__file__).resolve().parent.parent / "results" / PRIOR_RUN
+    prior_run = diag_args.prior_run
+    prior_dir = Path(__file__).resolve().parent.parent / "results" / prior_run
     manifest = json.loads((prior_dir / "manifest.json").read_text())
     extra = manifest["metrics"]["extra"]
     best_iter_for_step = {int(k): v for k, v in extra["best_iter_for_step_fit_on_half_A"].items()}
     focus_iter = extra["patch_iter_focus"]
     focus_pairs = [json.loads(l) for l in (prior_dir / "patch_pairs.jsonl").open() if json.loads(l)["is_focus_iter"]]
-    print(f"loaded {len(focus_pairs)} focus-iteration (iter={focus_iter}) pairs from {PRIOR_RUN}")
+    n_unique_recipients = len({fp["recipient_idx"] for fp in focus_pairs})
+    print(f"loaded {len(focus_pairs)} focus-iteration (iter={focus_iter}) pairs from {prior_run} "
+          f"({n_unique_recipients} unique recipients)")
 
     all_test = load_gsm8k_aug(split="test", n=None, seed=None)
     by_idx = {ex.idx: ex for ex in all_test}
@@ -169,7 +176,12 @@ def main() -> None:
     print(f"computing mean latent at iter {focus_iter} over {diag_args.mean_sample_n} half-B examples...")
     mean_vec = mean_latent_at_iter(model, tokenizer, half_b, device, n_latents, focus_iter, diag_args.mean_sample_n)
     zero_vec = torch.zeros_like(mean_vec)
-    print(f"mean/zero vectors ready ({time.perf_counter() - t0:.1f}s)")
+    # mean of what the focus iteration's input slot normally receives (iteration focus_iter-1's
+    # output) -- the on-manifold control matched to the slot being overwritten. The original
+    # `mean_vec` is the mean of the focus iteration's OUTPUT, kept for comparability.
+    mean_in_vec = (mean_latent_at_iter(model, tokenizer, half_b, device, n_latents, focus_iter - 1, diag_args.mean_sample_n)
+                   if focus_iter >= 2 else None)
+    print(f"mean/zero/mean_in vectors ready ({time.perf_counter() - t0:.1f}s)")
 
     ablate_records = []
     t1 = time.perf_counter()
@@ -191,11 +203,20 @@ def main() -> None:
         out_m = decode_answer(model, tokenizer, pkv_m, latent_m, device, diag_args.max_new_tokens)
         readout_m = topk_token_strings(tokenizer, thoughts_m[it]["logits"][0], 1)[0] if it < n_latents else None
 
+        if mean_in_vec is not None:
+            pkv_mi, thoughts_mi, latent_mi = run_thoughts(model, tokenizer, q_r, device, n_latents, override_input_at={it: mean_in_vec})
+            out_mi = decode_answer(model, tokenizer, pkv_mi, latent_mi, device, diag_args.max_new_tokens)
+            pred_mi = extract_final_number(out_mi)
+        else:
+            pred_mi = None
+
         pred_b, pred_z, pred_m = extract_final_number(out_b), extract_final_number(out_z), extract_final_number(out_m)
         ablate_records.append({
             "recipient_idx": fp["recipient_idx"], "step": s, "iter": it,
             "answer_base": pred_b, "answer_zero": pred_z, "answer_mean": pred_m,
+            "answer_mean_in": pred_mi,
             "answer_changed_by_zero": pred_z != pred_b, "answer_changed_by_mean": pred_m != pred_b,
+            "answer_changed_by_mean_in": (pred_mi != pred_b) if mean_in_vec is not None else None,
             "readout_changed_by_zero": (readout_z != base_readout) if base_readout is not None else None,
             "readout_changed_by_mean": (readout_m != base_readout) if base_readout is not None else None,
             # carry over the prior run's already-computed conditions on this SAME unit for paired stats
@@ -226,6 +247,29 @@ def main() -> None:
     print(f"McNemar zero-vs-patch: b={b_zp} c={c_zp} p={p_zp:.4f}")
     print(f"McNemar mean-vs-patch: b={b_mp} c={c_mp} p={p_mp:.4f}")
     print(f"McNemar zero-vs-control_any: b={b_zc} c={c_zc} p={p_zc:.4f}")
+    if mean_in_vec is not None:
+        frac_mean_in = frac("answer_changed_by_mean_in")
+        b_mip, c_mip, p_mip = mcnemar_for(ablate_records, "answer_changed_by_mean_in", "answer_changed_by_patch")
+        b_mic, c_mic, p_mic = mcnemar_for(ablate_records, "answer_changed_by_mean_in", "answer_changed_by_control_any")
+        print(f"mean_in_ablate={frac_mean_in:.3f}  McNemar mean_in-vs-patch: b={b_mip} c={c_mip} p={p_mip:.4f}  "
+              f"mean_in-vs-control_any: b={b_mic} c={c_mic} p={p_mic:.4f}")
+    else:
+        frac_mean_in = None; b_mip = c_mip = p_mip = b_mic = c_mic = p_mic = None
+
+    # the same recipient recurs once per matched step at the focus iteration; zero/mean/mean_in
+    # depend only on the recipient, so also report one row per recipient (first occurrence)
+    seen: set[int] = set()
+    dedup = [r for r in ablate_records if not (r["recipient_idx"] in seen or seen.add(r["recipient_idx"]))]
+    n_dd = len(dedup)
+    dedup_stats = {
+        "n_unique_recipients": n_dd,
+        "answer_changed_by_zero": sum(r["answer_changed_by_zero"] for r in dedup) / n_dd,
+        "answer_changed_by_mean": sum(r["answer_changed_by_mean"] for r in dedup) / n_dd,
+        "answer_changed_by_mean_in": (sum(r["answer_changed_by_mean_in"] for r in dedup) / n_dd) if mean_in_vec is not None else None,
+        "answer_changed_by_patch_any_pair": sum(1 for i in {r["recipient_idx"] for r in dedup}
+                                                if any(r["answer_changed_by_patch"] for r in ablate_records if r["recipient_idx"] == i)) / n_dd,
+    }
+    print(f"dedup (n={n_dd} unique recipients): {dedup_stats}")
     readout_z_frac = sum(1 for r in ablate_records if r["readout_changed_by_zero"]) / sum(1 for r in ablate_records if r["readout_changed_by_zero"] is not None)
     readout_m_frac = sum(1 for r in ablate_records if r["readout_changed_by_mean"]) / sum(1 for r in ablate_records if r["readout_changed_by_mean"] is not None)
     print(f"readout_changed_at_all: zero={readout_z_frac:.3f} mean={readout_m_frac:.3f}")
@@ -280,9 +324,14 @@ def main() -> None:
         "compute_steps": n_latents,
         "sec_per_example": None,
         "extra": {
-            "prior_run_id": PRIOR_RUN,
+            "prior_run_id": prior_run,
             "focus_iter": focus_iter,
             "n_ablate_pairs": n_ab,
+            "n_unique_recipients": n_unique_recipients,
+            "answer_changed_by_mean_in_ablate": frac_mean_in,
+            "mcnemar_mean_in_vs_patch": {"b": b_mip, "c": c_mip, "p_exact": p_mip},
+            "mcnemar_mean_in_vs_control_any": {"b": b_mic, "c": c_mic, "p_exact": p_mic},
+            "dedup_per_recipient": dedup_stats,
             "answer_changed_by_patch": frac_patch,
             "answer_changed_by_control_any": frac_ctrl,
             "answer_changed_by_zero_ablate": frac_zero,
@@ -319,7 +368,7 @@ def main() -> None:
                      "mean_sample_n": diag_args.mean_sample_n},
         seed=None,
         hardware=f"{diag_args.hardware} / {torch.cuda.get_device_name(0)}",
-        notes=f"Ablation (zero/mean at focus iter, paired against {PRIOR_RUN}'s real/control patches) "
+        notes=f"Ablation (zero/mean/mean_in at focus iter, paired against {prior_run}'s real/control patches) "
               f"+ attention-mass check (does answer generation attend to the focus thought position at all).",
     )
     manifest_out = record.save(predictions=ablate_records)
