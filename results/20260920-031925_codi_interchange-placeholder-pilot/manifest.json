@@ -1,0 +1,168 @@
+{
+  "run_id": "20260920-031925_codi_interchange-placeholder-pilot",
+  "mechanism": "codi",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "intervention_accuracy": 0.01,
+    "extra": {
+      "single_slot_summaries": {
+        "1": {
+          "label": "iter1",
+          "n": 60,
+          "answer_changed_rate": 0.55,
+          "answer_changed_wilson_ci": [
+            0.42491714548981496,
+            0.6690654614623918
+          ],
+          "steered_to_donor_rate": 0.016666666666666666,
+          "steered_to_donor_wilson_ci": [
+            0.002948083860873682,
+            0.08855338226779477
+          ],
+          "n_steered_eligible": 60
+        },
+        "2": {
+          "label": "iter2",
+          "n": 60,
+          "answer_changed_rate": 0.43333333333333335,
+          "answer_changed_wilson_ci": [
+            0.31572200394400635,
+            0.5589678534530513
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        "3": {
+          "label": "iter3",
+          "n": 60,
+          "answer_changed_rate": 0.45,
+          "answer_changed_wilson_ci": [
+            0.33093453853760824,
+            0.575082854510185
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        "4": {
+          "label": "iter4",
+          "n": 60,
+          "answer_changed_rate": 0.38333333333333336,
+          "answer_changed_wilson_ci": [
+            0.2708808958488824,
+            0.5098263545959686
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        "5": {
+          "label": "iter5",
+          "n": 60,
+          "answer_changed_rate": 0.36666666666666664,
+          "answer_changed_wilson_ci": [
+            0.2562073884620827,
+            0.4931723263320327
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        "6": {
+          "label": "iter6",
+          "n": 60,
+          "answer_changed_rate": 0.4166666666666667,
+          "answer_changed_wilson_ci": [
+            0.30064086487871833,
+            0.5427214568676039
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        }
+      },
+      "single_slot_nondecodable_pooled_n": 120,
+      "single_slot_decodable_pooled_n": 120,
+      "grouped_n": 100,
+      "grouped_answer_changed_nondecodable": 0.59,
+      "grouped_answer_changed_decodable": 0.56,
+      "grouped_answer_changed_wilson_ci_nondecodable": [
+        0.4920125056109662,
+        0.6813284290433533
+      ],
+      "grouped_answer_changed_wilson_ci_decodable": [
+        0.4622792771125631,
+        0.6532813459903167
+      ],
+      "grouped_mcnemar_answer_changed": {
+        "b": 20,
+        "c": 17,
+        "p_exact": 0.7428293587290682
+      },
+      "grouped_steered_to_donor_nondecodable": 0.01,
+      "grouped_steered_to_donor_decodable": 0.01,
+      "grouped_mcnemar_steered_to_donor": {
+        "b": 1,
+        "c": 1,
+        "p_exact": 1.0
+      },
+      "n_trainable_params": null,
+      "related_runs": [
+        "20260919-184323_codi_decode-patch-full-eval",
+        "20260919-192228_codi_early-termination-ablate-all",
+        "20260919-185332_explicit_cot_patch-positive-control"
+      ]
+    }
+  },
+  "hyperparams": {
+    "inf_latent_iterations": 6,
+    "num_latent": 6,
+    "n_pairs_per_site": 60,
+    "n_grouped_pairs": 100,
+    "nondecodable_iters": [
+      1,
+      4
+    ],
+    "decodable_iters": [
+      3,
+      5
+    ]
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A4500 (secure) / NVIDIA RTX A4500",
+  "author": "Henning Lindig",
+  "notes": "Donor-interchange patching at CODI's non-decodable placeholder positions (z0, z3) vs its best-decoding positions (z2, z4): single-slot at every iteration, then jointly-grouped {z0,z3} vs {z2,z4} paired on the same donor/recipient.",
+  "timestamp_utc": "2026-09-20T03:19:25.690968+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}
