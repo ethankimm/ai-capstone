@@ -1,0 +1,43 @@
+mechanism: coconut
+model: gpt2
+dataset:
+  name: gsm8k-aug
+  variant: cot
+  train_split: train
+  eval_split: test
+  eval_n: 200
+  eval_seed: 0
+compute_steps: 6           # <|latent|> tokens between <|start-latent|>/<|end-latent|>
+                           # (c_thought=2 per stage x max_latent_stage=3, paper default,
+                           # matches CODI's 6 and Table 1's GSM8k-Aug numbers)
+# No training run in this repo -- released checkpoint used as-is, see
+# latentreasoning/mechanisms/coconut.py for the checkpoint provenance / gotchas.
+# Paper's own stage-0-CoT-then-curriculum recipe (facebookresearch/coconut,
+# args/gsm_cot.yaml then args/gsm_coconut.yaml) is available if a from-scratch
+# reproduction is ever needed.
+training:
+  stage0_cot_epochs: 25          # early-stopped on val acc, ~40% target per repo README
+  c_thought: 2
+  max_latent_stage: 3
+  epochs_per_stage: 3
+  batch_size: 32                 # per-GPU in the paper's 4xA100 setup; effective 128
+  lr: 1e-4
+  optimizer: adamw_torch
+  weight_decay: 0.01
+  precision: fp32                # paper config sets bf16: False for GPT-2
+  seed: 0
+generation:
+  num_latents: 6
+  greedy: true
+  max_new_tokens: 64
+  delimiter: "###"                # not CODI's "The answer is:"
+released_weights: connordilgren/gpt2-gsm8k-coconut  # HF, checkpoint_33; Dilgren & Wiegreffe
+                                                      # (COLM 2026) reproduction collection
+notes: >
+  Hao et al. arXiv:2412.06769 -- multi-stage curriculum replacing explicit CoT steps with
+  <|latent|> tokens fed back as the previous position's last-layer hidden state. Reference
+  implementation github.com/facebookresearch/coconut; released checkpoint used as-is
+  (isolated venv pinned to their requirements.txt, see scripts/coconut_common.py) rather
+  than retrained, to compare directly against Dilgren & Wiegreffe (arXiv:2604.04902), whose
+  checkpoint collection this is. Paper reports 33.1% (Hao et al. repro: 34.1%) on GSM8k-Aug
+  for GPT-2 Small.

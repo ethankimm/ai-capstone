@@ -1,0 +1,149 @@
+{
+  "run_id": "20260920-031246_coconut_decode-patch-pilot",
+  "mechanism": "coconut",
+  "stage": "pilot",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.36,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "sec_per_example": 0.05850880215410143,
+    "decoding_accuracy": 0.28804347826086957,
+    "intervention_accuracy": 0.0,
+    "extra": {
+      "held_out_split": true,
+      "half_a_n": 97,
+      "half_b_n": 103,
+      "decoding_accuracy_matched_top1": 0.28804347826086957,
+      "decoding_accuracy_matched_top5": 0.391304347826087,
+      "best_pass_for_step_fit_on_half_A": {
+        "1": 1,
+        "2": 4,
+        "3": 4,
+        "4": 4,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0
+      },
+      "pass_avg_top1_fit_on_half_A": {
+        "0": 0.001984126984126984,
+        "1": 0.08081407931757117,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.08869348605796894,
+        "5": 0.0
+      },
+      "most_decodable_passes": [
+        0,
+        1,
+        4
+      ],
+      "least_decodable_passes": [
+        2,
+        3,
+        5
+      ],
+      "single_slot_summaries": {
+        "0": {
+          "n": 60,
+          "answer_changed_rate": 0.5166666666666667,
+          "answer_changed_wilson_ci": [
+            0.39307594850843575,
+            0.6382515871422999
+          ],
+          "steered_to_donor_rate": 0.0,
+          "n_steered_eligible": 60
+        },
+        "1": {
+          "n": 60,
+          "answer_changed_rate": 0.8666666666666667,
+          "answer_changed_wilson_ci": [
+            0.7583460540992789,
+            0.9308597302169036
+          ],
+          "steered_to_donor_rate": 0.03333333333333333,
+          "n_steered_eligible": 60
+        },
+        "2": {
+          "n": 0,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.0
+          ],
+          "steered_to_donor_rate": 0.0,
+          "n_steered_eligible": 0
+        },
+        "3": {
+          "n": 0,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.0
+          ],
+          "steered_to_donor_rate": 0.0,
+          "n_steered_eligible": 0
+        },
+        "4": {
+          "n": 60,
+          "answer_changed_rate": 0.65,
+          "answer_changed_wilson_ci": [
+            0.5236238380947751,
+            0.7583239827618451
+          ],
+          "steered_to_donor_rate": 0.0,
+          "n_steered_eligible": 60
+        },
+        "5": {
+          "n": 0,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.0
+          ],
+          "steered_to_donor_rate": 0.0,
+          "n_steered_eligible": 0
+        }
+      },
+      "grouped_n": 100,
+      "grouped_answer_changed_most_decodable": 0.9,
+      "grouped_answer_changed_least_decodable": 0.74,
+      "grouped_mcnemar_answer_changed": {
+        "b": 4,
+        "c": 20,
+        "p_exact": 0.001543879508972168
+      },
+      "n_trainable_params": 124442112,
+      "paper_table1_reference": {
+        "gpt2_coconut_gsm8k_aug_accuracy": 0.331,
+        "hao_et_al_repro": 0.341
+      }
+    }
+  },
+  "hyperparams": {
+    "num_latents": 6,
+    "n_patch_pairs": 60,
+    "n_grouped_pairs": 100,
+    "mapping_split": true
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A6000 (secure) / NVIDIA RTX A6000",
+  "author": "Henning Lindig",
+  "notes": "Coconut (released connordilgren/gpt2-gsm8k-coconut checkpoint) decoding + donor-interchange patching, mirroring decode_patch_codi.py / interchange_patch_placeholder_codi.py but with a DATA-DRIVEN decodable/non-decodable pass split instead of CODI's known z0/z3.",
+  "timestamp_utc": "2026-09-20T03:12:46.783454+00:00",
+  "git": {
+    "commit": "890ae225e955e9666184272ceac615ac1b8eb35f",
+    "dirty": true
+  }
+}
