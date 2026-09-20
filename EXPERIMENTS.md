@@ -3564,3 +3564,305 @@ all 6 focus (iter, step) panels) at `scatter_ridge_pred.png` / `scatter_mlp_pred
   per-cell-isolated probe can't — out of scope here.
 - Companion run `20260920-040411_coconut_probe-continuous-pilot` runs the identical
   continuous-metrics engine on Coconut and finds the same "no recoverable signal" result.
+
+---
+
+## 2026-09-20 — Coconut: continuous probe metrics at full scale (entire local gold-trace file) (coconut, run_id: 20260920-041902_coconut_probe-continuous-full)
+
+**Goal:** Full-scale confirmation of `20260920-040411_coconut_probe-continuous-pilot`
+(continuous-metrics pilot at train_n=500/eval_n=300). Uses the **entire**
+`gsm_valid-gold-reasoning-trace_test.json` file (1194 examples, index-parity split ->
+597/597) instead of a subsample of it — this is all the local gold-trace data available
+for Coconut, so this run is the ceiling on n for this data source, not a further-scalable
+"full" the way CODI's shared `gsm8k_aug` validation split is.
+
+**Mechanism / model:** `coconut`, gpt2 / `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`,
+compute_steps=6.
+
+**Data:** `gsm_valid-gold-reasoning-trace_test.json`, index-parity split (`idx % 2`,
+`split_seed=0`) into train_n=597 / eval_n=597 — both full halves of the file (the pilot
+used 500/300, a subsample of the same halves). Same split-provenance caveat as the pilot
+applies: this is not the same split source as CODI's `gsm8k_aug` train/validation split.
+
+**Hyperparams:** Unchanged from the pilot: ridge_lambda=1.0, mlp_hidden=64, mlp_epochs=200,
+mlp_lr=1e-3, max_step=3, signed-log1p target transform.
+
+**Command:**
+```
+cd /workspace/ai-capstone && .venv_coconut/bin/python scripts/probe_coconut.py \
+    --checkpoint_path <hf cache path for connordilgren/gpt2-gsm8k-coconut checkpoint_33> \
+    --data_dir /workspace/coconut_data \
+    --slug probe-continuous-full --stage full_run --hardware "RunPod RTX A4500 (secure)" \
+    --num_latents 6 --train_n 597 --eval_n 597
+```
+then locally: `uv run python scripts/probe_metrics_continuous.py --raw_predictions results/20260920-041902_coconut_probe-continuous-full/raw_predictions.jsonl`
+
+(Same fresh pod as the CODI full run (`a2qfxcs5t3yajj`), run in parallel in the separate
+pinned `.venv_coconut` (torch==2.5.1/transformers==4.46.2). Extraction: ~29s (train,
+597 examples) + ~28s (eval, 597 examples) — scaled from the pilot's 24s/14s at 500/300,
+consistent with Coconut's cheaper single-shared-forward-pass extraction vs. CODI's
+per-iteration loop. Combined pod uptime for both mechanisms' full runs ~12 min ≈ $0.05;
+terminated immediately after rsyncing results back.)
+
+**Headline results** (`results/20260920-041902_coconut_probe-continuous-full/continuous_metrics.json`):
+
+| | ridge avg R² | ridge avg Pearson r | ridge avg norm-MAE | mlp avg R² | mlp avg Pearson r | mlp avg norm-MAE |
+|---|---|---|---|---|---|---|
+| **non-decodable {1,4}** (z0,z3) | -63.8 | 0.19 | 0.50 | -0.20 | 0.21 | 0.11 |
+| **decodable {3,5}** (z2,z4) | -246,833 | 0.05 | 11.99 | +0.04 | 0.20 | 0.09 |
+
+hit@0.20: 6–12% across group/predictor combinations. Full per-cell table:
+`continuous_metrics.json`. Scatter plots: `scatter_ridge_pred.png` / `scatter_mlp_pred.png`.
+
+**Interpretation:**
+- **MLP tells the same "floor" story as the pilot and as CODI**: R² near zero (-0.20 to
+  +0.04, the only positive-average-R² cell across every run this session), Pearson r
+  0.20–0.21, hit@0.20 ~9–12% — weak-to-no signal, consistent across both group labels
+  and both scales (pilot and full).
+- **Ridge's averaged R² is essentially uninformative at this n and must not be quoted
+  as a headline number.** The "decodable" group average of -246,833 is driven by a
+  single catastrophic cell: iter=5 step=1 ridge has R²=-1,479,884, MAE=769,344 (normalized
+  MAE=69.2 — the prediction error is on average **69x the target's own standard
+  deviation**), while its own Pearson r is 0.000 and n=597 is not small. This is a
+  closed-form ridge regression on 768 standardized features with `ridge_lambda=1.0`
+  fitting on 597 training rows — under-regularized relative to the feature dimension for
+  this particular (iteration, step) cell's train/eval distribution shift, producing a
+  handful of eval-set predictions with an enormous magnitude that dominate the squared-
+  error sum. This is a genuine, reproducible instability in this specific ridge fit
+  (re-running `probe_metrics_continuous.py` against the same cached `raw_predictions.jsonl`
+  reproduces it exactly, since scoring is deterministic on cached predictions), not a
+  metrics-engine bug — but it means **R² is not a trustworthy summary statistic for
+  ridge on this data at this regularization strength**, full stop. Pearson r and
+  normalized MAE (both bounded, more robust to a handful of outlier predictions) are the
+  metrics to read for ridge; R² should be treated as diagnostic-only per cell, never
+  averaged into a headline number, for this predictor.
+- **This sharpens (rather than just repeats) the pilot's R²-fragility caveat**: the pilot's
+  worst ridge cell was R²=-342 (also iter=2 step=2, also flagged as an outlier-driven
+  blowup); at full scale a *different* cell (iter=5 step=1) blows up far more severely.
+  The instability isn't tied to one specific cell or fixed by more data — it's a property
+  of closed-form ridge with `lambda=1.0` on 768-d standardized features at this n, and
+  should inform any future probe work: either increase `ridge_lambda` materially, or
+  report Pearson r / hit-rate as primary and drop averaged R² for ridge specifically.
+- **Bottom line unchanged from the pilot and from CODI**: no recoverable intermediate-value
+  signal in Coconut's raw latent-pass vectors at any of the 4 focus positions, by the
+  metric that's actually reliable here (Pearson r, consistently 0.05–0.21, i.e. "no
+  meaningful linear relationship").
+
+**Gotchas hit:**
+- The ridge R² blowup above (iter=5 step=1) — worth a "gotcha" entry specifically because
+  it changes how this run's headline table should be read (see Interpretation). No
+  extraction-side gotchas; same pinned Coconut venv/checkpoint as the pilot.
+
+**Caveats:**
+- Ridge-averaged R² for the "decodable" group is not meaningful as reported in the table
+  above (driven by one catastrophic cell) — read Pearson r / normalized MAE instead, or
+  the per-cell table in `continuous_metrics.json` with that one cell excluded.
+- Split-provenance mismatch with CODI (same as pilot) — this run's train/eval split is
+  index-parity on a separate, smaller local file, not `gsm8k_aug`.
+- This is the ceiling on available local gold-trace data (1194 examples total); a larger
+  n would require regenerating the data via
+  `are-lrms-easily-interpretable/preprocessing/prepare_gsm8k.py`, out of scope here.
+
+**Next:**
+- If ridge probes are revisited for either mechanism, increase `ridge_lambda` (currently
+  1.0, clearly insufficient at this feature dimension/n) and treat averaged R² across
+  cells as unreliable regardless of that fix — report per-cell R² only as a diagnostic
+  alongside Pearson r, never averaged as a headline number for ridge.
+- Companion run `20260920-042323_codi_probe-continuous-full` (CODI full) reaches the
+  same MLP-is-the-more-trustworthy-predictor, Pearson-r-is-the-steadier-metric
+  conclusion, without as severe a ridge blowup (CODI's worst full-run ridge cell is
+  R²=-4.4, not in the same universe as Coconut's -1.5M) — worth a follow-up question
+  (not investigated here) on whether Coconut's live hidden vectors have higher
+  effective dimensionality / less train-eval distribution overlap than CODI's, making
+  ridge specifically less stable there.
+
+---
+
+## 2026-09-20 — Coconut smooth path interpolation patching, all 6 passes (coconut, run_id: 20260920-041935_coconut_interpolation-pilot)
+
+**Goal:** Task 3 (smooth path interpolation patching), Coconut counterpart to
+`20260920-041329_codi_interpolation-pilot`. Follow-up to
+`20260920-031246_coconut_decode-patch-pilot`, whose grouped donor-interchange patch
+found `answer_changed` tracking decodability (McNemar p=0.0015) while `steered_to_donor`
+stayed at/near floor everywhere — i.e. patching the more-decodable pass group perturbs
+the answer more, but essentially never steers it to specifically match the donor's gold
+value. Walking the continuous path between recipient and donor at each pass (instead of
+only the full alpha=1 swap) asks whether that null is a genuine "no portable content"
+result or an artifact of the endpoint knocking the recipient off-manifold.
+
+**Mechanism / model:** `coconut`, backbone openai-community/gpt2, checkpoint
+`hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`, compute_steps=6 (6 `<|latent|>`
+passes).
+
+**Data:** gsm8k-aug-equivalent test set (`gsm_valid-gold-reasoning-trace_test.json`,
+same corpus/questions as `gsm8k_aug.py`), pool_n=400 (shuffled, seed=0) filtered to the
+130 base-correct examples, then 50 (recipient, donor) pairs sampled with different gold
+final answers; run seed=0.
+
+**Command:**
+```
+python scripts/interpolation_patch_coconut.py \
+    --checkpoint_path <hf checkpoint_33 snapshot path> \
+    --data_dir /workspace/coconut_data \
+    --slug interpolation-pilot --stage pilot --hardware "RunPod RTX A6000 (secure)" \
+    --num_latents 6 --pool_n 400 --n_pairs 50 --positions 0,1,2,3,4,5 \
+    --decodable_positions 0,1,4 --nondecodable_positions 2,3,5
+```
+(full argv in `eval_command.txt`; `--decodable_positions`/`--nondecodable_positions` are
+the pass ranking `decode_patch_coconut.py`'s pilot found by empirical logit-lens
+accuracy, used here only for summary grouping/plot highlighting, not for selecting which
+positions to sweep — all 6 were swept). 11-point alpha sweep (0.0 to 1.0, step 0.1),
+50 pairs x 6 positions = 300 (pair, position) trajectories. Total pod wall time
+(env setup + checkpoint download + smoke test + this run) was well under 10 minutes;
+the pilot itself ran in 190s.
+
+**Headline results:**
+- Overall classification across all 300 trajectories: `smooth_transition`=7.7% (23),
+  `off_manifold_collapse`=0% (0), `step_function_invariance`=4.7% (14),
+  **`ambiguous`=87.7% (263)**.
+- Non-decodable passes {2,3,5}: 90% ambiguous, 8% smooth, 2% step, 0% collapse.
+  Decodable passes {0,1,4}: 85.3% ambiguous, 7.3% smooth, 7.3% step, 0% collapse — no
+  meaningful decodable/non-decodable split in this classification, unlike CODI's z0/z3
+  vs z2/z4 contrast (see `20260920-041329_codi_interpolation-pilot`).
+- **The classification result is not the interesting number here — the readout
+  strength is.** Inspecting `interpolation_pairs.jsonl` directly: `P(y_A)` and `P(y_B)`
+  are at or below floor (`< 1e-2`, median max-over-alpha `~6e-13` for P(y_A) and
+  `~1.5e-16` for P(y_B)) at **100% of the 300 trajectories, for every alpha including
+  alpha=0 and alpha=1** (i.e. even the *recipient's own* answer digit gets essentially
+  zero probability mass at this readout position, unpatched). Entropy is also ~0 at
+  every alpha, meaning the distribution is sharply peaked -- just not on either
+  candidate answer token. This is exactly the caveat flagged in
+  `interpolation_patch_coconut.py`'s own docstring before running: the readout used
+  here is the single forward step *immediately following* the last `<|latent|>` pass,
+  before "### <answer>" would normally be generated for this checkpoint's GSM8K format
+  (per `coconut_common.extract_answer_after_delimiter`). The model is almost certainly
+  placing its probability mass on "#" (the start of the delimiter) at this position,
+  not on the answer digit -- so `classify_trajectory` is correctly reporting "ambiguous"
+  on 300 near-flat-at-floor curves, not measuring anything about the interpolation path
+  itself.
+
+**Interpretation:** This run does NOT answer the smooth-transition-vs-collapse question
+for Coconut, because the chosen readout position doesn't carry the answer signal at all
+regardless of alpha or which pass is patched -- both endpoints (alpha=0, alpha=1) are at
+floor, so there's no baseline to see move. It DOES confirm, independently of the
+interpolation question, that a single-token readout right after the last latent pass is
+the wrong place to look for Coconut's answer probability on this checkpoint's format
+(consistent with `decode_patch_coconut.py`'s own logit-lens numbers being modest,
+28.8% matched top1, and computed via a *different* method -- `lm_head` on the live
+hidden state at each pass, not a full forward step at the sequence's current end).
+**Next run should either (a) teacher-force through the literal `" ###"` delimiter
+tokens before reading P(y_A)/P(y_B) on the digit position that follows, or (b) locate
+the actual highest-probability-mass position empirically per example** rather than
+assuming it's the immediate next token. Contrast with CODI
+(`20260920-041329_codi_interpolation-pilot`), whose analogous readout (post-loop,
+pre-eot-generation logits) is the paper's own decode method and does put real
+probability mass on the answer digit at alpha=0/1, so that pilot's "98% ambiguous"
+result is a genuine (if still null) finding about the interpolation path, not a
+readout-placement artifact.
+
+**Gotchas hit:**
+- Wrote and ran an unwitnessed real bug risk (per the script's own docstring, KV-cache
+  legacy-normalization / `finish_and_decode` replay edge cases) but the smoke test
+  (n=5, positions 0,3) and the full pilot both ran clean on the first try, no code
+  changes needed.
+- The readout-position issue above was anticipated in the script's docstring before
+  running ("if this readout is uniformly near-floor... that's a real and informative
+  possible outcome, not necessarily a bug") -- confirmed exactly that outcome.
+- Coconut's own env setup (torch==2.5.1 from the PyTorch cu121 index, transformers/
+  datasets/etc. from PyPI in a separate `pip install`) worked without the KV-cache
+  gotchas `decode_patch_coconut.py`'s notes flagged for a mismatched transformers pin.
+
+**Caveats:**
+- n=50 pairs, pilot scale, not the full held-out set.
+- `intervention_accuracy` in `manifest.json` (0.08 = non-decodable smooth_transition
+  rate) is a placeholder headline metric per the shared `RunRecord` schema; given the
+  readout-floor issue above, don't read anything into its specific value here.
+- `decodable_positions_in_scope`/`nondecodable_positions_in_scope` reuses
+  `decode_patch_coconut.py`'s pilot ranking (fit on n=200, half A) rather than
+  re-deriving it on this run's own pool -- a label for grouping, not a re-verified split.
+
+**Next:** Rerun with a fixed readout (teacher-force the delimiter, or empirically locate
+the answer-bearing position per example) before drawing any conclusion about Coconut's
+interpolation path. Compare directly against `20260920-041329_codi_interpolation-pilot`
+once that fix lands.
+
+---
+
+## 2026-09-20 — CODI: continuous probe metrics at full scale (eval_n=1000, the whole validation split) (codi, run_id: 20260920-042323_codi_probe-continuous-full)
+
+**Goal:** Full-scale confirmation of `20260920-040622_codi_probe-continuous-pilot`
+(continuous-metrics pilot at eval_n=300). Since probe fitting is cheap (feature
+extraction is the only real cost, and it scales linearly with eval_n) there was no
+reason to stop at a pilot-sized n once the pilot's floor result looked this clean —
+this run uses the *entire* fixed `gsm8k-aug` `validation` split (n=1000) instead of a
+300-example subsample, so this is the number to cite, not the pilot's.
+
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3`, compute_steps=6,
+same paper inference protocol as every other CODI run this week.
+
+**Data:** Probes fit on `gsm8k-aug` `train` (n=3000, unchanged from the pilot — probe
+capacity, not train-set size, was never the bottleneck here), reported on the **full**
+`validation` split (n=1000, seed=0 — everyone's shared held-out set, in its entirety).
+
+**Hyperparams:** Unchanged from the pilot: ridge_lambda=1.0, mlp_hidden=64, mlp_epochs=200,
+mlp_lr=1e-3, max_step=3, signed-log1p target transform.
+
+**Command:**
+```
+cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/probe_codi.py \
+    --ckpt_dir <hf cache path for zen-E/CODI-gpt2@fd641b3> \
+    --checkpoint_label "hf:zen-E/CODI-gpt2@fd641b3" \
+    --slug probe-continuous-full --stage full_run --hardware "RunPod RTX A4500 (secure)" \
+    --model_name_or_path gpt2 --seed 11 --model_max_length 512 --bf16 \
+    --lora_r 128 --lora_alpha 32 --lora_init --greedy True \
+    --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 \
+    --inf_latent_iterations 6 --inf_num_iterations 1 --remove_eos True --use_lora True \
+    --output_dir /tmp/unused --train_n 3000 --eval_n 1000
+```
+then locally: `uv run python scripts/probe_metrics_continuous.py --raw_predictions results/20260920-042323_codi_probe-continuous-full/raw_predictions.jsonl`
+
+(Fresh pod `a2qfxcs5t3yajj`, EU-RO-1, RTX A4500 secure $0.25/hr — same tier as the pilot
+run, new pod since the pilot's pod had already been terminated. Env setup (CODI +
+Coconut venvs, both checkpoints) took ~3 min; this run's own extraction was 288s (train,
+unchanged from pilot) + 90s (eval, up from 27s at eval_n=300 — scales close to linearly
+as expected), then 18 probe fits, negligible. Combined pod uptime for both mechanisms'
+full runs ~12 min ≈ $0.05; terminated immediately after rsyncing results back.)
+
+**Headline results** (`results/20260920-042323_codi_probe-continuous-full/continuous_metrics.json`):
+
+| | ridge avg R² | ridge avg Pearson r | ridge avg norm-MAE | mlp avg R² | mlp avg Pearson r | mlp avg norm-MAE |
+|---|---|---|---|---|---|---|
+| **non-decodable {1,4}** (z0,z3) | -0.47 | 0.11 | 0.13 | -0.08 | 0.14 | 0.11 |
+| **decodable {3,5}** (z2,z4) | -1.43 | 0.12 | 0.12 | -0.11 | 0.18 | 0.11 |
+
+hit@0.20 (loosest tolerance): 14–16% across group/predictor combinations, vs. hit@0.01
+of 0.4–0.7%. Full per-cell table: `continuous_metrics.json`. Scatter plots:
+`scatter_ridge_pred.png` / `scatter_mlp_pred.png`.
+
+**Interpretation:**
+- **Matches the pilot's conclusion, tighter.** Same qualitative floor: negative average R²
+  in 3 of 4 group/predictor cells, Pearson r uniformly weak (0.11–0.18), no
+  non-decodable/decodable separation. The full run's per-cell numbers are noticeably
+  *less extreme* than the pilot's (worst ridge cell here is R²=-4.4 at iter=5 step=1,
+  n=998, vs. the pilot's R²=-22.8 at n=147) — larger eval n damps the outlier-driven R²
+  blowups the pilot's smaller per-step samples were prone to (see pilot notes' caveat on
+  R² and heavy-tailed GSM8K values). This is the expected effect of more data, not a
+  different underlying finding: Pearson r, the steadier metric, barely moves between
+  pilot and full (pilot 0.13–0.38 vs. full 0.11–0.18 — both "weak, no real linear
+  relationship").
+- Normalized MAE also tightens slightly (pilot ~0.16–0.22 vs. full ~0.11–0.13) for the
+  same reason — fewer per-cell outliers pulling the average up.
+- **This is now the number to cite for CODI**, not the pilot — full validation split,
+  same conclusion, better-behaved tail.
+
+**Gotchas hit:** None new; same pinned CODI venv/checkpoint/extraction path as the pilot.
+
+**Caveats:** Same as the pilot (single seed, no probe-hyperparameter tuning,
+`max_step=3` step-3 n still smallest at 454). R² remains an outlier-sensitive metric on
+this dataset even at full scale (iter=5 cells still show R²≈-4); Pearson r is the more
+reliable read throughout.
+
+**Next:** This closes out the continuous-metrics probe question for CODI at the current
+hyperparameters. Per `next_experiments.md` #1, donor-interchange patching with
+content-bearing donors at z0/z3 is the next step toward the *causal*-faithfulness
+question this probe/decoding work can't answer on its own.

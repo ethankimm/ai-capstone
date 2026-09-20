@@ -1,0 +1,215 @@
+{
+  "run_id": "20260920-041935_coconut_interpolation-pilot",
+  "mechanism": "coconut",
+  "stage": "pilot",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 400,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "intervention_accuracy": 0.08,
+    "extra": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "decodable_positions_in_scope": [
+        0,
+        1,
+        4
+      ],
+      "nondecodable_positions_in_scope": [
+        2,
+        3,
+        5
+      ],
+      "n_pairs": 50,
+      "alphas": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1.0
+      ],
+      "overall_classification": {
+        "n": 300,
+        "counts": {
+          "smooth_transition": 23,
+          "off_manifold_collapse": 0,
+          "step_function_invariance": 14,
+          "ambiguous": 263
+        },
+        "pct": {
+          "smooth_transition": 0.07666666666666666,
+          "off_manifold_collapse": 0.0,
+          "step_function_invariance": 0.04666666666666667,
+          "ambiguous": 0.8766666666666667
+        }
+      },
+      "per_position_classification": {
+        "0": {
+          "n": 50,
+          "counts": {
+            "smooth_transition": 5,
+            "off_manifold_collapse": 0,
+            "step_function_invariance": 2,
+            "ambiguous": 43
+          },
+          "pct": {
+            "smooth_transition": 0.1,
+            "off_manifold_collapse": 0.0,
+            "step_function_invariance": 0.04,
+            "ambiguous": 0.86
+          }
+        },
+        "1": {
+          "n": 50,
+          "counts": {
+            "smooth_transition": 1,
+            "off_manifold_collapse": 0,
+            "step_function_invariance": 7,
+            "ambiguous": 42
+          },
+          "pct": {
+            "smooth_transition": 0.02,
+            "off_manifold_collapse": 0.0,
+            "step_function_invariance": 0.14,
+            "ambiguous": 0.84
+          }
+        },
+        "2": {
+          "n": 50,
+          "counts": {
+            "smooth_transition": 4,
+            "off_manifold_collapse": 0,
+            "step_function_invariance": 0,
+            "ambiguous": 46
+          },
+          "pct": {
+            "smooth_transition": 0.08,
+            "off_manifold_collapse": 0.0,
+            "step_function_invariance": 0.0,
+            "ambiguous": 0.92
+          }
+        },
+        "3": {
+          "n": 50,
+          "counts": {
+            "smooth_transition": 5,
+            "off_manifold_collapse": 0,
+            "step_function_invariance": 2,
+            "ambiguous": 43
+          },
+          "pct": {
+            "smooth_transition": 0.1,
+            "off_manifold_collapse": 0.0,
+            "step_function_invariance": 0.04,
+            "ambiguous": 0.86
+          }
+        },
+        "4": {
+          "n": 50,
+          "counts": {
+            "smooth_transition": 5,
+            "off_manifold_collapse": 0,
+            "step_function_invariance": 2,
+            "ambiguous": 43
+          },
+          "pct": {
+            "smooth_transition": 0.1,
+            "off_manifold_collapse": 0.0,
+            "step_function_invariance": 0.04,
+            "ambiguous": 0.86
+          }
+        },
+        "5": {
+          "n": 50,
+          "counts": {
+            "smooth_transition": 3,
+            "off_manifold_collapse": 0,
+            "step_function_invariance": 1,
+            "ambiguous": 46
+          },
+          "pct": {
+            "smooth_transition": 0.06,
+            "off_manifold_collapse": 0.0,
+            "step_function_invariance": 0.02,
+            "ambiguous": 0.92
+          }
+        }
+      },
+      "nondecodable_classification": {
+        "n": 150,
+        "counts": {
+          "smooth_transition": 12,
+          "off_manifold_collapse": 0,
+          "step_function_invariance": 3,
+          "ambiguous": 135
+        },
+        "pct": {
+          "smooth_transition": 0.08,
+          "off_manifold_collapse": 0.0,
+          "step_function_invariance": 0.02,
+          "ambiguous": 0.9
+        }
+      },
+      "decodable_classification": {
+        "n": 150,
+        "counts": {
+          "smooth_transition": 11,
+          "off_manifold_collapse": 0,
+          "step_function_invariance": 11,
+          "ambiguous": 128
+        },
+        "pct": {
+          "smooth_transition": 0.07333333333333333,
+          "off_manifold_collapse": 0.0,
+          "step_function_invariance": 0.07333333333333333,
+          "ambiguous": 0.8533333333333334
+        }
+      },
+      "n_trainable_params": 124442112,
+      "codi_analogue": "interpolation_patch_codi.py"
+    }
+  },
+  "hyperparams": {
+    "num_latents": 6,
+    "n_pairs": 50,
+    "positions": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "n_alphas": 11
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A6000 (secure) / NVIDIA RTX A6000",
+  "author": "Henning Lindig",
+  "notes": "Smooth path interpolation patching (Task 3), Coconut counterpart to interpolation_patch_codi.py: 11-point alpha sweep between recipient and donor pass vectors, single-pass splice, reading the first post-latent logits at each alpha. Classifies each pair/position trajectory as smooth_transition, off_manifold_collapse, step_function_invariance, or ambiguous.",
+  "timestamp_utc": "2026-09-20T04:19:35.751779+00:00",
+  "git": {
+    "commit": "bc9c2f1",
+    "dirty": true
+  }
+}

@@ -41,3 +41,6 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260920-032053_codi_probe-pilot](20260920-032053_codi_probe-pilot/) | codi | gpt2 | validation (n=300) | 6 | - | 0 | pilot | Henning Lindig |
 | [20260920-040411_coconut_probe-continuous-pilot](20260920-040411_coconut_probe-continuous-pilot/) | coconut | openai-community/gpt2 | test (n=300) | 6 | - | 0 | pilot | Henning Lindig |
 | [20260920-040622_codi_probe-continuous-pilot](20260920-040622_codi_probe-continuous-pilot/) | codi | gpt2 | validation (n=300) | 6 | - | 0 | pilot | Henning Lindig |
+| [20260920-041902_coconut_probe-continuous-full](20260920-041902_coconut_probe-continuous-full/) | coconut | openai-community/gpt2 | test (n=597) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260920-041935_coconut_interpolation-pilot](20260920-041935_coconut_interpolation-pilot/) | coconut | openai-community/gpt2 | test (n=400) | 6 | - | 0 | pilot | Henning Lindig |
+| [20260920-042323_codi_probe-continuous-full](20260920-042323_codi_probe-continuous-full/) | codi | gpt2 | validation (n=1000) | 6 | - | 0 | full_run | Henning Lindig |
