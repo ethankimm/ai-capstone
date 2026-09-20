@@ -110,19 +110,17 @@ interpolation path itself. Needs a readout fix (teacher-force through `" ###"` f
 or empirically locate the answer-bearing position) before the classification result
 means anything for Coconut.
 
-CODI ran to completion once (pilot, n=50 x 6 positions, run_id
-`20260920-041329_codi_interpolation-pilot`) but the RunPod pod used ephemeral container
-disk with no persistent/network volume attached, and got stopped+restarted mid
-result-pull -- wiped `/workspace` before `predictions.jsonl`/`manifest.json`/the plot
-could be copied back. Only the aggregate classification survived (from stdout):
-overall `smooth_transition=0.02, off_manifold_collapse=0.0,
+CODI: run and logged, `results/20260920-043950_codi_interpolation-pilot` (pilot,
+n=50 x 6 positions). Its first attempt ran to completion with near-identical numbers
+but was destroyed by an ephemeral-disk wipe during a subagent handoff mix-up before
+results could be pulled back (see that run's notes.md gotchas); this rerun executed
+in the foreground with results pulled off synchronously, no persistent volume needed.
+Headline: overall `smooth_transition=0.02, off_manifold_collapse=0.0,
 step_function_invariance=0.0, ambiguous=0.98`; non-decodable {z0,z3} vs decodable
-{z2,z4} showed no meaningful difference (0.02 vs 0.03 smooth). Unlike Coconut's floor
-issue, CODI's readout (post-loop, pre-eot-generation logits) is the paper's own decode
-method and does carry real probability mass at the endpoints, so that "98% ambiguous"
-would be a genuine (if null) finding -- but it needs a clean rerun with a network
-volume attached to actually get the per-example data and plot before it's logged.
-Rerun pending.
+{z2,z4} show no meaningful difference (2% vs 3% smooth) and no collapse/step signature
+anywhere. Unlike Coconut's floor issue, this readout is the paper's own decode method
+and does carry real probability mass at the endpoints, so this is a genuine (if null)
+finding, not a readout-placement artifact.
 
 Follow-up to `20260920-031925_codi_interchange-placeholder-pilot` (full alpha=1
 donor-swap at CODI's z0/z3: unambiguous null, no steering) and
