@@ -1,0 +1,389 @@
+{
+  "run_id": "20260920-041902_coconut_probe-continuous-full",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 597,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "decoding_accuracy": 0.0034521302184435643,
+    "extra": {
+      "per_iter_step": [
+        {
+          "iter": 1,
+          "step": 1,
+          "n_train": 597,
+          "n_eval": 597,
+          "ridge_acc_tol": 0.005025125628140704,
+          "ridge_acc_wilson_ci": [
+            0.0017104060638307153,
+            0.014669285355671528
+          ],
+          "mlp_acc_tol": 0.0033500837520938024,
+          "mlp_acc_wilson_ci": [
+            0.0009191758142781852,
+            0.012131851278386504
+          ],
+          "logit_lens_top1": 0.0033500837520938024,
+          "logit_lens_top5": 0.17755443886097153
+        },
+        {
+          "iter": 1,
+          "step": 2,
+          "n_train": 585,
+          "n_eval": 578,
+          "ridge_acc_tol": 0.0034602076124567475,
+          "ridge_acc_wilson_ci": [
+            0.0009494072941143407,
+            0.012527800248282078
+          ],
+          "mlp_acc_tol": 0.005190311418685121,
+          "mlp_acc_wilson_ci": [
+            0.0017666794942076134,
+            0.015147889694382546
+          ],
+          "logit_lens_top1": 0.0,
+          "logit_lens_top5": 0.09499136442141623
+        },
+        {
+          "iter": 1,
+          "step": 3,
+          "n_train": 422,
+          "n_eval": 423,
+          "ridge_acc_tol": 0.004728132387706856,
+          "ridge_acc_wilson_ci": [
+            0.0012975563233095563,
+            0.017073661477392157
+          ],
+          "mlp_acc_tol": 0.0,
+          "mlp_acc_wilson_ci": [
+            0.0,
+            0.00900005997541008
+          ],
+          "logit_lens_top1": 0.0,
+          "logit_lens_top5": 0.08747044917257683
+        },
+        {
+          "iter": 2,
+          "step": 1,
+          "n_train": 597,
+          "n_eval": 597,
+          "ridge_acc_tol": 0.0016750418760469012,
+          "ridge_acc_wilson_ci": [
+            0.00029573963339936827,
+            0.009426623132427765
+          ],
+          "mlp_acc_tol": 0.01340033500837521,
+          "mlp_acc_wilson_ci": [
+            0.006805375508471035,
+            0.026217637545218987
+          ],
+          "logit_lens_top1": 0.5896147403685092,
+          "logit_lens_top5": 0.661641541038526
+        },
+        {
+          "iter": 2,
+          "step": 2,
+          "n_train": 585,
+          "n_eval": 578,
+          "ridge_acc_tol": 0.0,
+          "ridge_acc_wilson_ci": [
+            0.0,
+            0.006602484250008937
+          ],
+          "mlp_acc_tol": 0.005190311418685121,
+          "mlp_acc_wilson_ci": [
+            0.0017666794942076134,
+            0.015147889694382546
+          ],
+          "logit_lens_top1": 0.055267702936096716,
+          "logit_lens_top5": 0.13989637305699482
+        },
+        {
+          "iter": 2,
+          "step": 3,
+          "n_train": 422,
+          "n_eval": 423,
+          "ridge_acc_tol": 0.004728132387706856,
+          "ridge_acc_wilson_ci": [
+            0.0012975563233095563,
+            0.017073661477392157
+          ],
+          "mlp_acc_tol": 0.01182033096926714,
+          "mlp_acc_wilson_ci": [
+            0.005059143112561308,
+            0.027368811426077846
+          ],
+          "logit_lens_top1": 0.037825059101654845,
+          "logit_lens_top5": 0.09929078014184398
+        },
+        {
+          "iter": 3,
+          "step": 1,
+          "n_train": 597,
+          "n_eval": 597,
+          "ridge_acc_tol": 0.0,
+          "ridge_acc_wilson_ci": [
+            0.0,
+            0.006393698438989577
+          ],
+          "mlp_acc_tol": 0.006700167504187605,
+          "mlp_acc_wilson_ci": [
+            0.002608516795944424,
+            0.01709983895039538
+          ],
+          "logit_lens_top1": 0.0016750418760469012,
+          "logit_lens_top5": 0.04355108877721943
+        },
+        {
+          "iter": 3,
+          "step": 2,
+          "n_train": 585,
+          "n_eval": 578,
+          "ridge_acc_tol": 0.0017301038062283738,
+          "ridge_acc_wilson_ci": [
+            0.00030546325783535524,
+            0.00973438263836732
+          ],
+          "mlp_acc_tol": 0.010380622837370242,
+          "mlp_acc_wilson_ci": [
+            0.004765908834191498,
+            0.02246074529297988
+          ],
+          "logit_lens_top1": 0.0,
+          "logit_lens_top5": 0.02072538860103627
+        },
+        {
+          "iter": 3,
+          "step": 3,
+          "n_train": 422,
+          "n_eval": 423,
+          "ridge_acc_tol": 0.0,
+          "ridge_acc_wilson_ci": [
+            0.0,
+            0.00900005997541008
+          ],
+          "mlp_acc_tol": 0.0,
+          "mlp_acc_wilson_ci": [
+            0.0,
+            0.00900005997541008
+          ],
+          "logit_lens_top1": 0.0,
+          "logit_lens_top5": 0.018912529550827423
+        },
+        {
+          "iter": 4,
+          "step": 1,
+          "n_train": 597,
+          "n_eval": 597,
+          "ridge_acc_tol": 0.0016750418760469012,
+          "ridge_acc_wilson_ci": [
+            0.00029573963339936827,
+            0.009426623132427765
+          ],
+          "mlp_acc_tol": 0.005025125628140704,
+          "mlp_acc_wilson_ci": [
+            0.0017104060638307153,
+            0.014669285355671528
+          ],
+          "logit_lens_top1": 0.0,
+          "logit_lens_top5": 0.09045226130653267
+        },
+        {
+          "iter": 4,
+          "step": 2,
+          "n_train": 585,
+          "n_eval": 578,
+          "ridge_acc_tol": 0.0034602076124567475,
+          "ridge_acc_wilson_ci": [
+            0.0009494072941143407,
+            0.012527800248282078
+          ],
+          "mlp_acc_tol": 0.010380622837370242,
+          "mlp_acc_wilson_ci": [
+            0.004765908834191498,
+            0.02246074529297988
+          ],
+          "logit_lens_top1": 0.0,
+          "logit_lens_top5": 0.10535405872193437
+        },
+        {
+          "iter": 4,
+          "step": 3,
+          "n_train": 422,
+          "n_eval": 423,
+          "ridge_acc_tol": 0.002364066193853428,
+          "ridge_acc_wilson_ci": [
+            0.00041742695869619907,
+            0.013268211929359697
+          ],
+          "mlp_acc_tol": 0.002364066193853428,
+          "mlp_acc_wilson_ci": [
+            0.00041742695869619907,
+            0.013268211929359697
+          ],
+          "logit_lens_top1": 0.0,
+          "logit_lens_top5": 0.0851063829787234
+        },
+        {
+          "iter": 5,
+          "step": 1,
+          "n_train": 597,
+          "n_eval": 597,
+          "ridge_acc_tol": 0.0,
+          "ridge_acc_wilson_ci": [
+            0.0,
+            0.006393698438989577
+          ],
+          "mlp_acc_tol": 0.006700167504187605,
+          "mlp_acc_wilson_ci": [
+            0.002608516795944424,
+            0.01709983895039538
+          ],
+          "logit_lens_top1": 0.07035175879396985,
+          "logit_lens_top5": 0.1658291457286432
+        },
+        {
+          "iter": 5,
+          "step": 2,
+          "n_train": 585,
+          "n_eval": 578,
+          "ridge_acc_tol": 0.0017301038062283738,
+          "ridge_acc_wilson_ci": [
+            0.00030546325783535524,
+            0.00973438263836732
+          ],
+          "mlp_acc_tol": 0.00865051903114187,
+          "mlp_acc_wilson_ci": [
+            0.003700428563182182,
+            0.020088863917795456
+          ],
+          "logit_lens_top1": 0.44905008635578586,
+          "logit_lens_top5": 0.5803108808290155
+        },
+        {
+          "iter": 5,
+          "step": 3,
+          "n_train": 422,
+          "n_eval": 423,
+          "ridge_acc_tol": 0.002364066193853428,
+          "ridge_acc_wilson_ci": [
+            0.00041742695869619907,
+            0.013268211929359697
+          ],
+          "mlp_acc_tol": 0.0070921985815602835,
+          "mlp_acc_wilson_ci": [
+            0.002414815938487424,
+            0.0206419807748601
+          ],
+          "logit_lens_top1": 0.04728132387706856,
+          "logit_lens_top5": 0.14893617021276595
+        },
+        {
+          "iter": 6,
+          "step": 1,
+          "n_train": 597,
+          "n_eval": 597,
+          "ridge_acc_tol": 0.0,
+          "ridge_acc_wilson_ci": [
+            0.0,
+            0.006393698438989577
+          ],
+          "mlp_acc_tol": 0.008375209380234505,
+          "mlp_acc_wilson_ci": [
+            0.003582489514403807,
+            0.019454530558773546
+          ],
+          "logit_lens_top1": 0.0,
+          "logit_lens_top5": 0.11725293132328309
+        },
+        {
+          "iter": 6,
+          "step": 2,
+          "n_train": 585,
+          "n_eval": 578,
+          "ridge_acc_tol": 0.0034602076124567475,
+          "ridge_acc_wilson_ci": [
+            0.0009494072941143407,
+            0.012527800248282078
+          ],
+          "mlp_acc_tol": 0.0017301038062283738,
+          "mlp_acc_wilson_ci": [
+            0.00030546325783535524,
+            0.00973438263836732
+          ],
+          "logit_lens_top1": 0.0,
+          "logit_lens_top5": 0.06563039723661486
+        },
+        {
+          "iter": 6,
+          "step": 3,
+          "n_train": 422,
+          "n_eval": 423,
+          "ridge_acc_tol": 0.002364066193853428,
+          "ridge_acc_wilson_ci": [
+            0.00041742695869619907,
+            0.013268211929359697
+          ],
+          "mlp_acc_tol": 0.004728132387706856,
+          "mlp_acc_wilson_ci": [
+            0.0012975563233095563,
+            0.017073661477392157
+          ],
+          "logit_lens_top1": 0.004728132387706856,
+          "logit_lens_top5": 0.08037825059101655
+        }
+      ],
+      "nondecodable_iters": [
+        1,
+        4
+      ],
+      "decodable_iters": [
+        3,
+        5
+      ],
+      "nondecodable_avg_ridge_acc": 0.0034521302184435643,
+      "nondecodable_avg_mlp_acc": 0.0043850349716905495,
+      "nondecodable_avg_logit_lens_top1": 0.0005583472920156337,
+      "decodable_avg_ridge_acc": 0.0009707123010516959,
+      "decodable_avg_mlp_acc": 0.006587279243074601,
+      "decodable_avg_logit_lens_top1": 0.09472636848381184,
+      "tol": 0.01,
+      "ridge_lambda": 1.0,
+      "mlp_hidden": 64,
+      "mlp_epochs": 200,
+      "mlp_lr": 0.001,
+      "n_trainable_params": 124442112,
+      "split_note": "train/eval split is index-parity on gsm_valid-gold-reasoning-trace_test.json (decode_patch_coconut.py's own mapping_split convention), NOT the shared gsm8k_aug train/validation split probe_codi.py uses -- not directly comparable on split provenance across mechanisms."
+    }
+  },
+  "hyperparams": {
+    "num_latents": 6,
+    "train_n": 597,
+    "eval_n": 597,
+    "max_step": 3,
+    "ridge_lambda": 1.0,
+    "mlp_hidden": 64,
+    "mlp_epochs": 200,
+    "mlp_lr": 0.001,
+    "tol": 0.01
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A4500 (secure) / NVIDIA RTX A4500",
+  "author": "Henning Lindig",
+  "notes": "Linear ridge + 2-layer MLP probes on Coconut's z0..z5 live latent-pass hidden vectors, fit on an index-parity half-split of the gold-trace test set / reported on the other half, compared position-by-position to the paper's own vocabulary-projection logit lens on the same examples -- Coconut counterpart to probe_codi.py's basis-drift check.",
+  "timestamp_utc": "2026-09-20T04:19:02.022385+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}
