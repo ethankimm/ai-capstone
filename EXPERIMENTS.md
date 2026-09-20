@@ -4531,3 +4531,232 @@ uncontrolled lead does not survive proper controls at scale.
 
 **Next:** Same as the CODI counterpart — `steered_to_donor_audit.md` §5 E3 (same-problem
 minimal-pair donors) is the next step if this cross-problem null is worth chasing further.
+
+---
+
+## 2026-09-20 — E3(a)+(b): same-problem minimal-pair donor-interchange patch, CODI -- upper bound is real, and it's diffuse (codi, run_id: 20260920-190420_codi_minimal-pair-patch)
+
+**Goal:** `steered_to_donor_audit.md` §5 E3. E2 (`20260920-085206_codi_qualified-patch`)
+found a clean null on **cross-problem** donors even with base-correct, propagation-qualified
+pairs. §4.3 argued the cross-problem design confounds two failure modes: "the value isn't
+in the thoughts at all" vs. "the value is there but entangled with the donor's problem
+context, which the recipient never saw." E3 removes the second confound entirely: the donor
+is the recipient's **own question** with one eligible number perturbed and the gold chain
+re-executed (`latentreasoning.data.minimal_pairs.generate_minimal_pair`), so the twin's
+final answer literally IS the counterfactual value (Metric A == Metric B by construction,
+`matches_twin`). (a) ALL-SLOT patches every latent iteration with the twin's own live
+latents -- an upper bound on whether the thought chain carries the value at all. (b)
+single-slot sweep + cumulative prefix localizes which iteration(s) carry it if ALL-SLOT
+succeeds.
+
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3` (released checkpoint),
+compute_steps=6, same inference protocol as E2 (LoRA r=128/α=32, projection 768+LN, greedy).
+
+**Data:** gsm8k-aug test, n=600 (seed=0), same slice as E2's CODI run. 263/600 base-correct
+(accuracy 0.438, matches E2). 258 minimal-pair candidates generated (base-correct +
+propagation-qualified original), 137/258 had a twin the model also solved correctly
+("qualified pairs" -- the set actually scored).
+
+**Command:**
+```
+cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/patch_minimal_pair_codi.py \
+  --ckpt_dir /workspace/codi_released --checkpoint_label "hf:zen-E/CODI-gpt2@fd641b3" \
+  --slug minimal-pair-patch --stage full_run --hardware "RunPod RTX A5000 (secure)" \
+  --model_name_or_path gpt2 --seed 11 --model_max_length 512 --bf16 \
+  --lora_r 128 --lora_alpha 32 --lora_init --greedy True \
+  --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 \
+  --inf_latent_iterations 6 --inf_num_iterations 1 --remove_eos True --use_lora True \
+  --eval_n 600 --n_pairs 200
+```
+Fresh RunPod RTX A5000 (secure, CA-MTL-1, $0.27/hr). CODI env setup (`codi_setup.sh`) took
+~3 min once the repo actually made it onto the pod -- the file transfer, not the env build,
+was the bottleneck this session (see Gotchas). Decode pass (n=600) 75s; full patch sweep
+(137 pairs × 4 conditions: all-slot, 6 single-slot, 6 prefix) ~3.5 min. Total pod time for
+this run + a throwaway n=40 smoke test (`20260920-185840_codi_minimal-pair-smoketest`, not
+logged): well under 10 min GPU.
+
+**Headline results:** `final_answer_accuracy=0.438` (matches E2's CODI slice exactly, same
+data/seed). n=137 qualified minimal pairs.
+
+| condition | n | matches_twin | 95% CI | answer_changed |
+|---|---|---|---|---|
+| ALL-SLOT (all 6 iters) | 137 | **0.701** | [0.62, 0.77] | 0.927 |
+| single-slot iter 1 | 137 | 0.036 | [0.02, 0.08] | 0.416 |
+| single-slot iter 2 | 137 | 0.080 | [0.05, 0.14] | 0.292 |
+| single-slot iter 3 | 137 | 0.000 | [0.00, 0.03] | 0.146 |
+| single-slot iter 4 | 137 | 0.036 | [0.02, 0.08] | 0.168 |
+| single-slot iter 5 | 137 | 0.000 | [0.00, 0.03] | 0.007 |
+| single-slot iter 6 | 137 | 0.109 | [0.07, 0.17] | 0.212 |
+| prefix 1..1 | 137 | 0.036 | [0.02, 0.08] | 0.416 |
+| prefix 1..2 | 137 | 0.080 | [0.05, 0.14] | 0.445 |
+| prefix 1..3 | 137 | 0.080 | [0.05, 0.14] | 0.445 |
+| prefix 1..4 | 137 | 0.467 | [0.39, 0.55] | 0.774 |
+| prefix 1..5 | 137 | 0.489 | [0.41, 0.57] | 0.803 |
+| prefix 1..6 | 137 | 0.701 | [0.62, 0.77] | 0.927 |
+
+**Interpretation:** This is the "succeeds where cross-problem fails" outcome
+`steered_to_donor_audit.md` §4.3 called out as itself a finding. ALL-SLOT moves the answer
+to the twin's answer 70% of the time (vs. 0.5–2.5% for cross-problem donors in E2, same
+model/data) -- the thought chain unambiguously carries the perturbed value when the donor
+shares the recipient's problem context. But the localization result is the more interesting
+half: no single iteration carries it (iter 6 alone is the best at 10.9%; iters 3 and 5 are
+exactly 0), yet the cumulative prefix jumps sharply between prefix 1..3 (8.0%) and prefix
+1..4 (46.7%), then climbs to 70.1% by prefix 1..6. The value isn't stored in a single
+addressable slot the way a "scratchpad variable" framing would predict -- it's distributed
+across the sequence of latents, and needs iterations 4-6 present together to reconstruct.
+This qualitatively matches the ablate-all finding referenced in `next_experiments.md`
+(thoughts are collectively load-bearing, load sits on the non-decodable placeholder slots)
+but now shown as a *positive* causal effect, not just a decrement from removal. Net: "not
+portable across problems" (E2) and "not stored in an addressable single-iteration slot even
+within the same problem" (E3 single-slot) both hold, but "not present in the thought chain
+at all" is now ruled out -- CODI's thoughts do encode the perturbed value, just as a
+joint/distributed function of iterations rather than a localized one.
+
+**Gotchas hit:**
+- The real bottleneck this session was **not** the CODI env setup (fast once it ran) but
+  getting the repo onto the pod: macOS's built-in `/usr/bin/rsync` is `openrsync` (protocol
+  version 29), which hangs/stalls for very long periods (confirmed 10+ min with zero bytes
+  transferred, twice) talking to the pod's modern rsync 3.2.7 -- almost certainly what made
+  last session's CODI setup churn for 1h19m+ before the pod disappeared with nothing
+  produced. Switched to `tar -cz | ssh ... tar -xz` for the transfer, which worked
+  immediately. Worth fixing properly (e.g. pin transfers to `tar` or install real rsync via
+  homebrew) rather than rediscovering this each session.
+- First `tar` transfer accidentally included the full local `results/` tree (672MB --
+  `--exclude='results/*/predictions*.jsonl'`-style patterns don't reliably match through
+  `tar`'s exclude matching the way they do for `rsync`/`.gitignore`); fixed by excluding
+  `results/` wholesale from the pod transfer (it doesn't need historical results, only to
+  write new ones) and creating an empty `results/` dir on the pod instead.
+- `--out_dir` is not a flag on `patch_minimal_pair_codi.py` (only on some other scripts) --
+  `RunRecord.save()` always writes to this repo's own `results/<run_id>/`, which then has to
+  be pulled back off the pod explicitly (this run + its notes were generated on the pod and
+  tarred back to the local repo).
+
+**Caveats:**
+- `n_pairs=200` was requested but only 137 qualified pairs existed in this 600-example
+  slice (base-correct twin AND base-correct original AND a valid non-negative-integer
+  perturbation existed among deltas ±1/±2/±3) -- not a bug, just the corpus's qualifying
+  pool size at this n.
+- `matches_twin` is a *minimal-pair-specific* metric, not directly comparable to E2's
+  `matches_cf` numbers in the table above without noting the different donor construction --
+  the audit doc's whole point was that these two designs answer different questions
+  (portability vs. presence).
+- Single-slot iter 3 and 5 being *exactly* 0/137 is consistent with (not proof of) those
+  being genuinely non-load-bearing positions in isolation; distinguishing "truly zero
+  effect" from "effect below what n=137 single-pair patches can detect" would need a larger
+  n or a grouped-ablation design (flagged in `next_experiments.md`).
+
+**Next:** Coconut counterpart is `20260920-195725_coconut_minimal-pair-patch` (same
+session). Both mechanisms now have the E3(a) upper-bound result; per
+`steered_to_donor_audit.md` §5 E4, DAS on minimal-pair targets is the natural follow-up
+now that ALL-SLOT succeeds and single-slot localizes weakly -- the prefix-jump pattern
+(3→4 for CODI) is a concrete hypothesis a learned subspace could test more precisely than
+raw single-slot patching.
+
+---
+
+## 2026-09-20 — E3(a)+(b): same-problem minimal-pair donor-interchange patch, Coconut -- upper bound is real, and pass 1 alone carries half of it (coconut, run_id: 20260920-195725_coconut_minimal-pair-patch)
+
+**Goal:** `steered_to_donor_audit.md` §5 E3, Coconut counterpart to
+`20260920-190420_codi_minimal-pair-patch`. Same design: donor = the recipient's own
+question with one eligible number perturbed and the gold chain re-executed
+(`latentreasoning.data.minimal_pairs.generate_minimal_pair`), removing the cross-problem
+confound that E2's null (`20260920-085317_coconut_qualified-patch`) couldn't rule out.
+(a) ALL-SLOT overrides every `<|latent|>` pass's live hidden with the twin's own live
+hidden at that pass. (b) single-slot sweep + cumulative prefix localizes which pass(es)
+carry it.
+
+**Mechanism / model:** `coconut`, backbone `openai-community/gpt2`, checkpoint
+`hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`, compute_steps=6 (6 `<|latent|>`
+passes).
+
+**Data:** `gsm_valid-gold-reasoning-trace_test.json` (Dilgren & Wiegreffe gold-trace prep,
+same source as E2's Coconut run), n=600 (seed=0). 213/600 base-correct (accuracy 0.355,
+matches E2's Coconut slice). 201 minimal-pair candidates generated, 105/201 had a
+base-correct twin ("qualified pairs" -- the set actually scored).
+
+**Command:**
+```
+cd /workspace/ai-capstone && .venv_coconut/bin/python scripts/patch_minimal_pair_coconut.py \
+  --checkpoint_path <hf checkpoint_33 snapshot path> \
+  --data_dir /workspace/coconut_data \
+  --slug minimal-pair-patch --stage full_run --hardware "RunPod RTX A5000 (secure)" \
+  --num_latents 6 --eval_n 600 --n_pairs 200
+```
+Same RunPod RTX A5000 pod as the CODI run above ($0.27/hr, CA-MTL-1). Coconut has no
+checked-in setup script (unlike CODI's `codi_setup.sh`); env was built inline: a fresh
+`.venv_coconut` pinned to the reference repo's own `requirements.txt` (torch==2.5.1,
+transformers==4.46.2, datasets==3.1.0, numpy==2.1.3), checkpoint via
+`hf_hub_download('connordilgren/gpt2-gsm8k-coconut', 'checkpoint_33')`, and the gold-trace
+data file copied in directly from the local `are-lrms-easily-interpretable` prep (no
+network dependency needed for that file). Env build ~2 min; decode pass (n=600) 30s; full
+patch sweep (105 pairs × conditions) ~1 min. A throwaway n=40 smoke test
+(`20260920-195521_coconut_minimal-pair-smoketest`, not logged) preceded this run.
+
+**Headline results:** `final_answer_accuracy=0.355` (matches E2's Coconut slice exactly,
+same data/seed). n=105 qualified minimal pairs.
+
+| condition | n | matches_twin | 95% CI | answer_changed |
+|---|---|---|---|---|
+| ALL-SLOT (all 6 passes) | 105 | **0.771** | [0.68, 0.84] | 0.867 |
+| single-slot pass 0 | 105 | 0.000 | [0.00, 0.04] | 0.019 |
+| single-slot pass 1 | 105 | **0.486** | [0.39, 0.58] | 0.705 |
+| single-slot pass 2 | 105 | 0.000 | [0.00, 0.04] | 0.000 |
+| single-slot pass 3 | 105 | 0.010 | [0.00, 0.05] | 0.019 |
+| single-slot pass 4 | 105 | 0.286 | [0.21, 0.38] | 0.362 |
+| single-slot pass 5 | 105 | 0.010 | [0.00, 0.05] | 0.048 |
+| prefix 0..0 | 105 | 0.000 | [0.00, 0.04] | 0.019 |
+| prefix 0..1 | 105 | 0.486 | [0.39, 0.58] | 0.705 |
+| prefix 0..2 | 105 | 0.486 | [0.39, 0.58] | 0.705 |
+| prefix 0..3 | 105 | 0.495 | [0.40, 0.59] | 0.714 |
+| prefix 0..4 | 105 | 0.743 | [0.65, 0.82] | 0.838 |
+| prefix 0..5 | 105 | 0.771 | [0.68, 0.84] | 0.867 |
+
+**Interpretation:** Same qualitative "succeeds where cross-problem fails" result as CODI
+(ALL-SLOT 77.1% vs. 0-1.8% for cross-problem donors in E2), but the localization story is
+sharply different. Where CODI's effect was diffuse (no single iteration above 11%, a
+step-change only appearing once 4 of 6 iterations are present), Coconut's pass 1 alone
+carries **48.6%** matches_twin -- essentially all of the gain from prefix 0..0 (0%) to
+prefix 0..1 (48.6%) happens in one step, and pass 4 alone adds another independently
+detectable 28.6%. The remaining passes (0, 2, 3, 5) are individually inert (0-1%). This
+mirrors E2's Coconut finding that passes 0/1 are the load-bearing/high-`answer_changed`
+positions, but now with a positive, well-localized causal signal instead of just an
+`answer_changed` correlate -- pass 1's continuous thought is, to first approximation, a
+single addressable slot carrying the perturbed step value within the same problem, which
+is a materially stronger "modular intermediate variable" result than anything CODI shows.
+The asymmetry between mechanisms (CODI: distributed across 4+ iterations; Coconut: mostly
+one pass) is itself a finding for the "do different latent scratchpads think alike"
+question -- no, not in how they localize a causally-verified value, even though both fail
+the same E2 cross-problem portability test.
+
+**Gotchas hit:**
+- Same rsync-hang issue as the CODI run this session (see its notes.md) -- switched to
+  `tar | ssh | tar` for all pod transfers.
+- No checked-in `coconut_setup.sh` exists (unlike CODI) -- env build was done as an inline
+  shell block. `coconut_common.py`'s docstring says it needs "the reference repo's own
+  checkout" but its actual imports are just `torch`/`transformers` (no `coconut.py` import),
+  so the vanilla reference checkout was NOT needed on the pod this run -- only the pinned
+  venv, the checkpoint, and the gold-trace JSON. Worth promoting to a real
+  `coconut_setup.sh` (mirroring `codi_setup.sh`) if this becomes a recurring setup.
+- One background SSH session silently produced zero output and left no trace of failure
+  (the smoke test's first attempt) -- switched to `nohup ... > remote.log 2>&1 &` with
+  polling for a completion marker in the remote log file, rather than piping a foregrounded
+  SSH command's stdout through the local tool's own backgrounding, which turned out to be
+  more failure-prone over this pod's network path.
+
+**Caveats:**
+- Same `n_pairs=200` requested / 105 actually qualified caveat as the CODI run -- corpus
+  pool size at n=600, not a bug.
+- `matches_twin` here is the same minimal-pair-specific metric as the CODI run's notes
+  describe; not directly comparable to E2's `matches_cf` numbers without accounting for the
+  different donor construction.
+- Pass 0 being exactly 0/105 for both `answer_changed` and `matches_twin` (not just
+  `matches_twin`) suggests it may be closer to a true no-op stage for Coconut (e.g. an
+  initial "read the question" pass) rather than merely under-detected -- unlike CODI's
+  near-zero-but-not-exactly-zero single-slot iterations, which do move answers even where
+  they don't move them to the twin's answer specifically.
+
+**Next:** CODI counterpart is `20260920-190420_codi_minimal-pair-patch` (same session).
+Per `steered_to_donor_audit.md` §5 E4, DAS on minimal-pair targets is the natural
+follow-up; Coconut's pass-1 result in particular is now a strong, well-localized candidate
+for a subspace-level (rather than full-vector) faithfulness check, since a single pass
+already does most of the work a learned subspace would need to explain.

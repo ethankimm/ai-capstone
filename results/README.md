@@ -49,3 +49,5 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260920-053935_coconut_das-pilot](20260920-053935_coconut_das-pilot/) | coconut | openai-community/gpt2 | test (n=180) | 6 | - | 0 | pilot | Henning Lindig |
 | [20260920-085206_codi_qualified-patch](20260920-085206_codi_qualified-patch/) | codi | gpt2 | test (n=600) | 6 | 0.435 | None | full_run | Henning Lindig |
 | [20260920-085317_coconut_qualified-patch](20260920-085317_coconut_qualified-patch/) | coconut | openai-community/gpt2 | test (n=600) | 6 | 0.355 | 0 | full_run | Henning Lindig |
+| [20260920-190420_codi_minimal-pair-patch](20260920-190420_codi_minimal-pair-patch/) | codi | gpt2 | test (n=600) | 6 | 0.438 | 0 | full_run | Henning Lindig |
+| [20260920-195725_coconut_minimal-pair-patch](20260920-195725_coconut_minimal-pair-patch/) | coconut | openai-community/gpt2 | test (n=600) | 6 | 0.355 | 0 | full_run | Henning Lindig |

@@ -1,0 +1,220 @@
+{
+  "run_id": "20260920-195725_coconut_minimal-pair-patch",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 600,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.355,
+    "compute_steps": 6,
+    "sec_per_example": 0.049852873813360926,
+    "intervention_accuracy": 0.7714285714285715,
+    "extra": {
+      "design": "E3: same-problem minimal-pair donor-interchange patch (steered_to_donor_audit.md)",
+      "n_examples_decoded": 600,
+      "n_base_correct": 213,
+      "n_candidates_checked": 201,
+      "n_qualified_pairs": 105,
+      "all_slot": {
+        "n": 105,
+        "answer_changed_rate": 0.8666666666666667,
+        "answer_changed_wilson_ci": [
+          0.7885632722139584,
+          0.9188868203976901
+        ],
+        "matches_twin_rate": 0.7714285714285715,
+        "matches_twin_wilson_ci": [
+          0.6823796607286441,
+          0.841317161074784
+        ]
+      },
+      "single_slot": {
+        "0": {
+          "n": 105,
+          "answer_changed_rate": 0.01904761904761905,
+          "answer_changed_wilson_ci": [
+            0.005239072265250375,
+            0.06680691015323666
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.035295328256842964
+          ]
+        },
+        "1": {
+          "n": 105,
+          "answer_changed_rate": 0.7047619047619048,
+          "answer_changed_wilson_ci": [
+            0.6115334816944522,
+            0.7835360505432216
+          ],
+          "matches_twin_rate": 0.4857142857142857,
+          "matches_twin_wilson_ci": [
+            0.39232024499960055,
+            0.5801167643791664
+          ]
+        },
+        "2": {
+          "n": 105,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.035295328256842964
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.035295328256842964
+          ]
+        },
+        "3": {
+          "n": 105,
+          "answer_changed_rate": 0.01904761904761905,
+          "answer_changed_wilson_ci": [
+            0.005239072265250375,
+            0.06680691015323666
+          ],
+          "matches_twin_rate": 0.009523809523809525,
+          "matches_twin_wilson_ci": [
+            0.0016831259050527937,
+            0.051987529432612214
+          ]
+        },
+        "4": {
+          "n": 105,
+          "answer_changed_rate": 0.3619047619047619,
+          "answer_changed_wilson_ci": [
+            0.27636595500808664,
+            0.45719180231999373
+          ],
+          "matches_twin_rate": 0.2857142857142857,
+          "matches_twin_wilson_ci": [
+            0.20806999151103067,
+            0.3784851491704734
+          ]
+        },
+        "5": {
+          "n": 105,
+          "answer_changed_rate": 0.047619047619047616,
+          "answer_changed_wilson_ci": [
+            0.020508863227294692,
+            0.10666310043365843
+          ],
+          "matches_twin_rate": 0.009523809523809525,
+          "matches_twin_wilson_ci": [
+            0.0016831259050527937,
+            0.051987529432612214
+          ]
+        }
+      },
+      "prefix": {
+        "0": {
+          "n": 105,
+          "answer_changed_rate": 0.01904761904761905,
+          "answer_changed_wilson_ci": [
+            0.005239072265250375,
+            0.06680691015323666
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.035295328256842964
+          ]
+        },
+        "1": {
+          "n": 105,
+          "answer_changed_rate": 0.7047619047619048,
+          "answer_changed_wilson_ci": [
+            0.6115334816944522,
+            0.7835360505432216
+          ],
+          "matches_twin_rate": 0.4857142857142857,
+          "matches_twin_wilson_ci": [
+            0.39232024499960055,
+            0.5801167643791664
+          ]
+        },
+        "2": {
+          "n": 105,
+          "answer_changed_rate": 0.7047619047619048,
+          "answer_changed_wilson_ci": [
+            0.6115334816944522,
+            0.7835360505432216
+          ],
+          "matches_twin_rate": 0.4857142857142857,
+          "matches_twin_wilson_ci": [
+            0.39232024499960055,
+            0.5801167643791664
+          ]
+        },
+        "3": {
+          "n": 105,
+          "answer_changed_rate": 0.7142857142857143,
+          "answer_changed_wilson_ci": [
+            0.6215148508295265,
+            0.7919300084889693
+          ],
+          "matches_twin_rate": 0.49523809523809526,
+          "matches_twin_wilson_ci": [
+            0.40147502342062186,
+            0.5893373130389671
+          ]
+        },
+        "4": {
+          "n": 105,
+          "answer_changed_rate": 0.8380952380952381,
+          "answer_changed_wilson_ci": [
+            0.7559361291453497,
+            0.8963879822238328
+          ],
+          "matches_twin_rate": 0.7428571428571429,
+          "matches_twin_wilson_ci": [
+            0.6517287582972721,
+            0.81684208226369
+          ]
+        },
+        "5": {
+          "n": 105,
+          "answer_changed_rate": 0.8666666666666667,
+          "answer_changed_wilson_ci": [
+            0.7885632722139584,
+            0.9188868203976901
+          ],
+          "matches_twin_rate": 0.7714285714285715,
+          "matches_twin_wilson_ci": [
+            0.6823796607286441,
+            0.841317161074784
+          ]
+        }
+      },
+      "n_trainable_params": 124442112,
+      "related_runs": [
+        "20260920-085317_coconut_qualified-patch"
+      ]
+    }
+  },
+  "hyperparams": {
+    "num_latents": 6,
+    "n_pairs_requested": 200,
+    "max_candidate_checks": 800
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A5000 (secure) / NVIDIA RTX A5000",
+  "author": "Henning Lindig",
+  "notes": "E3: same-problem minimal-pair donor-interchange patch -- all-slot, single-slot, and cumulative-prefix conditions, scored against the twin's own ground-truth final answer (Metric A == Metric B by minimal-pair construction).",
+  "timestamp_utc": "2026-09-20T19:57:25.725458+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}
