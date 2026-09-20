@@ -1,0 +1,592 @@
+{
+  "run_id": "20260920-085317_coconut_qualified-patch",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 600,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.355,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "sec_per_example": 0.050111674313278246,
+    "decoding_accuracy": null,
+    "intervention_accuracy": 0.014184397163120567,
+    "extra": {
+      "design": "E2: step-aligned base-correct controlled raw single-slot patch (steered_to_donor_audit.md)",
+      "n_examples_decoded": 600,
+      "n_base_correct": 213,
+      "max_step": 8,
+      "n_pairs_per_site_requested": 200,
+      "mean_sample_n": 200,
+      "total_pairs": 282,
+      "site_summary": {
+        "0": {
+          "step_target": 0,
+          "n_pairs": 164,
+          "real": {
+            "n": 164,
+            "answer_changed_rate": 0.6280487804878049,
+            "answer_changed_wilson_ci": [
+              0.5519376124293204,
+              0.6982983243110349
+            ],
+            "matches_cf_rate": 0.018292682926829267,
+            "matches_cf_n": 164,
+            "matches_cf_wilson_ci": [
+              0.0062402341407821645,
+              0.05239600383597687
+            ],
+            "matches_donor_final_rate": 0.012195121951219513,
+            "matches_donor_final_n": 164,
+            "outcome_taxonomy": {
+              "unchanged": 61,
+              "other_number": 88,
+              "recipient_intermediate": 8,
+              "counterfactual": 3,
+              "donor_intermediate": 3,
+              "donor_final": 1
+            }
+          },
+          "random": {
+            "n": 164,
+            "answer_changed_rate": 0.6219512195121951,
+            "answer_changed_wilson_ci": [
+              0.5457470518650229,
+              0.6925728878876962
+            ],
+            "matches_cf_rate": 0.012195121951219513,
+            "matches_cf_n": 164,
+            "matches_cf_wilson_ci": [
+              0.0033506679012033427,
+              0.043369573087919736
+            ],
+            "matches_donor_final_rate": 0.006097560975609756,
+            "matches_donor_final_n": 164,
+            "outcome_taxonomy": {
+              "other_number": 85,
+              "unchanged": 62,
+              "recipient_intermediate": 10,
+              "donor_intermediate": 4,
+              "counterfactual": 2,
+              "donor_final": 1
+            }
+          },
+          "mean": {
+            "n": 164,
+            "answer_changed_rate": 0.3475609756097561,
+            "answer_changed_wilson_ci": [
+              0.2789226081060789,
+              0.423177467203022
+            ],
+            "matches_cf_rate": null,
+            "matches_cf_n": 0,
+            "matches_cf_wilson_ci": null,
+            "matches_donor_final_rate": null,
+            "matches_donor_final_n": 0,
+            "outcome_taxonomy": {
+              "unchanged": 107,
+              "other_number": 51,
+              "recipient_intermediate": 6
+            }
+          },
+          "mcnemar_real_vs_random_answer_changed": {
+            "b": 32,
+            "c": 31,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_mean_answer_changed": {
+            "b": 54,
+            "c": 8,
+            "p_exact": 1.709326186236787e-09
+          },
+          "mcnemar_real_vs_random_matches_cf": {
+            "b": 3,
+            "c": 2,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_mean_matches_cf": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          }
+        },
+        "1": {
+          "step_target": 1,
+          "n_pairs": 89,
+          "real": {
+            "n": 89,
+            "answer_changed_rate": 0.898876404494382,
+            "answer_changed_wilson_ci": [
+              0.8188613249575372,
+              0.9458820659362002
+            ],
+            "matches_cf_rate": 0.011235955056179775,
+            "matches_cf_n": 89,
+            "matches_cf_wilson_ci": [
+              0.0019861320934023673,
+              0.06093393821990546
+            ],
+            "matches_donor_final_rate": 0.0,
+            "matches_donor_final_n": 89,
+            "outcome_taxonomy": {
+              "other_number": 77,
+              "unchanged": 9,
+              "donor_intermediate": 1,
+              "recipient_intermediate": 1,
+              "counterfactual": 1
+            }
+          },
+          "random": {
+            "n": 89,
+            "answer_changed_rate": 0.8764044943820225,
+            "answer_changed_wilson_ci": [
+              0.7920937020326948,
+              0.9295655541628038
+            ],
+            "matches_cf_rate": 0.0,
+            "matches_cf_n": 89,
+            "matches_cf_wilson_ci": [
+              0.0,
+              0.04137800296418846
+            ],
+            "matches_donor_final_rate": 0.0,
+            "matches_donor_final_n": 89,
+            "outcome_taxonomy": {
+              "other_number": 71,
+              "recipient_intermediate": 5,
+              "unchanged": 11,
+              "donor_intermediate": 2
+            }
+          },
+          "mean": {
+            "n": 89,
+            "answer_changed_rate": 0.7303370786516854,
+            "answer_changed_wilson_ci": [
+              0.6300316256093158,
+              0.8115807550476312
+            ],
+            "matches_cf_rate": null,
+            "matches_cf_n": 0,
+            "matches_cf_wilson_ci": null,
+            "matches_donor_final_rate": null,
+            "matches_donor_final_n": 0,
+            "outcome_taxonomy": {
+              "unchanged": 24,
+              "other_number": 56,
+              "recipient_intermediate": 9
+            }
+          },
+          "mcnemar_real_vs_random_answer_changed": {
+            "b": 10,
+            "c": 8,
+            "p_exact": 0.8145294189453125
+          },
+          "mcnemar_real_vs_mean_answer_changed": {
+            "b": 19,
+            "c": 4,
+            "p_exact": 0.002599477767944336
+          },
+          "mcnemar_real_vs_random_matches_cf": {
+            "b": 1,
+            "c": 0,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_mean_matches_cf": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          }
+        },
+        "2": {
+          "step_target": 2,
+          "n_pairs": 28,
+          "real": {
+            "n": 28,
+            "answer_changed_rate": 0.07142857142857142,
+            "answer_changed_wilson_ci": [
+              0.019811647447770794,
+              0.2264573842591786
+            ],
+            "matches_cf_rate": 0.0,
+            "matches_cf_n": 28,
+            "matches_cf_wilson_ci": [
+              0.0,
+              0.12064720365810762
+            ],
+            "matches_donor_final_rate": 0.0,
+            "matches_donor_final_n": 28,
+            "outcome_taxonomy": {
+              "unchanged": 26,
+              "other_number": 2
+            }
+          },
+          "random": {
+            "n": 28,
+            "answer_changed_rate": 0.17857142857142858,
+            "answer_changed_wilson_ci": [
+              0.0787838582943011,
+              0.355917915485911
+            ],
+            "matches_cf_rate": 0.0,
+            "matches_cf_n": 28,
+            "matches_cf_wilson_ci": [
+              0.0,
+              0.12064720365810762
+            ],
+            "matches_donor_final_rate": 0.0,
+            "matches_donor_final_n": 28,
+            "outcome_taxonomy": {
+              "unchanged": 23,
+              "other_number": 2,
+              "donor_intermediate": 1,
+              "recipient_intermediate": 2
+            }
+          },
+          "mean": {
+            "n": 28,
+            "answer_changed_rate": 0.07142857142857142,
+            "answer_changed_wilson_ci": [
+              0.019811647447770794,
+              0.2264573842591786
+            ],
+            "matches_cf_rate": null,
+            "matches_cf_n": 0,
+            "matches_cf_wilson_ci": null,
+            "matches_donor_final_rate": null,
+            "matches_donor_final_n": 0,
+            "outcome_taxonomy": {
+              "unchanged": 26,
+              "recipient_intermediate": 1,
+              "other_number": 1
+            }
+          },
+          "mcnemar_real_vs_random_answer_changed": {
+            "b": 0,
+            "c": 3,
+            "p_exact": 0.25
+          },
+          "mcnemar_real_vs_mean_answer_changed": {
+            "b": 1,
+            "c": 1,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_random_matches_cf": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_mean_matches_cf": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          }
+        },
+        "3": {
+          "step_target": 4,
+          "n_pairs": 1,
+          "real": {
+            "n": 1,
+            "answer_changed_rate": 1.0,
+            "answer_changed_wilson_ci": [
+              0.20654329147389294,
+              1.0
+            ],
+            "matches_cf_rate": 0.0,
+            "matches_cf_n": 1,
+            "matches_cf_wilson_ci": [
+              0.0,
+              0.7934567085261071
+            ],
+            "matches_donor_final_rate": 0.0,
+            "matches_donor_final_n": 1,
+            "outcome_taxonomy": {
+              "other_number": 1
+            }
+          },
+          "random": {
+            "n": 1,
+            "answer_changed_rate": 1.0,
+            "answer_changed_wilson_ci": [
+              0.20654329147389294,
+              1.0
+            ],
+            "matches_cf_rate": 0.0,
+            "matches_cf_n": 1,
+            "matches_cf_wilson_ci": [
+              0.0,
+              0.7934567085261071
+            ],
+            "matches_donor_final_rate": 0.0,
+            "matches_donor_final_n": 1,
+            "outcome_taxonomy": {
+              "other_number": 1
+            }
+          },
+          "mean": {
+            "n": 1,
+            "answer_changed_rate": 0.0,
+            "answer_changed_wilson_ci": [
+              0.0,
+              0.7934567085261071
+            ],
+            "matches_cf_rate": null,
+            "matches_cf_n": 0,
+            "matches_cf_wilson_ci": null,
+            "matches_donor_final_rate": null,
+            "matches_donor_final_n": 0,
+            "outcome_taxonomy": {
+              "unchanged": 1
+            }
+          },
+          "mcnemar_real_vs_random_answer_changed": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_mean_answer_changed": {
+            "b": 1,
+            "c": 0,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_random_matches_cf": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_mean_matches_cf": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          }
+        },
+        "4": {
+          "step_target": 5,
+          "n_pairs": 0,
+          "real": {
+            "n": 0,
+            "answer_changed_rate": 0.0,
+            "answer_changed_wilson_ci": [
+              0.0,
+              0.0
+            ],
+            "matches_cf_rate": null,
+            "matches_cf_n": 0,
+            "matches_cf_wilson_ci": null,
+            "matches_donor_final_rate": null,
+            "matches_donor_final_n": 0,
+            "outcome_taxonomy": {}
+          },
+          "random": {
+            "n": 0,
+            "answer_changed_rate": 0.0,
+            "answer_changed_wilson_ci": [
+              0.0,
+              0.0
+            ],
+            "matches_cf_rate": null,
+            "matches_cf_n": 0,
+            "matches_cf_wilson_ci": null,
+            "matches_donor_final_rate": null,
+            "matches_donor_final_n": 0,
+            "outcome_taxonomy": {}
+          },
+          "mean": {
+            "n": 0,
+            "answer_changed_rate": 0.0,
+            "answer_changed_wilson_ci": [
+              0.0,
+              0.0
+            ],
+            "matches_cf_rate": null,
+            "matches_cf_n": 0,
+            "matches_cf_wilson_ci": null,
+            "matches_donor_final_rate": null,
+            "matches_donor_final_n": 0,
+            "outcome_taxonomy": {}
+          },
+          "mcnemar_real_vs_random_answer_changed": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_mean_answer_changed": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_random_matches_cf": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_mean_matches_cf": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          }
+        },
+        "5": {
+          "step_target": 6,
+          "n_pairs": 0,
+          "real": {
+            "n": 0,
+            "answer_changed_rate": 0.0,
+            "answer_changed_wilson_ci": [
+              0.0,
+              0.0
+            ],
+            "matches_cf_rate": null,
+            "matches_cf_n": 0,
+            "matches_cf_wilson_ci": null,
+            "matches_donor_final_rate": null,
+            "matches_donor_final_n": 0,
+            "outcome_taxonomy": {}
+          },
+          "random": {
+            "n": 0,
+            "answer_changed_rate": 0.0,
+            "answer_changed_wilson_ci": [
+              0.0,
+              0.0
+            ],
+            "matches_cf_rate": null,
+            "matches_cf_n": 0,
+            "matches_cf_wilson_ci": null,
+            "matches_donor_final_rate": null,
+            "matches_donor_final_n": 0,
+            "outcome_taxonomy": {}
+          },
+          "mean": {
+            "n": 0,
+            "answer_changed_rate": 0.0,
+            "answer_changed_wilson_ci": [
+              0.0,
+              0.0
+            ],
+            "matches_cf_rate": null,
+            "matches_cf_n": 0,
+            "matches_cf_wilson_ci": null,
+            "matches_donor_final_rate": null,
+            "matches_donor_final_n": 0,
+            "outcome_taxonomy": {}
+          },
+          "mcnemar_real_vs_random_answer_changed": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_mean_answer_changed": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_random_matches_cf": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          },
+          "mcnemar_real_vs_mean_matches_cf": {
+            "b": 0,
+            "c": 0,
+            "p_exact": 1.0
+          }
+        }
+      },
+      "overall": {
+        "real": {
+          "n": 282,
+          "answer_changed_rate": 0.6595744680851063,
+          "answer_changed_wilson_ci": [
+            0.6024546202117651,
+            0.712405078306575
+          ],
+          "matches_cf_rate": 0.014184397163120567,
+          "matches_cf_n": 282,
+          "matches_cf_wilson_ci": [
+            0.005529404867899827,
+            0.03589773519848659
+          ],
+          "matches_donor_final_rate": 0.0070921985815602835,
+          "matches_donor_final_n": 282,
+          "outcome_taxonomy": {
+            "unchanged": 96,
+            "other_number": 168,
+            "recipient_intermediate": 9,
+            "counterfactual": 4,
+            "donor_intermediate": 4,
+            "donor_final": 1
+          }
+        },
+        "random": {
+          "n": 282,
+          "answer_changed_rate": 0.6595744680851063,
+          "answer_changed_wilson_ci": [
+            0.6024546202117651,
+            0.712405078306575
+          ],
+          "matches_cf_rate": 0.0070921985815602835,
+          "matches_cf_n": 282,
+          "matches_cf_wilson_ci": [
+            0.0019470554168142373,
+            0.02548632027097928
+          ],
+          "matches_donor_final_rate": 0.0035460992907801418,
+          "matches_donor_final_n": 282,
+          "outcome_taxonomy": {
+            "other_number": 159,
+            "unchanged": 96,
+            "recipient_intermediate": 17,
+            "donor_intermediate": 7,
+            "counterfactual": 2,
+            "donor_final": 1
+          }
+        },
+        "mean": {
+          "n": 282,
+          "answer_changed_rate": 0.4397163120567376,
+          "answer_changed_wilson_ci": [
+            0.3829789729205321,
+            0.4980740298614283
+          ],
+          "matches_cf_rate": null,
+          "matches_cf_n": 0,
+          "matches_cf_wilson_ci": null,
+          "matches_donor_final_rate": null,
+          "matches_donor_final_n": 0,
+          "outcome_taxonomy": {
+            "unchanged": 158,
+            "other_number": 108,
+            "recipient_intermediate": 16
+          }
+        }
+      },
+      "n_trainable_params": 124442112,
+      "paper_table1_reference": {
+        "gpt2_coconut_gsm8k_aug_accuracy": 0.331
+      }
+    }
+  },
+  "hyperparams": {
+    "num_latents": 6,
+    "n_pairs_per_site": 200,
+    "mean_sample_n": 200
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A6000 (secure) / NVIDIA RTX A6000",
+  "author": "Henning Lindig",
+  "notes": "E2: step-aligned, base-correct, controlled raw single-slot patch at EVERY Coconut pass (positional site->step assignment, not decoding-accuracy-fit). Real donor / random donor / mean-ablation conditions, scored with the shared counterfactual module (Metric B matches_cf primary).",
+  "timestamp_utc": "2026-09-20T08:53:17.634536+00:00",
+  "git": {
+    "commit": "f602171",
+    "dirty": true
+  }
+}

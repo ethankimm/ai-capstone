@@ -214,6 +214,28 @@ def score_patch(
                       recipient_values, donor_values)
 
 
+def qualifying_steps(steps: list[dict]) -> list[int]:
+    """Step indices k (0-indexed, k < len(steps) - 1) whose result is an operand of the
+    NEXT step's expression -- so a perturbation injected at k CAN propagate to k+1 and
+    beyond. `steered_to_donor_audit.md` #4.2 condition (i); used to build qualified
+    patch pools for E2/E3 (a step with no downstream use makes `matches_cf` undefined
+    by construction, not just null)."""
+    return [k for k in range(len(steps) - 1) if operand_in(steps[k]["val"], steps[k + 1]["expr"])]
+
+
+def site_to_step(site_idx: int, n_sites: int, max_step: int) -> int:
+    """Deterministic positional map from a latent 'site' index (0-indexed, 0..n_sites-1
+    -- a CODI iteration or a Coconut pass) to the step index (0-indexed) it is tested
+    against, splitting `n_sites` into `max_step` contiguous groups. Used instead of a
+    decoding-accuracy-fit mapping (`decode_patch_codi.py`'s `best_iter_for_step`) when
+    EVERY site must be tested, including ones a decoding-accuracy fit would never pick
+    as "best" for any step (steered_to_donor_audit.md E2 -- e.g. CODI's non-decodable
+    but load-bearing z0/z3)."""
+    if max_step <= 0:
+        return 0
+    return min(site_idx * max_step // n_sites, max_step - 1)
+
+
 def score_patch_unaligned(
     *,
     answer_base: str | None,

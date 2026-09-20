@@ -4326,3 +4326,208 @@ See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measure
 - **site 4** taxonomy: unchanged 117, other_number 53, recipient_intermediate 7, counterfactual 2, donor_intermediate 1
 - **site 5** taxonomy: unchanged 131, other_number 40, recipient_intermediate 6, recipient_gold 2, counterfactual 1
 - **total** taxonomy: unchanged 729, other_number 297, recipient_intermediate 24, recipient_gold 20, donor_intermediate 7, counterfactual 3
+
+---
+
+## 2026-09-20 — E2: step-aligned, base-correct, controlled raw single-slot patch at every CODI iteration -- null survives the fixed pair design (codi, run_id: 20260920-085206_codi_qualified-patch)
+
+**Goal:** `steered_to_donor_audit.md` E2. The earlier raw-patch nulls
+(`20260919-184323_codi_decode-patch-full-eval`, `20260920-031925_codi_interchange-placeholder-pilot`)
+used cross-problem donor pairs chosen only by differing final answers, at whichever
+iteration decoded a step best, with no requirement that the recipient itself be
+base-correct or that the targeted step actually be able to propagate downstream. This run
+fixes all three: qualified pairs (recipient AND donor base-correct; recipient's step-k
+gold value is an operand of step k+1, so a perturbation there CAN reach the final answer),
+tested at EVERY iteration (not just the best-decoding one, so z4/z5/z6 -- never a "best"
+step in the earlier decode-based mapping -- get tested too), with a proper mean-ablation
+control alongside the random-donor control. Scored with the shared `score_patch` module
+(Metric B `matches_cf` primary) from the start, not retrofitted.
+
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3` (released checkpoint),
+compute_steps=6, paper inference protocol (LoRA r=128/α=32, projection 768+LN, greedy,
+`model.eval()` fix from `20260919-090132_codi_ablate-attn` in place).
+
+**Data:** gsm8k-aug test, n=600 (seed=0). Site→step assignment is POSITIONAL
+(`latentreasoning.eval.counterfactual.site_to_step`), not decoding-accuracy-fit: the 6
+iterations are split into `max_step`=8 contiguous groups (iter 1→step 0, iter 2→step 1,
+iter 3→step 2, iters 4/5/6→steps 4/5/6 respectively) — deliberately not
+`decode_patch_codi.py`'s `best_iter_for_step`, so every iteration gets a target step
+instead of only the ones that happen to decode a step best.
+
+**Command:**
+```
+cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/patch_qualified_codi.py \
+  --ckpt_dir /workspace/codi_released --checkpoint_label "hf:zen-E/CODI-gpt2@fd641b3" \
+  --slug qualified-patch --stage full_run --hardware "RunPod RTX A6000 (secure)" \
+  --model_name_or_path gpt2 --seed 11 --model_max_length 512 --bf16 \
+  --lora_r 128 --lora_alpha 32 --lora_init --greedy True \
+  --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 \
+  --inf_latent_iterations 6 --inf_num_iterations 1 --remove_eos True --use_lora True \
+  --eval_n 600 --n_pairs_per_site 200
+```
+RunPod RTX A6000 (secure, EU-SE-1, $0.53/hr — A5000/A4500 both showed no stock at
+provision time). Fresh pod: `codi_setup.sh` (clone+patch+pinned venv, torch 2.7.1 /
+transformers 4.52.4 / peft 0.15.2), checkpoint `snapshot_download` (~3s). Decode pass
+(n=600) 73.8s; full patch sweep (6 sites, 370 qualified pairs total, 4 forward
+trajectories/pair) ~3 min. Ran concurrently with the Coconut E2 run below on the same
+pod. Total pod time including setup/downloads for both mechanisms: ~72 min ≈ **$0.64**
+(idle SSH-wait time dominates; actual GPU compute for this run was well under 5 min).
+
+**Headline results:** `final_answer_accuracy=0.435` (261/600), base-correct pool used for
+all pairing. 370 qualified pairs found across 6 sites (site pool sizes shrink sharply at
+higher steps since few examples have >3 steps at all: 190/121/52/2/3/2).
+
+| site (iter) | step | n | real matches_cf | random matches_cf | real answer_changed | random | mean | McNemar real-vs-random (cf) |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 0 | 190 | 0.005 | 0.000 | 0.263 | 0.274 | 0.274 | b=1,c=0,p=1.0 |
+| 2 | 1 | 121 | 0.025 | 0.008 | 0.413 | 0.421 | 0.099 | b=3,c=1,p=0.625 |
+| 3 | 2 | 52 | 0.000 | 0.000 | 0.308 | 0.327 | 0.308 | b=0,c=0,p=1.0 |
+| 4 | 4 | 2 | 0.000 | 0.000 | 0.500 | 0.500 | 0.500 | — |
+| 5 | 5 | 3 | 0.000 | 0.000 | 0.333 | 0.333 | 0.000 | — |
+| 6 | 6 | 2 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | — |
+
+**Overall (n=370):** `matches_cf` real=**1.10%** [0.43%, 2.80%] vs random=**0.28%**
+[0.05%, 1.54%] — both at floor, not distinguishable (the two site-level McNemar tests with
+any discordant pairs, sites 1 and 2, are non-significant: p=1.0, p=0.625).
+`matches_donor_final` (Metric A) real=0.81%, random=0.54% — same floor. `answer_changed`:
+real=31.9%, random=33.0% (statistically indistinguishable), mean-ablation=21.9%
+(noticeably lower, as expected — a content-free mean vector perturbs less than another
+example's real activation). Outcome taxonomy for real: unchanged 252, other_number 111,
+counterfactual 4, recipient_intermediate 2, donor_intermediate 1 — same "answers scramble
+toward recombinations of the recipient's own operands, not the donor's" pattern as every
+prior patching run on this mechanism.
+
+**Interpretation:** This is the cleanest version of the CODI raw-patch null run so far —
+base-correct-only pairs (removes the confound of patching an already-wrong recipient),
+propagation-qualified steps (removes the confound of patching a step whose value doesn't
+even matter downstream), and every iteration tested including the ones a decoding-fit
+mapping would never select. The null holds unchanged: real donor content is
+indistinguishable from a random donor's under Metric B (`matches_cf`) at every site with
+enough pairs to test (sites 4-6 have only 2-3 qualifying base-correct examples each — the
+positional site→step assignment runs out of qualifying pool at high step counts, since
+gsm8k-aug problems rarely have more than 3-4 real steps; `max_step=8` is driven by a small
+number of long/noisy rationales). Confirms `steered_to_donor_audit.md`'s prediction: fixing
+the metric AND the pair-qualification design does not surface a portable-value signal that
+the earlier, looser designs were hiding.
+
+**Gotchas hit:**
+- No RunPod pod was running at session start (prior pods had been terminated); this run
+  required a from-scratch pod provision + `codi_setup.sh` + checkpoint download, all
+  included in the ~72 min pod time above.
+- Proxy SSH (`ssh.runpod.io`) requires a PTY and does not support one-shot non-interactive
+  commands from a scripted client; used the pod's direct SSH port (`ssh root@<ip> -p
+  <port>`) for everything instead, which behaves like normal sshd.
+- Sites 4/5/6 (steps 4/5/6) have only 2-3 qualifying pairs each — `n_pairs_per_site=200`
+  requested but the qualified, base-correct pool at high step indices is tiny at this
+  problem-length distribution; not a bug, just the corpus's step-count tail.
+
+**Caveats:**
+- Site→step assignment is a POSITIONAL heuristic (`site_to_step`), not a
+  decoding-accuracy fit — chosen deliberately so non-decodable iterations get tested, but
+  it means a given iteration's "assigned step" may not be the step it is most naturally
+  associated with computationally. `intervention_accuracy` in the manifest is a global
+  average across sites of very unequal size (n=190 down to n=2); the per-site table above
+  is the number that matters, not the pooled `intervention_accuracy` scalar.
+- `matches_cf` is undefined (`None`) for the mean-ablation condition by construction — there
+  is no "value" a mean vector injects, so Metric B has nothing to check propagation of;
+  only `answer_changed` and the outcome taxonomy are meaningful for that condition.
+
+**Next:** Coconut counterpart is `20260920-085317_coconut_qualified-patch` (same session,
+same design, same pod). Per `steered_to_donor_audit.md` §5, E3 (same-problem minimal-pair
+donors, `latentreasoning/data/minimal_pairs.py`) is the next step if this cross-problem
+null is worth chasing further — it removes the "donor's remaining program lives in
+question text the recipient never saw" confound entirely.
+
+---
+
+## 2026-09-20 — E2: step-aligned, base-correct, controlled raw single-slot patch at every Coconut pass -- null survives the fixed pair design (coconut, run_id: 20260920-085317_coconut_qualified-patch)
+
+**Goal:** `steered_to_donor_audit.md` E2, Coconut counterpart to `20260920-085206_codi_qualified-patch`.
+The earlier Coconut raw-patch pilot (`20260920-031246_coconut_decode-patch-pilot`) picked
+donor/recipient pairs by differing final answers only, at whichever pass decoded a step
+best (leaving passes 2/3/5 completely untested, `n=0`, since they never won "best" for any
+step), with no base-correctness requirement. This run tests EVERY pass with qualified pairs
+(recipient AND donor base-correct; recipient's step-k gold value is an operand of step
+k+1) and adds a proper mean-ablation control alongside the random-donor control.
+
+**Mechanism / model:** `coconut`, backbone openai-community/gpt2, checkpoint
+`hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`, compute_steps=6 (6 `<|latent|>`
+passes).
+
+**Data:** `gsm_valid-gold-reasoning-trace_test.json` (Dilgren & Wiegreffe's gold-trace
+data prep, same underlying corpus as our own `gsm8k_aug.py`), n=600 (shuffled, seed=0).
+Site→step assignment is POSITIONAL (`site_to_step`), splitting the 6 passes into
+`max_step`=7 contiguous groups (pass 0→step 0, pass 1→step 1, pass 2→step 2, pass 3→step
+4, passes 4/5→steps 5/6) -- not a decoding-accuracy fit, so every pass gets a target step
+regardless of how well it happens to decode.
+
+**Command:**
+```
+cd /workspace/ai-capstone && .venv_coconut/bin/python scripts/patch_qualified_coconut.py \
+  --checkpoint_path <hf checkpoint_33 snapshot path> \
+  --data_dir /workspace/coconut_data \
+  --slug qualified-patch --stage full_run --hardware "RunPod RTX A6000 (secure)" \
+  --num_latents 6 --eval_n 600 --n_pairs_per_site 200
+```
+Same RunPod RTX A6000 pod as the CODI run above ($0.53/hr, EU-SE-1, kept warm to avoid a
+second provisioning cost). Setup: fresh `.venv_coconut` pinned to Coconut's own
+`requirements.txt` (torch==2.5.1, transformers==4.46.2, datasets==3.1.0), checkpoint
+`hf_hub_download` (~cached), gold-trace data file copied from the local
+`are-lrms-easily-interpretable` data prep. A throwaway n=40/3-pair smoke test (logged as
+`20260920-085123_coconut_qualified-patch-smoketest`, not a real run — kept only to confirm
+the pipeline before spending on the full n=600/200) preceded this. Decode pass (n=600)
+took seconds; full patch sweep (6 sites, 282 qualified pairs, 4 forward trajectories/pair)
+under 2 min.
+
+**Headline results:** `final_answer_accuracy=0.355` (213/600) — close to paper Table 1's
+33.1%. 282 qualified pairs across 6 sites; pool sizes shrink sharply at higher steps
+(164/89/28/1/0/0 — passes 4 and 5 had zero qualifying base-correct examples in this slice).
+
+| site (pass) | step | n | real matches_cf | random matches_cf | real answer_changed | random | mean | McNemar real-vs-random (cf) |
+|---|---|---|---|---|---|---|---|---|
+| 0 | 0 | 164 | 0.018 | 0.012 | 0.628 | 0.622 | 0.348 | b=3,c=2,p=1.0 |
+| 1 | 1 | 89 | 0.011 | 0.000 | 0.899 | 0.876 | 0.730 | b=1,c=0,p=1.0 |
+| 2 | 2 | 28 | 0.000 | 0.000 | 0.071 | 0.179 | 0.071 | b=0,c=0,p=1.0 |
+| 3 | 4 | 1 | 0.000 | 0.000 | 1.000 | 1.000 | 0.000 | — |
+| 4 | 5 | 0 | — | — | — | — | — | — |
+| 5 | 6 | 0 | — | — | — | — | — | — |
+
+**Overall (n=282):** `matches_cf` real=**1.42%** [0.55%, 3.59%] vs random=**0.71%**
+[0.19%, 2.55%] — same floor, no site's McNemar test approaches significance (b/c small,
+p=1.0 everywhere there's any discordance). `matches_donor_final` (Metric A) real=0.71%,
+random=0.35%. `answer_changed`: real=66.0%, random=66.0% (identical), mean-ablation=44.0%
+(clearly lower, as with CODI — a content-free mean vector perturbs less than a real
+donor's activation, confirming the intervention itself is working mechanically even though
+it never steers toward donor content). Outcome taxonomy for real: other_number 168,
+unchanged 96, recipient_intermediate 9, counterfactual 4, donor_intermediate 4,
+donor_final 1 — again, changed answers mostly scramble toward the recipient's own operand
+recombinations, not the donor's content.
+
+**Interpretation:** Passes 0 and 1 are the load-bearing/high-`answer_changed` passes
+(62.8% and 89.9% — pass 1 patches nearly always change the answer), exactly mirroring the
+prior pilot's finding that `answer_changed` tracks decodability/position. But even at
+these two passes, with the pair design fully fixed (base-correct, propagation-qualified,
+random-donor AND mean-ablation controls), `matches_cf` stays indistinguishable from chance
+(1.1-1.8% real vs 0-1.2% random). This directly answers `steered_to_donor_audit.md` §3.2's
+open question about the earlier pilot's one uncontrolled lead (pass 1: 5/60, 8.3%,
+"a lead, not a result" without a matched control) — with base-correct qualified pairs and
+a random-donor control at the same pass, pass 1's `matches_cf` drops to 1/89 (1.1%),
+statistically indistinguishable from its own random-donor control (0/89). The earlier
+uncontrolled lead does not survive proper controls at scale.
+
+**Gotchas hit:**
+- Passes 4 and 5 (steps 5/6 under the positional assignment) had zero qualifying
+  base-correct pairs in this 600-example slice — gsm8k-aug problems rarely have 6+ real
+  steps, so the highest-indexed steps have almost no qualifying pool regardless of sample
+  size; same shape of gap as CODI's sites 4-6.
+- Same proxy-SSH-needs-a-PTY issue as the CODI run; used direct SSH throughout.
+
+**Caveats:**
+- Same positional (not decoding-fit) site→step caveat as the CODI notes: the per-site
+  table is the number that matters, the manifest's pooled `intervention_accuracy` averages
+  very unequal site sizes.
+- `matches_cf` is undefined for mean-ablation by construction (no injected value to check
+  propagation of).
+
+**Next:** Same as the CODI counterpart — `steered_to_donor_audit.md` §5 E3 (same-problem
+minimal-pair donors) is the next step if this cross-problem null is worth chasing further.

@@ -38,7 +38,7 @@ def test_save_does_not_overwrite_existing_notes(tmp_path):
     assert (tmp_path / "notes.md").read_text() == "my notes"
 
 
-@pytest.mark.parametrize("bad", [dict(mechanism="coconut"), dict(stage="final"),
+@pytest.mark.parametrize("bad", [dict(mechanism="soft_thinking"), dict(stage="final"),
                                  dict(dataset=DatasetInfo(split="dev"))])
 def test_validation_rejects_unknown_values(bad):
     with pytest.raises(ValueError):

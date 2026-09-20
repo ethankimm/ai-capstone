@@ -25,4 +25,4 @@ so exposing them is a small addition, not a rewrite.
 """
 from __future__ import annotations
 
-MECHANISM_NAMES = ("explicit_cot", "filler_tokens", "codi", "recurrent_depth")
+MECHANISM_NAMES = ("explicit_cot", "filler_tokens", "codi", "recurrent_depth", "coconut")

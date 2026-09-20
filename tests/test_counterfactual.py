@@ -2,7 +2,8 @@ import json
 
 from latentreasoning.data.gsm8k_aug import load_local_sample
 from latentreasoning.eval.counterfactual import (
-    counterfactual_answer, num_equal, parse_steps, score_patch, score_patch_unaligned,
+    counterfactual_answer, num_equal, parse_steps, qualifying_steps, score_patch,
+    score_patch_unaligned, site_to_step,
 )
 from latentreasoning.runlog.manifest import RESULTS_DIR
 
@@ -81,6 +82,22 @@ def test_num_equal_handles_thousands_separators_and_none():
     assert num_equal("2,125", "2125")
     assert not num_equal(None, "1")
     assert not num_equal("1", None)
+
+
+def test_qualifying_steps_flags_operand_of_next_step():
+    steps = parse_steps(_rationale())  # 16-3-4=9, 9*2=18 -- step 0's "9" is an operand of step 1
+    assert qualifying_steps(steps) == [0]  # step 1 (last) has no downstream step to propagate to
+
+    non_propagating = parse_steps("<<5+5=10>> <<3*3=9>>")  # step 0's "10" isn't used in step 1
+    assert qualifying_steps(non_propagating) == []
+
+
+def test_site_to_step_splits_sites_into_contiguous_step_groups():
+    # 6 sites, 3 steps -> two sites per step, in order
+    assert [site_to_step(i, 6, 3) for i in range(6)] == [0, 0, 1, 1, 2, 2]
+    # fewer sites than steps -- every site still lands on a valid (clamped) step index
+    assert [site_to_step(i, 2, 3) for i in range(2)] == [0, 1]
+    assert site_to_step(0, 6, 0) == 0  # no steps at all -- degenerate but doesn't raise
 
 
 def test_local_sample_rationales_parse_cleanly():
