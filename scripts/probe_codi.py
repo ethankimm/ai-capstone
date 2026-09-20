@@ -35,6 +35,7 @@ Run inside the CODI venv, from the CODI checkout:
 """
 from __future__ import annotations
 
+import json
 import math
 import os
 import sys
@@ -44,7 +45,6 @@ from pathlib import Path
 from typing import Optional
 
 import torch
-import torch.nn as nn
 import transformers
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -53,6 +53,9 @@ sys.path.insert(0, os.getcwd())  # the CODI checkout: `src.model`
 from src.model import DataArguments, ModelArguments, TrainingArguments  # noqa: E402
 from eval_codi import build_model  # noqa: E402
 from decode_patch_codi import run_thoughts, topk_token_strings, num_match, wilson_ci  # noqa: E402
+from probe_common import (  # noqa: E402
+    parse_value, signed_log1p, inv_signed_log1p, within_tol, fit_ridge, train_mlp,
+)
 
 from latentreasoning.data.gsm8k_aug import load_gsm8k_aug  # noqa: E402
 from latentreasoning.runlog.manifest import DatasetInfo, ModelInfo, RunRecord, new_run_id  # noqa: E402
@@ -75,27 +78,6 @@ class ProbeArguments:
     tol: float = field(default=0.01, metadata={"help": "relative-error tolerance counted as a probe hit"})
 
 
-def parse_value(v: str) -> Optional[float]:
-    v = v.strip().lstrip("+")
-    try:
-        return float(v.replace(",", ""))
-    except ValueError:
-        return None
-
-
-def signed_log1p(x: torch.Tensor) -> torch.Tensor:
-    return torch.sign(x) * torch.log1p(x.abs())
-
-
-def inv_signed_log1p(y: torch.Tensor) -> torch.Tensor:
-    return torch.sign(y) * torch.expm1(y.abs())
-
-
-def within_tol(pred: float, gold: float, tol: float) -> bool:
-    denom = max(1.0, abs(gold))
-    return abs(pred - gold) / denom <= tol
-
-
 @torch.no_grad()
 def extract_features(model, tokenizer, examples, device, n_latents, max_step: int):
     """For each example, returns per-iteration z vectors (float32, cpu) and, for each
@@ -116,36 +98,6 @@ def extract_features(model, tokenizer, examples, device, n_latents, max_step: in
             }
         rows.append({"idx": ex.idx, "steps": steps[:max_step], "z": z, "per_iter_topk": per_iter_topk})
     return rows
-
-
-def fit_ridge(X: torch.Tensor, y: torch.Tensor, lam: float) -> torch.Tensor:
-    """Closed-form ridge: w = (X^T X + lam*I)^-1 X^T y, X already has a bias column."""
-    d = X.shape[1]
-    XtX = X.T @ X + lam * torch.eye(d, dtype=X.dtype)
-    Xty = X.T @ y
-    return torch.linalg.solve(XtX, Xty)
-
-
-class TinyMLP(nn.Module):
-    def __init__(self, d_in: int, d_hidden: int):
-        super().__init__()
-        self.net = nn.Sequential(nn.Linear(d_in, d_hidden), nn.ReLU(), nn.Linear(d_hidden, 1))
-
-    def forward(self, x):
-        return self.net(x).squeeze(-1)
-
-
-def train_mlp(X: torch.Tensor, y: torch.Tensor, hidden: int, epochs: int, lr: float) -> TinyMLP:
-    mlp = TinyMLP(X.shape[1], hidden)
-    opt = torch.optim.Adam(mlp.parameters(), lr=lr, weight_decay=1e-4)
-    loss_fn = nn.MSELoss()
-    for _ in range(epochs):
-        opt.zero_grad()
-        pred = mlp(X)
-        loss = loss_fn(pred, y)
-        loss.backward()
-        opt.step()
-    return mlp
 
 
 def probe_one(it: int, s: int, train_rows, eval_rows, ridge_lambda: float, mlp_hidden: int,
@@ -189,6 +141,15 @@ def probe_one(it: int, s: int, train_rows, eval_rows, ridge_lambda: float, mlp_h
     mlp_hits = sum(within_tol(p.item(), g.item(), tol) for p, g in zip(mlp_pred, y_ev_raw))
     mlp_acc = mlp_hits / len(y_ev)
 
+    # Raw per-example (real-scale) triples for the continuous-metrics follow-up
+    # (scripts/probe_metrics_continuous.py) -- the aggregate tol-hit-rate above collapses
+    # "no signal" and "signal, not to `tol` precision" to the same zero.
+    eval_idx = [r["idx"] for r in eval_rows if s <= len(r["steps"]) and parse_value(r["steps"][s - 1]) is not None]
+    raw = [
+        {"idx": idx, "y_gold": g.item(), "ridge_pred": p_r.item(), "mlp_pred": p_m.item()}
+        for idx, g, p_r, p_m in zip(eval_idx, y_ev_raw, ridge_pred, mlp_pred)
+    ]
+
     # logit-lens accuracy on the SAME eval rows / same step
     ll_hits1 = ll_hits5 = 0
     n_ll = 0
@@ -212,6 +173,7 @@ def probe_one(it: int, s: int, train_rows, eval_rows, ridge_lambda: float, mlp_h
         "ridge_acc_tol": ridge_acc, "ridge_acc_wilson_ci": list(wilson_ci(ridge_hits, len(y_ev))),
         "mlp_acc_tol": mlp_acc, "mlp_acc_wilson_ci": list(wilson_ci(mlp_hits, len(y_ev))),
         "logit_lens_top1": ll_acc1, "logit_lens_top5": ll_acc5,
+        "raw": raw,
     }
 
 
@@ -305,9 +267,21 @@ def main() -> None:
               "accuracy on the same eval examples: tests whether z0/z3 carry recoverable "
               "intermediate values under a rotated basis even though the logit lens null.",
     )
-    manifest = record.save(predictions=[{"iter": r["iter"], "step": r["step"], **r} for r in results])
+    manifest = record.save(predictions=[
+        {k: v for k, v in r.items() if k != "raw"} for r in results
+    ])
     out_dir = manifest.parent
     (out_dir / "eval_command.txt").write_text(argv + "\n")
+
+    # Raw per-example (iter, step, y_gold, ridge_pred, mlp_pred) cache, gitignored
+    # (results/<run_id>/ only tracks manifest.json/notes.md/predictions.jsonl per
+    # CLAUDE.md) -- input for scripts/probe_metrics_continuous.py, which runs fully
+    # locally (no GPU/model needed) on this file.
+    with (out_dir / "raw_predictions.jsonl").open("w") as f:
+        for r in results:
+            for row in r["raw"]:
+                f.write(json.dumps({"iter": r["iter"], "step": r["step"], **row}) + "\n")
+
     print(f"run_id={record.run_id} -> fill in {out_dir / 'notes.md'}, then: uv run python scripts/rebuild_index.py")
 
 

@@ -22,6 +22,11 @@ train = [
 dev = [
     "pytest>=8.0",
 ]
+# Diagnostic plots only (scripts/probe_metrics_continuous.py). No torch/model deps --
+# runs entirely locally on a cached raw_predictions.jsonl.
+viz = [
+    "matplotlib>=3.8",
+]
 
 # `latentreasoning` is installed as an editable package by `uv sync`, so `import latentreasoning` works
 # from scripts, notebooks, and any cwd (on a pod or locally) without sys.path hacks.

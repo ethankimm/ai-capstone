@@ -39,3 +39,5 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260920-031246_coconut_decode-patch-pilot](20260920-031246_coconut_decode-patch-pilot/) | coconut | openai-community/gpt2 | test (n=200) | 6 | 0.360 | 0 | pilot | Henning Lindig |
 | [20260920-031925_codi_interchange-placeholder-pilot](20260920-031925_codi_interchange-placeholder-pilot/) | codi | gpt2 | test (n=200) | 6 | - | 0 | pilot | Henning Lindig |
 | [20260920-032053_codi_probe-pilot](20260920-032053_codi_probe-pilot/) | codi | gpt2 | validation (n=300) | 6 | - | 0 | pilot | Henning Lindig |
+| [20260920-040411_coconut_probe-continuous-pilot](20260920-040411_coconut_probe-continuous-pilot/) | coconut | openai-community/gpt2 | test (n=300) | 6 | - | 0 | pilot | Henning Lindig |
+| [20260920-040622_codi_probe-continuous-pilot](20260920-040622_codi_probe-continuous-pilot/) | codi | gpt2 | validation (n=300) | 6 | - | 0 | pilot | Henning Lindig |
