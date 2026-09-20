@@ -23,7 +23,6 @@ import argparse
 import json
 import math
 import random
-import re
 import sys
 import time
 from pathlib import Path
@@ -32,17 +31,13 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from latentreasoning.data.gsm8k_aug import Example, load_gsm8k_aug
+from latentreasoning.eval.counterfactual import (
+    NUM_RE, counterfactual_answer, num_equal, operand_in, parse_steps, reeval_chain, safe_eval, substitute,
+)
 from latentreasoning.eval.metrics import extract_final_number, is_correct
 from latentreasoning.mechanisms.explicit_cot import build_eval_prompt_ids
 from latentreasoning.runlog.manifest import DatasetInfo, ModelInfo, RunRecord, new_run_id
 from latentreasoning.utils import set_seed
-
-STEP_RE = re.compile(r"<<([^<>=]*)=([^<>]*)>>")
-# Unsigned on purpose: inside a calculator expression "16-4" the minus is the operator, and
-# a signed pattern would swallow it into "-4" and miss the operand. (Signed results such as
-# "<<5-8=-3>>" are rare in GSM8K-Aug and are simply not matched.)
-NUM_RE = re.compile(r"\d[\d,]*(?:\.\d+)?")
-SAFE_EXPR_RE = re.compile(r"^[\d\s.+\-*/()]+$")
 
 
 # ---- stats helpers (copied from scripts/decode_patch_codi.py, which can't be imported
@@ -63,97 +58,6 @@ def mcnemar_exact_p(b: int, c: int) -> float:
         return 1.0
     k = min(b, c)
     return min(1.0, 2 * sum(math.comb(n, i) for i in range(0, k + 1)) / (2 ** n))
-
-
-# ---- arithmetic-chain helpers --------------------------------------------------------------
-def num_equal(a: str | None, b: str | None) -> bool:
-    if a is None or b is None:
-        return False
-    a, b = a.strip().replace(",", ""), b.strip().replace(",", "")
-    try:
-        return float(a) == float(b)
-    except ValueError:
-        return a == b
-
-
-def fmt_num(x: float) -> str:
-    if abs(x - round(x)) < 1e-9:
-        return str(int(round(x)))
-    return f"{x:.6f}".rstrip("0").rstrip(".")
-
-
-def safe_eval(expr: str) -> float | None:
-    expr = expr.replace(",", "").strip()
-    if not expr or not SAFE_EXPR_RE.match(expr):
-        return None
-    try:
-        v = eval(expr, {"__builtins__": {}}, {})  # noqa: S307 -- whitelisted charset above
-    except Exception:  # noqa: BLE001 -- ZeroDivisionError, SyntaxError, ...
-        return None
-    return float(v) if isinstance(v, (int, float)) else None
-
-
-def operand_in(val: str, expr: str) -> bool:
-    return any(num_equal(m, val) for m in NUM_RE.findall(expr))
-
-
-def substitute(expr: str, mapping: dict[str, str]) -> str:
-    pieces = re.split(r"(\d[\d,]*(?:\.\d+)?)", expr)
-    out = []
-    for p in pieces:
-        rep = p
-        if p and NUM_RE.fullmatch(p):
-            for old, new in mapping.items():
-                if num_equal(p, old):
-                    rep = new
-                    break
-        out.append(rep)
-    return "".join(out)
-
-
-def parse_steps(text: str) -> list[dict]:
-    """`<<expr=val>>` steps in order, with the value's character span in `text`."""
-    steps = []
-    for m in STEP_RE.finditer(text):
-        raw_val = m.group(2)
-        lead = len(raw_val) - len(raw_val.lstrip())
-        val = raw_val.strip()
-        vs = m.start(2) + lead
-        steps.append({"expr": m.group(1).strip(), "val": val, "val_span": (vs, vs + len(val))})
-    return steps
-
-
-def reeval_chain(steps: list[dict], k: int, new_val: str) -> dict[int, str] | None:
-    """Substitute `new_val` for step k's result in the downstream expressions of a chain and
-    re-evaluate it forward, propagating any changed results. Returns {j: new result} for
-    j > k, or None if any downstream step can't be evaluated."""
-    mapping = {steps[k]["val"]: new_val}
-    results: dict[int, str] = {}
-    for j in range(k + 1, len(steps)):
-        r = safe_eval(substitute(steps[j]["expr"], mapping))
-        if r is None:
-            return None
-        r_str = fmt_num(r)
-        results[j] = r_str
-        if not num_equal(r_str, steps[j]["val"]) and steps[j]["val"] not in mapping:
-            mapping[steps[j]["val"]] = r_str
-    return results
-
-
-def counterfactual_answer(steps: list[dict], k: int, new_val: str, base_answer: str | None) -> str | None:
-    """The answer a faithful continuation would give if step k's result were `new_val`:
-    re-evaluate the chain and return the re-evaluated version of whichever downstream step
-    the baseline answer came from. None if undefined (answer isn't a downstream result, or
-    the chain can't be evaluated)."""
-    if base_answer is None:
-        return None
-    results = reeval_chain(steps, k, new_val)
-    if results is None:
-        return None
-    for j in range(len(steps) - 1, k, -1):
-        if num_equal(steps[j]["val"], base_answer):
-            return results[j]
-    return None
 
 
 # ---- tokenization bookkeeping ---------------------------------------------------------------

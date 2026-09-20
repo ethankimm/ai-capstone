@@ -137,3 +137,19 @@ equal the live-control's answer.
 - A "same-iteration, unrelated-example" control is cheap to add to `decode_patch_codi.py` if
   a reviewer wants the changed-rate contrast to isolate content; it would sit between the
   real patch and the live control by construction.
+
+## Metric B addendum (rescored 2026-09-19, `scripts/rescore_counterfactual.py`)
+
+See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measures Metric A (`answer_patched == donor.answer` -- already the case for this run except where noted); the table below adds Metric B (`matches_cf`): does the answer equal the counterfactual obtained by substituting the injected value into the RECIPIENT's own remaining chain and re-evaluating.
+
+### Step-aligned single-slot patch (n=227 focus-iter pairs)
+
+| group | n | n(cf defined) | matches_cf | 95% CI | |
+|---|---|---|---|---|
+| real donor | 227 | 69 | 0.000 | [0.000, 0.053] |
+| control: random example, random iter | 227 | 69 | 0.000 | [0.000, 0.053] |
+| control: random example, live iter | 227 | 69 | 0.000 | [0.000, 0.053] |
+
+- **real donor** taxonomy: unchanged 156, other_number 61, recipient_gold 8, recipient_intermediate 2
+- **control: random example, random iter** taxonomy: unchanged 161, other_number 58, recipient_gold 5, recipient_intermediate 3
+- **control: random example, live iter** taxonomy: unchanged 162, other_number 61, recipient_intermediate 3, recipient_gold 1

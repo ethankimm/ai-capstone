@@ -118,3 +118,27 @@ directions. No need for a full-scale (`--full_test True`) rerun of this script s
 pilot's n and the uniform near-zero effect across every iteration and both groups already give a
 clear qualitative answer; scale would mainly narrow CIs already resting on essentially 0/1-count
 data.
+
+## Metric B addendum (rescored 2026-09-19, `scripts/rescore_counterfactual.py`)
+
+See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measures Metric A (`answer_patched == donor.answer` -- already the case for this run except where noted); the table below adds Metric B (`matches_cf`): does the answer equal the counterfactual obtained by substituting the injected value into the RECIPIENT's own remaining chain and re-evaluating.
+
+### Raw single-slot patch, unaligned (n=360)
+
+| group | n | n(cf defined) | matches_cf | 95% CI | perm-null |
+|---|---|---|---|---|---|
+| iter 1 | 60 | 26 | 0.038 | [0.007, 0.189] | 0.068 |
+| iter 2 | 60 | 22 | 0.000 | [0.000, 0.149] | 0.015 |
+| iter 3 | 60 | 20 | 0.000 | [0.000, 0.161] | 0.034 |
+| iter 4 | 60 | 26 | 0.000 | [0.000, 0.129] | 0.004 |
+| iter 5 | 60 | 29 | 0.000 | [0.000, 0.117] | 0.028 |
+| iter 6 | 60 | 25 | 0.000 | [0.000, 0.133] | 0.000 |
+| total | 360 | 148 | 0.007 | [0.001, 0.037] | 0.024 |
+
+- **iter 1** taxonomy: other_number 29, unchanged 27, recipient_intermediate 2, counterfactual 1, donor_final 1
+- **iter 2** taxonomy: unchanged 34, other_number 25, recipient_gold 1
+- **iter 3** taxonomy: unchanged 33, other_number 24, recipient_intermediate 2, recipient_gold 1
+- **iter 4** taxonomy: unchanged 37, other_number 22, recipient_intermediate 1
+- **iter 5** taxonomy: unchanged 38, other_number 19, recipient_gold 2, recipient_intermediate 1
+- **iter 6** taxonomy: unchanged 35, other_number 21, recipient_gold 4
+- **total** taxonomy: unchanged 204, other_number 140, recipient_gold 8, recipient_intermediate 6, counterfactual 1, donor_final 1

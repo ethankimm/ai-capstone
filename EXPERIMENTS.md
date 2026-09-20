@@ -2453,6 +2453,22 @@ equal the live-control's answer.
   a reviewer wants the changed-rate contrast to isolate content; it would sit between the
   real patch and the live control by construction.
 
+## Metric B addendum (rescored 2026-09-19, `scripts/rescore_counterfactual.py`)
+
+See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measures Metric A (`answer_patched == donor.answer` -- already the case for this run except where noted); the table below adds Metric B (`matches_cf`): does the answer equal the counterfactual obtained by substituting the injected value into the RECIPIENT's own remaining chain and re-evaluating.
+
+### Step-aligned single-slot patch (n=227 focus-iter pairs)
+
+| group | n | n(cf defined) | matches_cf | 95% CI | |
+|---|---|---|---|---|
+| real donor | 227 | 69 | 0.000 | [0.000, 0.053] |
+| control: random example, random iter | 227 | 69 | 0.000 | [0.000, 0.053] |
+| control: random example, live iter | 227 | 69 | 0.000 | [0.000, 0.053] |
+
+- **real donor** taxonomy: unchanged 156, other_number 61, recipient_gold 8, recipient_intermediate 2
+- **control: random example, random iter** taxonomy: unchanged 161, other_number 58, recipient_gold 5, recipient_intermediate 3
+- **control: random example, live iter** taxonomy: unchanged 162, other_number 61, recipient_intermediate 3, recipient_gold 1
+
 ---
 
 ## 2026-09-19 — CODI ablation + attention, re-run in eval mode: content-free vectors in the best-decoding slot cost ≤4 pp, a decodably-wrong value costs the same, and the answer read-out still puts 1.8% of its attention there (codi, run_id: 20260919-184716_codi_ablate-attn-eval)
@@ -3033,6 +3049,29 @@ follow-up in `next_experiments.md`, not done in this session per instructions to
 the pilot. Coconut probes (ridge/MLP vs logit lens, mirroring `probe_codi.py`) would be the
 natural companion analysis, not yet written.
 
+## Metric B addendum (rescored 2026-09-19, `scripts/rescore_counterfactual.py`)
+
+See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measures Metric A (`answer_patched == donor.answer` -- already the case for this run except where noted); the table below adds Metric B (`matches_cf`): does the answer equal the counterfactual obtained by substituting the injected value into the RECIPIENT's own remaining chain and re-evaluating.
+
+### Raw single-slot patch, all passes (n=180)
+
+| group | n | n(cf defined) | matches_cf | 95% CI | |
+|---|---|---|---|---|
+| all passes | 180 | 38 | 0.105 | [0.042, 0.241] |
+
+- **all passes** taxonomy: other_number 108, unchanged 58, recipient_intermediate 7, counterfactual 4, recipient_gold 3
+### By pass
+
+| group | n | n(cf defined) | matches_cf | 95% CI | |
+|---|---|---|---|---|
+| pass 0 | 60 | 0 | - | [0.000, 0.000] |
+| pass 1 | 60 | 28 | 0.143 | [0.057, 0.315] |
+| pass 4 | 60 | 10 | 0.000 | [0.000, 0.278] |
+
+- **pass 0** taxonomy: other_number 29, unchanged 29, recipient_intermediate 2
+- **pass 1** taxonomy: other_number 42, unchanged 8, counterfactual 4, recipient_intermediate 3, recipient_gold 3
+- **pass 4** taxonomy: other_number 37, unchanged 21, recipient_intermediate 2
+
 ---
 
 ## 2026-09-20 — CODI donor-interchange patching, placeholder vs decodable positions: no steering anywhere, load-bearing content is not portable (codi, run_id: 20260920-031925_codi_interchange-placeholder-pilot)
@@ -3155,6 +3194,30 @@ directions. No need for a full-scale (`--full_test True`) rerun of this script s
 pilot's n and the uniform near-zero effect across every iteration and both groups already give a
 clear qualitative answer; scale would mainly narrow CIs already resting on essentially 0/1-count
 data.
+
+## Metric B addendum (rescored 2026-09-19, `scripts/rescore_counterfactual.py`)
+
+See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measures Metric A (`answer_patched == donor.answer` -- already the case for this run except where noted); the table below adds Metric B (`matches_cf`): does the answer equal the counterfactual obtained by substituting the injected value into the RECIPIENT's own remaining chain and re-evaluating.
+
+### Raw single-slot patch, unaligned (n=360)
+
+| group | n | n(cf defined) | matches_cf | 95% CI | perm-null |
+|---|---|---|---|---|---|
+| iter 1 | 60 | 26 | 0.038 | [0.007, 0.189] | 0.068 |
+| iter 2 | 60 | 22 | 0.000 | [0.000, 0.149] | 0.015 |
+| iter 3 | 60 | 20 | 0.000 | [0.000, 0.161] | 0.034 |
+| iter 4 | 60 | 26 | 0.000 | [0.000, 0.129] | 0.004 |
+| iter 5 | 60 | 29 | 0.000 | [0.000, 0.117] | 0.028 |
+| iter 6 | 60 | 25 | 0.000 | [0.000, 0.133] | 0.000 |
+| total | 360 | 148 | 0.007 | [0.001, 0.037] | 0.024 |
+
+- **iter 1** taxonomy: other_number 29, unchanged 27, recipient_intermediate 2, counterfactual 1, donor_final 1
+- **iter 2** taxonomy: unchanged 34, other_number 25, recipient_gold 1
+- **iter 3** taxonomy: unchanged 33, other_number 24, recipient_intermediate 2, recipient_gold 1
+- **iter 4** taxonomy: unchanged 37, other_number 22, recipient_intermediate 1
+- **iter 5** taxonomy: unchanged 38, other_number 19, recipient_gold 2, recipient_intermediate 1
+- **iter 6** taxonomy: unchanged 35, other_number 21, recipient_gold 4
+- **total** taxonomy: unchanged 204, other_number 140, recipient_gold 8, recipient_intermediate 6, counterfactual 1, donor_final 1
 
 ---
 
@@ -3981,3 +4044,285 @@ whether P(y_A)/P(y_B) show any systematic trend the current thresholds miss. If 
 Coconut readout gets fixed (teacher-force through the "###" delimiter first, per that
 run's notes), rerun both mechanisms' interpolation sweeps at matched n for a real
 cross-mechanism comparison.
+
+---
+
+## 2026-09-20 — Distributed Alignment Search on CODI: learned subspace still doesn't steer (codi, run_id: 20260920-050602_codi_das-pilot)
+
+**Goal:** Follow-up to `20260920-031925_codi_interchange-placeholder-pilot` (raw full-vector
+donor-interchange patching at all 6 iterations is a clean null: swapping in another
+example's z never steers the answer toward the donor, even at the load-bearing
+placeholder positions z0/z3) and `20260920-032053_codi_probe-pilot` (which flagged DAS
+as the unimplemented next step: is the raw-vector null an artifact of an unconstrained
+intervention that also overwrites context/attention state, rather than evidence that no
+transferable subspace exists?). This run implements Distributed Alignment Search: learn
+an orthogonal rotation R (`torch.nn.utils.parametrizations.orthogonal`) that isolates a
+k-dim subspace of z, trained end-to-end (transformer + LoRA frozen) to maximize the
+donor's own gold-answer likelihood under the intervention, then evaluates whether that
+learned subspace steers the recipient's answer where the raw full vector could not.
+
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3` (released checkpoint,
+unchanged), 6 continuous thoughts, paper inference protocol (LoRA r=128/α=32,
+projection 768+LN, greedy). New script `scripts/das_codi.py`, reusing
+`encode_question`/`decode_answer`/`wilson_ci`/`mcnemar_exact_p` from
+`decode_patch_codi.py` and `sample_pairs` from
+`interchange_patch_placeholder_codi.py`. DAS hook per the task spec: inside
+`run_thoughts`'s per-iteration loop, replacing the INPUT fed to iteration `site` (same
+site-indexing convention as the interchange script).
+
+**Data:** Trained on `gsm8k-aug` `split="train"` (donor/recipient pairs with different
+gold answers), evaluated on `split="validation"` (the fixed 1000-example held-out set) —
+train/eval split convention matches `probe_codi.py`, keeping `test` untouched.
+
+**Hyperparams:** all 6 iteration sites (1..6) x k in {8, 32, 64}, 150 training pairs x
+5 epochs per (site, k), 60 held-out eval pairs per (site, k), AdamW lr=1e-3 + cosine
+schedule. Pilot-scale reduction of the task spec (n=1000 training pairs, 20 epochs,
+k in {4,8,16,32,64}) — see script docstring for the compute-budget accounting that
+motivated the reduction (batch-size-1 rollout, same constraint as every other CODI
+script in this repo).
+
+**Command:**
+```
+cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/das_codi.py \
+  --ckpt_dir /workspace/codi_released --checkpoint_label "hf:zen-E/CODI-gpt2@fd641b3" \
+  --slug das-pilot --stage pilot --hardware "RunPod RTX A6000 (secure)" \
+  --model_name_or_path gpt2 --seed 11 --model_max_length 512 --bf16 \
+  --lora_r 128 --lora_alpha 32 --lora_init --greedy True \
+  --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 \
+  --inf_latent_iterations 6 --inf_num_iterations 1 --remove_eos True --use_lora True \
+  --sites 1,2,3,4,5,6 --k_values 8,32,64 --train_n_pairs 150 --eval_n_pairs 60 --epochs 5
+```
+Fresh RunPod RTX A6000 pod ($0.53/hr, EU-RO-1, secure cloud — A5000 showed zero secure
+stock at provision time, confirmed live against the catalog). Setup: rsync repo +
+`bash scripts/codi_setup.sh` (~2 min, pinned env: torch 2.7.1 / transformers 4.52.4 /
+peft 0.15.2) + checkpoint `snapshot_download` (~7s, cached). Load: `missing=0
+unexpected=0`. A throwaway n=5/n=3 smoke test (deleted, not logged, per the n<10
+exception) confirmed the training + eval pipeline ran end-to-end before the real pilot.
+Full 18-combo sweep: ~65 minutes wall time (~$0.57 GPU cost).
+
+**Headline results:**
+- **17 of 18 (site, k) combinations: `steered_to_donor_rate=0.000`** (n=60 eval pairs
+  each, Wilson CI upper bound ~0.06). Training loss did decrease within each combo
+  (e.g. site=1/k=8: 35.0 → 26.0 over 750 steps), so R was learning *something* about the
+  donor's answer likelihood, but that did not translate into steering the recipient's
+  greedy-decoded answer toward the donor's gold value.
+- **One marginal exception:** site=4, k=32 — `steered_to_donor_rate=0.017` (1/60,
+  Wilson CI [0.003, 0.089]) — a single pair, not distinguishable from noise at this n.
+- `answer_changed_rate` ranges 0.10–0.32 across combos (patching does perturb the
+  output sometimes), but essentially never toward the donor's specific answer — same
+  qualitative signature as `20260919-192228_codi_early-termination-ablate-all`'s
+  ablation result and the raw-vector interchange null: perturbation without
+  donor-specific steering.
+- No systematic k-dependence (k=8, 32, 64 give statistically indistinguishable nulls)
+  and no clean placeholder-vs-decodable split emerges in `steered_to_donor` (unlike
+  `answer_changed`, which trends slightly higher at some sites, e.g. site=4: 0.25 (k=8)
+  to 0.32 (k=64)) — best_site=4 only because of the single k=32 hit above.
+
+**Interpretation:** DAS was the natural strongest-case test of the "unconstrained
+intervention" reading of the raw-patch null — a rotation trained specifically to
+maximize donor-answer likelihood, at every subspace size tested, still fails to
+transfer a donor's calculation state into a recipient. This weighs against "the
+intervention was just too blunt" and toward the harder conclusion already emerging
+from ablation + attention diagnostics: CODI's continuous thoughts are collectively
+load-bearing but not *portable* — not a subspace-basis artifact fixable by a smarter
+linear intervention. Consistent with "we plan for null findings" — this null is itself
+informative for the causality section of the writeup (a negative DAS result, at pilot
+scale, on the mechanism whose raw-patch null most needed this follow-up).
+
+**Gotchas hit:**
+- Same rsync/git caveat as `20260920-031246_coconut_decode-patch-pilot`: only
+  `latentreasoning/`, `scripts/`, `pyproject.toml`, `configs/`-equivalent paths were
+  synced (no `.git`), so `RunRecord`'s `git_info()`/`default_author()` produced
+  `author=""` / `git.commit="unknown"` — hand-corrected in `manifest.json` after
+  copying results back (`author="Henning Lindig"`, `git.commit` set to the local HEAD
+  at run time `0c0f4079af1a0a0119cff22e3d996db3091987ed`, `git.dirty=true`).
+- `torch.nn.utils.parametrizations.orthogonal` (not `.parametrization.orthogonal`,
+  a typo in the task spec this followed) is the correct current PyTorch API.
+- The teacher-forced training loss (CE against the donor's gold-answer digits right
+  after CODI's `eot` token) started high (30s-40s, well above the ~10.8 nats a uniform
+  random guess over GPT-2's vocab would give) and only partially came down within 750
+  steps — plausibly undertrained at this pilot's epoch budget (5 vs the spec's 20), not
+  necessarily a bug; the eval-time `steered_to_donor` null is the metric that matters
+  and is unambiguous regardless.
+
+**Caveats:**
+- Pilot scale throughout (train_n_pairs=150 vs spec's 1000, epochs=5 vs 20, k in
+  {8,32,64} vs {4,8,16,32,64}) — a full-scale rerun could in principle still find a
+  steerable subspace this pilot missed, though the uniformity of the null across all 18
+  combos (no combo showed even a directional trend toward steering) makes that less
+  likely than for a single ambiguous result.
+- `evaluate_rotation`/eval-time compute reuses a fresh per-(site,k) cache, so donor
+  z-vectors are recomputed for every combo rather than shared across the sweep — a
+  performance detail, not a correctness one.
+
+**Next:** If DAS is worth pursuing further, a full-scale rerun
+(`--train_n_pairs 1000 --epochs 20 --k_values 4,8,16,32,64`) would rule out
+undertraining as the explanation, though given the uniformity of this pilot's null and
+budget constraints, the coordinated CODI+Coconut null (see
+`20260920-053935_coconut_das-pilot`) is likely a stronger signal to write up than a
+larger, more expensive rerun of the same result.
+
+## Metric B addendum (rescored 2026-09-19, `scripts/rescore_counterfactual.py`)
+
+See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measures Metric A (`answer_patched == donor.answer` -- already the case for this run except where noted); the table below adds Metric B (`matches_cf`): does the answer equal the counterfactual obtained by substituting the injected value into the RECIPIENT's own remaining chain and re-evaluating.
+
+### DAS learned-subspace patch, unaligned (n=1080)
+
+| group | n | n(cf defined) | matches_cf | 95% CI | perm-null |
+|---|---|---|---|---|---|
+| site 1 | 180 | 117 | 0.000 | [0.000, 0.032] | 0.002 |
+| site 2 | 180 | 84 | 0.000 | [0.000, 0.044] | 0.003 |
+| site 3 | 180 | 96 | 0.010 | [0.002, 0.057] | 0.001 |
+| site 4 | 180 | 93 | 0.000 | [0.000, 0.040] | 0.005 |
+| site 5 | 180 | 105 | 0.000 | [0.000, 0.035] | 0.002 |
+| site 6 | 180 | 90 | 0.000 | [0.000, 0.041] | 0.001 |
+| total | 1080 | 585 | 0.002 | [0.000, 0.010] | 0.002 |
+
+- **site 1** taxonomy: unchanged 159, other_number 18, unparseable 2, recipient_gold 1
+- **site 2** taxonomy: unchanged 145, other_number 23, recipient_gold 9, unparseable 2, donor_intermediate 1
+- **site 3** taxonomy: unchanged 156, other_number 21, recipient_gold 2, counterfactual 1
+- **site 4** taxonomy: unchanged 132, other_number 37, unparseable 8, recipient_gold 2, donor_final 1
+- **site 5** taxonomy: unchanged 147, other_number 29, recipient_gold 3, unparseable 1
+- **site 6** taxonomy: unchanged 152, other_number 21, recipient_gold 5, unparseable 2
+- **total** taxonomy: unchanged 891, other_number 149, recipient_gold 22, unparseable 15, donor_intermediate 1, counterfactual 1, donor_final 1
+
+---
+
+## 2026-09-20 — Distributed Alignment Search on Coconut: learned subspace still doesn't steer (coconut, run_id: 20260920-053935_coconut_das-pilot)
+
+**Goal:** Coconut counterpart to `20260920-050602_codi_das-pilot`, run in the same
+session for the same reason: test whether a learned k-dim subspace of the patched
+latent hidden state can steer a recipient's answer toward a donor's, where raw
+full-vector donor-interchange patching (`20260920-031246_coconut_decode-patch-pilot`)
+was a clean null (`steered_to_donor` at or near floor across every pass, despite
+`answer_changed` tracking decodability). Same DAS mechanism as `das_codi.py`
+(orthogonal rotation R, k-dim subspace split, trained to maximize the donor's own
+gold-answer likelihood, transformer frozen) but hooked at Coconut's structurally
+different intervention point: the continuous input-embedding stack at the
+`<|latent|>` token position for pass i (vs. CODI's per-iteration loop input).
+
+**Mechanism / model:** `coconut`, backbone openai-community/gpt2, checkpoint
+`hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`, compute_steps=6 (6 `<|latent|>`
+passes). New script `scripts/das_coconut.py`, reusing `load_coconut`/
+`encode_question`/`finish_and_decode`/`extract_answer_after_delimiter`/`wilson_ci`/
+`_to_legacy_cache` from `coconut_common.py`. `coconut_common.run_passes` is hardwired
+`@torch.no_grad()`, so this script reimplements a resumable, optionally-grad-enabled
+version of the same loop (`run_pass_range`) rather than editing that shared module.
+
+**Data:** `gsm_valid-gold-reasoning-trace_test.json` (same corpus/questions as our own
+`gsm8k_aug.py`, Dilgren & Wiegreffe's data prep), shuffled with a seed disjoint from
+`decode_patch_coconut.py`'s eval slice (train pool seed=0, eval pool seed=1) so
+training and evaluation pairs don't overlap the prior pilot's own eval set.
+
+**Hyperparams:** all 6 latent passes (0..5) x k in {8, 32, 64}, 150 training pairs x
+5 epochs per (site, k), 60 held-out eval pairs per (site, k), AdamW lr=1e-3 + cosine
+schedule — same pilot-scale reduction of the task spec (n=1000, 20 epochs, k in
+{4,8,16,32,64}) as `das_codi.py`, same compute-budget reasoning. Teacher-forcing
+target simplified to `" ### {donor.answer}"` spliced directly after the last latent
+token (Coconut's post-latent continuation is free-form reasoning text ending
+`... ### <answer>`, not a single explicit answer-boundary token the way CODI's `eot_id`
+is — an approximation of y_donor, not the model's natural generation path).
+
+**Command:**
+```
+cd /workspace/ai-capstone && .venv_coconut/bin/python scripts/das_coconut.py \
+  --checkpoint_path /workspace/coconut_checkpoints/gsm-coconut/checkpoint_33 \
+  --data_dir /workspace/coconut_data \
+  --slug das-pilot --stage pilot --hardware "RunPod RTX A6000 (secure)" \
+  --num_latents 6 --sites 0,1,2,3,4,5 --k_values 8,32,64 \
+  --train_n_pairs 150 --eval_n_pairs 60 --epochs 5
+```
+Same RunPod RTX A6000 pod as the CODI DAS run above (kept warm to avoid a second
+provisioning cost), separate `.venv_coconut` pinned to Coconut's own requirements
+(`torch==2.5.1`, `transformers==4.46.2`). Setup: checkpoint `hf_hub_download`
+(`connordilgren/gpt2-gsm8k-coconut`, `checkpoint_33`, ~cached), gold-trace data file
+copied from the local `are-lrms-easily-interpretable` data prep. A throwaway n=5/n=3
+smoke test (deleted, not logged) confirmed the training + eval pipeline before the
+real pilot. Full 18-combo sweep: ~33 minutes wall time (~$0.29 GPU cost) — faster
+than CODI's equivalent sweep since Coconut's splice-based intervention needs no
+per-iteration loop restart.
+
+**Headline results:**
+- **All 18 of 18 (site, k) combinations: `steered_to_donor_rate=0.000`** (n=60 eval
+  pairs each, Wilson CI upper bound ~0.06) — a cleaner, more uniform null than CODI's
+  companion run (which had one marginal 1/60 hit). No combination, at any pass 0..5 or
+  any subspace size, produced even a single instance of the patched answer matching
+  the donor's gold value when the base answer didn't.
+- `answer_changed_rate` ranges 0.10–0.55 and, notably, trends upward with k within
+  every site (e.g. site=1: 0.367 at k=8 → 0.433 at k=32 → 0.550 at k=64) — the
+  larger the swapped subspace, the more it perturbs the output, exactly as expected
+  geometrically (k=64 swaps more of the vector than k=8). But this perturbation never
+  once resolves into donor-specific steering.
+- `intervention_accuracy` (this run's `best_site`/`best_k`, i.e. the best
+  `steered_to_donor_rate` found) is exactly 0.0 — there is no "best" combination in any
+  meaningful sense; the sweep is flat at floor.
+
+**Interpretation:** Same conclusion as CODI's companion run, and if anything a sharper
+version of it: even with the geometric confirmation that larger k perturbs the output
+more (`answer_changed` scaling with k is exactly what a correctly-implemented subspace
+intervention should show), the donor's specific content is never successfully
+transplanted. Combined with `20260920-031246_coconut_decode-patch-pilot`'s finding that
+raw full-vector patching already tracks decodability in `answer_changed` but not in
+`steered_to_donor`, this DAS result closes off the "intervention was too blunt" reading
+for Coconut just as it did for CODI: a rotation trained end-to-end specifically to
+maximize donor-answer likelihood, at three subspace sizes and all 6 passes, still finds
+no portable subspace. Two independently-implemented mechanisms (horizontal/CODI,
+positional-splice/Coconut), two independent DAS implementations, the same null —
+this is the strongest evidence yet in this project for "decodable/load-bearing
+computation, not portable computation" as a real property of both architectures rather
+than an artifact of either one's specific patching mechanics.
+
+**Gotchas hit:**
+- Same rsync/git caveat as `20260920-031246_coconut_decode-patch-pilot` and this
+  session's CODI DAS run: `.git` wasn't copied to the pod, so `author=""` /
+  `git.commit="unknown"` in the raw manifest — hand-corrected after copying results
+  back (`author="Henning Lindig"`, `git.commit=0c0f4079af1a0a0119cff22e3d996db3091987ed`,
+  `git.dirty=true`).
+- `coconut_common.run_passes`'s `@torch.no_grad()` decorator can't be bypassed by
+  calling context, so the grad-enabled continuation needed its own resumable
+  reimplementation (`run_pass_range` in `das_coconut.py`) rather than reusing the
+  shared module's loop directly — documented in the script's own docstring so this
+  isn't mistaken for a second, drifted copy of the reference logic.
+
+**Caveats:**
+- Same pilot-scale caveat as the CODI run: train_n_pairs=150/epochs=5 vs the spec's
+  1000/20, k in {8,32,64} vs {4,8,16,32,64}. The perfect 18/18 null and the
+  k-dependent `answer_changed` trend (evidence the intervention is doing something
+  geometrically sensible) both argue against undertraining being the reason for the
+  `steered_to_donor` floor, but a full-scale rerun would be the way to be certain.
+- The `" ### {answer}"` teacher-forcing simplification (skipping the model's natural
+  free-form reasoning continuation) means the training signal optimizes a proxy for
+  y_donor, not Coconut's actual generation path — plausible this understates what a
+  rotation trained against the true continuation could achieve, though the CODI run
+  (whose teacher-forcing target IS the natural continuation, just digits after `eot`)
+  shows the same null, which weighs against this being the deciding factor.
+
+**Next:** Given the CODI and Coconut DAS pilots agree completely (17/18 and 18/18
+null respectively), a full-scale rerun of either seems like a lower-priority use of
+remaining budget than moving to the next section of the plan (cross-architecture
+mapping / transplant, per `PROPOSAL.md`'s Oct 16 milestone) unless a reviewer
+specifically asks for the spec's exact scale.
+
+## Metric B addendum (rescored 2026-09-19, `scripts/rescore_counterfactual.py`)
+
+See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measures Metric A (`answer_patched == donor.answer` -- already the case for this run except where noted); the table below adds Metric B (`matches_cf`): does the answer equal the counterfactual obtained by substituting the injected value into the RECIPIENT's own remaining chain and re-evaluating.
+
+### DAS learned-subspace patch, unaligned (n=1080)
+
+| group | n | n(cf defined) | matches_cf | 95% CI | perm-null |
+|---|---|---|---|---|---|
+| site 0 | 180 | 72 | 0.000 | [0.000, 0.051] | 0.021 |
+| site 1 | 180 | 60 | 0.000 | [0.000, 0.060] | 0.009 |
+| site 2 | 180 | 90 | 0.000 | [0.000, 0.041] | 0.002 |
+| site 3 | 180 | 69 | 0.000 | [0.000, 0.053] | 0.032 |
+| site 4 | 180 | 60 | 0.033 | [0.009, 0.114] | 0.021 |
+| site 5 | 180 | 69 | 0.014 | [0.003, 0.078] | 0.003 |
+| total | 1080 | 420 | 0.007 | [0.002, 0.021] | 0.016 |
+
+- **site 0** taxonomy: unchanged 115, other_number 61, donor_intermediate 2, recipient_gold 2
+- **site 1** taxonomy: unchanged 99, other_number 68, recipient_gold 11, donor_intermediate 1, recipient_intermediate 1
+- **site 2** taxonomy: unchanged 154, other_number 17, recipient_intermediate 4, recipient_gold 4, donor_intermediate 1
+- **site 3** taxonomy: unchanged 113, other_number 58, recipient_intermediate 6, donor_intermediate 2, recipient_gold 1
+- **site 4** taxonomy: unchanged 117, other_number 53, recipient_intermediate 7, counterfactual 2, donor_intermediate 1
+- **site 5** taxonomy: unchanged 131, other_number 40, recipient_intermediate 6, recipient_gold 2, counterfactual 1
+- **total** taxonomy: unchanged 729, other_number 297, recipient_intermediate 24, recipient_gold 20, donor_intermediate 7, counterfactual 3

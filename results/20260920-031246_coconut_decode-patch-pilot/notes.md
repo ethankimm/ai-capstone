@@ -104,3 +104,26 @@ paper-comparable accuracy number and larger patch-pair counts — flagged as a p
 follow-up in `next_experiments.md`, not done in this session per instructions to stop at
 the pilot. Coconut probes (ridge/MLP vs logit lens, mirroring `probe_codi.py`) would be the
 natural companion analysis, not yet written.
+
+## Metric B addendum (rescored 2026-09-19, `scripts/rescore_counterfactual.py`)
+
+See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measures Metric A (`answer_patched == donor.answer` -- already the case for this run except where noted); the table below adds Metric B (`matches_cf`): does the answer equal the counterfactual obtained by substituting the injected value into the RECIPIENT's own remaining chain and re-evaluating.
+
+### Raw single-slot patch, all passes (n=180)
+
+| group | n | n(cf defined) | matches_cf | 95% CI | |
+|---|---|---|---|---|
+| all passes | 180 | 38 | 0.105 | [0.042, 0.241] |
+
+- **all passes** taxonomy: other_number 108, unchanged 58, recipient_intermediate 7, counterfactual 4, recipient_gold 3
+### By pass
+
+| group | n | n(cf defined) | matches_cf | 95% CI | |
+|---|---|---|---|---|
+| pass 0 | 60 | 0 | - | [0.000, 0.000] |
+| pass 1 | 60 | 28 | 0.143 | [0.057, 0.315] |
+| pass 4 | 60 | 10 | 0.000 | [0.000, 0.278] |
+
+- **pass 0** taxonomy: other_number 29, unchanged 29, recipient_intermediate 2
+- **pass 1** taxonomy: other_number 42, unchanged 8, counterfactual 4, recipient_intermediate 3, recipient_gold 3
+- **pass 4** taxonomy: other_number 37, unchanged 21, recipient_intermediate 2

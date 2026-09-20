@@ -1,0 +1,365 @@
+{
+  "run_id": "20260920-053935_coconut_das-pilot",
+  "mechanism": "coconut",
+  "stage": "pilot",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 180,
+    "seed": 1
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "intervention_accuracy": 0.0,
+    "extra": {
+      "sweep": [
+        {
+          "site": 0,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.3,
+          "answer_changed_wilson_ci": [
+            0.19898010252726892,
+            0.42508946966390415
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 0,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.35,
+          "answer_changed_wilson_ci": [
+            0.24167601723815488,
+            0.4763761619052249
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 0,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.43333333333333335,
+          "answer_changed_wilson_ci": [
+            0.31572200394400635,
+            0.5589678534530513
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 1,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.36666666666666664,
+          "answer_changed_wilson_ci": [
+            0.2562073884620827,
+            0.4931723263320327
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 1,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.43333333333333335,
+          "answer_changed_wilson_ci": [
+            0.31572200394400635,
+            0.5589678534530513
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 1,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.55,
+          "answer_changed_wilson_ci": [
+            0.42491714548981496,
+            0.6690654614623918
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 2,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.1,
+          "answer_changed_wilson_ci": [
+            0.04664219945723587,
+            0.20149694492511044
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 2,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.16666666666666666,
+          "answer_changed_wilson_ci": [
+            0.09313077201321032,
+            0.28031851497207827
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 2,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.16666666666666666,
+          "answer_changed_wilson_ci": [
+            0.09313077201321032,
+            0.28031851497207827
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 3,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.3333333333333333,
+          "answer_changed_wilson_ci": [
+            0.2272909421592783,
+            0.459433701333366
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 3,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.38333333333333336,
+          "answer_changed_wilson_ci": [
+            0.2708808958488824,
+            0.5098263545959686
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 3,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.4,
+          "answer_changed_wilson_ci": [
+            0.28569303003765506,
+            0.5263417560579315
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 4,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.2833333333333333,
+          "answer_changed_wilson_ci": [
+            0.1850667860430859,
+            0.40767525049735165
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 4,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.36666666666666664,
+          "answer_changed_wilson_ci": [
+            0.2562073884620827,
+            0.4931723263320327
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 4,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.4,
+          "answer_changed_wilson_ci": [
+            0.28569303003765506,
+            0.5263417560579315
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 5,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.3,
+          "answer_changed_wilson_ci": [
+            0.19898010252726892,
+            0.42508946966390415
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 5,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.3,
+          "answer_changed_wilson_ci": [
+            0.19898010252726892,
+            0.42508946966390415
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 5,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.21666666666666667,
+          "answer_changed_wilson_ci": [
+            0.13122921046407016,
+            0.3362026834734252
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        }
+      ],
+      "best_site": 0,
+      "best_k": 8,
+      "sites": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "k_values": [
+        8,
+        32,
+        64
+      ],
+      "train_n_pairs": 150,
+      "eval_n_pairs": 60,
+      "epochs": 5,
+      "n_trainable_params_backbone": 124442112,
+      "teacher_forcing_target": "' ### {donor.answer}' spliced directly after the last latent token -- a simplification of y_donor, not the model's natural free-form reasoning continuation.",
+      "related_runs": [
+        "20260920-031246_coconut_decode-patch-pilot"
+      ],
+      "spec_scale_note": "pilot-scale reduction of the DAS spec (train_n=1000, epochs=20, k in {4,8,16,32,64}) -- see script docstring."
+    }
+  },
+  "hyperparams": {
+    "num_latents": 6,
+    "sites": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "k_values": [
+      8,
+      32,
+      64
+    ],
+    "train_n_pairs": 150,
+    "eval_n_pairs": 60,
+    "epochs": 5,
+    "lr": 0.001
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A6000 (secure) / NVIDIA RTX A6000",
+  "author": "Henning Lindig",
+  "notes": "Distributed Alignment Search on Coconut: learned orthogonal rotation R isolates a k-dim subspace of the spliced latent hidden state for donor-interchange patching at each pass 0..5, trained to maximize the donor's own gold-answer likelihood, evaluated for steered_to_donor / answer_changed across a k sweep -- Coconut counterpart to das_codi.py, same question: does a learned subspace succeed where raw full-vector interchange patching does not.",
+  "timestamp_utc": "2026-09-20T05:39:35.031097+00:00",
+  "git": {
+    "commit": "0c0f4079af1a0a0119cff22e3d996db3091987ed",
+    "dirty": true
+  }
+}

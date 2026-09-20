@@ -1,0 +1,562 @@
+{
+  "run_id": "20260920-050602_codi_das-pilot",
+  "mechanism": "codi",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "validation",
+    "n_examples": 200,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "intervention_accuracy": 0.016666666666666666,
+    "extra": {
+      "sweep": [
+        {
+          "site": 1,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.1,
+          "answer_changed_wilson_ci": [
+            0.04664219945723587,
+            0.20149694492511044
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 1,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.15,
+          "answer_changed_wilson_ci": [
+            0.08097349242295689,
+            0.26114825891159615
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 1,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.1,
+          "answer_changed_wilson_ci": [
+            0.04664219945723587,
+            0.20149694492511044
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 2,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.16666666666666666,
+          "answer_changed_wilson_ci": [
+            0.09313077201321032,
+            0.28031851497207827
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 2,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.16666666666666666,
+          "answer_changed_wilson_ci": [
+            0.09313077201321032,
+            0.28031851497207827
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 2,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.25,
+          "answer_changed_wilson_ci": [
+            0.1577638557841185,
+            0.372323109454848
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 3,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.11666666666666667,
+          "answer_changed_wilson_ci": [
+            0.05767647403450049,
+            0.2217902059985814
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 3,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.13333333333333333,
+          "answer_changed_wilson_ci": [
+            0.06914026978309641,
+            0.24165394590072103
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 3,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.15,
+          "answer_changed_wilson_ci": [
+            0.08097349242295689,
+            0.26114825891159615
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 4,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.25,
+          "answer_changed_wilson_ci": [
+            0.1577638557841185,
+            0.372323109454848
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 4,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.25,
+          "answer_changed_wilson_ci": [
+            0.1577638557841185,
+            0.372323109454848
+          ],
+          "steered_to_donor_rate": 0.016666666666666666,
+          "steered_to_donor_wilson_ci": [
+            0.002948083860873682,
+            0.08855338226779477
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 4,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.31666666666666665,
+          "answer_changed_wilson_ci": [
+            0.21305705841174333,
+            0.4423400494301654
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 5,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.2,
+          "answer_changed_wilson_ci": [
+            0.11828389736858964,
+            0.3178204609181701
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 5,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.16666666666666666,
+          "answer_changed_wilson_ci": [
+            0.09313077201321032,
+            0.28031851497207827
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 5,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.18333333333333332,
+          "answer_changed_wilson_ci": [
+            0.1055768903713613,
+            0.29919993226466285
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 6,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.11666666666666667,
+          "answer_changed_wilson_ci": [
+            0.05767647403450049,
+            0.2217902059985814
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 6,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.2,
+          "answer_changed_wilson_ci": [
+            0.11828389736858964,
+            0.3178204609181701
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 6,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.15,
+          "answer_changed_wilson_ci": [
+            0.08097349242295689,
+            0.26114825891159615
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        }
+      ],
+      "best_site": 4,
+      "best_k": 32,
+      "nondecodable_site_summaries": [
+        {
+          "site": 1,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.1,
+          "answer_changed_wilson_ci": [
+            0.04664219945723587,
+            0.20149694492511044
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 1,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.15,
+          "answer_changed_wilson_ci": [
+            0.08097349242295689,
+            0.26114825891159615
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 1,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.1,
+          "answer_changed_wilson_ci": [
+            0.04664219945723587,
+            0.20149694492511044
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 4,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.25,
+          "answer_changed_wilson_ci": [
+            0.1577638557841185,
+            0.372323109454848
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 4,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.25,
+          "answer_changed_wilson_ci": [
+            0.1577638557841185,
+            0.372323109454848
+          ],
+          "steered_to_donor_rate": 0.016666666666666666,
+          "steered_to_donor_wilson_ci": [
+            0.002948083860873682,
+            0.08855338226779477
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 4,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.31666666666666665,
+          "answer_changed_wilson_ci": [
+            0.21305705841174333,
+            0.4423400494301654
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        }
+      ],
+      "decodable_site_summaries": [
+        {
+          "site": 3,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.11666666666666667,
+          "answer_changed_wilson_ci": [
+            0.05767647403450049,
+            0.2217902059985814
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 3,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.13333333333333333,
+          "answer_changed_wilson_ci": [
+            0.06914026978309641,
+            0.24165394590072103
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 3,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.15,
+          "answer_changed_wilson_ci": [
+            0.08097349242295689,
+            0.26114825891159615
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 5,
+          "k": 8,
+          "n": 60,
+          "answer_changed_rate": 0.2,
+          "answer_changed_wilson_ci": [
+            0.11828389736858964,
+            0.3178204609181701
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 5,
+          "k": 32,
+          "n": 60,
+          "answer_changed_rate": 0.16666666666666666,
+          "answer_changed_wilson_ci": [
+            0.09313077201321032,
+            0.28031851497207827
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        },
+        {
+          "site": 5,
+          "k": 64,
+          "n": 60,
+          "answer_changed_rate": 0.18333333333333332,
+          "answer_changed_wilson_ci": [
+            0.1055768903713613,
+            0.29919993226466285
+          ],
+          "steered_to_donor_rate": 0.0,
+          "steered_to_donor_wilson_ci": [
+            0.0,
+            0.06017393047793289
+          ],
+          "n_steered_eligible": 60
+        }
+      ],
+      "sites": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "k_values": [
+        8,
+        32,
+        64
+      ],
+      "train_n_pairs": 150,
+      "eval_n_pairs": 60,
+      "epochs": 5,
+      "n_trainable_params_backbone": 144499200,
+      "related_runs": [
+        "20260920-031925_codi_interchange-placeholder-pilot",
+        "20260920-032053_codi_probe-pilot"
+      ],
+      "spec_scale_note": "pilot-scale reduction of the DAS spec (train_n=1000, epochs=20, k in {4,8,16,32,64}) -- see script docstring."
+    }
+  },
+  "hyperparams": {
+    "inf_latent_iterations": 6,
+    "num_latent": 6,
+    "sites": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "k_values": [
+      8,
+      32,
+      64
+    ],
+    "train_n_pairs": 150,
+    "eval_n_pairs": 60,
+    "epochs": 5,
+    "lr": 0.001
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A6000 (secure) / NVIDIA RTX A6000",
+  "author": "Henning Lindig",
+  "notes": "Distributed Alignment Search: learned orthogonal rotation R isolates a k-dim subspace of z for donor-interchange patching, trained to maximize the donor's own gold-answer likelihood, evaluated for steered_to_donor / answer_changed at every iteration site 1..6 across a k sweep -- tests whether a learned subspace succeeds where raw full-vector interchange patching (20260920-031925) was a clean null.",
+  "timestamp_utc": "2026-09-20T05:06:02.688911+00:00",
+  "git": {
+    "commit": "0c0f4079af1a0a0119cff22e3d996db3091987ed",
+    "dirty": true
+  }
+}

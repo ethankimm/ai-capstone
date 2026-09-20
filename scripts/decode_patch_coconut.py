@@ -68,6 +68,7 @@ from coconut_common import (  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
+from latentreasoning.eval.counterfactual import parse_steps, score_patch  # noqa: E402
 from latentreasoning.eval.metrics import is_correct  # noqa: E402
 from latentreasoning.mechanisms.coconut import name as mechanism_name  # noqa: E402
 from latentreasoning.runlog.manifest import DatasetInfo, ModelInfo, RunRecord, new_run_id  # noqa: E402
@@ -263,15 +264,30 @@ def main() -> None:
             donor_recs = get_pass_records(donor)
             donor_vec = donor_recs[target_pass]["live_hidden"]
             pred_patched, thoughts_patched = answer_for(recipient.question, override_at_pass={target_pass: donor_vec})
+            # `donor_val` (donor's INTERMEDIATE value at step s) was previously compared
+            # directly against the patched answer -- invalid: it asks the model to abandon
+            # its remaining steps and echo a scratchpad variable, not its own final answer
+            # (see steered_to_donor_audit.md #2.1). `score_patch`'s `matches_cf` is the
+            # correct question: does the patched answer equal what a faithful continuation
+            # of the RECIPIENT's own chain would give with step s's value replaced by the
+            # donor's.
             donor_val = parse_step_value(donor.steps[s - 1])
-            steered = None
-            if pred_base is not None and donor_val is not None:
-                steered = num_match([pred_patched] if pred_patched else [], donor_val) and not num_match([pred_base], donor_val)
+            recipient_chain = parse_steps(" ".join(recipient.steps))
+            recipient_values = [parse_step_value(st) for st in recipient.steps]
+            recipient_values = [v for v in recipient_values if v is not None]
+            donor_values = [v for v in (parse_step_value(st) for st in donor.steps) if v is not None]
+            scored = score_patch(
+                answer_base=pred_base, answer_patched=pred_patched,
+                recipient_gold=recipient.answer, donor_final=donor.answer,
+                recipient_chain=recipient_chain, donor_value=donor_val, step=s - 1,
+                recipient_values=recipient_values, donor_values=donor_values,
+            )
             single_records[target_pass].append({
                 "recipient_idx": recipient.idx, "donor_idx": donor.idx, "step": s,
                 "answer_base": pred_base, "answer_patched": pred_patched,
-                "answer_changed": pred_patched != pred_base,
-                "steered_to_donor": steered,
+                "donor_value_at_step": donor_val,
+                **scored,
+                "steered_to_donor": scored["matches_donor_final"],
             })
             n_done += 1
             if n_done % 50 == 0:
