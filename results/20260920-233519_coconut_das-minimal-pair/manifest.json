@@ -1,0 +1,225 @@
+{
+  "run_id": "20260920-233519_coconut_das-minimal-pair",
+  "mechanism": "coconut",
+  "stage": "pilot",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 500,
+    "seed": 1
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "intervention_accuracy": 0.5054945054945055,
+    "extra": {
+      "design": "E4: DAS on same-problem minimal-pair donors, joint multi-site rotation (steered_to_donor_audit.md #5, next_experiments.md pasted plan)",
+      "sweep": [
+        {
+          "group": [
+            1
+          ],
+          "group_label": "1",
+          "k": 8,
+          "n": 91,
+          "answer_changed_rate": 0.42857142857142855,
+          "answer_changed_wilson_ci": [
+            0.3318249800682115,
+            0.5311043673911313
+          ],
+          "matches_twin_rate": 0.24175824175824176,
+          "matches_twin_wilson_ci": [
+            0.16541685277480106,
+            0.33902001880897653
+          ]
+        },
+        {
+          "group": [
+            1
+          ],
+          "group_label": "1",
+          "k": 16,
+          "n": 91,
+          "answer_changed_rate": 0.6043956043956044,
+          "answer_changed_wilson_ci": [
+            0.5016642594838487,
+            0.6986697711524965
+          ],
+          "matches_twin_rate": 0.34065934065934067,
+          "matches_twin_wilson_ci": [
+            0.25151222788130057,
+            0.44271477798954106
+          ]
+        },
+        {
+          "group": [
+            1
+          ],
+          "group_label": "1",
+          "k": 32,
+          "n": 91,
+          "answer_changed_rate": 0.5164835164835165,
+          "answer_changed_wilson_ci": [
+            0.41523851975365456,
+            0.6163931692941895
+          ],
+          "matches_twin_rate": 0.27472527472527475,
+          "matches_twin_wilson_ci": [
+            0.19355049670786545,
+            0.3741497529716002
+          ]
+        },
+        {
+          "group": [
+            1
+          ],
+          "group_label": "1",
+          "k": 64,
+          "n": 91,
+          "answer_changed_rate": 0.5714285714285714,
+          "answer_changed_wilson_ci": [
+            0.4688956326088688,
+            0.6681750199317885
+          ],
+          "matches_twin_rate": 0.3076923076923077,
+          "matches_twin_wilson_ci": [
+            0.22226672658950442,
+            0.40869690118564916
+          ]
+        },
+        {
+          "group": [
+            1,
+            4
+          ],
+          "group_label": "1+4",
+          "k": 8,
+          "n": 91,
+          "answer_changed_rate": 0.5384615384615384,
+          "answer_changed_wilson_ci": [
+            0.4365598988443711,
+            0.6372473756005981
+          ],
+          "matches_twin_rate": 0.2967032967032967,
+          "matches_twin_wilson_ci": [
+            0.212633552714673,
+            0.39724228236191794
+          ]
+        },
+        {
+          "group": [
+            1,
+            4
+          ],
+          "group_label": "1+4",
+          "k": 16,
+          "n": 91,
+          "answer_changed_rate": 0.6373626373626373,
+          "answer_changed_wilson_ci": [
+            0.5348810130309676,
+            0.7287163957010656
+          ],
+          "matches_twin_rate": 0.42857142857142855,
+          "matches_twin_wilson_ci": [
+            0.3318249800682115,
+            0.5311043673911313
+          ]
+        },
+        {
+          "group": [
+            1,
+            4
+          ],
+          "group_label": "1+4",
+          "k": 32,
+          "n": 91,
+          "answer_changed_rate": 0.6703296703296703,
+          "answer_changed_wilson_ci": [
+            0.5685683540449548,
+            0.7582924327827664
+          ],
+          "matches_twin_rate": 0.43956043956043955,
+          "matches_twin_wilson_ci": [
+            0.3420866632494298,
+            0.5419304769084756
+          ]
+        },
+        {
+          "group": [
+            1,
+            4
+          ],
+          "group_label": "1+4",
+          "k": 64,
+          "n": 91,
+          "answer_changed_rate": 0.6813186813186813,
+          "answer_changed_wilson_ci": [
+            0.5799071714420602,
+            0.7680414080842238
+          ],
+          "matches_twin_rate": 0.5054945054945055,
+          "matches_twin_wilson_ci": [
+            0.40464797119502816,
+            0.6058959251542531
+          ]
+        }
+      ],
+      "best_group": "1+4",
+      "best_k": 64,
+      "site_groups": [
+        "1",
+        "1+4"
+      ],
+      "k_values": [
+        8,
+        16,
+        32,
+        64
+      ],
+      "train_n_pairs_requested": 200,
+      "train_n_pairs_actual": 200,
+      "eval_n_pairs_requested": 100,
+      "eval_n_pairs_actual": 91,
+      "train_base_accuracy": 0.3358458961474037,
+      "eval_base_accuracy": 0.318,
+      "epochs": 5,
+      "lr": 0.001,
+      "n_trainable_params_backbone": 124442112,
+      "teacher_forcing_target": "' ### {twin.answer}' spliced directly after the last latent token, same simplification as das_coconut.py.",
+      "related_runs": [
+        "20260920-195725_coconut_minimal-pair-patch",
+        "20260920-053935_coconut_das-pilot"
+      ]
+    }
+  },
+  "hyperparams": {
+    "num_latents": 6,
+    "site_groups": [
+      "1",
+      "1+4"
+    ],
+    "k_values": [
+      8,
+      16,
+      32,
+      64
+    ],
+    "train_n_pairs": 200,
+    "eval_n_pairs": 100,
+    "epochs": 5,
+    "lr": 0.001
+  },
+  "seed": 0,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "",
+  "notes": "E4: Distributed Alignment Search on same-problem minimal-pair donors for Coconut -- a shared learned orthogonal rotation R isolates a k-dim subspace, jointly patched across every pass in a group (pass-1-alone vs. joint {1,4}), trained to maximize the twin's own gold-answer likelihood. Tests whether E3(a)'s pass-1 48.6% and pass-4 28.6% minimal-pair signals are explained by a low-dimensional linear subspace.",
+  "timestamp_utc": "2026-09-20T23:35:19.510663+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}
