@@ -54,3 +54,6 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260920-233519_coconut_das-minimal-pair](20260920-233519_coconut_das-minimal-pair/) | coconut | openai-community/gpt2 | test (n=500) | 6 | - | 0 | pilot |  |
 | [20260920-235312_codi_das-minimal-pair](20260920-235312_codi_das-minimal-pair/) | codi | gpt2 | validation (n=800) | 6 | - | 0 | pilot |  |
 | [20260921-195626_coconut_das-minimal-pair-fullscale](20260921-195626_coconut_das-minimal-pair-fullscale/) | coconut | openai-community/gpt2 | test (n=500) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260923-044632_codi_decode-patch-full-eval-top10](20260923-044632_codi_decode-patch-full-eval-top10/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | None | full_run | Henning Lindig |
+| [20260923-044803_coconut_decode-patch-pilot-top10](20260923-044803_coconut_decode-patch-pilot-top10/) | coconut | openai-community/gpt2 | test (n=200) | 6 | 0.360 | 0 | pilot | Henning Lindig |
+| [20260923-052604_codi_decode-patch-full-eval-latent0](20260923-052604_codi_decode-patch-full-eval-latent0/) | codi | gpt2 | test (n=1319) | 6 | 0.415 | None | full_run | Henning Lindig |

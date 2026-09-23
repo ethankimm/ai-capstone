@@ -127,3 +127,42 @@ See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measure
 - **pass 0** taxonomy: other_number 29, unchanged 29, recipient_intermediate 2
 - **pass 1** taxonomy: other_number 42, unchanged 8, counterfactual 4, recipient_intermediate 3, recipient_gold 3
 - **pass 4** taxonomy: other_number 37, unchanged 21, recipient_intermediate 2
+
+## ANY-pass decodability addendum (rescored 2026-09-22, `scripts/rescore_any_iter_top5.py`)
+
+CODI counterpart of this addendum is on `20260919-184323_codi_decode-patch-full-eval`. Tests
+whether a gold step value appearing in ANY of the 6 passes' top-5 (not just the one
+`best_pass_for_step` assigns) recovers more of D&W's own Finding 2 (54-93%, their
+backtracking search over the full latent trace) than the matched-pass live read does. No new
+model run — recomputed locally from this run's own cached `predictions.jsonl` (`per_pass`
+top-1/top-5 already saved per example), same held-out half-B population (n=368 example-step
+pairs, n=103 examples) as the logged matched-pass number. `decode_patch_coconut.py` now also
+computes this metric by default for future runs.
+
+| | matched-pass (logged) | ANY-pass (this addendum) |
+|---|---|---|
+| top1 | 0.288 | **0.315** (116/368) |
+| top5 | 0.391 | **0.535** (197/368) |
+
+Paper-style breakdown (correct-only, by step count), ANY-pass top5 — no matched-pass
+equivalent was computed at decode time for this run, so this table is new, not a comparison:
+
+| steps | ANY-pass top5 | n |
+|---|---|---|
+| 1 | 1.000 | 2 |
+| 2 | 0.778 | 18 |
+| 3 | 0.286 | 7 |
+| 4 | 0.167 | 6 |
+| 5 | 0.000 | 1 |
+
+**Interpretation:** ANY-pass closes a meaningfully larger fraction of the gap to D&W's Finding
+2 than CODI's ANY-iteration addendum closes to Shen et al.'s Table 3 — top5 jumps from 39.1%
+to 53.5% overall, and the 1-/2-step buckets (77.8-100%) land inside D&W's own reported 54-93%
+range, though at very small n (2 and 18) so not something to lean on. This is consistent with
+D&W's own framing: their Finding 2 is a *search* over the full trace for the best-matching
+subsequence, and ANY-pass is a (much cheaper, still live-only) step toward that — it recovers
+some of what a naive matched-pass read misses, especially at low step counts, but still falls
+off sharply by 3+ steps and isn't the same measurement as their backtracking search.
+
+**Caveat:** same as the CODI addendum — this only revises the decodability side upward; it
+doesn't touch the causal-patching/faithfulness nulls logged elsewhere for Coconut.

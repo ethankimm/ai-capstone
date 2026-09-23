@@ -1,0 +1,349 @@
+{
+  "run_id": "20260923-044632_codi_decode-patch-full-eval-top10",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.41925701288855194,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "sec_per_example": 0.2001236229852531,
+    "decoding_accuracy": 0.18344308560677328,
+    "intervention_accuracy": 0.004405286343612335,
+    "extra": {
+      "held_out_split": true,
+      "half_a_n": 660,
+      "half_b_n": 659,
+      "decoding_accuracy_matched_top1": 0.18344308560677328,
+      "decoding_accuracy_matched_top1_wilson_ci": [
+        0.16756700349721834,
+        0.20046111652823326
+      ],
+      "decoding_accuracy_matched_top5": 0.26575729068673565,
+      "decoding_accuracy_matched_top10": 0.31890874882408277,
+      "decoding_accuracy_matched_n": 2126,
+      "decoding_matrix_top1_by_iter_step_FULL_POPULATION": {
+        "1": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "2": {
+          "1": 0.2237,
+          "2": 0.284,
+          "3": 0.0842,
+          "4": 0.0447,
+          "5": 0.0178,
+          "6": 0.023,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "3": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "4": {
+          "1": 0.2091,
+          "2": 0.1691,
+          "3": 0.116,
+          "4": 0.066,
+          "5": 0.0311,
+          "6": 0.023,
+          "7": 0.0333,
+          "8": 0.0
+        },
+        "5": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "6": {
+          "1": 0.2045,
+          "2": 0.1723,
+          "3": 0.1115,
+          "4": 0.0699,
+          "5": 0.0222,
+          "6": 0.0345,
+          "7": 0.0,
+          "8": 0.0
+        }
+      },
+      "decoding_matrix_top5_by_iter_step_FULL_POPULATION": {
+        "1": {
+          "1": 0.0023,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0044,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "2": {
+          "1": 0.309,
+          "2": 0.3625,
+          "3": 0.1593,
+          "4": 0.1165,
+          "5": 0.0711,
+          "6": 0.046,
+          "7": 0.0667,
+          "8": 0.0
+        },
+        "3": {
+          "1": 0.0008,
+          "2": 0.0008,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "4": {
+          "1": 0.2798,
+          "2": 0.2403,
+          "3": 0.1889,
+          "4": 0.1359,
+          "5": 0.1022,
+          "6": 0.046,
+          "7": 0.0333,
+          "8": 0.0
+        },
+        "5": {
+          "1": 0.0008,
+          "2": 0.0008,
+          "3": 0.0,
+          "4": 0.0019,
+          "5": 0.0044,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "6": {
+          "1": 0.2775,
+          "2": 0.2427,
+          "3": 0.1945,
+          "4": 0.1398,
+          "5": 0.1022,
+          "6": 0.0575,
+          "7": 0.0667,
+          "8": 0.0
+        }
+      },
+      "decoding_matrix_top10_by_iter_step_FULL_POPULATION": {
+        "1": {
+          "1": 0.0061,
+          "2": 0.0024,
+          "3": 0.0,
+          "4": 0.0019,
+          "5": 0.0089,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "2": {
+          "1": 0.3743,
+          "2": 0.3997,
+          "3": 0.2059,
+          "4": 0.1728,
+          "5": 0.1244,
+          "6": 0.069,
+          "7": 0.0667,
+          "8": 0.0
+        },
+        "3": {
+          "1": 0.0023,
+          "2": 0.0016,
+          "3": 0.0023,
+          "4": 0.0,
+          "5": 0.0044,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "4": {
+          "1": 0.3321,
+          "2": 0.2945,
+          "3": 0.2571,
+          "4": 0.1922,
+          "5": 0.1644,
+          "6": 0.092,
+          "7": 0.1,
+          "8": 0.2222
+        },
+        "5": {
+          "1": 0.0023,
+          "2": 0.004,
+          "3": 0.0011,
+          "4": 0.0039,
+          "5": 0.0044,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0
+        },
+        "6": {
+          "1": 0.3321,
+          "2": 0.301,
+          "3": 0.2537,
+          "4": 0.2058,
+          "5": 0.1511,
+          "6": 0.1264,
+          "7": 0.1333,
+          "8": 0.1111
+        }
+      },
+      "best_iter_for_step_fit_on_half_A": {
+        "1": 2,
+        "2": 2,
+        "3": 6,
+        "4": 6,
+        "5": 2,
+        "6": 2,
+        "7": 4,
+        "8": 1
+      },
+      "live_iterations": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "paper_style_metric_held_out_correct_only_by_step_count": {
+        "1": {
+          "value": 0.6666666666666666,
+          "n": 9
+        },
+        "2": {
+          "value": 0.06722689075630252,
+          "n": 119
+        },
+        "3": {
+          "value": 0.0,
+          "n": 81
+        }
+      },
+      "decoding_accuracy_any_iteration_top1": 0.23000940733772343,
+      "decoding_accuracy_any_iteration_top1_wilson_ci": [
+        0.21261673739753575,
+        0.2483760425350188
+      ],
+      "decoding_accuracy_any_iteration_top5": 0.33584195672624645,
+      "decoding_accuracy_any_iteration_top10": 0.409689557855127,
+      "decoding_accuracy_any_iteration_n": 2126,
+      "paper_style_metric_any_iteration_top5_by_step_count": {
+        "1": {
+          "value": 0.6666666666666666,
+          "n": 9
+        },
+        "2": {
+          "value": 0.13445378151260504,
+          "n": 119
+        },
+        "3": {
+          "value": 0.0,
+          "n": 81
+        }
+      },
+      "paper_style_metric_any_iteration_top10_by_step_count": {
+        "1": {
+          "value": 0.7777777777777778,
+          "n": 9
+        },
+        "2": {
+          "value": 0.16806722689075632,
+          "n": 119
+        },
+        "3": {
+          "value": 0.04938271604938271,
+          "n": 81
+        }
+      },
+      "train_baseline_mode_value": "20",
+      "train_baseline_mode_count": 1599,
+      "train_baseline_sample_n": 20000,
+      "train_baseline_rate_matched_population": 0.028222013170272814,
+      "patch_iter_focus": 2,
+      "patch_focus_frac_requested": 0.65,
+      "n_patch_pairs": 350,
+      "n_patch_pairs_focus": 227,
+      "n_patch_pairs_other": 123,
+      "answer_changed_by_patch": 0.4057142857142857,
+      "answer_changed_by_control_any": 0.31142857142857144,
+      "answer_changed_by_control_live": 0.38857142857142857,
+      "answer_changed_wilson_ci_patch": [
+        0.3555642881397077,
+        0.45791157224527795
+      ],
+      "answer_changed_wilson_ci_control_any": [
+        0.2651815539649461,
+        0.36177016680502555
+      ],
+      "answer_changed_wilson_ci_control_live": [
+        0.3389789230153728,
+        0.44058345743961036
+      ],
+      "mcnemar_patch_vs_control_any": {
+        "b": 74,
+        "c": 41,
+        "p_exact": 0.00268570100596285
+      },
+      "mcnemar_patch_vs_control_live": {
+        "b": 53,
+        "c": 47,
+        "p_exact": 0.617299413589252
+      },
+      "readout_moved_toward_donor_real": 0.004405286343612335,
+      "readout_moved_toward_donor_control_any": 0.015873015873015872,
+      "readout_moved_toward_donor_control_live": 0.04395604395604396,
+      "answer_changed_patch_focus_iter": 0.30837004405286345,
+      "answer_changed_control_any_focus_iter": 0.29515418502202645,
+      "answer_changed_patch_other_iters": 0.5853658536585366,
+      "answer_changed_control_any_other_iters": 0.34146341463414637,
+      "n_trainable_params": 20057088,
+      "pilot_run_id": "20260919-073312_codi_decode-patch-pilot"
+    }
+  },
+  "hyperparams": {
+    "inf_latent_iterations": 6,
+    "greedy": true,
+    "num_latent": 6,
+    "n_patch_pairs": 350,
+    "patch_iter_focus": 2,
+    "mapping_split": true
+  },
+  "seed": null,
+  "hardware": "RunPod RTX A5000 (secure) / NVIDIA RTX A5000",
+  "author": "Henning Lindig",
+  "notes": "CODI decoding (full test set, held-out mapping split) + causal patching (scaled, stratified, two control variants, McNemar + Wilson CIs). Follow-up to the pilot run. This run adds top-10 alongside top-1/top-5 and the ANY-iteration variant.",
+  "timestamp_utc": "2026-09-23T04:46:32.177329+00:00",
+  "git": {
+    "commit": "3b1e1ee282ef022f108a12ac31a5d29f0d10c127-dirty",
+    "dirty": true
+  }
+}

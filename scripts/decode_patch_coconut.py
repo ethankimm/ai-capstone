@@ -116,6 +116,7 @@ def load_examples(data_dir: str, full_test: bool, eval_n: int, eval_seed: int) -
 def build_matrix(decode_records: list[dict], n_passes: int, max_step: int):
     hits1 = {p: {s: [0, 0] for s in range(1, max_step + 1)} for p in range(n_passes)}
     hits5 = {p: {s: [0, 0] for s in range(1, max_step + 1)} for p in range(n_passes)}
+    hits10 = {p: {s: [0, 0] for s in range(1, max_step + 1)} for p in range(n_passes)}
     for r in decode_records:
         for s_idx, gold_val in enumerate(r["step_values"], start=1):
             if gold_val is None:
@@ -124,11 +125,14 @@ def build_matrix(decode_records: list[dict], n_passes: int, max_step: int):
                 p = pr["pass"]
                 hits1[p][s_idx][1] += 1
                 hits5[p][s_idx][1] += 1
+                hits10[p][s_idx][1] += 1
                 if num_match([pr["top1"]], gold_val):
                     hits1[p][s_idx][0] += 1
                 if num_match(pr["top5"], gold_val):
                     hits5[p][s_idx][0] += 1
-    return hits1, hits5
+                if num_match(pr["top10"], gold_val):
+                    hits10[p][s_idx][0] += 1
+    return hits1, hits5, hits10
 
 
 def rate(hits, p, s):
@@ -165,7 +169,8 @@ def main() -> None:
         for pr in pass_records:
             top1 = topk_token_strings(tokenizer, pr["logits"], 1)
             top5 = topk_token_strings(tokenizer, pr["logits"], 5)
-            per_pass.append({"pass": pr["pass"], "top1": top1[0], "top5": top5})
+            top10 = topk_token_strings(tokenizer, pr["logits"], 10)
+            per_pass.append({"pass": pr["pass"], "top1": top1[0], "top5": top5, "top10": top10})
         decode_records.append({
             "idx": ex.idx, "n_steps": len(step_values), "step_values": step_values,
             "gold_answer": ex.answer, "raw_output": raw_output, "predicted_answer": pred,
@@ -185,19 +190,46 @@ def main() -> None:
         half_a = half_b = decode_records
     max_step = max((r["n_steps"] for r in decode_records), default=0)
 
-    hits_a_1, hits_a_5 = build_matrix(half_a, ca.num_latents, max_step)
+    hits_a_1, hits_a_5, hits_a_10 = build_matrix(half_a, ca.num_latents, max_step)
     best_pass_for_step = {}
     for s in range(1, max_step + 1):
         best_pass_for_step[s] = max(range(ca.num_latents), key=lambda p: rate(hits_a_1, p, s))
     print(f"best_pass_for_step (fit on half A): {best_pass_for_step}")
 
-    hits_b_1, hits_b_5 = build_matrix(half_b, ca.num_latents, max_step)
+    hits_b_1, hits_b_5, hits_b_10 = build_matrix(half_b, ca.num_latents, max_step)
     matched_c1 = sum(hits_b_1[best_pass_for_step[s]][s][0] for s in best_pass_for_step)
     matched_n1 = sum(hits_b_1[best_pass_for_step[s]][s][1] for s in best_pass_for_step)
     matched_c5 = sum(hits_b_5[best_pass_for_step[s]][s][0] for s in best_pass_for_step)
+    matched_c10 = sum(hits_b_10[best_pass_for_step[s]][s][0] for s in best_pass_for_step)
     overall_matched_top1 = matched_c1 / matched_n1 if matched_n1 else 0.0
     overall_matched_top5 = matched_c5 / matched_n1 if matched_n1 else 0.0
-    print(f"HELD-OUT matched-pass top1={overall_matched_top1:.4f} top5={overall_matched_top5:.4f} n={matched_n1}")
+    overall_matched_top10 = matched_c10 / matched_n1 if matched_n1 else 0.0
+    print(f"HELD-OUT matched-pass top1={overall_matched_top1:.4f} top5={overall_matched_top5:.4f} "
+          f"top10={overall_matched_top10:.4f} n={matched_n1}")
+
+    # ---- ANY-pass variant: does the gold value appear in ANY of the 6 passes' top-k, not just
+    # the one `best_pass_for_step` assigns to that step? No dependence on the half-A mapping (no
+    # circularity), computed directly on the half-B population. CODI counterpart:
+    # `decode_patch_codi.py`'s ANY-ITERATION block, same rationale (Table-3-style reproduction
+    # gap hypothesis: a value not committing to one fixed "correct" pass/iteration per step).
+    def any_pass_hit(rec, gold_val, k):
+        field = {1: "top1", 5: "top5", 10: "top10"}[k]
+        return any(num_match(pr[field] if k > 1 else [pr[field]], gold_val) for pr in rec["per_pass"])
+
+    any_hit1 = any_hit5 = any_hit10 = any_n = 0
+    for r in half_b:
+        for gold_val in r["step_values"]:
+            any_n += 1
+            any_hit1 += any_pass_hit(r, gold_val, 1)
+            any_hit5 += any_pass_hit(r, gold_val, 5)
+            any_hit10 += any_pass_hit(r, gold_val, 10)
+    any_pass_top1 = any_hit1 / any_n if any_n else 0.0
+    any_pass_top5 = any_hit5 / any_n if any_n else 0.0
+    any_pass_top10 = any_hit10 / any_n if any_n else 0.0
+    any_pass_top1_ci = wilson_ci(any_hit1, any_n)
+    print(f"ANY-PASS top1={any_pass_top1:.4f} (95% CI {any_pass_top1_ci}) top5={any_pass_top5:.4f} "
+          f"top10={any_pass_top10:.4f}  n={any_n}"
+          f"  (vs. matched top1={overall_matched_top1:.4f} top5={overall_matched_top5:.4f} top10={overall_matched_top10:.4f})")
 
     # rank passes by their OWN unconditional top1 rate (avg over steps they were ever best at,
     # or simplest: avg top1 rate at step 1 -- the pass that's live earliest for every example)
@@ -364,6 +396,12 @@ def main() -> None:
             "held_out_split": ca.mapping_split, "half_a_n": len(half_a), "half_b_n": len(half_b),
             "decoding_accuracy_matched_top1": overall_matched_top1,
             "decoding_accuracy_matched_top5": overall_matched_top5,
+            "decoding_accuracy_matched_top10": overall_matched_top10,
+            "decoding_accuracy_any_pass_top1": any_pass_top1,
+            "decoding_accuracy_any_pass_top1_wilson_ci": list(any_pass_top1_ci),
+            "decoding_accuracy_any_pass_top5": any_pass_top5,
+            "decoding_accuracy_any_pass_top10": any_pass_top10,
+            "decoding_accuracy_any_pass_n": any_n,
             "best_pass_for_step_fit_on_half_A": best_pass_for_step,
             "pass_avg_top1_fit_on_half_A": pass_avg_top1,
             "most_decodable_passes": most_decodable, "least_decodable_passes": least_decodable,

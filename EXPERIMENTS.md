@@ -2469,6 +2469,48 @@ See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measure
 - **control: random example, random iter** taxonomy: unchanged 161, other_number 58, recipient_gold 5, recipient_intermediate 3
 - **control: random example, live iter** taxonomy: unchanged 162, other_number 61, recipient_intermediate 3, recipient_gold 1
 
+## ANY-iteration decodability addendum (rescored 2026-09-22, `scripts/rescore_any_iter_top5.py`)
+
+Tests the hypothesis flagged in this run's own "Next" section: the paper's Table-3 metric
+doesn't commit to one "correct" iteration per step the way `best_iter_for_step` does; a gold
+value appearing in ANY of the 6 iterations' top-5 (not just the mapped one) might close most
+of the reproduction gap. No new model run — recomputed locally from this run's own cached
+`predictions.jsonl` (`per_iter` top-1/top-5 were already saved per example), same held-out
+half-B population (n=2126 example-step pairs, n=659 examples) as the logged matched-iteration
+number, so it's directly comparable. `decode_patch_codi.py` now also computes this metric by
+default for future runs.
+
+| | matched-iteration (logged) | ANY-iteration (this addendum) |
+|---|---|---|
+| top1 | 0.1839 | **0.2281** (485/2126) |
+| top5 | 0.2658 | **0.3358** (714/2126) |
+
+Paper-style metric (Table 3, correct-only, by step count), matched-iteration vs. ANY-iteration:
+
+| steps | matched-iteration (logged) | ANY-iteration | paper (Shen et al.) |
+|---|---|---|---|
+| 1 | 0.667 (n=9) | 0.667 (n=9) | 0.971 |
+| 2 | 0.067 (n=119) | **0.126** (n=119) | 0.839 |
+| 3 | 0.000 (n=82) | 0.012 (n=82) | 0.750 |
+| 4 | — | 0.023 (n=43) | — |
+| 5 | — | 0.000 (n=8) | — |
+
+**Interpretation:** ANY-iteration decoding does surface real additional signal — top1/top5
+both rise (18.4%→22.8%, 26.6%→33.6%), and the 2-step paper-style bucket nearly doubles
+(6.7%→12.6%). But it does **not** close the reproduction gap to the paper's reported
+97.1%/83.9%/75.0% — every bucket is still far below the paper's numbers, and the 1-step bucket
+(the best-powered one at n=9) is completely unchanged, since it was already saturated under
+the matched mapping. The "not committing to one fixed iteration" hypothesis explains part of
+the gap, not most of it; the larger remaining gap is more likely n (paper evaluates on their
+full 1319-example test set with presumably far more 1/2/3-step examples than this 659-example
+half-B slice gives, esp. at n=8-9) and/or a genuinely different reading rule than "value in
+top-5 of a forward-pass logit lens" that Appendix E's case study doesn't fully specify.
+
+**Caveat:** this doesn't affect any of the causal-patching or faithfulness conclusions in this
+run or elsewhere in the repo — those are about whether a *specific* injected value propagates,
+which ANY-iteration doesn't touch. It only revises the decodability side of the story upward,
+modestly.
+
 ---
 
 ## 2026-09-19 — CODI ablation + attention, re-run in eval mode: content-free vectors in the best-decoding slot cost ≤4 pp, a decodably-wrong value costs the same, and the answer read-out still puts 1.8% of its attention there (codi, run_id: 20260919-184716_codi_ablate-attn-eval)
@@ -3071,6 +3113,45 @@ See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measure
 - **pass 0** taxonomy: other_number 29, unchanged 29, recipient_intermediate 2
 - **pass 1** taxonomy: other_number 42, unchanged 8, counterfactual 4, recipient_intermediate 3, recipient_gold 3
 - **pass 4** taxonomy: other_number 37, unchanged 21, recipient_intermediate 2
+
+## ANY-pass decodability addendum (rescored 2026-09-22, `scripts/rescore_any_iter_top5.py`)
+
+CODI counterpart of this addendum is on `20260919-184323_codi_decode-patch-full-eval`. Tests
+whether a gold step value appearing in ANY of the 6 passes' top-5 (not just the one
+`best_pass_for_step` assigns) recovers more of D&W's own Finding 2 (54-93%, their
+backtracking search over the full latent trace) than the matched-pass live read does. No new
+model run — recomputed locally from this run's own cached `predictions.jsonl` (`per_pass`
+top-1/top-5 already saved per example), same held-out half-B population (n=368 example-step
+pairs, n=103 examples) as the logged matched-pass number. `decode_patch_coconut.py` now also
+computes this metric by default for future runs.
+
+| | matched-pass (logged) | ANY-pass (this addendum) |
+|---|---|---|
+| top1 | 0.288 | **0.315** (116/368) |
+| top5 | 0.391 | **0.535** (197/368) |
+
+Paper-style breakdown (correct-only, by step count), ANY-pass top5 — no matched-pass
+equivalent was computed at decode time for this run, so this table is new, not a comparison:
+
+| steps | ANY-pass top5 | n |
+|---|---|---|
+| 1 | 1.000 | 2 |
+| 2 | 0.778 | 18 |
+| 3 | 0.286 | 7 |
+| 4 | 0.167 | 6 |
+| 5 | 0.000 | 1 |
+
+**Interpretation:** ANY-pass closes a meaningfully larger fraction of the gap to D&W's Finding
+2 than CODI's ANY-iteration addendum closes to Shen et al.'s Table 3 — top5 jumps from 39.1%
+to 53.5% overall, and the 1-/2-step buckets (77.8-100%) land inside D&W's own reported 54-93%
+range, though at very small n (2 and 18) so not something to lean on. This is consistent with
+D&W's own framing: their Finding 2 is a *search* over the full trace for the best-matching
+subsequence, and ANY-pass is a (much cheaper, still live-only) step toward that — it recovers
+some of what a naive matched-pass read misses, especially at low step counts, but still falls
+off sharply by 3+ steps and isn't the same measurement as their backtracking search.
+
+**Caveat:** same as the CODI addendum — this only revises the decodability side upward; it
+doesn't touch the causal-patching/faithfulness nulls logged elsewhere for Coconut.
 
 ---
 
@@ -5123,3 +5204,353 @@ gap is the robust finding here, not the exact saturation k.
 - Revisit whether the trained k=128 joint-{1,4} rotation's subspace overlaps with the
   continuous probe's recovered directions (`20260920-040411_coconut_probe-continuous-pilot`)
   — same "Next" item carried over from the pilot, still not done.
+
+---
+
+## 2026-09-23 — CODI decode+patch, top-10 added: closes some of the ANY-iteration gap, not the reproduction gap (codi, run_id: 20260923-044632_codi_decode-patch-full-eval-top10)
+
+**Goal:** Extend the ANY-iteration decodability addendum on `20260919-184323_codi_decode-patch-full-eval`
+(top1/top5 only, rescored locally from cached predictions) with top-10, which needed a fresh
+model pass since only top-1/top-5 token strings were cached at decode time -- top-10 candidates
+were never saved. Exact re-run of `20260919-184323`'s command (same checkpoint, same held-out
+split, same patch-pair selection seed) with `scripts/decode_patch_codi.py` extended to compute
+and cache `top10` alongside `top1`/`top5`, and both the matched-iteration and ANY-iteration
+metrics extended to report top-10.
+
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3` (released checkpoint),
+compute_steps=6, paper inference protocol (LoRA r=128/α=32, projection 768+LN, greedy,
+`model.eval()` fix in place).
+
+**Data:** gsm8k-aug test, all 1319 examples; half A (idx even, n=660) fits `best_iter_for_step`,
+half B (idx odd, n=659) is where every decoding number and patch pair comes from. Train-corpus
+baseline from 20,000 train examples. 350 patch pairs (227 focus iter 2, 123 other live iters),
+`random.Random(0)` -- identical pair selection to `20260919-184323`.
+
+**Command:**
+```
+cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/decode_patch_codi.py \
+  --ckpt_dir <hf cache path for zen-E/CODI-gpt2@fd641b3> --checkpoint_label "hf:zen-E/CODI-gpt2@fd641b3" \
+  --slug decode-patch-full-eval-top10 --stage full_run --hardware "RunPod RTX A5000 (secure)" \
+  --model_name_or_path gpt2 --seed 11 --model_max_length 512 --bf16 \
+  --lora_r 128 --lora_alpha 32 --lora_init --greedy True \
+  --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 \
+  --inf_latent_iterations 6 --inf_num_iterations 1 --remove_eos True --use_lora True \
+  --full_test True --mapping_split True --n_patch_pairs 350
+```
+Fresh RunPod RTX A5000 (secure, CA-MTL-1, $0.27/hr). CODI env via `codi_setup.sh` (~2 min).
+Decode pass 264s (n=1319) + patch sweep 350 pairs (~3 min). Total pod uptime including
+provisioning, both mechanisms' env setup (Coconut ran on the same pod, see its own run),
+checkpoint downloads, and result transfer back: ~14 min ≈ **$0.06**.
+
+**Headline results:** `final_answer_accuracy=0.419` (553/1319, matches `20260919-184323`
+exactly -- same checkpoint/protocol/seed, confirms this is a faithful re-run, not a new
+measurement).
+
+| | top1 | top5 | top10 |
+|---|---|---|---|
+| matched-iteration (held out, n=2126) | 0.1834 | 0.2658 | **0.3189** |
+| ANY-iteration (n=2126) | 0.2300 | 0.3358 | **0.4097** |
+
+Paper-style metric (Table 3, correct-only, by step count):
+
+| steps | matched-iter top5 | ANY-iter top5 | **ANY-iter top10** | paper (Shen et al.) |
+|---|---|---|---|---|
+| 1 (n=9) | 0.667 | 0.667 | **0.778** | 0.971 |
+| 2 (n=119) | 0.067 | 0.134 | **0.168** | 0.839 |
+| 3 (n=81) | 0.000 | 0.000 | **0.049** | 0.750 |
+
+Patch sweep numbers (answer-changed, McNemar, read-out tracking) match `20260919-184323`
+within sampling noise -- see that run's notes for the full causal-patching writeup; this run
+doesn't change any faithfulness conclusion, only decodability.
+
+**Interpretation:** Widening to top-10 continues the pattern from the top1/top5 ANY-iteration
+addendum: real additional signal, still nowhere near closing the reproduction gap. Top-10
+ANY-iteration roughly doubles top1 matched-iteration (18.3%→41.0% overall; individual buckets
+up to 0.778 at 1-step) but every step-count bucket stays well below Shen et al.'s reported
+97.1%/83.9%/75.0%, and the 3-step bucket -- completely flat at 0.000 under both top5 variants
+-- only breaks off the floor at top10 (0.049), still far below 0.750. Widening k recovers
+some of what a single-position, single-candidate read misses, but the shape of the gap
+(collapses fastest at higher step counts) is unchanged -- consistent with `next_experiments.md`'s
+existing read that the gap is more about population size (paper's full 1319-example test set
+vs. this run's ~9-81-example step-count buckets) and/or a different reading rule than about a
+top-k cutoff specifically.
+
+**Gotchas hit:**
+- None new in the run itself. Setup-side: the local repo had uncommitted changes to
+  `decode_patch_codi.py`/`decode_patch_coconut.py` (the top-10 addition) at the time this run
+  was launched -- the pod ran the *working-tree* version of the script, not a committed one.
+  `manifest.json`'s `git.commit` is recorded as `3b1e1ee2...-dirty` (the HEAD the working tree
+  was based on, with `dirty: true`) rather than a commit that actually contains these changes,
+  since that commit didn't exist yet at run time. The script diff that produced this run is the
+  one committed alongside this notes.md.
+- `manifest.json`'s `author` field was empty on save (pod's `git config user.name` unset, same
+  gap noted in earlier runs) -- filled by hand.
+
+**Caveats:** Same as `20260919-184323` (paper-style buckets small-n at n=9/119/81; single seed).
+The ANY-iteration/ANY-pass metrics specifically only test "does the value appear anywhere in
+top-k across all 6 positions" -- they say nothing about causal use (see that run's patch-sweep
+results for the faithfulness side, unchanged here).
+
+**Next:** This closes out the top-k side of the decodability reproduction-gap question at the
+current pair-selection/mapping design. If still worth chasing: the "correct-only, all-steps-in-top-k"
+metric is still bottlenecked by population size at 2-3+ steps (n=81-119) -- a fresh pull from
+the paper's own full 1319-example test set structure (not the held-out half-B slice) would be
+the next lever, separate from k.
+
+---
+
+## 2026-09-23 — Coconut decode+patch, top-10 added: ANY-pass top10 lands near D&W's Finding 2 range at low step counts (coconut, run_id: 20260923-044803_coconut_decode-patch-pilot-top10)
+
+**Goal:** Coconut counterpart to `20260923-044632_codi_decode-patch-full-eval-top10`. Extends
+the ANY-pass decodability addendum on `20260920-031246_coconut_decode-patch-pilot` (top1/top5
+only, rescored locally) with top-10, which needed a fresh model pass (top-10 candidates were
+never cached at decode time). Exact re-run of the original pilot's command (same checkpoint,
+same eval_n/seed, same pair design) with `scripts/decode_patch_coconut.py` extended to cache
+`top10` and report matched-pass/ANY-pass top-10 alongside top-1/top-5.
+
+**Mechanism / model:** `coconut`, backbone `openai-community/gpt2`, checkpoint
+`hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`, compute_steps=6.
+
+**Data:** `gsm_valid-gold-reasoning-trace_test.json` (Dilgren & Wiegreffe's data prep), n=200
+(shuffled, seed=0) -- identical slice to the original pilot.
+
+**Command:**
+```
+.venv_coconut/bin/python scripts/decode_patch_coconut.py \
+  --checkpoint_path <hf cache path for connordilgren/gpt2-gsm8k-coconut checkpoint_33> \
+  --data_dir /workspace/coconut_data \
+  --slug decode-patch-pilot-top10 --stage pilot --hardware "RunPod RTX A5000 (secure)" \
+  --num_latents 6 --full_test False --eval_n 200 --eval_seed 0 --n_patch_pairs 60 --n_grouped_pairs 100
+```
+Same pod as the CODI top-10 run above (RunPod RTX A5000, secure, CA-MTL-1, $0.27/hr), separate
+pinned venv (`torch==2.5.1`/`transformers==4.46.2`). Decode+patch pass: 10.6s decode + ~15s
+patch/grouped sweep -- Coconut's single-shared-forward-pass extraction is far cheaper than
+CODI's per-iteration loop, as in every prior run. Combined pod time for both mechanisms
+(provisioning, both env setups, checkpoint downloads, both runs, result transfer): ~14 min ≈
+**$0.06** total (not separately billed per mechanism).
+
+**Headline results:** `final_answer_accuracy=0.360` (matches the original pilot exactly --
+same checkpoint/data/seed, confirms a faithful re-run).
+
+| | top1 | top5 | top10 |
+|---|---|---|---|
+| matched-pass (held out, n=368) | 0.288 | 0.391 | **0.462** |
+| ANY-pass (n=368) | 0.315 | 0.535 | **0.630** |
+
+Paper-style breakdown (correct-only, by step count), ANY-pass top10 (new -- no matched-pass or
+top5 equivalent was computed at decode time for the original pilot, so only the top10 column
+is directly new; top5 values are from the local rescore addendum on the original pilot's notes):
+
+| steps | ANY-pass top5 (this run) | **ANY-pass top10** | n |
+|---|---|---|---|
+| 1 | 1.000 | **1.000** | 2 |
+| 2 | 0.778 | **0.889** | 18 |
+| 3 | 0.286 | **0.429** | 7 |
+| 4 | 0.167 | **0.500** | 6 |
+| 5 | 0.000 | **0.000** | 1 |
+
+(Recomputed locally from this run's cached `predictions.jsonl`, same method as
+`scripts/rescore_any_iter_top5.py`, extended to k=10 -- `decode_patch_coconut.py` doesn't print
+a by-step-count breakdown itself, only the overall ANY-pass top1/top5/top10 numbers above; those
+overall numbers were cross-checked against this same recomputation and match exactly, 0.315/0.535/0.630
+at n=368.)
+
+Single-slot / grouped patch numbers match the original pilot's `steered_to_donor` results
+exactly (same seed, same pairs) -- no new causal-patching finding here, see the original
+pilot's notes and its Metric B addendum (`steered_to_donor_audit.md`) for that side.
+
+**Interpretation:** Top-10 pushes ANY-pass decodability further into D&W's reported Finding-2
+range (54-93%) at low-to-mid step counts: 2-step 88.9% (inside the range), 4-step 50.0% (just
+below it), 3-step 42.9% (below it) -- though at small n (6-18). This is a
+bigger jump than CODI's top10 ANY-iteration widening (which stayed far below Shen et al.'s
+numbers even at top10) -- consistent with the qualitative story already established across
+these two mechanisms: Coconut's live per-pass read is closer to D&W's own search-based
+decodability than CODI's per-iteration read is to Shen et al.'s. Still not the same measurement
+as D&W's actual backtracking search (this is "in top-10 of a live vocabulary projection at any
+of 6 fixed passes", not "found anywhere in a searched subsequence"), and still small-n outside
+the 1-2 step buckets.
+
+**Gotchas hit:**
+- Same working-tree/commit caveat as the CODI top-10 run: `manifest.json`'s `git.commit` is
+  `3b1e1ee2...-dirty` (HEAD at run time, uncommitted top-10 script changes on top) rather than a
+  commit containing this run's actual code.
+- `manifest.json`'s `author` field was empty on save (pod git config unset) -- filled by hand.
+- None on the decode/patch side -- identical environment and checkpoint to the original pilot,
+  no new pinning issues.
+
+**Caveats:** Same as the original pilot (n=200 slice, single seed, step-count buckets small
+beyond 1-2 steps: n=2/18/7/6/1). ANY-pass says nothing about causal use -- see the original
+pilot's patch-sweep and its Metric B addendum for the faithfulness side, unchanged here.
+
+**Next:** Closes out the top-k side of the decodability question for Coconut at this data
+scale. A larger n (the full 1194-example gold-trace file, per `next_experiments.md`'s note on
+`decode_patch_coconut.py`'s ceiling) would tighten the 2-5 step buckets before reading too much
+into the 33-83% range above.
+
+---
+
+## 2026-09-23 — CODI decode+patch, latent-0 + checked-steps fix: reproduction gap to Shen et al. Table 3 closes to within ~6-12pp (codi, run_id: 20260923-052604_codi_decode-patch-full-eval-latent0)
+
+**Goal:** Combine two methodology fixes identified by re-reading the reference repo
+(`probe_latent_token.py`) against a real decoded-output dump, plus a paper text re-check
+(Shen et al., Sec 3.5), both flagged as likely explanations for the large gap between our
+CODI decodability numbers and the paper's reported Table 3 (97.1%/83.9%/75.0% for
+1/2/3-step problems):
+
+1. **Never-scored position ("latent 0").** The reference repo's own probe script scores 7
+   candidate positions per example: the pre-loop encode-pass hidden state ("latent 0",
+   `lm_head(latent_embd)` before the first loop iteration) plus the 6 loop outputs
+   ("latent 1"-"latent 6"). `decode_patch_codi.py`'s `run_thoughts()` computes this exact
+   pre-loop hidden state (it's what feeds iteration 1) but never captured its logits or
+   scored it -- only iterations 1-6 were ever candidates. Confirmed directly in code
+   (`run_thoughts`, line ~110-116 before this run's fix) and against a real decode dump
+   from the reference repo, where latent-0 is very often the first, cleanest hit for step 1.
+2. **Wrong step-count bucketing.** CODI's own paper excludes the final CoT step from
+   distillation supervision ("this behavior would undermine the quality of the target
+   hidden activations", Sec 3.5). Checking the reference dump: the final step's numeric
+   value essentially never appears among any of the 7 decoded positions, while non-final
+   steps often do. Strong evidence Table 3's "N-step" buckets count only *checked*
+   (non-final) steps, i.e. `total_steps - 1`, not the raw chain length -- and that scoring
+   the final step (which the model was never trained to represent there) was inflating our
+   denominator with an unwinnable case.
+
+Both were independently verified for free against already-cached predictions before
+spending any GPU time: the checked-steps rebucketing alone (no latent-0, rescored locally
+from `20260923-044632_codi_decode-patch-full-eval-top10`'s predictions.jsonl) took the
+"1 checked step" bucket from ~15-17% to **86.6%/87.4%** (top5/top10) -- right in the
+paper's range -- while "2 checked steps" stayed low (~8.6%/19.8%), a real but incomplete
+fix. This run adds latent-0 (which needed a fresh decode pass -- its logits were never
+cached) on top of that fix to get the combined number.
+
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3` (released checkpoint),
+compute_steps=6, paper inference protocol (LoRA r=128/α=32, projection 768+LN, greedy,
+`model.eval()` fix in place). `run_thoughts()` called with the new `include_latent0=True`
+flag (default False, every other caller/script unaffected -- see the flag's docstring for
+the positional-indexing hazard this guards against).
+
+**Data:** gsm8k-aug test, all 1319 examples; half A (idx even, n=660) fits
+`best_iter_for_step` (unaffected by latent-0 -- `build_matrix` explicitly skips iter-0
+entries so the matched-iteration mapping and `patch_iter_focus` selection stay defined
+over iterations 1-6 only, same as every prior run); half B (idx odd, n=659) is where every
+decoding number and patch pair comes from.
+
+**Command:**
+```
+cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/decode_patch_codi.py \
+  --ckpt_dir <hf cache path for zen-E/CODI-gpt2@fd641b3> --checkpoint_label "hf:zen-E/CODI-gpt2@fd641b3" \
+  --slug decode-patch-full-eval-latent0 --stage full_run --hardware "RunPod RTX A40 (secure)" \
+  --model_name_or_path gpt2 --seed 11 --model_max_length 512 --bf16 \
+  --lora_r 128 --lora_alpha 32 --lora_init --greedy True \
+  --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 \
+  --inf_latent_iterations 6 --inf_num_iterations 1 --remove_eos True --use_lora True \
+  --full_test True --mapping_split True --n_patch_pairs 350
+```
+Fresh RunPod RTX A40 (secure, EU-SE-1, $0.49/hr -- A5000 had zero secure stock at
+provisioning time). `codi_setup.sh` (~2 min) + checkpoint download (~3s). Decode pass
+283s (n=1319, includes the one extra logits capture per example for latent-0 --
+negligible added cost since it reuses the already-computed encode-pass forward output, no
+extra forward pass) + patch sweep ~5 min (350 pairs). Total pod uptime including
+provisioning, env setup, checkpoint download, and result transfer: ~14 min ≈ **$0.11**.
+
+**Headline results:** `final_answer_accuracy=0.415` (548/1319 -- within noise of
+`20260923-044632`'s 0.419 and the original `20260919-184323`'s 0.419; small run-to-run
+greedy-decode variation across different pods/GPUs, same as noted in that run's
+"sampling noise" caveat, not a regression).
+
+| | top1 | top5 | top10 |
+|---|---|---|---|
+| matched-iteration (iters 1-6 only, unaffected by latent-0) | 0.1849 | 0.2643 | 0.3184 |
+| **ANY-iteration incl. latent-0** (n=2126) | **0.3617** | **0.4694** | **0.5400** |
+
+ANY-iteration jumped sharply from the top10-only-1-6 run's 0.2300/0.3358/0.4097 (all
+iterations 1-6) to 0.3617/0.4694/0.5400 once latent-0 is included -- confirming it's a
+real, frequently-hit position, not a marginal one.
+
+**The combined-fix result** (checked steps = `n_steps - 1`, drop the final step's gold
+value, ANY-iteration including latent-0):
+
+| checked steps (→ total CoT length) | our top5 | our top10 | n | paper (Shen et al.) | gap (top10) |
+|---|---|---|---|---|---|
+| 1 (2-step CoT) | 0.891 | **0.908** | 119 | 0.971 | 6.3pp |
+| 2 (3-step CoT) | 0.750 | **0.8125** | 80 | 0.839 | 2.7pp |
+| 3 (4-step CoT) | 0.628 | **0.674** | 43 | 0.750 | 7.6pp |
+
+For comparison, the two unfixed/partially-fixed numbers on the exact same population:
+
+| checked steps | original (total-chain, matched-iter, top5) | ANY-iter incl. latent-0, raw total-chain bucketing | **combined fix (checked-steps + latent-0)** |
+|---|---|---|---|
+| "2-step" (raw) / 1 checked | 0.067 | 0.160 | **0.891 (top5) / 0.908 (top10)** |
+| "3-step" (raw) / 2 checked | 0.000 | 0.113 | **0.750 (top5) / 0.8125 (top10)** |
+
+**Interpretation:** The combined fix takes the reproduction gap from 55-84 percentage
+points (original matched-iteration, total-chain-length bucketing) down to **3-8 points**
+at top10, across all three checked-step buckets with usable n (43-119). This is
+substantially better than either fix alone -- checked-steps bucketing alone closed most of
+the 1-checked-step gap but left 2-checked-steps at ~20%; adding latent-0 on top brings
+2-checked-steps to 81% (vs. paper's 83.9%) and even gives 3-checked-steps a real number
+(67.4% vs. 75.0%) where before it was near-zero. **This substantially reverses the
+project's earlier "CODI decodability doesn't reproduce the paper" framing** -- the
+original claim was a real measurement, but of a different, harder, and not-quite-matching
+quantity (matched single-iteration read, full-chain-conjunction, final step included) than
+what Table 3 most likely reports. Once measured comparably, CODI's continuous thoughts are
+about as decodable as the paper claims.
+
+**What this does NOT change:** the causal-patching / faithfulness results elsewhere in the
+repo (`20260919-184323`, `20260920-190420` minimal-pair, `20260920-085206` qualified-patch,
+etc.) are untouched -- those test whether a *specific* injected value propagates, which
+latent-0 and the checked-steps bucketing don't bear on. This run's own patch-sweep numbers
+(focus-iter answer-changed 29.1% patch / 28.6% control, McNemar p=0.09 on the pooled
+n=350) are consistent with the prior full-eval run's null within sampling noise -- the
+faithfulness gap (decodable but not causally used) stands. **Decodability and
+faithfulness are now on much firmer, more paper-comparable footing simultaneously**: CODI
+is decodable close to the paper's own numbers, and still not shown to be causally faithful
+under patching.
+
+**Gotchas hit:**
+- `run_thoughts()`'s `records` list gets a `{"iter": 0, ...}` entry prepended when
+  `include_latent0=True`, which shifts every other entry's *position* in the list by one.
+  One pre-existing block in this same file (`paper_metric`, the original un-fixed
+  matched-iteration metric) indexed `per_iter` *positionally*
+  (`per_iter[best_iter_for_step[s] - 1]`) rather than by the `"iter"` key -- this would have
+  silently grabbed the wrong iteration's candidates once latent-0 shifted the list. Fixed
+  to look up by `"iter"` key before this run (the bug was dormant in every prior run, since
+  `include_latent0` defaults to `False` and was never set anywhere before this file's
+  change -- no previously-logged numbers are affected).
+- `build_matrix()` now explicitly skips any `"iter": 0` entry so the matched-iteration
+  mapping/`patch_iter_focus` selection stay restricted to loop iterations 1-6, unaffected
+  by latent-0 -- confirmed by `answer_changed_patch_focus_iter`/`patch_iter_focus=2`
+  matching the pattern of prior runs.
+- Working-tree/commit caveat, same as the top-10 runs: `manifest.json`'s `git.commit` is
+  `3b1e1ee2...-dirty` (HEAD the working tree was based on) since the latent-0/checked-steps
+  script changes weren't committed yet at run time.
+- `manifest.json`'s `author` field was empty on save (pod git config unset) -- filled by
+  hand.
+
+**Caveats:**
+- n=43 at "3 checked steps" (4-step CoT) is the smallest well-powered bucket here --
+  67.4%/75.0% is a real result but with wider uncertainty than the n=80/119 buckets.
+- The checked-steps hypothesis (final step excluded from Table 3's buckets) is inferred
+  from the paper's own distillation-supervision text plus the reference dump's pattern, not
+  from reading Shen et al.'s actual scoring code (not available) -- it fits the data
+  extremely well but isn't a first-party confirmation.
+- Single seed, greedy decode; `final_answer_accuracy` varies by ~1pp run-to-run across
+  different pods for reasons not fully pinned down (same GPU-nondeterminism caveat noted in
+  `20260919-184323`'s correction).
+- `decoding_matrix_*_FULL_POPULATION` in the manifest still only covers iterations 1-6 (not
+  latent-0) -- the full structural odd/even-iteration finding from earlier runs is
+  unaffected/unchanged by this addition.
+
+**Next:**
+- This is likely the number to cite for CODI decodability in the Oct 9 writeup, replacing
+  the flatter "far below the paper" framing from `20260919-184323`/`20260923-044632` --
+  cite both: the original/partial numbers as the record of what was measured and why it
+  looked worse, this run as the corrected comparison.
+- Worth checking whether Coconut's own D&W paper has an analogous excluded-final-step or
+  missing-candidate-position convention before assuming any of this generalizes --
+  `coconut_common.py`'s `run_passes` already scores a pass-0-equivalent position (Coconut's
+  splicing works differently, no missing pre-loop position there), and the final-step
+  exclusion rationale is specific to Shen et al.'s distillation training, not established
+  for D&W's Coconut training regime.
+- If the residual 3-8pp gaps are worth chasing further: try scoring against the paper's
+  presumably much larger n (their full 1319-example test set, not this run's ~660-example
+  held-out half) before reading the remaining gap as a real discrepancy.

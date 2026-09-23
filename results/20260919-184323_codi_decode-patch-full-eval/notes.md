@@ -153,3 +153,45 @@ See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measure
 - **real donor** taxonomy: unchanged 156, other_number 61, recipient_gold 8, recipient_intermediate 2
 - **control: random example, random iter** taxonomy: unchanged 161, other_number 58, recipient_gold 5, recipient_intermediate 3
 - **control: random example, live iter** taxonomy: unchanged 162, other_number 61, recipient_intermediate 3, recipient_gold 1
+
+## ANY-iteration decodability addendum (rescored 2026-09-22, `scripts/rescore_any_iter_top5.py`)
+
+Tests the hypothesis flagged in this run's own "Next" section: the paper's Table-3 metric
+doesn't commit to one "correct" iteration per step the way `best_iter_for_step` does; a gold
+value appearing in ANY of the 6 iterations' top-5 (not just the mapped one) might close most
+of the reproduction gap. No new model run — recomputed locally from this run's own cached
+`predictions.jsonl` (`per_iter` top-1/top-5 were already saved per example), same held-out
+half-B population (n=2126 example-step pairs, n=659 examples) as the logged matched-iteration
+number, so it's directly comparable. `decode_patch_codi.py` now also computes this metric by
+default for future runs.
+
+| | matched-iteration (logged) | ANY-iteration (this addendum) |
+|---|---|---|
+| top1 | 0.1839 | **0.2281** (485/2126) |
+| top5 | 0.2658 | **0.3358** (714/2126) |
+
+Paper-style metric (Table 3, correct-only, by step count), matched-iteration vs. ANY-iteration:
+
+| steps | matched-iteration (logged) | ANY-iteration | paper (Shen et al.) |
+|---|---|---|---|
+| 1 | 0.667 (n=9) | 0.667 (n=9) | 0.971 |
+| 2 | 0.067 (n=119) | **0.126** (n=119) | 0.839 |
+| 3 | 0.000 (n=82) | 0.012 (n=82) | 0.750 |
+| 4 | — | 0.023 (n=43) | — |
+| 5 | — | 0.000 (n=8) | — |
+
+**Interpretation:** ANY-iteration decoding does surface real additional signal — top1/top5
+both rise (18.4%→22.8%, 26.6%→33.6%), and the 2-step paper-style bucket nearly doubles
+(6.7%→12.6%). But it does **not** close the reproduction gap to the paper's reported
+97.1%/83.9%/75.0% — every bucket is still far below the paper's numbers, and the 1-step bucket
+(the best-powered one at n=9) is completely unchanged, since it was already saturated under
+the matched mapping. The "not committing to one fixed iteration" hypothesis explains part of
+the gap, not most of it; the larger remaining gap is more likely n (paper evaluates on their
+full 1319-example test set with presumably far more 1/2/3-step examples than this 659-example
+half-B slice gives, esp. at n=8-9) and/or a genuinely different reading rule than "value in
+top-5 of a forward-pass logit lens" that Appendix E's case study doesn't fully specify.
+
+**Caveat:** this doesn't affect any of the causal-patching or faithfulness conclusions in this
+run or elsewhere in the repo — those are about whether a *specific* injected value propagates,
+which ANY-iteration doesn't touch. It only revises the decodability side of the story upward,
+modestly.

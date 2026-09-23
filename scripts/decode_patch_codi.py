@@ -99,14 +99,23 @@ def encode_question(model, tokenizer, question: str, device: str):
 
 @torch.no_grad()
 def run_thoughts(model, tokenizer, question: str, device: str, n_iters: int,
-                  override_input_at: dict[int, torch.Tensor] | None = None):
+                  override_input_at: dict[int, torch.Tensor] | None = None,
+                  include_latent0: bool = False):
     """Encode `question`, run `n_iters` loop iterations (1-indexed: iter 1..n_iters).
     `override_input_at`: {iter_index: post_proj_tensor} -- if iter i is a key, the
     computed post-proj latent that would normally feed iteration i is replaced by the
     given tensor before running that iteration's forward pass (a causal patch).
     Returns (past_key_values, records, final_post_proj_latent_for_next_step).
     records[i-1] = {"iter": i, "logits": [vocab], "post": tensor} for the *output* of
-    iteration i (the i-th continuous thought z_i)."""
+    iteration i (the i-th continuous thought z_i) -- UNLESS `include_latent0=True`, in
+    which case an extra {"iter": 0, ...} record for the pre-loop encode-pass hidden
+    state (the value that feeds iteration 1, read out via the same lm_head projection,
+    no extra forward pass needed) is prepended, and every other record shifts by one
+    position -- so any caller relying on positional `records[i-1]` indexing rather than
+    filtering by `rec["iter"]` MUST NOT pass `include_latent0=True`. Default False keeps
+    every existing caller's behavior identical; only `decode_patch_codi.py`'s own decode
+    loop opts in (this is the reference repo's "latent 0" probe position, never scored
+    here before -- see `20260923-*` notes for why it matters for decodability)."""
     input_ids, attn = encode_question(model, tokenizer, question, device)
     outputs = model.codi(input_ids=input_ids, use_cache=True, output_hidden_states=True,
                           past_key_values=None, attention_mask=attn)
@@ -116,6 +125,9 @@ def run_thoughts(model, tokenizer, question: str, device: str, n_iters: int,
         latent = model.prj(latent)
 
     records = []
+    if include_latent0:
+        latent0_logits = outputs.logits[:, -1, :].float().cpu()
+        records.append({"iter": 0, "logits": latent0_logits, "post": latent})
     for it in range(1, n_iters + 1):
         feed = latent
         if override_input_at is not None and it in override_input_at:
@@ -203,20 +215,32 @@ def rate(hits: dict, it: int, s: int) -> float:
 
 
 def build_matrix(decode_records: list[dict], n_latents: int, max_step: int):
-    """Unconditional top1/top5 hit-count matrices over the given decode_records."""
+    """Unconditional top1/top5/top10 hit-count matrices over the given decode_records,
+    for iterations 1..n_latents only -- the matched-iteration mapping fit and
+    `patch_iter_focus` selection are defined over these 6 loop positions, unchanged by
+    `include_latent0`. A `per_iter` entry with `"iter": 0` (present when the decode loop
+    was run with `include_latent0=True`) is intentionally skipped here; it only feeds
+    the ANY-iteration metrics (`any_iter_hit` et al.), which iterate `per_iter` directly
+    and are not restricted to 1..n_latents."""
     hits1 = {i: {s: [0, 0] for s in range(1, max_step + 1)} for i in range(1, n_latents + 1)}
     hits5 = {i: {s: [0, 0] for s in range(1, max_step + 1)} for i in range(1, n_latents + 1)}
+    hits10 = {i: {s: [0, 0] for s in range(1, max_step + 1)} for i in range(1, n_latents + 1)}
     for r in decode_records:
         for s_idx, gold_val in enumerate(r["step_values"], start=1):
             for pi in r["per_iter"]:
                 it = pi["iter"]
+                if it == 0:
+                    continue
                 hits1[it][s_idx][1] += 1
                 hits5[it][s_idx][1] += 1
+                hits10[it][s_idx][1] += 1
                 if num_match([pi["top1"]], gold_val):
                     hits1[it][s_idx][0] += 1
                 if num_match(pi["top5"], gold_val):
                     hits5[it][s_idx][0] += 1
-    return hits1, hits5
+                if num_match(pi["top10"], gold_val):
+                    hits10[it][s_idx][0] += 1
+    return hits1, hits5, hits10
 
 
 def main() -> None:
@@ -244,7 +268,8 @@ def main() -> None:
     with out_dir_placeholder.open("w") as progress_f:
         for ex in examples:
             question = ex.question.strip().replace("  ", " ")
-            pkv, thoughts, latent = run_thoughts(model, tokenizer, question, device, n_latents)
+            pkv, thoughts, latent = run_thoughts(model, tokenizer, question, device, n_latents,
+                                                  include_latent0=True)
             raw_output = decode_answer(model, tokenizer, pkv, latent, device, dec_args.max_new_tokens)
             pred = extract_final_number(raw_output)
             correct = is_correct(pred, ex.answer)
@@ -254,7 +279,8 @@ def main() -> None:
                 logits = rec["logits"][0]
                 top1 = topk_token_strings(tokenizer, logits, 1)
                 top5 = topk_token_strings(tokenizer, logits, 5)
-                per_iter.append({"iter": rec["iter"], "top1": top1[0], "top5": top5})
+                top10 = topk_token_strings(tokenizer, logits, 10)
+                per_iter.append({"iter": rec["iter"], "top1": top1[0], "top5": top5, "top10": top10})
             rec_out = {
                 "idx": ex.idx, "n_steps": len(steps), "step_values": steps,
                 "gold_answer": ex.answer, "raw_output": raw_output, "predicted_answer": pred,
@@ -281,12 +307,13 @@ def main() -> None:
     max_step = max((r["n_steps"] for r in decode_records), default=0)
     # full-population matrix, for the descriptive structural finding (odd/even iterations) --
     # not used for any mapping fit or metric that gets compared against a baseline.
-    hits_full_1, hits_full_5 = build_matrix(decode_records, n_latents, max_step)
+    hits_full_1, hits_full_5, hits_full_10 = build_matrix(decode_records, n_latents, max_step)
     matrix_top1_full = {it: {s: round(rate(hits_full_1, it, s), 4) for s in range(1, max_step + 1)} for it in range(1, n_latents + 1)}
     matrix_top5_full = {it: {s: round(rate(hits_full_5, it, s), 4) for s in range(1, max_step + 1)} for it in range(1, n_latents + 1)}
+    matrix_top10_full = {it: {s: round(rate(hits_full_10, it, s), 4) for s in range(1, max_step + 1)} for it in range(1, n_latents + 1)}
 
     # fit on half A only
-    hits_a_1, hits_a_5 = build_matrix(half_a, n_latents, max_step)
+    hits_a_1, hits_a_5, hits_a_10 = build_matrix(half_a, n_latents, max_step)
     best_iter_for_step = {}
     for s in range(1, max_step + 1):
         best_it = max(range(1, n_latents + 1), key=lambda it: rate(hits_a_1, it, s))
@@ -299,15 +326,17 @@ def main() -> None:
     print(f"best_iter_for_step (fit on half A): {best_iter_for_step}, live_iterations={live_iterations}")
 
     # report on half B only, using half A's mapping
-    hits_b_1, hits_b_5 = build_matrix(half_b, n_latents, max_step)
+    hits_b_1, hits_b_5, hits_b_10 = build_matrix(half_b, n_latents, max_step)
     matched_c1 = sum(hits_b_1[best_iter_for_step[s]][s][0] for s in best_iter_for_step)
     matched_n1 = sum(hits_b_1[best_iter_for_step[s]][s][1] for s in best_iter_for_step)
     matched_c5 = sum(hits_b_5[best_iter_for_step[s]][s][0] for s in best_iter_for_step)
+    matched_c10 = sum(hits_b_10[best_iter_for_step[s]][s][0] for s in best_iter_for_step)
     overall_matched_top1 = matched_c1 / matched_n1 if matched_n1 else 0.0
     overall_matched_top5 = matched_c5 / matched_n1 if matched_n1 else 0.0
+    overall_matched_top10 = matched_c10 / matched_n1 if matched_n1 else 0.0
     matched_top1_ci = wilson_ci(matched_c1, matched_n1)
     print(f"HELD-OUT matched-iteration top1={overall_matched_top1:.4f} (95% CI {matched_top1_ci}) "
-          f"top5={overall_matched_top5:.4f}  n={matched_n1}")
+          f"top5={overall_matched_top5:.4f} top10={overall_matched_top10:.4f}  n={matched_n1}")
 
     # paper's own metric, correct-answers-only, on half B with half A's mapping
     paper_metric = {}
@@ -318,11 +347,82 @@ def main() -> None:
             continue
         hits = 0
         for r in subset:
-            all_hit = all(num_match(r["per_iter"][best_iter_for_step[s] - 1]["top5"], v)
-                           for s, v in enumerate(r["step_values"], start=1))
+            # look up by "iter" key, not position -- `per_iter[0]` is iter 0 (the
+            # pre-loop encode-pass readout) when this run's decode loop was called with
+            # `include_latent0=True`, not iter 1, so a positional `[best_iter_for_step[s] - 1]`
+            # index would silently grab the wrong iteration's candidates.
+            all_hit = all(
+                num_match(next(pi for pi in r["per_iter"] if pi["iter"] == best_iter_for_step[s])["top5"], v)
+                for s, v in enumerate(r["step_values"], start=1)
+            )
             hits += all_hit
         paper_metric[target_steps] = {"value": hits / len(subset), "n": len(subset)}
     print("paper-style metric (held-out, correct-only, all-steps-in-top5):", paper_metric)
+
+    # ---- ANY-iteration variant: does the gold value appear in ANY iteration's top-k, not just
+    # the one `best_iter_for_step` assigns to that step? Doesn't depend on the half-A mapping at
+    # all (no circularity), so it's computed on the same half-B population directly. Iterates
+    # `rec["per_iter"]` directly (not the 1..n_latents-only `build_matrix`), so when the decode
+    # loop below is called with `include_latent0=True` this automatically also covers iter 0
+    # (the pre-loop encode-pass readout, "latent 0" in the reference repo's own probe script --
+    # never scored here before this addition).
+    def any_iter_hit(rec, gold_val, k):
+        field = {1: "top1", 5: "top5", 10: "top10"}[k]
+        return any(num_match(pi[field] if k > 1 else [pi[field]], gold_val) for pi in rec["per_iter"])
+
+    any_hit1 = any_hit5 = any_hit10 = any_n = 0
+    for r in half_b:
+        for gold_val in r["step_values"]:
+            any_n += 1
+            any_hit1 += any_iter_hit(r, gold_val, 1)
+            any_hit5 += any_iter_hit(r, gold_val, 5)
+            any_hit10 += any_iter_hit(r, gold_val, 10)
+    any_iter_top1 = any_hit1 / any_n if any_n else 0.0
+    any_iter_top5 = any_hit5 / any_n if any_n else 0.0
+    any_iter_top10 = any_hit10 / any_n if any_n else 0.0
+    any_iter_top1_ci = wilson_ci(any_hit1, any_n)
+    print(f"ANY-ITERATION top1={any_iter_top1:.4f} (95% CI {any_iter_top1_ci}) top5={any_iter_top5:.4f} "
+          f"top10={any_iter_top10:.4f}  n={any_n}"
+          f"  (vs. matched top1={overall_matched_top1:.4f} top5={overall_matched_top5:.4f} top10={overall_matched_top10:.4f})")
+
+    any_iter_paper_metric = {}
+    any_iter_paper_metric_top10 = {}
+    for target_steps in (1, 2, 3):
+        subset = [r for r in half_b if r["correct"] and r["n_steps"] == target_steps]
+        if not subset:
+            any_iter_paper_metric[target_steps] = {"value": None, "n": 0}
+            any_iter_paper_metric_top10[target_steps] = {"value": None, "n": 0}
+            continue
+        hits5 = sum(all(any_iter_hit(r, v, 5) for v in r["step_values"]) for r in subset)
+        hits10 = sum(all(any_iter_hit(r, v, 10) for v in r["step_values"]) for r in subset)
+        any_iter_paper_metric[target_steps] = {"value": hits5 / len(subset), "n": len(subset)}
+        any_iter_paper_metric_top10[target_steps] = {"value": hits10 / len(subset), "n": len(subset)}
+    print("paper-style metric, ANY-ITERATION top5 (held-out, correct-only, all-steps-in-any-top5):",
+          any_iter_paper_metric)
+    print("paper-style metric, ANY-ITERATION top10:", any_iter_paper_metric_top10)
+
+    # ---- CHECKED-STEPS variant: CODI's own paper (Shen et al., Sec 3.5) excludes the final
+    # CoT step from distillation supervision ("this behavior would undermine the quality of
+    # the target hidden activations"), and Table 3's step-count buckets very likely count only
+    # those checked (non-final) steps, not the raw total chain length -- bucket by
+    # `n_steps - 1` and drop the final step's gold value before requiring all-hit, instead of
+    # requiring every value in the full chain including the one the model was never trained to
+    # represent. Combined with ANY-iteration (now including latent-0 above), this is the
+    # corrected reproduction of Table 3.
+    checked_paper_metric = {}
+    for checked_steps in (1, 2, 3):
+        subset = [r for r in half_b if r["correct"] and r["n_steps"] - 1 == checked_steps]
+        if not subset:
+            checked_paper_metric[checked_steps] = {"value_top5": None, "value_top10": None, "n": 0}
+            continue
+        vals_per_r = [r["step_values"][:-1] for r in subset]
+        hits5 = sum(all(any_iter_hit(r, v, 5) for v in vals) for r, vals in zip(subset, vals_per_r))
+        hits10 = sum(all(any_iter_hit(r, v, 10) for v in vals) for r, vals in zip(subset, vals_per_r))
+        checked_paper_metric[checked_steps] = {
+            "value_top5": hits5 / len(subset), "value_top10": hits10 / len(subset), "n": len(subset),
+        }
+    print("paper-style metric, CHECKED STEPS (n_steps-1, drop final step) x ANY-iteration incl. latent-0:",
+          checked_paper_metric)
 
     # ---- train-corpus baseline (mirrors recurrent_depth's "most common step value in train") --
     train_sample = load_gsm8k_aug(split="train", n=dec_args.train_baseline_n, seed=0)
@@ -525,12 +625,23 @@ def main() -> None:
             "decoding_accuracy_matched_top1": overall_matched_top1,
             "decoding_accuracy_matched_top1_wilson_ci": list(matched_top1_ci),
             "decoding_accuracy_matched_top5": overall_matched_top5,
+            "decoding_accuracy_matched_top10": overall_matched_top10,
             "decoding_accuracy_matched_n": matched_n1,
             "decoding_matrix_top1_by_iter_step_FULL_POPULATION": matrix_top1_full,
             "decoding_matrix_top5_by_iter_step_FULL_POPULATION": matrix_top5_full,
+            "decoding_matrix_top10_by_iter_step_FULL_POPULATION": matrix_top10_full,
             "best_iter_for_step_fit_on_half_A": best_iter_for_step,
             "live_iterations": live_iterations,
             "paper_style_metric_held_out_correct_only_by_step_count": paper_metric,
+            "decoding_accuracy_any_iteration_top1": any_iter_top1,
+            "decoding_accuracy_any_iteration_top1_wilson_ci": list(any_iter_top1_ci),
+            "decoding_accuracy_any_iteration_top5": any_iter_top5,
+            "decoding_accuracy_any_iteration_top10": any_iter_top10,
+            "decoding_accuracy_any_iteration_n": any_n,
+            "paper_style_metric_any_iteration_top5_by_step_count": any_iter_paper_metric,
+            "paper_style_metric_any_iteration_top10_by_step_count": any_iter_paper_metric_top10,
+            "decode_loop_includes_latent0": True,
+            "paper_style_metric_checked_steps_n_minus_1_drop_final_any_iteration": checked_paper_metric,
             "train_baseline_mode_value": mode_value,
             "train_baseline_mode_count": mode_count,
             "train_baseline_sample_n": len(train_sample),
