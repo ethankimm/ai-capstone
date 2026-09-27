@@ -6544,3 +6544,362 @@ pairs (validation n=800, acc 0.791).
 **Caveats:** n=100 (±~9 pp at 0.7); one seed; the untrained references use one random rotation per k.
 **Next:** Read out the learned 16-dim subspace (does its projection linearly decode the step value? does it
 align with the P4 cross-mechanism map?).
+
+---
+
+## 2026-09-27 — E4 rerun that saves the rotations, Coconut passes 1+4: k=16 steers 63%, k=32 65% (raw swap 75%, untrained 0%) — replicates the fixed E4 (coconut, run_id: 20260927-182915_coconut_das-minimal-pair-saverot)
+
+**Goal:** As `20260927-184022_codi_das-minimal-pair-saverot`: `20260927-084449_coconut_das-minimal-pair-fixed`
+did not save its rotations. Retrain the passes 1+4 group at k=16/32 with `--save_rotations`.
+**Mechanism / model:** `coconut`, gpt2 / `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`, model frozen.
+**Data / hyperparams:** identical to `20260927-084449` (200 train pairs from `gsm_original_train.json` n=2500,
+acc 0.921; 100 eval pairs from `gsm_original_valid.json` n=500, acc 0.366; lr 1e-3, 5 epochs).
+**Command:** `das_minimal_pair_coconut.py --checkpoint_path .../checkpoint_33 --data_dir /workspace/coconut_data
+--slug das-minimal-pair-saverot --stage full_run --site_groups "1,4" --k_values 16,32 --train_n_pairs 200
+--eval_n_pairs 100 --epochs 5 --save_rotations /workspace/rotations/coconut`. Pod `ft7u4einf6ci9s`
+(RTX A5000 secure), 9 min sharing the GPU.
+**Headline results** (n=100, matches_twin): k=16 **0.63**, k=32 **0.65**; raw full-vector swap 0.75;
+untrained 0.00 at both k.
+**Interpretation:** Replicates E4 (previous: k=16 0.61, k=32 0.67, raw 0.75).
+**Artifacts:** `rot_1+4_k16.pt`, `rot_1+4_k32.pt` at `~/Documents/Penn/CIS5980/xmech_artifacts/rotations/coconut/`.
+**Caveats:** n=100; the eval base accuracy (0.366) is on the valid file, as before.
+**Next:** `20260927-185326_coconut_das-subspace-probe` and the xmech-subspace transplants.
+
+---
+
+## 2026-09-27 — E4 rerun that saves the rotations, CODI z0+z2+z4: k=16 steers 63%, k=32 69% (raw swap 82%, untrained 0%) — replicates the fixed E4 (codi, run_id: 20260927-184022_codi_das-minimal-pair-saverot)
+
+**Goal:** `20260927-094215_codi_das-minimal-pair-fixed` did not save its learned rotations, and the two
+follow-ups need them (DAS-subspace decoding, P4 restricted to the value subspace). Retrain the z0+z2+z4
+group at k=16 and k=32 with `--save_rotations`; the eval doubles as a second training run of E4.
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3`, aligned sites, transformer + LoRA frozen.
+**Data / hyperparams:** identical to `20260927-094215` (200 train pairs from gsm8k-aug train n=2500, 100 eval
+pairs from validation n=800; lr 1e-3, 5 epochs, cosine; same seeds). Train acc 0.790, eval acc 0.789.
+**Command:** `das_minimal_pair_codi.py $CODI_FLAGS --slug das-minimal-pair-saverot --stage full_run
+--site_groups "0,2,4" --k_values 16,32 --train_n_pairs 200 --eval_n_pairs 100 --epochs 5
+--save_rotations /workspace/rotations/codi` (full line in `eval_command.txt`). Pod `ft7u4einf6ci9s`
+(RTX A5000 secure, $0.27/hr), 14 min sharing the GPU with 3 other jobs.
+**Headline results** (n=100, matches_twin): k=16 **0.63**, k=32 **0.69**; raw full-vector swap 0.82;
+untrained random rotation 0.00 at k=16 and k=32.
+**Interpretation:** Replicates E4 within noise (previous run: k=16 0.70, k=32 0.72, raw 0.83; ±9 pp at n=100).
+The trained rotation, not the patch size, carries the effect (untrained 0.00).
+**Artifacts:** `rot_0+2+4_k16.pt`, `rot_0+2+4_k32.pt` ({"W": 768×768, "k", "group"}; the subspace is the first
+k rows of W), kept outside the repo at `~/Documents/Penn/CIS5980/xmech_artifacts/rotations/codi/`.
+**Caveats:** Training is not bit-deterministic across runs (0.70 → 0.63 at k=16 with the same seeds).
+**Next:** `20260927-185312_codi_das-subspace-probe` (decoding) and the xmech-subspace transplants.
+
+---
+
+## 2026-09-27 — Does CODI's learned 16-dim DAS subspace decode the step values? No better than a random 16-dim subspace: CODI stores the value redundantly across the vector (codi, run_id: 20260927-185312_codi_das-subspace-probe)
+
+**Goal:** Round-3 follow-up to E4. A learned 16-dim rotation of z0/z2/z4 steers 63–70% of minimal pairs
+(`20260927-094215`, rerun `20260927-184022`). Does that subspace also linearly or otherwise *decode* the
+step values, and does it do so better than a random 16-dim subspace?
+**Design** (`scripts/das_subspace_probe.py`, model-free, local CPU): features from the P4 latent dumps
+(`xmech_codi.py --mode dump`, 9319 questions): fit = 8000 GSM8K-Aug train questions, eval = the test set,
+model-correct examples only (fit n=6301 / eval n=548 for step 0). Rotation = `rot_0+2+4_k16.pt` from
+`20260927-184022_codi_das-minimal-pair-saverot`. Readouts per rationale step j: ridge on signed-log1p value
+(R², tol5, exact), **knn_exact** (nearest fit example's step value is the same; standardized Euclidean),
+**last_digit** (linear softmax on the last integer digit; majority baseline 0.43/0.42/0.37).
+Feature sets: DAS coordinates (all 3 sites, 48 dims; per site 16), random 16-dim subspaces (mean of 5
+draws for the 3-site set; one draw per single site), the 752-dim complement, full vectors.
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3`, 6 latents, aligned sites.
+**Command:** `uv run python scripts/das_subspace_probe.py --questions xmech_questions.jsonl --codi_latents
+codi_latents.pt --coconut_latents coconut_latents.pt --codi_rotation rotations/codi/rot_0+2+4_k16.pt
+--coconut_rotation rotations/coconut/rot_1+4_k16.pt --stage full_run` (inputs kept outside the repo at
+`~/Documents/Penn/CIS5980/xmech_artifacts/`, ~350 MB). One invocation writes this and the Coconut record.
+**Headline results** (eval split):
+
+| feature (dims) | step 0 knn / digit | step 1 knn / digit | step 0 ridge R² |
+|---|---|---|---|
+| DAS z0+z2+z4 (48) | 0.54 / 0.72 | 0.20 / 0.54 | 0.10 |
+| random 3×16 (48) | 0.54 / 0.68 | 0.22 / 0.54 | 0.44 |
+| complement (2256) | 0.57 / 0.76 | 0.23 / 0.53 | 0.68 |
+| **DAS@z0 (16)** | **0.61** / 0.72 | 0.05 / 0.42 | 0.07 |
+| random@z0 (16) | 0.61 / 0.74 | 0.07 / 0.43 | |
+| full z0 (768) | 0.63 / 0.80 | 0.07 / 0.45 | |
+| DAS@z2 (16) | 0.28 / 0.53 | **0.23** / 0.56 | |
+| random@z2 (16) | 0.29 / 0.51 | 0.23 / 0.58 | |
+
+(k=32 rotation, run unlogged with `--no_log`: DAS ≈ random again, knn 0.54 vs 0.55 at step 0; the ridge gap narrows, R² 0.50 vs 0.62.) Ridge tol5 ≤ 0.09 and exact ≤ 0.06 for every feature set.
+**Interpretation:**
+- **The causally privileged subspace is not decode-privileged in CODI.** Any 16 random dims at a site
+  decode that site's step (z0 → step 0, z2 → step 1) as well as the DAS dims, and nearly as well as the
+  whole 768-dim vector. The value is spread redundantly across CODI's latent; DAS found *a* direction set
+  the model reads out, not the only place the value lives.
+- The site ↔ step mapping from decoding matches the causal one (z0 carries step 0, z2 step 1 — aligned E3).
+- A linear read of log-magnitude is a poor probe here (DAS R² 0.10, *below* random 0.44): the value is not
+  on a linear number line in these dims. Token-like readouts (nearest neighbour, last digit) work.
+**Gotchas hit:** First version of the script had only the ridge probe; it made the DAS subspace look
+uninformative. Added knn_exact / last_digit and the single-site random/full controls before logging.
+**Caveats:** knn_exact benefits from repeated values across GSM8K problems (small integers are common) —
+compare rows against each other, not to 0. One random draw per single site. `predictions.jsonl` is empty
+(aggregate probe run; per-example predictions not saved).
+**Next:** Compare with Coconut (`20260927-185326`), where the DAS dims *are* privileged; the subspace
+transplant (P4 restricted) tests whether the DAS coordinates alone carry the value across mechanisms.
+
+---
+
+## 2026-09-27 — Does Coconut's learned 16-dim DAS subspace decode the step values? Yes, at its carrier pass: pass 1 → step 0 and pass 4 → step 1, well above random 16 dims and close to the full vector (coconut, run_id: 20260927-185326_coconut_das-subspace-probe)
+
+**Goal:** Round-3 follow-up to E4. A learned 16-dim rotation of passes 1+4 steers 61–63% of minimal pairs
+(`20260927-084449`, rerun `20260927-182915`). Does it also decode the step values, better than random dims?
+**Design:** identical to `20260927-185312_codi_das-subspace-probe` (same script and invocation); Coconut
+dump from `xmech_coconut.py --mode dump`, rotation `rot_1+4_k16.pt` from
+`20260927-182915_coconut_das-minimal-pair-saverot`. Model-correct examples only (fit n=7378 / eval n=432 for
+step 0). Majority last-digit baseline 0.42/0.40/0.39.
+**Mechanism / model:** `coconut`, gpt2 / `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`, 6 passes.
+**Command:** see the CODI record.
+**Headline results** (eval split):
+
+| feature (dims) | step 0 knn / digit | step 1 knn / digit | step 0 ridge R² |
+|---|---|---|---|
+| DAS passes 1+4 (32) | 0.48 / 0.72 | 0.39 / 0.69 | 0.09 |
+| random 2×16 (32) | 0.37 / 0.53 | 0.26 / 0.48 | 0.17 |
+| complement (1504) | 0.48 / 0.74 | 0.31 / 0.69 | 0.73 |
+| **DAS@pass1 (16)** | **0.60 / 0.72** | 0.08 / 0.42 | 0.08 |
+| random@pass1 (16) | 0.50 / 0.52 | 0.07 / 0.39 | |
+| full pass1 (768) | 0.65 / 0.75 | 0.09 / 0.33 | |
+| **DAS@pass4 (16)** | 0.24 / 0.43 | **0.51 / 0.69** | |
+| random@pass4 (16) | 0.23 / 0.42 | 0.34 / 0.47 | |
+| full pass4 (768) | 0.33 / 0.59 | 0.56 / 0.70 | |
+
+k=32 rotation (unlogged, `--no_log`): same ordering, DAS@pass1 knn 0.63 / digit 0.77, DAS@pass4 0.52 / 0.73; 3-site DAS vs random 0.51 vs 0.45 (step 0), 0.39 vs 0.30 (step 1). Step 2: nothing decodes (knn ≤ 0.07, digit ≈ majority). Ridge tol5 ≤ 0.09 everywhere.
+**Interpretation:**
+- **In Coconut the DAS subspace is where the value is concentrated.** At its carrier pass, 16 learned dims
+  recover almost everything the full 768-dim vector gives (pass 1/step 0: 0.60 vs 0.65 knn, 0.72 vs 0.75
+  digit; pass 4/step 1: 0.51 vs 0.56, 0.69 vs 0.70), and clearly beat 16 random dims (0.50 / 0.52; 0.34 / 0.47).
+- The same 16-dim basis serves both passes, and decoding confirms the causal site ↔ step map from P1
+  (pass 1 = step 0, pass 4 = step 1); each pass holds only its own step.
+- **Contrast with CODI** (`20260927-185312`): there random dims decode as well as the DAS dims. Both
+  mechanisms have a small causally sufficient subspace, but Coconut's value is localized in it while
+  CODI's is spread redundantly across the vector.
+- Linear log-magnitude probes fail in the DAS dims (R² 0.09 < random 0.17): the code is token-like, not
+  a number line — consistent with Coconut's latents being near the answer-token embeddings (logit lens).
+**Caveats:** as in the CODI record (knn benefits from common values; one random draw per single site;
+empty predictions.jsonl).
+**Next:** P4 restricted to these subspaces (`xmech-subspace-*` runs).
+
+---
+
+## 2026-09-27 — CODI → Coconut through the DAS value subspace: mapped coordinates carry the donor's values at 55–90% of Coconut's own subspace-only ceiling (cf_joint 0.05–0.07 vs own 0.09–0.11; shuffled/random 0), but subspace-only patches are ~3× weaker than whole vectors (coconut, run_id: 20260927-190704_coconut_xmech-subspace-codi-to-coconut-k16)
+
+**Goal:** Round-3 P4 caveat: the unrestricted CODI↔Coconut map reads all six source latents and writes whole
+target vectors, so it could route question-derived information rather than the computed values. Restrict
+both ends to the DAS value subspaces. This record: codi-to-coconut, k=16; sibling at the other k: `20260927-190716_coconut_xmech-subspace-codi-to-coconut-k32`.
+**Design** (`xmech_common.run_subspace_transplant`; `--mode subspace` of `xmech_codi.py` / `xmech_coconut.py`):
+same eval-split ladder recipients/donors as the unrestricted P4 runs (259 recipients, base-correct in both
+models; L2 same ops, L3 same length, L4 any), same dumps (re-made on this pod: accuracy CODI 0.419, Coconut
+0.331 on eval, identical to round 3). Rotations from `20260927-184022` (CODI z0+z2+z4) and `20260927-182915`
+(Coconut passes 1+4). Every `*_sub` condition writes k coordinates into the TARGET's DAS subspace at its
+carrier sites and keeps the recipient's own live complement (a cross-problem DAS interchange):
+**own_sub** = the target's own donor coordinates (ceiling for a subspace-only patch); **mapped_sub** = ridge
+from the source donor's DAS coordinates at its carriers → target coordinates (fit on the 8000-question fit
+split); **shuffled_sub** = same ridge on permuted pairs; **complement_sub** = ridge from the source donor's
+coordinates *outside* its DAS subspace; **random_sub** = own donor coordinates in a random k-dim subspace;
+**mapped_full** = the unrestricted round-3 condition (map of all 6 source sites → whole carrier vectors),
+re-run on the same recipients. Scoring as P1 (cf_joint = recipient's program on the donor's step values;
+permutation null in brackets).
+**Mechanism / model:** Coconut `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33` (target) and CODI `hf:zen-E/CODI-gpt2@fd641b3` (source).
+**Command:** `xmech_coconut.py --mode subspace --checkpoint_path .../checkpoint_33 --questions xmech_questions.jsonl --codi_latents codi_latents.pt --out_latents coconut_latents.pt --codi_rotation rot_0+2+4_k16.pt --coconut_rotation rot_1+4_k16.pt --slug xmech-subspace-codi-to-coconut-k16 --stage full_run` (full line in `eval_command.txt`). Pod `ft7u4einf6ci9s` (RTX A5000 secure, $0.27/hr);
+the four subspace transplants ran in parallel, ~50 min, most of it ridge fitting on CPU.
+**Headline results** (259 recipients; both k in one table, this record's k=16):
+
+| cf_joint (null ≤0.006) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_sub k16 / k32 | 0.085 / 0.104 | 0.108 / 0.120 | 0.085 / 0.120 |
+| **mapped_sub** k16 / k32 | **0.066 / 0.085** | **0.062 / 0.108** | **0.046 / 0.069** |
+| complement_sub k16 / k32 | 0.073 / 0.089 | 0.073 / 0.116 | 0.050 / 0.077 |
+| shuffled_sub k16 / k32 | 0.000 / 0.008 | 0.000 / 0.004 | 0.000 / 0.000 |
+| random_sub k16 / k32 | 0.000 / 0.000 | 0.000 / 0.000 | 0.000 / 0.000 |
+| mapped_full (unrestricted) | 0.309 | 0.301 | 0.278 |
+
+random_sub leaves 98–100% of answers unchanged; shuffled_sub leaves ~63%. self_mapped_sub (CODI recipient's own
+coordinates mapped back into it) unchanged 91% (k16) / 92% (k32). Coordinate-map eval R²: pass 1 0.34 / 0.40,
+pass 4 0.18 / 0.22 (complement input: 0.47 / 0.24; shuffled ≤0).
+
+**Interpretation:**
+- **Subspace-only patches transfer much less across problems than whole vectors, even within Coconut.**
+  own_sub (Coconut's own donor, subspace only) reaches 0.09–0.12 cf_joint vs ~0.30 for whole-vector own
+  carriers (round 3). DAS was trained on minimal pairs where the complement barely differs; across problems,
+  the recipient's own complement pulls back toward its own values.
+- **Within that ceiling, CODI's values are linearly translatable into Coconut's value subspace**: mapped_sub
+  reaches 55–90% of own_sub (e.g. L3 k32 0.108 vs 0.120), against 0–0.8% for the shuffled map and 0% for a
+  random subspace. So the pure value channel crosses mechanisms, not just question-derived context.
+- The input restriction does not matter: mapping from CODI's non-DAS coordinates works as well
+  (complement_sub ≈ mapped_sub). Consistent with `20260927-185312`: CODI stores the value redundantly
+  across the vector, so its DAS subspace is not the only place a map can read it from.
+- The unrestricted map's 0.28–0.31 (replicating round 3's 0.24–0.32) comes mostly from writing whole
+  vectors. This run cannot separate "other question-derived information" from "a stronger intervention":
+  own_sub, the equally restricted ceiling, is also 3× below own whole-vector.
+**Caveats:** n=259, one donor draw per level (±~3 pp at 0.1). The subspace patch keeps the recipient's
+*live* complement at later carriers (it reflects earlier patches), as in DAS training. The DAS subspaces were
+trained on within-problem minimal pairs, which may not be the right basis for cross-problem transfer.
+**Next:** Train the rotation on cross-problem (ladder) pairs instead of minimal pairs and see whether
+own_sub approaches whole-vector transfer; if it does, rerun this restriction with that basis.
+
+---
+
+## 2026-09-27 — CODI → Coconut through the k=32 DAS value subspace: mapped cf_joint 0.07–0.11 vs own subspace 0.10–0.12 (shuffled/random ≤0.008) (coconut, run_id: 20260927-190716_coconut_xmech-subspace-codi-to-coconut-k32)
+
+**Goal:** Round-3 P4 caveat: the unrestricted CODI↔Coconut map reads all six source latents and writes whole
+target vectors, so it could route question-derived information rather than the computed values. Restrict
+both ends to the DAS value subspaces. This record: codi-to-coconut, k=32; sibling at the other k: `20260927-190704_coconut_xmech-subspace-codi-to-coconut-k16`.
+**Design** (`xmech_common.run_subspace_transplant`; `--mode subspace` of `xmech_codi.py` / `xmech_coconut.py`):
+same eval-split ladder recipients/donors as the unrestricted P4 runs (259 recipients, base-correct in both
+models; L2 same ops, L3 same length, L4 any), same dumps (re-made on this pod: accuracy CODI 0.419, Coconut
+0.331 on eval, identical to round 3). Rotations from `20260927-184022` (CODI z0+z2+z4) and `20260927-182915`
+(Coconut passes 1+4). Every `*_sub` condition writes k coordinates into the TARGET's DAS subspace at its
+carrier sites and keeps the recipient's own live complement (a cross-problem DAS interchange):
+**own_sub** = the target's own donor coordinates (ceiling for a subspace-only patch); **mapped_sub** = ridge
+from the source donor's DAS coordinates at its carriers → target coordinates (fit on the 8000-question fit
+split); **shuffled_sub** = same ridge on permuted pairs; **complement_sub** = ridge from the source donor's
+coordinates *outside* its DAS subspace; **random_sub** = own donor coordinates in a random k-dim subspace;
+**mapped_full** = the unrestricted round-3 condition (map of all 6 source sites → whole carrier vectors),
+re-run on the same recipients. Scoring as P1 (cf_joint = recipient's program on the donor's step values;
+permutation null in brackets).
+**Mechanism / model:** Coconut `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33` (target) and CODI `hf:zen-E/CODI-gpt2@fd641b3` (source).
+**Command:** `xmech_coconut.py --mode subspace --checkpoint_path .../checkpoint_33 --questions xmech_questions.jsonl --codi_latents codi_latents.pt --out_latents coconut_latents.pt --codi_rotation rot_0+2+4_k32.pt --coconut_rotation rot_1+4_k32.pt --slug xmech-subspace-codi-to-coconut-k32 --stage full_run` (full line in `eval_command.txt`). Pod `ft7u4einf6ci9s` (RTX A5000 secure, $0.27/hr);
+the four subspace transplants ran in parallel, ~50 min, most of it ridge fitting on CPU.
+**Headline results** (259 recipients; both k in one table, this record's k=32):
+
+| cf_joint (null ≤0.006) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_sub k16 / k32 | 0.085 / 0.104 | 0.108 / 0.120 | 0.085 / 0.120 |
+| **mapped_sub** k16 / k32 | **0.066 / 0.085** | **0.062 / 0.108** | **0.046 / 0.069** |
+| complement_sub k16 / k32 | 0.073 / 0.089 | 0.073 / 0.116 | 0.050 / 0.077 |
+| shuffled_sub k16 / k32 | 0.000 / 0.008 | 0.000 / 0.004 | 0.000 / 0.000 |
+| random_sub k16 / k32 | 0.000 / 0.000 | 0.000 / 0.000 | 0.000 / 0.000 |
+| mapped_full (unrestricted) | 0.309 | 0.301 | 0.278 |
+
+random_sub leaves 98–100% of answers unchanged; shuffled_sub leaves ~63%. self_mapped_sub (CODI recipient's own
+coordinates mapped back into it) unchanged 91% (k16) / 92% (k32). Coordinate-map eval R²: pass 1 0.34 / 0.40,
+pass 4 0.18 / 0.22 (complement input: 0.47 / 0.24; shuffled ≤0).
+
+**Interpretation:**
+- **Subspace-only patches transfer much less across problems than whole vectors, even within Coconut.**
+  own_sub (Coconut's own donor, subspace only) reaches 0.09–0.12 cf_joint vs ~0.30 for whole-vector own
+  carriers (round 3). DAS was trained on minimal pairs where the complement barely differs; across problems,
+  the recipient's own complement pulls back toward its own values.
+- **Within that ceiling, CODI's values are linearly translatable into Coconut's value subspace**: mapped_sub
+  reaches 55–90% of own_sub (e.g. L3 k32 0.108 vs 0.120), against 0–0.8% for the shuffled map and 0% for a
+  random subspace. So the pure value channel crosses mechanisms, not just question-derived context.
+- The input restriction does not matter: mapping from CODI's non-DAS coordinates works as well
+  (complement_sub ≈ mapped_sub). Consistent with `20260927-185312`: CODI stores the value redundantly
+  across the vector, so its DAS subspace is not the only place a map can read it from.
+- The unrestricted map's 0.28–0.31 (replicating round 3's 0.24–0.32) comes mostly from writing whole
+  vectors. This run cannot separate "other question-derived information" from "a stronger intervention":
+  own_sub, the equally restricted ceiling, is also 3× below own whole-vector.
+**Caveats:** n=259, one donor draw per level (±~3 pp at 0.1). The subspace patch keeps the recipient's
+*live* complement at later carriers (it reflects earlier patches), as in DAS training. The DAS subspaces were
+trained on within-problem minimal pairs, which may not be the right basis for cross-problem transfer.
+**Next:** Train the rotation on cross-problem (ladder) pairs instead of minimal pairs and see whether
+own_sub approaches whole-vector transfer; if it does, rerun this restriction with that basis.
+
+---
+
+## 2026-09-27 — Coconut → CODI through the k=32 DAS value subspace: mapped cf_joint 0.04–0.06 vs own subspace 0.10–0.21 (shuffled ≤0.015, random 0) (codi, run_id: 20260927-191455_codi_xmech-subspace-coconut-to-codi-k32)
+
+**Goal:** Round-3 P4 caveat: the unrestricted CODI↔Coconut map reads all six source latents and writes whole
+target vectors, so it could route question-derived information rather than the computed values. Restrict
+both ends to the DAS value subspaces. This record: coconut-to-codi, k=32; sibling at the other k: `20260927-191525_codi_xmech-subspace-coconut-to-codi-k16`.
+**Design** (`xmech_common.run_subspace_transplant`; `--mode subspace` of `xmech_codi.py` / `xmech_coconut.py`):
+same eval-split ladder recipients/donors as the unrestricted P4 runs (259 recipients, base-correct in both
+models; L2 same ops, L3 same length, L4 any), same dumps (re-made on this pod: accuracy CODI 0.419, Coconut
+0.331 on eval, identical to round 3). Rotations from `20260927-184022` (CODI z0+z2+z4) and `20260927-182915`
+(Coconut passes 1+4). Every `*_sub` condition writes k coordinates into the TARGET's DAS subspace at its
+carrier sites and keeps the recipient's own live complement (a cross-problem DAS interchange):
+**own_sub** = the target's own donor coordinates (ceiling for a subspace-only patch); **mapped_sub** = ridge
+from the source donor's DAS coordinates at its carriers → target coordinates (fit on the 8000-question fit
+split); **shuffled_sub** = same ridge on permuted pairs; **complement_sub** = ridge from the source donor's
+coordinates *outside* its DAS subspace; **random_sub** = own donor coordinates in a random k-dim subspace;
+**mapped_full** = the unrestricted round-3 condition (map of all 6 source sites → whole carrier vectors),
+re-run on the same recipients. Scoring as P1 (cf_joint = recipient's program on the donor's step values;
+permutation null in brackets).
+**Mechanism / model:** CODI `hf:zen-E/CODI-gpt2@fd641b3` (target) and Coconut `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33` (source).
+**Command:** `xmech_codi.py $CODI_FLAGS --mode subspace --questions ... --codi_latents ... --coconut_latents ... --codi_rotation rot_0+2+4_k32.pt --coconut_rotation rot_1+4_k32.pt --slug xmech-subspace-coconut-to-codi-k32 --stage full_run` (full line in `eval_command.txt`). Pod `ft7u4einf6ci9s` (RTX A5000 secure, $0.27/hr);
+the four subspace transplants ran in parallel, ~50 min, most of it ridge fitting on CPU.
+**Headline results** (259 recipients; both k in one table, this record's k=32):
+
+| cf_joint (null ≤0.006) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_sub k16 / k32 | 0.120 / 0.178 | 0.135 / 0.208 | 0.073 / 0.100 |
+| **mapped_sub** k16 / k32 | **0.015 / 0.039** | **0.031 / 0.050** | **0.031 / 0.062** |
+| complement_sub k16 / k32 | 0.031 / 0.073 | 0.046 / 0.073 | 0.046 / 0.081 |
+| shuffled_sub k16 / k32 | 0.000 / 0.004 | 0.008 / 0.012 | 0.000 / 0.015 |
+| random_sub k16 / k32 | 0.000 / 0.000 | 0.000 / 0.000 | 0.000 / 0.000 |
+| mapped_full (unrestricted) | 0.263 | 0.282 | 0.266 |
+
+random_sub leaves 98–100% unchanged; shuffled_sub ~47–63%. self_mapped_sub unchanged 86% (k16) / 79% (k32).
+Coordinate-map eval R²: z0 0.38 / 0.41, z2 0.21 / 0.22, z4 0.16 / 0.16 (complement input: 0.54 / 0.30 / 0.23).
+
+**Interpretation:**
+- **Coconut → CODI through the value subspace is weak.** mapped_sub gives 0.015–0.06 cf_joint, 12–62% of
+  CODI's own subspace-only ceiling (own_sub 0.07–0.21), above the shuffled map (≤0.015) and random subspace (0)
+  but small. With whole vectors the same direction gives 0.26–0.28.
+- CODI's own subspace-only interchange carries a cross-problem donor's values at 0.07–0.21 (k=32 > k=16),
+  i.e. again a fraction of whole-vector own carriers (round 2/3: 0.20–0.39).
+- Coconut's non-DAS coordinates predict CODI's DAS coordinates *better* than Coconut's DAS coordinates do
+  (complement_sub 0.03–0.08 > mapped_sub; R² z0 0.54 vs 0.38). Coconut's 16/32 DAS dims hold the value
+  (`20260927-185326`) but not everything CODI's value subspace encodes.
+- The direction asymmetry (into Coconut works better) matches the probe results: Coconut's value subspace is
+  compact and localized, so it is an easy target to write to; CODI's is not.
+**Caveats:** n=259, one donor draw per level (±~3 pp at 0.1). The subspace patch keeps the recipient's
+*live* complement at later carriers (it reflects earlier patches), as in DAS training. The DAS subspaces were
+trained on within-problem minimal pairs, which may not be the right basis for cross-problem transfer.
+**Next:** Train the rotation on cross-problem (ladder) pairs instead of minimal pairs and see whether
+own_sub approaches whole-vector transfer; if it does, rerun this restriction with that basis.
+
+---
+
+## 2026-09-27 — Coconut → CODI through the DAS value subspace is weak: mapped cf_joint 0.015–0.03 vs CODI's own subspace-only 0.07–0.14 (shuffled/random ≤0.008) (codi, run_id: 20260927-191525_codi_xmech-subspace-coconut-to-codi-k16)
+
+**Goal:** Round-3 P4 caveat: the unrestricted CODI↔Coconut map reads all six source latents and writes whole
+target vectors, so it could route question-derived information rather than the computed values. Restrict
+both ends to the DAS value subspaces. This record: coconut-to-codi, k=16; sibling at the other k: `20260927-191455_codi_xmech-subspace-coconut-to-codi-k32`.
+**Design** (`xmech_common.run_subspace_transplant`; `--mode subspace` of `xmech_codi.py` / `xmech_coconut.py`):
+same eval-split ladder recipients/donors as the unrestricted P4 runs (259 recipients, base-correct in both
+models; L2 same ops, L3 same length, L4 any), same dumps (re-made on this pod: accuracy CODI 0.419, Coconut
+0.331 on eval, identical to round 3). Rotations from `20260927-184022` (CODI z0+z2+z4) and `20260927-182915`
+(Coconut passes 1+4). Every `*_sub` condition writes k coordinates into the TARGET's DAS subspace at its
+carrier sites and keeps the recipient's own live complement (a cross-problem DAS interchange):
+**own_sub** = the target's own donor coordinates (ceiling for a subspace-only patch); **mapped_sub** = ridge
+from the source donor's DAS coordinates at its carriers → target coordinates (fit on the 8000-question fit
+split); **shuffled_sub** = same ridge on permuted pairs; **complement_sub** = ridge from the source donor's
+coordinates *outside* its DAS subspace; **random_sub** = own donor coordinates in a random k-dim subspace;
+**mapped_full** = the unrestricted round-3 condition (map of all 6 source sites → whole carrier vectors),
+re-run on the same recipients. Scoring as P1 (cf_joint = recipient's program on the donor's step values;
+permutation null in brackets).
+**Mechanism / model:** CODI `hf:zen-E/CODI-gpt2@fd641b3` (target) and Coconut `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33` (source).
+**Command:** `xmech_codi.py $CODI_FLAGS --mode subspace --questions ... --codi_latents ... --coconut_latents ... --codi_rotation rot_0+2+4_k16.pt --coconut_rotation rot_1+4_k16.pt --slug xmech-subspace-coconut-to-codi-k16 --stage full_run` (full line in `eval_command.txt`). Pod `ft7u4einf6ci9s` (RTX A5000 secure, $0.27/hr);
+the four subspace transplants ran in parallel, ~50 min, most of it ridge fitting on CPU.
+**Headline results** (259 recipients; both k in one table, this record's k=16):
+
+| cf_joint (null ≤0.006) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_sub k16 / k32 | 0.120 / 0.178 | 0.135 / 0.208 | 0.073 / 0.100 |
+| **mapped_sub** k16 / k32 | **0.015 / 0.039** | **0.031 / 0.050** | **0.031 / 0.062** |
+| complement_sub k16 / k32 | 0.031 / 0.073 | 0.046 / 0.073 | 0.046 / 0.081 |
+| shuffled_sub k16 / k32 | 0.000 / 0.004 | 0.008 / 0.012 | 0.000 / 0.015 |
+| random_sub k16 / k32 | 0.000 / 0.000 | 0.000 / 0.000 | 0.000 / 0.000 |
+| mapped_full (unrestricted) | 0.263 | 0.282 | 0.266 |
+
+random_sub leaves 98–100% unchanged; shuffled_sub ~47–63%. self_mapped_sub unchanged 86% (k16) / 79% (k32).
+Coordinate-map eval R²: z0 0.38 / 0.41, z2 0.21 / 0.22, z4 0.16 / 0.16 (complement input: 0.54 / 0.30 / 0.23).
+
+**Interpretation:**
+- **Coconut → CODI through the value subspace is weak.** mapped_sub gives 0.015–0.06 cf_joint, 12–62% of
+  CODI's own subspace-only ceiling (own_sub 0.07–0.21), above the shuffled map (≤0.015) and random subspace (0)
+  but small. With whole vectors the same direction gives 0.26–0.28.
+- CODI's own subspace-only interchange carries a cross-problem donor's values at 0.07–0.21 (k=32 > k=16),
+  i.e. again a fraction of whole-vector own carriers (round 2/3: 0.20–0.39).
+- Coconut's non-DAS coordinates predict CODI's DAS coordinates *better* than Coconut's DAS coordinates do
+  (complement_sub 0.03–0.08 > mapped_sub; R² z0 0.54 vs 0.38). Coconut's 16/32 DAS dims hold the value
+  (`20260927-185326`) but not everything CODI's value subspace encodes.
+- The direction asymmetry (into Coconut works better) matches the probe results: Coconut's value subspace is
+  compact and localized, so it is an easy target to write to; CODI's is not.
+**Caveats:** n=259, one donor draw per level (±~3 pp at 0.1). The subspace patch keeps the recipient's
+*live* complement at later carriers (it reflects earlier patches), as in DAS training. The DAS subspaces were
+trained on within-problem minimal pairs, which may not be the right basis for cross-problem transfer.
+**Next:** Train the rotation on cross-problem (ladder) pairs instead of minimal pairs and see whether
+own_sub approaches whole-vector transfer; if it does, rerun this restriction with that basis.

@@ -38,7 +38,7 @@ from latentreasoning.runlog.manifest import DatasetInfo, ModelInfo, RunRecord, n
 class Args:
     checkpoint_path: str = field(metadata={"help": "path to checkpoint_33"})
     questions: str = field(metadata={"help": "xmech_questions.jsonl"})
-    codi_latents: str = field(metadata={"help": "codi_latents.pt from xmech_codi.py dump"})
+    codi_latents: str = field(default="", metadata={"help": "codi_latents.pt from xmech_codi.py dump"})
     out_latents: str = field(default="/workspace/coconut_latents.pt")
     model_id: str = field(default="openai-community/gpt2")
     checkpoint_label: str = field(default="hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33")
@@ -53,6 +53,10 @@ class Args:
     max_new_tokens: int = field(default=48)
     smoke_n: int = field(default=0, metadata={"help": ">0: only this many fit and eval questions, don't log"})
     device: str = field(default="cuda")
+    mode: str = field(default="full", metadata={"help": "full (dump + unrestricted transplant) | dump (dump only) | "
+                                                          "subspace (reuse out_latents, DAS-subspace transplant)"})
+    codi_rotation: str = field(default="", metadata={"help": "subspace mode: CODI DAS rotation .pt (source)"})
+    coconut_rotation: str = field(default="", metadata={"help": "subspace mode: Coconut DAS rotation .pt (target)"})
 
 
 def main() -> None:
@@ -68,7 +72,7 @@ def main() -> None:
     if a.smoke_n:
         questions = ([q for q in questions if q["split"] == "fit"][:a.smoke_n]
                      + [q for q in questions if q["split"] == "eval"][:a.smoke_n])
-    codi = torch.load(a.codi_latents)
+    codi = torch.load(a.codi_latents) if a.mode != "dump" else None
 
     def answer_with(question: str, override=None):
         input_ids, attn = encode_question(tokenizer, special_ids, question, a.num_latents, a.device)
@@ -77,6 +81,10 @@ def main() -> None:
         raw = finish_and_decode(base_model, embedding, tokenizer, inputs_embeds, kv_cache, ncr, attn,
                                 a.device, a.max_new_tokens, eos_id)
         return extract_answer_after_delimiter(raw), recs
+
+    if a.mode == "subspace":
+        run_subspace(a, questions, torch.load(a.out_latents), codi, answer_with, n_params, argv)
+        return
 
     t0 = time.perf_counter()
     rows = {}
@@ -90,6 +98,9 @@ def main() -> None:
     dump_elapsed = time.perf_counter() - t0
     fit_keys, eval_keys = xc.split_keys(questions, "fit"), xc.split_keys(questions, "eval")
     acc = {s: sum(rows[k]["correct"] for k in ks) / len(ks) for s, ks in (("fit", fit_keys), ("eval", eval_keys))}
+    if a.mode == "dump":
+        print(f"dumped {len(rows)} in {dump_elapsed:.0f}s -> {a.out_latents}; accuracy {acc}")
+        return
     print(f"dumped {len(rows)} in {dump_elapsed:.0f}s; coconut accuracy {acc}; "
           f"codi accuracy eval {sum(codi['rows'][k]['correct'] for k in eval_keys) / len(eval_keys):.3f}")
 
@@ -148,6 +159,56 @@ def main() -> None:
         seed=a.pair_seed,
         hardware=f"{a.hardware} / {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'cpu'}",
         notes="P4 cross-mechanism transplant, CODI -> Coconut, with R2 / CKA alignment.",
+    )
+    manifest = record.save(predictions=rows_t)
+    (manifest.parent / "eval_command.txt").write_text(argv + "\n")
+    print(f"run_id={record.run_id} -> fill in {manifest.parent / 'notes.md'}")
+
+
+def run_subspace(a, questions, dump, codi, answer_with, n_params, argv) -> None:
+    Wk_tgt, tgt_sites, k = xc.load_subspace(a.coconut_rotation)
+    Wk_src, src_sites, k_src = xc.load_subspace(a.codi_rotation)
+    print(f"Coconut subspace k={k} at passes {tgt_sites}; CODI subspace k={k_src} at z{src_sites}")
+    t1 = time.perf_counter()
+    rows_t, summary = xc.run_subspace_transplant(questions, dump, codi, Wk_tgt, Wk_src, src_sites, tgt_sites,
+                                                 lambda q, vecs: answer_with(q, override=vecs)[0],
+                                                 a.n_recipients, a.pair_seed, a.reps)
+    patch_elapsed = time.perf_counter() - t1
+    from ladder_common import format_row  # noqa: E402
+    for level in ("L2", "L3", "L4"):
+        for c, s in summary[level].items():
+            print(format_row(f"{level} {c}", s))
+    print(f"self_mapped_sub unchanged: {summary['self_mapped_sub_unchanged_rate']}")
+    print(f"coordinate map fit: {summary['coord_map_fit']}")
+    if a.smoke_n:
+        print("smoke run -- not logging")
+        return
+    eval_keys = xc.split_keys(questions, "eval")
+    record = RunRecord(
+        run_id=new_run_id("coconut", a.slug), mechanism="coconut", stage=a.stage,
+        model=ModelInfo(backbone=a.model_id, checkpoint=a.checkpoint_label, n_params=n_params),
+        dataset=DatasetInfo(name="gsm8k-aug", split="test", n_examples=len(eval_keys), seed=None),
+        metrics={
+            "final_answer_accuracy": sum(dump["rows"][k_]["correct"] for k_ in eval_keys) / len(eval_keys),
+            "compute_steps": a.num_latents,
+            "intervention_accuracy": summary["L4"]["mapped_sub"]["rates"]["cf_joint"],
+            "extra": {
+                "design": "P4 CODI -> Coconut restricted to the DAS value subspaces: ridge from the CODI donor's "
+                          "k DAS coordinates (z" + ",".join(map(str, src_sites)) + ") to Coconut's k DAS "
+                          "coordinates at each carrier pass, written into the recipient's subspace only; controls "
+                          "own / shuffled / complement-input / random-subspace / unrestricted map",
+                "direction": "codi_to_coconut", "k": k, "k_src": k_src, "tgt_sites": tgt_sites, "src_sites": src_sites,
+                "codi_rotation": a.codi_rotation, "coconut_rotation": a.coconut_rotation,
+                "transplant": summary, "n_recipients": len(rows_t), "patch_elapsed_sec": patch_elapsed,
+                "related_runs": ["20260927-085211_coconut_xmech-codi-to-coconut", "20260927-094215_codi_das-minimal-pair-fixed",
+                                 "20260927-084449_coconut_das-minimal-pair-fixed"],
+            },
+        },
+        hyperparams={"k": k, "tgt_sites": tgt_sites, "src_sites": src_sites, "n_recipients_cap": a.n_recipients,
+                     "pair_seed": a.pair_seed, "reps": a.reps, "lambdas": list(xc.LAMBDAS)},
+        seed=a.pair_seed,
+        hardware=f"{a.hardware} / {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'cpu'}",
+        notes="P4 cross-mechanism transplant restricted to the DAS value subspace, CODI -> Coconut.",
     )
     manifest = record.save(predictions=rows_t)
     (manifest.parent / "eval_command.txt").write_text(argv + "\n")

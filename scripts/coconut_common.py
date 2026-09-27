@@ -133,6 +133,8 @@ def run_passes(base_model, embedding, input_ids, attn, device, num_latents: int,
         pass_records.append({"pass": pass_idx, "live_hidden": live_hidden.float().cpu(), "logits": logits.float().cpu()})
 
         fill_value = override_at_pass[pass_idx] if (override_at_pass and pass_idx in override_at_pass) else live_hidden
+        if callable(fill_value):  # f(live hidden) -> vector to splice, e.g. a subspace patch
+            fill_value = fill_value(live_hidden)
         inputs_embeds = inputs_embeds.clone()
         inputs_embeds[0, token_idx, :] = fill_value.to(inputs_embeds.dtype).to(device)
 

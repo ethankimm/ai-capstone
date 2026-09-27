@@ -51,6 +51,7 @@ Run inside a venv pinned to Coconut's own requirements.txt (same convention as
 from __future__ import annotations
 
 import json
+import os
 import random
 import sys
 import time
@@ -112,6 +113,7 @@ class DASArguments:
     eval_seed: int = field(default=0)
     pair_seed: int = field(default=0)
     max_new_tokens: int = field(default=48)
+    save_rotations: str = field(default="", metadata={"help": "dir: save each trained R as rot_<group>_k<k>.pt"})
     device: str = field(default="cuda")
 
 
@@ -440,6 +442,11 @@ def main() -> None:
             records, summary = evaluate_rotation(base_model, embedding, tokenizer, eos_id, special_ids, device,
                                                   da.num_latents, group, k, rotation, eval_pairs, da.max_new_tokens)
             all_records.extend([{"group": group_label(group), "k": k, **r} for r in records])
+            if da.save_rotations:
+                os.makedirs(da.save_rotations, exist_ok=True)
+                torch.save({"W": rotation.rot.weight.detach().float().cpu(), "k": k, "group": group,
+                            "mechanism": "coconut", "matches_twin_rate": summary["matches_twin_rate"]},
+                           os.path.join(da.save_rotations, f"rot_{group_label(group)}_k{k}.pt"))
             all_summaries.append(summary)
             print(f"group={group_label(group)} k={k}: matches_twin={summary['matches_twin_rate']:.3f} "
                   f"answer_changed={summary['answer_changed_rate']:.3f} (n={summary['n']}, "

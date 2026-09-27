@@ -132,6 +132,8 @@ def run_thoughts(model, tokenizer, question: str, device: str, n_iters: int,
         feed = latent
         if override_input_at is not None and it in override_input_at:
             feed = override_input_at[it]
+            if callable(feed):  # f(live latent) -> latent to feed, e.g. a subspace patch
+                feed = feed(latent)
         outputs = model.codi(inputs_embeds=feed, use_cache=True, output_hidden_states=True, past_key_values=pkv)
         pkv = outputs.past_key_values
         pre_hidden = outputs.hidden_states[-1][:, -1, :]

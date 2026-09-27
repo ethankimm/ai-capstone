@@ -76,3 +76,11 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260927-085211_coconut_xmech-codi-to-coconut](20260927-085211_coconut_xmech-codi-to-coconut/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run | Henning Lindig |
 | [20260927-092012_codi_xmech-coconut-to-codi](20260927-092012_codi_xmech-coconut-to-codi/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run | Henning Lindig |
 | [20260927-094215_codi_das-minimal-pair-fixed](20260927-094215_codi_das-minimal-pair-fixed/) | codi | gpt2 | validation (n=800) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260927-182915_coconut_das-minimal-pair-saverot](20260927-182915_coconut_das-minimal-pair-saverot/) | coconut | openai-community/gpt2 | validation (n=500) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260927-184022_codi_das-minimal-pair-saverot](20260927-184022_codi_das-minimal-pair-saverot/) | codi | gpt2 | validation (n=800) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260927-185312_codi_das-subspace-probe](20260927-185312_codi_das-subspace-probe/) | codi | gpt2 | test (n=548) | - | 0.419 | 0 | full_run | Henning Lindig |
+| [20260927-185326_coconut_das-subspace-probe](20260927-185326_coconut_das-subspace-probe/) | coconut | openai-community/gpt2 | test (n=432) | - | 0.331 | 0 | full_run | Henning Lindig |
+| [20260927-190704_coconut_xmech-subspace-codi-to-coconut-k16](20260927-190704_coconut_xmech-subspace-codi-to-coconut-k16/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run | Henning Lindig |
+| [20260927-190716_coconut_xmech-subspace-codi-to-coconut-k32](20260927-190716_coconut_xmech-subspace-codi-to-coconut-k32/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run | Henning Lindig |
+| [20260927-191455_codi_xmech-subspace-coconut-to-codi-k32](20260927-191455_codi_xmech-subspace-coconut-to-codi-k32/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run | Henning Lindig |
+| [20260927-191525_codi_xmech-subspace-coconut-to-codi-k16](20260927-191525_codi_xmech-subspace-coconut-to-codi-k16/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run | Henning Lindig |

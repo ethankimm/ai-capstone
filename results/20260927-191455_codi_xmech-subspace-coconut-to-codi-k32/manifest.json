@@ -1,0 +1,904 @@
+{
+  "run_id": "20260927-191455_codi_xmech-subspace-coconut-to-codi-k32",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.41925701288855194,
+    "compute_steps": 6,
+    "intervention_accuracy": 0.06177606177606178,
+    "extra": {
+      "design": "P4 Coconut -> CODI restricted to the DAS value subspaces: ridge from the Coconut donor's k DAS coordinates (passes 1,4) to CODI's k DAS coordinates at each carrier, written into the recipient's subspace only; controls own / shuffled / complement-input / random-subspace / unrestricted map",
+      "direction": "coconut_to_codi",
+      "k": 32,
+      "k_src": 32,
+      "tgt_sites": [
+        0,
+        2,
+        4
+      ],
+      "src_sites": [
+        1,
+        4
+      ],
+      "codi_rotation": "/workspace/rotations/codi/rot_0+2+4_k32.pt",
+      "coconut_rotation": "/workspace/rotations/coconut/rot_1+4_k32.pt",
+      "transplant": {
+        "L2": {
+          "own_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.14285714285714285,
+              "donor_final": 0.03474903474903475,
+              "cf_joint": 0.1776061776061776,
+              "cf_single": 0.007722007722007722,
+              "recipient_intermediate": 0.007722007722007722,
+              "donor_intermediate": 0.019305019305019305,
+              "other": 0.61003861003861
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 37,
+              "donor_final": 9,
+              "cf_joint": 46,
+              "cf_single": 2,
+              "recipient_intermediate": 2,
+              "donor_intermediate": 5,
+              "other": 158
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.14276579666337266,
+              "donor_final": 0.009436338623108373,
+              "cf_joint": 0.004921622197678699,
+              "cf_single": 0.0022670464453874322,
+              "recipient_intermediate": 0.0149973841771784,
+              "donor_intermediate": 0.015849948652366837,
+              "other": 0.8097618632409076
+            },
+            "donor_final_wilson_ci": [
+              0.018387145093751157,
+              0.06471081200284237
+            ],
+            "cf_joint_wilson_ci": [
+              0.13587469264071717,
+              0.22876165107351987
+            ],
+            "answer_changed_rate": 0.8571428571428572,
+            "n_cf_joint_distinct": 220
+          },
+          "mapped_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.32432432432432434,
+              "donor_final": 0.019305019305019305,
+              "cf_joint": 0.03861003861003861,
+              "cf_single": 0.007722007722007722,
+              "recipient_intermediate": 0.019305019305019305,
+              "donor_intermediate": 0.019305019305019305,
+              "other": 0.5714285714285714
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 84,
+              "donor_final": 5,
+              "cf_joint": 10,
+              "cf_single": 2,
+              "recipient_intermediate": 5,
+              "donor_intermediate": 5,
+              "other": 148
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.32426462039297754,
+              "donor_final": 0.008119210944463821,
+              "cf_joint": 0.0035073441072743477,
+              "cf_single": 0.001530829748478859,
+              "recipient_intermediate": 0.011645932643491067,
+              "donor_intermediate": 0.01073518583110491,
+              "other": 0.6401968763322095
+            },
+            "donor_final_wilson_ci": [
+              0.008273324839959947,
+              0.04438804991959105
+            ],
+            "cf_joint_wilson_ci": [
+              0.021104889620649308,
+              0.06960221306020485
+            ],
+            "answer_changed_rate": 0.6756756756756757,
+            "n_cf_joint_distinct": 220
+          },
+          "shuffled_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.4671814671814672,
+              "donor_final": 0.011583011583011582,
+              "cf_joint": 0.003861003861003861,
+              "cf_single": 0.007722007722007722,
+              "recipient_intermediate": 0.011583011583011582,
+              "donor_intermediate": 0.011583011583011582,
+              "other": 0.4864864864864865
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 121,
+              "donor_final": 3,
+              "cf_joint": 1,
+              "cf_single": 2,
+              "recipient_intermediate": 3,
+              "donor_intermediate": 3,
+              "other": 126
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.467285373839924,
+              "donor_final": 0.006335613120725399,
+              "cf_joint": 0.002867494623447581,
+              "cf_single": 0.0012012477476604732,
+              "recipient_intermediate": 0.009183732780501037,
+              "donor_intermediate": 0.008040609923856393,
+              "other": 0.5050859279638851
+            },
+            "donor_final_wilson_ci": [
+              0.0039468710701741,
+              0.03349621252085563
+            ],
+            "cf_joint_wilson_ci": [
+              0.0006818698910721083,
+              0.021542922531436352
+            ],
+            "answer_changed_rate": 0.5328185328185329,
+            "n_cf_joint_distinct": 220
+          },
+          "complement_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.3088803088803089,
+              "donor_final": 0.03474903474903475,
+              "cf_joint": 0.07335907335907337,
+              "cf_single": 0.003861003861003861,
+              "recipient_intermediate": 0.007722007722007722,
+              "donor_intermediate": 0.02702702702702703,
+              "other": 0.5444015444015444
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 80,
+              "donor_final": 9,
+              "cf_joint": 19,
+              "cf_single": 1,
+              "recipient_intermediate": 2,
+              "donor_intermediate": 7,
+              "other": 141
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.3090630574730474,
+              "donor_final": 0.008492980687194602,
+              "cf_joint": 0.003761731171953773,
+              "cf_single": 0.001958427053439851,
+              "recipient_intermediate": 0.012642519196463198,
+              "donor_intermediate": 0.011925075622430776,
+              "other": 0.6521562087954704
+            },
+            "donor_final_wilson_ci": [
+              0.018387145093751157,
+              0.06471081200284237
+            ],
+            "cf_joint_wilson_ci": [
+              0.04746343600945245,
+              0.11172597692974744
+            ],
+            "answer_changed_rate": 0.6911196911196911,
+            "n_cf_joint_distinct": 220
+          },
+          "random_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.9845559845559846,
+              "donor_final": 0.0,
+              "cf_joint": 0.0,
+              "cf_single": 0.0,
+              "recipient_intermediate": 0.0,
+              "donor_intermediate": 0.0,
+              "other": 0.015444015444015444
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 255,
+              "donor_final": 0,
+              "cf_joint": 0,
+              "cf_single": 0,
+              "recipient_intermediate": 0,
+              "donor_intermediate": 0,
+              "other": 4
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.9845369814172495,
+              "donor_final": 9.68860813455539e-05,
+              "cf_joint": 1.937721626911078e-05,
+              "cf_single": 5.813164880733234e-05,
+              "recipient_intermediate": 0.0003875443253822156,
+              "donor_intermediate": 0.0003875443253822156,
+              "other": 0.014513534985563974
+            },
+            "donor_final_wilson_ci": [
+              0.0,
+              0.014615646838247825
+            ],
+            "cf_joint_wilson_ci": [
+              0.0,
+              0.014615646838247825
+            ],
+            "answer_changed_rate": 0.015444015444015413,
+            "n_cf_joint_distinct": 220
+          },
+          "mapped_full": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.07722007722007722,
+              "donor_final": 0.08108108108108109,
+              "cf_joint": 0.2625482625482625,
+              "cf_single": 0.023166023166023165,
+              "recipient_intermediate": 0.011583011583011582,
+              "donor_intermediate": 0.023166023166023165,
+              "other": 0.5212355212355212
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 20,
+              "donor_final": 21,
+              "cf_joint": 68,
+              "cf_single": 6,
+              "recipient_intermediate": 3,
+              "donor_intermediate": 6,
+              "other": 135
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.07717048030534943,
+              "donor_final": 0.00914498285315715,
+              "cf_joint": 0.0050956154457210395,
+              "cf_single": 0.002324995640633174,
+              "recipient_intermediate": 0.014821847209036483,
+              "donor_intermediate": 0.015325596264507003,
+              "other": 0.8761164822815958
+            },
+            "donor_final_wilson_ci": [
+              0.053641143026695565,
+              0.1207665610810256
+            ],
+            "cf_joint_wilson_ci": [
+              0.21270951189080536,
+              0.31932803467716564
+            ],
+            "answer_changed_rate": 0.9227799227799228,
+            "n_cf_joint_distinct": 220
+          }
+        },
+        "L3": {
+          "own_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.17374517374517376,
+              "donor_final": 0.019305019305019305,
+              "cf_joint": 0.2084942084942085,
+              "cf_single": 0.011583011583011582,
+              "recipient_intermediate": 0.003861003861003861,
+              "donor_intermediate": 0.015444015444015444,
+              "other": 0.5675675675675675
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 45,
+              "donor_final": 5,
+              "cf_joint": 54,
+              "cf_single": 3,
+              "recipient_intermediate": 1,
+              "donor_intermediate": 4,
+              "other": 147
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.17389871896742184,
+              "donor_final": 0.008507916820093412,
+              "cf_joint": 0.005252039768212562,
+              "cf_single": 0.0032171166107870307,
+              "recipient_intermediate": 0.015058431364948933,
+              "donor_intermediate": 0.014050659896509622,
+              "other": 0.7800151165720266
+            },
+            "donor_final_wilson_ci": [
+              0.008273324839959947,
+              0.04438804991959105
+            ],
+            "cf_joint_wilson_ci": [
+              0.1634588089987185,
+              0.26205069938960357
+            ],
+            "answer_changed_rate": 0.8262548262548263,
+            "n_cf_joint_distinct": 246
+          },
+          "mapped_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.32432432432432434,
+              "donor_final": 0.023166023166023165,
+              "cf_joint": 0.05019305019305019,
+              "cf_single": 0.0,
+              "recipient_intermediate": 0.015444015444015444,
+              "donor_intermediate": 0.011583011583011582,
+              "other": 0.5752895752895753
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 84,
+              "donor_final": 6,
+              "cf_joint": 13,
+              "cf_single": 0,
+              "recipient_intermediate": 4,
+              "donor_intermediate": 3,
+              "other": 149
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.324521793058005,
+              "donor_final": 0.006744316750324619,
+              "cf_joint": 0.0043411694025078,
+              "cf_single": 0.0023450066861760888,
+              "recipient_intermediate": 0.011705653210333533,
+              "donor_intermediate": 0.010368417992596756,
+              "other": 0.6399736429000562
+            },
+            "donor_final_wilson_ci": [
+              0.010659301222663321,
+              0.049611219121148305
+            ],
+            "cf_joint_wilson_ci": [
+              0.02956428384097465,
+              0.08397025559266141
+            ],
+            "answer_changed_rate": 0.6756756756756757,
+            "n_cf_joint_distinct": 246
+          },
+          "shuffled_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.4749034749034749,
+              "donor_final": 0.007722007722007722,
+              "cf_joint": 0.011583011583011582,
+              "cf_single": 0.015444015444015444,
+              "recipient_intermediate": 0.011583011583011582,
+              "donor_intermediate": 0.007722007722007722,
+              "other": 0.47104247104247104
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 123,
+              "donor_final": 2,
+              "cf_joint": 3,
+              "cf_single": 4,
+              "recipient_intermediate": 3,
+              "donor_intermediate": 2,
+              "other": 122
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.47495929917047836,
+              "donor_final": 0.006008217691293899,
+              "cf_joint": 0.003120396929994573,
+              "cf_single": 0.0018606093495619816,
+              "recipient_intermediate": 0.00908985192650593,
+              "donor_intermediate": 0.00936119078998372,
+              "other": 0.4956004341421816
+            },
+            "donor_final_wilson_ci": [
+              0.0021201692749995716,
+              0.027713768731769527
+            ],
+            "cf_joint_wilson_ci": [
+              0.0039468710701741,
+              0.03349621252085563
+            ],
+            "answer_changed_rate": 0.5250965250965252,
+            "n_cf_joint_distinct": 246
+          },
+          "complement_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.30115830115830117,
+              "donor_final": 0.023166023166023165,
+              "cf_joint": 0.07335907335907337,
+              "cf_single": 0.003861003861003861,
+              "recipient_intermediate": 0.023166023166023165,
+              "donor_intermediate": 0.007722007722007722,
+              "other": 0.5675675675675675
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 78,
+              "donor_final": 6,
+              "cf_joint": 19,
+              "cf_single": 1,
+              "recipient_intermediate": 6,
+              "donor_intermediate": 2,
+              "other": 147
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.3010000387611923,
+              "donor_final": 0.006492499709291058,
+              "cf_joint": 0.004108686383193147,
+              "cf_single": 0.002577619287569286,
+              "recipient_intermediate": 0.011473312919105392,
+              "donor_intermediate": 0.010387999534865692,
+              "other": 0.6639598434047831
+            },
+            "donor_final_wilson_ci": [
+              0.010659301222663321,
+              0.049611219121148305
+            ],
+            "cf_joint_wilson_ci": [
+              0.04746343600945245,
+              0.11172597692974744
+            ],
+            "answer_changed_rate": 0.6988416988416988,
+            "n_cf_joint_distinct": 246
+          },
+          "random_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.9806949806949807,
+              "donor_final": 0.0,
+              "cf_joint": 0.0,
+              "cf_single": 0.0,
+              "recipient_intermediate": 0.0,
+              "donor_intermediate": 0.0,
+              "other": 0.019305019305019305
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 254,
+              "donor_final": 0,
+              "cf_joint": 0,
+              "cf_single": 0,
+              "recipient_intermediate": 0,
+              "donor_intermediate": 0,
+              "other": 5
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.9806999186141147,
+              "donor_final": 0.00013564314227027866,
+              "cf_joint": 7.75103670115878e-05,
+              "cf_single": 5.813277525869085e-05,
+              "recipient_intermediate": 0.0003100414680463512,
+              "donor_intermediate": 0.0005038173855753207,
+              "other": 0.018214936247723135
+            },
+            "donor_final_wilson_ci": [
+              0.0,
+              0.014615646838247825
+            ],
+            "cf_joint_wilson_ci": [
+              0.0,
+              0.014615646838247825
+            ],
+            "answer_changed_rate": 0.019305019305019266,
+            "n_cf_joint_distinct": 246
+          },
+          "mapped_full": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.0694980694980695,
+              "donor_final": 0.03861003861003861,
+              "cf_joint": 0.28185328185328185,
+              "cf_single": 0.02702702702702703,
+              "recipient_intermediate": 0.011583011583011582,
+              "donor_intermediate": 0.019305019305019305,
+              "other": 0.5521235521235521
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 18,
+              "donor_final": 10,
+              "cf_joint": 73,
+              "cf_single": 7,
+              "recipient_intermediate": 3,
+              "donor_intermediate": 5,
+              "other": 143
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.06943071465953364,
+              "donor_final": 0.009904828361535927,
+              "cf_joint": 0.005504836114826229,
+              "cf_single": 0.003081932895272431,
+              "recipient_intermediate": 0.01748366963230021,
+              "donor_intermediate": 0.0175418193095695,
+              "other": 0.8770521990269621
+            },
+            "donor_final_wilson_ci": [
+              0.021104889620649308,
+              0.06960221306020485
+            ],
+            "cf_joint_wilson_ci": [
+              0.23055725365856722,
+              0.339526020830707
+            ],
+            "answer_changed_rate": 0.9305019305019305,
+            "n_cf_joint_distinct": 246
+          }
+        },
+        "L4": {
+          "own_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.20463320463320464,
+              "donor_final": 0.003861003861003861,
+              "cf_joint": 0.10038610038610038,
+              "cf_single": 0.003861003861003861,
+              "recipient_intermediate": 0.003861003861003861,
+              "donor_intermediate": 0.03474903474903475,
+              "other": 0.6486486486486487
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 53,
+              "donor_final": 1,
+              "cf_joint": 26,
+              "cf_single": 1,
+              "recipient_intermediate": 1,
+              "donor_intermediate": 9,
+              "other": 168
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.20462864336206063,
+              "donor_final": 0.009412220393144185,
+              "cf_joint": 0.005558245376198315,
+              "cf_single": 0.0016655369419967076,
+              "recipient_intermediate": 0.01498983247797037,
+              "donor_intermediate": 0.014796165391691683,
+              "other": 0.7489493560569381
+            },
+            "donor_final_wilson_ci": [
+              0.0006818698910721083,
+              0.021542922531436352
+            ],
+            "cf_joint_wilson_ci": [
+              0.06942952436806599,
+              0.14302390766095832
+            ],
+            "answer_changed_rate": 0.7953667953667953,
+            "n_cf_joint_distinct": 254
+          },
+          "mapped_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.38223938223938225,
+              "donor_final": 0.003861003861003861,
+              "cf_joint": 0.06177606177606178,
+              "cf_single": 0.007722007722007722,
+              "recipient_intermediate": 0.007722007722007722,
+              "donor_intermediate": 0.023166023166023165,
+              "other": 0.5135135135135135
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 99,
+              "donor_final": 1,
+              "cf_joint": 16,
+              "cf_single": 2,
+              "recipient_intermediate": 2,
+              "donor_intermediate": 6,
+              "other": 133
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.3822440952510124,
+              "donor_final": 0.007827788649706457,
+              "cf_joint": 0.004301408614442658,
+              "cf_single": 0.0012012942977272286,
+              "recipient_intermediate": 0.011489798686326559,
+              "donor_intermediate": 0.012942977272286915,
+              "other": 0.5799926372284978
+            },
+            "donor_final_wilson_ci": [
+              0.0006818698910721083,
+              0.021542922531436352
+            ],
+            "cf_joint_wilson_ci": [
+              0.03837926404986469,
+              0.09798271213655327
+            ],
+            "answer_changed_rate": 0.6177606177606177,
+            "n_cf_joint_distinct": 254
+          },
+          "shuffled_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.4749034749034749,
+              "donor_final": 0.0,
+              "cf_joint": 0.015444015444015444,
+              "cf_single": 0.011583011583011582,
+              "recipient_intermediate": 0.011583011583011582,
+              "donor_intermediate": 0.0,
+              "other": 0.4864864864864865
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 123,
+              "donor_final": 0,
+              "cf_joint": 4,
+              "cf_single": 3,
+              "recipient_intermediate": 3,
+              "donor_intermediate": 0,
+              "other": 126
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.47492733966285605,
+              "donor_final": 0.006200348769618291,
+              "cf_joint": 0.002925789575663631,
+              "cf_single": 0.0011819414842084868,
+              "recipient_intermediate": 0.00846735128850998,
+              "donor_intermediate": 0.009223018794807207,
+              "other": 0.49707421042433636
+            },
+            "donor_final_wilson_ci": [
+              0.0,
+              0.014615646838247825
+            ],
+            "cf_joint_wilson_ci": [
+              0.006021741998008371,
+              0.03903048717728198
+            ],
+            "answer_changed_rate": 0.5250965250965252,
+            "n_cf_joint_distinct": 254
+          },
+          "complement_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.3166023166023166,
+              "donor_final": 0.011583011583011582,
+              "cf_joint": 0.08108108108108109,
+              "cf_single": 0.015444015444015444,
+              "recipient_intermediate": 0.003861003861003861,
+              "donor_intermediate": 0.019305019305019305,
+              "other": 0.5521235521235521
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 82,
+              "donor_final": 3,
+              "cf_joint": 21,
+              "cf_single": 4,
+              "recipient_intermediate": 1,
+              "donor_intermediate": 5,
+              "other": 143
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.31654299939942265,
+              "donor_final": 0.009570490342329077,
+              "cf_joint": 0.004591510548850185,
+              "cf_single": 0.0014917565918205243,
+              "recipient_intermediate": 0.013309568552996106,
+              "donor_intermediate": 0.013987639731096345,
+              "other": 0.6405060348334851
+            },
+            "donor_final_wilson_ci": [
+              0.0039468710701741,
+              0.03349621252085563
+            ],
+            "cf_joint_wilson_ci": [
+              0.053641143026695565,
+              0.1207665610810256
+            ],
+            "answer_changed_rate": 0.6833976833976834,
+            "n_cf_joint_distinct": 254
+          },
+          "random_sub": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.9845559845559846,
+              "donor_final": 0.0,
+              "cf_joint": 0.0,
+              "cf_single": 0.0,
+              "recipient_intermediate": 0.0,
+              "donor_intermediate": 0.0,
+              "other": 0.015444015444015444
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 255,
+              "donor_final": 0,
+              "cf_joint": 0,
+              "cf_single": 0,
+              "recipient_intermediate": 0,
+              "donor_intermediate": 0,
+              "other": 4
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.9845399771393145,
+              "donor_final": 0.0001937346223143538,
+              "cf_joint": 7.749384892574152e-05,
+              "cf_single": 0.0,
+              "recipient_intermediate": 0.0003099753957029661,
+              "donor_intermediate": 0.0002712284712400953,
+              "other": 0.014607590522502276
+            },
+            "donor_final_wilson_ci": [
+              0.0,
+              0.014615646838247825
+            ],
+            "cf_joint_wilson_ci": [
+              0.0,
+              0.014615646838247825
+            ],
+            "answer_changed_rate": 0.015444015444015413,
+            "n_cf_joint_distinct": 254
+          },
+          "mapped_full": {
+            "n": 259,
+            "rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.11583011583011583,
+              "donor_final": 0.011583011583011582,
+              "cf_joint": 0.26640926640926643,
+              "cf_single": 0.015444015444015444,
+              "recipient_intermediate": 0.011583011583011582,
+              "donor_intermediate": 0.023166023166023165,
+              "other": 0.555984555984556
+            },
+            "counts": {
+              "unparseable": 0,
+              "unchanged": 30,
+              "donor_final": 3,
+              "cf_joint": 69,
+              "cf_single": 4,
+              "recipient_intermediate": 3,
+              "donor_intermediate": 6,
+              "other": 144
+            },
+            "null_rates": {
+              "unparseable": 0.0,
+              "unchanged": 0.11590495018800635,
+              "donor_final": 0.010757064774973834,
+              "cf_joint": 0.0059890684963367835,
+              "cf_single": 0.0015699499941853705,
+              "recipient_intermediate": 0.01465286661239679,
+              "donor_intermediate": 0.016145288211807576,
+              "other": 0.8349808117222933
+            },
+            "donor_final_wilson_ci": [
+              0.0039468710701741,
+              0.03349621252085563
+            ],
+            "cf_joint_wilson_ci": [
+              0.21626897860139915,
+              0.32337771355083256
+            ],
+            "answer_changed_rate": 0.8841698841698842,
+            "n_cf_joint_distinct": 254
+          }
+        },
+        "self_mapped_sub_unchanged_rate": 0.7915057915057915,
+        "coord_map_fit": {
+          "mapped_sub": {
+            "0": {
+              "lambda": 10.0,
+              "eval_r2": 0.4123451295367895
+            },
+            "2": {
+              "lambda": 100.0,
+              "eval_r2": 0.2208116741492674
+            },
+            "4": {
+              "lambda": 100.0,
+              "eval_r2": 0.15658921247721913
+            }
+          },
+          "shuffled_sub": {
+            "0": {
+              "lambda": 10000.0,
+              "eval_r2": -0.02032418972101957
+            },
+            "2": {
+              "lambda": 10000.0,
+              "eval_r2": -0.03562254926194508
+            },
+            "4": {
+              "lambda": 10000.0,
+              "eval_r2": -0.050191053497781635
+            }
+          },
+          "complement_sub": {
+            "0": {
+              "lambda": 1000.0,
+              "eval_r2": 0.5319182441294135
+            },
+            "2": {
+              "lambda": 1000.0,
+              "eval_r2": 0.30880874136591874
+            },
+            "4": {
+              "lambda": 1000.0,
+              "eval_r2": 0.23965489917164096
+            }
+          }
+        }
+      },
+      "n_recipients": 259,
+      "patch_elapsed_sec": 1629.9169714804739,
+      "related_runs": [
+        "20260927-092012_codi_xmech-coconut-to-codi",
+        "20260927-094215_codi_das-minimal-pair-fixed",
+        "20260927-084449_coconut_das-minimal-pair-fixed"
+      ]
+    }
+  },
+  "hyperparams": {
+    "k": 32,
+    "tgt_sites": [
+      0,
+      2,
+      4
+    ],
+    "src_sites": [
+      1,
+      4
+    ],
+    "n_recipients_cap": 1000,
+    "pair_seed": 0,
+    "reps": 200,
+    "lambdas": [
+      0.1,
+      1.0,
+      10.0,
+      100.0,
+      1000.0,
+      10000.0
+    ]
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A5000 (secure) / NVIDIA RTX A5000",
+  "author": "Henning Lindig",
+  "notes": "P4 cross-mechanism transplant restricted to the DAS value subspace, Coconut -> CODI.",
+  "timestamp_utc": "2026-09-27T19:14:55.776550+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

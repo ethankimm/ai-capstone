@@ -1,0 +1,172 @@
+{
+  "run_id": "20260927-182915_coconut_das-minimal-pair-saverot",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "validation",
+    "n_examples": 500,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "intervention_accuracy": 0.65,
+    "extra": {
+      "design": "E4: DAS on same-problem minimal-pair donors, joint multi-site rotation (steered_to_donor_audit.md #5, next_experiments.md pasted plan)",
+      "sweep": [
+        {
+          "group": [
+            1,
+            4
+          ],
+          "group_label": "1+4",
+          "k": 16,
+          "n": 100,
+          "answer_changed_rate": 0.85,
+          "answer_changed_wilson_ci": [
+            0.7671626666784216,
+            0.906940968088377
+          ],
+          "matches_twin_rate": 0.63,
+          "matches_twin_wilson_ci": [
+            0.5322034757513312,
+            0.7181778743049083
+          ]
+        },
+        {
+          "group": [
+            1,
+            4
+          ],
+          "group_label": "1+4",
+          "k": 32,
+          "n": 100,
+          "answer_changed_rate": 0.86,
+          "answer_changed_wilson_ci": [
+            0.7786263961619276,
+            0.914737342455351
+          ],
+          "matches_twin_rate": 0.65,
+          "matches_twin_wilson_ci": [
+            0.5525426042919797,
+            0.7363589534652197
+          ]
+        }
+      ],
+      "references": [
+        {
+          "group": [
+            1,
+            4
+          ],
+          "group_label": "1+4",
+          "k": 768,
+          "n": 100,
+          "answer_changed_rate": 0.87,
+          "answer_changed_wilson_ci": [
+            0.7901947810519012,
+            0.9224290614158575
+          ],
+          "matches_twin_rate": 0.75,
+          "matches_twin_wilson_ci": [
+            0.6569535362992417,
+            0.8245490599627573
+          ],
+          "reference": "full"
+        },
+        {
+          "group": [
+            1,
+            4
+          ],
+          "group_label": "1+4",
+          "k": 16,
+          "n": 100,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            1,
+            4
+          ],
+          "group_label": "1+4",
+          "k": 32,
+          "n": 100,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        }
+      ],
+      "best_group": "1+4",
+      "best_k": 32,
+      "site_groups": [
+        "1+4"
+      ],
+      "k_values": [
+        16,
+        32
+      ],
+      "train_n_pairs_requested": 200,
+      "train_n_pairs_actual": 200,
+      "eval_n_pairs_requested": 100,
+      "eval_n_pairs_actual": 100,
+      "train_base_accuracy": 0.9212,
+      "eval_base_accuracy": 0.366,
+      "epochs": 5,
+      "lr": 0.001,
+      "n_trainable_params_backbone": 124442112,
+      "teacher_forcing_target": "'### {twin.answer}' (token 21017 as the model emits it) after the final pass; pools: train = gsm_original_train.json, eval = gsm_original_valid.json",
+      "site_definition": "pass p = vector spliced into the p-th <|latent|> slot",
+      "related_runs": [
+        "20260920-195725_coconut_minimal-pair-patch",
+        "20260920-053935_coconut_das-pilot"
+      ]
+    }
+  },
+  "hyperparams": {
+    "num_latents": 6,
+    "site_groups": [
+      "1+4"
+    ],
+    "k_values": [
+      16,
+      32
+    ],
+    "train_n_pairs": 200,
+    "eval_n_pairs": 100,
+    "epochs": 5,
+    "lr": 0.001
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A5000 (secure) / NVIDIA RTX A5000",
+  "author": "Henning Lindig",
+  "notes": "E4: Distributed Alignment Search on same-problem minimal-pair donors for Coconut -- a shared learned orthogonal rotation R isolates a k-dim subspace, jointly patched across every pass in a group (pass-1-alone vs. joint {1,4}), trained to maximize the twin's own gold-answer likelihood. Tests whether E3(a)'s pass-1 48.6% and pass-4 28.6% minimal-pair signals are explained by a low-dimensional linear subspace.",
+  "timestamp_utc": "2026-09-27T18:29:15.240563+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}
