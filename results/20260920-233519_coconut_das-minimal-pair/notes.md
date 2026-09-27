@@ -112,3 +112,7 @@ low-dimensional linear code.
   -- if the SAME dimensions matter for both readout and causal control, that would be a
   much stronger "this is the scratchpad variable's actual encoding" claim than either
   result alone.
+
+
+---
+**Caveat (2026-09-27): the DAS training recipe used here is suspect.** In `20260927-072659_codi_das-minimal-pair-aligned-bigk` the same recipe (lr 1e-3, 5 epochs, teacher-forced CE) trained at k=512 steers 22% while an UNTRAINED random rotation steers 71% on the same pairs. This run had no untrained reference, so its null may be an optimization failure; do not cite it as evidence against a linear subspace until rerun with a fixed recipe.

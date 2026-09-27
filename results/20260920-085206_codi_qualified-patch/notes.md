@@ -116,3 +116,5 @@ recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (
 iteration 6. Per-site real/random/mean rates describe shifted sites; the cross-problem null itself is not expected to depend on the shift, but should be confirmed with an aligned rerun. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
 z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
 Numbers above are left as logged; they describe the shifted intervention.
+
+Aligned rerun of this experiment: `20260927-062443_codi_qualified-patch-aligned` (z0 matches_cf 7.5% vs 0.5% here; see its notes on why real≈random is not a null).

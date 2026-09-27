@@ -46,6 +46,17 @@ similar order of magnitude to the earlier `20260920-050602_codi_das-pilot`'s 13,
 steps (150 x 5 x 18 combos) despite fewer combos, because train_n_pairs is ~3x larger
 per the plan's explicit n=500 spec.
 
+Sites (aligned 2026-09-27): site s = z_s, the latent fed INTO loop iteration s+1,
+s = 0..n_iters-1 (z_0 = latent-0). At iteration s+1 the recipient's own z_s is the
+background and the twin's z_s the donor. The first E4 run
+(`20260920-235312_codi_das-minimal-pair`, groups "4" and "1,2,3,4" in the old 1-indexed
+labels) mixed the recipient's z_{i-1} background with the twin's z_i -- see the correction
+note on that run. Default groups are now "4" and "0,2,4", the sites the aligned E3 rerun
+(`20260927-004340_codi_minimal-pair-patch-aligned`) found carry the value. Each group also
+gets two untrained references on the same eval pairs: `full` (k=768, i.e. the raw
+full-vector swap -- any orthogonal R gives exactly z_B) and `untrained` (a random
+orthogonal R at each k: the floor for what training adds).
+
 Run inside the CODI venv, from the CODI checkout (same convention as `das_codi.py`):
 
   cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/das_minimal_pair_codi.py \\
@@ -55,7 +66,7 @@ Run inside the CODI venv, from the CODI checkout (same convention as `das_codi.p
       --lora_r 128 --lora_alpha 32 --lora_init --greedy True \\
       --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 \\
       --inf_latent_iterations 6 --inf_num_iterations 1 --remove_eos True --use_lora True \\
-      --site_groups "4;1,2,3,4" --k_values 8,16,32,64 \\
+      --site_groups "4;0,2,4" --k_values 8,16,32,64 \\
       --train_n_pairs 500 --eval_n_pairs 150 --epochs 5
 """
 from __future__ import annotations
@@ -92,15 +103,14 @@ DELTAS = (1, -1, 2, -2, 3, -3)
 
 @dataclass
 class DASArguments:
-    slug: str = field(default="das-minimal-pair")
+    slug: str = field(default="das-minimal-pair-aligned")
     stage: str = field(default="pilot")
     hardware: str = field(default="RunPod GPU")
     checkpoint_label: Optional[str] = field(default=None)
     site_groups: str = field(
-        default="4;1,2,3,4",
+        default="4;0,2,4",
         metadata={"help": "semicolon-separated groups, each a comma-separated list of "
-                           "1-indexed iterations sharing one rotation, e.g. '4;1,2,3,4' "
-                           "= iter-4-alone and joint prefix-1..4 (E4's two CODI target sites)"},
+                           "sites z_s (0-indexed; z_s feeds iteration s+1) sharing one rotation"},
     )
     k_values: str = field(default="8,16,32,64", metadata={"help": "comma-separated subspace sizes to sweep"})
     train_n_pairs: int = field(default=500, metadata={"help": "qualified minimal-pair training tuples per (group,k)"})
@@ -161,8 +171,8 @@ def run_intervened(model, tokenizer, question: str, device: str, n_iters: int,
     if model.use_prj:
         latent = model.prj(latent)
     for it in range(1, n_iters + 1):
-        if it in sites:
-            z_b = donor_vecs[it].to(device=device, dtype=torch.float32)
+        if it - 1 in sites:  # site s = z_s, fed into iteration s+1
+            z_b = donor_vecs[it - 1].to(device=device, dtype=torch.float32)
             latent = intervene(rotation, latent.float(), z_b, k).to(latent.dtype)
         outputs = model.codi(inputs_embeds=latent, use_cache=True, output_hidden_states=True, past_key_values=pkv)
         pkv = outputs.past_key_values
@@ -191,7 +201,7 @@ def teacher_forced_ce(model, tokenizer, pkv, device: str, target_text: str) -> O
 
 def decode_one(model, tokenizer, device, n_iters, max_new_tokens, question: str):
     q = question.strip().replace("  ", " ")
-    pkv, thoughts, latent = run_thoughts(model, tokenizer, q, device, n_iters)
+    pkv, thoughts, latent = run_thoughts(model, tokenizer, q, device, n_iters, include_latent0=True)
     raw = decode_answer(model, tokenizer, pkv, latent, device, max_new_tokens)
     return extract_final_number(raw), thoughts
 
@@ -200,8 +210,8 @@ def build_minimal_pairs(model, tokenizer, device, n_iters, max_new_tokens, examp
                          n_pairs: int, max_candidate_checks: int, pair_seed: int, tag: str):
     """Decode-then-filter minimal-pair pool, mirroring `patch_minimal_pair_codi.py`:
     base-correct originals, propagation-qualified perturbation, twin also base-correct.
-    Returns a list of (mp, pred_base, twin_vecs) tuples, twin_vecs = {iter: donor
-    thought tensor at every 1..n_iters iteration} for use at any site/group."""
+    Returns a list of (mp, pred_base, twin_vecs) tuples, twin_vecs = {s: the twin's z_s}
+    for s = 0..n_iters-1, for use at any site/group."""
     t0 = time.perf_counter()
     base_info: dict[int, dict] = {}
     for ex in examples:
@@ -234,7 +244,7 @@ def build_minimal_pairs(model, tokenizer, device, n_iters, max_new_tokens, examp
         n_checked += 1
         twin_pred, twin_thoughts = decode_one(model, tokenizer, device, n_iters, max_new_tokens, mp.twin.question)
         if is_correct(twin_pred, mp.twin.answer):
-            twin_vecs = {it: twin_thoughts[it - 1]["post"] for it in range(1, n_iters + 1)}
+            twin_vecs = {rec["iter"]: rec["post"] for rec in twin_thoughts if rec["iter"] < n_iters}
             pairs.append((mp, base_info[mp.original.idx]["pred"], twin_vecs))
         if n_checked % 100 == 0:
             print(f"[{tag}] checked {n_checked} candidates, {len(pairs)} qualified so far", flush=True)
@@ -326,9 +336,21 @@ def main() -> None:
         da.eval_n_pairs, da.eval_max_candidate_checks, da.pair_seed + 1, tag="eval")
 
     all_summaries = []
+    reference_summaries = []
     all_records = []
     t0 = time.perf_counter()
     for group in groups:
+        # untrained references on the same eval pairs: full-vector swap, random rotation per k
+        torch.manual_seed(da.train_seed)
+        for ref_k, tag in [(HIDDEN_DIM, "full")] + [(k, "untrained") for k in k_values]:
+            ref_rot = OrthogonalRotation(HIDDEN_DIM).to(device).eval()
+            records, summary = evaluate_rotation(model, tokenizer, device, n_iters, group, ref_k, ref_rot,
+                                                  eval_pairs, da.max_new_tokens)
+            summary["reference"] = tag
+            reference_summaries.append(summary)
+            all_records.extend([{"group": group_label(group), "k": ref_k, "reference": tag, **r} for r in records])
+            print(f"[ref {tag}] group={group_label(group)} k={ref_k}: matches_twin={summary['matches_twin_rate']:.3f} "
+                  f"answer_changed={summary['answer_changed_rate']:.3f}", flush=True)
         for k in k_values:
             print(f"--- training group={group_label(group)} k={k} (n_train_pairs={len(train_pairs)}) ---", flush=True)
             rotation = train_rotation(model, tokenizer, device, n_iters, group, k, list(train_pairs), da.lr, da.epochs)
@@ -349,7 +371,9 @@ def main() -> None:
         "extra": {
             "design": "E4: DAS on same-problem minimal-pair donors, joint multi-site rotation "
                       "(steered_to_donor_audit.md #5, next_experiments.md pasted plan)",
+            "site_definition": "site s = z_s = latent fed into loop iteration s+1; z_0 = latent-0",
             "sweep": all_summaries,
+            "references": reference_summaries,
             "best_group": best["group_label"], "best_k": best["k"],
             "site_groups": [group_label(g) for g in groups], "k_values": k_values,
             "train_n_pairs_requested": da.train_n_pairs, "train_n_pairs_actual": len(train_pairs),
@@ -358,8 +382,8 @@ def main() -> None:
             "epochs": da.epochs, "lr": da.lr,
             "n_trainable_params_backbone": n_params,
             "related_runs": [
-                "20260920-190420_codi_minimal-pair-patch",
-                "20260920-050602_codi_das-pilot",
+                "20260920-235312_codi_das-minimal-pair",
+                "20260927-004340_codi_minimal-pair-patch-aligned",
             ],
         },
     }
@@ -379,7 +403,7 @@ def main() -> None:
         },
         seed=da.train_seed,
         hardware=f"{da.hardware} / {torch.cuda.get_device_name(0)}",
-        notes="E4: Distributed Alignment Search on same-problem minimal-pair donors -- a shared "
+        notes="E4 (aligned sites z_0..z_5): Distributed Alignment Search on same-problem minimal-pair donors -- a shared "
               "learned orthogonal rotation R isolates a k-dim subspace, jointly patched across "
               "every site in a group (single-slot vs. joint prefix span), trained to maximize "
               "the twin's own gold-answer likelihood. Tests whether E3(a)'s ALL-SLOT upper bound "

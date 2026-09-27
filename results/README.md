@@ -67,3 +67,8 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260927-004443_coconut_nonsteered-buckets-e3full](20260927-004443_coconut_nonsteered-buckets-e3full/) | coconut | openai-community/gpt2 | test (n=1194) | 6 | - | 0 | full_run | Henning Lindig |
 | [20260927-005051_codi_necessity-all-replacements](20260927-005051_codi_necessity-all-replacements/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run | Henning Lindig |
 | [20260927-005834_coconut_necessity-all-replacements](20260927-005834_coconut_necessity-all-replacements/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run | Henning Lindig |
+| [20260927-062443_codi_qualified-patch-aligned](20260927-062443_codi_qualified-patch-aligned/) | codi | gpt2 | test (n=600) | 6 | 0.435 | None | full_run | Henning Lindig |
+| [20260927-062452_coconut_ladder-patch](20260927-062452_coconut_ladder-patch/) | coconut | openai-community/gpt2 | test (n=1194) | 6 | 0.336 | 0 | full_run | Henning Lindig |
+| [20260927-063622_codi_ladder-patch](20260927-063622_codi_ladder-patch/) | codi | gpt2 | test (n=1319) | 6 | 0.415 | 0 | full_run | Henning Lindig |
+| [20260927-070156_codi_das-minimal-pair-aligned](20260927-070156_codi_das-minimal-pair-aligned/) | codi | gpt2 | validation (n=800) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260927-072659_codi_das-minimal-pair-aligned-bigk](20260927-072659_codi_das-minimal-pair-aligned-bigk/) | codi | gpt2 | validation (n=800) | 6 | - | 0 | full_run | Henning Lindig |

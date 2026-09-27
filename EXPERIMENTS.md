@@ -4317,6 +4317,10 @@ See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measure
 - **site 6** taxonomy: unchanged 152, other_number 21, recipient_gold 5, unparseable 2
 - **total** taxonomy: unchanged 891, other_number 149, recipient_gold 22, unparseable 15, donor_intermediate 1, counterfactual 1, donor_final 1
 
+
+---
+**Caveat (2026-09-27): the DAS training recipe used here is suspect.** In `20260927-072659_codi_das-minimal-pair-aligned-bigk` the same recipe (lr 1e-3, 5 epochs, teacher-forced CE) trained at k=512 steers 22% while an UNTRAINED random rotation steers 71% on the same pairs. This run had no untrained reference, so its null may be an optimization failure; do not cite it as evidence against a linear subspace until rerun with a fixed recipe.
+
 ---
 
 ## 2026-09-20 — Distributed Alignment Search on Coconut: learned subspace still doesn't steer (coconut, run_id: 20260920-053935_coconut_das-pilot)
@@ -4458,6 +4462,10 @@ See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measure
 - **site 5** taxonomy: unchanged 131, other_number 40, recipient_intermediate 6, recipient_gold 2, counterfactual 1
 - **total** taxonomy: unchanged 729, other_number 297, recipient_intermediate 24, recipient_gold 20, donor_intermediate 7, counterfactual 3
 
+
+---
+**Caveat (2026-09-27): the DAS training recipe used here is suspect.** In `20260927-072659_codi_das-minimal-pair-aligned-bigk` the same recipe (lr 1e-3, 5 epochs, teacher-forced CE) trained at k=512 steers 22% while an UNTRAINED random rotation steers 71% on the same pairs. This run had no untrained reference, so its null may be an optimization failure; do not cite it as evidence against a linear subspace until rerun with a fixed recipe.
+
 ---
 
 ## 2026-09-20 — E2: step-aligned, base-correct, controlled raw single-slot patch at every CODI iteration -- null survives the fixed pair design (codi, run_id: 20260920-085206_codi_qualified-patch)
@@ -4578,6 +4586,8 @@ recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (
 iteration 6. Per-site real/random/mean rates describe shifted sites; the cross-problem null itself is not expected to depend on the shift, but should be confirmed with an aligned rerun. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
 z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
 Numbers above are left as logged; they describe the shifted intervention.
+
+Aligned rerun of this experiment: `20260927-062443_codi_qualified-patch-aligned` (z0 matches_cf 7.5% vs 0.5% here; see its notes on why real≈random is not a null).
 
 ---
 
@@ -5029,6 +5039,10 @@ low-dimensional linear code.
   much stronger "this is the scratchpad variable's actual encoding" claim than either
   result alone.
 
+
+---
+**Caveat (2026-09-27): the DAS training recipe used here is suspect.** In `20260927-072659_codi_das-minimal-pair-aligned-bigk` the same recipe (lr 1e-3, 5 epochs, teacher-forced CE) trained at k=512 steers 22% while an UNTRAINED random rotation steers 71% on the same pairs. This run had no untrained reference, so its null may be an optimization failure; do not cite it as evidence against a linear subspace until rerun with a fixed recipe.
+
 ---
 
 ## 2026-09-20 — E4: DAS on same-problem minimal-pair donors, joint multi-site subspace, CODI -- flat null across every (site, k) (codi, run_id: 20260920-235312_codi_das-minimal-pair)
@@ -5149,6 +5163,8 @@ recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (
 iteration 6. The learned subspace mixed vectors from two different positions; the DAS results for CODI need an aligned rerun. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
 z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
 Numbers above are left as logged; they describe the shifted intervention.
+
+Aligned rerun of this experiment: `20260927-070156_codi_das-minimal-pair-aligned` (raw z0+z2+z4 swap 84%; learned k≤64 subspace still ≤6%).
 
 ---
 
@@ -5284,6 +5300,10 @@ gap is the robust finding here, not the exact saturation k.
 - Revisit whether the trained k=128 joint-{1,4} rotation's subspace overlaps with the
   continuous probe's recovered directions (`20260920-040411_coconut_probe-continuous-pilot`)
   — same "Next" item carried over from the pilot, still not done.
+
+
+---
+**Caveat (2026-09-27): the DAS training recipe used here is suspect.** In `20260927-072659_codi_das-minimal-pair-aligned-bigk` the same recipe (lr 1e-3, 5 epochs, teacher-forced CE) trained at k=512 steers 22% while an UNTRAINED random rotation steers 71% on the same pairs. This run had no untrained reference, so its null may be an optimization failure; do not cite it as evidence against a linear subspace until rerun with a fixed recipe.
 
 ---
 
@@ -6138,3 +6158,216 @@ Single-pass accuracy (PWC), baseline 0.331:
 **Caveats:** Coconut was trained with a curriculum, so trunc_k<6 may be closer to in-distribution than
 CODI's truncation. pass@k samples answer tokens only, T=0.7. One noise draw per (example, pass).
 **Next:** side-by-side Q2 table for both mechanisms in RESEARCH_PLAN; rerun CODI E2/E4 aligned.
+
+---
+
+## 2026-09-27 — E2 rerun with aligned sites, CODI: single-site cross-problem patching moves z0's step-0 value ~8% of the time, for any donor; no other site carries its assigned step (codi, run_id: 20260927-062443_codi_qualified-patch-aligned)
+
+**Goal:** Rerun E2 (`20260920-085206_codi_qualified-patch`) with the site-indexing fix: site s = z_s, the
+latent fed into iteration s+1 (z_0 = latent-0), donor z_s → `override_input_at={s+1: …}`. Same design,
+seed, slice and site→step map (`site_to_step(s, 6, max_step)`) as before, so the only change is the fix.
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3`, 6 latents, eval mode, greedy.
+**Data:** gsm8k-aug test n=600 seed=0 (the E2/E3 slice); base accuracy 0.435, 261 base-correct, 370 pairs.
+**Command:** `scripts/patch_qualified_codi.py … --slug qualified-patch-aligned --stage full_run --eval_n 600
+--n_pairs_per_site 200 --output_dir /tmp/o` (full flags in `eval_command.txt`). Pod `5wb7p2e1kr568o`
+(RTX A6000 secure, $0.53/hr — A5000 out of stock), in parallel with E4 and the two ladder runs; ~10 min.
+**Headline results:** `intervention_accuracy` (matches_cf, real donor, pooled) = 0.041, random donor 0.041.
+
+| site (step) | n | changed real / random / mean | matches_cf real | random | old E2 (shifted) real cf |
+|---|---|---|---|---|---|
+| z0 (0) | 190 | 0.43 / 0.43 / 0.31 | **0.075** | **0.081** | 0.005 |
+| z1 (1) | 121 | 0.19 / 0.18 / 0.10 | 0.008 | 0.000 | 0.025 |
+| z2 (2) | 52 | 0.62 / 0.64 / 0.42 | 0.000 | 0.000 | 0.000 |
+| z3–z5 (4–6) | 2–3 each | — | 0 | 0 | 0 |
+
+(`mean` has no counterfactual by construction — matches_cf is None; see `outcome_taxonomy`.)
+
+**Interpretation:**
+- The fix moves z0 from 0.5% to 7.5–8.1% counterfactual match: the donor's latent-0 does carry its
+  step-0 value into the recipient's own chain in a minority of cases.
+- Real ≈ random is NOT a null here: E2's "random donor" is a second real donor scored against its OWN
+  value, so both transferring their value at the same rate is exactly what value transfer predicts.
+  The proper control is a permutation null (score against an unrelated donor's value), which the
+  ladder run has: `20260927-063622_codi_ladder-patch` gives z0 cf_single 8–12% against a null of 0.1%.
+- z1 carries nothing (inert in aligned E3 too). z2 is tested against step 2 by the positional map, but
+  aligned E3 and the ladder say z2/z4 carry later values for chains of ≥3 steps — and only 52 recipients
+  have a step-2 qualifying step, so this cell is thin. The positional map (max_step=8 over 6 sites) is a
+  poor fit for CODI's even-site layout; the ladder's cf_joint/cf_single scoring supersedes it.
+**Gotchas hit:** The E2 design's random-donor "control" is not a control for value transfer (above).
+**Caveats:** Single slice, greedy; z3–z5 cells have n ≤ 3.
+**Next:** Use the ladder run for cross-problem claims; E2 stays as the like-for-like correction of the old run.
+
+---
+
+## 2026-09-27 — P1 transfer ladder, Coconut: pass 1 carries step 0's value and pass 4 step 1's, portable across problems at every level; all six passes carry the donor's answer itself (coconut, run_id: 20260927-062452_coconut_ladder-patch)
+
+**Goal:** RESEARCH_PLAN §4 P1, Coconut counterpart of `20260927-063622_codi_ladder-patch` (same donor
+levels, scoring and null — see that record and `scripts/ladder_common.py`).
+**Mechanism / model:** `coconut`, gpt2 / `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`, 6 latents.
+Conditions: all_slot (passes 0..5), carriers (passes 1,4 — the value-carrying passes of E3
+`20260927-003331`), pass 1 alone, pass 4 alone.
+**Data:** gold-trace test file, all 1194; base accuracy 0.336; 296 recipients (chain lengths 2/3/4+:
+173/101/22).
+**Command:** `scripts/patch_ladder_coconut.py --eval_n 0 --stage full_run` (see `eval_command.txt`).
+Pod `5wb7p2e1kr568o`, RTX A6000 secure; decode 75 s, patching ~4 min.
+**Headline results** (n=296, rate / permutation null):
+
+| level | condition | unchanged | donor_final | cf_joint | cf_single | other |
+|---|---|---|---|---|---|---|
+| L2 | all_slot | 0.04 | **0.37** / 0.011 | 0.15 / 0.006 | 0.01 | 0.42 |
+| L2 | carriers 1,4 | 0.08 | 0.15 / 0.010 | **0.27** / 0.005 | 0.01 | 0.46 |
+| L2 | pass 1 | 0.09 | 0.04 | **0.28** / 0.005 | **0.12** / 0.003 | 0.46 |
+| L2 | pass 4 | 0.55 | 0.02 | 0.05 | 0.07 | 0.27 |
+| L3 | all_slot | 0.04 | **0.26** / 0.010 | 0.04 | 0.01 | 0.61 |
+| L3 | carriers | 0.06 | 0.03 | **0.34** / 0.005 | 0.01 | 0.51 |
+| L3 | pass 1 | 0.10 | 0.01 | 0.25 | 0.12 | 0.49 |
+| L4 | all_slot | 0.02 | **0.23** / 0.012 | 0.04 | 0.01 | 0.65 |
+| L4 | carriers | 0.03 | 0.03 | **0.29** / 0.006 | 0.01 | 0.56 |
+| L4 | pass 1 | 0.06 | 0.01 | 0.25 | 0.11 | 0.54 |
+
+By chain length: **pass 1** → 2-step cf_joint 0.43–0.47 at every level; 3-step cf_single (= the step-0
+substitution) 0.30–0.34 at every level. **Carriers** on 3-step chains: cf_joint 0.19 / 0.28 / 0.28
+(L2/L3/L4). **all_slot** donor_final 2-step 0.38 / 0.28 / 0.26.
+
+**Interpretation:**
+- **Value per pass, portable across problems.** Pass 1 holds step 0's result: transplanted from ANY
+  problem, the recipient carries on with the donor's step-0 value (2-step: cf_joint ~45%; 3-step: exactly
+  the step-0 substitution, ~32%) — flat across L2/L3/L4, so the operator sequence does not matter. Adding
+  pass 4 turns 3-step answers into full cf_joint (step 0 AND step 1 values replaced, 19–28%), so pass 4
+  holds step 1's result. Null ≤0.5%.
+- **All six passes also carry the donor's answer.** all_slot gives the donor's final answer 23–37% even
+  for unrelated donors (L4), where CODI gives 4%. Coconut's full latent sequence contains the answer
+  (consistent with Li et al.: early routing to the answer); CODI's does not — it recomputes the final
+  operation from context.
+- Compared with CODI: both mechanisms carry portable intermediate values at a few sites (Coconut 1/4,
+  CODI 0/2/4). They differ in where the final operation lives: in Coconut's latents vs CODI's context.
+**Caveats:** One donor draw per level; greedy; 4+ step chains n=22. Base accuracy on this file 0.336.
+**Next:** P4 — cross-mechanism transplant at matched sites (CODI z0 → Coconut pass 1 for the step-0 value).
+
+---
+
+## 2026-09-27 — P1 transfer ladder, CODI: intermediate values transfer across problems (cf_joint 44→37→21% down the ladder on 2-step chains), the program does not (codi, run_id: 20260927-063622_codi_ladder-patch)
+
+**Goal:** RESEARCH_PLAN §4 P1: fill the ladder rungs between level 1 (same-problem twin, E3 aligned 83.9%)
+and level 4 (unrelated problem). Same recipients at every level; donors: **L2** different problem, same
+number of steps and same operator sequence; **L3** same number of steps, different operators; **L4** any
+problem (random-donor control). `scripts/patch_ladder_codi.py` + `scripts/ladder_common.py`.
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3`, 6 latents, eval mode, greedy.
+Aligned sites (z_s → iteration s+1). Conditions: all_slot (z0..z5), carriers (z0,z2,z4 — the value-carrying
+sites of aligned E3), each carrier alone.
+**Data:** gsm8k-aug test, all 1319; base accuracy 0.419; 369 recipients (base-correct, verified chain,
+with a base-correct L2, L3 and L4 donor of a different answer). Chain lengths 2/3/4+: 204/130/35.
+**Scoring** (first match wins; see `ladder_common.py`): unchanged · donor_final · **cf_joint** (the
+recipient's program re-run with every intermediate value replaced by the donor's value at the same step
+index — values from the latents, final operation and its question operands from the recipient's context)
+· cf_single (one donor step value substituted) · recipient/donor intermediate · other. Null: each answer
+re-bucketed against another recipient's donor at the same level (200 permutations).
+**Command:** see `eval_command.txt` (`--eval_n 0 --n_recipients 1000`). Pod `5wb7p2e1kr568o`, RTX A6000
+secure, ~15 min in parallel with three other jobs.
+**Headline results** (n=369, rate / permutation null):
+
+| level | condition | unchanged | donor_final | cf_joint | cf_single | other |
+|---|---|---|---|---|---|---|
+| L2 | all_slot | 0.06 | 0.15 / 0.009 | **0.33** / 0.004 | 0.01 | 0.45 |
+| L2 | carriers z0,z2,z4 | 0.06 | 0.13 / 0.009 | **0.34** / 0.004 | 0.01 | 0.44 |
+| L3 | all_slot | 0.06 | 0.02 / 0.008 | 0.24 / 0.004 | 0.02 | 0.63 |
+| L3 | carriers | 0.06 | 0.02 / 0.007 | **0.32** / 0.004 | 0.02 | 0.56 |
+| L4 | all_slot | 0.05 | 0.04 / 0.007 | 0.14 / 0.004 | 0.02 | 0.71 |
+| L4 | carriers | 0.05 | 0.02 / 0.008 | 0.18 / 0.005 | 0.01 | 0.68 |
+| L2/L3/L4 | z0 alone | 0.53–0.55 | ≤0.02 | 0.02–0.03 | **0.08–0.12** / 0.001 | 0.29–0.33 |
+| L2/L3/L4 | z2 alone | 0.63–0.68 | ≤0.01 | 0.02–0.03 | 0.01–0.03 | 0.26–0.28 |
+| L2/L3/L4 | z4 alone | 0.53–0.59 | ≤0.01 | 0.04–0.07 | 0.00–0.02 | 0.28–0.35 |
+
+By chain length (carriers; donor_final / cf_joint): 2 steps L2 0.06/0.44, L3 0.01/0.37, L4 0.01/0.21;
+3 steps L2 0.22/0.25, L3 0.05/0.31, L4 0.04/0.18; 4+ steps (n=35) L2 0.17/0.14, L3 0/0.09, L4 0/0.03.
+
+**Interpretation:**
+- **Values are portable, programs are not.** Transplanting a different problem's z0/z2/z4 makes CODI
+  finish its OWN computation on the DONOR's intermediate values (cf_joint 18–34%, null ≤0.5%). The
+  donor's final answer only comes through when the donor has the same operator sequence and ≥3 steps
+  (L2 3-step: 22%) — where the donor's program and the recipient's coincide. At L3/L4 donor_final is at
+  its null.
+- The ladder breaks gradually, not at a cliff: cf_joint 44% (L2) → 37% (L3) → 21% (L4) on 2-step
+  chains. Same operator sequence helps, but most of the transfer survives a different operator.
+  Level 1 (same problem, E3 aligned) is 84%.
+- Carriers ≥ all_slot at L3/L4: adding the "inert" odd sites z1/z3/z5 from an unrelated problem hurts.
+- Single carriers alone rarely finish the job (z0 alone → the step-0 substitution, cf_single 8–12%),
+  consistent with aligned E3 where each even site carries part of the value.
+- "other" stays 44–71%: most transplants from another problem produce an answer we can't attribute.
+**Gotchas hit:** For 2-step chains cf_joint and "step-0 cf_single" are the same number; cf_joint takes
+precedence, so the by-length split is the one to read. Donor_final precedes cf_joint when equal.
+**Caveats:** One recipient–donor draw per level (pair_seed 0); greedy; 4+ step chains are thin (n=35).
+Chains are the dataset's `<<>>` annotations filtered to self-consistent ones (`chain_ok`).
+**Next:** Coconut counterpart `20260927-062452_coconut_ladder-patch`; P4 (CODI↔Coconut transplant) can now
+start from value transfer at matched sites (CODI z0 ↔ Coconut pass 1 for step 0).
+
+---
+
+## 2026-09-27 — E4 rerun with aligned sites, CODI: the raw z0/z2/z4 swap steers 84%, but no learned subspace up to k=64 recovers more than 6% (codi, run_id: 20260927-070156_codi_das-minimal-pair-aligned)
+
+**Goal:** Rerun E4 (`20260920-235312_codi_das-minimal-pair`, flat null ≤4%) with the site-indexing fix.
+The old run spliced the twin's z_i into a background of the recipient's z_{i-1}. Here site s = z_s feeds
+iteration s+1, and both background and donor are z_s. Groups follow aligned E3 (`20260927-004340`):
+**z4 alone** (strongest single site) and **z0+z2+z4 jointly** (the value-carrying sites; mirrors Coconut's
+"1" and "1+4"). New untrained references on the same eval pairs: `full` (k=768 — any orthogonal R gives
+exactly the raw full-vector swap) and `untrained` (random R at each k).
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3`, 6 latents; transformer + LoRA frozen.
+**Data:** train pairs from gsm8k-aug train n=2500 (acc 0.790, 200 qualified pairs / 296 checked); eval
+pairs from validation n=800 (acc 0.790, 100 / 165). Same pools and seeds as the old run.
+**Command:** `scripts/das_minimal_pair_codi.py … --slug das-minimal-pair-aligned --site_groups "4;0,2,4"
+--k_values 8,16,32,64 --train_n_pairs 200 --eval_n_pairs 100 --epochs 5` (see `eval_command.txt`). Pod
+`5wb7p2e1kr568o` RTX A6000 secure, ~40 min in parallel with the E2 and ladder runs.
+**Headline results** (n=100 eval pairs, matches_twin / answer_changed):
+
+| group | full k=768 (raw swap) | untrained k≤64 | k=8 | k=16 | k=32 | k=64 |
+|---|---|---|---|---|---|---|
+| z4 | **0.41** / 0.58 | 0.00 / ≤0.01 | 0.02 / 0.03 | 0.02 / 0.08 | 0.00 / 0.10 | 0.02 / 0.09 |
+| z0+z2+z4 | **0.84** / 0.95 | 0.00 / ≤0.01 | 0.03 / 0.15 | 0.02 / 0.16 | 0.05 / 0.16 | **0.06** / 0.27 |
+| old run (shifted), best cell | — | — | | | 0.04 (1+2+3+4) | |
+
+Training loss (teacher-forced CE on the twin's answer) now reaches ~9–11 nats on z0+z2+z4 (old run:
+plateau at 30–40).
+**Interpretation:**
+- The references validate the fix: the untrained raw swap on these validation pairs reproduces aligned
+  E3 (84% vs 83.9% on the test set; z4 alone 41% vs 36%).
+- DAS is still a null relative to that ceiling. A learned k≤64 subspace (≤8% of the dims) moves the
+  answer more as k grows (answer_changed 15→27%) but lands on the twin's answer at most 6%. Either the
+  value is spread over many more than 64 dimensions, or 200 training pairs × 5 epochs cannot find the
+  rotation — the loss is still ~10 nats, so training is the more likely limit.
+- The old "DAS null" for CODI stands qualitatively, but it is no longer evidence against the value being
+  in the latents: the raw vectors at the same sites carry it 84% of the time.
+**Caveats:** n=100 eval pairs (±~5 pp); one seed; no hyperparameter search (lr 1e-3, 5 epochs).
+**Next:** large-k extension `*_codi_das-minimal-pair-aligned-bigk` (k = 128/256/512, z0+z2+z4), same pools.
+
+**Update (large-k extension `20260927-072659_codi_das-minimal-pair-aligned-bigk`):** at k=512 the untrained rotation steers 71% and the trained one 22% — the DAS training recipe is failing, so the ≤6% here is not evidence against a subspace.
+
+---
+
+## 2026-09-27 — E4 large-k extension, CODI: DAS training makes steering WORSE than an untrained rotation at k=512 (0.22 vs 0.71) — the DAS nulls are an optimization failure, not evidence (codi, run_id: 20260927-072659_codi_das-minimal-pair-aligned-bigk)
+
+**Goal:** Extend `20260927-070156_codi_das-minimal-pair-aligned` (k ≤ 64, ≤6%) to k ∈ {128, 256, 512} on
+the z0+z2+z4 group, matching the range of Coconut's saturation sweep (`20260921-195626`, k up to 256).
+**Mechanism / model / data:** as the parent run (same train/eval pools, seeds, lr 1e-3, 5 epochs, 200 train
+/ 100 eval pairs). Command in `eval_command.txt`. Same pod (RTX A6000 secure), ~22 min alone.
+**Headline results** (n=100, matches_twin / answer_changed):
+
+| k | untrained random R | trained R |
+|---|---|---|
+| 128 | 0.00 / 0.02 | 0.08 / 0.55 |
+| 256 | 0.11 / 0.18 | 0.15 / 0.47 |
+| 512 | **0.71** / 0.85 | **0.22** / 0.59 |
+| 768 (raw swap) | 0.84 / 0.95 | — |
+
+**Interpretation:**
+- At k=512 training cuts steering from 71% (random rotation) to 22%. An objective that rewards the
+  twin's answer should never do worse than its random initialisation on the same pairs, so the training
+  recipe is failing (lr/epochs/objective — the teacher-forced CE is still ~10 nats), not finding "no
+  subspace". A random 512-dim subspace already carries most of the value (71 of 84 points).
+- Consequence: **every DAS null so far (CODI pilot, CODI E4 old + aligned, Coconut E4 + saturation sweep)
+  used this same training recipe and should not be cited as evidence against a linear subspace** until the
+  recipe is fixed and shown to beat its untrained reference.
+**Gotchas hit:** Only visible because this run added untrained references; the earlier DAS runs had none.
+**Caveats:** n=100, one seed.
+**Next:** Debug DAS training before any more DAS claims: lower lr (1e-4), more epochs, check that the
+trained R beats the untrained one at k=512 on the TRAIN pairs first, and consider an interchange loss on
+the steered token only. Re-run CODI and Coconut E4 with the fixed recipe and the untrained references.

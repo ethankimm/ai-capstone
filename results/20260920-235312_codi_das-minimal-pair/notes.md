@@ -116,3 +116,5 @@ recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (
 iteration 6. The learned subspace mixed vectors from two different positions; the DAS results for CODI need an aligned rerun. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
 z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
 Numbers above are left as logged; they describe the shifted intervention.
+
+Aligned rerun of this experiment: `20260927-070156_codi_das-minimal-pair-aligned` (raw z0+z2+z4 swap 84%; learned k≤64 subspace still ≤6%).

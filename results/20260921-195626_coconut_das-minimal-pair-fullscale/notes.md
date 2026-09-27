@@ -130,3 +130,7 @@ gap is the robust finding here, not the exact saturation k.
 - Revisit whether the trained k=128 joint-{1,4} rotation's subspace overlaps with the
   continuous probe's recovered directions (`20260920-040411_coconut_probe-continuous-pilot`)
   — same "Next" item carried over from the pilot, still not done.
+
+
+---
+**Caveat (2026-09-27): the DAS training recipe used here is suspect.** In `20260927-072659_codi_das-minimal-pair-aligned-bigk` the same recipe (lr 1e-3, 5 epochs, teacher-forced CE) trained at k=512 steers 22% while an UNTRAINED random rotation steers 71% on the same pairs. This run had no untrained reference, so its null may be an optimization failure; do not cite it as evidence against a linear subspace until rerun with a fixed recipe.

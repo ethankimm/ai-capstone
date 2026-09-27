@@ -1,0 +1,220 @@
+{
+  "run_id": "20260927-072659_codi_das-minimal-pair-aligned-bigk",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "validation",
+    "n_examples": 800,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "intervention_accuracy": 0.22,
+    "extra": {
+      "design": "E4: DAS on same-problem minimal-pair donors, joint multi-site rotation (steered_to_donor_audit.md #5, next_experiments.md pasted plan)",
+      "site_definition": "site s = z_s = latent fed into loop iteration s+1; z_0 = latent-0",
+      "sweep": [
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 128,
+          "n": 100,
+          "answer_changed_rate": 0.55,
+          "answer_changed_wilson_ci": [
+            0.45244427031643447,
+            0.6438562489359654
+          ],
+          "matches_twin_rate": 0.08,
+          "matches_twin_wilson_ci": [
+            0.04109296948581091,
+            0.14998266879403072
+          ]
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 256,
+          "n": 100,
+          "answer_changed_rate": 0.47,
+          "answer_changed_wilson_ci": [
+            0.3751065198210374,
+            0.5671131686275227
+          ],
+          "matches_twin_rate": 0.15,
+          "matches_twin_wilson_ci": [
+            0.09305903191162297,
+            0.23283733332157835
+          ]
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 512,
+          "n": 100,
+          "answer_changed_rate": 0.59,
+          "answer_changed_wilson_ci": [
+            0.4920125056109662,
+            0.6813284290433533
+          ],
+          "matches_twin_rate": 0.22,
+          "matches_twin_wilson_ci": [
+            0.15001174503655804,
+            0.3107053471500031
+          ]
+        }
+      ],
+      "references": [
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 768,
+          "n": 100,
+          "answer_changed_rate": 0.95,
+          "answer_changed_wilson_ci": [
+            0.8882480347279118,
+            0.9784566385436864
+          ],
+          "matches_twin_rate": 0.84,
+          "matches_twin_wilson_ci": [
+            0.7557955544110557,
+            0.8990479765052628
+          ],
+          "reference": "full"
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 128,
+          "n": 100,
+          "answer_changed_rate": 0.02,
+          "answer_changed_wilson_ci": [
+            0.005501852234968185,
+            0.07001316294199365
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 256,
+          "n": 100,
+          "answer_changed_rate": 0.18,
+          "answer_changed_wilson_ci": [
+            0.11700131654251038,
+            0.26667536024213084
+          ],
+          "matches_twin_rate": 0.11,
+          "matches_twin_wilson_ci": [
+            0.06254131955225126,
+            0.18631463027903022
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 512,
+          "n": 100,
+          "answer_changed_rate": 0.85,
+          "answer_changed_wilson_ci": [
+            0.7671626666784216,
+            0.906940968088377
+          ],
+          "matches_twin_rate": 0.71,
+          "matches_twin_wilson_ci": [
+            0.6146092505999207,
+            0.7898529302601586
+          ],
+          "reference": "untrained"
+        }
+      ],
+      "best_group": "0+2+4",
+      "best_k": 512,
+      "site_groups": [
+        "0+2+4"
+      ],
+      "k_values": [
+        128,
+        256,
+        512
+      ],
+      "train_n_pairs_requested": 200,
+      "train_n_pairs_actual": 200,
+      "eval_n_pairs_requested": 100,
+      "eval_n_pairs_actual": 100,
+      "train_base_accuracy": 0.79,
+      "eval_base_accuracy": 0.79,
+      "epochs": 5,
+      "lr": 0.001,
+      "n_trainable_params_backbone": 144499200,
+      "related_runs": [
+        "20260920-235312_codi_das-minimal-pair",
+        "20260927-004340_codi_minimal-pair-patch-aligned"
+      ]
+    }
+  },
+  "hyperparams": {
+    "inf_latent_iterations": 6,
+    "num_latent": 6,
+    "site_groups": [
+      "0+2+4"
+    ],
+    "k_values": [
+      128,
+      256,
+      512
+    ],
+    "train_n_pairs": 200,
+    "eval_n_pairs": 100,
+    "epochs": 5,
+    "lr": 0.001
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A6000 (secure) / NVIDIA RTX A6000",
+  "author": "Henning Lindig",
+  "notes": "E4 (aligned sites z_0..z_5): Distributed Alignment Search on same-problem minimal-pair donors -- a shared learned orthogonal rotation R isolates a k-dim subspace, jointly patched across every site in a group (single-slot vs. joint prefix span), trained to maximize the twin's own gold-answer likelihood. Tests whether E3(a)'s ALL-SLOT upper bound (70.1% matches_twin) and the prefix-1..4 jump are explained by a low-dimensional linear subspace rather than the full 768-dim vector.",
+  "timestamp_utc": "2026-09-27T07:26:59.555515+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

@@ -136,3 +136,7 @@ See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measure
 - **site 5** taxonomy: unchanged 147, other_number 29, recipient_gold 3, unparseable 1
 - **site 6** taxonomy: unchanged 152, other_number 21, recipient_gold 5, unparseable 2
 - **total** taxonomy: unchanged 891, other_number 149, recipient_gold 22, unparseable 15, donor_intermediate 1, counterfactual 1, donor_final 1
+
+
+---
+**Caveat (2026-09-27): the DAS training recipe used here is suspect.** In `20260927-072659_codi_das-minimal-pair-aligned-bigk` the same recipe (lr 1e-3, 5 epochs, teacher-forced CE) trained at k=512 steers 22% while an UNTRAINED random rotation steers 71% on the same pairs. This run had no untrained reference, so its null may be an optimization failure; do not cite it as evidence against a linear subspace until rerun with a fixed recipe.

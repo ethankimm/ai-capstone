@@ -20,6 +20,15 @@ activation at that site over a sample of base-correct examples). Scored with
 `score_patch` (Metric B `matches_cf` primary, Metric A `matches_donor_final` secondary,
 full outcome taxonomy) + paired exact McNemar (real vs random, real vs mean).
 
+Sites (aligned 2026-09-27): site s = z_s, the latent fed INTO loop iteration s+1, for
+s = 0..n_latents-1 (z_0 = latent-0, the post-projection bot-position state after encoding
+the question). The donor's z_s replaces the recipient's z_s via
+`override_input_at={s + 1: donor z_s}`, and site s is tested against step
+`site_to_step(s, ...)` -- the same numbering and site->step map as Coconut passes 0..5 in
+`patch_qualified_coconut.py`. The first E2 run (`20260920-085206_codi_qualified-patch`)
+fed the donor's z_i into iteration i (one position early, never z_0, and the unused z_6
+into iteration 6); see the correction note on that run.
+
 Reuses `decode_patch_codi.py`'s model-loading and generation primitives (same released
 checkpoint, same paper protocol) -- run inside the CODI venv/checkout, same convention:
 
@@ -64,7 +73,7 @@ from latentreasoning.runlog.manifest import DatasetInfo, ModelInfo, RunRecord, n
 
 @dataclass
 class QualArguments:
-    slug: str = field(default="qualified-patch")
+    slug: str = field(default="qualified-patch-aligned")
     stage: str = field(default="pilot")
     hardware: str = field(default="RunPod GPU")
     checkpoint_label: Optional[str] = field(default=None)
@@ -92,15 +101,15 @@ def main() -> None:
 
     # ---- decode pass: base answer + correctness + cached per-iter latents -----------------
     t0 = time.perf_counter()
-    thought_cache: dict[int, list] = {}
+    thought_cache: dict[int, dict[int, torch.Tensor]] = {}  # idx -> {s: z_s}, s = 0..n_latents
     base_info: dict[int, dict] = {}
     for ex in examples:
         q = ex.question.strip().replace("  ", " ")
-        pkv, thoughts, latent = run_thoughts(model, tokenizer, q, device, n_latents)
+        pkv, thoughts, latent = run_thoughts(model, tokenizer, q, device, n_latents, include_latent0=True)
         raw = decode_answer(model, tokenizer, pkv, latent, device, qa.max_new_tokens)
         pred = extract_final_number(raw)
         correct = is_correct(pred, ex.answer)
-        thought_cache[ex.idx] = thoughts
+        thought_cache[ex.idx] = {rec["iter"]: rec["post"] for rec in thoughts}
         steps = parse_steps(ex.rationale)
         base_info[ex.idx] = {"pred": pred, "correct": correct, "steps": steps,
                               "qualifying": set(qualifying_steps(steps))}
@@ -121,18 +130,17 @@ def main() -> None:
 
     # ---- mean activation per site, sampled from base-correct examples ---------------------
     mean_sample = rng.sample(correct_idxs, min(qa.mean_sample_n, len(correct_idxs)))
-    mean_vec = {}
-    for it in range(1, n_latents + 1):
-        vecs = [thought_cache[idx][it - 1]["post"] for idx in mean_sample]
-        mean_vec[it] = torch.stack(vecs, dim=0).mean(dim=0)
+    sites = list(range(n_latents))  # z_0 .. z_{n-1}; z_s feeds iteration s+1
+    mean_vec = {s: torch.stack([thought_cache[idx][s] for idx in mean_sample], dim=0).mean(dim=0) for s in sites}
     print(f"mean activation computed from {len(mean_sample)} base-correct examples per site")
 
     # ---- build qualified pairs + run three conditions, per site ---------------------------
-    site_records: dict[int, list[dict]] = {it: [] for it in range(1, n_latents + 1)}
+    site_records: dict[int, list[dict]] = {s: [] for s in sites}
     t1 = time.perf_counter()
     n_done = 0
-    for it in range(1, n_latents + 1):
-        k = site_to_step(it - 1, n_latents, max_step)
+    for site in sites:
+        it = site + 1  # the iteration whose input is replaced
+        k = site_to_step(site, n_latents, max_step)
         recipient_pool = [idx for idx in correct_idxs if k in base_info[idx]["qualifying"]]
         donor_pool_all = [idx for idx in correct_idxs if val_at(idx, k) is not None]
         rng.shuffle(recipient_pool)
@@ -151,13 +159,13 @@ def main() -> None:
             pairs.append((ridx, donor_idx, rand_idx))
             if len(pairs) >= qa.n_pairs_per_site:
                 break
-        print(f"site iter={it} step={k}: {len(recipient_pool)} qualifying recipients, {len(pairs)} pairs selected")
+        print(f"site z{site} (-> iter {it}) step={k}: {len(recipient_pool)} qualifying recipients, {len(pairs)} pairs selected")
 
         for ridx, donor_idx, rand_idx in pairs:
             ex = by_idx[ridx]
             q = ex.question.strip().replace("  ", " ")
-            donor_post = thought_cache[donor_idx][it - 1]["post"]
-            rand_post = thought_cache[rand_idx][it - 1]["post"]
+            donor_post = thought_cache[donor_idx][site]
+            rand_post = thought_cache[rand_idx][site]
 
             pkv_b, _, latent_b = run_thoughts(model, tokenizer, q, device, n_latents)
             pred_base = extract_final_number(decode_answer(model, tokenizer, pkv_b, latent_b, device, qa.max_new_tokens))
@@ -168,7 +176,7 @@ def main() -> None:
             pkv_n, _, latent_n = run_thoughts(model, tokenizer, q, device, n_latents, override_input_at={it: rand_post})
             pred_rand = extract_final_number(decode_answer(model, tokenizer, pkv_n, latent_n, device, qa.max_new_tokens))
 
-            pkv_m, _, latent_m = run_thoughts(model, tokenizer, q, device, n_latents, override_input_at={it: mean_vec[it]})
+            pkv_m, _, latent_m = run_thoughts(model, tokenizer, q, device, n_latents, override_input_at={it: mean_vec[site]})
             pred_mean = extract_final_number(decode_answer(model, tokenizer, pkv_m, latent_m, device, qa.max_new_tokens))
 
             recipient_chain = base_info[ridx]["steps"]
@@ -190,9 +198,9 @@ def main() -> None:
                                        recipient_chain=recipient_chain, donor_value=None, step=k,
                                        recipient_values=recipient_values, donor_values=[])
 
-            site_records[it].append({
+            site_records[site].append({
                 "recipient_idx": ridx, "donor_idx": donor_idx, "random_donor_idx": rand_idx,
-                "step": k, "iter": it,
+                "step": k, "site": site, "iter": it,
                 "answer_base": pred_base, "answer_real": pred_real, "answer_random": pred_rand, "answer_mean": pred_mean,
                 "recipient_value_at_step": val_at(ridx, k), "donor_value_at_step": donor_val,
                 "random_donor_value_at_step": rand_val,
@@ -237,10 +245,10 @@ def main() -> None:
         return {"b": b, "c": c, "p_exact": mcnemar_exact_p(b, c)}
 
     site_summary = {}
-    for it in range(1, n_latents + 1):
-        records = site_records[it]
-        k = site_to_step(it - 1, n_latents, max_step)
-        site_summary[it] = {
+    for site in sites:
+        records = site_records[site]
+        k = site_to_step(site, n_latents, max_step)
+        site_summary[site] = {
             "step_target": k, "n_pairs": len(records),
             "real": summarize(records, "real"), "random": summarize(records, "random"), "mean": summarize(records, "mean"),
             "mcnemar_real_vs_random_answer_changed": mcnemar_key(records, "real", "random", "answer_changed"),
@@ -248,8 +256,8 @@ def main() -> None:
             "mcnemar_real_vs_random_matches_cf": mcnemar_key(records, "real", "random", "matches_cf"),
             "mcnemar_real_vs_mean_matches_cf": mcnemar_key(records, "real", "mean", "matches_cf"),
         }
-        s = site_summary[it]
-        print(f"site iter={it} step={k} n={s['n_pairs']}: "
+        s = site_summary[site]
+        print(f"site z{site} step={k} n={s['n_pairs']}: "
               f"matches_cf real={s['real']['matches_cf_rate']} random={s['random']['matches_cf_rate']} mean={s['mean']['matches_cf_rate']}")
 
     total_pairs = sum(len(v) for v in site_records.values())
@@ -269,7 +277,10 @@ def main() -> None:
         "decoding_accuracy": None,
         "intervention_accuracy": overall["real"]["matches_cf_rate"],
         "extra": {
-            "design": "E2: step-aligned base-correct controlled raw single-slot patch (steered_to_donor_audit.md)",
+            "design": "E2: step-aligned base-correct controlled raw single-slot patch (steered_to_donor_audit.md), "
+                      "aligned sites z_0..z_5",
+            "site_definition": "site s = z_s = latent fed into loop iteration s+1; z_0 = latent-0 (bot position)",
+            "related_runs": ["20260920-085206_codi_qualified-patch", "20260927-004340_codi_minimal-pair-patch-aligned"],
             "n_examples_decoded": len(examples), "n_base_correct": len(correct_idxs), "max_step": max_step,
             "n_pairs_per_site_requested": qa.n_pairs_per_site, "mean_sample_n": len(mean_sample),
             "total_pairs": total_pairs,
@@ -291,8 +302,8 @@ def main() -> None:
                      "mean_sample_n": qa.mean_sample_n},
         seed=None,
         hardware=f"{qa.hardware} / {torch.cuda.get_device_name(0)}",
-        notes="E2: step-aligned, base-correct, controlled raw single-slot patch at EVERY CODI "
-              "iteration (positional site->step assignment, not decoding-accuracy-fit). Real "
+        notes="E2 (aligned sites z_0..z_5): step-aligned, base-correct, controlled raw single-slot patch at EVERY CODI "
+              "latent (positional site->step assignment, not decoding-accuracy-fit). Real "
               "donor / random donor / mean-ablation conditions, scored with the shared "
               "counterfactual module (Metric B matches_cf primary).",
     )
