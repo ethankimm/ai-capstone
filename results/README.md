@@ -72,3 +72,7 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260927-063622_codi_ladder-patch](20260927-063622_codi_ladder-patch/) | codi | gpt2 | test (n=1319) | 6 | 0.415 | 0 | full_run | Henning Lindig |
 | [20260927-070156_codi_das-minimal-pair-aligned](20260927-070156_codi_das-minimal-pair-aligned/) | codi | gpt2 | validation (n=800) | 6 | - | 0 | full_run | Henning Lindig |
 | [20260927-072659_codi_das-minimal-pair-aligned-bigk](20260927-072659_codi_das-minimal-pair-aligned-bigk/) | codi | gpt2 | validation (n=800) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260927-084449_coconut_das-minimal-pair-fixed](20260927-084449_coconut_das-minimal-pair-fixed/) | coconut | openai-community/gpt2 | validation (n=500) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260927-085211_coconut_xmech-codi-to-coconut](20260927-085211_coconut_xmech-codi-to-coconut/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run | Henning Lindig |
+| [20260927-092012_codi_xmech-coconut-to-codi](20260927-092012_codi_xmech-coconut-to-codi/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run | Henning Lindig |
+| [20260927-094215_codi_das-minimal-pair-fixed](20260927-094215_codi_das-minimal-pair-fixed/) | codi | gpt2 | validation (n=800) | 6 | - | 0 | full_run | Henning Lindig |

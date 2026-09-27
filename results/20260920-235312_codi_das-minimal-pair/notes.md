@@ -118,3 +118,5 @@ z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" lo
 Numbers above are left as logged; they describe the shifted intervention.
 
 Aligned rerun of this experiment: `20260927-070156_codi_das-minimal-pair-aligned` (raw z0+z2+z4 swap 84%; learned k≤64 subspace still ≤6%).
+
+**Resolved (2026-09-27):** the DAS teacher-forcing target was wrong (CODI: bare number instead of "The answer is: N"; Coconut: " ###" instead of "###"), and the Coconut minimal-pair script trained and evaluated on overlapping test examples. With both fixed, DAS finds a ~16-dim value subspace in both mechanisms: `20260927-094215_codi_das-minimal-pair-fixed` (z0+z2+z4, k=16: 0.70 vs raw 0.83), `20260927-084449_coconut_das-minimal-pair-fixed` (passes 1+4, k=32: 0.67 vs raw 0.75). This run's null is an artifact.

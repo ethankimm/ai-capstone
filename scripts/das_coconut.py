@@ -312,7 +312,7 @@ def train_rotation(base_model, embedding, tokenizer, special_ids, pairs, device,
             _, final_state = run_pass_range(base_model, embedding, input_ids, attn, device, num_latents,
                                              special_ids["latent"], site_pass + 1, num_latents, state=new_state, grad=True)
             loss = teacher_forced_ce(base_model, embedding, tokenizer, final_state, attn, device,
-                                      f" ### {donor.answer.strip()}")
+                                      f"### {donor.answer.strip()}")  # "###" (21017), not " ###" (44386): fixed 2026-09-27
             if loss is None:
                 continue
             opt.zero_grad()

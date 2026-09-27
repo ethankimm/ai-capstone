@@ -181,6 +181,13 @@ def run_intervened(model, tokenizer, question: str, device: str, n_iters: int,
     return pkv, latent
 
 
+# CODI answers "The answer is: <n>" after eot; teacher-force that exact string (the number after
+# "is:" is a space-prefixed token). Before 2026-09-27 the target was the bare number, a token
+# the model never emits there, so training fought the answer format.
+def answer_target(answer: str) -> str:
+    return f"The answer is: {answer.strip()}"
+
+
 def teacher_forced_ce(model, tokenizer, pkv, device: str, target_text: str) -> Optional[torch.Tensor]:
     target_ids = tokenizer(target_text, add_special_tokens=False)["input_ids"]
     if not target_ids:
@@ -266,7 +273,7 @@ def train_rotation(model, tokenizer, device, n_iters, group: list[int], k: int,
         for mp, _pred_base, twin_vecs in train_pairs:
             q = mp.original.question.strip().replace("  ", " ")
             pkv, _latent = run_intervened(model, tokenizer, q, device, n_iters, rotation, sites, twin_vecs, k)
-            loss = teacher_forced_ce(model, tokenizer, pkv, device, mp.twin.answer.strip())
+            loss = teacher_forced_ce(model, tokenizer, pkv, device, answer_target(mp.twin.answer))
             if loss is None:
                 continue
             opt.zero_grad()

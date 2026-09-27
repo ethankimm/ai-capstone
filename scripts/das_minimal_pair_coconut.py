@@ -88,7 +88,7 @@ class DASArguments:
     checkpoint_path: str = field(metadata={"help": "path to the downloaded checkpoint_33 file"})
     data_dir: str = field(metadata={"help": "dir with gsm_valid-gold-reasoning-trace_test.json"})
     model_id: str = field(default="openai-community/gpt2")
-    slug: str = field(default="das-minimal-pair")
+    slug: str = field(default="das-minimal-pair-fixed")
     stage: str = field(default="pilot")
     hardware: str = field(default="RunPod GPU")
     checkpoint_label: str = field(default="hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33")
@@ -102,21 +102,21 @@ class DASArguments:
     k_values: str = field(default="8,16,32,64", metadata={"help": "comma-separated subspace sizes to sweep"})
     train_n_pairs: int = field(default=500, metadata={"help": "qualified minimal-pair training tuples per (group,k)"})
     eval_n_pairs: int = field(default=150, metadata={"help": "held-out qualified minimal-pair tuples per (group,k)"})
-    train_pool_n: int = field(default=1200, metadata={"help": "gold-trace examples to decode looking for train pairs"})
-    eval_pool_n: int = field(default=500, metadata={"help": "gold-trace examples to decode looking for eval pairs (disjoint offset from train)"})
+    train_pool_n: int = field(default=2500, metadata={"help": "gsm_original_train.json examples to decode looking for train pairs"})
+    eval_pool_n: int = field(default=500, metadata={"help": "gsm_original_valid.json examples to decode looking for eval pairs"})
     train_max_candidate_checks: int = field(default=2500)
     eval_max_candidate_checks: int = field(default=900)
     epochs: int = field(default=5, metadata={"help": "passes over the training pairs"})
     lr: float = field(default=1e-3)
     train_seed: int = field(default=0)
-    eval_seed: int = field(default=1)  # disjoint shuffle seed, same convention as das_coconut.py
+    eval_seed: int = field(default=0)
     pair_seed: int = field(default=0)
     max_new_tokens: int = field(default=48)
     device: str = field(default="cuda")
 
 
-def load_examples(data_dir: str, n: int, seed: int) -> list[Example]:
-    rows = json.loads((Path(data_dir) / "gsm_valid-gold-reasoning-trace_test.json").read_text())
+def load_examples(data_dir: str, n: int, seed: int, fname: str) -> list[Example]:
+    rows = json.loads((Path(data_dir) / fname).read_text())
     examples = [Example(question=r["question"], rationale=" ".join(r["steps"]),
                          answer=r["answer"].strip(), idx=i) for i, r in enumerate(rows)]
     random.Random(seed).shuffle(examples)
@@ -343,7 +343,7 @@ def train_rotation(base_model, embedding, tokenizer, special_ids, device, num_la
                 base_model, embedding, tokenizer, special_ids, mp.original.question, device, num_latents,
                 rotation, group, twin_vecs, k, grad=True)
             loss = teacher_forced_ce(base_model, embedding, tokenizer, final_state, attn, device,
-                                      f" ### {mp.twin.answer.strip()}")
+                                      f"### {mp.twin.answer.strip()}")  # "###" (21017) as the model emits it, not " ###" (44386)
             if loss is None:
                 continue
             opt.zero_grad()
@@ -405,8 +405,10 @@ def main() -> None:
     k_values = [int(s) for s in da.k_values.split(",")]
     print(f"site_groups={groups} k_values={k_values}")
 
-    train_examples = load_examples(da.data_dir, da.train_pool_n, da.train_seed)
-    eval_examples = load_examples(da.data_dir, da.eval_pool_n, da.eval_seed)
+    # train and eval from Coconut's own train / valid files (before 2026-09-27 both came from the
+    # 1194-example test file with train_pool_n >= 1194, so every eval recipient was also a train recipient)
+    train_examples = load_examples(da.data_dir, da.train_pool_n, da.train_seed, "gsm_original_train.json")
+    eval_examples = load_examples(da.data_dir, da.eval_pool_n, da.eval_seed, "gsm_original_valid.json")
 
     train_pairs, train_acc, train_n_correct = build_minimal_pairs(
         base_model, embedding, tokenizer, eos_id, special_ids, device, da.num_latents, da.max_new_tokens,
@@ -418,7 +420,19 @@ def main() -> None:
     all_summaries = []
     all_records = []
     t0 = time.perf_counter()
+    reference_summaries = []
     for group in groups:
+        # untrained references on the same eval pairs: full-vector swap (k=768), random rotation per k
+        torch.manual_seed(da.train_seed)
+        for ref_k, tag in [(HIDDEN_DIM, "full")] + [(k, "untrained") for k in k_values]:
+            ref_rot = OrthogonalRotation(HIDDEN_DIM).to(device).eval()
+            records, summary = evaluate_rotation(base_model, embedding, tokenizer, eos_id, special_ids, device,
+                                                  da.num_latents, group, ref_k, ref_rot, eval_pairs, da.max_new_tokens)
+            summary["reference"] = tag
+            reference_summaries.append(summary)
+            all_records.extend([{"group": group_label(group), "k": ref_k, "reference": tag, **r} for r in records])
+            print(f"[ref {tag}] group={group_label(group)} k={ref_k}: matches_twin={summary['matches_twin_rate']:.3f} "
+                  f"answer_changed={summary['answer_changed_rate']:.3f}", flush=True)
         for k in k_values:
             print(f"--- training group={group_label(group)} k={k} (n_train_pairs={len(train_pairs)}) ---", flush=True)
             rotation = train_rotation(base_model, embedding, tokenizer, special_ids, device, da.num_latents,
@@ -441,6 +455,7 @@ def main() -> None:
             "design": "E4: DAS on same-problem minimal-pair donors, joint multi-site rotation "
                       "(steered_to_donor_audit.md #5, next_experiments.md pasted plan)",
             "sweep": all_summaries,
+            "references": reference_summaries,
             "best_group": best["group_label"], "best_k": best["k"],
             "site_groups": [group_label(g) for g in groups], "k_values": k_values,
             "train_n_pairs_requested": da.train_n_pairs, "train_n_pairs_actual": len(train_pairs),
@@ -448,8 +463,9 @@ def main() -> None:
             "train_base_accuracy": train_acc, "eval_base_accuracy": eval_acc,
             "epochs": da.epochs, "lr": da.lr,
             "n_trainable_params_backbone": n_params,
-            "teacher_forcing_target": "' ### {twin.answer}' spliced directly after the last "
-                                       "latent token, same simplification as das_coconut.py.",
+            "teacher_forcing_target": "'### {twin.answer}' (token 21017 as the model emits it) after the final "
+                                       "pass; pools: train = gsm_original_train.json, eval = gsm_original_valid.json",
+            "site_definition": "pass p = vector spliced into the p-th <|latent|> slot",
             "related_runs": [
                 "20260920-195725_coconut_minimal-pair-patch",
                 "20260920-053935_coconut_das-pilot",
@@ -462,7 +478,7 @@ def main() -> None:
         mechanism=mechanism_name,
         stage=da.stage,
         model=ModelInfo(backbone=da.model_id, checkpoint=da.checkpoint_label, n_params=n_params),
-        dataset=DatasetInfo(name="gsm8k-aug", split="test", n_examples=len(eval_examples), seed=da.eval_seed),
+        dataset=DatasetInfo(name="gsm8k-aug", split="validation", n_examples=len(eval_examples), seed=da.eval_seed),
         metrics=metrics,
         hyperparams={
             "num_latents": da.num_latents, "site_groups": [group_label(g) for g in groups], "k_values": k_values,

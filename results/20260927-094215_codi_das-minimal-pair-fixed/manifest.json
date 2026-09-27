@@ -1,0 +1,672 @@
+{
+  "run_id": "20260927-094215_codi_das-minimal-pair-fixed",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "validation",
+    "n_examples": 800,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "intervention_accuracy": 0.74,
+    "extra": {
+      "design": "E4: DAS on same-problem minimal-pair donors, joint multi-site rotation (steered_to_donor_audit.md #5, next_experiments.md pasted plan)",
+      "site_definition": "site s = z_s = latent fed into loop iteration s+1; z_0 = latent-0",
+      "sweep": [
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 8,
+          "n": 100,
+          "answer_changed_rate": 0.31,
+          "answer_changed_wilson_ci": [
+            0.22779563206132378,
+            0.40626239477955695
+          ],
+          "matches_twin_rate": 0.13,
+          "matches_twin_wilson_ci": [
+            0.07757093858414264,
+            0.20980521894809878
+          ]
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 16,
+          "n": 100,
+          "answer_changed_rate": 0.41,
+          "answer_changed_wilson_ci": [
+            0.31867157095664655,
+            0.5079874943890338
+          ],
+          "matches_twin_rate": 0.18,
+          "matches_twin_wilson_ci": [
+            0.11700131654251038,
+            0.26667536024213084
+          ]
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 32,
+          "n": 100,
+          "answer_changed_rate": 0.45,
+          "answer_changed_wilson_ci": [
+            0.3561437510640346,
+            0.5475557296835656
+          ],
+          "matches_twin_rate": 0.23,
+          "matches_twin_wilson_ci": [
+            0.15843154746876406,
+            0.32154564856827694
+          ]
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 64,
+          "n": 100,
+          "answer_changed_rate": 0.51,
+          "answer_changed_wilson_ci": [
+            0.4134784047743415,
+            0.6057816990761385
+          ],
+          "matches_twin_rate": 0.29,
+          "matches_twin_wilson_ci": [
+            0.21014706973984146,
+            0.38539074940007934
+          ]
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 128,
+          "n": 100,
+          "answer_changed_rate": 0.49,
+          "answer_changed_wilson_ci": [
+            0.3942183009238615,
+            0.5865215952256586
+          ],
+          "matches_twin_rate": 0.29,
+          "matches_twin_wilson_ci": [
+            0.21014706973984146,
+            0.38539074940007934
+          ]
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 256,
+          "n": 100,
+          "answer_changed_rate": 0.48,
+          "answer_changed_wilson_ci": [
+            0.38464384320080547,
+            0.5768359490982345
+          ],
+          "matches_twin_rate": 0.25,
+          "matches_twin_wilson_ci": [
+            0.1754509400372426,
+            0.3430464637007583
+          ]
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 512,
+          "n": 100,
+          "answer_changed_rate": 0.5,
+          "answer_changed_wilson_ci": [
+            0.40382982859014716,
+            0.5961701714098528
+          ],
+          "matches_twin_rate": 0.29,
+          "matches_twin_wilson_ci": [
+            0.21014706973984146,
+            0.38539074940007934
+          ]
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 8,
+          "n": 100,
+          "answer_changed_rate": 0.67,
+          "answer_changed_wilson_ci": [
+            0.5730516033971139,
+            0.7543701620610456
+          ],
+          "matches_twin_rate": 0.38,
+          "matches_twin_wilson_ci": [
+            0.2909744920013438,
+            0.47790426179289663
+          ]
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 16,
+          "n": 100,
+          "answer_changed_rate": 0.91,
+          "answer_changed_wilson_ci": [
+            0.8377362530335634,
+            0.9519280048361151
+          ],
+          "matches_twin_rate": 0.7,
+          "matches_twin_wilson_ci": [
+            0.6041496156718804,
+            0.7810524613377188
+          ]
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 32,
+          "n": 100,
+          "answer_changed_rate": 0.87,
+          "answer_changed_wilson_ci": [
+            0.7901947810519012,
+            0.9224290614158575
+          ],
+          "matches_twin_rate": 0.72,
+          "matches_twin_wilson_ci": [
+            0.6251178763865427,
+            0.7986044083240164
+          ]
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 64,
+          "n": 100,
+          "answer_changed_rate": 0.88,
+          "answer_changed_wilson_ci": [
+            0.8018773199709163,
+            0.9300066263473222
+          ],
+          "matches_twin_rate": 0.71,
+          "matches_twin_wilson_ci": [
+            0.6146092505999207,
+            0.7898529302601586
+          ]
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 128,
+          "n": 100,
+          "answer_changed_rate": 0.91,
+          "answer_changed_wilson_ci": [
+            0.8377362530335634,
+            0.9519280048361151
+          ],
+          "matches_twin_rate": 0.73,
+          "matches_twin_wilson_ci": [
+            0.6356769977376873,
+            0.8073053908233518
+          ]
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 256,
+          "n": 100,
+          "answer_changed_rate": 0.86,
+          "answer_changed_wilson_ci": [
+            0.7786263961619276,
+            0.914737342455351
+          ],
+          "matches_twin_rate": 0.69,
+          "matches_twin_wilson_ci": [
+            0.5937376052204429,
+            0.7722043679386762
+          ]
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 512,
+          "n": 100,
+          "answer_changed_rate": 0.88,
+          "answer_changed_wilson_ci": [
+            0.8018773199709163,
+            0.9300066263473222
+          ],
+          "matches_twin_rate": 0.74,
+          "matches_twin_wilson_ci": [
+            0.6462882736813838,
+            0.8159542187301354
+          ]
+        }
+      ],
+      "references": [
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 768,
+          "n": 100,
+          "answer_changed_rate": 0.5,
+          "answer_changed_wilson_ci": [
+            0.40382982859014716,
+            0.5961701714098528
+          ],
+          "matches_twin_rate": 0.34,
+          "matches_twin_wilson_ci": [
+            0.25461379497543,
+            0.43722454341689065
+          ],
+          "reference": "full"
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 8,
+          "n": 100,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 16,
+          "n": 100,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 32,
+          "n": 100,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 64,
+          "n": 100,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 128,
+          "n": 100,
+          "answer_changed_rate": 0.01,
+          "answer_changed_wilson_ci": [
+            0.0017673865655472645,
+            0.0544875247609346
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 256,
+          "n": 100,
+          "answer_changed_rate": 0.03,
+          "answer_changed_wilson_ci": [
+            0.010254338223414816,
+            0.08452078080402699
+          ],
+          "matches_twin_rate": 0.01,
+          "matches_twin_wilson_ci": [
+            0.0017673865655472645,
+            0.0544875247609346
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            4
+          ],
+          "group_label": "4",
+          "k": 512,
+          "n": 100,
+          "answer_changed_rate": 0.22,
+          "answer_changed_wilson_ci": [
+            0.15001174503655804,
+            0.3107053471500031
+          ],
+          "matches_twin_rate": 0.11,
+          "matches_twin_wilson_ci": [
+            0.06254131955225126,
+            0.18631463027903022
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 768,
+          "n": 100,
+          "answer_changed_rate": 0.93,
+          "answer_changed_wilson_ci": [
+            0.8625032899347025,
+            0.965681175635936
+          ],
+          "matches_twin_rate": 0.83,
+          "matches_twin_wilson_ci": [
+            0.7445181876635703,
+            0.8910652394022684
+          ],
+          "reference": "full"
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 8,
+          "n": 100,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 16,
+          "n": 100,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 32,
+          "n": 100,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 64,
+          "n": 100,
+          "answer_changed_rate": 0.0,
+          "answer_changed_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.03699480747600191
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 128,
+          "n": 100,
+          "answer_changed_rate": 0.02,
+          "answer_changed_wilson_ci": [
+            0.005501852234968185,
+            0.07001316294199365
+          ],
+          "matches_twin_rate": 0.01,
+          "matches_twin_wilson_ci": [
+            0.0017673865655472645,
+            0.0544875247609346
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 256,
+          "n": 100,
+          "answer_changed_rate": 0.08,
+          "answer_changed_wilson_ci": [
+            0.04109296948581091,
+            0.14998266879403072
+          ],
+          "matches_twin_rate": 0.04,
+          "matches_twin_wilson_ci": [
+            0.015663050551848016,
+            0.09837217232607373
+          ],
+          "reference": "untrained"
+        },
+        {
+          "group": [
+            0,
+            2,
+            4
+          ],
+          "group_label": "0+2+4",
+          "k": 512,
+          "n": 100,
+          "answer_changed_rate": 0.8,
+          "answer_changed_wilson_ci": [
+            0.7111690380734977,
+            0.8666340774409013
+          ],
+          "matches_twin_rate": 0.67,
+          "matches_twin_wilson_ci": [
+            0.5730516033971139,
+            0.7543701620610456
+          ],
+          "reference": "untrained"
+        }
+      ],
+      "best_group": "0+2+4",
+      "best_k": 512,
+      "site_groups": [
+        "4",
+        "0+2+4"
+      ],
+      "k_values": [
+        8,
+        16,
+        32,
+        64,
+        128,
+        256,
+        512
+      ],
+      "train_n_pairs_requested": 200,
+      "train_n_pairs_actual": 200,
+      "eval_n_pairs_requested": 100,
+      "eval_n_pairs_actual": 100,
+      "train_base_accuracy": 0.7908,
+      "eval_base_accuracy": 0.79125,
+      "epochs": 5,
+      "lr": 0.001,
+      "n_trainable_params_backbone": 144499200,
+      "related_runs": [
+        "20260920-235312_codi_das-minimal-pair",
+        "20260927-004340_codi_minimal-pair-patch-aligned"
+      ]
+    }
+  },
+  "hyperparams": {
+    "inf_latent_iterations": 6,
+    "num_latent": 6,
+    "site_groups": [
+      "4",
+      "0+2+4"
+    ],
+    "k_values": [
+      8,
+      16,
+      32,
+      64,
+      128,
+      256,
+      512
+    ],
+    "train_n_pairs": 200,
+    "eval_n_pairs": 100,
+    "epochs": 5,
+    "lr": 0.001
+  },
+  "seed": 0,
+  "hardware": "RunPod L4 (secure) / NVIDIA L4",
+  "author": "Henning Lindig",
+  "notes": "E4 (aligned sites z_0..z_5): Distributed Alignment Search on same-problem minimal-pair donors -- a shared learned orthogonal rotation R isolates a k-dim subspace, jointly patched across every site in a group (single-slot vs. joint prefix span), trained to maximize the twin's own gold-answer likelihood. Tests whether E3(a)'s ALL-SLOT upper bound (70.1% matches_twin) and the prefix-1..4 jump are explained by a low-dimensional linear subspace rather than the full 768-dim vector.",
+  "timestamp_utc": "2026-09-27T09:42:15.445170+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

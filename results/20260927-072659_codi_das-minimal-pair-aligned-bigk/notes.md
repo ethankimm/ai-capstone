@@ -26,3 +26,5 @@ the z0+z2+z4 group, matching the range of Coconut's saturation sweep (`20260921-
 **Next:** Debug DAS training before any more DAS claims: lower lr (1e-4), more epochs, check that the
 trained R beats the untrained one at k=512 on the TRAIN pairs first, and consider an interchange loss on
 the steered token only. Re-run CODI and Coconut E4 with the fixed recipe and the untrained references.
+
+**Resolved (2026-09-27):** the DAS teacher-forcing target was wrong (CODI: bare number instead of "The answer is: N"; Coconut: " ###" instead of "###"), and the Coconut minimal-pair script trained and evaluated on overlapping test examples. With both fixed, DAS finds a ~16-dim value subspace in both mechanisms: `20260927-094215_codi_das-minimal-pair-fixed` (z0+z2+z4, k=16: 0.70 vs raw 0.83), `20260927-084449_coconut_das-minimal-pair-fixed` (passes 1+4, k=32: 0.67 vs raw 0.75). This run's null is an artifact.

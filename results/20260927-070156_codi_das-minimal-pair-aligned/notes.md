@@ -35,3 +35,5 @@ plateau at 30–40).
 **Next:** large-k extension `*_codi_das-minimal-pair-aligned-bigk` (k = 128/256/512, z0+z2+z4), same pools.
 
 **Update (large-k extension `20260927-072659_codi_das-minimal-pair-aligned-bigk`):** at k=512 the untrained rotation steers 71% and the trained one 22% — the DAS training recipe is failing, so the ≤6% here is not evidence against a subspace.
+
+**Resolved (2026-09-27):** the DAS teacher-forcing target was wrong (CODI: bare number instead of "The answer is: N"; Coconut: " ###" instead of "###"), and the Coconut minimal-pair script trained and evaluated on overlapping test examples. With both fixed, DAS finds a ~16-dim value subspace in both mechanisms: `20260927-094215_codi_das-minimal-pair-fixed` (z0+z2+z4, k=16: 0.70 vs raw 0.83), `20260927-084449_coconut_das-minimal-pair-fixed` (passes 1+4, k=32: 0.67 vs raw 0.75). This run's null is an artifact.

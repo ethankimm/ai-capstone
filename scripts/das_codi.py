@@ -232,7 +232,8 @@ def train_rotation(model, tokenizer, pairs, device, n_iters, site_it, k, lr, epo
                 _, z_b = prefix_pkv_and_latent(model, tokenizer, q_d, device, site_it)
             patched = intervene(rotation, z_a.float(), z_b.float(), k).to(z_a.dtype)
             pkv_final = continue_loop(model, pkv, patched, site_it, n_iters)
-            loss = teacher_forced_ce(model, tokenizer, pkv_final, device, donor.answer.strip())
+            # CODI emits "The answer is: <n>"; the bare number was a token it never produces there (fixed 2026-09-27)
+            loss = teacher_forced_ce(model, tokenizer, pkv_final, device, f"The answer is: {donor.answer.strip()}")
             if loss is None:
                 continue
             opt.zero_grad()
