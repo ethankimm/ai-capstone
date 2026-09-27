@@ -57,3 +57,13 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260923-044632_codi_decode-patch-full-eval-top10](20260923-044632_codi_decode-patch-full-eval-top10/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | None | full_run | Henning Lindig |
 | [20260923-044803_coconut_decode-patch-pilot-top10](20260923-044803_coconut_decode-patch-pilot-top10/) | coconut | openai-community/gpt2 | test (n=200) | 6 | 0.360 | 0 | pilot | Henning Lindig |
 | [20260923-052604_codi_decode-patch-full-eval-latent0](20260923-052604_codi_decode-patch-full-eval-latent0/) | codi | gpt2 | test (n=1319) | 6 | 0.415 | None | full_run | Henning Lindig |
+| [20260926-235221_codi_cfr-minimal-pairs](20260926-235221_codi_cfr-minimal-pairs/) | codi | gpt2 | test (n=600) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260926-235221_coconut_cfr-minimal-pairs](20260926-235221_coconut_cfr-minimal-pairs/) | coconut | openai-community/gpt2 | test (n=600) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260926-235222_codi_nonsteered-buckets](20260926-235222_codi_nonsteered-buckets/) | codi | gpt2 | test (n=600) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260926-235222_coconut_nonsteered-buckets](20260926-235222_coconut_nonsteered-buckets/) | coconut | openai-community/gpt2 | test (n=600) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260927-003331_coconut_minimal-pair-patch-full](20260927-003331_coconut_minimal-pair-patch-full/) | coconut | openai-community/gpt2 | test (n=1194) | 6 | 0.336 | 0 | full_run | Henning Lindig |
+| [20260927-004340_codi_minimal-pair-patch-aligned](20260927-004340_codi_minimal-pair-patch-aligned/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run | Henning Lindig |
+| [20260927-004433_codi_nonsteered-buckets-e3full](20260927-004433_codi_nonsteered-buckets-e3full/) | codi | gpt2 | test (n=1319) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260927-004443_coconut_nonsteered-buckets-e3full](20260927-004443_coconut_nonsteered-buckets-e3full/) | coconut | openai-community/gpt2 | test (n=1194) | 6 | - | 0 | full_run | Henning Lindig |
+| [20260927-005051_codi_necessity-all-replacements](20260927-005051_codi_necessity-all-replacements/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run | Henning Lindig |
+| [20260927-005834_coconut_necessity-all-replacements](20260927-005834_coconut_necessity-all-replacements/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run | Henning Lindig |

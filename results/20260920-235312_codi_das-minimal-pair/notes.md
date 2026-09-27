@@ -106,3 +106,13 @@ itself the E4 "do different latent scratchpads think alike" answer for this angl
 Coconut's intermediate state looks close to a genuine low-dimensional linear "scratchpad
 variable"; CODI's does not, even though both show a raw-vector same-problem effect of
 similar overall magnitude (E3(a): 70.1% vs 77.1%).
+
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. `run_intervened` rotated the recipient's own feed (z_{it-1}) as background against the twin's z_it as donor. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. The learned subspace mixed vectors from two different positions; the DAS results for CODI need an aligned rerun. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.

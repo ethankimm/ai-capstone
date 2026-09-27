@@ -1,0 +1,425 @@
+{
+  "run_id": "20260927-004340_codi_minimal-pair-patch-aligned",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.41925701288855194,
+    "compute_steps": 6,
+    "sec_per_example": 0.20568713331785707,
+    "intervention_accuracy": 0.8391167192429022,
+    "extra": {
+      "design": "E3 rerun with aligned sites z_0..z_5 (z_s -> input of iteration s+1), leave-one-out, legacy (pre-fix) conditions on the same pairs, non-responsive pairs, full CFR log",
+      "site_definition": "site s = z_s = latent fed into loop iteration s+1; z_0 = latent-0 (bot position); legacy iter i = twin z_i fed into iteration i",
+      "n_examples_decoded": 1319,
+      "n_qualified_pairs": 317,
+      "all_slot": {
+        "n": 317,
+        "answer_changed_rate": 0.9526813880126183,
+        "answer_changed_wilson_ci": [
+          0.923404569491463,
+          0.9711178365805675
+        ],
+        "matches_twin_rate": 0.8391167192429022,
+        "matches_twin_wilson_ci": [
+          0.7946470331018998,
+          0.8754655707499699
+        ]
+      },
+      "single_slot": {
+        "0": {
+          "n": 317,
+          "answer_changed_rate": 0.38170347003154576,
+          "answer_changed_wilson_ci": [
+            0.3299425916648165,
+            0.43629719768918257
+          ],
+          "matches_twin_rate": 0.19873817034700317,
+          "matches_twin_wilson_ci": [
+            0.15853107635074185,
+            0.24615958720410888
+          ]
+        },
+        "1": {
+          "n": 317,
+          "answer_changed_rate": 0.006309148264984227,
+          "answer_changed_wilson_ci": [
+            0.0017318683052554192,
+            0.022708852598767
+          ],
+          "matches_twin_rate": 0.0031545741324921135,
+          "matches_twin_wilson_ci": [
+            0.0005570626746672774,
+            0.017650052612128448
+          ]
+        },
+        "2": {
+          "n": 317,
+          "answer_changed_rate": 0.3659305993690852,
+          "answer_changed_wilson_ci": [
+            0.3148032033995141,
+            0.42026855786835143
+          ],
+          "matches_twin_rate": 0.20189274447949526,
+          "matches_twin_wilson_ci": [
+            0.16139336021482162,
+            0.24953090895725574
+          ]
+        },
+        "3": {
+          "n": 317,
+          "answer_changed_rate": 0.00946372239747634,
+          "answer_changed_wilson_ci": [
+            0.0032235796769826876,
+            0.027450746844266426
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.011973509669569032
+          ]
+        },
+        "4": {
+          "n": 317,
+          "answer_changed_rate": 0.5173501577287066,
+          "answer_changed_wilson_ci": [
+            0.46246320355748183,
+            0.5718216273372649
+          ],
+          "matches_twin_rate": 0.35962145110410093,
+          "matches_twin_wilson_ci": [
+            0.3087641844098291,
+            0.41384036562358295
+          ]
+        },
+        "5": {
+          "n": 317,
+          "answer_changed_rate": 0.00946372239747634,
+          "answer_changed_wilson_ci": [
+            0.0032235796769826876,
+            0.027450746844266426
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.011973509669569032
+          ]
+        }
+      },
+      "prefix": {
+        "0": {
+          "n": 317,
+          "answer_changed_rate": 0.38170347003154576,
+          "answer_changed_wilson_ci": [
+            0.3299425916648165,
+            0.43629719768918257
+          ],
+          "matches_twin_rate": 0.19873817034700317,
+          "matches_twin_wilson_ci": [
+            0.15853107635074185,
+            0.24615958720410888
+          ]
+        },
+        "1": {
+          "n": 317,
+          "answer_changed_rate": 0.3722397476340694,
+          "answer_changed_wilson_ci": [
+            0.3208518358322724,
+            0.42668713667004654
+          ],
+          "matches_twin_rate": 0.20189274447949526,
+          "matches_twin_wilson_ci": [
+            0.16139336021482162,
+            0.24953090895725574
+          ]
+        },
+        "2": {
+          "n": 317,
+          "answer_changed_rate": 0.7287066246056783,
+          "answer_changed_wilson_ci": [
+            0.6772385273737419,
+            0.7746978798751935
+          ],
+          "matches_twin_rate": 0.5394321766561514,
+          "matches_twin_wilson_ci": [
+            0.48441663251773376,
+            0.5935034376975997
+          ]
+        },
+        "3": {
+          "n": 317,
+          "answer_changed_rate": 0.7381703470031545,
+          "answer_changed_wilson_ci": [
+            0.6871282488398796,
+            0.7835089752607358
+          ],
+          "matches_twin_rate": 0.5394321766561514,
+          "matches_twin_wilson_ci": [
+            0.48441663251773376,
+            0.5935034376975997
+          ]
+        },
+        "4": {
+          "n": 317,
+          "answer_changed_rate": 0.9526813880126183,
+          "answer_changed_wilson_ci": [
+            0.923404569491463,
+            0.9711178365805675
+          ],
+          "matches_twin_rate": 0.8422712933753943,
+          "matches_twin_wilson_ci": [
+            0.7980797107533765,
+            0.8782664987157197
+          ]
+        },
+        "5": {
+          "n": 317,
+          "answer_changed_rate": 0.9526813880126183,
+          "answer_changed_wilson_ci": [
+            0.923404569491463,
+            0.9711178365805675
+          ],
+          "matches_twin_rate": 0.8391167192429022,
+          "matches_twin_wilson_ci": [
+            0.7946470331018998,
+            0.8754655707499699
+          ]
+        }
+      },
+      "leave_one_out": {
+        "0": {
+          "n": 317,
+          "answer_changed_rate": 0.8738170347003155,
+          "answer_changed_wilson_ci": [
+            0.8327318068671206,
+            0.9059504587742426
+          ],
+          "matches_twin_rate": 0.7287066246056783,
+          "matches_twin_wilson_ci": [
+            0.6772385273737419,
+            0.7746978798751935
+          ]
+        },
+        "1": {
+          "n": 317,
+          "answer_changed_rate": 0.9495268138801262,
+          "answer_changed_wilson_ci": [
+            0.9195922407739594,
+            0.9686965596808443
+          ],
+          "matches_twin_rate": 0.8391167192429022,
+          "matches_twin_wilson_ci": [
+            0.7946470331018998,
+            0.8754655707499699
+          ]
+        },
+        "2": {
+          "n": 317,
+          "answer_changed_rate": 0.832807570977918,
+          "answer_changed_wilson_ci": [
+            0.7877975798041764,
+            0.8698478128132398
+          ],
+          "matches_twin_rate": 0.6593059936908517,
+          "matches_twin_wilson_ci": [
+            0.6055029998621158,
+            0.7092940838078323
+          ]
+        },
+        "3": {
+          "n": 317,
+          "answer_changed_rate": 0.9495268138801262,
+          "answer_changed_wilson_ci": [
+            0.9195922407739594,
+            0.9686965596808443
+          ],
+          "matches_twin_rate": 0.8359621451104101,
+          "matches_twin_wilson_ci": [
+            0.791219696547563,
+            0.87265930168708
+          ]
+        },
+        "4": {
+          "n": 317,
+          "answer_changed_rate": 0.7413249211356467,
+          "answer_changed_wilson_ci": [
+            0.6904310734972929,
+            0.7864397562205492
+          ],
+          "matches_twin_rate": 0.5457413249211357,
+          "matches_twin_wilson_ci": [
+            0.49070854574840866,
+            0.5996787357013786
+          ]
+        },
+        "5": {
+          "n": 317,
+          "answer_changed_rate": 0.9526813880126183,
+          "answer_changed_wilson_ci": [
+            0.923404569491463,
+            0.9711178365805675
+          ],
+          "matches_twin_rate": 0.8422712933753943,
+          "matches_twin_wilson_ci": [
+            0.7980797107533765,
+            0.8782664987157197
+          ]
+        }
+      },
+      "all_slot_legacy": {
+        "n": 317,
+        "answer_changed_rate": 0.9369085173501577,
+        "answer_changed_wilson_ci": [
+          0.9045638657467454,
+          0.9587905122391516
+        ],
+        "matches_twin_rate": 0.7129337539432177,
+        "matches_twin_wilson_ci": [
+          0.660816161727291,
+          0.7599522174355109
+        ]
+      },
+      "single_slot_legacy": {
+        "1": {
+          "n": 317,
+          "answer_changed_rate": 0.47003154574132494,
+          "answer_changed_wilson_ci": [
+            0.41577579040482826,
+            0.5250049562315182
+          ],
+          "matches_twin_rate": 0.025236593059936908,
+          "matches_twin_wilson_ci": [
+            0.012841925858624054,
+            0.049000428748758526
+          ]
+        },
+        "2": {
+          "n": 317,
+          "answer_changed_rate": 0.3186119873817035,
+          "answer_changed_wilson_ci": [
+            0.26975299885081544,
+            0.3718146781586497
+          ],
+          "matches_twin_rate": 0.04100946372239748,
+          "matches_twin_wilson_ci": [
+            0.024120074193333643,
+            0.0688903085001824
+          ]
+        },
+        "3": {
+          "n": 317,
+          "answer_changed_rate": 0.1608832807570978,
+          "answer_changed_wilson_ci": [
+            0.12453442925003017,
+            0.20535296689810023
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.011973509669569032
+          ]
+        },
+        "4": {
+          "n": 317,
+          "answer_changed_rate": 0.19242902208201892,
+          "answer_changed_wilson_ci": [
+            0.15281915367932825,
+            0.23940429864106905
+          ],
+          "matches_twin_rate": 0.04100946372239748,
+          "matches_twin_wilson_ci": [
+            0.024120074193333643,
+            0.0688903085001824
+          ]
+        },
+        "5": {
+          "n": 317,
+          "answer_changed_rate": 0.012618296529968454,
+          "answer_changed_wilson_ci": [
+            0.004917574547621187,
+            0.03199035759085462
+          ],
+          "matches_twin_rate": 0.0,
+          "matches_twin_wilson_ci": [
+            0.0,
+            0.011973509669569032
+          ]
+        },
+        "6": {
+          "n": 317,
+          "answer_changed_rate": 0.24290220820189273,
+          "answer_changed_wilson_ci": [
+            0.19895490329236676,
+            0.2930062389036576
+          ],
+          "matches_twin_rate": 0.10725552050473186,
+          "matches_twin_wilson_ci": [
+            0.07777327920774907,
+            0.14614282144752755
+          ]
+        }
+      },
+      "nonresponsive": {
+        "n": 229,
+        "matches_twin_pred_rate": 0.5327510917030568,
+        "matches_twin_pred_wilson_ci": [
+          0.46812261734404287,
+          0.5962988606049148
+        ],
+        "answer_changed_rate": 0.7510917030567685,
+        "matches_twin_gold_rate": 0.021834061135371178
+      },
+      "cfr": {
+        "n_candidates": 1471,
+        "n_original_correct": 546,
+        "twin_correct_given_original_correct": 0.5805860805860806,
+        "twin_correct_given_original_correct_wilson_ci": [
+          0.5387722385060594,
+          0.6212738547688039
+        ],
+        "twin_correct_given_original_wrong": 0.07027027027027027,
+        "both_correct_rate": 0.21549966009517335
+      },
+      "decode_elapsed_sec": 271.30132884625345,
+      "patch_elapsed_sec": 1503.552714961581,
+      "related_runs": [
+        "20260920-190420_codi_minimal-pair-patch",
+        "20260926-235221_codi_cfr-minimal-pairs"
+      ]
+    }
+  },
+  "hyperparams": {
+    "inf_latent_iterations": 6,
+    "greedy": true,
+    "n_pairs_cap": 1000,
+    "n_nonresponsive_cap": 300,
+    "deltas": [
+      1,
+      -1,
+      2,
+      -2,
+      3,
+      -3
+    ],
+    "max_new_tokens": 64
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A5000 (secure) / NVIDIA RTX A5000",
+  "author": "Henning Lindig",
+  "notes": "E3 rerun, CODI: aligned-site same-problem minimal-pair patch (all/single/prefix/leave-one-out) + legacy conditions + non-responsive pairs + CFR log.",
+  "timestamp_utc": "2026-09-27T00:43:40.765536+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

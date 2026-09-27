@@ -106,3 +106,13 @@ same design, same pod). Per `steered_to_donor_audit.md` §5, E3 (same-problem mi
 donors, `latentreasoning/data/minimal_pairs.py`) is the next step if this cross-problem
 null is worth chasing further — it removes the "donor's remaining program lives in
 question text the recipient never saw" confound entirely.
+
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. This run patched `{it: donor z_it}` (`thought_cache[donor][it-1]["post"]`). So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. Per-site real/random/mean rates describe shifted sites; the cross-problem null itself is not expected to depend on the shift, but should be confirmed with an aligned rerun. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.

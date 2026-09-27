@@ -142,3 +142,13 @@ See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measure
 - **iter 5** taxonomy: unchanged 38, other_number 19, recipient_gold 2, recipient_intermediate 1
 - **iter 6** taxonomy: unchanged 35, other_number 21, recipient_gold 4
 - **total** taxonomy: unchanged 204, other_number 140, recipient_gold 8, recipient_intermediate 6, counterfactual 1, donor_final 1
+
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. Donor vectors were `recs[it-1]["post"]` fed at `{it: ...}`. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. The "z0/z3 don't steer" null was run on shifted sites (and never transplanted latent-0); it should be rerun aligned. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.

@@ -1664,6 +1664,16 @@ qualitative null is unchanged; decoding accuracy is if anything underestimated. 
 above are left as run. Fixed in `build_model` in commit for `20260919-090132_codi_ablate-attn`;
 re-run in eval mode before citing these numbers (~$0.11 on an A5000).
 
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. The patch sweep used `{it: donor_recs[it-1]["post"]}`. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. Decoding numbers are unaffected; only the patch-sweep numbers describe shifted sites. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.
+
 ---
 
 ## 2026-09-19 — Causal patching on the step-supervised checkpoint: no faithfulness, symmetric with CODI (recurrent_depth, run_id: 20260919-075647_recurrent_depth_patch-pilot)
@@ -1977,6 +1987,16 @@ contrasts remain valid as paired comparisons (both conditions share the noise) a
 qualitative null is unchanged; decoding accuracy is if anything underestimated. Numbers
 above are left as run. Fixed in `build_model` in commit for `20260919-090132_codi_ablate-attn`;
 re-run in eval mode before citing these numbers (~$0.11 on an A5000).
+
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. The patch sweep used `{it: donor_recs[it-1]["post"]}`. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. Decoding numbers are unaffected; only the patch-sweep numbers describe shifted sites. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.
 
 ---
 
@@ -2311,6 +2331,16 @@ iteration's top-1 token shifting under a fixed injected input says little.
   (b) ablation signature per mechanism (off-manifold-sensitive vs. content-sensitive), (c)
   attention mass on the patched position, side by side.
 
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. The `mean` condition fed the population mean of iteration it's OUTPUT (z_it) into iteration it; the `mean_in` condition and zero ablation are aligned. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. Only the `mean` rows are affected; prefer `mean_in`. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.
+
 ---
 
 ## 2026-09-19 — CODI decode+patch full run, re-run in eval mode: decoding unchanged, the injected value still never propagates, and with the noise floor gone the answer-changed contrasts resolve into slot sensitivity, not content faithfulness (codi, run_id: 20260919-184323_codi_decode-patch-full-eval)
@@ -2510,6 +2540,16 @@ top-5 of a forward-pass logit lens" that Appendix E's case study doesn't fully s
 run or elsewhere in the repo — those are about whether a *specific* injected value propagates,
 which ANY-iteration doesn't touch. It only revises the decodability side of the story upward,
 modestly.
+
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. The patch sweep used `{it: donor_recs[it-1]["post"]}`. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. Decoding numbers are unaffected; only the patch-sweep numbers describe shifted sites. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.
 
 ---
 
@@ -3299,6 +3339,16 @@ See `steered_to_donor_audit.md`. `steered_to_donor` as originally logged measure
 - **iter 5** taxonomy: unchanged 38, other_number 19, recipient_gold 2, recipient_intermediate 1
 - **iter 6** taxonomy: unchanged 35, other_number 21, recipient_gold 4
 - **total** taxonomy: unchanged 204, other_number 140, recipient_gold 8, recipient_intermediate 6, counterfactual 1, donor_final 1
+
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. Donor vectors were `recs[it-1]["post"]` fed at `{it: ...}`. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. The "z0/z3 don't steer" null was run on shifted sites (and never transplanted latent-0); it should be rerun aligned. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.
 
 ---
 
@@ -4519,6 +4569,16 @@ donors, `latentreasoning/data/minimal_pairs.py`) is the next step if this cross-
 null is worth chasing further — it removes the "donor's remaining program lives in
 question text the recipient never saw" confound entirely.
 
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. This run patched `{it: donor z_it}` (`thought_cache[donor][it-1]["post"]`). So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. Per-site real/random/mean rates describe shifted sites; the cross-problem null itself is not expected to depend on the shift, but should be confirmed with an aligned rerun. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.
+
 ---
 
 ## 2026-09-20 — E2: step-aligned, base-correct, controlled raw single-slot patch at every Coconut pass -- null survives the fixed pair design (coconut, run_id: 20260920-085317_coconut_qualified-patch)
@@ -4732,6 +4792,16 @@ session). Both mechanisms now have the E3(a) upper-bound result; per
 now that ALL-SLOT succeeds and single-slot localizes weakly -- the prefix-jump pattern
 (3→4 for CODI) is a concrete hypothesis a learned subspace could test more precisely than
 raw single-slot patching.
+
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. This run patched `{i: twin z_i}` for i=1..6. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. The all-slot 70.1% is a full shifted chain; the single-slot / prefix localization ("no iteration above 11%, diffuse") is an artifact of the shift. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.
 
 ---
 
@@ -5070,6 +5140,16 @@ Coconut's intermediate state looks close to a genuine low-dimensional linear "sc
 variable"; CODI's does not, even though both show a raw-vector same-problem effect of
 similar overall magnitude (E3(a): 70.1% vs 77.1%).
 
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. `run_intervened` rotated the recipient's own feed (z_{it-1}) as background against the twin's z_it as donor. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. The learned subspace mixed vectors from two different positions; the DAS results for CODI need an aligned rerun. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.
+
 ---
 
 ## 2026-09-21 — E4 full-scale: Coconut DAS subspace saturation sweep, k in {64,96,128,256}, joint {1,4} vs pass-1-alone (coconut, run_id: 20260921-195626_coconut_das-minimal-pair-fullscale)
@@ -5296,6 +5376,16 @@ current pair-selection/mapping design. If still worth chasing: the "correct-only
 metric is still bottlenecked by population size at 2-3+ steps (n=81-119) -- a fresh pull from
 the paper's own full 1319-example test set structure (not the held-out half-B slice) would be
 the next lever, separate from k.
+
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. The patch sweep used `{it: donor_recs[it-1]["post"]}`. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. Decoding numbers are unaffected; only the patch-sweep numbers describe shifted sites. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.
 
 ---
 
@@ -5554,3 +5644,497 @@ under patching.
 - If the residual 3-8pp gaps are worth chasing further: try scoring against the paper's
   presumably much larger n (their full 1319-example test set, not this run's ~660-example
   held-out half) before reading the remaining gap as a real discrepancy.
+
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. The patch sweep used `{it: donor_recs[it-1]["post"]}`. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. Decoding numbers (incl. latent-0) are unaffected; only the patch-sweep numbers describe shifted sites. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.
+
+---
+
+## 2026-09-26 — Counterfactual responsiveness on E3 minimal pairs, CODI: the unpatched model follows a one-number change only 53% of the time (codi, run_id: 20260926-235221_codi_cfr-minimal-pairs)
+
+**Goal:** E3 (`20260920-190420_codi_minimal-pair-patch`) reports all-slot steering of 70.1%, but only
+on pairs where the model solves BOTH the original and the perturbed twin. What is the behavioral
+reference: how often does the unpatched model's own answer move correctly when one question number
+changes? (RESEARCH_PLAN round 1, item 4.)
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3`, compute_steps=6. No model run.
+**Data:** the E3 slice, gsm8k-aug test n=600 seed=0; 263 base-correct; 258 candidate twins decoded.
+**Command:** `uv run python scripts/cfr_minimal_pairs.py` (offline; writes this record + the Coconut one).
+**Definition:** CFR = P(twin answered correctly | original answered correctly), greedy, over every
+candidate twin E3 decoded = `n_qualified_pairs / n_candidates_checked` from E3's manifest (exact).
+**Headline results:**
+
+| quantity | value |
+|---|---|
+| P(original correct), slice | 0.438 |
+| **CFR = P(twin correct \| original correct)** | **137/258 = 0.531** [0.470, 0.591] |
+| E3 all-slot matches_twin (on the 137 responsive pairs) | 0.701 |
+| all-slot × CFR (of all 258 checked originals-correct candidates) | 0.372 |
+
+**Interpretation:** E3's "70% steering" is conditioned on a behaviorally responsive half of the pool.
+The model itself only tracks the perturbation in about half of the problems it gets right, so the
+patched latents reproduce the model's input-driven answer change in 70% of the cases where that
+change exists at all (≈37% of all candidates). Quote the steering number together with CFR, and do
+not read 70% as "70% of the time latents carry the value".
+**Gotchas hit:** The stratified breakdown (by step, delta, chain length) needs the rejected
+candidates, which E3 did not save. Replaying E3's candidate construction needs E3's exact
+base-correct set; no saved CODI run reproduces it (E2 has 261 vs 263 correct, the eval-mode full-test
+run has 263 but a different set — bf16 greedy flips across pods, and one flip early in the slice
+shifts every later `rng.choice`). A small flip search got to 128/137 and was abandoned. So CODI gets
+the aggregate only; the E3 rerun (`patch_minimal_pair_codi.py`, 2026-09-26) logs every candidate twin
+(`candidates.jsonl`), which gives the stratified CFR directly at n≈1319.
+**Caveats:** CFR is over propagation-qualified steps with deltas ±1..±3 only; it says nothing about
+larger perturbations.
+**Next:** stratified CFR from the E3 rerun's `candidates.jsonl`; Coconut counterpart
+`20260926-235221_coconut_cfr-minimal-pairs`.
+
+---
+
+## 2026-09-26 — Counterfactual responsiveness on E3 minimal pairs, Coconut: 52%, and it falls with chain length (coconut, run_id: 20260926-235221_coconut_cfr-minimal-pairs)
+
+**Goal:** Behavioral reference for Coconut's E3 steering (77.1%, `20260920-195725_coconut_minimal-pair-patch`):
+how often does the unpatched model answer the perturbed twin correctly when it answers the original
+correctly? (RESEARCH_PLAN round 1, item 4.)
+**Mechanism / model:** `coconut`, gpt2 / `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`, 6 latents. No model run.
+**Data:** E3 slice, gold-trace test file n=600 seed=0; 213 base-correct; 201 candidate twins decoded.
+**Command:** `uv run python scripts/cfr_minimal_pairs.py`.
+**Definition:** as in the CODI record: CFR = P(twin correct | original correct), greedy.
+Stratified by replaying E3's candidate construction on E2's base correctness
+(`20260920-085317_coconut_qualified-patch`, same slice); the replay reproduces E3's logged counts
+exactly (201 candidates, 105 qualified), so `predictions.jsonl` holds every checked candidate with its
+label.
+**Headline results:**
+
+| quantity | value |
+|---|---|
+| P(original correct), slice | 0.355 |
+| **CFR** | **105/201 = 0.522** [0.454, 0.590] |
+| E3 all-slot matches_twin (on responsive pairs) | 0.771 |
+| all-slot × CFR | 0.403 |
+
+| stratum | CFR |
+|---|---|
+| perturbed step 0 / 1 / 2 / 3+ | 69/118=0.58, 28/59=0.47, 7/19=0.37, 1/5=0.20 |
+| chain length 2 / 3 / 4 / 5+ | 55/83=0.66, 37/73=0.51, 7/30=0.23, 6/15=0.40 |
+| \|delta\| 1 / 2 / 3 | 0.51, 0.62, 0.43 |
+| delta sign + / − | 99/185=0.54, 6/16=0.38 |
+
+**Interpretation:** Same picture as CODI (0.531): the model follows a one-number change in about
+half the problems it solves. Responsiveness drops with chain length and perturbed-step depth, so E3's
+qualified pairs over-represent short chains / early steps: the 77% steering number describes that
+easier subset.
+**Gotchas hit:** none beyond the replay (verified exact here, unlike CODI).
+**Caveats:** negative deltas are rare (16/201) because `generate_minimal_pair` requires non-negative
+integer chains. Strata beyond step 2 / chain length 4 are small.
+**Next:** full-n stratified CFR from the E3 rerun's `candidates.jsonl`.
+
+---
+
+## 2026-09-26 — Where non-steered patched answers go, CODI: level 1 misses are partial propagation of the perturbed number; level 4 moves are unrelated (codi, run_id: 20260926-235222_codi_nonsteered-buckets)
+
+**Goal:** `henning_thoughts.md`: "donor states change answer but do not steer as per donor value ->
+what are the answers going towards instead?" Turn "context-entangled" into a measurement by bucketing
+every patched answer from E3 (level 1, same-problem twin, `20260920-190420`) and E2 (level 4,
+cross-problem donor, `20260920-085206`). RESEARCH_PLAN round 1, item 3.
+**Mechanism / model:** `codi`, released checkpoint. No model run, saved predictions only.
+**Command:** `uv run python scripts/analyze_nonsteered.py --reps 200` (writes this + the Coconut record).
+**Buckets** (first match wins; definitions in the script docstring): unchanged (recipient original) ·
+donor_final (steered) · counterfactual (E2 Metric B) · **partial_propagation** (E3: the perturbed
+operand changed in only some of the steps that use it) · **wrong_step** (donor value injected at the
+wrong chain step) · donor_intermediate · recipient_intermediate · off_by_delta (E3: recipient answer
+± delta) · other (unrelated). **Null:** each moved-not-steered answer is re-bucketed against a random
+other record's chains (200 permutations); a bucket only means something above that.
+**Headline results:**
+
+E3 all-slot (n=137): 70.1% steered, 7.3% unchanged, 8.0% partial_propagation, 12.4% other.
+Among the 31 moved-but-not-steered answers: **partial_propagation 35% (null 1.6%)**, recipient
+intermediate 6% (null 2%), off_by_delta 3% (1%), other 55%.
+
+Split by whether partial propagation is possible at all (perturbed number used in ≥2 steps):
+
+| all-slot | n | steered | partial_propagation | unchanged | other |
+|---|---|---|---|---|---|
+| number used in ≥2 steps | 26 | 0.50 | **0.42** | 0.04 | 0.04 |
+| number used once | 111 | 0.75 | — | 0.08 | 0.14 |
+
+E2 (level 4, 370 pairs pooled over sites): real donor 68% unchanged, 1.1% counterfactual, 0% donor
+final; of the 114 moved answers, 91% other, wrong_step 6% (null 0.3%) — but the **random** donor
+gives the same 6% wrong_step and 4% donor_intermediate, and mean ablation 0% / 7% recipient
+intermediate. Nothing distinguishes the real donor from a random one.
+
+**Interpretation:** At level 1 the misses are not noise. When the perturbed number enters the chain
+twice, the all-slot latent patch carries the new value into one use while the other use keeps the
+recipient's number — about as often (42%) as it fully steers (50%). When the number enters once,
+steering is 75%. Direct evidence that part of the computation reads operands from the question
+tokens' KV cache rather than from the latents: the latents hold the value for the step they compute,
+not a context-free copy of the operand. At level 4 the moved answers are unrelated numbers, and the
+real donor's step value shows up no more often than a random donor's: cross-problem patches disrupt,
+they don't transmit.
+**Caveats:** CODI's committed E3/E2 runs use the pre-fix site indexing (donor z_i fed where the
+recipient's z_{i-1} goes; see `patch_minimal_pair_codi.py`); all-slot is a full shifted transplant, and
+single-slot / prefix rows describe that intervention, not the aligned one. Re-run this analysis on the
+aligned E3 rerun. The multi-use subset is small (26); 55% of moved answers are still "other".
+**Next:** rerun on the aligned CODI E3 (and larger n); Coconut counterpart
+`20260926-235222_coconut_nonsteered-buckets`.
+
+---
+
+## 2026-09-26 — Where non-steered patched answers go, Coconut: pass 1 carries one use of the perturbed number, not the number (coconut, run_id: 20260926-235222_coconut_nonsteered-buckets)
+
+**Goal:** As for CODI (`20260926-235222_codi_nonsteered-buckets`): bucket every patched answer of
+Coconut E3 (`20260920-195725`) and E2 (`20260920-085317`) by which chain it is consistent with, against
+a permutation null. RESEARCH_PLAN round 1, item 3.
+**Mechanism / model:** `coconut`, released checkpoint_33. No model run.
+**Command:** `uv run python scripts/analyze_nonsteered.py --reps 200`.
+**Headline results:**
+
+E3 all-slot (n=105): 77.1% steered, 13.3% unchanged; only 10 moved-not-steered answers
+(partial_propagation 2, wrong_step 1, donor_intermediate 1, off_by_delta 1, other 5).
+E3 **single-slot pass 1** (the pass that carries 48.6% alone): of 23 moved-not-steered answers,
+**partial_propagation 52% (null 2%)**.
+
+Split by whether the perturbed number is used in ≥2 steps:
+
+| condition | subset | n | steered | partial_prop. | unchanged | other |
+|---|---|---|---|---|---|---|
+| all-slot | ≥2 uses | 29 | 0.52 | 0.07 | 0.21 | 0.14 |
+| all-slot | 1 use | 76 | **0.87** | — | 0.11 | 0.01 |
+| pass 1 only | ≥2 uses | 29 | **0.07** | **0.41** | 0.21 | 0.31 |
+| pass 1 only | 1 use | 76 | 0.64 | — | 0.33 | 0.01 |
+| pass 4 only | ≥2 uses | 29 | 0.38 | 0.14 | 0.41 | 0.07 |
+| pass 4 only | 1 use | 76 | 0.25 | — | 0.72 | 0.01 |
+
+E2 (level 4, 282 pairs): real donor 34% unchanged, 1.4% counterfactual; moved answers 93% other,
+donor_intermediate 2% (null 1.6%), recipient_intermediate 5% (null 2%). The random donor and mean
+ablation look the same (recipient_intermediate 9% / 12%). No donor-specific signal.
+
+**Interpretation:** Pass 1's "48.6% alone" is really two numbers: 64% when the perturbed operand is
+used once, 7% when it is used twice, where pass 1 instead yields the half-propagated answer 41% of the
+time. So pass 1 carries the value of the step it computes, and the other use of the operand still
+comes from the question text. That localizes and qualifies the Coconut "single addressable slot"
+reading: addressable per step, not per variable. Even all-slot drops from 87% to 52% on multi-use
+operands. Level 4 moves are disruption, not transmission, as for CODI.
+**Caveats:** small multi-use subset (29); only 10 moved-not-steered all-slot answers. Buckets are
+first-match; `other` is still the largest non-steered bucket for single-slot pass 1 on multi-use pairs (31%).
+**Next:** repeat on the full-n E3 rerun (`patch_minimal_pair_coconut.py`, 2026-09-26).
+
+---
+
+## 2026-09-27 — E3 rerun at full n, Coconut: passes 1 and 4 carry the value (leave-one-out confirms), non-responsive pairs follow the twin's wrong answer (coconut, run_id: 20260927-003331_coconut_minimal-pair-patch-full)
+
+**Goal:** RESEARCH_PLAN round 1, item 1 (power): Coconut E3 had n=105 pairs; rerun on the full gold-trace
+set to pass the ~210 target, and add leave-one-out, non-responsive pairs and a full CFR log, so it
+matches the aligned CODI rerun (`20260927-004340_codi_minimal-pair-patch-aligned`) condition-for-condition.
+Coconut's sites were already aligned (`run_passes` splices the twin's pass-p vector into the recipient's
+pass-p slot).
+**Mechanism / model:** `coconut`, gpt2 / `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`, 6 latents.
+**Data:** gold-trace test file, all 1194 (seed-0 order); 1412 candidates from every example, 413 with a
+correct original, **231 qualified pairs**, 182 non-responsive pairs; every twin in `candidates.jsonl`.
+**Command:**
+```
+cd /workspace/ai-capstone && .venv_coconut/bin/python scripts/patch_minimal_pair_coconut.py \
+  --checkpoint_path /workspace/coconut_checkpoints/checkpoint_33 --data_dir /workspace/coconut_data \
+  --slug minimal-pair-patch-full --stage full_run --hardware "RunPod RTX A5000 (secure)" \
+  --eval_n 0 --n_pairs 1000 --n_nonresponsive 300
+```
+Same pod as the CODI rerun ($0.27/hr A5000), in parallel; decode 232 s, whole run ~20 min.
+**Headline results:** base accuracy 0.336 on the gold-trace set (paper 0.331–0.341).
+
+| pass (n=231) | single-slot | leave-one-out | prefix 0..p |
+|---|---|---|---|
+| 0 | 0.013 | 0.818 | 0.013 |
+| 1 | **0.558** | **0.398** | 0.550 |
+| 2 | 0.000 | 0.827 | 0.550 |
+| 3 | 0.026 | 0.818 | 0.584 |
+| 4 | **0.338** | **0.628** | 0.784 |
+| 5 | 0.004 | 0.784 | 0.827 |
+| ALL-SLOT | **0.827** [0.773, 0.870] | | |
+
+Non-responsive pairs (n=182): all-slot moves the recipient to the twin's **wrong** answer 48.9%
+[0.417, 0.561], to the twin's gold 2.7%.
+CFR = 231/413 = 0.559; by chain length 2/3/4/5+: 0.73 / 0.57 / 0.31 / 0.26; P(twin correct | original
+wrong) = 0.056.
+**Interpretation:** Replicates the n=105 run (all-slot 0.771 → 0.827, pass 1 0.486 → 0.558, pass 4 0.286
+→ 0.338) with tighter CIs. Leave-one-out shows passes 1 and 4 are also *necessary* for steering (dropping
+pass 1 costs 43 pp, pass 4 costs 20 pp); 0, 2, 3, 5 cost ≤4 pp. With CODI's aligned rerun, both
+mechanisms localize the transplanted value to a few latents (Coconut 1/4, CODI 0/2/4), with inert
+latents between. Non-responsive pairs: the latents carry what the model computed for the twin, right or
+wrong.
+**Gotchas hit:** none.
+**Caveats:** gold-trace set (1194) is a filtered subset of the 1319 test questions. Multi-use operands
+still limit steering (0.59 vs 0.89 single-use; see `20260927-004443_coconut_nonsteered-buckets-e3full`).
+**Next:** aligned CODI E2/E4 reruns so the two mechanisms are compared on identical site semantics.
+
+---
+
+## 2026-09-27 — E3 rerun with aligned sites, CODI: the value is NOT diffuse — it sits on z0/z2/z4, and the old "diffuse" result was a site-indexing artifact (codi, run_id: 20260927-004340_codi_minimal-pair-patch-aligned)
+
+**Goal:** RESEARCH_PLAN round 1, item 1: rerun E3 on CODI with the latent-0 site, at n toward the
+~210 power target, before the "CODI stores values diffusely, Coconut locally" claim is written anywhere.
+**What changed vs the committed E3 (20260920-190420): a site-indexing bug.** CODI feeds six latents into
+its loop: z_0 (latent-0, bot position) into iteration 1, and z_s (iteration s's output) into iteration
+s+1; z_6 is never consumed (`decode_answer` continues from the KV cache with eot).
+`run_thoughts(override_input_at={i: v})` replaces the vector fed INTO iteration i. The committed E3,
+E2 (`patch_qualified_codi.py`), E4 (`das_minimal_pair_codi.py`), `decode_patch_codi.py` and
+`interchange_patch_placeholder_codi.py` all patched `{i: donor z_i}`: the donor's z_i placed where the
+recipient's z_{i-1} goes, one position early, never transplanting z_0 and feeding the unused z_6 into
+iteration 6. The ablation scripts (`early_termination_codi.py`, mean/zero) were already aligned; Coconut's
+`run_passes` is aligned. This run patches site s as `{s+1: twin z_s}` (s = 0..5, same numbering as
+Coconut passes 0..5), and keeps the old conditions as `*_legacy` on the same pairs.
+(The uncommitted latent-0 edits to `patch_minimal_pair_codi.py` / `patch_qualified_codi.py` /
+`probe_codi.py` found on 2026-09-26 were on this machine only — no teammate branch touches them — and
+added a site 0 but left sites 1..6 on the shifted indexing; this script supersedes the E3 one.)
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3`, 6 latents, eval mode, greedy, batch 1.
+**Data:** gsm8k-aug test, all 1319; candidates from every example (1471), 546 with a correct original,
+**317 qualified pairs** (original and twin both correct), 229 non-responsive pairs (original correct,
+twin answered wrong), every twin logged in `candidates.jsonl`.
+**Command:**
+```
+cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/patch_minimal_pair_codi.py \
+  --ckpt_dir /workspace/codi_released --checkpoint_label hf:zen-E/CODI-gpt2@fd641b3 \
+  --model_name_or_path gpt2 --seed 11 --model_max_length 512 --bf16 --lora_r 128 --lora_alpha 32 \
+  --lora_init --greedy True --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 \
+  --inf_latent_iterations 6 --inf_num_iterations 1 --remove_eos True --use_lora True --output_dir /tmp/o \
+  --slug minimal-pair-patch-aligned --stage full_run --hardware "RunPod RTX A5000 (secure)" \
+  --eval_n 0 --n_pairs 1000 --n_nonresponsive 300
+```
+Pod `k030n8z4jrafxm` (RTX A5000 secure, CA-MTL-1, $0.27/hr), run in parallel with the two necessity runs
+and the Coconut E3 rerun; decode 271 s, twins ~5 min, patching 317 pairs × 25 conditions ~25 min.
+**Headline results:** base accuracy 0.419 (553/1319, identical to the eval-mode baseline).
+
+| condition (n=317) | matches_twin | answer_changed |
+|---|---|---|
+| **ALL-SLOT aligned (z0..z5)** | **0.839** [0.795, 0.875] | 0.953 |
+| ALL-SLOT legacy (old E3 intervention) | 0.713 [0.661, 0.760] | 0.937 |
+
+Aligned vs legacy on the same pairs: 41 pairs steer only aligned, 1 only legacy (McNemar p = 2e-11).
+
+| site | single-slot | leave-one-out | prefix z0..s |
+|---|---|---|---|
+| z0 (latent-0) | 0.199 | 0.729 | 0.199 |
+| z1 | 0.003 | 0.839 | 0.202 |
+| z2 | 0.202 | 0.659 | 0.539 |
+| z3 | 0.000 | 0.836 | 0.539 |
+| z4 | **0.360** | **0.546** | 0.842 |
+| z5 | 0.000 | 0.842 | 0.839 |
+
+Legacy single-slot "iter i" on the same pairs: 0.025, 0.041, 0.000, 0.041, 0.000, 0.107 (reproduces the
+old E3 table: max 10.9% there, 10.7% here).
+
+Non-responsive pairs (n=229, twin answered wrong): all-slot moves the recipient to the twin's **wrong**
+answer 53.3% [0.468, 0.596] of the time, to the twin's gold answer 2.2%.
+CFR (from `candidates.jsonl`): P(twin correct | original correct) = 317/546 = 0.581; by chain length
+2/3/4/5+: 0.70 / 0.62 / 0.48 / 0.27; by perturbed step 0/1/2/3: 0.63 / 0.59 / 0.46 / 0.21.
+P(twin correct | original wrong) = 0.070.
+
+**Interpretation:**
+- **The "CODI is diffuse" claim is withdrawn.** It came from the shifted indexing: legacy single-slot
+  never exceeds 11%, but aligned single sites reach 36% (z4), 20% (z2) and 20% (z0 = latent-0). The
+  perturbed value sits on the EVEN latents z0, z2, z4; the odd latents z1, z3, z5 are inert both
+  alone (≤0.3%) and when left out (no drop from 0.839). Prefix jumps exactly at z0, z2 and z4.
+- This is the same shape as Coconut (`20260927-003331`: passes 1 and 4 carry it, 0/2/3/5 inert) — both
+  mechanisms localize the value to a few specific latents with inert slots between. The cross-mechanism
+  difference is WHICH positions (CODI 0/2/4 vs Coconut 1/4), not diffuse vs local.
+- The even latents are also CODI's decodable positions (logit lens: z0 per
+  `20260923-052604_codi_decode-patch-full-eval-latent0`; z2/z4 per the earlier decode runs, whose
+  "{z0,z3} non-decodable vs {z2,z4} decodable" labels were on output indices). So for CODI the
+  "decodable but not causally used" story from the shifted patch runs needs rechecking too.
+- Non-responsive pairs: the latents carry the model's own (wrong) computation for the twin, not the
+  correct value — 53% follow the twin's wrong answer. That is a faithfulness result: what the latents
+  carry is what the model actually computed.
+- Behavioral reference: the unpatched model follows a one-number change in 58% of problems it solves,
+  dropping to 27% for 5+-step chains; quote the 84% alongside it.
+**Gotchas hit:** 8 processes on one A5000 made the GPU the bottleneck (98% util); fine for this size.
+**Caveats:**
+- **Every committed CODI donor-patch run used the shifted indexing**: E2 `20260920-085206`, E4
+  `20260920-235312` and `20260920-050602`, `20260919-080349`/`-184323` patch sweeps,
+  `20260920-031925` interchange. Their CODI single-site numbers describe a one-position-early transplant,
+  not the named site; all-slot style conditions (full shifted chain) are less affected. Correction
+  notes should be appended to those runs and E2/E4 rerun aligned before any CODI site-level claim.
+- Pairs are not the same as the old E3 (full test set, candidates from all examples, different rng draw).
+**Next:** append correction notes to the shifted-indexing runs; rerun E2 (and E4 DAS) with aligned
+sites; bucket analysis on this run is `20260927-004433_codi_nonsteered-buckets-e3full`.
+
+---
+
+## 2026-09-27 — Where non-steered answers go, aligned CODI E3 at n=317: single-use operands steer 92%, multi-use operands half-propagate (codi, run_id: 20260927-004433_codi_nonsteered-buckets-e3full)
+
+**Goal:** Repeat the bucket analysis (`20260926-235222_codi_nonsteered-buckets`) on the aligned, full-n E3
+rerun `20260927-004340_codi_minimal-pair-patch-aligned`. The E2 (level-4) tables in this record are the
+same as in the earlier record (same E2 source, shifted-indexing caveat).
+**Command:** `uv run python scripts/analyze_nonsteered.py --mechanism codi --e3-run 20260927-004340_codi_minimal-pair-patch-aligned --slug nonsteered-buckets-e3full --reps 200`
+**Headline results:** all-slot (aligned) moved-not-steered answers: n=36, **partial_propagation 64%**
+(permutation null 3%).
+
+| condition | operand used in ≥2 steps (n=60) | used once (n=257) |
+|---|---|---|
+| all-slot: steered / partial / unchanged | 0.50 / **0.38** / 0.03 | **0.92** / — / 0.05 |
+| z0 alone: steered / partial | 0.05 / **0.50** | 0.23 / — |
+| z2 alone: steered / partial | 0.07 / 0.23 | 0.23 / — |
+| z4 alone: steered / partial | 0.28 / 0.13 | 0.38 / — |
+| z1, z3, z5 alone | ≥0.98 unchanged | ≥0.99 unchanged |
+
+**Interpretation:** Confirms the n=137 finding on aligned sites and 2.3× the pairs: when the perturbed
+number enters one step, transplanting the twin's latents steers 92% of the time; when it enters two or
+more steps, only 50%, and the dominant failure (38%) is the recipient chain with the new number used in
+some steps and the old number in others. z0 alone produces exactly that half-propagated answer on half
+the multi-use pairs. The latents carry the value of the step they compute; other uses of the operand
+are read from the question tokens. That is the measured form of "context-entangled".
+**Caveats:** first-match buckets; "other" remains the largest bucket for single-site non-steered answers.
+
+---
+
+## 2026-09-27 — Where non-steered answers go, Coconut E3 at n=231: same multi-use operand failure, concentrated on pass 1 (coconut, run_id: 20260927-004443_coconut_nonsteered-buckets-e3full)
+
+**Goal:** Repeat the bucket analysis (`20260926-235222_coconut_nonsteered-buckets`) on the full-n E3 rerun
+`20260927-003331_coconut_minimal-pair-patch-full`. E2 tables unchanged from the earlier record.
+**Command:** `uv run python scripts/analyze_nonsteered.py --mechanism coconut --e3-run 20260927-003331_coconut_minimal-pair-patch-full --slug nonsteered-buckets-e3full --reps 200`
+**Headline results:** all-slot moved-not-steered n=16, partial_propagation 38% (null 3%).
+
+| condition | operand used in ≥2 steps (n=46) | used once (n=185) |
+|---|---|---|
+| all-slot: steered / partial / unchanged | 0.59 / 0.13 / 0.17 | **0.89** / — / 0.09 |
+| pass 1 alone: steered / partial | **0.07 / 0.48** | 0.68 / — |
+| pass 4 alone: steered / partial | 0.37 / 0.17 | 0.33 / — |
+| passes 0, 2, 3 alone | ≥0.98 unchanged | ≥0.95 unchanged |
+
+**Interpretation:** Same pattern as CODI (`20260927-004433`): 89% steering for single-use operands vs 59%
+for multi-use ones. Pass 1 alone steers 68% of single-use pairs but only 7% of multi-use pairs, where it
+yields the half-propagated answer 48% of the time. Pass 1 carries one use of the number (the step it
+computes), not the number as a variable.
+**Caveats:** multi-use subset n=46; first-match buckets.
+
+---
+
+## 2026-09-27 — Necessity under zero / mean / norm-matched noise, CODI: thoughts are necessary under every replacement, but which site looks necessary depends on the replacement, and sampling recovers most of what truncation loses (codi, run_id: 20260927-005051_codi_necessity-all-replacements)
+
+**Goal:** RESEARCH_PLAN round 1, item 2: fill the Q2 "necessary?" cells with every replacement type
+(Jin et al.'s point that zero / mean ablation are off-distribution in different ways), with
+preserved-when-correct (PWC), the correct→wrong / wrong→correct flip split, and cheap pass@k.
+Extends `20260919-192228_codi_early-termination-ablate-all` (truncation, ablate-all zero/mean,
+single mean on the 200-slice) to norm-matched noise, single-site zero/noise, the full test set for
+every condition, and sampling.
+**Mechanism / model:** `codi`, gpt2 / `hf:zen-E/CODI-gpt2@fd641b3`, 6 latents, eval mode, batch 1.
+**Data:** gsm8k-aug test, all 1319, every condition.
+**Design:** `scripts/necessity_codi.py` + `scripts/necessity_common.py`. Sites z0..z5, z_s = latent fed
+into iteration s+1 (z0 = latent-0), aligned with `override_input_at` (same numbering as the aligned E3
+rerun and Coconut passes 0..5). trunc_k = k thoughts then eot (KV-snapshot path, verified equivalent in
+the prior run). Replacements: zero; mean = population mean of z_s over 300 seeded test examples (norms
+62–68); noise = Gaussian direction scaled to this example's clean ||z_s||, seed idx·1000+s.
+PWC = P(correct | baseline correct). pass@k: 10 answers sampled at T=0.7 from the (deterministic)
+latent state, unbiased estimator; conditions trunc_6, trunc_0, ablate_all_{zero,mean,noise}.
+**Command:** 4 shards in parallel then merge, see `scripts/necessity_codi.py` docstring; flags as in
+`eval_command.txt` (`--output_dir /tmp/o` added, required by the CODI TrainingArguments parser).
+Pod `k030n8z4jrafxm` (A5000 secure, $0.27/hr), ~40 min wall shared with 4 other jobs (7.4 s/ex/shard).
+**Headline results:** `final_answer_accuracy=0.419` (553/1319, identical to the prior run),
+**`early_termination_necessity=0.181`** (0.419 − 0.238, identical to the prior run).
+
+| condition | acc | PWC | c→w | w→c | pass@1 | pass@10 | pass@10 \| base correct | pass@10 \| base wrong |
+|---|---|---|---|---|---|---|---|---|
+| baseline trunc_6 | 0.419 | 1 | 0 | 0 | 0.407 | 0.519 | 0.998 | 0.174 |
+| trunc_0 | 0.238 | 0.454 | 302 | 63 | 0.218 | 0.509 | 0.832 | 0.277 |
+| ablate_all_zero | 0.231 | 0.441 | 309 | 61 | 0.214 | 0.494 | 0.770 | 0.294 |
+| ablate_all_mean | **0.105** | **0.201** | 442 | 27 | 0.089 | 0.307 | 0.450 | 0.204 |
+| ablate_all_noise | 0.141 | 0.259 | 410 | 43 | 0.128 | 0.397 | 0.644 | 0.218 |
+
+Truncation curve k=0..6: 0.238, 0.243, 0.231, 0.370, 0.370, 0.411, 0.419 (unchanged from the prior run).
+
+Single-site accuracy (PWC in parentheses), baseline 0.419:
+
+| site | zero | mean | noise |
+|---|---|---|---|
+| z0 (latent-0) | 0.408 (0.95) | **0.298 (0.65)** | **0.305 (0.66)** |
+| z1 | 0.353 (0.80) | 0.399 (0.90) | 0.368 (0.81) |
+| z2 | 0.349 (0.79) | 0.375 (0.84) | 0.353 (0.77) |
+| z3 | 0.315 (0.71) | 0.325 (0.73) | 0.374 (0.83) |
+| z4 | **0.305 (0.68)** | 0.354 (0.78) | 0.371 (0.82) |
+| z5 | 0.415 (0.97) | 0.413 (0.96) | 0.409 (0.95) |
+
+All ablate-all McNemar p < 1e-38; flips are overwhelmingly correct→wrong.
+**Interpretation:**
+- **Necessary under every replacement.** No content-free replacement preserves more than 44% of
+  correct answers. Mean replacement is the most damaging (PWC 0.20, below the no-thoughts 0.45) and zero
+  is nearly identical to truncation, so the "worse than nothing" effect of the prior run is specific to
+  plausible-norm, wrong-content inputs (mean, noise), consistent with Jin et al.'s concern.
+- **pass@k:** removing the scratchpad (trunc_0) keeps aggregate pass@10 at 0.509 vs 0.519, because
+  no-thought sampling is more diverse on problems the full model misses (0.28 vs 0.17). On problems the
+  full model solves, thoughts make the right answer near-certain (pass@10 0.998 vs 0.832 without them;
+  0.45 under mean). So thoughts mostly concentrate probability on the right answer where the model can
+  solve the problem; they are not the only route to it. Mean/noise inputs remove capability outright.
+- **Single-site necessity depends on the replacement.** z0 is harmless under zero but the most necessary
+  site under mean or noise; z4 is the most necessary under zero. z5 is unnecessary under all three
+  (it only feeds the last iteration before eot). The odd sites z1/z3 carry no transplantable value in
+  the aligned E3 (`20260927-004340`: ≤0.3% steering) yet removing them costs 5–10 pp: load-bearing but
+  content-invariant across twins, plausibly structural placeholders. Single-site "necessity" claims must
+  name the replacement.
+**Gotchas hit:** CODI's HfArgumentParser needs `--output_dir` (TrainingArguments); any path works.
+**Caveats:** pass@k samples only the answer tokens (latents are deterministic by design), T=0.7 only;
+numeric answers have a small guessing floor, not estimated. Noise is one draw per (example, site).
+**Next:** Coconut counterpart `necessity_coconut.py` (same design); cross-reference with the aligned E3
+site pattern (steering on z0/z2/z4, necessity on z0/z3/z4 depending on replacement).
+
+---
+
+## 2026-09-27 — Necessity under zero / mean / norm-matched noise, Coconut: thoughts are strongly necessary and, unlike CODI, sampling does not recover what truncation removes; pass 1 is the necessary site under every replacement (coconut, run_id: 20260927-005834_coconut_necessity-all-replacements)
+
+**Goal:** RESEARCH_PLAN round 1, item 2 — Coconut had no necessity run at all, leaving the Q2
+"necessary?" cell empty for one of our two mechanisms. Same design as the CODI run
+(`20260927-005051_codi_necessity-all-replacements`) via `scripts/necessity_coconut.py` + `necessity_common.py`.
+**Mechanism / model:** `coconut`, gpt2 / `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`, 6 latents, greedy.
+**Data:** `gsm_original_test.json` — all 1319 GSM8K test questions (the same questions as CODI's test split).
+**Design:** sites = passes 0..5 (pass p = vector spliced into the p-th `<|latent|>` slot; pass 0 = the
+hidden state at `<|start-latent|>`). trunc_k = k `<|latent|>` tokens between start/end markers (k=0:
+question + start + end). Replacements per pass: zero; mean over 300 seeded test examples (norms 23–38);
+noise = Gaussian direction scaled to this example's clean pass-p norm (seed idx·1000+p). PWC, flip split,
+pass@k (10 samples, T=0.7, answer tokens only) as for CODI.
+**Command:** 2 shards + merge, see `scripts/necessity_coconut.py` docstring / `eval_command.txt`. Same pod
+as the CODI runs (A5000 secure, $0.27/hr), ~50 min wall (6 s/ex/shard while sharing the GPU, ~2 s/ex after).
+**Headline results:** `final_answer_accuracy=0.331` (437/1319; paper Table 1 0.331, Hao et al. repro 0.341),
+**`early_termination_necessity=0.250`** (0.331 − 0.081).
+
+| condition | acc | PWC | c→w | w→c | pass@1 | pass@10 | pass@10 \| base correct | pass@10 \| base wrong |
+|---|---|---|---|---|---|---|---|---|
+| baseline trunc_6 | 0.331 | 1 | 0 | 0 | 0.326 | 0.415 | 0.998 | 0.126 |
+| trunc_0 | 0.081 | 0.183 | 357 | 27 | 0.071 | **0.168** | 0.320 | 0.092 |
+| ablate_all_zero | **0.033** | **0.078** | 403 | 10 | 0.034 | 0.091 | 0.172 | 0.051 |
+| ablate_all_mean | 0.090 | 0.215 | 343 | 25 | 0.080 | 0.222 | 0.432 | 0.118 |
+| ablate_all_noise | 0.066 | 0.149 | 372 | 22 | 0.062 | 0.152 | 0.297 | 0.080 |
+
+Truncation curve k=0..6: 0.081, 0.083, 0.152, 0.190, 0.234, 0.272, 0.331 (graded, every latent adds).
+
+Single-pass accuracy (PWC), baseline 0.331:
+
+| pass | zero | mean | noise |
+|---|---|---|---|
+| 0 | 0.189 (0.53) | 0.252 (0.69) | 0.185 (0.49) |
+| 1 | **0.115 (0.31)** | **0.108 (0.27)** | **0.124 (0.30)** |
+| 2 | 0.230 (0.63) | 0.326 (0.97) | 0.255 (0.71) |
+| 3 | 0.199 (0.54) | 0.244 (0.65) | 0.230 (0.63) |
+| 4 | 0.212 (0.59) | 0.223 (0.60) | 0.212 (0.59) |
+| 5 | 0.256 (0.73) | 0.278 (0.78) | 0.271 (0.76) |
+
+**Interpretation:**
+- **Necessary, more so than CODI.** Truncating to zero latents keeps 18% of correct answers (CODI 45%);
+  ablate-all zero keeps 8% (CODI 44%). Zero is the most damaging replacement here (CODI: mean), so the
+  ranking of replacement types is mechanism-specific — report all three.
+- **pass@k separates the mechanisms.** CODI without thoughts keeps pass@10 at 0.509 vs 0.519; Coconut
+  without thoughts drops pass@10 from 0.415 to 0.168, and on problems the full model solves from 0.998 to
+  0.320. Coconut's latents enable the answer; CODI's mostly sharpen a distribution that already contains it.
+- **Pass 1 is necessary under every replacement** (PWC 0.27–0.31, ~4× the damage of any other pass),
+  matching its role as the main carrier of transplantable value in E3 (`20260927-003331`: 56% steering
+  alone, 43 pp loss when left out). Pass 4, the second E3 carrier, is moderately necessary (PWC ~0.6)
+  but not more than passes 0/3. Passes 2/3/5 carry no transplantable value in E3 yet removing them
+  still costs 5–15 pp under zero/noise; pass 2 is harmless under mean only.
+- Unlike CODI's even/odd split, necessity in Coconut is spread across all passes (every single-pass
+  ablation is significant except pass 2 under mean); transplantable value is concentrated in passes 1/4.
+**Gotchas hit:** Coconut's answer decode recomputes the full sequence per token (no KV cache, mirroring
+`Coconut.generate`), so batched sampling here is ~3× slower per example than CODI's.
+**Caveats:** Coconut was trained with a curriculum, so trunc_k<6 may be closer to in-distribution than
+CODI's truncation. pass@k samples answer tokens only, T=0.7. One noise draw per (example, pass).
+**Next:** side-by-side Q2 table for both mechanisms in RESEARCH_PLAN; rerun CODI E2/E4 aligned.

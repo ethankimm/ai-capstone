@@ -27,6 +27,8 @@ results/*/*
 !results/*/ablation_pairs.jsonl
 !results/*/attention_mass.jsonl
 !results/*/train_log.json
+!results/*/candidates.jsonl
+!results/*/nonresponsive.jsonl
 
 # Model artifacts anywhere else
 checkpoints/

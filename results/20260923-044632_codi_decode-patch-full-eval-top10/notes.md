@@ -87,3 +87,13 @@ current pair-selection/mapping design. If still worth chasing: the "correct-only
 metric is still bottlenecked by population size at 2-3+ steps (n=81-119) -- a fresh pull from
 the paper's own full 1319-example test set structure (not the held-out half-B slice) would be
 the next lever, separate from k.
+
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. The patch sweep used `{it: donor_recs[it-1]["post"]}`. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. Decoding numbers are unaffected; only the patch-sweep numbers describe shifted sites. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.

@@ -1,0 +1,1546 @@
+{
+  "run_id": "20260926-235222_codi_nonsteered-buckets",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 600,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "extra": {
+      "design": "offline: bucket every E3 (level-1 minimal pair) and E2 (level-4 cross-problem) patched answer by the chain it is consistent with, vs a permutation null",
+      "e3_buckets": [
+        "unparseable",
+        "unchanged",
+        "donor_final",
+        "partial_propagation",
+        "wrong_step",
+        "donor_intermediate",
+        "recipient_intermediate",
+        "off_by_delta",
+        "other"
+      ],
+      "e2_buckets": [
+        "unparseable",
+        "unchanged",
+        "counterfactual",
+        "donor_final",
+        "wrong_step",
+        "donor_intermediate",
+        "recipient_intermediate",
+        "other"
+      ],
+      "e3": {
+        "all_slot": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.072992700729927,
+            "donor_final": 0.7007299270072993,
+            "partial_propagation": 0.08029197080291971,
+            "wrong_step": 0.0,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.014598540145985401,
+            "off_by_delta": 0.0072992700729927005,
+            "other": 0.12408759124087591
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 10,
+            "donor_final": 96,
+            "partial_propagation": 11,
+            "wrong_step": 0,
+            "donor_intermediate": 0,
+            "recipient_intermediate": 2,
+            "off_by_delta": 1,
+            "other": 17
+          },
+          "n_moved_not_steered": 31,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.3548387096774194,
+            "wrong_step": 0.0,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.06451612903225806,
+            "off_by_delta": 0.03225806451612903,
+            "other": 0.5483870967741935
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.00903225806451613,
+            "donor_final": 0.005161290322580645,
+            "partial_propagation": 0.01629032258064516,
+            "wrong_step": 0.016451612903225808,
+            "donor_intermediate": 0.006290322580645161,
+            "recipient_intermediate": 0.019193548387096773,
+            "off_by_delta": 0.009838709677419354,
+            "other": 0.917741935483871
+          }
+        },
+        "single_slot_1": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.583941605839416,
+            "donor_final": 0.0364963503649635,
+            "partial_propagation": 0.0,
+            "wrong_step": 0.0364963503649635,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.014598540145985401,
+            "off_by_delta": 0.014598540145985401,
+            "other": 0.31386861313868614
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 80,
+            "donor_final": 5,
+            "partial_propagation": 0,
+            "wrong_step": 5,
+            "donor_intermediate": 0,
+            "recipient_intermediate": 2,
+            "off_by_delta": 2,
+            "other": 43
+          },
+          "n_moved_not_steered": 52,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.0,
+            "wrong_step": 0.09615384615384616,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.038461538461538464,
+            "off_by_delta": 0.038461538461538464,
+            "other": 0.8269230769230769
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.005192307692307692,
+            "donor_final": 0.00625,
+            "partial_propagation": 0.004903846153846154,
+            "wrong_step": 0.016634615384615383,
+            "donor_intermediate": 0.010673076923076922,
+            "recipient_intermediate": 0.01730769230769231,
+            "off_by_delta": 0.007403846153846154,
+            "other": 0.9316346153846153
+          }
+        },
+        "single_slot_2": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.708029197080292,
+            "donor_final": 0.08029197080291971,
+            "partial_propagation": 0.0072992700729927005,
+            "wrong_step": 0.021897810218978103,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.0072992700729927005,
+            "off_by_delta": 0.029197080291970802,
+            "other": 0.145985401459854
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 97,
+            "donor_final": 11,
+            "partial_propagation": 1,
+            "wrong_step": 3,
+            "donor_intermediate": 0,
+            "recipient_intermediate": 1,
+            "off_by_delta": 4,
+            "other": 20
+          },
+          "n_moved_not_steered": 29,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.034482758620689655,
+            "wrong_step": 0.10344827586206896,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.034482758620689655,
+            "off_by_delta": 0.13793103448275862,
+            "other": 0.6896551724137931
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.011206896551724138,
+            "donor_final": 0.004310344827586207,
+            "partial_propagation": 0.011034482758620689,
+            "wrong_step": 0.01206896551724138,
+            "donor_intermediate": 0.0034482758620689655,
+            "recipient_intermediate": 0.017758620689655173,
+            "off_by_delta": 0.027586206896551724,
+            "other": 0.9125862068965517
+          }
+        },
+        "single_slot_3": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.8540145985401459,
+            "donor_final": 0.0,
+            "partial_propagation": 0.0,
+            "wrong_step": 0.014598540145985401,
+            "donor_intermediate": 0.0364963503649635,
+            "recipient_intermediate": 0.0072992700729927005,
+            "off_by_delta": 0.014598540145985401,
+            "other": 0.072992700729927
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 117,
+            "donor_final": 0,
+            "partial_propagation": 0,
+            "wrong_step": 2,
+            "donor_intermediate": 5,
+            "recipient_intermediate": 1,
+            "off_by_delta": 2,
+            "other": 10
+          },
+          "n_moved_not_steered": 20,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.0,
+            "wrong_step": 0.1,
+            "donor_intermediate": 0.25,
+            "recipient_intermediate": 0.05,
+            "off_by_delta": 0.1,
+            "other": 0.5
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.01,
+            "wrong_step": 0.01075,
+            "donor_intermediate": 0.05725,
+            "recipient_intermediate": 0.00275,
+            "off_by_delta": 0.0095,
+            "other": 0.90975
+          }
+        },
+        "single_slot_4": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.8321167883211679,
+            "donor_final": 0.0364963503649635,
+            "partial_propagation": 0.014598540145985401,
+            "wrong_step": 0.014598540145985401,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.0,
+            "off_by_delta": 0.0,
+            "other": 0.10218978102189781
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 114,
+            "donor_final": 5,
+            "partial_propagation": 2,
+            "wrong_step": 2,
+            "donor_intermediate": 0,
+            "recipient_intermediate": 0,
+            "off_by_delta": 0,
+            "other": 14
+          },
+          "n_moved_not_steered": 18,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.1111111111111111,
+            "wrong_step": 0.1111111111111111,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.0,
+            "off_by_delta": 0.0,
+            "other": 0.7777777777777778
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.004166666666666667,
+            "partial_propagation": 0.017222222222222222,
+            "wrong_step": 0.03361111111111111,
+            "donor_intermediate": 0.008888888888888889,
+            "recipient_intermediate": 0.005833333333333334,
+            "off_by_delta": 0.008333333333333333,
+            "other": 0.9219444444444445
+          }
+        },
+        "single_slot_5": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.9927007299270073,
+            "donor_final": 0.0,
+            "partial_propagation": 0.0,
+            "wrong_step": 0.0,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.0072992700729927005,
+            "off_by_delta": 0.0,
+            "other": 0.0
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 136,
+            "donor_final": 0,
+            "partial_propagation": 0,
+            "wrong_step": 0,
+            "donor_intermediate": 0,
+            "recipient_intermediate": 1,
+            "off_by_delta": 0,
+            "other": 0
+          },
+          "n_moved_not_steered": 1,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.0,
+            "wrong_step": 0.0,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 1.0,
+            "off_by_delta": 0.0,
+            "other": 0.0
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.0,
+            "wrong_step": 0.0,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 1.0,
+            "off_by_delta": 0.0,
+            "other": 0.0
+          }
+        },
+        "single_slot_6": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.7883211678832117,
+            "donor_final": 0.10948905109489052,
+            "partial_propagation": 0.021897810218978103,
+            "wrong_step": 0.0072992700729927005,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.0,
+            "off_by_delta": 0.0,
+            "other": 0.072992700729927
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 108,
+            "donor_final": 15,
+            "partial_propagation": 3,
+            "wrong_step": 1,
+            "donor_intermediate": 0,
+            "recipient_intermediate": 0,
+            "off_by_delta": 0,
+            "other": 10
+          },
+          "n_moved_not_steered": 14,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.21428571428571427,
+            "wrong_step": 0.07142857142857142,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.0,
+            "off_by_delta": 0.0,
+            "other": 0.7142857142857143
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.017142857142857144,
+            "donor_final": 0.0,
+            "partial_propagation": 0.019285714285714285,
+            "wrong_step": 0.005,
+            "donor_intermediate": 0.005,
+            "recipient_intermediate": 0.008571428571428572,
+            "off_by_delta": 0.023214285714285715,
+            "other": 0.9217857142857143
+          }
+        },
+        "prefix_1": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.583941605839416,
+            "donor_final": 0.0364963503649635,
+            "partial_propagation": 0.0,
+            "wrong_step": 0.0364963503649635,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.014598540145985401,
+            "off_by_delta": 0.014598540145985401,
+            "other": 0.31386861313868614
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 80,
+            "donor_final": 5,
+            "partial_propagation": 0,
+            "wrong_step": 5,
+            "donor_intermediate": 0,
+            "recipient_intermediate": 2,
+            "off_by_delta": 2,
+            "other": 43
+          },
+          "n_moved_not_steered": 52,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.0,
+            "wrong_step": 0.09615384615384616,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.038461538461538464,
+            "off_by_delta": 0.038461538461538464,
+            "other": 0.8269230769230769
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.005480769230769231,
+            "donor_final": 0.00826923076923077,
+            "partial_propagation": 0.006538461538461538,
+            "wrong_step": 0.01875,
+            "donor_intermediate": 0.010192307692307691,
+            "recipient_intermediate": 0.01730769230769231,
+            "off_by_delta": 0.005961538461538462,
+            "other": 0.9275
+          }
+        },
+        "prefix_2": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.5547445255474452,
+            "donor_final": 0.08029197080291971,
+            "partial_propagation": 0.014598540145985401,
+            "wrong_step": 0.10218978102189781,
+            "donor_intermediate": 0.0072992700729927005,
+            "recipient_intermediate": 0.0072992700729927005,
+            "off_by_delta": 0.0,
+            "other": 0.23357664233576642
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 76,
+            "donor_final": 11,
+            "partial_propagation": 2,
+            "wrong_step": 14,
+            "donor_intermediate": 1,
+            "recipient_intermediate": 1,
+            "off_by_delta": 0,
+            "other": 32
+          },
+          "n_moved_not_steered": 50,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.04,
+            "wrong_step": 0.28,
+            "donor_intermediate": 0.02,
+            "recipient_intermediate": 0.02,
+            "off_by_delta": 0.0,
+            "other": 0.64
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0013,
+            "donor_final": 0.0108,
+            "partial_propagation": 0.0083,
+            "wrong_step": 0.0255,
+            "donor_intermediate": 0.0107,
+            "recipient_intermediate": 0.0175,
+            "off_by_delta": 0.0115,
+            "other": 0.9144
+          }
+        },
+        "prefix_3": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.5547445255474452,
+            "donor_final": 0.08029197080291971,
+            "partial_propagation": 0.014598540145985401,
+            "wrong_step": 0.10218978102189781,
+            "donor_intermediate": 0.0072992700729927005,
+            "recipient_intermediate": 0.0072992700729927005,
+            "off_by_delta": 0.0,
+            "other": 0.23357664233576642
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 76,
+            "donor_final": 11,
+            "partial_propagation": 2,
+            "wrong_step": 14,
+            "donor_intermediate": 1,
+            "recipient_intermediate": 1,
+            "off_by_delta": 0,
+            "other": 32
+          },
+          "n_moved_not_steered": 50,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.04,
+            "wrong_step": 0.28,
+            "donor_intermediate": 0.02,
+            "recipient_intermediate": 0.02,
+            "off_by_delta": 0.0,
+            "other": 0.64
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0018,
+            "donor_final": 0.0125,
+            "partial_propagation": 0.0087,
+            "wrong_step": 0.0271,
+            "donor_intermediate": 0.0102,
+            "recipient_intermediate": 0.0162,
+            "off_by_delta": 0.0145,
+            "other": 0.909
+          }
+        },
+        "prefix_4": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.22627737226277372,
+            "donor_final": 0.46715328467153283,
+            "partial_propagation": 0.0364963503649635,
+            "wrong_step": 0.072992700729927,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.0072992700729927005,
+            "off_by_delta": 0.014598540145985401,
+            "other": 0.17518248175182483
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 31,
+            "donor_final": 64,
+            "partial_propagation": 5,
+            "wrong_step": 10,
+            "donor_intermediate": 0,
+            "recipient_intermediate": 1,
+            "off_by_delta": 2,
+            "other": 24
+          },
+          "n_moved_not_steered": 42,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.11904761904761904,
+            "wrong_step": 0.23809523809523808,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.023809523809523808,
+            "off_by_delta": 0.047619047619047616,
+            "other": 0.5714285714285714
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.005833333333333334,
+            "donor_final": 0.0054761904761904765,
+            "partial_propagation": 0.005714285714285714,
+            "wrong_step": 0.017023809523809524,
+            "donor_intermediate": 0.007619047619047619,
+            "recipient_intermediate": 0.009523809523809525,
+            "off_by_delta": 0.005357142857142857,
+            "other": 0.9434523809523809
+          }
+        },
+        "prefix_5": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.19708029197080293,
+            "donor_final": 0.48905109489051096,
+            "partial_propagation": 0.0364963503649635,
+            "wrong_step": 0.072992700729927,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.0072992700729927005,
+            "off_by_delta": 0.014598540145985401,
+            "other": 0.18248175182481752
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 27,
+            "donor_final": 67,
+            "partial_propagation": 5,
+            "wrong_step": 10,
+            "donor_intermediate": 0,
+            "recipient_intermediate": 1,
+            "off_by_delta": 2,
+            "other": 25
+          },
+          "n_moved_not_steered": 43,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.11627906976744186,
+            "wrong_step": 0.23255813953488372,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.023255813953488372,
+            "off_by_delta": 0.046511627906976744,
+            "other": 0.5813953488372093
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.004534883720930232,
+            "donor_final": 0.005697674418604651,
+            "partial_propagation": 0.005232558139534884,
+            "wrong_step": 0.01686046511627907,
+            "donor_intermediate": 0.007558139534883721,
+            "recipient_intermediate": 0.008837209302325582,
+            "off_by_delta": 0.005,
+            "other": 0.9462790697674418
+          }
+        },
+        "prefix_6": {
+          "n": 137,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.072992700729927,
+            "donor_final": 0.7007299270072993,
+            "partial_propagation": 0.08029197080291971,
+            "wrong_step": 0.0,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.014598540145985401,
+            "off_by_delta": 0.0072992700729927005,
+            "other": 0.12408759124087591
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 10,
+            "donor_final": 96,
+            "partial_propagation": 11,
+            "wrong_step": 0,
+            "donor_intermediate": 0,
+            "recipient_intermediate": 2,
+            "off_by_delta": 1,
+            "other": 17
+          },
+          "n_moved_not_steered": 31,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "donor_final": 0.0,
+            "partial_propagation": 0.3548387096774194,
+            "wrong_step": 0.0,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.06451612903225806,
+            "off_by_delta": 0.03225806451612903,
+            "other": 0.5483870967741935
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.008870967741935484,
+            "donor_final": 0.005,
+            "partial_propagation": 0.018548387096774192,
+            "wrong_step": 0.014032258064516129,
+            "donor_intermediate": 0.00467741935483871,
+            "recipient_intermediate": 0.020806451612903225,
+            "off_by_delta": 0.011129032258064516,
+            "other": 0.9169354838709678
+          }
+        }
+      },
+      "e2": {
+        "real": {
+          "n": 370,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.6810810810810811,
+            "counterfactual": 0.010810810810810811,
+            "donor_final": 0.0,
+            "wrong_step": 0.01891891891891892,
+            "donor_intermediate": 0.002702702702702703,
+            "recipient_intermediate": 0.005405405405405406,
+            "other": 0.2810810810810811
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 252,
+            "counterfactual": 4,
+            "donor_final": 0,
+            "wrong_step": 7,
+            "donor_intermediate": 1,
+            "recipient_intermediate": 2,
+            "other": 104
+          },
+          "n_moved_not_steered": 114,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "counterfactual": 0.0,
+            "donor_final": 0.0,
+            "wrong_step": 0.06140350877192982,
+            "donor_intermediate": 0.008771929824561403,
+            "recipient_intermediate": 0.017543859649122806,
+            "other": 0.9122807017543859
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.008640350877192983,
+            "counterfactual": 0.0021929824561403508,
+            "donor_final": 0.00706140350877193,
+            "wrong_step": 0.0034210526315789475,
+            "donor_intermediate": 0.020394736842105264,
+            "recipient_intermediate": 0.019649122807017545,
+            "other": 0.938640350877193
+          },
+          "by_site": {
+            "1": {
+              "n": 190,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.7368421052631579,
+                "counterfactual": 0.005263157894736842,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.005263157894736842,
+                "recipient_intermediate": 0.010526315789473684,
+                "other": 0.24210526315789474
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 140,
+                "counterfactual": 1,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 1,
+                "recipient_intermediate": 2,
+                "other": 46
+              },
+              "n_moved_not_steered": 49,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.02040816326530612,
+                "recipient_intermediate": 0.04081632653061224,
+                "other": 0.9387755102040817
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "2": {
+              "n": 121,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.5867768595041323,
+                "counterfactual": 0.024793388429752067,
+                "donor_final": 0.0,
+                "wrong_step": 0.05785123966942149,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.3305785123966942
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 71,
+                "counterfactual": 3,
+                "donor_final": 0,
+                "wrong_step": 7,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 0,
+                "other": 40
+              },
+              "n_moved_not_steered": 47,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.14893617021276595,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.851063829787234
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "3": {
+              "n": 52,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.6923076923076923,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.3076923076923077
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 36,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 0,
+                "other": 16
+              },
+              "n_moved_not_steered": 16,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 1.0
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "4": {
+              "n": 2,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.5,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.5
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 1,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 0,
+                "other": 1
+              },
+              "n_moved_not_steered": 1,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 1.0
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "5": {
+              "n": 3,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.6666666666666666,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.3333333333333333
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 2,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 0,
+                "other": 1
+              },
+              "n_moved_not_steered": 1,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 1.0
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "6": {
+              "n": 2,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 1.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 2,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 0,
+                "other": 0
+              },
+              "n_moved_not_steered": 0,
+              "moved_rates": {},
+              "moved_null_rates": {}
+            }
+          }
+        },
+        "random": {
+          "n": 370,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.6702702702702703,
+            "counterfactual": 0.002702702702702703,
+            "donor_final": 0.0,
+            "wrong_step": 0.01891891891891892,
+            "donor_intermediate": 0.013513513513513514,
+            "recipient_intermediate": 0.008108108108108109,
+            "other": 0.2864864864864865
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 248,
+            "counterfactual": 1,
+            "donor_final": 0,
+            "wrong_step": 7,
+            "donor_intermediate": 5,
+            "recipient_intermediate": 3,
+            "other": 106
+          },
+          "n_moved_not_steered": 121,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "counterfactual": 0.0,
+            "donor_final": 0.0,
+            "wrong_step": 0.05785123966942149,
+            "donor_intermediate": 0.04132231404958678,
+            "recipient_intermediate": 0.024793388429752067,
+            "other": 0.8760330578512396
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.009710743801652892,
+            "counterfactual": 0.0032231404958677685,
+            "donor_final": 0.006239669421487603,
+            "wrong_step": 0.00384297520661157,
+            "donor_intermediate": 0.01681818181818182,
+            "recipient_intermediate": 0.021115702479338843,
+            "other": 0.9390495867768595
+          },
+          "by_site": {
+            "1": {
+              "n": 190,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.7263157894736842,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.010526315789473684,
+                "donor_intermediate": 0.015789473684210527,
+                "recipient_intermediate": 0.010526315789473684,
+                "other": 0.23684210526315788
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 138,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 2,
+                "donor_intermediate": 3,
+                "recipient_intermediate": 2,
+                "other": 45
+              },
+              "n_moved_not_steered": 52,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.038461538461538464,
+                "donor_intermediate": 0.057692307692307696,
+                "recipient_intermediate": 0.038461538461538464,
+                "other": 0.8653846153846154
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "2": {
+              "n": 121,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.5785123966942148,
+                "counterfactual": 0.008264462809917356,
+                "donor_final": 0.0,
+                "wrong_step": 0.04132231404958678,
+                "donor_intermediate": 0.008264462809917356,
+                "recipient_intermediate": 0.0,
+                "other": 0.36363636363636365
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 70,
+                "counterfactual": 1,
+                "donor_final": 0,
+                "wrong_step": 5,
+                "donor_intermediate": 1,
+                "recipient_intermediate": 0,
+                "other": 44
+              },
+              "n_moved_not_steered": 50,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.1,
+                "donor_intermediate": 0.02,
+                "recipient_intermediate": 0.0,
+                "other": 0.88
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "3": {
+              "n": 52,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.6730769230769231,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.019230769230769232,
+                "other": 0.3076923076923077
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 35,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 1,
+                "other": 16
+              },
+              "n_moved_not_steered": 17,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.058823529411764705,
+                "other": 0.9411764705882353
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "4": {
+              "n": 2,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.5,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.5
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 1,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 0,
+                "other": 1
+              },
+              "n_moved_not_steered": 1,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 1.0
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "5": {
+              "n": 3,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.6666666666666666,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.3333333333333333,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 2,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 1,
+                "recipient_intermediate": 0,
+                "other": 0
+              },
+              "n_moved_not_steered": 1,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 1.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "6": {
+              "n": 2,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 1.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 2,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 0,
+                "other": 0
+              },
+              "n_moved_not_steered": 0,
+              "moved_rates": {},
+              "moved_null_rates": {}
+            }
+          }
+        },
+        "mean": {
+          "n": 370,
+          "rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.7810810810810811,
+            "counterfactual": 0.0,
+            "donor_final": 0.0,
+            "wrong_step": 0.0,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.016216216216216217,
+            "other": 0.20270270270270271
+          },
+          "counts": {
+            "unparseable": 0,
+            "unchanged": 289,
+            "counterfactual": 0,
+            "donor_final": 0,
+            "wrong_step": 0,
+            "donor_intermediate": 0,
+            "recipient_intermediate": 6,
+            "other": 75
+          },
+          "n_moved_not_steered": 81,
+          "moved_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.0,
+            "counterfactual": 0.0,
+            "donor_final": 0.0,
+            "wrong_step": 0.0,
+            "donor_intermediate": 0.0,
+            "recipient_intermediate": 0.07407407407407407,
+            "other": 0.9259259259259259
+          },
+          "moved_null_rates": {
+            "unparseable": 0.0,
+            "unchanged": 0.009814814814814814,
+            "counterfactual": 0.0030246913580246914,
+            "donor_final": 0.010246913580246913,
+            "wrong_step": 0.003703703703703704,
+            "donor_intermediate": 0.019567901234567902,
+            "recipient_intermediate": 0.022407407407407407,
+            "other": 0.9312345679012346
+          },
+          "by_site": {
+            "1": {
+              "n": 190,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.7263157894736842,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.021052631578947368,
+                "other": 0.25263157894736843
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 138,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 4,
+                "other": 48
+              },
+              "n_moved_not_steered": 52,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.07692307692307693,
+                "other": 0.9230769230769231
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "2": {
+              "n": 121,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.9008264462809917,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.008264462809917356,
+                "other": 0.09090909090909091
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 109,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 1,
+                "other": 11
+              },
+              "n_moved_not_steered": 12,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.08333333333333333,
+                "other": 0.9166666666666666
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "3": {
+              "n": 52,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.6923076923076923,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.019230769230769232,
+                "other": 0.28846153846153844
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 36,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 1,
+                "other": 15
+              },
+              "n_moved_not_steered": 16,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0625,
+                "other": 0.9375
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "4": {
+              "n": 2,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.5,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.5
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 1,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 0,
+                "other": 1
+              },
+              "n_moved_not_steered": 1,
+              "moved_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 1.0
+              },
+              "moved_null_rates": {
+                "unparseable": 0.0,
+                "unchanged": 0.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              }
+            },
+            "5": {
+              "n": 3,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 1.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 3,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 0,
+                "other": 0
+              },
+              "n_moved_not_steered": 0,
+              "moved_rates": {},
+              "moved_null_rates": {}
+            },
+            "6": {
+              "n": 2,
+              "rates": {
+                "unparseable": 0.0,
+                "unchanged": 1.0,
+                "counterfactual": 0.0,
+                "donor_final": 0.0,
+                "wrong_step": 0.0,
+                "donor_intermediate": 0.0,
+                "recipient_intermediate": 0.0,
+                "other": 0.0
+              },
+              "counts": {
+                "unparseable": 0,
+                "unchanged": 2,
+                "counterfactual": 0,
+                "donor_final": 0,
+                "wrong_step": 0,
+                "donor_intermediate": 0,
+                "recipient_intermediate": 0,
+                "other": 0
+              },
+              "n_moved_not_steered": 0,
+              "moved_rates": {},
+              "moved_null_rates": {}
+            }
+          }
+        }
+      },
+      "null": "permutation of moved-not-steered answers within condition, 200 reps",
+      "source_runs": [
+        "20260920-190420_codi_minimal-pair-patch",
+        "20260920-085206_codi_qualified-patch"
+      ]
+    }
+  },
+  "hyperparams": {
+    "reps": 200
+  },
+  "seed": 0,
+  "hardware": "local-cpu (offline, no model)",
+  "author": "Henning Lindig",
+  "notes": "Offline: where non-steered patched answers go (recipient original / donor final / donor value at the wrong step / unrelated), E3 + E2, with a permutation null.",
+  "timestamp_utc": "2026-09-26T23:52:22.446629+00:00",
+  "git": {
+    "commit": "1b1c0e7",
+    "dirty": true
+  }
+}

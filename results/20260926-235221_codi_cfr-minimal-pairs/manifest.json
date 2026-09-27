@@ -1,0 +1,64 @@
+{
+  "run_id": "20260926-235221_codi_cfr-minimal-pairs",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 600,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "extra": {
+      "design": "offline: counterfactual responsiveness of the unpatched model on E3's minimal-pair candidates",
+      "cfr_definition": "P(twin answered correctly | original answered correctly), greedy, over every E3 candidate twin that was decoded",
+      "cfr": {
+        "n": 258,
+        "k": 137,
+        "rate": 0.5310077519379846,
+        "wilson_ci": [
+          0.47010477066365763,
+          0.5910008748869349
+        ]
+      },
+      "context": {
+        "p_original_correct": 0.43833333333333335,
+        "cfr_twin_correct_given_original_correct": 0.5310077519379846,
+        "all_slot_matches_twin_on_responsive_pairs": 0.7007299270072993,
+        "all_slot_matches_twin_times_cfr": 0.372093023255814
+      },
+      "stratified": null,
+      "stratified_skipped_reason": "replayed 250 candidates < 258 checked",
+      "source_runs": [
+        "20260920-190420_codi_minimal-pair-patch",
+        "20260919-184323_codi_decode-patch-full-eval"
+      ]
+    }
+  },
+  "hyperparams": {
+    "deltas": [
+      1,
+      -1,
+      2,
+      -2,
+      3,
+      -3
+    ],
+    "pair_seed": 0
+  },
+  "seed": 0,
+  "hardware": "local-cpu (offline, no model)",
+  "author": "Henning Lindig",
+  "notes": "Offline CFR on E3 minimal pairs: how often the unpatched model gets the perturbed twin right given it gets the original right -- the behavioral reference for E3 steering.",
+  "timestamp_utc": "2026-09-26T23:52:21.576696+00:00",
+  "git": {
+    "commit": "1b1c0e7",
+    "dirty": true
+  }
+}

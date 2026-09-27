@@ -1,0 +1,199 @@
+{
+  "run_id": "20260926-235221_coconut_cfr-minimal-pairs",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 600,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "extra": {
+      "design": "offline: counterfactual responsiveness of the unpatched model on E3's minimal-pair candidates",
+      "cfr_definition": "P(twin answered correctly | original answered correctly), greedy, over every E3 candidate twin that was decoded",
+      "cfr": {
+        "n": 201,
+        "k": 105,
+        "rate": 0.5223880597014925,
+        "wilson_ci": [
+          0.4535629523394574,
+          0.5903734355817459
+        ]
+      },
+      "context": {
+        "p_original_correct": 0.355,
+        "cfr_twin_correct_given_original_correct": 0.5223880597014925,
+        "all_slot_matches_twin_on_responsive_pairs": 0.7714285714285715,
+        "all_slot_matches_twin_times_cfr": 0.40298507462686567
+      },
+      "stratified": {
+        "by_step": {
+          "0": {
+            "n": 118,
+            "k": 69,
+            "rate": 0.5847457627118644,
+            "wilson_ci": [
+              0.4945348394767576,
+              0.6696127094720415
+            ]
+          },
+          "1": {
+            "n": 59,
+            "k": 28,
+            "rate": 0.4745762711864407,
+            "wilson_ci": [
+              0.35265669027401325,
+              0.5996042324268729
+            ]
+          },
+          "2": {
+            "n": 19,
+            "k": 7,
+            "rate": 0.3684210526315789,
+            "wilson_ci": [
+              0.19149272376273843,
+              0.5896084250184328
+            ]
+          },
+          "3": {
+            "n": 4,
+            "k": 1,
+            "rate": 0.25,
+            "wilson_ci": [
+              0.045586062644636216,
+              0.6993639475573634
+            ]
+          },
+          "4": {
+            "n": 1,
+            "k": 0,
+            "rate": 0.0,
+            "wilson_ci": [
+              0.0,
+              0.7934567085261071
+            ]
+          }
+        },
+        "by_abs_delta": {
+          "1": {
+            "n": 148,
+            "k": 75,
+            "rate": 0.5067567567567568,
+            "wilson_ci": [
+              0.4270629423091041,
+              0.5861086786432569
+            ]
+          },
+          "2": {
+            "n": 39,
+            "k": 24,
+            "rate": 0.6153846153846154,
+            "wilson_ci": [
+              0.45898781310078474,
+              0.7510883745299295
+            ]
+          },
+          "3": {
+            "n": 14,
+            "k": 6,
+            "rate": 0.42857142857142855,
+            "wilson_ci": [
+              0.21380509930400526,
+              0.6740973309713064
+            ]
+          }
+        },
+        "by_delta_sign": {
+          "+": {
+            "n": 185,
+            "k": 99,
+            "rate": 0.5351351351351351,
+            "wilson_ci": [
+              0.46327868010393497,
+              0.6055620837955447
+            ]
+          },
+          "-": {
+            "n": 16,
+            "k": 6,
+            "rate": 0.375,
+            "wilson_ci": [
+              0.18480982554752806,
+              0.613593529020652
+            ]
+          }
+        },
+        "by_chain_len": {
+          "2": {
+            "n": 83,
+            "k": 55,
+            "rate": 0.6626506024096386,
+            "wilson_ci": [
+              0.5557524399753323,
+              0.7551584598699032
+            ]
+          },
+          "3": {
+            "n": 73,
+            "k": 37,
+            "rate": 0.5068493150684932,
+            "wilson_ci": [
+              0.39472044284713675,
+              0.6182933413530882
+            ]
+          },
+          "4": {
+            "n": 30,
+            "k": 7,
+            "rate": 0.23333333333333334,
+            "wilson_ci": [
+              0.11792239210501232,
+              0.40928672330324267
+            ]
+          },
+          "5": {
+            "n": 15,
+            "k": 6,
+            "rate": 0.4,
+            "wilson_ci": [
+              0.19824228082594664,
+              0.642535572434923
+            ]
+          }
+        }
+      },
+      "stratified_skipped_reason": null,
+      "source_runs": [
+        "20260920-195725_coconut_minimal-pair-patch",
+        "20260920-085317_coconut_qualified-patch"
+      ]
+    }
+  },
+  "hyperparams": {
+    "deltas": [
+      1,
+      -1,
+      2,
+      -2,
+      3,
+      -3
+    ],
+    "pair_seed": 0
+  },
+  "seed": 0,
+  "hardware": "local-cpu (offline, no model)",
+  "author": "Henning Lindig",
+  "notes": "Offline CFR on E3 minimal pairs: how often the unpatched model gets the perturbed twin right given it gets the original right -- the behavioral reference for E3 steering.",
+  "timestamp_utc": "2026-09-26T23:52:21.655060+00:00",
+  "git": {
+    "commit": "1b1c0e7",
+    "dirty": true
+  }
+}

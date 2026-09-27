@@ -179,3 +179,13 @@ iteration's top-1 token shifting under a fixed injected input says little.
 - If the eval-mode re-run holds: the writeup's two-mechanism figure is (a) patch ≈ control,
   (b) ablation signature per mechanism (off-manifold-sensitive vs. content-sensitive), (c)
   attention mass on the patched position, side by side.
+
+
+---
+**Correction (2026-09-27): CODI site indexing was shifted by one position.** `run_thoughts(override_input_at={i: v})`
+replaces the latent fed INTO iteration i, which is normally z_{i-1} (z_0 = latent-0 for i=1); z_6 is never
+consumed. The `mean` condition fed the population mean of iteration it's OUTPUT (z_it) into iteration it; the `mean_in` condition and zero ablation are aligned. So a site labelled "iter i" / "z_i" here transplanted the donor's z_i into the slot where the
+recipient's z_{i-1} lives: one position early, z_0 never transplanted, and the (normally unused) z_6 fed into
+iteration 6. Only the `mean` rows are affected; prefer `mean_in`. Aligned rerun of E3: `20260927-004340_codi_minimal-pair-patch-aligned` (steering sits on
+z0/z2/z4, all-slot 0.839 vs 0.713 legacy on the same 317 pairs; the "diffuse" localization does not hold).
+Numbers above are left as logged; they describe the shifted intervention.
