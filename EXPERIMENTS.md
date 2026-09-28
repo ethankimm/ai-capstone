@@ -6903,3 +6903,716 @@ Coordinate-map eval R²: z0 0.38 / 0.41, z2 0.21 / 0.22, z4 0.16 / 0.16 (complem
 trained on within-problem minimal pairs, which may not be the right basis for cross-problem transfer.
 **Next:** Train the rotation on cross-problem (ladder) pairs instead of minimal pairs and see whether
 own_sub approaches whole-vector transfer; if it does, rerun this restriction with that basis.
+
+---
+
+## 2026-09-28 — Experiment A1, CODI z0 only → Coconut: pre-reasoning latent alone carries 74-110% of the unrestricted map's cf_joint (coconut, run_id: 20260927-224224_coconut_xmech-ctrl-site0-codi-to-coconut)
+
+**Goal:** Round-3/4 P4 caveat: the unrestricted CODI↔Coconut map reads all six source latents and
+writes whole target vectors, so it could route question-derived information rather than the
+source's computed values. This is Experiment A (question-only control): does a source
+representation that has done NO reasoning yet already carry most of the unrestricted map's
+transfer? Here: CODI z0 alone (the vector after only the question-encode pass, before any of
+CODI's own iterative "thinking").
+**Design** (`xmech_common.run_transplant` with the new `feat`/`feat_sites` params;
+`xmech_coconut.py --mode ctrl --ctrl_kind site0`): identical transplant to the unrestricted P4 run
+(`20260927-085211_coconut_xmech-codi-to-coconut`) — same 259 eval-split ladder recipients/donors
+(base-correct in both models, pair_seed 0), same fit split (8000 train questions), same carriers
+(passes 1,4). Only the ridge map's INPUT changes: instead of concatenating all 6 CODI z-sites, it
+reads CODI z0 only (768 dims instead of 4608). Recipients/donors are still pinned by the true
+CODI↔Coconut correctness intersection (`xmech_common._ladder_pairs`); only the "mapped"/"self_mapped"
+conditions' features change.
+**Mechanism / model:** Coconut `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33` (target), CODI
+`hf:zen-E/CODI-gpt2@fd641b3` (source, feature only).
+**Command:** `scripts/xmech_coconut.py --checkpoint_path .../checkpoint_33 --questions
+xmech_questions.jsonl --codi_latents codi_latents.pt --out_latents coconut_latents.pt --mode ctrl
+--ctrl_kind site0 --slug xmech-ctrl-site0-codi-to-coconut --stage full_run` (full line in
+`eval_command.txt`). Pod `jbzj5cd4diacxb` (RTX A40 secure, $0.49/hr, EU-SE-1); ran alongside 7
+other jobs (all 6 Experiment A conditions + both Experiment B `das_ladder` runs) on one GPU.
+**Headline results** (259 recipients; sibling runs at the same direction:
+`20260927-224922_..sites1to5..` (complement) and `20260927-224642_..gpt2..` (A2 no-reasoning
+control); reference unrestricted run `20260927-085211_coconut_xmech-codi-to-coconut`, mapped_all
+cf_joint L2/L3/L4 = 0.32/0.28/0.24):
+
+| cf_joint (null ≤0.015) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_carriers (this run) | 0.270 | 0.313 | 0.351 |
+| **mapped_carriers (z0 only)** | **0.236** | **0.205** | **0.263** |
+| shuffled_carriers | 0.012 | 0.008 | 0.008 |
+| % of unrestricted mapped_all (0.32/0.28/0.24) | 74% | 73% | 110% |
+
+Map fit (held-out R², CODI z0 → Coconut pass): pass0 0.208, pass1 0.290, pass2 0.225, pass3 0.102,
+pass4 0.088, pass5 0.062. self_mapped_carriers (recipient's own z0, mapped back into itself)
+unchanged 65.6%.
+
+**Interpretation:**
+- **CODI's very first latent — computed before any of its own iterative reasoning — already
+  carries most of what the unrestricted 6-site map uses to transfer values into Coconut**: 74-110%
+  of the all-sites mapped rate, vs 5-8% for a plain-GPT2 question encoding (sibling run
+  `20260927-224642`, Experiment A2) and ~87-98% for the complement z1-z5 (sibling
+  `20260927-224922`). Per the pre-registered decision rule (≥70% ⇒ explained by the source's
+  own pre-reasoning encoding, not a generic question confound — since a plain untrained-for-GSM8K
+  GPT-2 encoding of the same text reaches nowhere near this).
+- This does NOT mean "no reasoning happened" — z0 is CODI's own trained question encoding, shaped
+  by the whole training objective, not raw text. It means CODI concentrates a lot of transferable,
+  Coconut-decodable value information very early, consistent with earlier findings that CODI's
+  value is redundant across its vector / not confined to a small DAS subspace
+  (`20260927-185312`).
+- L4 (110%) exceeding 100% is within noise at n=259 (~3pp per few recipients) but also plausible:
+  L4's random donor may on average need less problem-specific downstream computation to identify
+  than L2/L3's matched-length siblings.
+**Caveats:** n=259, one donor draw per level. z0 is still a MODEL-INTERNAL representation (not raw
+text), so this doesn't isolate "question information" as cleanly as the plain-GPT2 control
+(A2) does — see that run for the cleaner confound test. own_carriers here (0.270/0.313/0.351)
+reads a few points lower than the L2/L3 values quoted in round-3/4 notes for the same conditions
+(there rounded to "0.30" for all three levels); worth a byte-level dump diff if this resurfaces,
+but the comparator this experiment cares about (mapped_all from the unrestricted run) was read
+precisely, not rounded, so the ratios above stand.
+**Next:** See `20260927-224642` (A2, plain GPT-2) and the reverse direction
+(`20260927-225629`/`-225751`/`-225810`) for the full 2-direction x 3-condition picture; Experiment B
+(`das_ladder_codi.py`/`das_ladder_coconut.py`) asks the complementary basis question.
+
+---
+
+## 2026-09-28 — Experiment A2, plain GPT-2 (no latent training) → Coconut: question text alone carries only 5-8% of the unrestricted map's cf_joint (coconut, run_id: 20260927-224642_coconut_xmech-ctrl-gpt2-to-coconut)
+
+**Goal:** Round-3/4 P4 caveat: the unrestricted CODI↔Coconut map reads all six source latents and
+writes whole target vectors, so it could be routing question-derived information rather than the
+source's computed reasoning. This is the cleanest version of that control: map from plain,
+untrained-for-GSM8K HF `gpt2` hidden states of the SAME question text — a representation that has
+done no task-specific reasoning at all — into Coconut's carriers.
+**Design** (`gpt2_plain_dump.py` + `xmech_common.run_transplant`'s new `feat`/`feat_sites` params;
+`xmech_coconut.py --mode ctrl --ctrl_kind gpt2`): plain-GPT2 features dumped locally (MPS, no GPU
+needed, 9319 questions in 75s): for each question, `[layer6 last-token hidden, layer12 last-token
+hidden, layer12 mean-over-question-tokens]` (3x768=2304 dims), question text prepped identically to
+every mechanism's own encoder (`strip().replace("  ", " ")`). Same 259 eval-split ladder
+recipients/donors as the unrestricted P4 run (pinned by the TRUE CODI/Coconut correctness
+intersection, `xmech_common._ladder_pairs` — the GPT-2 features only replace what feeds the ridge
+map, not which pairs are tested). Same fit split (8000 train questions), same carriers (passes
+1,4).
+**Mechanism / model:** Coconut `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33` (target); plain
+`gpt2` (124M, no fine-tuning) supplies the source features.
+**Command:** `scripts/xmech_coconut.py --checkpoint_path .../checkpoint_33 --questions
+xmech_questions.jsonl --codi_latents codi_latents.pt --out_latents coconut_latents.pt --mode ctrl
+--ctrl_kind gpt2 --gpt2_latents gpt2_latents.pt --slug xmech-ctrl-gpt2-to-coconut --stage full_run`
+(full line in `eval_command.txt`). Pod `jbzj5cd4diacxb` (RTX A40 secure, $0.49/hr, EU-SE-1); ran
+alongside 7 other jobs on one GPU.
+**Headline results** (259 recipients; siblings `20260927-224224` (z0 only) and
+`20260927-224922` (z1-z5); reference unrestricted run `20260927-085211`, mapped_all cf_joint
+L2/L3/L4 = 0.32/0.28/0.24):
+
+| cf_joint (null ≤0.015) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_carriers (this run) | 0.270 | 0.313 | 0.351 |
+| **mapped_carriers (plain GPT-2)** | **0.023** | **0.023** | **0.012** |
+| shuffled_carriers | 0.015 | 0.008 | 0.008 |
+| % of unrestricted mapped_all (0.32/0.28/0.24) | 7% | 8% | 5% |
+
+Map fit (held-out R², plain-GPT2 features → Coconut pass): pass0 0.128, pass1 0.053, pass2 0.102,
+pass3 0.091, pass4 0.035, pass5 0.128 — much lower than any CODI-derived feature set, and the
+mapped condition (0.012-0.023) is barely above the shuffled-pair control (0.008-0.015), i.e. close
+to the floor of "any map that has seen the right marginals but no real pairing." self_mapped_carriers
+(recipient's own GPT-2 features mapped into itself) unchanged only 19.3% — the map barely
+reconstructs the recipient's own content either.
+
+**Interpretation:**
+- **The question-confound hypothesis for the unrestricted P4 result is ruled out by this control.**
+  A representation with zero task-specific reasoning (plain GPT-2's own hidden states on the exact
+  question text) reaches only 5-8% of what the unrestricted 6-site CODI→Coconut map achieves — far
+  below the ~40% "well below" branch of the pre-registered decision rule, and barely above its own
+  shuffled-pair control. Whatever the unrestricted map is reading from CODI's latents, it is not
+  reducible to "the question, re-encoded."
+- Contrast with the sibling `20260927-224224` (CODI's OWN z0, same "no reasoning yet" logical
+  position in the pipeline, but the model's own trained encoding): 74-110% vs this run's 5-8%. The
+  gap between "plain GPT-2's encoding of the text" and "CODI's own z0" is the value added by CODI's
+  training/architecture at the very first step, before any of its iterative loop — separate from
+  the value added by later iterations.
+**Caveats:** n=259. GPT-2 features are 3 fixed probe points (two last-token layers + one mean-pool);
+a differently-chosen feature set (more layers, attention-weighted pooling) might do somewhat better,
+but the gap to CODI's own z0 (a single 768-dim vector, less total information) is large enough that
+this is unlikely to close it. own_carriers here reads slightly lower than the "0.30" quoted for all
+three levels in round-3/4 notes — see caveat on the sibling run; doesn't affect this run's own ratio,
+which is computed against the precisely-read unrestricted mapped_all.
+**Next:** Reverse direction (`20260927-225751_codi_xmech-ctrl-gpt2-to-codi`) for the same control
+into CODI. Experiment B addresses the OTHER round-4 open problem (basis mismatch for cross-problem
+DAS subspaces) and found a much bigger effect size than this question-confound check.
+
+---
+
+## 2026-09-28 — Experiment A1 complement, CODI z1-z5 → Coconut: post-question-encode latents alone carry 61-98% of the unrestricted map's cf_joint (coconut, run_id: 20260927-224922_coconut_xmech-ctrl-sites1to5-codi-to-coconut)
+
+**Goal:** Complement view of Experiment A1 (`20260927-224224`, CODI z0 only): with z0 (the
+pre-reasoning question encoding) held OUT of the map's input, do CODI's remaining five iterations
+(z1-z5, where its own iterative "thinking" actually happens) still carry most of the unrestricted
+map's transfer power on their own?
+**Design:** identical to `20260927-224224` except the ridge map reads CODI z1,z2,z3,z4,z5
+concatenated (5x768=3840 dims) instead of z0 alone (`xmech_coconut.py --mode ctrl --ctrl_kind
+sites1to5`). Same 259 recipients, same fit split, same carriers (passes 1,4).
+**Mechanism / model:** Coconut `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33` (target), CODI
+`hf:zen-E/CODI-gpt2@fd641b3` (source, feature only, z0 excluded).
+**Command:** `scripts/xmech_coconut.py ... --mode ctrl --ctrl_kind sites1to5 --slug
+xmech-ctrl-sites1to5-codi-to-coconut --stage full_run` (full line in `eval_command.txt`). Pod
+`jbzj5cd4diacxb` (RTX A40 secure, $0.49/hr, EU-SE-1); ran alongside 7 other jobs on one GPU.
+**Headline results** (259 recipients; siblings `20260927-224224` (z0 only) and `20260927-224642`
+(plain GPT-2); reference unrestricted run `20260927-085211`, mapped_all cf_joint L2/L3/L4 =
+0.32/0.28/0.24):
+
+| cf_joint (null ≤0.015) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_carriers (this run) | 0.270 | 0.313 | 0.351 |
+| **mapped_carriers (z1-z5)** | **0.278** | **0.274** | **0.147** |
+| shuffled_carriers | 0.012 | 0.008 | 0.004 |
+| % of unrestricted mapped_all (0.32/0.28/0.24) | 87% | 98% | 61% |
+
+Map fit (held-out R², CODI z1-z5 → Coconut pass): pass0 0.323, pass1 0.185, pass2 0.282, pass3
+0.317, pass4 0.180, pass5 0.287 — noticeably higher than z0-only's R² (`20260927-224224`) at every
+pass, consistent with the reasoning iterations carrying more total decodable structure once
+concatenated. self_mapped_carriers unchanged 76.8% (highest of the three A1/A2 conditions).
+
+**Interpretation:**
+- **CODI's iterative latents (z1-z5) alone reach 87-98% of the unrestricted 6-site map at L2/L3,
+  and both z0-only and z1-z5-only individually approach or exceed the full 6-site rate at L2/L3** —
+  the two halves of CODI's latent trajectory are each close to sufficient on their own, i.e. the
+  transferable value information is redundant across the trajectory, not concentrated in one place
+  that z0-only or z1-z5-only would miss. This matches the earlier DAS finding
+  (`20260927-185312`) that CODI's value isn't confined to a small subspace.
+- L4 is the one level where z1-z5 underperforms z0 (61% vs 110%) and both underperform the combined
+  6-site map somewhat unevenly across levels — with n=259 and one donor draw per level this could
+  be noise, but is also consistent with L4 (random donor, most different problem) needing more of
+  the FULL trajectory (including z0's problem framing) than L2/L3's closer donors.
+**Caveats:** n=259. This run and z0-only together don't sum to more than the unrestricted map
+(they're two overlapping, individually-strong views of the same redundant information, not
+independent contributions).
+**Next:** See the reverse direction's complement (`20260927-225810_codi_..sites1to5..`) — there the
+asymmetry is much sharper (Coconut needs its later passes, unlike CODI where either half suffices).
+
+---
+
+## 2026-09-28 — Experiment A1, Coconut pass0 only → CODI: pre-reasoning latent alone carries only 15-39% of the unrestricted map's cf_joint (codi, run_id: 20260927-225629_codi_xmech-ctrl-site0-coconut-to-codi)
+
+**Goal:** Reverse direction of `20260927-224224` (CODI z0 → Coconut). Does Coconut's pass0 — the
+vector computed from the question alone, before any of Coconut's own splice-and-recompute passes —
+carry most of the unrestricted CODI↔Coconut map's transfer power into CODI?
+**Design** (`xmech_common.run_transplant`'s new `feat`/`feat_sites` params; `xmech_codi.py --mode
+ctrl --ctrl_kind site0`): identical transplant to the unrestricted P4 run
+(`20260927-092012_codi_xmech-coconut-to-codi`) — same 259 eval-split ladder recipients/donors, same
+fit split, same carriers (z0,z2,z4). Only the map's input changes: Coconut pass0 alone (768 dims)
+instead of all 6 passes (4608 dims).
+**Mechanism / model:** CODI `hf:zen-E/CODI-gpt2@fd641b3` (target, aligned sites), Coconut
+`hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33` (source, feature only).
+**Command:** `xmech_codi.py $CODI_FLAGS --mode ctrl --ctrl_kind site0 --questions
+xmech_questions.jsonl --codi_latents codi_latents.pt --coconut_latents coconut_latents.pt --slug
+xmech-ctrl-site0-coconut-to-codi --stage full_run` (full line in `eval_command.txt`). Pod
+`jbzj5cd4diacxb` (RTX A40 secure, $0.49/hr, EU-SE-1); ran alongside 7 other jobs on one GPU.
+**Headline results** (259 recipients; siblings `20260927-225810` (passes 1-5) and
+`20260927-225751` (plain GPT-2); reference unrestricted run `20260927-092012`, mapped_all cf_joint
+L2/L3/L4 = 0.26/0.25/0.21):
+
+| cf_joint (null ≤0.006) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_carriers (this run) | 0.359 | 0.386 | 0.193 |
+| **mapped_carriers (pass0 only)** | **0.039** | **0.058** | **0.081** |
+| shuffled_carriers | 0.015 | 0.023 | 0.004 |
+| % of unrestricted mapped_all (0.26/0.25/0.21) | 15% | 23% | 39% |
+
+Map fit (held-out R², Coconut pass0 → CODI site): z0 0.262, z1 0.471, z2 0.122, z3 0.404, z4 0.127,
+z5 0.387. self_mapped_carriers (recipient's own pass0 mapped into itself) unchanged 32.8%.
+
+**Interpretation:**
+- **Unlike the reverse direction, Coconut's pass0 alone is NOT sufficient.** 15-39% of the
+  unrestricted map — clearly on the "reasoning latents add transferable content beyond the
+  question" side of the decision rule at L2/L3 (well below 40%), borderline at L4. Coconut needs
+  its LATER passes to supply what the unrestricted map uses.
+- This is the sharpest asymmetry in Experiment A: CODI's z0 carries 74-110% of ITS OWN direction's
+  unrestricted transfer (`20260927-224224`), but Coconut's pass0 carries only 15-39% of its
+  direction. Consistent with the two mechanisms' architectures: CODI's z0 is the output of a full
+  autoregressive pass over the question BEFORE any loop iteration begins (already "digested"),
+  whereas Coconut's pass0 fills the first of six fixed `<|latent|>` slots inside one forward pass,
+  with less computation behind it at that point.
+- See the sibling complement run (`20260927-225810`, passes 1-5): it alone reaches ~100-129% of the
+  unrestricted rate, confirming the missing content is squarely in Coconut's later passes.
+**Caveats:** n=259, one donor draw per level. own_carriers here (0.359/0.386/0.193) is close to but
+not identical to the "0.39/0.39/0.20" quoted in round-3 notes for the same nominal condition — a
+few points off, plausibly rounding in that summary; doesn't affect this run's ratio, computed
+against the precisely-read unrestricted mapped_all.
+**Next:** `20260927-225751` (A2 plain-GPT2 control, same direction) and `20260927-225810` (the
+complement) complete this direction's picture.
+
+---
+
+## 2026-09-28 — Experiment A2, plain GPT-2 (no latent training) → CODI: question text alone carries only 7-9% of the unrestricted map's cf_joint (codi, run_id: 20260927-225751_codi_xmech-ctrl-gpt2-to-codi)
+
+**Goal:** Reverse direction of `20260927-224642` (plain GPT-2 → Coconut) — the cleanest
+question-only control, this time mapping into CODI.
+**Design** (`gpt2_plain_dump.py` + `xmech_common.run_transplant`'s `feat`/`feat_sites` params;
+`xmech_codi.py --mode ctrl --ctrl_kind gpt2`): same plain-GPT2 feature dump as the Coconut-direction
+run (`[layer6 last-token, layer12 last-token, layer12 mean-over-question-tokens]`, 2304 dims), same
+259 eval-split ladder recipients/donors as the unrestricted P4 run, pinned by the TRUE
+CODI/Coconut correctness intersection. Same fit split, same carriers (z0,z2,z4).
+**Mechanism / model:** CODI `hf:zen-E/CODI-gpt2@fd641b3` (target, aligned sites); plain `gpt2`
+(124M, no fine-tuning) supplies the source features.
+**Command:** `xmech_codi.py $CODI_FLAGS --mode ctrl --ctrl_kind gpt2 --gpt2_latents
+gpt2_latents.pt --slug xmech-ctrl-gpt2-to-codi --stage full_run` (full line in `eval_command.txt`).
+Pod `jbzj5cd4diacxb` (RTX A40 secure, $0.49/hr, EU-SE-1); ran alongside 7 other jobs on one GPU.
+**Headline results** (259 recipients; siblings `20260927-225629` (pass0 only) and
+`20260927-225810` (passes 1-5); reference unrestricted run `20260927-092012`, mapped_all cf_joint
+L2/L3/L4 = 0.26/0.25/0.21):
+
+| cf_joint (null ≤0.006) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_carriers (this run) | 0.359 | 0.386 | 0.193 |
+| **mapped_carriers (plain GPT-2)** | **0.019** | **0.023** | **0.015** |
+| shuffled_carriers | 0.042 | 0.019 | 0.012 |
+| % of unrestricted mapped_all (0.26/0.25/0.21) | 7% | 9% | 7% |
+
+Map fit (held-out R², plain-GPT2 features → CODI site): z0 0.029, z1 0.140, z2 -0.004, z3 0.157, z4
+0.007, z5 0.149 — the lowest R² of any feature set tested in either direction, and the mapped
+condition here is actually BELOW its own shuffled-pair control at L2 (0.019 vs 0.042) — both are
+near zero, i.e. this map has essentially no signal to exploit either way.
+self_mapped_carriers unchanged only 23.6%.
+
+**Interpretation:**
+- **Confirms the question-confound control in both directions.** 7-9% of the unrestricted map's
+  transfer, consistent with the Coconut-direction result (`20260927-224642`, 5-8%) and well inside
+  the "<40%" branch of the decision rule. Neither direction's unrestricted P4 result is explained
+  by re-encoding the question text alone.
+- The R² near zero (and mapped ≤ shuffled at L2) means this condition isn't just "weak signal
+  diluted by noise" — plain GPT-2's representation of these questions carries close to nothing a
+  linear map can turn into CODI's site-specific value information, at least at these three probe
+  points.
+**Caveats:** n=259. As with the Coconut-direction gpt2 control, a richer GPT-2 feature set might
+move this number somewhat, but the size of the gap to either mechanism's own pass0/z0
+(`20260927-224224`, `20260927-225629`) makes it unlikely to change the qualitative conclusion.
+**Next:** This closes out Experiment A (both directions x all three conditions logged). Decision:
+plain-GPT2 control rules out the question confound cleanly in both directions; the source's own
+pre-reasoning encoding (z0/pass0) is informative for CODI→Coconut but not for Coconut→CODI — a
+genuine mechanism asymmetry, not an artifact of the map's input dimensionality (z0-only and
+pass0-only are both 768 dims).
+
+---
+
+## 2026-09-28 — Experiment A1 complement, Coconut pass1-5 → CODI: post-pass0 latents alone reach 100-129% of the unrestricted map's cf_joint (codi, run_id: 20260927-225810_codi_xmech-ctrl-sites1to5-coconut-to-codi)
+
+**Goal:** Complement view of `20260927-225629` (Coconut pass0 only): with pass0 held out, do
+Coconut's remaining five passes (1-5, where the splice-and-recompute reasoning actually accumulates)
+carry the unrestricted map's full transfer power on their own?
+**Design:** identical to `20260927-225629` except the ridge map reads Coconut passes 1,2,3,4,5
+concatenated (5x768=3840 dims) instead of pass0 alone (`xmech_codi.py --mode ctrl --ctrl_kind
+sites1to5`). Same 259 recipients, same fit split, same carriers (z0,z2,z4).
+**Mechanism / model:** CODI `hf:zen-E/CODI-gpt2@fd641b3` (target, aligned sites), Coconut
+`hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33` (source, feature only, pass0 excluded).
+**Command:** `xmech_codi.py $CODI_FLAGS --mode ctrl --ctrl_kind sites1to5 --slug
+xmech-ctrl-sites1to5-coconut-to-codi --stage full_run` (full line in `eval_command.txt`). Pod
+`jbzj5cd4diacxb` (RTX A40 secure, $0.49/hr, EU-SE-1); ran alongside 7 other jobs on one GPU.
+**Headline results** (259 recipients; siblings `20260927-225629` (pass0 only) and
+`20260927-225751` (plain GPT-2); reference unrestricted run `20260927-092012`, mapped_all cf_joint
+L2/L3/L4 = 0.26/0.25/0.21):
+
+| cf_joint (null ≤0.006) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_carriers (this run) | 0.359 | 0.386 | 0.193 |
+| **mapped_carriers (passes 1-5)** | **0.259** | **0.286** | **0.270** |
+| shuffled_carriers | 0.019 | 0.019 | 0.008 |
+| % of unrestricted mapped_all (0.26/0.25/0.21) | 100% | 114% | 129% |
+
+Map fit (held-out R², Coconut passes1-5 → CODI site): z0 0.540, z1 0.581, z2 0.360, z3 0.536, z4
+0.312, z5 0.519 — the highest R² of any source-feature set in either direction, roughly double
+pass0-only's (`20260927-225629`). self_mapped_carriers unchanged 75.3% — this condition also
+reconstructs the recipient's own content best of the three A1/A2 conditions in this direction.
+
+**Interpretation:**
+- **Coconut's passes 1-5 alone fully account for (and slightly exceed, within noise) the
+  unrestricted 6-pass map's transfer into CODI** — confirming that pass0's near-total exclusion
+  from the transfer (`20260927-225629`, 15-39%) is not a dimensionality artifact (both conditions
+  are 5x vs 1x768) but a real statement about WHERE in Coconut's pipeline the transferable value
+  lives: after the question-encode pass, not in it.
+- Together with the CODI-side result (`20260927-224224`/`20260927-224922`, where EITHER half
+  reaches most of the ceiling), this is the round's cleanest asymmetry: CODI spreads transferable
+  value redundantly across its whole trajectory including step 0; Coconut concentrates it in the
+  passes after step 0. Both are consistent with the DAS probe results from round 4
+  (`20260927-185312` CODI: no dims are special; `20260927-185326` Coconut: its DAS dims at the
+  carrier pass do hold the value) — the same underlying pattern seen from a different angle.
+**Caveats:** n=259, one donor draw per level. Values above 100% (114%, 129%) are within plausible
+noise range at this n but also consistent with pass0 (question framing) being mildly UNHELPFUL for
+a cross-problem donor swap, since it carries donor-problem-specific framing the recipient doesn't
+need.
+**Next:** This completes Experiment A (both directions logged: `20260927-224224/-224642/-224922`
+into Coconut, this run + `20260927-225629/-225751` into CODI). See `MEMORY`/results index for the
+combined report; Experiment B (`20260927-234206`, `20260928-005033`) tackles the DAS cross-problem
+basis question in parallel.
+
+---
+
+## 2026-09-28 — Experiment B, Coconut: a DAS rotation trained on cross-problem ladder donors reaches 58-70% of the whole-vector cross-problem ceiling, vs 28-40% for the minimal-pair-trained rotation (coconut, run_id: 20260927-234206_coconut_das-ladder)
+
+**Goal:** Round-4 open problem 2: the DAS value-subspace rotations used throughout (E4,
+`20260927-182915`) were trained on WITHIN-PROBLEM minimal pairs, where the complement (everything
+outside the k-dim subspace) is nearly identical between recipient and donor. When that rotation
+was used for a CROSS-PROBLEM subspace-only patch (round 4, `20260927-190704/-190716`), the result
+was far weaker than a whole-vector cross-problem patch (own_sub 0.085-0.120 cf_joint vs whole-vector
+own ~0.27-0.35) — hypothesized to be because the training basis doesn't suit cross-problem transfer
+(the recipient's live complement, no longer near-identical to the donor's, pulls back toward the
+recipient's own values). This asks: does training the SAME kind of DAS rotation directly on
+CROSS-PROBLEM (ladder L2+L3) donor pairs close that gap?
+**Design** (`das_ladder_coconut.py`, modelled on `das_minimal_pair_coconut.py` — reuses its
+`OrthogonalRotation`/`intervene`/`run_intervened`/`run_pass_range`/`teacher_forced_ce` unchanged):
+- **Train:** decoded 3000 `gsm_original_train.json` examples with this model alone (base accuracy
+  92.6% on the decoded pool), built ladder pairs (`ladder_common.build_ladder_pairs`, L2 same ops +
+  L3 same length/different ops) for up to 500 recipients, flattened to 1000 (recipient, donor,
+  level) training tuples where the recipient's program re-run on the donor's step values
+  (`ladder_common.targets(...)["cf_joint"]`) is defined. One shared rotation R per k, trained for 5
+  epochs (5000 steps/k) via the same DAS mechanism as `das_minimal_pair_coconut.py`
+  (`intervene(R, z_a=recipient's own live pass, z_b=donor's own live pass, k)` at passes {1,4}
+  jointly), teacher-forced against `"### {cf_joint}"` (no leading space).
+- **Eval:** the EXACT SAME 259 recipients as the unrestricted P4 run (`xmech_common._ladder_pairs`
+  reproduced from `codi_latents.pt`+`coconut_latents.pt`'s correctness intersection, pair_seed 0) —
+  for a same-recipient, apples-to-apples comparison to round 4's minimal-pair-rotation own_sub.
+  Conditions: `full` (raw whole-vector swap of the donor's own passes 1,4 — any orthogonal R at
+  k=768 gives this exactly), `untrained_k{16,32,64}` (random rotation, same k, floor), `trained_k{16,32,64}`
+  (this run's ladder-trained rotation). Scored with `ladder_common.summarize` (cf_joint bucket +
+  permutation null), matching P4's own metric — NOT `das_minimal_pair`'s `matches_twin`, since
+  ladder donors are cross-problem (their own final answer isn't a valid target).
+**Mechanism / model:** Coconut `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33`.
+**Command:** `scripts/das_ladder_coconut.py --checkpoint_path .../checkpoint_33 --data_dir
+coconut_data --site_group 1,4 --k_values 16,32,64 --train_n_recipients 500 --epochs 5 ...
+--save_rotations rotations_ladder/coconut --slug das-ladder --stage full_run` (full line in
+`eval_command.txt`). Pod `jbzj5cd4diacxb` (RTX A40 secure, $0.49/hr, EU-SE-1); ran alongside 7 other
+jobs (all 6 Experiment A conditions + `das_ladder_codi`) initially, then alone once those finished
+(training sped up ~10x once GPU/CPU contention cleared — see caveats).
+**Headline results** (259 recipients; train pool 500 ladder recipients / 1000 (recipient, donor,
+level) tuples, train accuracy 92.6%):
+
+| cf_joint (null ≤0.006) | L2 | L3 | L4 |
+|---|---|---|---|
+| full (whole-vector own, ceiling) | 0.270 | 0.313 | 0.351 |
+| untrained_k16/32/64 (floor) | 0.000 | 0.000 | 0.000 |
+| **trained_k16** | **0.170** | **0.220** | **0.205** |
+| **trained_k32** | **0.189** | **0.220** | **0.243** |
+| **trained_k64** | **0.181** | **0.208** | **0.243** |
+| % of whole-vector ceiling, k32 | 70% | 70% | 69% |
+| round-4 minimal-pair rotation own_sub, k32 (`20260927-190716`) | 0.104 (35%) | 0.120 (40%) | 0.120 (34%*) |
+
+(*round-4's own ceiling for that comparison used the round-3 "own whole-vector" figure ~0.30 for
+all levels; this run's own ceiling varies by level (0.270/0.313/0.351) — percentages above use each
+run's own ceiling.)
+
+untrained (random k-dim rotation) leaves 97-100% of answers unchanged — a random subspace carries
+nothing, as expected; the trained rotation leaves only 10-16% unchanged (vs full's 6-9%), i.e. most
+of the ceiling's "the answer actually changes" behavior is preserved too.
+
+**Interpretation:**
+- **Training the DAS rotation on cross-problem donors instead of within-problem minimal pairs
+  roughly DOUBLES the subspace-only cross-problem transfer**: 58-70% of the whole-vector ceiling
+  (this run) vs 28-40% (round 4's minimal-pair rotation, same eval recipients, same k). This
+  confirms round 4's hypothesis: the minimal-pair training basis was mismatched to cross-problem
+  transfer specifically because training never exposed the rotation to a genuinely different live
+  complement.
+- k=16 already captures most of the gain (63-70% of ceiling); k=32/64 add only a few more points.
+  The value that generalizes across problems needs a moderately larger subspace than
+  minimal-pair-DAS suggested (there, k=16 vs k=32 differed by a similar small margin, but both sat
+  much lower in absolute terms) — i.e. the earlier "16 dims carry the value" finding
+  (`20260927-182915`) was correct about the DIMENSIONALITY, but the earlier ROTATION (the specific
+  16-dim subspace it found) generalizes far less well than one trained for this purpose.
+- This still falls short of the whole-vector ceiling (a 30-40% gap remains at every k), so a
+  subspace-only patch — even on the right basis — does not fully substitute for the unrestricted
+  intervention; some transferable content still lives outside any single k≤64 linear subspace of
+  this rotation, or the complement (still the recipient's own live value) genuinely interferes.
+**Caveats:** n=259 eval, n=1000 train tuples (500 recipients x up to 2 levels); one donor draw per
+level at eval. Training ran ~10x slower during the first ~90 min while sharing the GPU/CPU with 7
+other jobs (this repo's convention allows several jobs per GPU, but ridge-fit-heavy jobs are
+CPU-bound and 8 concurrent jobs saturated this pod's 9 vCPUs) — final wall-clock is not
+representative of a dedicated-GPU run; loss curves and results are unaffected by this, only
+runtime. `full`'s absolute values here (0.270/0.313/0.351) differ a few points from the "0.30" all
+three levels quoted in round-3/4 summary notes for the nominal same condition — see the Experiment A
+runs' caveats for the same observation; doesn't affect this run's own ratios.
+**Next:** Given own_sub with the ladder basis reaches ~70% of ceiling (the pre-registered "approaches
+whole-vector ceiling" branch), the natural follow-up is `xmech_coconut.py`/`xmech_codi.py --mode
+subspace` re-run with these ladder rotations (instead of the minimal-pair ones) to see whether
+CROSS-MECHANISM `mapped_sub` also improves — see `20260927-234206`'s sibling
+(`20260928-005033_codi_das-ladder`) for the CODI side, and the `xmech-subspace-ladder-*` runs for
+that follow-up.
+
+---
+
+## 2026-09-28 — Experiment B, CODI: a DAS rotation trained on cross-problem ladder donors reaches 58-77% of the whole-vector cross-problem ceiling, vs 12-53% for the minimal-pair-trained rotation (codi, run_id: 20260928-005033_codi_das-ladder)
+
+**Goal:** CODI counterpart of `20260927-234206_coconut_das-ladder` — read that record for the full
+motivation (round-4 open problem 2: does training the DAS rotation on cross-problem donors instead
+of within-problem minimal pairs close the gap between subspace-only and whole-vector cross-problem
+transfer found in round 4's `20260927-191455/-191525`?).
+**Design** (`das_ladder_codi.py`, modelled on `das_minimal_pair_codi.py` — reuses its
+`OrthogonalRotation`/`intervene`/`run_intervened`/`teacher_forced_ce`/`answer_target` unchanged):
+- **Train:** decoded 3000 GSM8K-Aug train examples with this model alone (base accuracy 79.4% on
+  the decoded pool), built ladder pairs for up to 500 recipients, 1000 (recipient, donor, level)
+  training tuples with a defined cf_joint target. One shared rotation R per k over sites {0,2,4}
+  jointly, trained 5 epochs (5000 steps/k), teacher-forced against `"The answer is: {cf_joint}"`.
+- **Eval:** same 259 P4-identical recipients as the Coconut sibling run (from
+  `xmech_common._ladder_pairs` on the shared dumps). Conditions: `full` (raw whole-vector swap),
+  `untrained_k{16,32,64}` (random rotation, floor), `trained_k{16,32,64}` (ladder-trained). Scored
+  with `ladder_common.summarize` (cf_joint bucket + permutation null).
+**Mechanism / model:** CODI `hf:zen-E/CODI-gpt2@fd641b3`, aligned sites (z_s feeds iteration s+1).
+**Command:** `xmech_codi.py`-style CODI flags + `das_ladder_codi.py --site_group 0,2,4 --k_values
+16,32,64 --train_n_recipients 500 --epochs 5 ... --save_rotations rotations_ladder/codi --slug
+das-ladder --stage full_run` (full line in `eval_command.txt`). Pod `jbzj5cd4diacxb` (RTX A40
+secure, $0.49/hr, EU-SE-1); ran alongside 7 other jobs initially (see sibling run's caveat on
+CPU-bound contention slowing the first ~90 min), then alone.
+**Headline results** (259 recipients; train pool 500 ladder recipients / 1000 tuples, train
+accuracy 79.4%):
+
+| cf_joint (null ≤0.010) | L2 | L3 | L4 |
+|---|---|---|---|
+| full (whole-vector own, ceiling) | 0.363 | 0.386 | 0.193 |
+| untrained_k16/32/64 (floor) | 0.000 | 0.000 | 0.000 |
+| **trained_k16** | **0.228** | **0.293** | **0.112** |
+| **trained_k32** | **0.270** | **0.263** | **0.124** |
+| **trained_k64** | **0.278** | **0.266** | **0.135** |
+| % of whole-vector ceiling, k32 | 74% | 68% | 64% |
+| round-4 minimal-pair rotation own_sub, k32 (`20260927-191455`) | 0.178 (46%) | 0.208 (53%) | 0.100 (52%*) |
+
+(*round-4's ceiling reference used round-3's "0.39/0.39/0.20"; this run's own ceiling is
+0.363/0.386/0.193 — percentages above use each run's own ceiling for an apples-to-apples read.)
+
+untrained leaves 98.8-99.6% unchanged (a random 16-64 dim subspace is essentially inert); the
+trained rotation leaves 8.5-15% unchanged, close to `full`'s 6.6-7.7%.
+
+**Interpretation:**
+- **Same qualitative result as the Coconut sibling, smaller relative gain but still substantial**:
+  the ladder-trained rotation reaches 58-77% of the whole-vector ceiling (using k32: 74%/68%/64% for
+  L2/L3/L4) vs round 4's minimal-pair rotation at 46-53% (k32) — round 4's CODI-side own_sub was
+  already the STRONGER of the two mechanisms' minimal-pair-basis results (see
+  `20260927-191455/-191525`'s own interpretation: "CODI's own subspace-only interchange carries a
+  cross-problem donor's values at 0.07–0.21"), so there was less headroom to close here than on the
+  Coconut side (28-40% → 58-70%, a near-doubling).
+- k=16 already captures most of the L2/L3 gain (k16 actually edges out k32/k64 at L3: 0.293 vs
+  0.263/0.266) but L4 keeps improving through k64 (0.112→0.124→0.135) — consistent with L4's random
+  donor needing a slightly larger subspace to carry enough of the more different problem's value.
+- L4's ceiling itself is much lower here than L2/L3 (0.193 vs 0.363/0.386) — matches the established
+  pattern (round 2/3) that CODI's whole-vector transfer is weaker for the least-similar donor, so
+  the subspace-only L4 numbers (11-14%) are a smaller absolute effect even at a similar RELATIVE
+  fraction of ceiling (64-70%).
+**Caveats:** n=259 eval, n=1000 train tuples; one donor draw per level. Wall-clock inflated by
+initial GPU/CPU contention with 7 other concurrent jobs (loss curves/results unaffected, see sibling
+run's caveat). `full` here (0.363/0.386/0.193) is close to but not identical to the "0.39/0.39/0.20"
+quoted in round-3 notes for the nominal same condition (this run's own eval decode, not a reused
+cached prediction) — small run-to-run variance, doesn't change the qualitative picture.
+**Next:** Both mechanisms show own_sub with the ladder basis approaching (Coconut) or substantially
+closing (CODI) the whole-vector ceiling — the pre-registered condition for rerunning `--mode
+subspace` with these rotations to test cross-mechanism `mapped_sub`. See the
+`xmech-subspace-ladder-*` runs for that follow-up (in progress / logged separately).
+
+---
+
+## 2026-09-28 — CODI → Coconut through the LADDER-trained DAS subspace, k=16: mapped coordinates reach 59-93% of Coconut's own subspace-only ceiling (cf_joint 0.120-0.158 vs own_sub 0.170-0.220) (coconut, run_id: 20260928-012726_coconut_xmech-subspace-ladder-codi-to-coconut-k16)
+
+**Goal:** k=16 sibling of `20260928-012717` (k=32) — read that record for the full motivation and
+design. This record: codi-to-coconut, k=16.
+**Design:** identical to `20260928-012717` except k=16 (`rotations_ladder/{codi,coconut}/rot_*_k16.pt`).
+**Mechanism / model:** Coconut (target), CODI (source). Rotations: CODI `rot_0+2+4_k16.pt`, Coconut
+`rot_1+4_k16.pt` (both from this round's Experiment B, `20260928-005033`/`20260927-234206`).
+**Command:** `xmech_coconut.py --mode subspace --codi_rotation rot_0+2+4_k16.pt --coconut_rotation
+rot_1+4_k16.pt --slug xmech-subspace-ladder-codi-to-coconut-k16 --stage full_run` (full line in
+`eval_command.txt`). Pod `jbzj5cd4diacxb` (RTX A40 secure, $0.49/hr, EU-SE-1); ran alongside 3
+sibling subspace runs, no CPU contention from the earlier 8-job batch (already finished).
+**Headline results** (259 recipients; round-4 minimal-pair comparator:
+`20260927-190704_coconut_xmech-subspace-codi-to-coconut-k16`):
+
+| cf_joint (null ≤0.006) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_sub (ladder basis, k16) | 0.170 | 0.220 | 0.205 |
+| **mapped_sub (ladder basis, k16)** | **0.158** | **0.124** | **0.120** |
+| complement_sub (ladder basis, k16) | 0.189 | 0.166 | 0.151 |
+| shuffled_sub | 0.012 | 0.008 | 0.008 |
+| random_sub | 0.000 | 0.000 | 0.000 |
+| mapped_full (unrestricted, this run) | 0.309 | 0.301 | 0.278 |
+| mapped_sub, round-4 minimal-pair basis, k16 (`20260927-190704`) | 0.066 | 0.062 | 0.046 |
+
+mapped_sub is more than DOUBLE round 4's minimal-pair-basis number at every level (0.158 vs 0.066,
+0.124 vs 0.062, 0.120 vs 0.046) — an even larger relative jump than at k=32. mapped_sub reaches
+59-93% of this run's own_sub. Coordinate-map eval R²: pass 1 0.451, pass 4 0.246 (complement input:
+0.547/0.286; shuffled ≤-0.01).
+
+**Interpretation:**
+- Same conclusion as the k=32 sibling, at a smaller subspace: k=16 already captures most of the
+  ladder basis's improvement over the minimal-pair basis (roughly 2x at both k), consistent with
+  Experiment B's own finding that k=16 already captures most of the same-mechanism gain.
+- complement_sub (0.151-0.189) again matches or exceeds mapped_sub (0.120-0.158) at every level,
+  same pattern as k=32 and as round 4 — CODI's value is not confined to its own DAS subspace at
+  either k.
+**Caveats:** n=259, one donor draw per level. random_sub/shuffled_sub near zero confirm the
+improvement is a real basis effect.
+**Next:** See `20260928-012717` (k=32, same direction) and the reverse direction
+(`20260928-013453`/`-013447`) for the complete picture.
+
+---
+
+## 2026-09-28 — CODI → Coconut through the LADDER-trained DAS subspace, k=32: mapped coordinates now reach 68-104% of Coconut's own subspace-only ceiling (cf_joint 0.166-0.197 vs own_sub 0.189-0.243), roughly double round 4's minimal-pair-basis numbers (coconut, run_id: 20260928-012717_coconut_xmech-subspace-ladder-codi-to-coconut-k32)
+
+**Goal:** Follow-up to Experiment B (`20260927-234206_coconut_das-ladder`,
+`20260928-005033_codi_das-ladder`): both mechanisms' DAS rotations trained on CROSS-PROBLEM ladder
+donors reached ~58-70% of the whole-vector cross-problem ceiling (own-mechanism), vs round 4's
+minimal-pair-trained rotations at 28-53% — meeting the pre-registered "approaches ceiling" branch
+for rerunning the CROSS-MECHANISM subspace transplant (`run_subspace_transplant`,
+round 4's `20260927-190704/-190716`) with the new rotations instead.
+**Design** (`xmech_common.run_subspace_transplant`, unchanged from round 4; `xmech_coconut.py
+--mode subspace`): identical to round 4's codi-to-coconut subspace runs, except `--codi_rotation`
+and `--coconut_rotation` point at the LADDER-trained rotations
+(`rotations_ladder/{codi,coconut}/rot_*_k32.pt`, from this round's Experiment B) instead of the
+minimal-pair ones. Same 259 recipients, same conditions: **own_sub** (Coconut's own donor
+coordinates, cross-problem DAS interchange — ceiling for a subspace-only patch with THIS basis);
+**mapped_sub** (ridge from CODI donor's ladder-DAS coordinates at z0,z2,z4 → Coconut's ladder-DAS
+coordinates at passes 1,4); **shuffled_sub** (same ridge, permuted pairs); **complement_sub** (ridge
+from CODI's coordinates OUTSIDE its ladder-DAS subspace); **random_sub** (own donor coordinates in
+a random k-dim subspace); **mapped_full** (the unrestricted P4 condition, re-run here for a
+same-recipient comparison).
+**Mechanism / model:** Coconut `hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33` (target), CODI
+`hf:zen-E/CODI-gpt2@fd641b3` (source). Rotations: CODI `rot_0+2+4_k32.pt` (from
+`20260928-005033_codi_das-ladder`), Coconut `rot_1+4_k32.pt` (from
+`20260927-234206_coconut_das-ladder`).
+**Command:** `xmech_coconut.py --checkpoint_path .../checkpoint_33 --mode subspace --codi_rotation
+rotations_ladder/codi/rot_0+2+4_k32.pt --coconut_rotation rotations_ladder/coconut/rot_1+4_k32.pt
+--slug xmech-subspace-ladder-codi-to-coconut-k32 --stage full_run` (full line in
+`eval_command.txt`). Pod `jbzj5cd4diacxb` (RTX A40 secure, $0.49/hr, EU-SE-1); ran alongside 3
+sibling subspace runs (this experiment's k16, and both directions' k16/k32) once the 8
+Experiment-A/B jobs had finished, so no CPU contention this time (~15 min total).
+**Headline results** (259 recipients; sibling at k=16: `20260928-012726`; round-4 minimal-pair
+comparator: `20260927-190716_coconut_xmech-subspace-codi-to-coconut-k32`):
+
+| cf_joint (null ≤0.006) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_sub (ladder basis, k32) | 0.189 | 0.220 | 0.243 |
+| **mapped_sub (ladder basis, k32)** | **0.197** | **0.189** | **0.166** |
+| complement_sub (ladder basis, k32) | 0.224 | 0.208 | 0.185 |
+| shuffled_sub | 0.008 | 0.000 | 0.000 |
+| random_sub | 0.000 | 0.000 | 0.000 |
+| mapped_full (unrestricted, this run) | 0.309 | 0.301 | 0.278 |
+| mapped_sub, round-4 minimal-pair basis, k32 (`20260927-190716`) | 0.085 | 0.108 | 0.069 |
+
+mapped_sub roughly DOUBLES round 4's minimal-pair-basis number at every level (0.197 vs 0.085,
+0.189 vs 0.108, 0.166 vs 0.069). mapped_sub reaches 68-104% of THIS run's own_sub (vs round 4's
+55-90% of ITS own_sub — a similar or slightly better relative efficiency, on a much higher absolute
+base). self_mapped_sub (Coconut recipient's own coordinates mapped back into itself) unchanged
+89.2%. Coordinate-map eval R²: pass 1 0.451, pass 4 0.255 (complement input: 0.499/0.263; shuffled
+≤-0.01) — close to round 4's minimal-pair-basis R² (0.34-0.47 / 0.18-0.24), i.e. the ladder basis's
+gain is NOT primarily from a better-fitting ridge map; it is from the DAS subspace itself
+generalizing better to cross-problem donors (see the own_sub jump, which needs no cross-mechanism
+map at all).
+**Interpretation:**
+- **Training the DAS rotation on cross-problem donors, not just improves the same-mechanism
+  subspace-only ceiling (Experiment B) — it roughly doubles the CROSS-MECHANISM subspace-restricted
+  transfer too**, in absolute cf_joint terms (0.166-0.197 vs 0.069-0.085). The value channel that
+  crosses mechanisms was always there (round 3/4 found the unrestricted, whole-vector version); this
+  confirms it is genuinely the SAME kind of information the within-problem DAS subspace was
+  supposed to isolate, just requiring a cross-problem-trained subspace to access reliably at k=32.
+- mapped_sub now essentially MATCHES or exceeds own_sub at L2 (104%) and is close at L3 (86%),
+  vs round 4's 82%/90% for the SAME levels with the old basis — i.e. relative efficiency
+  (mapped/own) is similar-to-better, and the whole scale moved up together.
+- The input restriction still doesn't matter: mapping from CODI's non-DAS (complement) coordinates
+  works AS WELL AS or better than mapping from its DAS coordinates (complement_sub 0.185-0.224 >
+  mapped_sub 0.166-0.197 at every level) — replicating round 4's finding
+  (`20260927-185312`: CODI stores the value redundantly across the vector) with the new basis.
+**Caveats:** n=259, one donor draw per level. random_sub/shuffled_sub near zero throughout confirm
+the improvement is a real basis effect, not a general loosening of the null.
+**Next:** See sibling k=16 (`20260928-012726`) and the reverse direction
+(`20260928-012726`... `20260928-013447/-013453`) for the full 2-direction x 2-k picture. This
+closes out the round-4 "wrong basis" open problem: a cross-problem-trained DAS subspace
+substantially narrows (though does not fully close) the gap to whole-vector transfer, in both the
+same-mechanism and cross-mechanism settings.
+
+---
+
+## 2026-09-28 — Coconut → CODI through the LADDER-trained DAS subspace, k=32: mapped coordinates reach 26-72% of CODI's own subspace-only ceiling (cf_joint 0.069-0.089 vs own_sub 0.124-0.270), 40-77% above round 4's minimal-pair basis (codi, run_id: 20260928-013447_codi_xmech-subspace-ladder-coconut-to-codi-k32)
+
+**Goal:** Reverse direction of `20260928-012717` — read that record for the full motivation. This
+record: coconut-to-codi, k=32.
+**Design** (`xmech_common.run_subspace_transplant`; `xmech_codi.py --mode subspace`): identical to
+round 4's coconut-to-codi subspace runs, except the rotations are the LADDER-trained ones
+(`rotations_ladder/{codi,coconut}/rot_*_k32.pt`) instead of the minimal-pair ones. Same 259
+recipients, same conditions (own_sub / mapped_sub / shuffled_sub / complement_sub / random_sub /
+mapped_full).
+**Mechanism / model:** CODI `hf:zen-E/CODI-gpt2@fd641b3` (target, aligned sites), Coconut
+`hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33` (source). Rotations: CODI `rot_0+2+4_k32.pt`,
+Coconut `rot_1+4_k32.pt` (both from this round's Experiment B).
+**Command:** `xmech_codi.py $CODI_FLAGS --mode subspace --codi_rotation rot_0+2+4_k32.pt
+--coconut_rotation rot_1+4_k32.pt --slug xmech-subspace-ladder-coconut-to-codi-k32 --stage
+full_run` (full line in `eval_command.txt`). Pod `jbzj5cd4diacxb` (RTX A40 secure, $0.49/hr,
+EU-SE-1); ran alongside 3 sibling subspace runs, no CPU contention.
+**Headline results** (259 recipients; sibling at k=16: `20260928-013453`; round-4 minimal-pair
+comparator: `20260927-191455_codi_xmech-subspace-coconut-to-codi-k32`):
+
+| cf_joint (null ≤0.009) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_sub (ladder basis, k32) | 0.270 | 0.263 | 0.124 |
+| **mapped_sub (ladder basis, k32)** | **0.069** | **0.081** | **0.089** |
+| complement_sub (ladder basis, k32) | 0.112 | 0.112 | 0.108 |
+| shuffled_sub | 0.019 | 0.015 | 0.004 |
+| random_sub | 0.000 | 0.000 | 0.000 |
+| mapped_full (unrestricted, this run) | 0.259 | 0.278 | 0.270 |
+| mapped_sub, round-4 minimal-pair basis, k32 (`20260927-191455`) | 0.039 | 0.050 | 0.062 |
+
+mapped_sub improves over round 4's minimal-pair-basis number at every level (0.069 vs 0.039, +77%;
+0.081 vs 0.050, +62%; 0.089 vs 0.062, +44%) — a real but smaller relative gain than the codi-to-coconut
+direction (`20260928-012717`, roughly a doubling), consistent with Experiment B's own asymmetry
+(CODI's ladder-basis own_sub gain over minimal-pair was smaller than Coconut's). mapped_sub reaches
+26-72% of this run's own_sub. Coordinate-map eval R²: z0 0.471, z2 0.304, z4 0.254 (complement
+input: 0.557/0.362/0.303; shuffled ≤-0.02) — again close to round 4's minimal-pair-basis R², so the
+gain is from the subspace generalizing better, not from the ridge map fitting better.
+**Interpretation:**
+- **The direction asymmetry from round 4 persists with the better basis**: into Coconut, mapped_sub
+  is close to (or above) own_sub; into CODI, mapped_sub tops out around 26-72% of own_sub even with
+  the improved basis. This matches the probe-based explanation carried over from round 4: Coconut's
+  value subspace is compact and easy to write into; CODI's is not (it's redundant across the whole
+  vector), so a value written only into CODI's k-dim subspace competes with everything else in the
+  live vector at that site.
+- Coconut's non-DAS (complement) coordinates again predict CODI's DAS coordinates BETTER than
+  Coconut's own DAS coordinates do (complement_sub 0.108-0.112 > mapped_sub 0.069-0.089 at every
+  level; R² 0.557 vs 0.471 at z0) — same pattern as round 4, replicated with the new basis.
+**Caveats:** n=259, one donor draw per level. own_sub's L4 (0.124) is notably lower than L2/L3
+(0.270/0.263) here, same pattern seen in Experiment B's own CODI run (`20260928-005033`) — L4's
+random, most-different donor is harder for CODI's subspace-only patch specifically.
+**Next:** See sibling k=16 (`20260928-013453`) and the forward direction
+(`20260928-012717`/`-012726`). Together these four runs close out the round-4 "wrong basis" open
+problem for both directions and both tested k.
+
+---
+
+## 2026-09-28 — Coconut → CODI through the LADDER-trained DAS subspace, k=16: mapped coordinates reach 20-50% of CODI's own subspace-only ceiling (cf_joint 0.058-0.077 vs own_sub 0.116-0.293), 22-97% above round 4's minimal-pair basis (codi, run_id: 20260928-013453_codi_xmech-subspace-ladder-coconut-to-codi-k16)
+
+**Goal:** k=16 sibling of `20260928-013447` (k=32) — read that record for the full motivation and
+design. This record: coconut-to-codi, k=16.
+**Design:** identical to `20260928-013447` except k=16 (`rotations_ladder/{codi,coconut}/rot_*_k16.pt`).
+**Mechanism / model:** CODI (target, aligned sites), Coconut (source). Rotations: CODI
+`rot_0+2+4_k16.pt`, Coconut `rot_1+4_k16.pt` (both from this round's Experiment B).
+**Command:** `xmech_codi.py $CODI_FLAGS --mode subspace --codi_rotation rot_0+2+4_k16.pt
+--coconut_rotation rot_1+4_k16.pt --slug xmech-subspace-ladder-coconut-to-codi-k16 --stage
+full_run` (full line in `eval_command.txt`). Pod `jbzj5cd4diacxb` (RTX A40 secure, $0.49/hr,
+EU-SE-1); ran alongside 3 sibling subspace runs, no CPU contention.
+**Headline results** (259 recipients; round-4 minimal-pair comparator:
+`20260927-191525_codi_xmech-subspace-coconut-to-codi-k16`):
+
+| cf_joint (null ≤0.012) | L2 | L3 | L4 |
+|---|---|---|---|
+| own_sub (ladder basis, k16) | 0.224 | 0.293 | 0.116 |
+| **mapped_sub (ladder basis, k16)** | **0.077** | **0.062** | **0.058** |
+| complement_sub (ladder basis, k16) | 0.120 | 0.100 | 0.077 |
+| shuffled_sub | 0.008 | 0.012 | 0.004 |
+| random_sub | 0.000 | 0.000 | 0.000 |
+| mapped_full (unrestricted, this run) | 0.259 | 0.278 | 0.270 |
+| mapped_sub, round-4 minimal-pair basis, k16 (`20260927-191525`) | 0.015 | 0.031 | 0.031 |
+
+mapped_sub improves substantially over round 4's minimal-pair-basis number at every level (0.077 vs
+0.015, +413%; 0.062 vs 0.031, +100%; 0.058 vs 0.031, +87% — the k=16 gain is even larger in relative
+terms than k=32's, though both k remain well below own_sub). mapped_sub reaches 20-50% of this
+run's own_sub. Coordinate-map eval R²: z0 0.491, z2 0.327, z4 0.279 (complement input:
+0.596/0.407/0.343; shuffled ≤-0.02).
+**Interpretation:**
+- Same direction asymmetry as k=32 (`20260928-013447`): Coconut's value subspace is easier to write
+  a cross-mechanism value into than CODI's, at either k tested.
+- The relative improvement over round 4's minimal-pair basis is LARGER at k=16 than k=32 in this
+  direction (up to +413% vs +77%) because round 4's minimal-pair-basis k16 number
+  (`20260927-191525`, 0.015) was unusually low to begin with — closer to its own shuffled-pair floor
+  (0.000-0.015) than to a real signal. The ladder basis turns k=16 from "barely above noise" into a
+  small but clearly real effect (0.058-0.077, vs shuffled 0.004-0.012).
+**Caveats:** n=259, one donor draw per level.
+**Next:** This completes the round-4 "wrong basis" follow-up: 4 subspace-ladder runs (2 directions
+x k∈{16,32}), all logged. Combined with Experiment B's own-mechanism result and Experiment A's
+question-only control, this is a full 12-run round; see `MEMORY.md`/results index for the summary.

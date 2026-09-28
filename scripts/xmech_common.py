@@ -67,9 +67,12 @@ def fit_map(X: torch.Tensor, Y: torch.Tensor, seed: int = 0) -> tuple[RidgeMap, 
 
 
 def fit_site_maps(src: torch.Tensor, tgt: torch.Tensor, target_sites: list[int], shuffle: bool = False,
-                  seed: int = 0) -> tuple[dict[int, RidgeMap], dict]:
-    """src, tgt: [n, 6, 768]. One map per target site from all source sites concatenated."""
-    X = src.reshape(src.shape[0], -1)
+                  seed: int = 0, src_sites: list[int] | None = None) -> tuple[dict[int, RidgeMap], dict]:
+    """src: [n, S, 768] (S = 6 for a mechanism dump, or however many "feature sites" a
+    control source packs -- see `gpt2_plain_dump.py`), tgt: [n, 6, 768]. One map per target
+    site from the concatenation of `src_sites` (default: all S) source sites."""
+    sites = src_sites if src_sites is not None else list(range(src.shape[1]))
+    X = src[:, sites, :].reshape(src.shape[0], -1)
     if shuffle:
         X = X[torch.randperm(X.shape[0], generator=torch.Generator().manual_seed(seed + 7))]
     maps, info = {}, {}
@@ -78,8 +81,10 @@ def fit_site_maps(src: torch.Tensor, tgt: torch.Tensor, target_sites: list[int],
     return maps, info
 
 
-def eval_r2(maps: dict[int, RidgeMap], src: torch.Tensor, tgt: torch.Tensor) -> dict[int, float]:
-    X = src.reshape(src.shape[0], -1)
+def eval_r2(maps: dict[int, RidgeMap], src: torch.Tensor, tgt: torch.Tensor,
+           src_sites: list[int] | None = None) -> dict[int, float]:
+    sites = src_sites if src_sites is not None else list(range(src.shape[1]))
+    X = src[:, sites, :].reshape(src.shape[0], -1)
     return {p: r2(m(X), tgt[:, p, :]) for p, m in maps.items()}
 
 
@@ -106,25 +111,35 @@ def shuffled_copy(xs: list, seed: int) -> list:
 
 
 def run_transplant(questions: list[dict], tgt: dict, src: dict, maps: dict, shuf_maps: dict, carriers: list[int],
-                   answer_with, n_recipients: int, pair_seed: int, reps: int, log_every: int = 25):
+                   answer_with, n_recipients: int, pair_seed: int, reps: int, log_every: int = 25,
+                   feat: dict | None = None, feat_sites: list[int] | None = None):
     """Ladder-style transplant into the TARGET mechanism on the `eval` split.
 
     tgt / src: latent dumps. maps / shuf_maps: {target site: RidgeMap} for every target site.
     answer_with(question, {target site: FloatTensor[768]}) -> pred string (target model).
     Recipients and donors must be base-correct in BOTH mechanisms (the source latents should
-    encode correct values; the target's own donor latents are the ceiling). Conditions per level:
+    encode correct values; the target's own donor latents are the ceiling) -- `src` decides
+    pairing/correctness and is what `own_carriers`/`targets` are computed from. `feat` (default
+    `src`) is what actually FEEDS the maps: a question-only control (RESEARCH_PLAN Experiment A)
+    passes a different dump here -- e.g. `src` restricted to `feat_sites` (a subset of its own
+    6 sites, for the "site 0 only" / "sites 1-5" conditions) or an unrelated dump entirely (a
+    plain-GPT2 question encoding, all of whose sites are used by default) -- while `src` still
+    pins the same recipients/donors as the unrestricted run. Conditions per level:
       own_carriers      target's own donor latents at `carriers`
-      mapped_carriers   map(source donor latents) at `carriers`
+      mapped_carriers   map(feat donor latents) at `carriers`
       shuffled_carriers shuffled-pair map at `carriers`
-      mapped_all        map(source donor latents) at every target site
-    plus, once per recipient, `self_mapped_carriers`: map(source RECIPIENT latents) -- a
+      mapped_all        map(feat donor latents) at every target site
+    plus, once per recipient, `self_mapped_carriers`: map(feat RECIPIENT latents) -- a
     reconstruction check (a faithful map should leave the answer unchanged)."""
     from ladder_common import LEVELS, targets  # noqa: E402
+    feat = feat if feat is not None else src
     pairs, key_of = _ladder_pairs(questions, tgt, src, n_recipients, pair_seed)
     n_sites = len(maps)
 
     def mapped(m: dict, key: str, sites) -> dict:
-        x = src["rows"][key]["z"].double().reshape(1, -1)
+        z = feat["rows"][key]["z"]
+        fs = feat_sites if feat_sites is not None else list(range(z.shape[0]))
+        x = z[fs].double().reshape(1, -1)
         return {p: m[p](x)[0].float() for p in sites}
 
     rows = []

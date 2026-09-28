@@ -84,3 +84,15 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260927-190716_coconut_xmech-subspace-codi-to-coconut-k32](20260927-190716_coconut_xmech-subspace-codi-to-coconut-k32/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run | Henning Lindig |
 | [20260927-191455_codi_xmech-subspace-coconut-to-codi-k32](20260927-191455_codi_xmech-subspace-coconut-to-codi-k32/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run | Henning Lindig |
 | [20260927-191525_codi_xmech-subspace-coconut-to-codi-k16](20260927-191525_codi_xmech-subspace-coconut-to-codi-k16/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run | Henning Lindig |
+| [20260927-224224_coconut_xmech-ctrl-site0-codi-to-coconut](20260927-224224_coconut_xmech-ctrl-site0-codi-to-coconut/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run |  |
+| [20260927-224642_coconut_xmech-ctrl-gpt2-to-coconut](20260927-224642_coconut_xmech-ctrl-gpt2-to-coconut/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run |  |
+| [20260927-224922_coconut_xmech-ctrl-sites1to5-codi-to-coconut](20260927-224922_coconut_xmech-ctrl-sites1to5-codi-to-coconut/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run |  |
+| [20260927-225629_codi_xmech-ctrl-site0-coconut-to-codi](20260927-225629_codi_xmech-ctrl-site0-coconut-to-codi/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run |  |
+| [20260927-225751_codi_xmech-ctrl-gpt2-to-codi](20260927-225751_codi_xmech-ctrl-gpt2-to-codi/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run |  |
+| [20260927-225810_codi_xmech-ctrl-sites1to5-coconut-to-codi](20260927-225810_codi_xmech-ctrl-sites1to5-coconut-to-codi/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run |  |
+| [20260927-234206_coconut_das-ladder](20260927-234206_coconut_das-ladder/) | coconut | openai-community/gpt2 | test (n=259) | 6 | - | 0 | full_run |  |
+| [20260928-005033_codi_das-ladder](20260928-005033_codi_das-ladder/) | codi | gpt2 | test (n=259) | 6 | - | 0 | full_run |  |
+| [20260928-012726_coconut_xmech-subspace-ladder-codi-to-coconut-k16](20260928-012726_coconut_xmech-subspace-ladder-codi-to-coconut-k16/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run |  |
+| [20260928-012717_coconut_xmech-subspace-ladder-codi-to-coconut-k32](20260928-012717_coconut_xmech-subspace-ladder-codi-to-coconut-k32/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run |  |
+| [20260928-013447_codi_xmech-subspace-ladder-coconut-to-codi-k32](20260928-013447_codi_xmech-subspace-ladder-coconut-to-codi-k32/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run |  |
+| [20260928-013453_codi_xmech-subspace-ladder-coconut-to-codi-k16](20260928-013453_codi_xmech-subspace-ladder-coconut-to-codi-k16/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run |  |
