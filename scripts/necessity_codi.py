@@ -151,7 +151,7 @@ def finalize(merged: dict, na: NecArguments, argv: str) -> None:
         run_id=new_run_id("codi", na.slug),
         mechanism="codi",
         stage=na.stage,
-        model=ModelInfo(backbone="gpt2", checkpoint=meta["checkpoint"], n_params=meta["n_params"]),
+        model=ModelInfo(backbone=meta.get("backbone", "gpt2"), checkpoint=meta["checkpoint"], n_params=meta["n_params"]),
         dataset=DatasetInfo(name="gsm8k-aug", split="test", n_examples=n, seed=None),
         metrics=metrics,
         hyperparams={"inf_latent_iterations": n_sites, "greedy": True, "mean_sample_n": meta["mean_sample_n"],
@@ -243,6 +243,7 @@ def main() -> None:
     meta = {"n_sites": n_sites, "num_shards": na.num_shards, "mean_sample_n": mean_n, "mean_norms": mean_norms,
             "k_samples": na.k_samples, "temperature": na.temperature, "max_new_tokens": na.max_new_tokens,
             "checkpoint": na.checkpoint_label or model_args.ckpt_dir,
+            "backbone": model_args.model_name_or_path,
             "n_params": sum(p.numel() for p in model.parameters()),
             "gpu": torch.cuda.get_device_name(0), "elapsed_sec": elapsed}
     payload = {"meta": meta, "records": records, "samples": samples}

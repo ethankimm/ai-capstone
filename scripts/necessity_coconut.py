@@ -172,6 +172,10 @@ def main() -> None:
                          position_ids=pos[:, ncr[0]:ncr[1]], past_key_values=past)
         toks: list[list[int]] = [[] for _ in range(k)]
         done = [False] * k
+        stop_ids = {eos_id}  # same stop rule as finish_and_decode (adds Llama's <|eot_id|>)
+        eot_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
+        if eot_id is not None and eot_id != tokenizer.unk_token_id:
+            stop_ids.add(eot_id)
         seq = ie_k
         for step in range(na.max_new_tokens):
             logits = out.logits[:, -1].float() / na.temperature
@@ -179,7 +183,7 @@ def main() -> None:
             for r in range(k):
                 t = ids[r, 0].item()
                 if not done[r]:
-                    if t == eos_id and step > 0:  # finish_and_decode keeps the first token unconditionally
+                    if t in stop_ids and step > 0:  # finish_and_decode keeps the first token unconditionally
                         done[r] = True
                     else:
                         toks[r].append(t)
