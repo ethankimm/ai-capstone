@@ -1,0 +1,331 @@
+{
+  "run_id": "20261009-094526_coconut_llama1b-minimal-pair-patch",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "/workspace/llama32-1b-instruct",
+    "checkpoint": "hf:connordilgren/llama32-1b-gsm8k-coconut@49dc864/checkpoint_10",
+    "n_params": 1235820544
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1194,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.36432160804020103,
+    "compute_steps": 6,
+    "sec_per_example": 0.3004803422618489,
+    "intervention_accuracy": 0.21551724137931033,
+    "extra": {
+      "design": "E3 rerun at full n: same-problem minimal-pair patch (all/single/prefix/leave-one-out), non-responsive pairs, full CFR log",
+      "site_definition": "pass p = vector spliced into the p-th <|latent|> slot (pass 0 = hidden at <|start-latent|>)",
+      "n_examples_decoded": 1194,
+      "n_qualified_pairs": 232,
+      "all_slot": {
+        "n": 232,
+        "answer_changed_rate": 0.29310344827586204,
+        "answer_changed_wilson_ci": [
+          0.23828149674762336,
+          0.3546656338688583
+        ],
+        "matches_twin_rate": 0.21551724137931033,
+        "matches_twin_wilson_ci": [
+          0.16746880120968669,
+          0.2728335033879755
+        ]
+      },
+      "single_slot": {
+        "0": {
+          "n": 232,
+          "answer_changed_rate": 0.2629310344827586,
+          "answer_changed_wilson_ci": [
+            0.2104750193648489,
+            0.32311023446653636
+          ],
+          "matches_twin_rate": 0.1896551724137931,
+          "matches_twin_wilson_ci": [
+            0.14442186057960044,
+            0.24499883534512196
+          ]
+        },
+        "1": {
+          "n": 232,
+          "answer_changed_rate": 0.21120689655172414,
+          "answer_changed_wilson_ci": [
+            0.1636058023824668,
+            0.2682162341030388
+          ],
+          "matches_twin_rate": 0.14655172413793102,
+          "matches_twin_wilson_ci": [
+            0.10680659851094985,
+            0.19781141629220617
+          ]
+        },
+        "2": {
+          "n": 232,
+          "answer_changed_rate": 0.13793103448275862,
+          "answer_changed_wilson_ci": [
+            0.09942567868353856,
+            0.1882317998953042
+          ],
+          "matches_twin_rate": 0.09051724137931035,
+          "matches_twin_wilson_ci": [
+            0.05996557180393788,
+            0.1344089575411819
+          ]
+        },
+        "3": {
+          "n": 232,
+          "answer_changed_rate": 0.11206896551724138,
+          "answer_changed_wilson_ci": [
+            0.077634655672296,
+            0.15914121423360697
+          ],
+          "matches_twin_rate": 0.05603448275862069,
+          "matches_twin_wilson_ci": [
+            0.03303553335017749,
+            0.09349685109768922
+          ]
+        },
+        "4": {
+          "n": 232,
+          "answer_changed_rate": 0.06465517241379311,
+          "answer_changed_wilson_ci": [
+            0.03956951837514469,
+            0.10392340229703528
+          ],
+          "matches_twin_rate": 0.017241379310344827,
+          "matches_twin_wilson_ci": [
+            0.006724635624291837,
+            0.043485335814165166
+          ]
+        },
+        "5": {
+          "n": 232,
+          "answer_changed_rate": 0.02586206896551724,
+          "answer_changed_wilson_ci": [
+            0.011905368254414139,
+            0.05526513940835613
+          ],
+          "matches_twin_rate": 0.008620689655172414,
+          "matches_twin_wilson_ci": [
+            0.002367246725904753,
+            0.03088218848823898
+          ]
+        }
+      },
+      "prefix": {
+        "0": {
+          "n": 232,
+          "answer_changed_rate": 0.2629310344827586,
+          "answer_changed_wilson_ci": [
+            0.2104750193648489,
+            0.32311023446653636
+          ],
+          "matches_twin_rate": 0.1896551724137931,
+          "matches_twin_wilson_ci": [
+            0.14442186057960044,
+            0.24499883534512196
+          ]
+        },
+        "1": {
+          "n": 232,
+          "answer_changed_rate": 0.2629310344827586,
+          "answer_changed_wilson_ci": [
+            0.2104750193648489,
+            0.32311023446653636
+          ],
+          "matches_twin_rate": 0.1939655172413793,
+          "matches_twin_wilson_ci": [
+            0.1482404878933305,
+            0.24966047614354853
+          ]
+        },
+        "2": {
+          "n": 232,
+          "answer_changed_rate": 0.27155172413793105,
+          "answer_changed_wilson_ci": [
+            0.21838724845281535,
+            0.3321585416028831
+          ],
+          "matches_twin_rate": 0.2025862068965517,
+          "matches_twin_wilson_ci": [
+            0.1559054129894056,
+            0.25895608727178665
+          ]
+        },
+        "3": {
+          "n": 232,
+          "answer_changed_rate": 0.27586206896551724,
+          "answer_changed_wilson_ci": [
+            0.2223532914182074,
+            0.33667276674964774
+          ],
+          "matches_twin_rate": 0.20689655172413793,
+          "matches_twin_wilson_ci": [
+            0.15975127623422933,
+            0.2635904921391196
+          ]
+        },
+        "4": {
+          "n": 232,
+          "answer_changed_rate": 0.28879310344827586,
+          "answer_changed_wilson_ci": [
+            0.23429001364259866,
+            0.35017684886172634
+          ],
+          "matches_twin_rate": 0.21120689655172414,
+          "matches_twin_wilson_ci": [
+            0.1636058023824668,
+            0.2682162341030388
+          ]
+        },
+        "5": {
+          "n": 232,
+          "answer_changed_rate": 0.29310344827586204,
+          "answer_changed_wilson_ci": [
+            0.23828149674762336,
+            0.3546656338688583
+          ],
+          "matches_twin_rate": 0.21551724137931033,
+          "matches_twin_wilson_ci": [
+            0.16746880120968669,
+            0.2728335033879755
+          ]
+        }
+      },
+      "leave_one_out": {
+        "0": {
+          "n": 232,
+          "answer_changed_rate": 0.22413793103448276,
+          "answer_changed_wilson_ci": [
+            0.1752195030333355,
+            0.28204333778864
+          ],
+          "matches_twin_rate": 0.15948275862068967,
+          "matches_twin_wilson_ci": [
+            0.11797348747578082,
+            0.21208533166384516
+          ]
+        },
+        "1": {
+          "n": 232,
+          "answer_changed_rate": 0.28879310344827586,
+          "answer_changed_wilson_ci": [
+            0.23429001364259866,
+            0.35017684886172634
+          ],
+          "matches_twin_rate": 0.21120689655172414,
+          "matches_twin_wilson_ci": [
+            0.1636058023824668,
+            0.2682162341030388
+          ]
+        },
+        "2": {
+          "n": 232,
+          "answer_changed_rate": 0.28879310344827586,
+          "answer_changed_wilson_ci": [
+            0.23429001364259866,
+            0.35017684886172634
+          ],
+          "matches_twin_rate": 0.21120689655172414,
+          "matches_twin_wilson_ci": [
+            0.1636058023824668,
+            0.2682162341030388
+          ]
+        },
+        "3": {
+          "n": 232,
+          "answer_changed_rate": 0.28879310344827586,
+          "answer_changed_wilson_ci": [
+            0.23429001364259866,
+            0.35017684886172634
+          ],
+          "matches_twin_rate": 0.21120689655172414,
+          "matches_twin_wilson_ci": [
+            0.1636058023824668,
+            0.2682162341030388
+          ]
+        },
+        "4": {
+          "n": 232,
+          "answer_changed_rate": 0.28879310344827586,
+          "answer_changed_wilson_ci": [
+            0.23429001364259866,
+            0.35017684886172634
+          ],
+          "matches_twin_rate": 0.21120689655172414,
+          "matches_twin_wilson_ci": [
+            0.1636058023824668,
+            0.2682162341030388
+          ]
+        },
+        "5": {
+          "n": 232,
+          "answer_changed_rate": 0.28879310344827586,
+          "answer_changed_wilson_ci": [
+            0.23429001364259866,
+            0.35017684886172634
+          ],
+          "matches_twin_rate": 0.21120689655172414,
+          "matches_twin_wilson_ci": [
+            0.1636058023824668,
+            0.2682162341030388
+          ]
+        }
+      },
+      "nonresponsive": {
+        "n": 215,
+        "matches_twin_pred_rate": 0.10232558139534884,
+        "matches_twin_pred_wilson_ci": [
+          0.06854889119254981,
+          0.15006402335386182
+        ],
+        "answer_changed_rate": 0.33488372093023255,
+        "matches_twin_gold_rate": 0.046511627906976744
+      },
+      "cfr": {
+        "n_candidates": 1412,
+        "n_original_correct": 447,
+        "twin_correct_given_original_correct": 0.5190156599552572,
+        "twin_correct_given_original_correct_wilson_ci": [
+          0.4727322307669097,
+          0.564975026061209
+        ],
+        "twin_correct_given_original_wrong": 0.08186528497409326,
+        "both_correct_rate": 0.1643059490084986
+      },
+      "decode_elapsed_sec": 358.77352866064757,
+      "patch_elapsed_sec": 1241.055958517827,
+      "n_trainable_params": 1235820544,
+      "related_runs": [
+        "20260920-195725_coconut_minimal-pair-patch",
+        "20260926-235221_coconut_cfr-minimal-pairs"
+      ]
+    }
+  },
+  "hyperparams": {
+    "num_latents": 6,
+    "n_pairs_cap": 1000,
+    "n_nonresponsive_cap": 300,
+    "deltas": [
+      1,
+      -1,
+      2,
+      -2,
+      3,
+      -3
+    ]
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX A40 (secure, EU-SE-1, $0.59/hr) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "E3 rerun, Coconut, full gold-trace set: minimal-pair patch (all/single/prefix/leave-one-out) + non-responsive pairs + CFR log.",
+  "timestamp_utc": "2026-10-09T09:45:26.381772+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

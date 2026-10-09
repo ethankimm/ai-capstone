@@ -95,7 +95,11 @@ def compute_accuracy(gold: list, pred: list):
 
 
 def build_model(model_args, training_args):
-    target_modules = ["c_attn", "c_proj", 'c_fc']  # the gpt2 branch of test.py
+    # test.py's branches: llama-family vs gpt2 (the only two backbones we load)
+    if any(name in model_args.model_name_or_path.lower() for name in ["llama", "mistral", "falcon", "qwen"]):
+        target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "up_proj", "down_proj", "gate_proj"]
+    else:
+        target_modules = ["c_attn", "c_proj", 'c_fc']
     lora_config = LoraConfig(
         task_type=TaskType.CAUSAL_LM,
         inference_mode=False,

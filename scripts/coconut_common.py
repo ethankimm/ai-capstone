@@ -164,10 +164,16 @@ def finish_and_decode(base_model, embedding, tokenizer, inputs_embeds, kv_cache,
     new_embed = embedding(torch.tensor(next_token, device=device)).view(1, 1, -1)
     new_inputs_embeds = torch.cat((inputs_embeds, new_embed), dim=1)
 
+    # Llama-Instruct ends turns with <|eot_id|>; the reference Coconut.generate stops on it too
+    # (GPT-2 maps unknown tokens to unk == eos, so only add eot when it is a real, distinct token)
+    stop_ids = {eos_token_id}
+    eot_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
+    if eot_id is not None and eot_id != tokenizer.unk_token_id:
+        stop_ids.add(eot_id)
     for _ in range(max_new_tokens - 1):
         outputs = base_model(inputs_embeds=new_inputs_embeds)
         next_token = torch.argmax(outputs.logits[0, -1]).item()
-        if next_token == eos_token_id:
+        if next_token in stop_ids:
             break
         tokens.append(next_token)
         new_embed = embedding(torch.tensor(next_token, device=device)).view(1, 1, -1)

@@ -291,7 +291,7 @@ def main() -> None:
         run_id=new_run_id("codi", mpa.slug),
         mechanism="codi",
         stage=mpa.stage,
-        model=ModelInfo(backbone="gpt2", checkpoint=mpa.checkpoint_label or model_args.ckpt_dir, n_params=n_params),
+        model=ModelInfo(backbone=model_args.model_name_or_path, checkpoint=mpa.checkpoint_label or model_args.ckpt_dir, n_params=n_params),
         dataset=DatasetInfo(name="gsm8k-aug", split="test", n_examples=len(examples),
                             seed=mpa.eval_seed if mpa.eval_n else None),
         metrics=metrics,

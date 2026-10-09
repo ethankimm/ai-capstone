@@ -7616,3 +7616,113 @@ run's own_sub. Coordinate-map eval R²: z0 0.491, z2 0.327, z4 0.279 (complement
 **Next:** This completes the round-4 "wrong basis" follow-up: 4 subspace-ladder runs (2 directions
 x k∈{16,32}), all logged. Combined with Experiment B's own-mechanism result and Experiment A's
 question-only control, this is a full 12-run round; see `MEMORY.md`/results index for the summary.
+
+---
+
+## 2026-10-09 — Coconut Llama-3.2-1B: reproduction gate + E3 twin transplant (coconut, run_id: 20261009-094526_coconut_llama1b-minimal-pair-patch)
+
+**Goal:** Same as the paired CODI run (`20261009-102724_codi_llama1b-minimal-pair-patch`): (1) reproduction gate
+for the released Llama-3.2-1B Coconut checkpoint; (2) does the GPT-2 E3 twin transplant
+(`20260927-003331_coconut_minimal-pair-patch-full`: all-slot 0.827, value in passes 1 and 4) hold on Llama?
+Same script, same caps.
+**Mechanism / model:** `coconut`, backbone `unsloth/Llama-3.2-1B-Instruct@5a8abab` (tokenizer patched to Meta's
+defaults) + `connordilgren/llama32-1b-gsm8k-coconut@49dc864/checkpoint_10`, 6 latent passes.
+**Data:** gsm8k-aug test, gold-trace set n=1194 (same filter as the GPT-2 run).
+**Hyperparams:** Coconut env pins (torch 2.5.1, transformers 4.46.2), greedy; pair caps 1000 / 300; deltas ±1..3.
+**Command:** `eval_command.txt`. Code change: `coconut_common.finish_and_decode` also stops on `<|eot_id|>`,
+as the reference `Coconut.generate` does for Llama (GPT-2 behaviour unchanged).
+**Headline results:**
+- **Gate passes:** base accuracy **0.364** vs 0.357 in Dilgren & Wiegreffe Table 1 (Coconut paper 0.453 used
+  a different setup). Loaded with missing=0 unexpected=0.
+- Twin transplant, n=232 qualified pairs:
+
+| pass | single | leave-one-out | prefix 0..p | GPT-2 single / LOO |
+|---|---|---|---|---|
+| 0 | **0.190** | **0.159** | 0.190 | 0.013 / 0.818 |
+| 1 | 0.147 | 0.211 | 0.194 | 0.558 / 0.398 |
+| 2 | 0.091 | 0.211 | 0.203 | 0.000 / 0.827 |
+| 3 | 0.056 | 0.211 | 0.207 | 0.026 / 0.818 |
+| 4 | 0.017 | 0.211 | 0.211 | 0.338 / 0.628 |
+| 5 | 0.009 | 0.211 | 0.216 | 0.004 / 0.784 |
+| **ALL-SLOT** | **0.216** [0.167, 0.273] (changed 0.293) | | | 0.827 [0.773, 0.870] |
+
+- Non-responsive pairs (n=215): all-slot moves the recipient to the twin's wrong answer 0.102 [0.069, 0.150]
+  (GPT-2 0.489).
+- CFR: 232/447 = 0.519 [0.473, 0.565] (GPT-2 0.559); P(twin correct | original wrong) = 0.082.
+
+**Interpretation:** **The Coconut transplant result does not port.** Replacing all six continuous thoughts with
+the twin's changes the answer in only 29% of pairs and steers it to the twin's answer in 22% (GPT-2: 83%).
+Whatever steering there is comes almost entirely from pass 0. Passes 1–5 add ~2.5 pp in the prefix curve, and
+leaving any of passes 1–5 out costs nothing. The answer is mostly determined by the question tokens, which the
+answer positions can still attend to. That fits two readings, which this run cannot yet separate:
+(a) Llama-1B Coconut does most of its computation outside the latents (latents mostly unused, a known worry
+for Coconut at scale), or (b) the value is in the latents but redundantly re-derivable from the question, so
+overwriting them is "corrected". The decisive control is ablation: zero or mean-replace all latents and check
+whether accuracy drops. If it barely moves, (a) holds.
+This makes the Q1/Q3 picture method-dependent across families: CODI's finding ports (0.84 → 0.69), Coconut's does not (0.83 → 0.22).
+**Gotchas hit:** without the `<|eot_id|>` stop, generation runs past the answer turn. The smoke test caught it
+only indirectly; checking `finish_and_decode` against the reference generate did.
+**Caveats:** single seed, greedy. Different pair sets per model. Before trusting the null, confirm with the ablation
+control above. A pass-indexing bug is unlikely, since it is the same code that gives the GPT-2 table and the
+checkpoint loads cleanly with gate accuracy matching the paper, but the ablation would also expose one.
+**Next:** latent-ablation control on Llama Coconut (cheap: one decode pass, ~6 min); then the Q2 decode control.
+
+---
+
+## 2026-10-09 — CODI Llama-3.2-1B: reproduction gate + E3 twin transplant (codi, run_id: 20261009-102724_codi_llama1b-minimal-pair-patch)
+
+**Goal:** First cross-family check. (1) Reproduction gate: does the released Llama-3.2-1B CODI checkpoint
+reproduce the paper's GSM8K-Aug accuracy under our eval code? (2) Does the GPT-2 E3 minimal-pair (twin)
+transplant result (aligned all-slot 0.839, value on z0/z2/z4; `20260927-004340_codi_minimal-pair-patch-aligned`)
+hold on a different, 8x larger model family? The design is identical to the GPT-2 run: same script, same caps
+and same aligned site convention (patch site s as `{s+1: twin z_s}`).
+**Mechanism / model:** `codi`, backbone `unsloth/Llama-3.2-1B-Instruct@5a8abab` (ungated mirror of
+`meta-llama/Llama-3.2-1B-Instruct`; tokenizer/config patched to Meta's defaults: no pad token,
+PreTrainedTokenizerFast, no pad_token_id) + `connordilgren/llama32-1b-gsm8k-codi@5f670c7` (Dilgren & Wiegreffe
+release), compute_steps=6.
+**Data:** gsm8k-aug test, full n=1319; run seed=11.
+**Hyperparams:** bf16, LoRA r=128 alpha=32 on q/k/v/o/up/down/gate_proj, prj_dim=2048, num_latent=6, greedy;
+pair caps 1000 / non-responsive cap 300; deltas ±1..3.
+**Command:** see `eval_command.txt` (run from `/workspace/codi` with the CODI env; `--model_name_or_path
+/workspace/llama32-1b-instruct --ckpt_dir /workspace/codi_llama --prj_dim 2048 --eval_n 0 --n_pairs 1000
+--n_nonresponsive 300`). Code changes needed: `eval_codi.build_model` picks LoRA targets by family;
+`patch_minimal_pair_codi.py` records the real backbone.
+**Headline results:**
+- **Gate passes:** base accuracy **0.566** (746/1319) vs 0.560 in Dilgren & Wiegreffe Table 1 (CODI paper 0.556).
+  Checkpoint loaded with missing=0 unexpected=0.
+- Twin transplant, n=471 qualified pairs:
+
+| condition | Llama-1B matches_twin | changed | GPT-2 (n=317) |
+|---|---|---|---|
+| **ALL-SLOT aligned** | **0.692** [0.649, 0.732] | 0.828 | 0.839 [0.795, 0.875] |
+| ALL-SLOT legacy | 0.594 | 0.773 | 0.713 |
+
+| site | single | leave-one-out | prefix z0..s | GPT-2 single / LOO |
+|---|---|---|---|---|
+| z0 | 0.000 | 0.699 | 0.000 | 0.199 / 0.729 |
+| z1 | **0.384** | **0.251** | 0.384 | 0.003 / 0.839 |
+| z2 | 0.028 | 0.686 | 0.467 | 0.202 / 0.659 |
+| z3 | 0.000 | 0.696 | 0.469 | 0.000 / 0.836 |
+| z4 | **0.217** | **0.482** | 0.667 | 0.360 / 0.546 |
+| z5 | 0.004 | 0.667 | 0.692 | 0.000 / 0.842 |
+
+- Non-responsive pairs (n=272, twin answered wrong): all-slot moves the recipient to the twin's wrong answer
+  0.474 [0.416, 0.534] (GPT-2 0.533).
+- CFR: P(twin correct | original correct) = 471/743 = 0.634 [0.599, 0.668] (GPT-2 0.581);
+  P(twin correct | original wrong) = 0.085.
+
+**Interpretation:** The core Q1 finding replicates across families: transplanting the twin's latents moves
+the answer to the twin's answer in most pairs (0.69), and also carries the twin's wrong answers. That means the
+latents carry the problem-specific value, not just a "be correct" signal. The effect is weaker than on GPT-2
+(0.69 vs 0.84, non-overlapping CIs). Localization is sparse in both models: a few slots carry the value and
+the rest are inert (single ≈ 0, LOO ≈ all-slot). **The slots differ, though.** GPT-2 uses z0/z2/z4 (even
+slots), while Llama uses z1 (strongest) and z4, and z0 is inert. So the qualitative claim ports ("value lives
+in a sparse subset of slots"), but a slot-index-level claim does not. Any cross-model mapping needs to be
+learned per model, not assumed by position.
+**Gotchas hit:** the gated meta-llama repo needs a token, so we used the unsloth mirror with the tokenizer
+config patched to Meta's. LoRA target modules had been hard-coded to GPT-2 names (c_attn etc.), which would
+have silently loaded nothing for Llama. Fixed, and the load is confirmed by missing=0 unexpected=0.
+**Caveats:** single seed, greedy. Qualified pairs differ between models (each model's own correct originals),
+so the GPT-2 vs Llama comparison is on different pair sets. The legacy row is kept only for continuity.
+**Next:** Q2 decode control on Llama (does a probe read the value at z1/z4 where the transplant says it lives?);
+a within-method baseline (CODI GPT-2 seed vs seed) to answer the advisor's pretraining-artifact concern.

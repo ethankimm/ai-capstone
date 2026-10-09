@@ -96,3 +96,5 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20260928-012717_coconut_xmech-subspace-ladder-codi-to-coconut-k32](20260928-012717_coconut_xmech-subspace-ladder-codi-to-coconut-k32/) | coconut | openai-community/gpt2 | test (n=1319) | 6 | 0.331 | 0 | full_run |  |
 | [20260928-013447_codi_xmech-subspace-ladder-coconut-to-codi-k32](20260928-013447_codi_xmech-subspace-ladder-coconut-to-codi-k32/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run |  |
 | [20260928-013453_codi_xmech-subspace-ladder-coconut-to-codi-k16](20260928-013453_codi_xmech-subspace-ladder-coconut-to-codi-k16/) | codi | gpt2 | test (n=1319) | 6 | 0.419 | 0 | full_run |  |
+| [20261009-094526_coconut_llama1b-minimal-pair-patch](20261009-094526_coconut_llama1b-minimal-pair-patch/) | coconut | /workspace/llama32-1b-instruct | test (n=1194) | 6 | 0.364 | 0 | full_run | Henning Lindig |
+| [20261009-102724_codi_llama1b-minimal-pair-patch](20261009-102724_codi_llama1b-minimal-pair-patch/) | codi | /workspace/llama32-1b-instruct | test (n=1319) | 6 | 0.566 | 0 | full_run | Henning Lindig |
