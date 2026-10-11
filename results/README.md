@@ -100,3 +100,9 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261009-102724_codi_llama1b-minimal-pair-patch](20261009-102724_codi_llama1b-minimal-pair-patch/) | codi | /workspace/llama32-1b-instruct | test (n=1319) | 6 | 0.566 | 0 | full_run | Henning Lindig |
 | [20261009-231032_codi_llama1b-necessity-all-replacements](20261009-231032_codi_llama1b-necessity-all-replacements/) | codi | /workspace/llama32-1b-instruct | test (n=1319) | 6 | 0.566 | 0 | full_run | Henning Lindig |
 | [20261009-231035_coconut_llama1b-necessity-all-replacements](20261009-231035_coconut_llama1b-necessity-all-replacements/) | coconut | /workspace/llama32-1b-instruct | test (n=1319) | 6 | 0.359 | 0 | full_run | Henning Lindig |
+| [20261011-050903_coconut_zhang-swap-gsm8k](20261011-050903_coconut_zhang-swap-gsm8k/) | coconut | openai-community/gpt2 | test (n=1194) | 6 | 0.336 | 0 | pilot | Henning Lindig |
+| [20261011-051254_coconut_zhang-swap-prontoqa](20261011-051254_coconut_zhang-swap-prontoqa/) | coconut | openai-community/gpt2 | test (n=800) | 6 | 0.990 | 0 | pilot | Henning Lindig |
+| [20261011-052217_coconut_zhang-swap-prosqa](20261011-052217_coconut_zhang-swap-prosqa/) | coconut | openai-community/gpt2 | test (n=500) | 6 | 0.980 | 0 | pilot | Henning Lindig |
+| [20261011-052723_explicit_cot_zhang-swap-gsm8k](20261011-052723_explicit_cot_zhang-swap-gsm8k/) | explicit_cot | openai-community/gpt2 | test (n=1194) | None | 0.429 | 0 | pilot | Henning Lindig |
+| [20261011-053511_explicit_cot_zhang-swap-prontoqa](20261011-053511_explicit_cot_zhang-swap-prontoqa/) | explicit_cot | openai-community/gpt2 | test (n=800) | None | 0.993 | 0 | pilot | Henning Lindig |
+| [20261011-053847_explicit_cot_zhang-swap-prosqa](20261011-053847_explicit_cot_zhang-swap-prosqa/) | explicit_cot | openai-community/gpt2 | test (n=500) | None | 0.742 | 0 | pilot | Henning Lindig |

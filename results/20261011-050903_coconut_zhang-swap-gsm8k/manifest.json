@@ -1,0 +1,144 @@
+{
+  "run_id": "20261011-050903_coconut_zhang-swap-gsm8k",
+  "mechanism": "coconut",
+  "stage": "pilot",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut/checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1194,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.3358458961474037,
+    "compute_steps": 6,
+    "sec_per_example": 0.09237051762317165,
+    "intervention_accuracy": 0.04020100502512563,
+    "extra": {
+      "design": "Zhang et al. 2025 random-permutation full-chain swap (+ E3 twin swap on gsm8k, same recipients); IR = answer changed; steer = P(answer == donor's | donor differs)",
+      "accuracy_before": 0.3358458961474037,
+      "random_swap_all": {
+        "n": 1194,
+        "n_skipped": 0,
+        "accuracy_after": 0.04020100502512563,
+        "accuracy_after_ci": [
+          0.03045421181656631,
+          0.05289704263978251
+        ],
+        "ir": 0.9246231155778895,
+        "ir_ci": [
+          0.9082488391605404,
+          0.9382737728442522
+        ],
+        "n_donor_differs": 1186,
+        "steer": 0.07841483979763912,
+        "steer_ci": [
+          0.06444057058554223,
+          0.09511142356225022
+        ]
+      },
+      "random_swap_base_correct": {
+        "n": 401,
+        "n_skipped": 0,
+        "accuracy_after": 0.07231920199501247,
+        "accuracy_after_ci": [
+          0.05082193172050734,
+          0.10193312111991223
+        ],
+        "ir": 0.9276807980049875,
+        "ir_ci": [
+          0.8980668788800876,
+          0.9491780682794926
+        ],
+        "n_donor_differs": 399,
+        "steer": 0.10025062656641603,
+        "steer_ci": [
+          0.07448730038572754,
+          0.13363817622840565
+        ]
+      },
+      "twin_swap_base_correct": {
+        "n": 179,
+        "n_skipped": 0,
+        "accuracy_after": 0.0782122905027933,
+        "accuracy_after_ci": [
+          0.04715821351030407,
+          0.12699033911666924
+        ],
+        "ir": 0.9217877094972067,
+        "ir_ci": [
+          0.8730096608833308,
+          0.952841786489696
+        ],
+        "n_donor_differs": 178,
+        "steer": 0.8707865168539326,
+        "steer_ci": [
+          0.8135729857934059,
+          0.9123335174489765
+        ]
+      },
+      "random_swap_on_twin_recipients": {
+        "n": 179,
+        "n_skipped": 0,
+        "accuracy_after": 0.0670391061452514,
+        "accuracy_after_ci": [
+          0.03876136589053865,
+          0.11351032720337433
+        ],
+        "ir": 0.9329608938547486,
+        "ir_ci": [
+          0.8864896727966256,
+          0.9612386341094614
+        ],
+        "n_donor_differs": 179,
+        "steer": 0.13966480446927373,
+        "steer_ci": [
+          0.09642311191795816,
+          0.1980481681408468
+        ]
+      },
+      "paired_ir_twin_vs_random": {
+        "n": 179,
+        "b_twin_only": 10,
+        "c_random_only": 12,
+        "mcnemar_p": 0.8318119049072266
+      },
+      "cfr": {
+        "n_candidates": 294,
+        "n_twins_decoded": 294,
+        "n_responsive": 179,
+        "twin_correct_given_original_correct": 0.608843537414966
+      },
+      "decode_elapsed_sec": 110.29039804206695,
+      "swap_elapsed_sec": 152.09149795898702
+    }
+  },
+  "hyperparams": {
+    "method": "coconut",
+    "num_latents": 6,
+    "perm_seed": 0,
+    "n_twin_cap": 400,
+    "max_new_tokens": 48,
+    "deltas": [
+      1,
+      -1,
+      2,
+      -2,
+      3,
+      -3
+    ]
+  },
+  "seed": 0,
+  "hardware": "local Apple Silicon CPU / cpu",
+  "author": "Henning Lindig",
+  "notes": "Zhang-style random swap vs twin swap, coconut on gsm8k.",
+  "timestamp_utc": "2026-10-11T05:09:03.672472+00:00",
+  "git": {
+    "commit": "acfdd67",
+    "dirty": true
+  }
+}

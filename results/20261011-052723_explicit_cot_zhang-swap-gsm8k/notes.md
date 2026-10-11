@@ -1,0 +1,13 @@
+## 2026-10-11 — Zhang-style random swap + twin swap, cot on gsm8k (explicit_cot, run_id: 20261011-052723_explicit_cot_zhang-swap-gsm8k)
+
+**Goal:** Pilot from PILOT_ZHANG_SWAP.md: replicate Zhang et al. 2025's random-permutation latent/CoT swap (arXiv 2512.21711, Table 3) on the Dilgren & Wiegreffe GPT-2 grid, next to our E3 twin swap on the same recipients (GSM8K only). Does the 'latents are placeholders' verdict depend on the intervention, the task, or the method?
+**Mechanism / model:** `explicit_cot`, openai-community/gpt2 / hf:connordilgren/gpt2-gsm8k-cot/checkpoint_25, compute_steps=None.
+**Data:** gsm8k-aug test n=1194 seed=0; run seed=0.
+**Hyperparams:** {'method': 'cot', 'num_latents': 6, 'perm_seed': 0, 'n_twin_cap': 400, 'max_new_tokens': 256, 'deltas': [1, -1, 2, -2, 3, -3]}
+**Command:** `scripts/swap_random_coconut.py --method cot --dataset gsm8k --checkpoint_path <grid>/gpt2-gsm8k-cot/checkpoint_25 --checkpoint_label hf:connordilgren/gpt2-gsm8k-cot/checkpoint_25 --data_dir ~/Projects/are-lrms-easily-interpretable/data --device cpu --slug zhang-swap-gsm8k --stage pilot --hardware 'local Apple Silicon CPU'  (venv pinned to Coconut's requirements: torch 2.5.1, transformers 4.46.2)`
+**Headline results:** `final_answer_accuracy=0.429`, `compute_steps=None`
+**Results:** Random swap (donor's generated reasoning text before '###'): accuracy 0.429 -> 0.009, IR 99.2%, steer 95.3% (n=1194). Twin swap (n=241, CFR 0.64): IR 99.6%, steer 100%. On the same recipients, random steer is 97.0%.
+**Interpretation:** Positive control, Zhang's CoT row: the explicit-CoT model copies whatever answer its reasoning text implies, from any donor. This contrasts with Coconut on GSM8K, where random donors break the answer but don't transfer theirs (8%).
+**Gotchas hit:** The local transformers 5.x breaks coconut_common's legacy KV-cache slicing, so I used a scratch venv pinned to Coconut's requirements. Grid CoT/no-CoT checkpoints keep the base vocab (50257), while the Coconut ones have +3 latent tokens; the loader now resizes to the checkpoint's vocab.
+**Caveats:** Single seed and permutation. GPT-2 only. CODI is not in this pilot (its scripts hard-code CUDA): CODI GSM8K/ProntoQA/ProsQA is the next step. Steer is defined as P(swapped answer == donor's own base answer AND != recipient's base answer | donor answer differs). On ProntoQA, binary answers make ~50% steer the chance level. Swaps are full-chain (all 6 latent passes / the whole reasoning text). The CoT splice re-tokenizes the donor's decoded text.
+**Next:** CODI rows (GSM8K zen-E + grid ProntoQA/ProsQA, on RunPod); Llama-1B grid; no-CoT parity check on our own pool; decide the paper angle (PILOT_ZHANG_SWAP.md).

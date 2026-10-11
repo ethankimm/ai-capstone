@@ -1,0 +1,105 @@
+{
+  "run_id": "20261011-053511_explicit_cot_zhang-swap-prontoqa",
+  "mechanism": "explicit_cot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-prontoqa-cot/checkpoint_25",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "prontoqa",
+    "split": "test",
+    "n_examples": 800,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.9925,
+    "compute_steps": null,
+    "sec_per_example": 0.52734448874995,
+    "intervention_accuracy": 0.52,
+    "extra": {
+      "design": "Zhang et al. 2025 random-permutation full-chain swap (+ E3 twin swap on gsm8k, same recipients); IR = answer changed; steer = P(answer == donor's | donor differs)",
+      "accuracy_before": 0.9925,
+      "random_swap_all": {
+        "n": 800,
+        "n_skipped": 0,
+        "accuracy_after": 0.52,
+        "accuracy_after_ci": [
+          0.4853666097760782,
+          0.5544422281840373
+        ],
+        "ir": 0.4825,
+        "ir_ci": [
+          0.44803936962182556,
+          0.5171278971630733
+        ],
+        "n_donor_differs": 406,
+        "steer": 0.4852216748768473,
+        "steer_ci": [
+          0.43697304641796925,
+          0.5337473489738116
+        ]
+      },
+      "random_swap_base_correct": {
+        "n": 794,
+        "n_skipped": 0,
+        "accuracy_after": 0.5188916876574308,
+        "accuracy_after_ci": [
+          0.4841303113868109,
+          0.553471137321805
+        ],
+        "ir": 0.4811083123425693,
+        "ir_ci": [
+          0.44652886267819514,
+          0.5158696886131892
+        ],
+        "n_donor_differs": 403,
+        "steer": 0.48635235732009924,
+        "steer_ci": [
+          0.4379129046464287,
+          0.5350495456044797
+        ]
+      },
+      "twin_swap_base_correct": {
+        "n": 0
+      },
+      "random_swap_on_twin_recipients": {
+        "n": 0
+      },
+      "paired_ir_twin_vs_random": {
+        "n": 0,
+        "b_twin_only": 0,
+        "c_random_only": 0,
+        "mcnemar_p": 1.0
+      },
+      "cfr": null,
+      "decode_elapsed_sec": 421.87559099995997,
+      "swap_elapsed_sec": 43.35066324996296
+    }
+  },
+  "hyperparams": {
+    "method": "cot",
+    "num_latents": 6,
+    "perm_seed": 0,
+    "n_twin_cap": 400,
+    "max_new_tokens": 256,
+    "deltas": [
+      1,
+      -1,
+      2,
+      -2,
+      3,
+      -3
+    ]
+  },
+  "seed": 0,
+  "hardware": "local Apple Silicon CPU / cpu",
+  "author": "Henning Lindig",
+  "notes": "Zhang-style random swap vs twin swap, cot on prontoqa.",
+  "timestamp_utc": "2026-10-11T05:35:11.310782+00:00",
+  "git": {
+    "commit": "acfdd67",
+    "dirty": true
+  }
+}
