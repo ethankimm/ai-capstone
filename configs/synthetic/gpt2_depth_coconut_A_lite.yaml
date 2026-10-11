@@ -3,8 +3,9 @@
 # epochs_per_stage 1 instead of 3, to fit the Phase A budget. Initialized from the step-2 depth CoT
 # checkpoint (gpt2_depth_cot/checkpoint_1, test 0.999), resume 1 = skip the stage-0 (CoT) epoch.
 # Epoch e -> stage e: epochs 1-3 = stages 1-3 (first k written steps -> 2k latents, rest written);
-# epochs 4-6 = stage 4 > max_latent_stage -> ALL written steps dropped, 6 latents (pad_latent_to_max).
-# So 3 epochs of curriculum + 3 epochs at the final all-latent stage. save_only_improve False: one
+# epoch 4 = stage 4 > max_latent_stage -> ALL written steps dropped, 6 latents (pad_latent_to_max).
+# So 3 epochs of curriculum + 1 epoch at the final all-latent stage. (Planned 3 final epochs, num_epochs 7;
+# cut to 1 on 2026-10-11 after measuring 7.9 s/step solo on an A40 = ~1.7-2.5 h/epoch.) save_only_improve False: one
 # checkpoint per epoch (stage switches drop accuracy, "best" would freeze at an early stage);
 # evaluate the last one (final stage).
 # Launch: cd /workspace/coconut && WANDB_MODE=disabled torchrun --nnodes 1 --nproc_per_node 1 run.py <this file>
@@ -38,6 +39,6 @@ reset_optimizer: True
 batch_size_training: 32
 debug: False
 gradient_accumulation_steps: 4
-num_epochs: 7
+num_epochs: 5
 lr: !!float "1e-4"
 weight_decay: 0.01

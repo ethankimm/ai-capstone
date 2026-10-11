@@ -61,7 +61,7 @@ job() {
       codi_eval $ck $DATA/depth/test.json --checkpoint_label "$ck" --train_log_from $(codi_ckpt)/trainer_state.json \
           --slug synthetic-depth-codi --stage pilot > $LOGS/gpt2_depth_codi.eval 2>&1 ;;
     filler6_long)
-      uv run python scripts/train_synthetic.py --method filler_tokens --compute-steps 6 --faithful \
+      .venv/bin/python scripts/train_synthetic.py --method filler_tokens --compute-steps 6 --faithful \
           --train-json $DATA/depth/train.json --val-json $DATA/depth/valid_monitor.json \
           --test-json $DATA/depth/test.json --epochs $FILLER_EPOCHS --batch-size 32 --grad-accum 4 --lr 1e-4 \
           --early-stop-patience 0 --output-dir /workspace/synthetic_runs/synthetic-depth-filler6-faithful-25ep \
