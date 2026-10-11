@@ -39,13 +39,18 @@ setup() {
 coconut_job() {  # name (= config basename), method (cot|no_cot), task
   local name=$1 method=$2 task=$3 port=$4
   local log=$LOGS/$name.log
-  (cd /workspace/coconut && WANDB_MODE=disabled setsid $REPO/.venv_coconut/bin/torchrun --nnodes 1 \
-      --nproc_per_node 1 --master_port $port run.py $REPO/configs/synthetic/$name.yaml > $log 2>&1) &
-  local pid=$!
+  # setsid'd torchrun writes its own pid (= its process group id): $! of a subshell is NOT the
+  # torchrun group, so killpg on it hit the job wrapper instead of training (step 2 depth no-CoT
+  # kept training to epoch 25 and its eval never ran).
+  (cd /workspace/coconut && WANDB_MODE=disabled setsid bash -c 'echo $$ > '$LOGS/$name.pid'; exec "$@"' _ \
+      $REPO/.venv_coconut/bin/torchrun --nnodes 1 --nproc_per_node 1 --master_port $port run.py \
+      $REPO/configs/synthetic/$name.yaml > $log 2>&1) &
+  local sub=$!
   sleep 5
+  local pid=$(cat $LOGS/$name.pid)
   .venv_coconut/bin/python scripts/pod/coconut_watch.py --log $log --pid $pid \
       --patience $PATIENCE --max-epochs $MAX_EPOCHS >> $LOGS/$name.watch 2>&1 || true
-  wait $pid || true
+  wait $sub || true
   local ckpt=$(ls -v /workspace/coconut_runs/$name/checkpoint_* | tail -1)
   .venv_coconut/bin/python scripts/eval_synthetic_coconut.py --method $method --checkpoint_path $ckpt \
       --checkpoint_label "$ckpt" --test_json $DATA/$task/test.json --train_log $log \
