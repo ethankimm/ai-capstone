@@ -1,0 +1,160 @@
+{
+  "run_id": "20261011-090628_coconut_twin-magnitude-gsm8k",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1194,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.3358458961474037,
+    "compute_steps": 6,
+    "sec_per_example": 0.058584456918004534,
+    "intervention_accuracy": 0.8450772200772201,
+    "extra": {
+      "change_set": "1,-1,2,-2,3,-3,5,-5,10,-10,20,-20,x0.5,x1.25,x1.5,x2,x3",
+      "conditions": "all_slot",
+      "hidden_operand_filter": false,
+      "n_candidates_hidden_operand_ok": 4374,
+      "design": "E3 rerun at full n: same-problem minimal-pair patch (all/single/prefix/leave-one-out), non-responsive pairs, full CFR log",
+      "site_definition": "pass p = vector spliced into the p-th <|latent|> slot (pass 0 = hidden at <|start-latent|>)",
+      "n_examples_decoded": 1194,
+      "n_qualified_pairs": 2072,
+      "all_slot": {
+        "n": 2072,
+        "answer_changed_rate": 0.9502895752895753,
+        "answer_changed_wilson_ci": [
+          0.9400692178513912,
+          0.9588433003291865
+        ],
+        "matches_twin_rate": 0.8450772200772201,
+        "matches_twin_wilson_ci": [
+          0.8288599557669689,
+          0.8600172687765608
+        ]
+      },
+      "magnitude_bins": {
+        "<=5%": {
+          "n": 135,
+          "steer_rate": 0.5111111111111111,
+          "steer_wilson_ci": [
+            0.42765373089299835,
+            0.5939536259798697
+          ],
+          "mean_fraction_moved": 1.0438218390804597,
+          "mean_fraction_moved_clipped": 0.7420977011494254,
+          "median_fraction_moved": 1.0,
+          "n_fraction_parseable": 116
+        },
+        "5-15%": {
+          "n": 345,
+          "steer_rate": 0.8695652173913043,
+          "steer_wilson_ci": [
+            0.8299199538080119,
+            0.9010708454544613
+          ],
+          "mean_fraction_moved": 0.9457139224873781,
+          "mean_fraction_moved_clipped": 0.9278332524327949,
+          "median_fraction_moved": 1.0,
+          "n_fraction_parseable": 345
+        },
+        "15-40%": {
+          "n": 588,
+          "steer_rate": 0.8809523809523809,
+          "steer_wilson_ci": [
+            0.852271783726833,
+            0.9046875107871046
+          ],
+          "mean_fraction_moved": 0.8696047821260047,
+          "mean_fraction_moved_clipped": 0.9215017439182402,
+          "median_fraction_moved": 1.0,
+          "n_fraction_parseable": 588
+        },
+        "40-100%": {
+          "n": 660,
+          "steer_rate": 0.8712121212121212,
+          "steer_wilson_ci": [
+            0.8434921559179152,
+            0.8946357348319263
+          ],
+          "mean_fraction_moved": 0.8927622040249795,
+          "mean_fraction_moved_clipped": 0.913170192977795,
+          "median_fraction_moved": 1.0,
+          "n_fraction_parseable": 660
+        },
+        ">100%": {
+          "n": 344,
+          "steer_rate": 0.8401162790697675,
+          "steer_wilson_ci": [
+            0.7976616226736669,
+            0.8750583740144809
+          ],
+          "mean_fraction_moved": 0.8932607178665548,
+          "mean_fraction_moved_clipped": 0.8944399538310187,
+          "median_fraction_moved": 1.0,
+          "n_fraction_parseable": 344
+        }
+      },
+      "nonresponsive": {
+        "n": 300,
+        "matches_twin_pred_rate": 0.47333333333333333,
+        "matches_twin_pred_wilson_ci": [
+          0.41752799159808596,
+          0.5298129913351266
+        ],
+        "answer_changed_rate": 0.8033333333333333,
+        "matches_twin_gold_rate": 0.03666666666666667
+      },
+      "cfr": {
+        "n_candidates": 10951,
+        "n_original_correct": 3530,
+        "twin_correct_given_original_correct": 0.5869688385269122,
+        "twin_correct_given_original_correct_wilson_ci": [
+          0.5706397989938538,
+          0.6031087923408568
+        ],
+        "twin_correct_given_original_wrong": 0.06158199703543997,
+        "both_correct_rate": 0.1892064651629988
+      },
+      "decode_elapsed_sec": 69.94984156009741,
+      "patch_elapsed_sec": 136.64335057884455,
+      "n_trainable_params": 124442112,
+      "related_runs": [
+        "20260920-195725_coconut_minimal-pair-patch",
+        "20260926-235221_coconut_cfr-minimal-pairs"
+      ]
+    }
+  },
+  "hyperparams": {
+    "num_latents": 6,
+    "n_pairs_cap": 100000,
+    "n_nonresponsive_cap": 300,
+    "deltas": [
+      1,
+      -1,
+      2,
+      -2,
+      3,
+      -3
+    ],
+    "change_set": "1,-1,2,-2,3,-3,5,-5,10,-10,20,-20,x0.5,x1.25,x1.5,x2,x3",
+    "conditions": "all_slot",
+    "hidden_operand_filter": false
+  },
+  "seed": 0,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "E3 rerun, Coconut, full gold-trace set: minimal-pair patch (all/single/prefix/leave-one-out) + non-responsive pairs + CFR log.",
+  "timestamp_utc": "2026-10-11T09:06:28.600578+00:00",
+  "git": {
+    "commit": "0d7c26e",
+    "dirty": true
+  }
+}

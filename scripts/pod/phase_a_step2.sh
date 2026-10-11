@@ -17,7 +17,7 @@ LOGS=/workspace/logs
 COCONUT_COMMIT=27273cb8cca4bb763c041a63b036d0c3b7cbbb48
 PATIENCE=${PATIENCE:-2}
 MAX_EPOCHS=${MAX_EPOCHS:-10}
-SLOTS=${SLOTS:-5}
+SLOTS=${SLOTS:-4}
 HW="RunPod ${GPU_LABEL:-GPU} (secure)"
 export PATH="$HOME/.local/bin:$PATH"
 mkdir -p $RUNS $LOGS
@@ -39,7 +39,7 @@ setup() {
 coconut_job() {  # name (= config basename), method (cot|no_cot), task
   local name=$1 method=$2 task=$3 port=$4
   local log=$LOGS/$name.log
-  (cd /workspace/coconut && WANDB_MODE=offline setsid $REPO/.venv_coconut/bin/torchrun --nnodes 1 \
+  (cd /workspace/coconut && WANDB_MODE=disabled setsid $REPO/.venv_coconut/bin/torchrun --nnodes 1 \
       --nproc_per_node 1 --master_port $port run.py $REPO/configs/synthetic/$name.yaml > $log 2>&1) &
   local pid=$!
   sleep 5

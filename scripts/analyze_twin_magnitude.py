@@ -35,8 +35,11 @@ def load_rows(run_dir: Path) -> list[dict]:
     rows = []
     for line in (run_dir / "predictions.jsonl").read_text().splitlines():
         r = json.loads(line)
-        if r.get("rel_answer_change") is None:
-            continue  # original answer 0: relative change undefined
+        if not r.get("rel_answer_change"):
+            # None: original answer 0, relative change undefined. 0: the changed step does not
+            # reach the final answer (e.g. the answer is an earlier step), so steering is undefined
+            # (matches_twin is False by construction). Both excluded; counted in `n_excluded`.
+            continue
         rows.append({
             "matches_twin": bool(r["all_slot"]["matches_twin"]),
             "answer_changed": bool(r["all_slot"]["answer_changed"]),
@@ -122,8 +125,11 @@ def main() -> None:
     report, md = {}, []
     for d in args.run_dirs:
         rows = load_rows(d)
-        res = {"filtered": analyze([r for r in rows if r["hidden_operand_ok"]]), "all": analyze(rows)}
+        n_total = sum(1 for _ in (d / "predictions.jsonl").open())
+        res = {"n_excluded_undefined_change": n_total - len(rows),"filtered": analyze([r for r in rows if r["hidden_operand_ok"]]), "all": analyze(rows)}
         report[d.name] = res
+        md.append(f"_{n_total - len(rows)} of {n_total} pairs excluded: twin answer equal to the original, "
+                  "or original answer 0._\n")
         for pop in ("filtered", "all"):
             r = res[pop]
             md.append(f"### {d.name}: {pop} (n={r['overall']['n']}, steer {r['overall']['steer_rate']:.3f})")

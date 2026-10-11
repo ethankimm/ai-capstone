@@ -109,3 +109,5 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261011-061437_codi_zhang-swap-gsm8k](20261011-061437_codi_zhang-swap-gsm8k/) | codi | gpt2 | test (n=1194) | 6 | 0.441 | 0 | pilot | Henning Lindig |
 | [20261011-061753_codi_zhang-swap-prontoqa](20261011-061753_codi_zhang-swap-prontoqa/) | codi | gpt2 | test (n=800) | 6 | 0.953 | 0 | pilot | Henning Lindig |
 | [20261011-062104_codi_zhang-swap-prosqa](20261011-062104_codi_zhang-swap-prosqa/) | codi | gpt2 | test (n=500) | 6 | 0.816 | 0 | pilot | Henning Lindig |
+| [20261011-090628_coconut_twin-magnitude-gsm8k](20261011-090628_coconut_twin-magnitude-gsm8k/) | coconut | openai-community/gpt2 | test (n=1194) | 6 | 0.336 | 0 | full_run | Henning Lindig |
+| [20261011-092740_codi_twin-magnitude-gsm8k](20261011-092740_codi_twin-magnitude-gsm8k/) | codi | gpt2 | test (n=1319) | 6 | 0.415 | 0 | full_run | Henning Lindig |
