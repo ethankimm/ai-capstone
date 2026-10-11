@@ -92,13 +92,13 @@ case "${1:-}" in
     export REPO DATA RUNS LOGS PATIENCE MAX_EPOCHS HW PATH
     nohup bash -c "echo $JOBS | tr ' ' '\n' | xargs -P $SLOTS -I{} bash -c 'job {}'" > $LOGS/step2.log 2>&1 &
     echo launched ;;
-  queue)  # bash phase_a_step2.sh queue job1 job2 ...: start each job once >= 18 GB GPU memory is free
+  queue)  # bash phase_a_step2.sh queue job1 job2 ...: start each job once QUEUE_MIN_FREE_MB (default 9 GB) GPU memory is free
     shift
     export -f job coconut_job ours_job
     export REPO DATA RUNS LOGS PATIENCE MAX_EPOCHS HW PATH
     nohup bash -c '
       for j in '"$*"'; do
-        until [ $(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1) -ge 18000 ]; do sleep 60; done
+        until [ $(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1) -ge ${QUEUE_MIN_FREE_MB:-9000} ]; do sleep 60; done
         echo "$(date -u +%FT%TZ) start $j"; (job $j &) ; sleep 240
       done' > $LOGS/queue.log 2>&1 &
     echo queued ;;
