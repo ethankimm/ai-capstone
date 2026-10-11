@@ -1,0 +1,190 @@
+{
+  "run_id": "20261011-110212_filler_tokens_synthetic-width-filler6-faithful",
+  "mechanism": "filler_tokens",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "~/Documents/Penn/CIS5980/synthetic_checkpoints/synthetic-width-filler6-faithful/best",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "synthetic-width",
+    "split": "test",
+    "n_examples": 7500,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.9978666666666667,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "train_loss": 0.02878416047605407,
+    "sec_per_example": 0.005987901113989453,
+    "extra": {
+      "task": "width",
+      "task_level_range": [
+        2,
+        16
+      ],
+      "seconds_per_epoch": 2255.241016264481,
+      "seconds_per_epoch_all": [
+        2033.8649741029367,
+        2033.2723387270235,
+        2296.4009144341107,
+        2657.425837793853
+      ],
+      "epochs_trained": 4,
+      "best_epoch": 2,
+      "best_monitor_accuracy": 0.9977777777777778,
+      "monitor_accuracy_by_epoch": [
+        0.9888888888888889,
+        0.9977777777777778,
+        0.9977777777777778,
+        0.9977777777777778
+      ],
+      "early_stopped": true,
+      "eval_checkpoint": "best",
+      "test_eval_seconds": 44.909258354920894,
+      "per_level_accuracy": {
+        "2": 0.992,
+        "3": 0.988,
+        "4": 0.99,
+        "5": 0.998,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0,
+        "9": 1.0,
+        "10": 1.0,
+        "11": 1.0,
+        "12": 1.0,
+        "13": 1.0,
+        "14": 1.0,
+        "15": 1.0,
+        "16": 1.0
+      },
+      "per_level_n": {
+        "2": 500,
+        "3": 500,
+        "4": 500,
+        "5": 500,
+        "6": 500,
+        "7": 500,
+        "8": 500,
+        "9": 500,
+        "10": 500,
+        "11": 500,
+        "12": 500,
+        "13": 500,
+        "14": 500,
+        "15": 500,
+        "16": 500
+      },
+      "per_level_ci95": {
+        "2": [
+          0.9796129641658948,
+          0.9968846848199377
+        ],
+        "3": [
+          0.9740696388835527,
+          0.9944890048259724
+        ],
+        "4": [
+          0.9768069002442693,
+          0.9957212461034096
+        ],
+        "5": [
+          0.9887592932948532,
+          0.9996468636054407
+        ],
+        "6": [
+          0.9923756595384479,
+          1.0
+        ],
+        "7": [
+          0.9923756595384479,
+          1.0
+        ],
+        "8": [
+          0.9923756595384479,
+          1.0
+        ],
+        "9": [
+          0.9923756595384479,
+          1.0
+        ],
+        "10": [
+          0.9923756595384479,
+          1.0
+        ],
+        "11": [
+          0.9923756595384479,
+          1.0
+        ],
+        "12": [
+          0.9923756595384479,
+          1.0
+        ],
+        "13": [
+          0.9923756595384479,
+          1.0
+        ],
+        "14": [
+          0.9923756595384479,
+          1.0
+        ],
+        "15": [
+          0.9923756595384479,
+          1.0
+        ],
+        "16": [
+          0.9923756595384479,
+          1.0
+        ]
+      },
+      "curve_fit": {
+        "floor": 1.0,
+        "ceiling": 0.9899988060582885,
+        "midpoint_param": 4.8489999999999975,
+        "slope": 9.169048538786063,
+        "sse": 0.004000011436072533,
+        "rmse": 0.0007302977873052911,
+        "best_observed": 1.0,
+        "halfway_target": 1.0,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": null,
+      "midpoint_status": "beyond_range",
+      "midpoint_extrapolated": null,
+      "auc": 0.998,
+      "cot_leak_rate": 0.0,
+      "flat": true,
+      "checkpoint_pod_path": "/workspace/synthetic_runs/synthetic-width-filler6-faithful/best"
+    }
+  },
+  "hyperparams": {
+    "lr": 0.0001,
+    "max_epochs": 10.0,
+    "batch_size": 32,
+    "grad_accum": 4,
+    "train_n": 100000,
+    "train_json": "/workspace/synthetic_data/width/train.json",
+    "val_json": "/workspace/synthetic_data/width/valid_monitor.json",
+    "test_json": "/workspace/synthetic_data/width/test.json",
+    "max_new_tokens": 19,
+    "gen_batch_size": 64,
+    "early_stop_patience": 2,
+    "early_stop_min_delta": 0.005,
+    "filler_token": ".",
+    "faithful": true,
+    "cot_rate": 0.5,
+    "mask_filler_loss": false
+  },
+  "seed": 42,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "filler_tokens on synthetic width (levels 2-16), 100000 train examples, per-level eval on /workspace/synthetic_data/width/test.json",
+  "timestamp_utc": "2026-10-11T13:33:33.081437+00:00",
+  "git": {
+    "commit": "0d7c26e",
+    "dirty": true
+  }
+}
