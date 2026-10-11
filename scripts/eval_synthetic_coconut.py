@@ -47,7 +47,8 @@ import torch
 import transformers
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from coconut_common import extract_answer_after_delimiter  # noqa: E402
+from coconut_common import (encode_question, extract_answer_after_delimiter, finish_and_decode,  # noqa: E402
+                            load_coconut, run_passes)
 from depth_curve import curve_metrics  # noqa: E402
 from swap_random_coconut import load_model  # noqa: E402
 from synthetic_common import annotate_records, coconut_cot_text, load_synthetic, parse_coconut_log  # noqa: E402
@@ -55,14 +56,15 @@ from synthetic_common import annotate_records, coconut_cot_text, load_synthetic,
 from latentreasoning.eval.metrics import is_correct  # noqa: E402
 from latentreasoning.runlog.manifest import DatasetInfo, ModelInfo, RunRecord, new_run_id  # noqa: E402
 
-MECHANISM = {"cot": "explicit_cot", "no_cot": "baseline_no_cot"}
+MECHANISM = {"cot": "explicit_cot", "no_cot": "baseline_no_cot", "coconut": "coconut"}
 
 
 @dataclass
 class EvalArguments:
     checkpoint_path: str = field(metadata={"help": "Coconut run.py checkpoint_N (state dict)"})
     test_json: str = field(metadata={"help": "synthetic test.json"})
-    method: str = field(default="cot", metadata={"help": "cot | no_cot"})
+    method: str = field(default="cot", metadata={"help": "cot | no_cot | coconut"})
+    num_latents: int = field(default=0, metadata={"help": "coconut: latents per question; 0 = c_thought x max_latent_stage from --config_path"})
     model_id: str = field(default="openai-community/gpt2")
     checkpoint_label: Optional[str] = field(default=None)
     config_path: Optional[str] = field(default=None, metadata={"help": "Coconut yaml used for training (recorded)"})
@@ -119,11 +121,46 @@ def run_eval(model, tokenizer, ds, ea: EvalArguments, max_new: int, batch_size: 
     return records, elapsed
 
 
+@torch.no_grad()
+def run_eval_coconut(model, embedding, special_ids, tokenizer, ds, ea: EvalArguments, max_new: int, num_latents: int):
+    """Coconut inference, one question at a time (as run.py's val loop): question + "\\n",
+    <|start-latent|>, num_latents x <|latent|> filled by the latent loop, <|end-latent|>, then
+    greedy decode (`coconut_common.run_passes` / `finish_and_decode`, a copy of `Coconut.generate`)."""
+    eos = tokenizer.eos_token_id
+    t0 = time.perf_counter()
+    records = []
+    for ex, row in zip(ds.examples, ds.rows):
+        input_ids, attn = encode_question(tokenizer, special_ids, row["question"], num_latents, ea.device)
+        _, embeds, kv, ncr = run_passes(model, embedding, input_ids, attn, ea.device, num_latents,
+                                        latent_token_id=special_ids["latent"])
+        text = finish_and_decode(model, embedding, tokenizer, embeds, kv, ncr, attn, ea.device, max_new, eos)
+        pred = extract_answer_after_delimiter(text)
+        native = text.split("#")[-1].replace(",", "").strip()
+        records.append({
+            "idx": ex.idx, "question": ex.question, "gold_answer": ex.answer, "raw_output": text,
+            "predicted_answer": pred, "correct": is_correct(pred, ex.answer),
+            "coconut_native_correct": native == ex.answer.replace(",", "").strip(),
+            "n_generated_tokens": len(tokenizer.encode(text, add_special_tokens=False)),
+        })
+    elapsed = time.perf_counter() - t0
+    annotate_records(records, ds)
+    return records, elapsed
+
+
 def main() -> None:
     (ea,) = transformers.HfArgumentParser((EvalArguments,)).parse_args_into_dataclasses()
     assert ea.method in MECHANISM, ea.method
     argv = " ".join(sys.argv)
-    tokenizer, model, _, _ = load_model(ea.model_id, ea.checkpoint_path, ea.device)
+    train_cfg = None
+    if ea.config_path:
+        import yaml  # in the Coconut venv via run.py's own requirements (datasets -> pyyaml)
+        train_cfg = yaml.safe_load(Path(ea.config_path).read_text())
+    if ea.method == "coconut":
+        tokenizer, model, embedding, special_ids = load_coconut(ea.model_id, ea.checkpoint_path, ea.device)
+        num_latents = ea.num_latents or train_cfg["c_thought"] * train_cfg["max_latent_stage"]
+    else:
+        tokenizer, model, _, _ = load_model(ea.model_id, ea.checkpoint_path, ea.device)
+        num_latents = 0
     n_params = sum(p.numel() for p in model.parameters())
 
     ds = load_synthetic(ea.test_json).subset(ea.smoke_n)
@@ -136,7 +173,7 @@ def main() -> None:
         max_new = 16
     print(f"method={ea.method} task={task} n={len(ds.rows)} levels={ds.level_range} max_new_tokens={max_new}", flush=True)
 
-    if ea.verify_batched_n:
+    if ea.verify_batched_n and ea.method != "coconut":  # coconut decodes at batch 1 only
         sub = ds.subset(ea.verify_batched_n)
         r1, _ = run_eval(model, tokenizer, sub, ea, max_new, 1)
         rb, _ = run_eval(model, tokenizer, sub, ea, max_new, ea.batch_size)
@@ -148,7 +185,10 @@ def main() -> None:
         if mism:
             raise SystemExit("batched decode differs from batch-1 -- rerun with --batch_size 1")
 
-    records, elapsed = run_eval(model, tokenizer, ds, ea, max_new, ea.batch_size)
+    if ea.method == "coconut":
+        records, elapsed = run_eval_coconut(model, embedding, special_ids, tokenizer, ds, ea, max_new, num_latents)
+    else:
+        records, elapsed = run_eval(model, tokenizer, ds, ea, max_new, ea.batch_size)
     n = len(records)
     acc = sum(r["correct"] for r in records) / n
     unparseable = sum(r["predicted_answer"] is None for r in records) / n
@@ -172,11 +212,6 @@ def main() -> None:
     if sec_per_epoch is None:
         print("WARNING: no --train_log / --seconds_per_epoch -> seconds_per_epoch=None")
 
-    train_cfg = None
-    if ea.config_path:
-        import yaml  # in the Coconut venv via run.py's own requirements (datasets -> pyyaml)
-        train_cfg = yaml.safe_load(Path(ea.config_path).read_text())
-
     mechanism = MECHANISM[ea.method]
     label = ea.checkpoint_label or ea.checkpoint_path
     record = RunRecord(
@@ -189,6 +224,7 @@ def main() -> None:
             "final_answer_accuracy": acc,
             "unparseable_rate": unparseable,
             "sec_per_example": elapsed / n,
+            **({"compute_steps": num_latents} if ea.method == "coconut" else {}),
             "extra": {
                 "task": task,
                 "task_level_range": ds.level_range,
@@ -197,6 +233,7 @@ def main() -> None:
                 "monitor_accuracy_by_epoch": [v["accuracy"] for v in train_info["val_accuracy"]] if train_info else None,
                 "coconut_native_accuracy": native_acc,
                 "cot_tokens": sum(r["n_generated_tokens"] for r in records) / n,
+                **({"num_latents": num_latents} if ea.method == "coconut" else {}),
                 **curve,
             },
         },
