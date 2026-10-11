@@ -32,8 +32,16 @@ continuity correction; Wilson intervals for each marginal combined via the phi
 correlation of the 2x2 table), and the exact two-sided McNemar p (binomial on the
 discordant pairs, b vs c).
 
+Collapsed depth (`--by collapsed`, depth task only): the depth ops are + - * on integers with
+no wrap, so consecutive additive steps fold into one offset and consecutive multiplications
+into one product. collapsed depth = 1 + number of switches between additive (+ -) and
+multiplicative (*) ops -- a tighter bound on the serial depth than the nominal level (the
+chain is still affine in x0, so even this overstates it). `--by collapsed` recomputes it
+from each record's `question` and uses it in place of `level` for the curves and McNemar.
+
 Usage:
   uv run python scripts/depth_curve.py results/<run1> results/<run2> [--json out.json] [--md out.md]
+  uv run python scripts/depth_curve.py results/<run> --by collapsed
   uv run python scripts/depth_curve.py --mcnemar results/<runA> results/<runB> --min-level 6
 
 Library (no deps beyond numpy + stdlib, so it also runs from the Coconut/CODI venvs):
@@ -251,6 +259,18 @@ def newcombe_paired_ci(a: int, b: int, c: int, d: int, z: float = Z95) -> tuple[
     return (max(-1.0, diff - dl), min(1.0, diff + du))
 
 
+def collapsed_depth(question: str) -> int:
+    """1 + number of additive<->multiplicative switches in a depth-task chain (module docstring)."""
+    from latentreasoning.tasks.synthetic import parse_depth_question  # lazy: CLI-only dependency
+    kinds = ["M" if op == "*" else "A" for op in parse_depth_question(question).ops]
+    return 1 + sum(kinds[i] != kinds[i - 1] for i in range(1, len(kinds)))
+
+
+def with_collapsed_level(records: Iterable[dict]) -> list[dict]:
+    """Copies of `records` with `level` replaced by the collapsed depth (original kept as `nominal_level`)."""
+    return [{**r, "nominal_level": r["level"], "level": collapsed_depth(r["question"])} for r in records]
+
+
 def _key(r: dict, id_key: str | None):
     if id_key:
         return r[id_key]
@@ -329,10 +349,13 @@ def main(argv: Sequence[str] | None = None) -> None:
     ap.add_argument("--id-key", default=None, help="pairing key (default: 'id', else 'idx')")
     ap.add_argument("--json", default=None, help="write results JSON here")
     ap.add_argument("--md", default=None, help="write markdown table here")
+    ap.add_argument("--by", choices=["level", "collapsed"], default="level",
+                    help="x axis: nominal level (default) or collapsed depth (depth task)")
     args = ap.parse_args(argv)
+    load = load_records if args.by == "level" else (lambda p: with_collapsed_level(load_records(p)))
 
     if args.mcnemar:
-        ra, rb = (load_records(p) for p in args.mcnemar)
+        ra, rb = (load(p) for p in args.mcnemar)
         res = paired_mcnemar(ra, rb, args.min_level, args.max_level, args.id_key)
         res = {"a": str(args.mcnemar[0]), "b": str(args.mcnemar[1]), **res}
         print(json.dumps(res, indent=2))
@@ -344,7 +367,7 @@ def main(argv: Sequence[str] | None = None) -> None:
         ap.error("give run dirs / predictions files, or --mcnemar A B")
     results = {}
     for p in args.inputs:
-        recs = load_records(p)
+        recs = load(p)
         if args.min_level is not None or args.max_level is not None:
             recs = [r for r in recs if (args.min_level is None or int(r["level"]) >= args.min_level)
                     and (args.max_level is None or int(r["level"]) <= args.max_level)]

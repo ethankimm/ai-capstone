@@ -144,3 +144,10 @@ def test_flat_curve_has_no_midpoint():
     recs = [{"level": lv, "correct": i % 250 != 0} for lv in range(1, 13) for i in range(500)]
     out = curve_metrics(recs)
     assert out["midpoint"] is None and out["midpoint_status"] == "beyond_range" and out["flat"]
+
+
+def test_collapsed_depth():
+    from depth_curve import collapsed_depth
+    # + + * - : A A M A -> 2 switches -> 3
+    assert collapsed_depth("a = 3+4; b = a+2; c = b*3; d = c-5. What is d?") == 3
+    assert collapsed_depth("a = 3*4. What is a?") == 1
