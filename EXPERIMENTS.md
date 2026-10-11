@@ -8199,3 +8199,98 @@ comparison with the no-CoT runs (Coconut-repo and same-stack), done in the step-
 rule; the no-CoT runs on the same task were still improving at that point, so "filler vs no-CoT" must be read with each
 model's own stopping epoch in mind. One seed. L1 has n=76.
 **Next:** paired comparison against no-CoT; CODI and Coconut on this task (step 3).
+
+---
+
+## 2026-10-11 — Synthetic width task, no-CoT GPT-2 (Coconut repo): 0.997 at every width (baseline_no_cot, run_id: 20261011-143650_baseline_no_cot_synthetic-width-no_cot)
+
+**Goal:** Phase A step 2 width pilot: the no-CoT lower bound on the width task, trained with the same Coconut-repo recipe
+as the CoT run.
+**Mechanism / model:** `baseline_no_cot`, gpt2, full fine-tune.
+**Data:** synthetic width v1.2.0: train 100k, monitor 450, test 7,500.
+**Training:** Coconut repo `run.py` @27273cb, `no_cot: True`, `configs/synthetic/gpt2_width_no_cot.yaml` (1 GPU, 32 x 4 =
+128 effective, lr 1e-4 constant, fp32, seed 0). **Deviation: stopped by hand after epoch 1** (monitor 449/450 = 0.998,
+which cannot gain the 0.5 pt the early-stop rule requires; two more ~40-min epochs would only have slowed the depth jobs).
+Epoch 1 took 2313 s on a GPU shared with 2-3 jobs.
+**Checkpoint:** `~/Documents/Penn/CIS5980/synthetic_checkpoints/gpt2_width_no_cot/checkpoint_1`; training log `~/Documents/Penn/CIS5980/synthetic_checkpoints/gpt2_width_no_cot.log`.
+**Eval:** `scripts/eval_synthetic_coconut.py --method no_cot` (`eval_command.txt`), greedy, prompt = question + "\n".
+**Headline results:** test accuracy **0.997**; widths 2-5 0.986-0.992, widths 6-16
+1.000; flat (no midpoint). AUC 0.997.
+**Interpretation:** No-CoT solves the width task at every width, as well as CoT (0.996) and filler (0.997-0.998). The H2
+width pilot therefore has no headroom (see `20261011-133817_baseline_no_cot_synthetic-width-nocot-samestack` for the
+paired test).
+**Caveats:** one epoch, one seed.
+
+---
+
+## 2026-10-11 — Synthetic width task, no-CoT GPT-2 (same stack as filler): 0.997; filler gains +0.3 pt at widths >= 6, far below the 5-pt bar (baseline_no_cot, run_id: 20261011-133817_baseline_no_cot_synthetic-width-nocot-samestack)
+
+**Goal:** Phase A step 2: matched no-CoT control for the H2 width pilot (filler 6 and 24 vs no-CoT, McNemar pooled over
+widths >= 6; go if gain >= 5 pt with CI excluding 0).
+**Mechanism / model:** `baseline_no_cot`, gpt2, full fine-tune.
+**Data:** synthetic width v1.2.0: train 100k, monitor 450, test 7,500 (500/level).
+**Training:** `scripts/train_synthetic.py --method filler_tokens --compute-steps 0` (no filler, not faithful: question ->
+answer, i.e. no-CoT) -- the same training script, datasets/collate, lr 1e-4, effective batch 128, linear decay over max 10
+epochs and early-stopping rule (2 epochs without >= 0.5 pt monitor gain) as the faithful filler runs, so filler vs this
+run isolates the filler positions (and the faithful mode's 50% CoT training half) from the training stack. Seed 42.
+GPU shared with other jobs. Command: `eval_command.txt`; wrapper `scripts/pod/phase_a_step2.sh`.
+**Logging note:** the script logged it as `filler_tokens` (compute_steps 0); relabelled to `baseline_no_cot` before commit
+as the Phase A prompt requires (`metrics.extra.relabelled_from_run_id` holds the original id).
+**Checkpoint:** `~/Documents/Penn/CIS5980/synthetic_checkpoints/synthetic-width-nocot-samestack/best` (epoch 1).
+**Headline results:** test accuracy **0.997**; per level 0.990-1.000; flat (no midpoint).
+Monitor 1.000 at every epoch; early-stopped after 3. Mean seconds/epoch 1292 (shared GPU).
+**H2 pilot, paired over widths >= 6 (n = 5,500):** filler-6 and filler-24 are both 1.000 vs no-CoT 0.9967: difference
+**+0.0033 [+0.0019, +0.0052]**, exact McNemar p < 1e-5 (18 items right only with filler, 0 only without). Against the
+Coconut-repo no-CoT run (`20261011-143650_baseline_no_cot_synthetic-width-no_cot`, 1.000 at widths >= 6) the difference is 0.
+**Interpretation:** H2 pilot is a **no-go** by the pre-set rule: the filler gain is statistically detectable but 0.3 pt,
+because no-CoT is already at ceiling. The width task is solved in one forward pass at every width up to 16, so it cannot
+show whether filler helps on width; it would need a harder width task (more chains, larger values, or an aggregate that
+is harder than max).
+**Caveats:** one seed. The 18 filler-only items are spread over widths 11-16 (no-CoT 0.990-0.996 there).
+
+---
+
+## 2026-10-11 — Synthetic depth task, no-CoT GPT-2 (same stack as filler): 0.360, midpoint depth 4.5; filler-6 is 2.2 pt worse (baseline_no_cot, run_id: 20261011-133416_baseline_no_cot_synthetic-depth-nocot-samestack)
+
+**Goal:** Phase A step 2: matched no-CoT control for the depth filler run (H2 core control), and a second no-CoT depth
+curve next to the Coconut-repo no-CoT run.
+**Mechanism / model:** `baseline_no_cot`, gpt2, full fine-tune.
+**Data:** synthetic depth v1.2.0: train 100k, monitor 349, test 5,576 (500/level, L1 = 76).
+**Training:** `scripts/train_synthetic.py --method filler_tokens --compute-steps 0` (no filler, not faithful: question ->
+answer, i.e. no-CoT) -- the same training script, datasets/collate, lr 1e-4, effective batch 128, linear decay over max 10
+epochs and early-stopping rule (2 epochs without >= 0.5 pt monitor gain) as the faithful filler runs, so filler vs this
+run isolates the filler positions (and the faithful mode's 50% CoT training half) from the training stack. Seed 42.
+GPU shared with other jobs. Command: `eval_command.txt`; wrapper `scripts/pod/phase_a_step2.sh`.
+**Logging note:** the script logged it as `filler_tokens` (compute_steps 0); relabelled to `baseline_no_cot` before commit
+as the Phase A prompt requires (`metrics.extra.relabelled_from_run_id` holds the original id).
+**Checkpoint:** `~/Documents/Penn/CIS5980/synthetic_checkpoints/synthetic-depth-nocot-samestack/best` (epoch 3).
+**Headline results:** test accuracy **0.360**, AUC 0.385, midpoint at depth
+**4.49**. Monitor by epoch: 0.183, 0.281, 0.367, 0.315, 0.364; best epoch
+3, early-stopped after 5. Mean seconds/epoch 1101 (shared GPU).
+
+| level | n | accuracy [95% CI] |
+|---|---|---|
+| 1 | 76 | 0.789 [0.685, 0.866] |
+| 2 | 500 | 0.828 [0.792, 0.859] |
+| 3 | 500 | 0.650 [0.607, 0.691] |
+| 4 | 500 | 0.502 [0.458, 0.546] |
+| 5 | 500 | 0.414 [0.372, 0.458] |
+| 6 | 500 | 0.350 [0.309, 0.393] |
+| 7 | 500 | 0.270 [0.233, 0.311] |
+| 8 | 500 | 0.250 [0.214, 0.290] |
+| 9 | 500 | 0.190 [0.158, 0.227] |
+| 10 | 500 | 0.176 [0.145, 0.212] |
+| 11 | 500 | 0.148 [0.120, 0.182] |
+| 12 | 500 | 0.118 [0.093, 0.149] |
+
+**Paired comparison with faithful filler-6** (`20261011-093413_filler_tokens_synthetic-depth-filler6-faithful`, same 5,576
+items; `scripts/depth_curve.py` paired McNemar, Newcombe CI): filler 0.338 vs no-CoT 0.360, difference **-0.022 [-0.036,
+-0.008]**, exact McNemar p = 0.003 (filler-only correct 744, no-CoT-only 865). Depths >= 4: -0.019 [-0.035, -0.003], p = 0.019.
+**Interpretation:** Six filler positions do not help on the serial task; if anything the faithful filler model is slightly
+worse (its training mix spends half the examples on CoT targets). This is the plan's H2 core-control prediction: extra
+positions without feeding results forward buy nothing on depth. Accuracy decays smoothly with depth from ~0.8 at depths
+1-2 to 0.12 at depth 12; the midpoint (4.5) sits well inside 1-12, so the task has the depth range H1 needs.
+**Caveats:** L1 accuracy (0.79, n=76) is below L2 (0.83): L1 has only 95 distinct training problems oversampled 88x, and
+the test problems are unseen ones, so L1 measures generalisation from very few examples; treat L1 as noisy. One seed;
+early stopping fired at a plateau that may not be final (monitor 0.367 -> 0.315 -> 0.364).
+**Next:** Coconut-repo no-CoT depth run (still training) for the main no-CoT curve; CODI/Coconut on depth in step 3.

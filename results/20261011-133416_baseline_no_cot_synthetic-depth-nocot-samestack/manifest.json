@@ -1,0 +1,174 @@
+{
+  "run_id": "20261011-133416_baseline_no_cot_synthetic-depth-nocot-samestack",
+  "mechanism": "baseline_no_cot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "~/Documents/Penn/CIS5980/synthetic_checkpoints/synthetic-depth-nocot-samestack/best",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "synthetic-depth",
+    "split": "test",
+    "n_examples": 5576,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.3601147776183644,
+    "unparseable_rate": 0.0,
+    "compute_steps": 0,
+    "train_loss": 0.5487243210873031,
+    "sec_per_example": 0.0027523523800284167,
+    "extra": {
+      "task": "depth",
+      "task_level_range": [
+        1,
+        12
+      ],
+      "seconds_per_epoch": 1100.7118072101846,
+      "seconds_per_epoch_all": [
+        1598.44666934805,
+        1355.7393239738885,
+        1194.0801686029881,
+        675.3327294010669,
+        679.9601447249297
+      ],
+      "epochs_trained": 5,
+      "best_epoch": 3,
+      "best_monitor_accuracy": 0.3667621776504298,
+      "monitor_accuracy_by_epoch": [
+        0.1833810888252149,
+        0.2808022922636103,
+        0.3667621776504298,
+        0.3151862464183381,
+        0.3638968481375358
+      ],
+      "early_stopped": true,
+      "eval_checkpoint": "best",
+      "test_eval_seconds": 15.347116871038452,
+      "per_level_accuracy": {
+        "1": 0.7894736842105263,
+        "2": 0.828,
+        "3": 0.65,
+        "4": 0.502,
+        "5": 0.414,
+        "6": 0.35,
+        "7": 0.27,
+        "8": 0.25,
+        "9": 0.19,
+        "10": 0.176,
+        "11": 0.148,
+        "12": 0.118
+      },
+      "per_level_n": {
+        "1": 76,
+        "2": 500,
+        "3": 500,
+        "4": 500,
+        "5": 500,
+        "6": 500,
+        "7": 500,
+        "8": 500,
+        "9": 500,
+        "10": 500,
+        "11": 500,
+        "12": 500
+      },
+      "per_level_ci95": {
+        "1": [
+          0.6850436020610325,
+          0.8660485329012565
+        ],
+        "2": [
+          0.7924525525008731,
+          0.8585458801563487
+        ],
+        "3": [
+          0.6071928710061952,
+          0.6905198268553391
+        ],
+        "4": [
+          0.45832636322986225,
+          0.5456431394082917
+        ],
+        "5": [
+          0.37164260890980144,
+          0.45766877764958563
+        ],
+        "6": [
+          0.3094801731446609,
+          0.39280712899380477
+        ],
+        "7": [
+          0.2329485392031058,
+          0.3105586574092084
+        ],
+        "8": [
+          0.21404849674782103,
+          0.2897636734829552
+        ],
+        "9": [
+          0.1580273788297291,
+          0.2266997122564333
+        ],
+        "10": [
+          0.1451264013297259,
+          0.21181417128935995
+        ],
+        "11": [
+          0.1195614053892054,
+          0.18180613029572734
+        ],
+        "12": [
+          0.09259300825150649,
+          0.14923198786111944
+        ]
+      },
+      "curve_fit": {
+        "floor": 0.14169082686309326,
+        "ceiling": 1.0,
+        "midpoint_param": 3.7775000000000016,
+        "slope": 0.5675024539624286,
+        "sse": 4.511573573671253,
+        "rmse": 0.028444783953461835,
+        "best_observed": 0.828,
+        "halfway_target": 0.48484541343154663,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": 4.493419350726728,
+      "midpoint_status": "in_range",
+      "flat": false,
+      "midpoint_extrapolated": 4.493419350726728,
+      "auc": 0.3847033492822966,
+      "cot_leak_rate": 0.0,
+      "relabelled_from_run_id": "20261011-133416_filler_tokens_synthetic-depth-nocot-samestack",
+      "checkpoint_pod_path": "/workspace/synthetic_runs/synthetic-depth-nocot-samestack/best"
+    }
+  },
+  "hyperparams": {
+    "lr": 0.0001,
+    "max_epochs": 10.0,
+    "batch_size": 32,
+    "grad_accum": 4,
+    "train_n": 100000,
+    "train_json": "/workspace/synthetic_data/depth/train.json",
+    "val_json": "/workspace/synthetic_data/depth/valid_monitor.json",
+    "test_json": "/workspace/synthetic_data/depth/test.json",
+    "max_new_tokens": 19,
+    "gen_batch_size": 64,
+    "early_stop_patience": 2,
+    "early_stop_min_delta": 0.005,
+    "filler_token": ".",
+    "faithful": false,
+    "trainer": "scripts/train_synthetic.py --method filler_tokens --compute-steps 0 (no filler, not faithful) = no-CoT"
+  },
+  "seed": 42,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "filler_tokens on synthetic depth (levels 1-12), 100000 train examples, per-level eval on /workspace/synthetic_data/depth/test.json",
+  "timestamp_utc": "2026-10-11T15:06:25.852130+00:00",
+  "git": {
+    "commit": "0d7c26e",
+    "dirty": true
+  }
+}
