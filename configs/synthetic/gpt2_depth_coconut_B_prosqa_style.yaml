@@ -1,0 +1,46 @@
+# DRAFT -- not launched. Step 3, option B ("ProsQA-style"), adapted from Dilgren & Wiegreffe's
+# args_coconut-cot-no_cot/gpt2_prosqa_coconut.yaml: c_thought 1, max_latent_stage 6,
+# epochs_per_stage 5, from scratch (pretrained GPT-2, no CoT init), 50 epochs.
+# Curriculum (epoch e -> stage e // 5): stages 0..6 over epochs 0-34 (stage k: first k
+# steps -> k latents, rest written); from epoch 35 (stage 7 > max_latent_stage) ALL
+# written steps are dropped (dataset.py: "n_skip_steps = 10000  # skip all") and every
+# example gets 6 latents. depth levels > 6 therefore jump from "6 latent + rest written"
+# straight to "6 latent, nothing written".
+# save_only_improve False (as reference): one ~0.5 GB checkpoint per epoch -> ~25 GB for 50
+# epochs; prune or flip to True if the volume is small (but note True + stage switches:
+# accuracy typically drops when a stage starts, so "best" would freeze at an early stage).
+# 1 GPU: 32 x accum 4 = 128 effective.
+# Launch: cd /workspace/coconut && WANDB_MODE=offline torchrun --nnodes 1 --nproc_per_node 1 run.py <this file>
+
+project: coconut
+save_path: /workspace/coconut_runs
+name: gpt2_depth_coconut_B
+
+only_eval: False
+
+coconut: True
+cot: False
+no_thoughts: False
+no_cot: False
+
+c_thought: 1
+epochs_per_stage: 5
+max_latent_stage: 6
+pad_latent_to_max: True
+
+save_only_improve: False
+uniform_prob: 0.0
+model_id: openai-community/gpt2
+load_model_path: None
+seed: 0
+resume: 0
+bf16: False
+train_path: /workspace/synthetic_data/depth/train.json
+val_path: /workspace/synthetic_data/depth/valid_monitor.json
+reset_optimizer: True
+batch_size_training: 32
+debug: False
+gradient_accumulation_steps: 4
+num_epochs: 50
+lr: !!float "1e-4"
+weight_decay: 0.01

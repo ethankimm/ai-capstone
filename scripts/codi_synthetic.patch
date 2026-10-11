@@ -1,0 +1,45 @@
+diff --git a/train.py b/train.py
+index 7dd4e06..aaa054f 100644
+--- a/train.py
++++ b/train.py
+@@ -309,6 +309,24 @@ def train():
+                     questions.append(question)
+                     cots.append(cot)
+                     answers.append(answer)
++                elif data_args.data_name in ("depth", "width"):
++                    # ai-capstone synthetic tasks (scripts/codi_synthetic.patch). Same format as the
++                    # prontoqa branch above / Dilgren & Wiegreffe's prosqa branch: steps joined by "\n"
++                    # (also Coconut's step separator), last step dropped unless --include_last_cot
++                    # (prosqa/prontoqa always drop it; icot drops it unless --include_last_cot),
++                    # fixed distillation template "The answer is: <answer>".
++                    question = example['question'].strip() + '\n'
++                    steps = example['steps'] if training_args.include_last_cot else example['steps'][:-1]
++                    cot = '\n'.join(steps) + "\n"
++                    answer = f"The answer is: {str(example['answer']).strip()}"
++
++                    # avoid OOM: remove very long data
++                    token_num = len(tokenizer.encode(question + " " + cot + " " + answer))
++                    if token_num > training_args.max_token_num:
++                        continue
++                    questions.append(question)
++                    cots.append(cot)
++                    answers.append(answer)
+                 else:
+                     raise NotImplementedError
+             if training_args.exp_mode:
+@@ -388,6 +406,15 @@ def train():
+             train_dataset = SupervisedDataset(data_name=data_args.data_name, raw_data=dataset, tokenizer=tokenizer, bot=model.bot_id, eot=model.eot_id)
+             data_collator = DataCollatorForSupervisedDataset(tokenizer=tokenizer)
+             return dict(train_dataset=train_dataset, eval_dataset=None, data_collator=data_collator)
++        elif data_args.data_name in ("depth", "width"):
++            # ai-capstone synthetic tasks: $CODI_SYNTHETIC_DATA_DIR/<task>/train.json
++            # (default data/synthetic/<task>/train.json, relative to the CODI checkout)
++            synth_dir = os.environ.get("CODI_SYNTHETIC_DATA_DIR", "data/synthetic")
++            with open(os.path.join(synth_dir, data_args.data_name, "train.json")) as f:
++                dataset = json.load(f)
++            train_dataset = SupervisedDataset(data_name=data_args.data_name, raw_data=dataset, tokenizer=tokenizer, bot=model.bot_id, eot=model.eot_id)
++            data_collator = DataCollatorForSupervisedDataset(tokenizer=tokenizer)
++            return dict(train_dataset=train_dataset, eval_dataset=None, data_collator=data_collator)
+         else:
+             raise NotImplementedError(f"Dataset {data_args.data_name} is not supported.")
+ 

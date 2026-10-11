@@ -1,0 +1,48 @@
+# DRAFT -- not launched. Step 3, option A ("GSM8K-style"), adapted from Dilgren & Wiegreffe's
+# args_coconut-cot-no_cot/gpt2_gsm8k_coconut.yaml (= Coconut's args/gsm_coconut.yaml):
+# c_thought 2, max_latent_stage 3, epochs_per_stage 3, initialized from the step-2 CoT
+# checkpoint with resume 3 (skips the 3 stage-0 epochs: the CoT model IS stage 0).
+# Curriculum (epoch e -> stage e // 3): stage k<=3 replaces the first k written steps with
+# 2k latents; from epoch 12 (stage 4 > max_latent_stage) ALL written steps are dropped and
+# every example gets 3 x 2 = 6 latents (pad_latent_to_max) -- see dataset.py
+# get_cot_latent_dataset: "if scheduled_stage_to_train > configs.max_latent_stage:
+# n_skip_steps = 10000  # skip all". So width levels > 3 never see a partially-latent
+# chain covering their later steps; at the final stage 6 latents stand in for up to
+# 16 steps.
+# num_epochs 25 = Coconut repo (Dilgren's gsm8k file uses 47; their released GSM8K ckpt is
+# checkpoint_33). 1 GPU: 32 x accum 4 = 128 effective, as in step 2.
+# Before launching: set load_model_path to the step-2 CoT checkpoint you selected.
+# Launch: cd /workspace/coconut && WANDB_MODE=offline torchrun --nnodes 1 --nproc_per_node 1 run.py <this file>
+
+project: coconut
+save_path: /workspace/coconut_runs
+name: gpt2_width_coconut_A
+
+only_eval: False
+
+coconut: True
+cot: False
+no_thoughts: False
+no_cot: False
+
+c_thought: 2
+epochs_per_stage: 3
+max_latent_stage: 3
+pad_latent_to_max: True
+
+save_only_improve: False
+uniform_prob: 0.0
+model_id: openai-community/gpt2
+load_model_path: /workspace/coconut_runs/gpt2_width_cot/checkpoint_FILL_ME
+seed: 0
+resume: 3
+bf16: False
+train_path: /workspace/synthetic_data/width/train.json
+val_path: /workspace/synthetic_data/width/valid_monitor.json
+reset_optimizer: True
+batch_size_training: 32
+debug: False
+gradient_accumulation_steps: 4
+num_epochs: 25
+lr: !!float "1e-4"
+weight_decay: 0.01
