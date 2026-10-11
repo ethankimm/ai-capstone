@@ -191,6 +191,9 @@ def normalized_auc(levels: Sequence[float], accs: Sequence[float]) -> float:
     return area / float(lv[-1] - lv[0])
 
 
+FLAT_RANGE = 0.10  # best - worst per-level accuracy below this -> no midpoint ("flat": True)
+
+
 def curve_metrics(records: Iterable[dict], level_key: str = "level", correct_key: str = "correct") -> dict[str, Any]:
     """Everything for `metrics["extra"]`: per-level accuracy / n / Wilson CI (keys are
     the level as a string, JSON-friendly), the 4PL fit, midpoint (+status), AUC."""
@@ -200,6 +203,11 @@ def curve_metrics(records: Iterable[dict], level_key: str = "level", correct_key
     fit = fit_sigmoid4(levels, accs, [r["n"] for r in rows])
     best = max(accs)
     mid, status, extrap = halfway_level(fit, best, min(levels), max(levels))
+    flat = best - min(accs) < FLAT_RANGE
+    if flat:
+        # no drop inside the range: a floor/best halfway crossing would be fit noise
+        # (e.g. CoT at 0.996-1.0), so report it like a curve that never drops
+        mid, status = None, "beyond_range"
     return {
         "per_level_accuracy": {str(r["level"]): r["accuracy"] for r in rows},
         "per_level_n": {str(r["level"]): r["n"] for r in rows},
@@ -208,6 +216,7 @@ def curve_metrics(records: Iterable[dict], level_key: str = "level", correct_key
                       "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"},
         "midpoint": mid,
         "midpoint_status": status,
+        "flat": flat,
         "midpoint_extrapolated": extrap,
         "auc": normalized_auc(levels, accs),
     }

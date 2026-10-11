@@ -138,3 +138,9 @@ def test_paired_mcnemar_pairs_by_id_and_filters_level():
     assert res["a_only"] == 25 and res["b_only"] == 0
     assert res["diff_ci95"][0] < 0.5 < res["diff_ci95"][1]
     assert res["mcnemar_exact_p"] == pytest.approx(2 * 0.5 ** 25)
+
+
+def test_flat_curve_has_no_midpoint():
+    recs = [{"level": lv, "correct": i % 250 != 0} for lv in range(1, 13) for i in range(500)]
+    out = curve_metrics(recs)
+    assert out["midpoint"] is None and out["midpoint_status"] == "beyond_range" and out["flat"]
