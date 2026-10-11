@@ -66,7 +66,10 @@ from eval_codi import build_model  # noqa: E402
 from decode_patch_codi import decode_answer, run_thoughts, wilson_ci  # noqa: E402
 
 from latentreasoning.data.gsm8k_aug import load_gsm8k_aug  # noqa: E402
-from latentreasoning.data.minimal_pairs import generate_minimal_pair  # noqa: E402
+from latentreasoning.data.minimal_pairs import (  # noqa: E402
+    generate_change_set_pairs, generate_minimal_pair, parse_change_set, passes_hidden_operand_filter,
+)
+from latentreasoning.eval.twin_magnitude import bin_summary, magnitude_fields  # noqa: E402
 from latentreasoning.eval.counterfactual import parse_steps, qualifying_steps  # noqa: E402
 from latentreasoning.eval.metrics import extract_final_number, is_correct  # noqa: E402
 from latentreasoning.runlog.manifest import DatasetInfo, ModelInfo, RunRecord, new_run_id  # noqa: E402
@@ -87,6 +90,15 @@ class MPArguments:
     max_new_tokens: int = field(default=64)
     pair_seed: int = field(default=0)
     smoke_n: int = field(default=0, metadata={"help": ">0: first n examples only, don't log"})
+    # Phase A step 1 (twin magnitude). Defaults reproduce the original E3 behaviour exactly.
+    change_set: str = field(default="", metadata={
+        "help": "'' = legacy: first of DELTAS that works per (example, step). Otherwise a comma list of "
+                "additive ints and xF factors (e.g. latentreasoning.data.minimal_pairs.WIDE_CHANGE_SET); "
+                "one twin per (example, step, change)"})
+    conditions: str = field(default="full", metadata={
+        "help": "full = all E3 conditions; all_slot = only the aligned all-slot transplant"})
+    hidden_operand_filter: bool = field(default=False, metadata={
+        "help": "patch only pairs passing minimal_pairs.passes_hidden_operand_filter (all candidates still logged)"})
 
 
 def main() -> None:
@@ -140,14 +152,19 @@ def main() -> None:
 
     # ---- candidates from EVERY example (CFR needs base-wrong originals too) ------------------
     rng = random.Random(mpa.pair_seed)
-    candidates = []
-    for ex in examples:
-        for k in base_info[ex.idx]["qualifying"]:
-            for delta in DELTAS:
-                mp = generate_minimal_pair(ex, k, delta, rng=rng)
-                if mp is not None:
-                    candidates.append(mp)
-                    break
+    magnitude_mode = bool(mpa.change_set) or mpa.hidden_operand_filter or mpa.conditions != "full"
+    if mpa.change_set:
+        candidates = generate_change_set_pairs(examples, lambda ex: base_info[ex.idx]["qualifying"],
+                                               parse_change_set(mpa.change_set), rng=rng)
+    else:
+        candidates = []
+        for ex in examples:
+            for k in base_info[ex.idx]["qualifying"]:
+                for delta in DELTAS:
+                    mp = generate_minimal_pair(ex, k, delta, rng=rng)
+                    if mp is not None:
+                        candidates.append(mp)
+                        break
     rng.shuffle(candidates)
     print(f"minimal-pair candidates (propagation-qualified step, any original): {len(candidates)}")
 
@@ -163,6 +180,13 @@ def main() -> None:
                          "chain_len": len(parse_steps(mp.original.rationale)),
                          "original_pred": base_info[mp.original.idx]["pred"], "original_correct": orig_ok,
                          "twin_answer": mp.twin.answer, "twin_pred": twin_pred, "twin_correct": twin_ok})
+        if magnitude_mode:
+            hidden_ok = passes_hidden_operand_filter(mp)
+            cand_log[-1].update({"change": mp.change, "hidden_operand_ok": hidden_ok,
+                                 "original_gold": mp.original.answer,
+                                 **magnitude_fields(mp.original.answer, mp.twin.answer, None)})
+            if mpa.hidden_operand_filter and not hidden_ok:
+                continue
         if orig_ok and twin_ok and len(responsive) < mpa.n_pairs:
             responsive.append((mp, twin_pred, twin_z))
         elif orig_ok and not twin_ok and twin_pred is not None and len(nonresponsive) < mpa.n_nonresponsive:
@@ -187,6 +211,17 @@ def main() -> None:
                     "matches_twin": is_correct(pred, twin_answer) and not is_correct(pred_base, twin_answer)}
 
         all_slot = cond(run_override(ex.question, aligned(z, sites)))
+        if mpa.conditions == "all_slot":
+            records.append({
+                "recipient_idx": ex.idx, "step": mp.step, "perturbed_number": mp.perturbed_number,
+                "delta": mp.delta, "change": mp.change, "answer_base": pred_base, "recipient_gold": ex.answer,
+                "twin_question": mp.twin.question, "twin_answer": twin_answer, "twin_pred": twin_pred,
+                "chain_len": len(parse_steps(ex.rationale)), "hidden_operand_ok": passes_hidden_operand_filter(mp),
+                "all_slot": all_slot, **magnitude_fields(pred_base, twin_answer, all_slot["pred"]),
+            })
+            if (pi + 1) % 100 == 0:
+                print(f"patched {pi + 1}/{len(responsive)} pairs ({time.perf_counter() - t2:.0f}s)", flush=True)
+            continue
         single = {s: cond(run_override(ex.question, aligned(z, [s]))) for s in sites}
         prefix = {s: cond(run_override(ex.question, aligned(z, range(s + 1)))) for s in sites[:-1]}
         prefix[sites[-1]] = all_slot
@@ -201,6 +236,10 @@ def main() -> None:
             "all_slot": all_slot, "single_slot": single, "prefix": prefix, "leave_one_out": loo,
             "all_slot_legacy": all_legacy, "single_slot_legacy": single_legacy,
         })
+        if magnitude_mode:
+            records[-1].update({"change": mp.change, "chain_len": len(parse_steps(ex.rationale)),
+                                "hidden_operand_ok": passes_hidden_operand_filter(mp),
+                                **magnitude_fields(pred_base, twin_answer, all_slot["pred"])})
         if (pi + 1) % 25 == 0:
             print(f"patched {pi + 1}/{len(responsive)} pairs ({time.perf_counter() - t2:.0f}s)", flush=True)
 
@@ -229,14 +268,20 @@ def main() -> None:
                 "matches_twin_rate": matched / n if n else 0.0,
                 "matches_twin_wilson_ci": list(wilson_ci(matched, n))}
 
-    summary = {
-        "all_slot": summarize(lambda r: r["all_slot"]),
-        "single_slot": {s: summarize(lambda r, s=s: r["single_slot"][s]) for s in sites},
-        "prefix": {s: summarize(lambda r, s=s: r["prefix"][s]) for s in sites},
-        "leave_one_out": {s: summarize(lambda r, s=s: r["leave_one_out"][s]) for s in sites},
-        "all_slot_legacy": summarize(lambda r: r["all_slot_legacy"]),
-        "single_slot_legacy": {i: summarize(lambda r, i=i: r["single_slot_legacy"][i]) for i in range(1, n_latents + 1)},
-    }
+    if mpa.conditions == "all_slot":
+        summary = {"all_slot": summarize(lambda r: r["all_slot"])}
+    else:
+        summary = {
+            "all_slot": summarize(lambda r: r["all_slot"]),
+            "single_slot": {s: summarize(lambda r, s=s: r["single_slot"][s]) for s in sites},
+            "prefix": {s: summarize(lambda r, s=s: r["prefix"][s]) for s in sites},
+            "leave_one_out": {s: summarize(lambda r, s=s: r["leave_one_out"][s]) for s in sites},
+            "all_slot_legacy": summarize(lambda r: r["all_slot_legacy"]),
+            "single_slot_legacy": {i: summarize(lambda r, i=i: r["single_slot_legacy"][i]) for i in range(1, n_latents + 1)},
+        }
+    if magnitude_mode:
+        summary["magnitude_bins"] = bin_summary(
+            [{**r, "matches_twin": r["all_slot"]["matches_twin"]} for r in records])
     n_nr = len(nr_records)
     nr_matched = sum(r["matches_twin_pred"] for r in nr_records)
     nr_changed = sum(r["answer_changed"] for r in nr_records)
@@ -256,13 +301,17 @@ def main() -> None:
     def line(name, s):
         return f"{name:22s} n={s['n']:4d} matches_twin={s['matches_twin_rate']:.3f} changed={s['answer_changed_rate']:.3f}"
     print(line("ALL-SLOT (aligned)", summary["all_slot"]))
-    print(line("ALL-SLOT (legacy)", summary["all_slot_legacy"]))
-    for s in sites:
-        print(line(f"single z{s}", summary["single_slot"][s]) + " | " + line(f"leave-out z{s}", summary["leave_one_out"][s]))
-    for s in sites:
-        print(line(f"prefix z0..z{s}", summary["prefix"][s]))
-    for i in range(1, n_latents + 1):
-        print(line(f"single legacy iter{i}", summary["single_slot_legacy"][i]))
+    if mpa.conditions != "all_slot":
+        print(line("ALL-SLOT (legacy)", summary["all_slot_legacy"]))
+        for s in sites:
+            print(line(f"single z{s}", summary["single_slot"][s]) + " | " + line(f"leave-out z{s}", summary["leave_one_out"][s]))
+        for s in sites:
+            print(line(f"prefix z0..z{s}", summary["prefix"][s]))
+        for i in range(1, n_latents + 1):
+            print(line(f"single legacy iter{i}", summary["single_slot_legacy"][i]))
+    if magnitude_mode:
+        for b, v in summary["magnitude_bins"].items():
+            print(f"rel answer change {b:8s} n={v['n']:5d} steer={v['steer_rate']} frac_moved={v['mean_fraction_moved']}")
     print(f"non-responsive pairs n={n_nr}: matches_twin_pred={nonresp_summary['matches_twin_pred_rate']} "
           f"changed={nonresp_summary['answer_changed_rate']}")
     print(f"CFR: {json.dumps(cfr)}")
@@ -277,6 +326,10 @@ def main() -> None:
         "sec_per_example": decode_elapsed / len(examples),
         "intervention_accuracy": summary["all_slot"]["matches_twin_rate"],
         "extra": {
+            **({"change_set": mpa.change_set or list(DELTAS), "conditions": mpa.conditions,
+                "hidden_operand_filter": mpa.hidden_operand_filter,
+                "n_candidates_hidden_operand_ok": sum(c.get("hidden_operand_ok", False) for c in cand_log)}
+               if magnitude_mode else {}),
             "design": "E3 rerun with aligned sites z_0..z_5 (z_s -> input of iteration s+1), leave-one-out, "
                       "legacy (pre-fix) conditions on the same pairs, non-responsive pairs, full CFR log",
             "site_definition": "site s = z_s = latent fed into loop iteration s+1; z_0 = latent-0 (bot position); "
@@ -297,7 +350,9 @@ def main() -> None:
         metrics=metrics,
         hyperparams={"inf_latent_iterations": n_latents, "greedy": training_args.greedy,
                      "n_pairs_cap": mpa.n_pairs, "n_nonresponsive_cap": mpa.n_nonresponsive,
-                     "deltas": list(DELTAS), "max_new_tokens": mpa.max_new_tokens},
+                     "deltas": list(DELTAS), "max_new_tokens": mpa.max_new_tokens,
+                     **({"change_set": mpa.change_set, "conditions": mpa.conditions,
+                         "hidden_operand_filter": mpa.hidden_operand_filter} if magnitude_mode else {})},
         seed=mpa.pair_seed,
         hardware=f"{mpa.hardware} / {torch.cuda.get_device_name(0)}",
         notes="E3 rerun, CODI: aligned-site same-problem minimal-pair patch (all/single/prefix/leave-one-out) "

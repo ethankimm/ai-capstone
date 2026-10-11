@@ -17,6 +17,7 @@ ground truth by direct re-execution, not by re-deriving it through
 """
 from __future__ import annotations
 
+import math
 import re
 from dataclasses import dataclass
 
@@ -33,6 +34,7 @@ class MinimalPair:
     step: int  # 0-indexed chain step whose result differs between original and twin
     perturbed_number: str  # the question-text number that was changed
     delta: int
+    change: str | None = None  # change-set label ("+5", "x1.5"); None for the legacy delta-only path
 
 
 def _reexecute(steps: list[dict], seed_mapping: dict[str, str]) -> list[str] | None:
@@ -73,12 +75,17 @@ def _eligible_operands(question: str, steps: list[dict], step: int) -> list[tupl
 
 def generate_minimal_pair(
     example: Example, step: int, delta: int, rng=None, require_nonneg_int: bool = True,
+    factor: float | None = None,
 ) -> MinimalPair | None:
     """Perturb one eligible question number by `delta`, re-execute the chain, and build a
     twin `Example`. Returns None if there's no eligible operand, the perturbed chain
     can't be evaluated, any step's result goes negative/non-integer (when
     `require_nonneg_int`), or step `step`'s result doesn't actually change (delta was
-    absorbed, e.g. by a floor/rounding op)."""
+    absorbed, e.g. by a floor/rounding op).
+
+    `factor` (optional): multiply the operand by `factor` and round half up to an integer
+    instead of adding `delta` (`delta` is then ignored and the realised integer change is
+    recorded in `MinimalPair.delta`). None = the original additive behaviour."""
     steps = parse_steps(example.rationale)
     if step >= len(steps):
         return None
@@ -90,7 +97,15 @@ def generate_minimal_pair(
         orig_num = float(tok.replace(",", ""))
     except ValueError:
         return None
-    new_num = orig_num + delta
+    change_label = None
+    if factor is not None:
+        new_num = float(math.floor(orig_num * factor + 0.5))
+        if new_num == orig_num:
+            return None
+        delta = int(new_num - orig_num) if (new_num - orig_num).is_integer() else delta
+        change_label = f"x{factor:g}"
+    else:
+        new_num = orig_num + delta
     if require_nonneg_int and (new_num < 0 or not new_num.is_integer()):
         return None
     new_tok = fmt_num(new_num)
@@ -125,7 +140,8 @@ def generate_minimal_pair(
     twin_answer = new_results[ans_idx]
 
     twin = Example(question=twin_question, rationale=twin_rationale, answer=twin_answer, idx=example.idx)
-    return MinimalPair(original=example, twin=twin, step=step, perturbed_number=tok, delta=delta)
+    return MinimalPair(original=example, twin=twin, step=step, perturbed_number=tok, delta=delta,
+                       change=change_label)
 
 
 def generate_minimal_pairs(
@@ -143,3 +159,92 @@ def generate_minimal_pairs(
                     out.append(pair)
                     break
     return out
+
+
+# ---- change sets beyond +-1..3 (Phase A step 1: twin-magnitude rerun) ------------------------
+
+DEFAULT_DELTAS = (1, -1, 2, -2, 3, -3)
+# Additive deltas up to +-20 plus multiplicative factors (rounded half up to an integer).
+WIDE_CHANGE_SET = "1,-1,2,-2,3,-3,5,-5,10,-10,20,-20,x0.5,x1.25,x1.5,x2,x3"
+
+
+@dataclass(frozen=True)
+class Change:
+    kind: str  # "add" | "mul"
+    value: float
+
+    @property
+    def label(self) -> str:
+        return f"x{self.value:g}" if self.kind == "mul" else f"{int(self.value):+d}"
+
+
+def parse_change_set(spec: str) -> list[Change]:
+    """`"1,-1,5,x0.5,x2"` -> additive changes for plain integers, multiplicative for `xF`."""
+    out = []
+    for tok in (t.strip() for t in spec.split(",")):
+        if not tok:
+            continue
+        if tok[0] in "xX*":
+            out.append(Change("mul", float(tok[1:])))
+        else:
+            v = float(tok)
+            if not v.is_integer() or v == 0:
+                raise ValueError(f"additive change must be a non-zero integer: {tok!r}")
+            out.append(Change("add", v))
+    return out
+
+
+def generate_minimal_pair_for_change(example: Example, step: int, change: Change, rng=None) -> MinimalPair | None:
+    if change.kind == "mul":
+        return generate_minimal_pair(example, step, 0, rng=rng, factor=change.value)
+    pair = generate_minimal_pair(example, step, int(change.value), rng=rng)
+    if pair is not None:
+        pair.change = change.label
+    return pair
+
+
+def generate_change_set_pairs(
+    examples: list[Example], steps_for, changes: list[Change], rng=None,
+) -> list[MinimalPair]:
+    """One minimal pair per (example, qualifying step, change) that succeeds -- unlike
+    `generate_minimal_pairs`, which keeps only the first delta that works. Twins are
+    deduplicated per recipient by question text (two steps can pick the same operand
+    with the same change). `steps_for(example)` returns the step indices to try."""
+    out, seen = [], set()
+    for ex in examples:
+        for step in steps_for(ex):
+            for ch in changes:
+                pair = generate_minimal_pair_for_change(ex, step, ch, rng=rng)
+                if pair is None or (ex.idx, pair.twin.question) in seen:
+                    continue
+                seen.add((ex.idx, pair.twin.question))
+                out.append(pair)
+    return out
+
+
+def hidden_operands(question: str, rationale: str) -> list[str]:
+    """Chain operands that are neither a number written in the question nor an earlier
+    step's result: unit constants (7 days, 100 for percent), numbers spelled as words
+    ("twice", "three"). Re-execution substitutes the perturbed literal everywhere, so a
+    hidden operand that coincides with it, or that the question ties to it implicitly,
+    makes the twin's re-executed gold answer wrong -- negligible at +-1..3 on most items,
+    not at x2 or +20."""
+    q_nums = [m.group(0) for m in QUESTION_NUM_RE.finditer(question)]
+    prior: list[str] = []
+    hidden = []
+    for st in parse_steps(rationale):
+        for o in NUM_RE.findall(st["expr"]):
+            if not any(num_equal(o, q) for q in q_nums) and not any(num_equal(o, p) for p in prior):
+                hidden.append(o)
+        prior.append(st["val"])
+    return hidden
+
+
+def passes_hidden_operand_filter(pair: MinimalPair) -> bool:
+    """Hidden-operand filter for large-change twins: keep a pair only if (a) the
+    original chain has no hidden operands (`hidden_operands`), and (b) the perturbed
+    question number does not coincide with any step result of the original chain (the
+    literal substitution would otherwise also rewrite that intermediate)."""
+    if hidden_operands(pair.original.question, pair.original.rationale):
+        return False
+    return not any(num_equal(pair.perturbed_number, st["val"]) for st in parse_steps(pair.original.rationale))
