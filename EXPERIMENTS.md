@@ -7917,3 +7917,51 @@ A KV-cached batched decode is worth adding for future Llama Coconut runs (valida
 **Gotchas hit:** The local transformers 5.x breaks coconut_common's legacy KV-cache slicing, so I used a scratch venv pinned to Coconut's requirements. Grid CoT/no-CoT checkpoints keep the base vocab (50257), while the Coconut ones have +3 latent tokens; the loader now resizes to the checkpoint's vocab.
 **Caveats:** Single seed and permutation. GPT-2 only. CODI is not in this pilot (its scripts hard-code CUDA): CODI GSM8K/ProntoQA/ProsQA is the next step. Steer is defined as P(swapped answer == donor's own base answer AND != recipient's base answer | donor answer differs). On ProntoQA, binary answers make ~50% steer the chance level. Swaps are full-chain (all 6 latent passes / the whole reasoning text). The CoT splice re-tokenizes the donor's decoded text.
 **Next:** CODI rows (GSM8K zen-E + grid ProntoQA/ProsQA, on RunPod); Llama-1B grid; no-CoT parity check on our own pool; decide the paper angle (PILOT_ZHANG_SWAP.md).
+
+---
+
+## 2026-10-11 — Zhang-style random swap + twin swap, codi on gsm8k (codi, run_id: 20261011-061437_codi_zhang-swap-gsm8k)
+
+**Goal:** CODI rows of the Zhang-swap pilot (PILOT_ZHANG_SWAP.md): does the pattern from Coconut (random swap = placeholder on logic tasks, load-bearing but content-blind on GSM8K; twin swap reads the content) hold for CODI?
+**Mechanism / model:** `codi`, gpt2 / hf:zen-E/CODI-gpt2, compute_steps=6.
+**Data:** gsm8k-aug test n=1194 seed=0; run seed=0.
+**Hyperparams:** {'method': 'codi', 'num_latents': 6, 'perm_seed': 0, 'n_twin_cap': 400, 'max_new_tokens': 64, 'deltas': [1, -1, 2, -2, 3, -3], 'dtype': 'float32', 'greedy': True}
+**Command:** `scripts/swap_random_codi.py --dataset gsm8k --checkpoint_path zen-E/CODI-gpt2 --grid_repo ~/Projects/are-lrms-easily-interpretable --data_dir ~/Projects/are-lrms-easily-interpretable/data --device cpu --fp32 True --slug zhang-swap-gsm8k --stage pilot --hardware 'local Apple Silicon CPU'  (venv: torch 2.5.1, transformers 4.46.2, peft 0.15.2)`
+**Headline results:** `final_answer_accuracy=0.441`, `compute_steps=6`
+**Results:** Base accuracy 0.441 (fp32, gold-trace test set, n=1194; reference bf16 protocol 0.437 on the full test set). Random swap: accuracy 0.441 -> 0.043 [0.033, 0.056], IR 93.0% [91.4, 94.3], steer-to-donor 1.6%. Twin swap on base-correct recipients with a responsive twin (n=235, CFR 0.625): IR 94.5%, steer 86.7%. Same 228 recipients, paired: twin steer 86.4% vs random 1.8%, McNemar b=193 c=0, p=1.6e-58.
+**Interpretation:** Same pattern as Coconut on GSM8K (`20261011-050903_coconut_zhang-swap-gsm8k`): a random swap breaks the model (latents are used), but a random donor's answer almost never transfers, while a twin's does (86-87%, matching the aligned E3 84%). The answer-change rate can't separate the two donors. So the use-vs-content split holds across both latent methods. Note: CODI's latents 'sharpen' rather than 'compute' in the sampling-recovery test, yet foreign latents still collapse accuracy. Removing latents and replacing them with wrong content are different interventions.
+**Gotchas hit:** `eval_codi.build_model` hard-codes CUDA, so this loads with the grid repo's device-agnostic `CODIInference` and reimplements its latent loop with an override hook. bf16 on CPU took ~3.6 s/example, so it is cast to fp32 (~35x faster). On the n=30 smoke test, 1/30 base answers differed from bf16; full-set base accuracy matches the references.
+**Caveats:** fp32, not the reference bf16 protocol. Single permutation seed. GPT-2 only. Full-chain swap (z_0..z_5, aligned). On ProntoQA, binary answers put chance-level steer at ~50%.
+**Next:** Llama-1B grid; write up the use-vs-content table across methods and tasks. Multi-dataset direction: see MULTI_DATASET.md.
+
+---
+
+## 2026-10-11 — Zhang-style random swap, codi on prontoqa (codi, run_id: 20261011-061753_codi_zhang-swap-prontoqa)
+
+**Goal:** CODI rows of the Zhang-swap pilot (PILOT_ZHANG_SWAP.md): does the pattern from Coconut (random swap = placeholder on logic tasks, load-bearing but content-blind on GSM8K; twin swap reads the content) hold for CODI?
+**Mechanism / model:** `codi`, gpt2 / hf:connordilgren/gpt2-prontoqa-codi/pytorch_model.bin, compute_steps=6.
+**Data:** prontoqa test n=800 seed=0; run seed=0.
+**Hyperparams:** {'method': 'codi', 'num_latents': 6, 'perm_seed': 0, 'n_twin_cap': 400, 'max_new_tokens': 64, 'deltas': [1, -1, 2, -2, 3, -3], 'dtype': 'float32', 'greedy': True}
+**Command:** `scripts/swap_random_codi.py --dataset prontoqa --checkpoint_path <grid>/gpt2-prontoqa-codi/pytorch_model.bin --grid_repo ~/Projects/are-lrms-easily-interpretable --data_dir ~/Projects/are-lrms-easily-interpretable/data --device cpu --fp32 True --slug zhang-swap-prontoqa --stage pilot --hardware 'local Apple Silicon CPU'  (venv: torch 2.5.1, transformers 4.46.2, peft 0.15.2)`
+**Headline results:** `final_answer_accuracy=0.953`, `compute_steps=6`
+**Results:** Base accuracy 0.953 (Dilgren & Wiegreffe report 94.8). Random swap: accuracy 0.953 -> 0.953, IR 0.0% [0, 0.48], steer 0 (n=800).
+**Interpretation:** Placeholder verdict, same as Coconut on ProntoQA: CODI ignores its latents on this task, consistent with Dilgren's latent = no-CoT parity.
+**Gotchas hit:** `eval_codi.build_model` hard-codes CUDA, so this loads with the grid repo's device-agnostic `CODIInference` and reimplements its latent loop with an override hook. bf16 on CPU took ~3.6 s/example, so it is cast to fp32 (~35x faster). On the n=30 smoke test, 1/30 base answers differed from bf16; full-set base accuracy matches the references.
+**Caveats:** fp32, not the reference bf16 protocol. Single permutation seed. GPT-2 only. Full-chain swap (z_0..z_5, aligned). On ProntoQA, binary answers put chance-level steer at ~50%.
+**Next:** Llama-1B grid; write up the use-vs-content table across methods and tasks. Multi-dataset direction: see MULTI_DATASET.md.
+
+---
+
+## 2026-10-11 — Zhang-style random swap, codi on prosqa (codi, run_id: 20261011-062104_codi_zhang-swap-prosqa)
+
+**Goal:** CODI rows of the Zhang-swap pilot (PILOT_ZHANG_SWAP.md): does the pattern from Coconut (random swap = placeholder on logic tasks, load-bearing but content-blind on GSM8K; twin swap reads the content) hold for CODI?
+**Mechanism / model:** `codi`, gpt2 / hf:connordilgren/gpt2-prosqa-codi/pytorch_model.bin, compute_steps=6.
+**Data:** prosqa test n=500 seed=0; run seed=0.
+**Hyperparams:** {'method': 'codi', 'num_latents': 6, 'perm_seed': 0, 'n_twin_cap': 400, 'max_new_tokens': 64, 'deltas': [1, -1, 2, -2, 3, -3], 'dtype': 'float32', 'greedy': True}
+**Command:** `scripts/swap_random_codi.py --dataset prosqa --checkpoint_path <grid>/gpt2-prosqa-codi/pytorch_model.bin --grid_repo ~/Projects/are-lrms-easily-interpretable --data_dir ~/Projects/are-lrms-easily-interpretable/data --device cpu --fp32 True --slug zhang-swap-prosqa --stage pilot --hardware 'local Apple Silicon CPU'  (venv: torch 2.5.1, transformers 4.46.2, peft 0.15.2)`
+**Headline results:** `final_answer_accuracy=0.816`, `compute_steps=6`
+**Results:** Base accuracy 0.816 (Dilgren & Wiegreffe report 80.0). Random swap: accuracy 0.816 -> 0.816, IR 0.0% [0, 0.76], steer 0 (n=500).
+**Interpretation:** Placeholder verdict, same as Coconut on ProsQA.
+**Gotchas hit:** `eval_codi.build_model` hard-codes CUDA, so this loads with the grid repo's device-agnostic `CODIInference` and reimplements its latent loop with an override hook. bf16 on CPU took ~3.6 s/example, so it is cast to fp32 (~35x faster). On the n=30 smoke test, 1/30 base answers differed from bf16; full-set base accuracy matches the references.
+**Caveats:** fp32, not the reference bf16 protocol. Single permutation seed. GPT-2 only. Full-chain swap (z_0..z_5, aligned). On ProntoQA, binary answers put chance-level steer at ~50%.
+**Next:** Llama-1B grid; write up the use-vs-content table across methods and tasks. Multi-dataset direction: see MULTI_DATASET.md.

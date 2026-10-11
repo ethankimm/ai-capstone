@@ -1,0 +1,13 @@
+## 2026-10-11 — Zhang-style random swap + twin swap, codi on gsm8k (codi, run_id: 20261011-061437_codi_zhang-swap-gsm8k)
+
+**Goal:** CODI rows of the Zhang-swap pilot (PILOT_ZHANG_SWAP.md): does the pattern from Coconut (random swap = placeholder on logic tasks, load-bearing but content-blind on GSM8K; twin swap reads the content) hold for CODI?
+**Mechanism / model:** `codi`, gpt2 / hf:zen-E/CODI-gpt2, compute_steps=6.
+**Data:** gsm8k-aug test n=1194 seed=0; run seed=0.
+**Hyperparams:** {'method': 'codi', 'num_latents': 6, 'perm_seed': 0, 'n_twin_cap': 400, 'max_new_tokens': 64, 'deltas': [1, -1, 2, -2, 3, -3], 'dtype': 'float32', 'greedy': True}
+**Command:** `scripts/swap_random_codi.py --dataset gsm8k --checkpoint_path zen-E/CODI-gpt2 --grid_repo ~/Projects/are-lrms-easily-interpretable --data_dir ~/Projects/are-lrms-easily-interpretable/data --device cpu --fp32 True --slug zhang-swap-gsm8k --stage pilot --hardware 'local Apple Silicon CPU'  (venv: torch 2.5.1, transformers 4.46.2, peft 0.15.2)`
+**Headline results:** `final_answer_accuracy=0.441`, `compute_steps=6`
+**Results:** Base accuracy 0.441 (fp32, gold-trace test set, n=1194; reference bf16 protocol 0.437 on the full test set). Random swap: accuracy 0.441 -> 0.043 [0.033, 0.056], IR 93.0% [91.4, 94.3], steer-to-donor 1.6%. Twin swap on base-correct recipients with a responsive twin (n=235, CFR 0.625): IR 94.5%, steer 86.7%. Same 228 recipients, paired: twin steer 86.4% vs random 1.8%, McNemar b=193 c=0, p=1.6e-58.
+**Interpretation:** Same pattern as Coconut on GSM8K (`20261011-050903_coconut_zhang-swap-gsm8k`): a random swap breaks the model (latents are used), but a random donor's answer almost never transfers, while a twin's does (86-87%, matching the aligned E3 84%). The answer-change rate can't separate the two donors. So the use-vs-content split holds across both latent methods. Note: CODI's latents 'sharpen' rather than 'compute' in the sampling-recovery test, yet foreign latents still collapse accuracy. Removing latents and replacing them with wrong content are different interventions.
+**Gotchas hit:** `eval_codi.build_model` hard-codes CUDA, so this loads with the grid repo's device-agnostic `CODIInference` and reimplements its latent loop with an override hook. bf16 on CPU took ~3.6 s/example, so it is cast to fp32 (~35x faster). On the n=30 smoke test, 1/30 base answers differed from bf16; full-set base accuracy matches the references.
+**Caveats:** fp32, not the reference bf16 protocol. Single permutation seed. GPT-2 only. Full-chain swap (z_0..z_5, aligned). On ProntoQA, binary answers put chance-level steer at ~50%.
+**Next:** Llama-1B grid; write up the use-vs-content table across methods and tasks. Multi-dataset direction: see MULTI_DATASET.md.

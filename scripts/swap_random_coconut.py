@@ -127,55 +127,17 @@ def derangement(n: int, seed: int) -> list[int]:
             return perm
 
 
-def main() -> None:
-    (sa,) = transformers.HfArgumentParser((SwapArguments,)).parse_args_into_dataclasses()
-    assert sa.method in ("coconut", "cot") and sa.dataset in DATA_FILES
-    argv = " ".join(sys.argv)
-    device = sa.device
-    max_new = sa.max_new_tokens or (48 if sa.method == "coconut" else 256)
-    tokenizer, model, embedding, special_ids = load_model(sa.model_id, sa.checkpoint_path, device)
-    n_params = sum(p.numel() for p in model.parameters())
-    eos_id = tokenizer.eos_token_id
-
-    examples = load_examples(sa.data_dir, sa.dataset, sa.eval_n, sa.eval_seed)
-    if sa.smoke_n:
-        examples = examples[:sa.smoke_n]
-    print(f"method={sa.method} dataset={sa.dataset} n_examples={len(examples)}")
-
-    # ---- method-specific "run" (returns answer + the donor payload) and "run with donor payload"
-    @torch.no_grad()
-    def greedy(prompt_ids: list[int]) -> str:
-        ids = torch.tensor([prompt_ids], device=device)
-        out = model.generate(ids, attention_mask=torch.ones_like(ids), max_new_tokens=max_new, do_sample=False,
-                             eos_token_id=eos_id, pad_token_id=eos_id)
-        return tokenizer.decode(out[0, len(prompt_ids):], skip_special_tokens=True)
-
-    def q_ids(question: str) -> list[int]:
-        return tokenizer.encode(question if question.endswith("\n") else question + "\n", add_special_tokens=True)
-
-    if sa.method == "coconut":
-        def run(question: str, payload=None):
-            input_ids, attn = encode_question(tokenizer, special_ids, question, sa.num_latents, device)
-            override = {p: payload[p] for p in range(sa.num_latents)} if payload is not None else None
-            recs, emb, kv, ncr = run_passes(model, embedding, input_ids, attn, device, sa.num_latents,
-                                            override_at_pass=override, latent_token_id=special_ids["latent"])
-            raw = finish_and_decode(model, embedding, tokenizer, emb, kv, ncr, attn, device, max_new, eos_id)
-            return extract_answer_after_delimiter(raw), [r["live_hidden"] for r in recs], raw
-    else:
-        def run(question: str, payload=None):
-            if payload is None:
-                raw = greedy(q_ids(question))
-                reasoning = raw.split("###")[0] if "###" in raw else None
-                return extract_answer_after_delimiter(raw), reasoning, raw
-            tail = greedy(q_ids(question) + tokenizer.encode(payload + "###", add_special_tokens=False))
-            return tail.strip().replace(",", "") or None, None, "###" + tail
-
+def swap_experiment(run, examples: list[Example], dataset: str, perm_seed: int, n_twin: int):
+    """Shared by the Coconut/CoT and CODI scripts. `run(question, payload=None)` returns
+    (pred, payload, raw): payload=None runs the model normally and returns its own payload
+    (latent chain / reasoning text, or None if there is nothing to splice); a payload runs the
+    model on `question` with that payload spliced in."""
     # ---- base pass ------------------------------------------------------------------------------
     t0 = time.perf_counter()
     base: dict[int, dict] = {}
     for i, ex in enumerate(examples):
         pred, payload, raw = run(ex.question)
-        base[ex.idx] = {"pred": pred, "correct": same_answer(pred, ex.answer, sa.dataset), "payload": payload, "raw": raw}
+        base[ex.idx] = {"pred": pred, "correct": same_answer(pred, ex.answer, dataset), "payload": payload, "raw": raw}
         if (i + 1) % 200 == 0:
             print(f"decoded {i + 1}/{len(examples)} ({time.perf_counter() - t0:.0f}s)", flush=True)
     decode_elapsed = time.perf_counter() - t0
@@ -188,14 +150,14 @@ def main() -> None:
         pred, _, raw = run(ex.question, payload)
         rb = base[ex.idx]["pred"]
         return {"pred": pred, "raw": raw[:200], "skipped": False,
-                "correct": same_answer(pred, ex.answer, sa.dataset),
-                "answer_changed": not same_answer(pred, rb, sa.dataset),
-                "donor_differs": not same_answer(donor_pred, rb, sa.dataset),
-                "matches_donor": same_answer(pred, donor_pred, sa.dataset) and not same_answer(pred, rb, sa.dataset)}
+                "correct": same_answer(pred, ex.answer, dataset),
+                "answer_changed": not same_answer(pred, rb, dataset),
+                "donor_differs": not same_answer(donor_pred, rb, dataset),
+                "matches_donor": same_answer(pred, donor_pred, dataset) and not same_answer(pred, rb, dataset)}
 
     # ---- random swap (Zhang) --------------------------------------------------------------------
     t1 = time.perf_counter()
-    perm = derangement(len(examples), sa.perm_seed)
+    perm = derangement(len(examples), perm_seed)
     records = []
     for i, ex in enumerate(examples):
         donor = examples[perm[i]]
@@ -209,8 +171,8 @@ def main() -> None:
     # ---- twin swap (gsm8k only, E3 design) ------------------------------------------------------
     twin_by_recipient: dict[int, dict] = {}
     cfr = None
-    if sa.dataset == "gsm8k":
-        rng = random.Random(sa.perm_seed)
+    if dataset == "gsm8k":
+        rng = random.Random(perm_seed)
         cands = []
         for ex in examples:
             if not base[ex.idx]["correct"]:
@@ -222,11 +184,11 @@ def main() -> None:
                     break  # one twin per recipient so random vs twin is paired 1:1
         n_decoded = 0
         for mp in cands:
-            if len(twin_by_recipient) >= sa.n_twin:
+            if len(twin_by_recipient) >= n_twin:
                 break
             tpred, tpayload, _ = run(mp.twin.question)
             n_decoded += 1
-            if not same_answer(tpred, mp.twin.answer, sa.dataset):
+            if not same_answer(tpred, mp.twin.answer, dataset):
                 continue
             r = cond(mp.original, tpred, tpayload)
             r.update({"twin_answer": mp.twin.answer, "step": mp.step, "delta": mp.delta})
@@ -270,6 +232,54 @@ def main() -> None:
     }
     for k, v in summary.items():
         print(f"{k}: {json.dumps(v)}")
+    return summary, records, acc_before, decode_elapsed, swap_elapsed
+
+
+def main() -> None:
+    (sa,) = transformers.HfArgumentParser((SwapArguments,)).parse_args_into_dataclasses()
+    assert sa.method in ("coconut", "cot") and sa.dataset in DATA_FILES
+    argv = " ".join(sys.argv)
+    device = sa.device
+    max_new = sa.max_new_tokens or (48 if sa.method == "coconut" else 256)
+    tokenizer, model, embedding, special_ids = load_model(sa.model_id, sa.checkpoint_path, device)
+    n_params = sum(p.numel() for p in model.parameters())
+    eos_id = tokenizer.eos_token_id
+
+    examples = load_examples(sa.data_dir, sa.dataset, sa.eval_n, sa.eval_seed)
+    if sa.smoke_n:
+        examples = examples[:sa.smoke_n]
+    print(f"method={sa.method} dataset={sa.dataset} n_examples={len(examples)}")
+
+    # ---- method-specific "run" (returns answer + the donor payload) and "run with donor payload"
+    @torch.no_grad()
+    def greedy(prompt_ids: list[int]) -> str:
+        ids = torch.tensor([prompt_ids], device=device)
+        out = model.generate(ids, attention_mask=torch.ones_like(ids), max_new_tokens=max_new, do_sample=False,
+                             eos_token_id=eos_id, pad_token_id=eos_id)
+        return tokenizer.decode(out[0, len(prompt_ids):], skip_special_tokens=True)
+
+    def q_ids(question: str) -> list[int]:
+        return tokenizer.encode(question if question.endswith("\n") else question + "\n", add_special_tokens=True)
+
+    if sa.method == "coconut":
+        def run(question: str, payload=None):
+            input_ids, attn = encode_question(tokenizer, special_ids, question, sa.num_latents, device)
+            override = {p: payload[p] for p in range(sa.num_latents)} if payload is not None else None
+            recs, emb, kv, ncr = run_passes(model, embedding, input_ids, attn, device, sa.num_latents,
+                                            override_at_pass=override, latent_token_id=special_ids["latent"])
+            raw = finish_and_decode(model, embedding, tokenizer, emb, kv, ncr, attn, device, max_new, eos_id)
+            return extract_answer_after_delimiter(raw), [r["live_hidden"] for r in recs], raw
+    else:
+        def run(question: str, payload=None):
+            if payload is None:
+                raw = greedy(q_ids(question))
+                reasoning = raw.split("###")[0] if "###" in raw else None
+                return extract_answer_after_delimiter(raw), reasoning, raw
+            tail = greedy(q_ids(question) + tokenizer.encode(payload + "###", add_special_tokens=False))
+            return tail.strip().replace(",", "") or None, None, "###" + tail
+
+    summary, records, acc_before, decode_elapsed, swap_elapsed = swap_experiment(
+        run, examples, sa.dataset, sa.perm_seed, sa.n_twin)
 
     if sa.smoke_n:
         print("smoke run -- not logging")

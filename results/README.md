@@ -106,3 +106,6 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261011-052723_explicit_cot_zhang-swap-gsm8k](20261011-052723_explicit_cot_zhang-swap-gsm8k/) | explicit_cot | openai-community/gpt2 | test (n=1194) | None | 0.429 | 0 | pilot | Henning Lindig |
 | [20261011-053511_explicit_cot_zhang-swap-prontoqa](20261011-053511_explicit_cot_zhang-swap-prontoqa/) | explicit_cot | openai-community/gpt2 | test (n=800) | None | 0.993 | 0 | pilot | Henning Lindig |
 | [20261011-053847_explicit_cot_zhang-swap-prosqa](20261011-053847_explicit_cot_zhang-swap-prosqa/) | explicit_cot | openai-community/gpt2 | test (n=500) | None | 0.742 | 0 | pilot | Henning Lindig |
+| [20261011-061437_codi_zhang-swap-gsm8k](20261011-061437_codi_zhang-swap-gsm8k/) | codi | gpt2 | test (n=1194) | 6 | 0.441 | 0 | pilot | Henning Lindig |
+| [20261011-061753_codi_zhang-swap-prontoqa](20261011-061753_codi_zhang-swap-prontoqa/) | codi | gpt2 | test (n=800) | 6 | 0.953 | 0 | pilot | Henning Lindig |
+| [20261011-062104_codi_zhang-swap-prosqa](20261011-062104_codi_zhang-swap-prosqa/) | codi | gpt2 | test (n=500) | 6 | 0.816 | 0 | pilot | Henning Lindig |
