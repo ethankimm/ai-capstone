@@ -122,3 +122,4 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261011-182123_baseline_no_cot_synthetic-depth-no_cot](20261011-182123_baseline_no_cot_synthetic-depth-no_cot/) | baseline_no_cot | openai-community/gpt2 | test (n=5576) | - | 0.797 | 0 | pilot | Henning Lindig |
 | [20261011-191236_filler_tokens_synthetic-depth-filler6-faithful-25ep](20261011-191236_filler_tokens_synthetic-depth-filler6-faithful-25ep/) | filler_tokens | gpt2 | test (n=5576) | 6 | 0.669 | 42 | pilot | Henning Lindig |
 | [20261012-034825_codi_synthetic-depth-codi](20261012-034825_codi_synthetic-depth-codi/) | codi | gpt2 | test (n=5576) | 6 | 0.395 | 11 | pilot | Henning Lindig |
+| [20261012-064341_coconut_synthetic-depth-coconut-A-lite](20261012-064341_coconut_synthetic-depth-coconut-A-lite/) | coconut | openai-community/gpt2 | test (n=5576) | 6 | 0.311 | 0 | pilot |  |
