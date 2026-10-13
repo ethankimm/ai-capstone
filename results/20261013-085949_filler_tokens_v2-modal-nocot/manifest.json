@@ -1,0 +1,149 @@
+{
+  "run_id": "20261013-085949_filler_tokens_v2-modal-nocot",
+  "mechanism": "filler_tokens",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "/workspace/synthetic_runs/pilot-modal_nocot/best",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "synthetic-modal",
+    "split": "test",
+    "n_examples": 3000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.718,
+    "unparseable_rate": 0.0,
+    "compute_steps": 0,
+    "train_loss": 0.3101445694866083,
+    "sec_per_example": 0.002208517973330648,
+    "extra": {
+      "task": "modal",
+      "task_level_range": [
+        6,
+        16
+      ],
+      "seconds_per_epoch": 1084.905105660752,
+      "seconds_per_epoch_all": [
+        1419.1685323050478,
+        1431.8210044010193,
+        1432.6526713679777,
+        1431.8314904799918,
+        1433.7484216699959,
+        1224.5522699700086,
+        1068.923268399958,
+        784.0674712160253,
+        698.2255185000249,
+        698.6967873250251,
+        696.8663473849883,
+        698.3074849089608
+      ],
+      "epochs_trained": 12,
+      "best_epoch": 12,
+      "best_monitor_accuracy": 0.7611111111111111,
+      "monitor_accuracy_by_epoch": [
+        0.36666666666666664,
+        0.48333333333333334,
+        0.5444444444444444,
+        0.5888888888888889,
+        0.6055555555555555,
+        0.65,
+        0.7388888888888889,
+        0.7222222222222222,
+        0.75,
+        0.7444444444444445,
+        0.7555555555555555,
+        0.7611111111111111
+      ],
+      "early_stopped": false,
+      "eval_checkpoint": "best",
+      "test_eval_seconds": 6.625553919991944,
+      "per_level_accuracy": {
+        "6": 0.902,
+        "8": 0.834,
+        "10": 0.738,
+        "12": 0.684,
+        "14": 0.624,
+        "16": 0.526
+      },
+      "per_level_n": {
+        "6": 500,
+        "8": 500,
+        "10": 500,
+        "12": 500,
+        "14": 500,
+        "16": 500
+      },
+      "per_level_ci95": {
+        "6": [
+          0.8727939491335183,
+          0.9250760811353939
+        ],
+        "8": [
+          0.7988646838026932,
+          0.8640422567689898
+        ],
+        "10": [
+          0.6977470833575388,
+          0.7746237305827623
+        ],
+        "12": [
+          0.641977870830057,
+          0.7232163718800919
+        ],
+        "14": [
+          0.5807491793847674,
+          0.6653599841807676
+        ],
+        "16": [
+          0.4822016483694956,
+          0.5694018859265038
+        ]
+      },
+      "curve_fit": {
+        "floor": 0.3830317460577416,
+        "ceiling": 1.0,
+        "midpoint_param": 11.75,
+        "slope": 0.2641221068685614,
+        "sse": 0.6325894986624967,
+        "rmse": 0.01452112826955372,
+        "best_observed": 0.902,
+        "halfway_target": 0.6425158730288708,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": 12.963057974860194,
+      "midpoint_status": "in_range",
+      "flat": false,
+      "midpoint_extrapolated": 12.963057974860194,
+      "auc": 0.7188000000000001,
+      "cot_leak_rate": 0.0
+    }
+  },
+  "hyperparams": {
+    "lr": 0.0001,
+    "max_epochs": 12.0,
+    "batch_size": 32,
+    "grad_accum": 4,
+    "train_n": 100000,
+    "train_json": "/workspace/synthetic_data_v2/modal/train.json",
+    "val_json": "/workspace/synthetic_data_v2/modal/valid_monitor.json",
+    "test_json": "/workspace/synthetic_data_v2/modal/test.json",
+    "max_new_tokens": 19,
+    "gen_batch_size": 64,
+    "early_stop_patience": 0,
+    "early_stop_min_delta": 0.005,
+    "filler_token": ".",
+    "faithful": false
+  },
+  "seed": 42,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "filler_tokens on synthetic modal (levels 6-16), 100000 train examples, per-level eval on /workspace/synthetic_data_v2/modal/test.json",
+  "timestamp_utc": "2026-10-13T12:37:15.888809+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

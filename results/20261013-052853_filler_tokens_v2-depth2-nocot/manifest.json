@@ -1,0 +1,185 @@
+{
+  "run_id": "20261013-052853_filler_tokens_v2-depth2-nocot",
+  "mechanism": "filler_tokens",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "/workspace/synthetic_runs/pilot-depth2_nocot/best",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 6000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.18083333333333335,
+    "unparseable_rate": 0.0,
+    "compute_steps": 0,
+    "train_loss": 0.8077437576837043,
+    "sec_per_example": 0.002317187269674226,
+    "extra": {
+      "task": "depth2",
+      "task_level_range": [
+        1,
+        12
+      ],
+      "seconds_per_epoch": 2271.08357825333,
+      "seconds_per_epoch_all": [
+        2986.216456214024,
+        2990.666811196017,
+        2988.901069598971,
+        2987.874010181986,
+        3008.378082138952,
+        3083.2700046650134,
+        2886.730027345009,
+        2008.0966729830252,
+        1516.4629397940007,
+        1358.0386751419865,
+        719.0339900659746,
+        719.3341997149982
+      ],
+      "epochs_trained": 12,
+      "best_epoch": 10,
+      "best_monitor_accuracy": 0.18888888888888888,
+      "monitor_accuracy_by_epoch": [
+        0.027777777777777776,
+        0.09166666666666666,
+        0.08888888888888889,
+        0.10555555555555556,
+        0.1111111111111111,
+        0.1361111111111111,
+        0.16111111111111112,
+        0.14166666666666666,
+        0.17777777777777778,
+        0.18888888888888888,
+        0.18055555555555555,
+        0.18888888888888888
+      ],
+      "early_stopped": false,
+      "eval_checkpoint": "best",
+      "test_eval_seconds": 13.903123618045356,
+      "per_level_accuracy": {
+        "1": 0.838,
+        "2": 0.51,
+        "3": 0.266,
+        "4": 0.14,
+        "5": 0.094,
+        "6": 0.064,
+        "7": 0.048,
+        "8": 0.038,
+        "9": 0.044,
+        "10": 0.05,
+        "11": 0.046,
+        "12": 0.032
+      },
+      "per_level_n": {
+        "1": 500,
+        "2": 500,
+        "3": 500,
+        "4": 500,
+        "5": 500,
+        "6": 500,
+        "7": 500,
+        "8": 500,
+        "9": 500,
+        "10": 500,
+        "11": 500,
+        "12": 500
+      },
+      "per_level_ci95": {
+        "1": [
+          0.8031477342378299,
+          0.8676982116101608
+        ],
+        "2": [
+          0.4662736879310782,
+          0.5535738252596908
+        ],
+        "3": [
+          0.2291604018204711,
+          0.30640778951553543
+        ],
+        "4": [
+          0.11232266018786358,
+          0.17316686494445405
+        ],
+        "5": [
+          0.0714264085922213,
+          0.12276455586255913
+        ],
+        "6": [
+          0.04569601604478943,
+          0.08895240883768415
+        ],
+        "7": [
+          0.03246520694135317,
+          0.07042719683589006
+        ],
+        "8": [
+          0.024460118055830385,
+          0.05858477253064388
+        ],
+        "9": [
+          0.02923395562860718,
+          0.06571944287232845
+        ],
+        "10": [
+          0.034093745243849435,
+          0.0727681611715476
+        ],
+        "11": [
+          0.030845108370816204,
+          0.06807779276827323
+        ],
+        "12": [
+          0.019791513626571118,
+          0.051344869045441784
+        ]
+      },
+      "curve_fit": {
+        "floor": 0.04945469467135277,
+        "ceiling": 1.0,
+        "midpoint_param": 2.047750000000001,
+        "slope": 1.3090590946356515,
+        "sse": 1.7543588491540234,
+        "rmse": 0.017099507055049,
+        "best_observed": 0.838,
+        "halfway_target": 0.44372734733567637,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": 2.3106990724644847,
+      "midpoint_status": "in_range",
+      "flat": false,
+      "midpoint_extrapolated": 2.3106990724644847,
+      "auc": 0.15772727272727272,
+      "cot_leak_rate": 0.0
+    }
+  },
+  "hyperparams": {
+    "lr": 0.0001,
+    "max_epochs": 12.0,
+    "batch_size": 32,
+    "grad_accum": 4,
+    "train_n": 100000,
+    "train_json": "/workspace/synthetic_data_v2/depth2/train.json",
+    "val_json": "/workspace/synthetic_data_v2/depth2/valid_monitor.json",
+    "test_json": "/workspace/synthetic_data_v2/depth2/test.json",
+    "max_new_tokens": 19,
+    "gen_batch_size": 64,
+    "early_stop_patience": 0,
+    "early_stop_min_delta": 0.005,
+    "filler_token": ".",
+    "faithful": false
+  },
+  "seed": 42,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "filler_tokens on synthetic depth2 (levels 1-12), 100000 train examples, per-level eval on /workspace/synthetic_data_v2/depth2/test.json",
+  "timestamp_utc": "2026-10-13T13:03:55.342128+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

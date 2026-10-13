@@ -1,0 +1,164 @@
+{
+  "run_id": "20261013-052904_explicit_cot_v2-depth2-cot",
+  "mechanism": "explicit_cot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "/workspace/synthetic_runs/pilot-depth2_cot/best",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 6000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.9998333333333334,
+    "unparseable_rate": 0.0,
+    "train_loss": 0.05354036151638726,
+    "sec_per_example": 0.03186701786749958,
+    "extra": {
+      "task": "depth2",
+      "task_level_range": [
+        1,
+        12
+      ],
+      "seconds_per_epoch": 4114.449330278982,
+      "seconds_per_epoch_all": [
+        4114.480586519989,
+        4116.037637492991,
+        4112.829766823968
+      ],
+      "epochs_trained": 3,
+      "best_epoch": 3,
+      "best_monitor_accuracy": 1.0,
+      "monitor_accuracy_by_epoch": [
+        0.9861111111111112,
+        0.9972222222222222,
+        1.0
+      ],
+      "early_stopped": false,
+      "eval_checkpoint": "best",
+      "test_eval_seconds": 191.20210720499745,
+      "per_level_accuracy": {
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0,
+        "9": 1.0,
+        "10": 1.0,
+        "11": 0.998,
+        "12": 1.0
+      },
+      "per_level_n": {
+        "1": 500,
+        "2": 500,
+        "3": 500,
+        "4": 500,
+        "5": 500,
+        "6": 500,
+        "7": 500,
+        "8": 500,
+        "9": 500,
+        "10": 500,
+        "11": 500,
+        "12": 500
+      },
+      "per_level_ci95": {
+        "1": [
+          0.9923756595384479,
+          1.0
+        ],
+        "2": [
+          0.9923756595384479,
+          1.0
+        ],
+        "3": [
+          0.9923756595384479,
+          1.0
+        ],
+        "4": [
+          0.9923756595384479,
+          1.0
+        ],
+        "5": [
+          0.9923756595384479,
+          1.0
+        ],
+        "6": [
+          0.9923756595384479,
+          1.0
+        ],
+        "7": [
+          0.9923756595384479,
+          1.0
+        ],
+        "8": [
+          0.9923756595384479,
+          1.0
+        ],
+        "9": [
+          0.9923756595384479,
+          1.0
+        ],
+        "10": [
+          0.9923756595384479,
+          1.0
+        ],
+        "11": [
+          0.9887592932948532,
+          0.9996468636054407
+        ],
+        "12": [
+          0.9923756595384479,
+          1.0
+        ]
+      },
+      "curve_fit": {
+        "floor": 0.9990000000000001,
+        "ceiling": 1.0,
+        "midpoint_param": 10.325250000000002,
+        "slope": 54.93539887574253,
+        "sse": 0.0010000000000000018,
+        "rmse": 0.0004082482904638634,
+        "best_observed": 1.0,
+        "halfway_target": 0.9995,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": null,
+      "midpoint_status": "beyond_range",
+      "flat": true,
+      "midpoint_extrapolated": 10.325250000000002,
+      "auc": 0.9998181818181819,
+      "cot_tokens": 48.5
+    }
+  },
+  "hyperparams": {
+    "lr": 0.0001,
+    "max_epochs": 3.0,
+    "batch_size": 32,
+    "grad_accum": 4,
+    "train_n": 100000,
+    "train_json": "/workspace/synthetic_data_v2/depth2/train.json",
+    "val_json": "/workspace/synthetic_data_v2/depth2/valid_monitor.json",
+    "test_json": "/workspace/synthetic_data_v2/depth2/test.json",
+    "max_new_tokens": 103,
+    "gen_batch_size": 64,
+    "early_stop_patience": 0,
+    "early_stop_min_delta": 0.005
+  },
+  "seed": 42,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "explicit_cot on synthetic depth2 (levels 1-12), 100000 train examples, per-level eval on /workspace/synthetic_data_v2/depth2/test.json",
+  "timestamp_utc": "2026-10-13T08:58:55.128111+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

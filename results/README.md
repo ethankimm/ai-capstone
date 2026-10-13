@@ -123,3 +123,10 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261011-191236_filler_tokens_synthetic-depth-filler6-faithful-25ep](20261011-191236_filler_tokens_synthetic-depth-filler6-faithful-25ep/) | filler_tokens | gpt2 | test (n=5576) | 6 | 0.669 | 42 | pilot | Henning Lindig |
 | [20261012-034825_codi_synthetic-depth-codi](20261012-034825_codi_synthetic-depth-codi/) | codi | gpt2 | test (n=5576) | 6 | 0.395 | 11 | pilot | Henning Lindig |
 | [20261012-064341_coconut_synthetic-depth-coconut-A-lite](20261012-064341_coconut_synthetic-depth-coconut-A-lite/) | coconut | openai-community/gpt2 | test (n=5576) | 6 | 0.311 | 0 | pilot |  |
+| [20261013-052904_explicit_cot_v2-depth2-cot](20261013-052904_explicit_cot_v2-depth2-cot/) | explicit_cot | gpt2 | test (n=6000) | - | 1.000 | 42 | pilot | Henning Lindig |
+| [20261013-052840_filler_tokens_v2-paircount-nocot](20261013-052840_filler_tokens_v2-paircount-nocot/) | filler_tokens | gpt2 | test (n=3000) | 0 | 0.313 | 42 | pilot | Henning Lindig |
+| [20261013-052841_filler_tokens_v2-distinct-nocot](20261013-052841_filler_tokens_v2-distinct-nocot/) | filler_tokens | gpt2 | test (n=2500) | 0 | 0.985 | 42 | pilot | Henning Lindig |
+| [20261013-111639_explicit_cot_v2-paircount-cot](20261013-111639_explicit_cot_v2-paircount-cot/) | explicit_cot | gpt2 | test (n=3000) | - | 0.214 | 42 | pilot | Henning Lindig |
+| [20261013-092201_explicit_cot_v2-modal-cot](20261013-092201_explicit_cot_v2-modal-cot/) | explicit_cot | gpt2 | test (n=3000) | - | 0.997 | 42 | pilot | Henning Lindig |
+| [20261013-085949_filler_tokens_v2-modal-nocot](20261013-085949_filler_tokens_v2-modal-nocot/) | filler_tokens | gpt2 | test (n=3000) | 0 | 0.718 | 42 | pilot | Henning Lindig |
+| [20261013-052853_filler_tokens_v2-depth2-nocot](20261013-052853_filler_tokens_v2-depth2-nocot/) | filler_tokens | gpt2 | test (n=6000) | 0 | 0.181 | 42 | pilot | Henning Lindig |

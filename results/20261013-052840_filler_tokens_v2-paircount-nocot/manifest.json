@@ -1,0 +1,149 @@
+{
+  "run_id": "20261013-052840_filler_tokens_v2-paircount-nocot",
+  "mechanism": "filler_tokens",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "/workspace/synthetic_runs/pilot-paircount_nocot/best",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "synthetic-paircount",
+    "split": "test",
+    "n_examples": 3000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.31266666666666665,
+    "unparseable_rate": 0.0,
+    "compute_steps": 0,
+    "train_loss": 0.3697265523778813,
+    "sec_per_example": 0.006814157583323929,
+    "extra": {
+      "task": "paircount",
+      "task_level_range": [
+        6,
+        16
+      ],
+      "seconds_per_epoch": 1078.0933741107438,
+      "seconds_per_epoch_all": [
+        1060.2094955409993,
+        1078.7932413500384,
+        1078.5357689830125,
+        1077.827261370956,
+        1079.2590327640064,
+        1078.566369430977,
+        1079.3288232229534,
+        1077.8139116810053,
+        1078.8836422159802,
+        1079.2542884540162,
+        1078.946388235956,
+        1089.7022660790244
+      ],
+      "epochs_trained": 12,
+      "best_epoch": 5,
+      "best_monitor_accuracy": 0.34444444444444444,
+      "monitor_accuracy_by_epoch": [
+        0.24444444444444444,
+        0.2722222222222222,
+        0.28888888888888886,
+        0.28888888888888886,
+        0.34444444444444444,
+        0.31666666666666665,
+        0.26666666666666666,
+        0.28888888888888886,
+        0.3,
+        0.32222222222222224,
+        0.3277777777777778,
+        0.3333333333333333
+      ],
+      "early_stopped": false,
+      "eval_checkpoint": "best",
+      "test_eval_seconds": 20.442472749971785,
+      "per_level_accuracy": {
+        "6": 0.448,
+        "8": 0.442,
+        "10": 0.302,
+        "12": 0.232,
+        "14": 0.236,
+        "16": 0.216
+      },
+      "per_level_n": {
+        "6": 500,
+        "8": 500,
+        "10": 500,
+        "12": 500,
+        "14": 500,
+        "16": 500
+      },
+      "per_level_ci95": {
+        "6": [
+          0.4049726694186174,
+          0.4918202619893841
+        ],
+        "8": [
+          0.3990759531428234,
+          0.4858084703507167
+        ],
+        "10": [
+          0.26339155087985655,
+          0.3436276879429182
+        ],
+        "12": [
+          0.19712923845271468,
+          0.2709574080346774
+        ],
+        "14": [
+          0.20088129547155886,
+          0.27514435629214073
+        ],
+        "16": [
+          0.18216774485419415,
+          0.25416288052796754
+        ]
+      },
+      "curve_fit": {
+        "floor": 0.2272291486044946,
+        "ceiling": 0.4489612987189487,
+        "midpoint_param": 9.662500000000001,
+        "slope": 1.9872133054627197,
+        "sse": 0.10546939701974833,
+        "rmse": 0.005929288799953115,
+        "best_observed": 0.448,
+        "halfway_target": 0.3376145743022473,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": 9.666863328648517,
+      "midpoint_status": "in_range",
+      "flat": false,
+      "midpoint_extrapolated": 9.666863328648517,
+      "auc": 0.3088,
+      "cot_leak_rate": 0.0
+    }
+  },
+  "hyperparams": {
+    "lr": 0.0001,
+    "max_epochs": 12.0,
+    "batch_size": 32,
+    "grad_accum": 4,
+    "train_n": 100000,
+    "train_json": "/workspace/synthetic_data_v2/paircount/train.json",
+    "val_json": "/workspace/synthetic_data_v2/paircount/valid_monitor.json",
+    "test_json": "/workspace/synthetic_data_v2/paircount/test.json",
+    "max_new_tokens": 19,
+    "gen_batch_size": 64,
+    "early_stop_patience": 0,
+    "early_stop_min_delta": 0.005,
+    "filler_token": ".",
+    "faithful": false
+  },
+  "seed": 42,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "filler_tokens on synthetic paircount (levels 6-16), 100000 train examples, per-level eval on /workspace/synthetic_data_v2/paircount/test.json",
+  "timestamp_utc": "2026-10-13T09:04:59.929693+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

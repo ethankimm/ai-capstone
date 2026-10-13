@@ -49,6 +49,7 @@ import shutil
 import sys
 import tempfile
 import time
+import types
 from pathlib import Path
 
 import torch
@@ -198,6 +199,12 @@ def main() -> None:
     p.add_argument("--max-new-tokens", type=int, default=0, help="0 = longest gold target in train/test + 16")
     p.add_argument("--gen-batch-size", type=int, default=64)
     p.add_argument("--verify-batched-n", type=int, default=0, help="check batched == batch-1 decode on first N test")
+    p.add_argument("--eval-only-ckpt", default=None,
+                   help="skip training: load this checkpoint dir and run only the test eval + RunRecord "
+                        "(e.g. after --verify-batched-n aborted a finished run)")
+    p.add_argument("--on-mismatch", choices=["abort", "warn", "batch1"], default="abort",
+                   help="--verify-batched-n failure: abort (default), warn (keep batched decode, record the "
+                        "mismatch count in the run), or batch1 (evaluate at batch size 1; slow)")
     p.add_argument("--early-stop-patience", type=int, default=0, help="0 = off")
     p.add_argument("--early-stop-min-delta", type=float, default=0.005)
     p.add_argument("--eval-checkpoint", choices=["best", "last"], default="best")
@@ -277,14 +284,20 @@ def main() -> None:
         data_collator=lambda batch: collate(batch, tokenizer.pad_token_id),
         callbacks=[monitor_cb],
     )
-    train_result = trainer.train()
-    model.save_pretrained(ckpt_dir / "last")
-    tokenizer.save_pretrained(ckpt_dir / "last")
-
-    eval_ckpt = ckpt_dir / args.eval_checkpoint
-    if args.eval_checkpoint == "best" and monitor_cb.best_epoch != len(monitor_cb.epochs):
+    if args.eval_only_ckpt:
+        train_result = types.SimpleNamespace(training_loss=None)
+        eval_ckpt = Path(args.eval_only_ckpt)
         model = AutoModelForCausalLM.from_pretrained(eval_ckpt).to(device)
+    else:
+        train_result = trainer.train()
+        model.save_pretrained(ckpt_dir / "last")
+        tokenizer.save_pretrained(ckpt_dir / "last")
+
+        eval_ckpt = ckpt_dir / args.eval_checkpoint
+        if args.eval_checkpoint == "best" and monitor_cb.best_epoch != len(monitor_cb.epochs):
+            model = AutoModelForCausalLM.from_pretrained(eval_ckpt).to(device)
     model.eval()
+    verify_info = None
 
     if args.verify_batched_n:
         sub = test.subset(args.verify_batched_n)
@@ -296,8 +309,15 @@ def main() -> None:
               f"{len(sub.examples) - len(mism)}/{len(sub.examples)} identical", flush=True)
         for m in mism[:5]:
             print("  MISMATCH", m)
-        if mism:
+        verify_info = {"verify_n": len(sub.examples), "verify_mismatches": len(mism),
+                       "on_mismatch": args.on_mismatch}
+        if mism and args.on_mismatch == "abort":
             raise SystemExit("batched decode differs from batch-1 decode -- use --gen-batch-size 1")
+        if mism and args.on_mismatch == "batch1":
+            args.gen_batch_size = 1
+            print("mismatch: evaluating at batch size 1", flush=True)
+        elif mism:
+            print(f"WARNING: {len(mism)} mismatches; keeping batched decode (recorded in the run)", flush=True)
 
     result, test_secs = evaluate(model, tokenizer, test, args, device)
     curve = curve_metrics(result.records)
@@ -313,7 +333,9 @@ def main() -> None:
         "seconds_per_epoch_all": secs,
         "epochs_trained": len(monitor_cb.epochs),
         "best_epoch": monitor_cb.best_epoch,
-        "best_monitor_accuracy": monitor_cb.best_acc,
+        "best_monitor_accuracy": monitor_cb.best_acc if monitor_cb.epochs else None,
+        "eval_only_ckpt": args.eval_only_ckpt,
+        **({"batched_decode_check": verify_info} if verify_info else {}),
         "monitor_accuracy_by_epoch": [e["monitor_accuracy"] for e in monitor_cb.epochs],
         "early_stopped": monitor_cb.early_stopped,
         "eval_checkpoint": args.eval_checkpoint,
@@ -349,7 +371,7 @@ def main() -> None:
             "final_answer_accuracy": result.final_answer_accuracy,
             "unparseable_rate": result.unparseable_rate,
             **({"compute_steps": args.compute_steps} if args.method == "filler_tokens" else {}),
-            "train_loss": train_result.training_loss,
+            **({"train_loss": train_result.training_loss} if train_result.training_loss is not None else {}),
             "sec_per_example": result.sec_per_example,
             "extra": extra,
         },

@@ -1,0 +1,125 @@
+{
+  "run_id": "20261013-111639_explicit_cot_v2-paircount-cot",
+  "mechanism": "explicit_cot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "/workspace/synthetic_runs/pilot-paircount_cot/best",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "synthetic-paircount",
+    "split": "test",
+    "n_examples": 3000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.21433333333333332,
+    "unparseable_rate": 0.0,
+    "sec_per_example": 0.052122248004675686,
+    "extra": {
+      "task": "paircount",
+      "task_level_range": [
+        6,
+        16
+      ],
+      "seconds_per_epoch": null,
+      "seconds_per_epoch_all": [],
+      "epochs_trained": 0,
+      "best_epoch": null,
+      "best_monitor_accuracy": null,
+      "eval_only_ckpt": "/workspace/synthetic_runs/pilot-paircount_cot/best",
+      "batched_decode_check": {
+        "verify_n": 32,
+        "verify_mismatches": 0,
+        "on_mismatch": "warn"
+      },
+      "monitor_accuracy_by_epoch": [],
+      "early_stopped": false,
+      "eval_checkpoint": "best",
+      "test_eval_seconds": 156.36674401402706,
+      "per_level_accuracy": {
+        "6": 0.392,
+        "8": 0.188,
+        "10": 0.196,
+        "12": 0.184,
+        "14": 0.164,
+        "16": 0.162
+      },
+      "per_level_n": {
+        "6": 500,
+        "8": 500,
+        "10": 500,
+        "12": 500,
+        "14": 500,
+        "16": 500
+      },
+      "per_level_ci95": {
+        "6": [
+          0.35018737778967923,
+          0.4354594797500162
+        ],
+        "8": [
+          0.15617996413496654,
+          0.22457762431304207
+        ],
+        "10": [
+          0.16357810661426447,
+          0.2330574923863593
+        ],
+        "12": [
+          0.1524894793781606,
+          0.22032910379354043
+        ],
+        "14": [
+          0.13412892031587176,
+          0.1989946364742914
+        ],
+        "16": [
+          0.13230178838983928,
+          0.19685226576217005
+        ]
+      },
+      "curve_fit": {
+        "floor": 0.17578911196741517,
+        "ceiling": 0.9999044541827966,
+        "midpoint_param": 5.3100000000000005,
+        "slope": 1.4988994379363538,
+        "sse": 0.3900916136322104,
+        "rmse": 0.011403093346868799,
+        "best_observed": 0.392,
+        "halfway_target": 0.2838945559837076,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": 6.571316709454196,
+      "midpoint_status": "in_range",
+      "flat": false,
+      "midpoint_extrapolated": 6.571316709454196,
+      "auc": 0.20180000000000003,
+      "cot_tokens": 80.0
+    }
+  },
+  "hyperparams": {
+    "lr": 0.0001,
+    "max_epochs": 3.0,
+    "batch_size": 32,
+    "grad_accum": 4,
+    "train_n": 100000,
+    "train_json": "/workspace/synthetic_data_v2/paircount/train.json",
+    "val_json": "/workspace/synthetic_data_v2/paircount/valid_monitor.json",
+    "test_json": "/workspace/synthetic_data_v2/paircount/test.json",
+    "max_new_tokens": 131,
+    "gen_batch_size": 64,
+    "early_stop_patience": 0,
+    "early_stop_min_delta": 0.005
+  },
+  "seed": 42,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "explicit_cot on synthetic paircount (levels 6-16), 100000 train examples, per-level eval on /workspace/synthetic_data_v2/paircount/test.json",
+  "timestamp_utc": "2026-10-13T11:19:42.574900+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

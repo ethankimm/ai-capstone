@@ -1,0 +1,128 @@
+{
+  "run_id": "20261013-092201_explicit_cot_v2-modal-cot",
+  "mechanism": "explicit_cot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "/workspace/synthetic_runs/pilot-modal_cot/best",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "synthetic-modal",
+    "split": "test",
+    "n_examples": 3000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.997,
+    "unparseable_rate": 0.0,
+    "train_loss": 0.032127747537674604,
+    "sec_per_example": 0.044602549693683005,
+    "extra": {
+      "task": "modal",
+      "task_level_range": [
+        6,
+        16
+      ],
+      "seconds_per_epoch": 2741.289993778337,
+      "seconds_per_epoch_all": [
+        2944.493049416982,
+        2943.6038183530327,
+        2335.7731135649956
+      ],
+      "epochs_trained": 3,
+      "best_epoch": 1,
+      "best_monitor_accuracy": 1.0,
+      "monitor_accuracy_by_epoch": [
+        1.0,
+        0.9944444444444445,
+        1.0
+      ],
+      "early_stopped": false,
+      "eval_checkpoint": "best",
+      "test_eval_seconds": 133.80764908104902,
+      "per_level_accuracy": {
+        "6": 1.0,
+        "8": 1.0,
+        "10": 1.0,
+        "12": 0.998,
+        "14": 0.996,
+        "16": 0.988
+      },
+      "per_level_n": {
+        "6": 500,
+        "8": 500,
+        "10": 500,
+        "12": 500,
+        "14": 500,
+        "16": 500
+      },
+      "per_level_ci95": {
+        "6": [
+          0.9923756595384479,
+          1.0
+        ],
+        "8": [
+          0.9923756595384479,
+          1.0
+        ],
+        "10": [
+          0.9923756595384479,
+          1.0
+        ],
+        "12": [
+          0.9887592932948532,
+          0.9996468636054407
+        ],
+        "14": [
+          0.9855342847848231,
+          0.9989023694773173
+        ],
+        "16": [
+          0.9740696388835527,
+          0.9944890048259724
+        ]
+      },
+      "curve_fit": {
+        "floor": 0.946625281142162,
+        "ceiling": 1.0,
+        "midpoint_param": 18.05,
+        "slope": 0.6034176336545163,
+        "sse": 0.0003383690799140989,
+        "rmse": 0.00033584176825508116,
+        "best_observed": 1.0,
+        "halfway_target": 0.973312640571081,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": null,
+      "midpoint_status": "beyond_range",
+      "flat": true,
+      "midpoint_extrapolated": 18.05,
+      "auc": 0.9975999999999999,
+      "cot_tokens": 87.0
+    }
+  },
+  "hyperparams": {
+    "lr": 0.0001,
+    "max_epochs": 3.0,
+    "batch_size": 32,
+    "grad_accum": 4,
+    "train_n": 100000,
+    "train_json": "/workspace/synthetic_data_v2/modal/train.json",
+    "val_json": "/workspace/synthetic_data_v2/modal/valid_monitor.json",
+    "test_json": "/workspace/synthetic_data_v2/modal/test.json",
+    "max_new_tokens": 138,
+    "gen_batch_size": 64,
+    "early_stop_patience": 0,
+    "early_stop_min_delta": 0.005
+  },
+  "seed": 42,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "explicit_cot on synthetic modal (levels 6-16), 100000 train examples, per-level eval on /workspace/synthetic_data_v2/modal/test.json",
+  "timestamp_utc": "2026-10-13T11:42:14.010566+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

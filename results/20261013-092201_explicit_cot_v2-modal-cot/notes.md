@@ -1,0 +1,13 @@
+## 2026-10-13 — v2 modal, explicit CoT, GPT-2 small: 0.997 (CoT gate passed) (explicit_cot, run_id: 20261013-092201_explicit_cot_v2-modal-cot)
+
+**Goal:** Positive control for `modal`: does CoT (N expression evaluations plus a final answer step) solve the task near-perfectly?
+**Mechanism / model:** `explicit_cot`, gpt2 / /workspace/synthetic_runs/pilot-modal_cot/best, compute_steps=-.
+**Data:** synthetic-modal test n=3000 seed=None; run seed=42.
+**Hyperparams:** {'lr': 0.0001, 'max_epochs': 3.0, 'batch_size': 32, 'grad_accum': 4, 'train_n': 100000, 'train_json': '/workspace/synthetic_data_v2/modal/train.json', 'val_json': '/workspace/synthetic_data_v2/modal/valid_monitor.json', 'test_json': '/workspace/synthetic_data_v2/modal/test.json', 'max_new_tokens': 138, 'gen_batch_size': 64, 'early_stop_patience': 0, 'early_stop_min_delta': 0.005}
+**Command:** `scripts/train_synthetic.py --method explicit_cot --epochs 3 --train-json /workspace/synthetic_data_v2/modal/train.json --val-json /workspace/synthetic_data_v2/modal/valid_monitor.json --test-json /workspace/synthetic_data_v2/modal/test.json --batch-size 32 --grad-accum 4 --lr 1e-4 --early-stop-patience 0 --output-dir /workspace/synthetic_runs/pilot-modal_cot --verify-batched-n 32 --stage pilot --hardware RunPod A40 (secure) --slug v2-modal-cot` (on RunPod A40 via `scripts/pod/pilot_v2.sh`)
+**Headline results:** `final_answer_accuracy=0.997`, `unparseable_rate=0.000`
+**Interpretation:** Test accuracy 0.997 (unparseable 0). Per N: 6 -> 1.000, 8 -> 1.000, 10 -> 1.000, 12 -> 0.998, 14 -> 0.996, 16 -> 0.988; a slight decline at the largest N. Monitor by epoch 1.000 / 0.994 / 1.000. Mean CoT length 87 tokens. With the no-CoT run (0.718) this gives a clean gap that widens with N.
+**Gotchas hit:** Batched-decode check passed (32/32).
+**Caveats:** Generator 2.0.0 (`latentreasoning/tasks/synthetic_v2.py`, seed 5980; data sha256 in each task's `stats.json`). The pod had no .git, so `manifest.json` has `git.commit: unknown`; code state = main + the then-uncommitted v2 generator and `scripts/pod/pilot_v2.sh`. One seed (42), one training stack (`train_synthetic.py`), GPT-2 small only, fixed epoch budget with no early stopping (eval on best-on-monitor checkpoint). Test = 500 items per level, so per-level 95% CIs are about +-2-5 pt. The 4PL `midpoint` in the manifest is halfway between the fitted floor and best accuracy; it is not meaningful when a curve sits on its floor.
+**Next:** Reference for CODI/Coconut on `modal`.
+**Checkpoint (added 2026-10-13):** the pod was terminated after the pilot; this run's best checkpoint was copied to `~/Documents/Penn/CIS5980/synthetic_checkpoints/v2_pilot/modal_cot_best` (479 MB). `manifest.json` still shows the original pod path.
