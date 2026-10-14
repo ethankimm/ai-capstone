@@ -1,0 +1,109 @@
+{
+  "run_id": "20261014-124731_recurrent_depth_gate-ouro-2.6b",
+  "mechanism": "recurrent_depth",
+  "stage": "pilot",
+  "model": {
+    "backbone": "ByteDance/Ouro-2.6B",
+    "checkpoint": "ByteDance/Ouro-2.6B",
+    "n_params": 2667974657
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.23275208491281274,
+    "compute_steps": 4,
+    "extra": {
+      "design": "Ouro step 0 gate: few-shot no-CoT accuracy on the xmech eval split by loop count, CoT reference at the trained loop count, overlap with CODI/Coconut base-correct sets",
+      "acc_by_loops": {
+        "1": 0.09476876421531463,
+        "2": 0.18726307808946172,
+        "3": 0.22820318423047764,
+        "4": 0.23275208491281274,
+        "5": 0.23351023502653526,
+        "6": 0.22971948445792267
+      },
+      "seconds_by_loops": {
+        "1": 651.11691522412,
+        "2": 911.0673801284283,
+        "3": 1219.211565706879,
+        "4": 1499.1879280675203,
+        "5": 1751.529244735837,
+        "6": 2068.402219692245
+      },
+      "cot_reference_acc": 0.715,
+      "cot_n": 200,
+      "correct_overlap_by_loops": {
+        "1": {
+          "ouro_and_codi": 85,
+          "ouro_and_coconut": 72,
+          "ouro_and_both": 67,
+          "codi_and_coconut": 363
+        },
+        "2": {
+          "ouro_and_codi": 163,
+          "ouro_and_coconut": 148,
+          "ouro_and_both": 133,
+          "codi_and_coconut": 363
+        },
+        "3": {
+          "ouro_and_codi": 201,
+          "ouro_and_coconut": 179,
+          "ouro_and_both": 160,
+          "codi_and_coconut": 363
+        },
+        "4": {
+          "ouro_and_codi": 206,
+          "ouro_and_coconut": 183,
+          "ouro_and_both": 163,
+          "codi_and_coconut": 363
+        },
+        "5": {
+          "ouro_and_codi": 208,
+          "ouro_and_coconut": 182,
+          "ouro_and_both": 165,
+          "codi_and_coconut": 363
+        },
+        "6": {
+          "ouro_and_codi": 206,
+          "ouro_and_coconut": 181,
+          "ouro_and_both": 164,
+          "codi_and_coconut": 363
+        }
+      },
+      "gate": {
+        "rule": "some loops<=4 with no-CoT acc>=0.15 and ouro&codi&coconut correct>=100",
+        "passed": true
+      }
+    }
+  },
+  "hyperparams": {
+    "n_shots": 8,
+    "shot_seed": 0,
+    "max_new_tokens": 8,
+    "loops": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "cot_max_new_tokens": 160,
+    "decoding": "greedy",
+    "attn_implementation": "eager",
+    "prompt": "Question: ...\\nAnswer: <number> (shots from xmech fit split)"
+  },
+  "seed": 0,
+  "hardware": "RunPod A40 x1 / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "Ouro step 0: does the released looped model answer GSM8K without CoT, and at which loop count?",
+  "timestamp_utc": "2026-10-14T12:47:31.273882+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

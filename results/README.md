@@ -131,3 +131,4 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261013-085949_filler_tokens_v2-modal-nocot](20261013-085949_filler_tokens_v2-modal-nocot/) | filler_tokens | gpt2 | test (n=3000) | 0 | 0.718 | 42 | pilot | Henning Lindig |
 | [20261013-052853_filler_tokens_v2-depth2-nocot](20261013-052853_filler_tokens_v2-depth2-nocot/) | filler_tokens | gpt2 | test (n=6000) | 0 | 0.181 | 42 | pilot | Henning Lindig |
 | [20261014-100712_recurrent_depth_gate-ouro-1.4b](20261014-100712_recurrent_depth_gate-ouro-1.4b/) | recurrent_depth | ByteDance/Ouro-1.4B | test (n=1319) | 4 | 0.183 | 0 | pilot | Henning Lindig |
+| [20261014-124731_recurrent_depth_gate-ouro-2.6b](20261014-124731_recurrent_depth_gate-ouro-2.6b/) | recurrent_depth | ByteDance/Ouro-2.6B | test (n=1319) | 4 | 0.233 | 0 | pilot | Henning Lindig |
