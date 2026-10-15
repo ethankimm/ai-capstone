@@ -133,3 +133,4 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261014-100712_recurrent_depth_gate-ouro-1.4b](20261014-100712_recurrent_depth_gate-ouro-1.4b/) | recurrent_depth | ByteDance/Ouro-1.4B | test (n=1319) | 4 | 0.183 | 0 | pilot | Henning Lindig |
 | [20261014-124731_recurrent_depth_gate-ouro-2.6b](20261014-124731_recurrent_depth_gate-ouro-2.6b/) | recurrent_depth | ByteDance/Ouro-2.6B | test (n=1319) | 4 | 0.233 | 0 | pilot | Henning Lindig |
 | [20261014-163349_recurrent_depth_twin-patch-ouro-1.4b](20261014-163349_recurrent_depth_twin-patch-ouro-1.4b/) | recurrent_depth | ByteDance/Ouro-1.4B | test (n=65) | 4 | - | 0 | pilot | Henning Lindig |
+| [20261015-022002_recurrent_depth_probe-ouro-1.4b](20261015-022002_recurrent_depth_probe-ouro-1.4b/) | recurrent_depth | ByteDance/Ouro-1.4B | test (n=1144) | 4 | - | 0 | pilot | Henning Lindig |
