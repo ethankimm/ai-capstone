@@ -1,0 +1,320 @@
+{
+  "run_id": "20261017-212529_coconut_evict-kv",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-gsm8k-coconut@checkpoint_33",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.33131159969673996,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "sec_per_example": 0.9524698005746768,
+    "extra": {
+      "conditions": {
+        "full": {
+          "acc": 0.33131159969673996,
+          "ci95": [
+            0.3064318954322668,
+            0.3571710635312251
+          ],
+          "agree_with_full": 1.0,
+          "lost": 0,
+          "gained": 0,
+          "mcnemar_p_vs_full": 1.0
+        },
+        "evict_all": {
+          "acc": 0.08188021228203184,
+          "ci95": [
+            0.06826917473563936,
+            0.09791973253791476
+          ],
+          "agree_with_full": 0.15693707354056102,
+          "lost": 356,
+          "gained": 27,
+          "mcnemar_p_vs_full": 2.2001174940837146e-74
+        },
+        "keep_only_1": {
+          "acc": 0.08946171341925702,
+          "ci95": [
+            0.07522732002106684,
+            0.1060805553889596
+          ],
+          "agree_with_full": 0.20621683093252463,
+          "lost": 341,
+          "gained": 22,
+          "mcnemar_p_vs_full": 1.0992730207735542e-74
+        },
+        "keep_only_2": {
+          "acc": 0.1379833206974981,
+          "ci95": [
+            0.12041946633545747,
+            0.15764980514799148
+          ],
+          "agree_with_full": 0.2926459438968916,
+          "lost": 285,
+          "gained": 30,
+          "mcnemar_p_vs_full": 2.6962266017089485e-53
+        },
+        "keep_only_3": {
+          "acc": 0.09401061410159212,
+          "ci95": [
+            0.07941827004990741,
+            0.11096098624200236
+          ],
+          "agree_with_full": 0.22744503411675512,
+          "lost": 338,
+          "gained": 25,
+          "mcnemar_p_vs_full": 3.1625303908043233e-71
+        },
+        "keep_only_4": {
+          "acc": 0.14859742228961334,
+          "ci95": [
+            0.13042283510233077,
+            0.16881299177217934
+          ],
+          "agree_with_full": 0.30477634571645185,
+          "lost": 269,
+          "gained": 28,
+          "mcnemar_p_vs_full": 1.3330581090157036e-50
+        },
+        "keep_only_5": {
+          "acc": 0.1865049279757392,
+          "ci95": [
+            0.1664050040344427,
+            0.2084256635224288
+          ],
+          "agree_with_full": 0.36087945413191813,
+          "lost": 220,
+          "gained": 29,
+          "mcnemar_p_vs_full": 1.6282126562138176e-37
+        },
+        "keep_only_6": {
+          "acc": 0.221379833206975,
+          "ci95": [
+            0.1998008306535632,
+            0.24457709033108077
+          ],
+          "agree_with_full": 0.45489006823351025,
+          "lost": 166,
+          "gained": 21,
+          "mcnemar_p_vs_full": 3.6313391817490366e-29
+        },
+        "evict_only_1": {
+          "acc": 0.32676269901440486,
+          "ci95": [
+            0.3019851246673774,
+            0.352546453414231
+          ],
+          "agree_with_full": 0.935557240333586,
+          "lost": 11,
+          "gained": 5,
+          "mcnemar_p_vs_full": 0.210113525390625
+        },
+        "evict_only_2": {
+          "acc": 0.2964366944655042,
+          "ci95": [
+            0.2724102944013161,
+            0.3216454111344033
+          ],
+          "agree_with_full": 0.6914329037149356,
+          "lost": 64,
+          "gained": 18,
+          "mcnemar_p_vs_full": 3.3155201688474993e-07
+        },
+        "evict_only_3": {
+          "acc": 0.3282789992418499,
+          "ci95": [
+            0.3034670838452075,
+            0.3540882878636954
+          ],
+          "agree_with_full": 0.9332827899924185,
+          "lost": 10,
+          "gained": 6,
+          "mcnemar_p_vs_full": 0.454498291015625
+        },
+        "evict_only_4": {
+          "acc": 0.3237300985595148,
+          "ci95": [
+            0.29902210484473196,
+            0.3494618859822876
+          ],
+          "agree_with_full": 0.8551933282789992,
+          "lost": 24,
+          "gained": 14,
+          "mcnemar_p_vs_full": 0.14330665429588407
+        },
+        "evict_only_5": {
+          "acc": 0.2721758908263836,
+          "ci95": [
+            0.2488433543220756,
+            0.2968316531769325
+          ],
+          "agree_with_full": 0.6550416982562547,
+          "lost": 104,
+          "gained": 26,
+          "mcnemar_p_vs_full": 3.025786266290503e-12
+        },
+        "evict_only_6": {
+          "acc": 0.27065959059893857,
+          "ci95": [
+            0.2473733216941976,
+            0.29527789217751604
+          ],
+          "agree_with_full": 0.6573161485974223,
+          "lost": 101,
+          "gained": 21,
+          "mcnemar_p_vs_full": 9.677506062033445e-14
+        },
+        "keep_25": {
+          "acc": 0.23199393479909022,
+          "ci95": [
+            0.21001199703527193,
+            0.25553247934043316
+          ],
+          "agree_with_full": 0.49128127369219105,
+          "lost": 156,
+          "gained": 25,
+          "mcnemar_p_vs_full": 2.4313479520724504e-24
+        },
+        "keep_1346": {
+          "acc": 0.24109173616376042,
+          "ci95": [
+            0.21878045623322476,
+            0.2649067819062471
+          ],
+          "agree_with_full": 0.5200909780136467,
+          "lost": 140,
+          "gained": 21,
+          "mcnemar_p_vs_full": 8.858534759057205e-23
+        },
+        "keep_135": {
+          "acc": 0.19636087945413191,
+          "ci95": [
+            0.17581729512427624,
+            0.2186680310100092
+          ],
+          "agree_with_full": 0.42987111448066717,
+          "lost": 205,
+          "gained": 27,
+          "mcnemar_p_vs_full": 4.6801901811884593e-35
+        },
+        "keep_246": {
+          "acc": 0.2623199393479909,
+          "ci95": [
+            0.23929448027006298,
+            0.28672586865153127
+          ],
+          "agree_with_full": 0.6360879454131918,
+          "lost": 111,
+          "gained": 20,
+          "mcnemar_p_vs_full": 1.7618615889081849e-16
+        },
+        "evict_band_L0-3": {
+          "acc": 0.3244882486732373,
+          "ci95": [
+            0.2997627471469017,
+            0.350233140493765
+          ],
+          "agree_with_full": 0.7225170583775588,
+          "lost": 35,
+          "gained": 26,
+          "mcnemar_p_vs_full": 0.30567741986311836
+        },
+        "evict_band_L4-7": {
+          "acc": 0.312357846853677,
+          "ci95": [
+            0.287921589051228,
+            0.33788394957108314
+          ],
+          "agree_with_full": 0.7649734647460197,
+          "lost": 40,
+          "gained": 15,
+          "mcnemar_p_vs_full": 0.0010158471941252856
+        },
+        "evict_band_L8-11": {
+          "acc": 0.17816527672479152,
+          "ci95": [
+            0.1584579118062044,
+            0.1997418908005476
+          ],
+          "agree_with_full": 0.4382107657316149,
+          "lost": 222,
+          "gained": 20,
+          "mcnemar_p_vs_full": 2.704056716394891e-44
+        },
+        "keep_band_L0-3": {
+          "acc": 0.08112206216830932,
+          "ci95": [
+            0.0675753273036241,
+            0.0971016831562828
+          ],
+          "agree_with_full": 0.24109173616376042,
+          "lost": 352,
+          "gained": 22,
+          "mcnemar_p_vs_full": 1.0532743790006683e-77
+        },
+        "keep_band_L4-7": {
+          "acc": 0.14935557240333586,
+          "ci95": [
+            0.13113867935933132,
+            0.169609044328826
+          ],
+          "agree_with_full": 0.310841546626232,
+          "lost": 265,
+          "gained": 25,
+          "mcnemar_p_vs_full": 8.949806839189844e-52
+        },
+        "keep_band_L8-11": {
+          "acc": 0.3100833965125095,
+          "ci95": [
+            0.28570356255132734,
+            0.3355662856300422
+          ],
+          "agree_with_full": 0.5845337376800607,
+          "lost": 64,
+          "gained": 36,
+          "mcnemar_p_vs_full": 0.006637120515926126
+        },
+        "merge_mean": {
+          "acc": 0.14101592115238817,
+          "ci95": [
+            0.123273972457602,
+            0.1608428862804359
+          ],
+          "agree_with_full": 0.3032600454890068,
+          "lost": 276,
+          "gained": 25,
+          "mcnemar_p_vs_full": 1.148987502721326e-54
+        }
+      },
+      "dtype": "float32",
+      "command": "scripts/evict_kv_coconut.py --checkpoint_path /Users/henninglindig/.cache/huggingface/hub/models--connordilgren--gpt2-gsm8k-coconut/snapshots/24f1422fcf6d557fd359fc818a4d1d0fde4aac7f/checkpoint_33 --data_file /Users/henninglindig/Projects/are-lrms-easily-interpretable/data/gsm_original_test.json --n 0 --check_reference True",
+      "data_file": "gsm_original_test.json (Dilgren & Wiegreffe prep)",
+      "reference_mismatches": 0
+    }
+  },
+  "hyperparams": {
+    "num_latents": 6,
+    "greedy": true,
+    "max_new_tokens": 48,
+    "mask": "additive -inf on thought-slot key columns, queries at/after <|end-latent|> only"
+  },
+  "seed": 0,
+  "hardware": "local Apple Silicon CPU",
+  "author": "Henning Lindig",
+  "notes": "Answer-phase KV eviction of Coconut's thought slots (by slot and layer band), the Coconut mirror of the CODI evict-kv run.",
+  "timestamp_utc": "2026-10-17T21:25:29.141969+00:00",
+  "git": {
+    "commit": "15e9860",
+    "dirty": true
+  }
+}
