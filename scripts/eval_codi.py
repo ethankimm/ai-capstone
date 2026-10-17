@@ -94,7 +94,7 @@ def compute_accuracy(gold: list, pred: list):
     return acc / len(gold)
 
 
-def build_model(model_args, training_args):
+def build_model(model_args, training_args, device: str = "cuda", dtype: torch.dtype = torch.bfloat16):
     # test.py's branches: llama-family vs gpt2 (the only two backbones we load)
     if any(name in model_args.model_name_or_path.lower() for name in ["llama", "mistral", "falcon", "qwen"]):
         target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "up_proj", "down_proj", "gate_proj"]
@@ -130,8 +130,8 @@ def build_model(model_args, training_args):
         tokenizer.pad_token_id = model.pad_token_id
         if tokenizer.pad_token_id is None:  # error handling
             tokenizer.pad_token_id = tokenizer.convert_tokens_to_ids('[PAD]')
-    model = model.to('cuda')
-    model.to(torch.bfloat16)
+    model = model.to(device)
+    model.to(dtype)
     # get_peft_model() injects fresh LoRA layers whose Dropout(0.1) modules default to
     # training mode even though from_pretrained() returned the backbone in eval mode --
     # every importer of build_model must get a deterministic model, so set eval here.

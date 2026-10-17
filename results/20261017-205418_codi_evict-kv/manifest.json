@@ -1,0 +1,296 @@
+{
+  "run_id": "20261017-205418_codi_evict-kv",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.4245640636846095,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "sec_per_example": 2.2106245069818042,
+    "extra": {
+      "conditions": {
+        "full": {
+          "acc": 0.4245640636846095,
+          "ci95": [
+            0.3981460333921651,
+            0.4514202336499356
+          ],
+          "agree_with_full": 1.0,
+          "lost": 0,
+          "gained": 0,
+          "mcnemar_p_vs_full": 1.0
+        },
+        "evict_all": {
+          "acc": 0.22896133434420016,
+          "ci95": [
+            0.2070924279283171,
+            0.25240446119279913
+          ],
+          "agree_with_full": 0.24639878695981804,
+          "lost": 316,
+          "gained": 58,
+          "mcnemar_p_vs_full": 4.2886245464220767e-44
+        },
+        "keep_only_1": {
+          "acc": 0.26156178923426837,
+          "ci95": [
+            0.23856057875551223,
+            0.2859478733524347
+          ],
+          "agree_with_full": 0.28430629264594387,
+          "lost": 284,
+          "gained": 69,
+          "mcnemar_p_vs_full": 4.2334179001600875e-32
+        },
+        "keep_only_2": {
+          "acc": 0.21986353297952996,
+          "ci95": [
+            0.19834379105147726,
+            0.24301033630587227
+          ],
+          "agree_with_full": 0.25928733889310085,
+          "lost": 324,
+          "gained": 54,
+          "mcnemar_p_vs_full": 4.828288562323213e-48
+        },
+        "keep_only_3": {
+          "acc": 0.22062168309325247,
+          "ci95": [
+            0.19907225681346544,
+            0.2437937673575313
+          ],
+          "agree_with_full": 0.29492039423805916,
+          "lost": 316,
+          "gained": 47,
+          "mcnemar_p_vs_full": 4.4370433453216575e-50
+        },
+        "keep_only_4": {
+          "acc": 0.221379833206975,
+          "ci95": [
+            0.1998008306535632,
+            0.24457709033108077
+          ],
+          "agree_with_full": 0.2562547384382108,
+          "lost": 309,
+          "gained": 41,
+          "mcnemar_p_vs_full": 5.309455051183204e-52
+        },
+        "keep_only_5": {
+          "acc": 0.2266868840030326,
+          "ci95": [
+            0.20490384089329786,
+            0.25005735778687666
+          ],
+          "agree_with_full": 0.33813495072024263,
+          "lost": 302,
+          "gained": 41,
+          "mcnemar_p_vs_full": 2.8281701655665274e-50
+        },
+        "keep_only_6": {
+          "acc": 0.21607278241091737,
+          "ci95": [
+            0.19470309752067796,
+            0.23909154576843542
+          ],
+          "agree_with_full": 0.24791508718726307,
+          "lost": 318,
+          "gained": 43,
+          "mcnemar_p_vs_full": 5.64678932390477e-53
+        },
+        "evict_only_1": {
+          "acc": 0.3616376042456406,
+          "ci95": [
+            0.3361438814028299,
+            0.387934950106551
+          ],
+          "agree_with_full": 0.7657316148597423,
+          "lost": 99,
+          "gained": 16,
+          "mcnemar_p_vs_full": 8.564981783013103e-16
+        },
+        "evict_only_2": {
+          "acc": 0.42532221379833207,
+          "ci95": [
+            0.3988957966595908,
+            0.4521823671961572
+          ],
+          "agree_with_full": 0.9370735405610311,
+          "lost": 8,
+          "gained": 9,
+          "mcnemar_p_vs_full": 1.0
+        },
+        "evict_only_3": {
+          "acc": 0.4071266110689917,
+          "ci95": [
+            0.38091922071532935,
+            0.4338734196128853
+          ],
+          "agree_with_full": 0.8339651250947687,
+          "lost": 41,
+          "gained": 18,
+          "mcnemar_p_vs_full": 0.0037937056353716074
+        },
+        "evict_only_4": {
+          "acc": 0.42153146322971946,
+          "ci95": [
+            0.3951476201203859,
+            0.4483710596671259
+          ],
+          "agree_with_full": 0.9112964366944655,
+          "lost": 14,
+          "gained": 10,
+          "mcnemar_p_vs_full": 0.5412561893463135
+        },
+        "evict_only_5": {
+          "acc": 0.3692191053828658,
+          "ci95": [
+            0.3435895315666938,
+            0.3956082680791594
+          ],
+          "agree_with_full": 0.6633813495072024,
+          "lost": 103,
+          "gained": 30,
+          "mcnemar_p_vs_full": 1.451900534574549e-10
+        },
+        "evict_only_6": {
+          "acc": 0.4177407126611069,
+          "ci95": [
+            0.39140104654726376,
+            0.44455814917201203
+          ],
+          "agree_with_full": 0.9112964366944655,
+          "lost": 18,
+          "gained": 9,
+          "mcnemar_p_vs_full": 0.12207812070846558
+        },
+        "keep_135": {
+          "acc": 0.3692191053828658,
+          "ci95": [
+            0.3435895315666938,
+            0.3956082680791594
+          ],
+          "agree_with_full": 0.6565579984836998,
+          "lost": 95,
+          "gained": 22,
+          "mcnemar_p_vs_full": 5.3144029909432085e-12
+        },
+        "keep_246": {
+          "acc": 0.10917361637604246,
+          "ci95": [
+            0.09346457844216403,
+            0.1271526141226903
+          ],
+          "agree_with_full": 0.19863532979529946,
+          "lost": 445,
+          "gained": 29,
+          "mcnemar_p_vs_full": 8.190092287541565e-97
+        },
+        "evict_band_L0-3": {
+          "acc": 0.3055344958301744,
+          "ci95": [
+            0.2812696191961908,
+            0.3309288481032953
+          ],
+          "agree_with_full": 0.4131918119787718,
+          "lost": 190,
+          "gained": 33,
+          "mcnemar_p_vs_full": 5.323594902393333e-28
+        },
+        "evict_band_L4-7": {
+          "acc": 0.3692191053828658,
+          "ci95": [
+            0.3435895315666938,
+            0.3956082680791594
+          ],
+          "agree_with_full": 0.66868840030326,
+          "lost": 99,
+          "gained": 26,
+          "mcnemar_p_vs_full": 3.1605245396941373e-11
+        },
+        "evict_band_L8-11": {
+          "acc": 0.12736921910538287,
+          "ci95": [
+            0.11045286933047857,
+            0.14644984676190922
+          ],
+          "agree_with_full": 0.22744503411675512,
+          "lost": 425,
+          "gained": 33,
+          "mcnemar_p_vs_full": 6.624179935029742e-88
+        },
+        "keep_band_L0-3": {
+          "acc": 0.11296436694465505,
+          "ci95": [
+            0.09699274853138067,
+            0.1311839281017098
+          ],
+          "agree_with_full": 0.19332827899924185,
+          "lost": 435,
+          "gained": 24,
+          "mcnemar_p_vs_full": 9.503137315694522e-99
+        },
+        "keep_band_L4-7": {
+          "acc": 0.18119787717968158,
+          "ci95": [
+            0.161345886478828,
+            0.20290150338251292
+          ],
+          "agree_with_full": 0.22971948445792267,
+          "lost": 351,
+          "gained": 30,
+          "mcnemar_p_vs_full": 1.3870038425360106e-70
+        },
+        "keep_band_L8-11": {
+          "acc": 0.26156178923426837,
+          "ci95": [
+            0.23856057875551223,
+            0.2859478733524347
+          ],
+          "agree_with_full": 0.31311599696739956,
+          "lost": 257,
+          "gained": 42,
+          "mcnemar_p_vs_full": 7.717139409734664e-39
+        },
+        "merge_mean": {
+          "acc": 0.22971948445792267,
+          "ci95": [
+            0.20782216523967253,
+            0.25318662069509096
+          ],
+          "agree_with_full": 0.2517058377558757,
+          "lost": 309,
+          "gained": 52,
+          "mcnemar_p_vs_full": 1.3040050747402417e-45
+        }
+      },
+      "dtype": "float32",
+      "command": "/Users/henninglindig/Documents/Penn/CIS5980/ai-capstone/scripts/evict_kv_codi.py --ckpt_dir /Users/henninglindig/.cache/huggingface/hub/models--zen-E--CODI-gpt2/snapshots/fd641b3d3edc59e4f534b55588e906588c9e36bb/ --checkpoint_label hf:zen-E/CODI-gpt2@fd641b3 --model_name_or_path gpt2 --seed 11 --model_max_length 512 --lora_r 128 --lora_alpha 32 --lora_init --greedy True --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 --inf_latent_iterations 6 --inf_num_iterations 1 --remove_eos True --use_lora True --output_dir /tmp/x --device cpu --n 0"
+    }
+  },
+  "hyperparams": {
+    "num_latent": 6,
+    "greedy": true,
+    "max_new_tokens": 64,
+    "mask": "additive -inf on thought-slot key columns, answer phase only (eot + generated tokens)"
+  },
+  "seed": 11,
+  "hardware": "local Apple Silicon CPU",
+  "author": "Henning Lindig",
+  "notes": "Answer-phase KV eviction of CODI's thought slots (by slot and layer band) as a causal test of which latents the answer reads.",
+  "timestamp_utc": "2026-10-17T20:54:18.473777+00:00",
+  "git": {
+    "commit": "4244f5e",
+    "dirty": true
+  }
+}
