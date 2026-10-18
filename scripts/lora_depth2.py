@@ -8,6 +8,10 @@ Size 0 = the untrained base model with the same zero-shot prompt (reference). Tr
 one fixed shuffle, balanced over --levels). Small sets get more epochs: passes = max(--min-passes, --min-epochs * n).
 One RunRecord per size (mechanism baseline_no_cot).
 
+--keep-layers k1,k2,...: depth-truncated variants for the layer-count question -- keep only the first k decoder blocks
+(final norm + tied LM head unchanged), then the same recipe; width, tokenizer, pretraining and fine-tuning data are
+identical across k. Default: the full model.
+
 Usage (pod):  python scripts/lora_depth2.py --train-json /root/depth2/train.json --test-json /root/depth2/test.json
 Smoke (local CPU, no logging):  ... --model Qwen/Qwen3-0.6B-Base --sizes 0,16 --per-level 2 --min-passes 32 --smoke
 """
@@ -114,6 +118,7 @@ def main() -> None:
     p.add_argument("--train-json", required=True)
     p.add_argument("--test-json", required=True)
     p.add_argument("--sizes", default="0,200,1000,5000,20000")
+    p.add_argument("--keep-layers", default="", help="comma list of k: keep only the first k decoder blocks")
     p.add_argument("--levels", default="1,2,3,4")
     p.add_argument("--per-level", type=int, default=200)
     p.add_argument("--min-passes", type=int, default=10_000, help="minimum training examples seen per size")
@@ -141,9 +146,17 @@ def main() -> None:
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
-    for n in [int(x) for x in a.sizes.split(",")]:
+    keeps = [int(x) for x in a.keep_layers.split(",") if x] or [None]
+    for keep, n in [(k, n) for k in keeps for n in [int(x) for x in a.sizes.split(",")]]:
         set_seed(0)
-        base = AutoModelForCausalLM.from_pretrained(a.model, torch_dtype=dtype).to(device)
+        base = AutoModelForCausalLM.from_pretrained(a.model, torch_dtype=dtype)
+        full_layers = base.config.num_hidden_layers
+        if keep:
+            base.model.layers = base.model.layers[:keep]
+            base.config.num_hidden_layers = keep
+            if getattr(base.config, "layer_types", None):
+                base.config.layer_types = base.config.layer_types[:keep]
+        base = base.to(device)
         n_layers, n_params = base.config.num_hidden_layers, sum(q.numel() for q in base.parameters())
         log, epochs, steps, train_secs = [], 0, 0, 0.0
         if n:
@@ -165,12 +178,12 @@ def main() -> None:
             cnt[q["level"]] += 1
             rows.append({"id": q["id"], "level": q["level"], "gold": q["answer"], "raw": o, "pred": pred, "correct": ok})
         acc = {str(L): k[L] / cnt[L] for L in sorted(cnt)}
-        print(f"n={n}: per level " + " ".join(f"{L}:{v:.2f}" for L, v in acc.items())
+        print(f"k={n_layers}/{full_layers} n={n}: per level " + " ".join(f"{L}:{v:.2f}" for L, v in acc.items())
               + f" | train {train_secs:.0f}s ({epochs} ep, {steps} steps) eval {eval_secs:.0f}s", flush=True)
         if not a.smoke:
             name = a.model.split("/")[-1].lower()
             record = RunRecord(
-                run_id=new_run_id("baseline_no_cot", f"depth2-lora-{name}-n{n}"), mechanism="baseline_no_cot",
+                run_id=new_run_id("baseline_no_cot", f"depth2-lora-{name}" + (f"-keep{keep}" if keep else "") + f"-n{n}"), mechanism="baseline_no_cot",
                 stage=a.stage,
                 model=ModelInfo(backbone=a.model, checkpoint=f"{a.model} + LoRA (not saved)" if n else a.model,
                                 n_params=n_params),
@@ -179,11 +192,12 @@ def main() -> None:
                          "unparseable_rate": unparse / len(items), "compute_steps": 0,
                          "extra": {"task": "depth2", "design": "LoRA data-efficiency: answer-only fine-tune at one "
                                    "training-set size, zero-shot eval on levels " + a.levels,
-                                   "train_n": n, "n_layers": n_layers, "per_level_accuracy": acc,
+                                   "train_n": n, "n_layers": n_layers, "full_layers": full_layers,
+                                   "keep_layers": keep, "per_level_accuracy": acc,
                                    "per_level_n": {str(L): cnt[L] for L in sorted(cnt)},
                                    "epochs": epochs, "optimizer_steps": steps, "train_seconds": train_secs,
                                    "eval_seconds": eval_secs}},
-                hyperparams={"train_n": n, "train_levels": sorted(levels), "train_subset": "nested prefix of one "
+                hyperparams={"train_n": n, "keep_layers": keep, "train_levels": sorted(levels), "train_subset": "nested prefix of one "
                              "level-interleaved shuffle", "data_seed": a.data_seed, "lr": a.lr, "batch_size": a.bs,
                              "epochs": epochs, "min_passes": a.min_passes, "min_epochs": a.min_epochs,
                              "lora_rank": a.rank, "lora_alpha": 2 * a.rank, "lora_targets": "all-linear",
