@@ -1,0 +1,198 @@
+{
+  "run_id": "20261017-231556_baseline_fewshot_nocot_depth2-fewshot-pythia-1.4b-deduped",
+  "mechanism": "baseline_fewshot_nocot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "EleutherAI/pythia-1.4b-deduped",
+    "checkpoint": "EleutherAI/pythia-1.4b-deduped",
+    "n_params": null
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 2400,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.021666666666666667,
+    "compute_steps": 0,
+    "extra": {
+      "task": "depth2",
+      "design": "depth-vs-layers scan: pretrained model, few-shot same-level shots, no CoT, per-level accuracy on the first per_level test items of each level; CoT reference",
+      "n_layers": 24,
+      "effective_layers": {
+        "nocot": 24
+      },
+      "nocot": {
+        "nocot": {
+          "per_level_accuracy": {
+            "1": 0.04,
+            "2": 0.03,
+            "3": 0.02,
+            "4": 0.03,
+            "5": 0.02,
+            "6": 0.035,
+            "7": 0.015,
+            "8": 0.025,
+            "9": 0.005,
+            "10": 0.005,
+            "11": 0.02,
+            "12": 0.015
+          },
+          "per_level_ci95": {
+            "1": [
+              0.02040538715065641,
+              0.07693293829419882
+            ],
+            "2": [
+              0.013820125830748327,
+              0.06389511973247333
+            ],
+            "3": [
+              0.007804300176394188,
+              0.050287865505193874
+            ],
+            "4": [
+              0.013820125830748327,
+              0.06389511973247333
+            ],
+            "5": [
+              0.007804300176394188,
+              0.050287865505193874
+            ],
+            "6": [
+              0.017055324637357105,
+              0.07047146086668134
+            ],
+            "7": [
+              0.005114145184492387,
+              0.043166480556278884
+            ],
+            "8": [
+              0.010724561470787711,
+              0.05717914415161715
+            ],
+            "9": [
+              0.0008831459893662054,
+              0.02777439986977148
+            ],
+            "10": [
+              0.0008831459893662054,
+              0.02777439986977148
+            ],
+            "11": [
+              0.007804300176394188,
+              0.050287865505193874
+            ],
+            "12": [
+              0.005114145184492387,
+              0.043166480556278884
+            ]
+          },
+          "overall": 0.021666666666666667,
+          "crossing_50": null,
+          "crossing_25": null,
+          "reach_above_floor": 0
+        }
+      },
+      "cot_reference": {
+        "per_level_accuracy": {
+          "1": 0.2,
+          "2": 0.06,
+          "3": 0.04,
+          "4": 0.02,
+          "5": 0.0,
+          "6": 0.08,
+          "7": 0.02,
+          "8": 0.0,
+          "9": 0.0,
+          "10": 0.0,
+          "11": 0.02,
+          "12": 0.0
+        },
+        "per_level_ci95": {
+          "1": [
+            0.11243629945973886,
+            0.3303737210448524
+          ],
+          "2": [
+            0.020614596364630478,
+            0.16217343370877002
+          ],
+          "3": [
+            0.011038652660826577,
+            0.13460337877954667
+          ],
+          "4": [
+            0.0035391680889764604,
+            0.10495686471836953
+          ],
+          "5": [
+            0.0,
+            0.07135003417431873
+          ],
+          "6": [
+            0.031549003255790686,
+            0.18838502545063704
+          ],
+          "7": [
+            0.0035391680889764604,
+            0.10495686471836953
+          ],
+          "8": [
+            0.0,
+            0.07135003417431873
+          ],
+          "9": [
+            0.0,
+            0.07135003417431873
+          ],
+          "10": [
+            0.0,
+            0.07135003417431873
+          ],
+          "11": [
+            0.0035391680889764604,
+            0.10495686471836953
+          ],
+          "12": [
+            0.0,
+            0.07135003417431873
+          ]
+        },
+        "overall": 0.03666666666666667,
+        "crossing_50": null,
+        "crossing_25": null,
+        "reach_above_floor": 1
+      },
+      "seconds": {
+        "nocot": 5.7538287070347,
+        "cot": 6.755155374004971
+      },
+      "main_condition": "nocot"
+    }
+  },
+  "hyperparams": {
+    "n_shots": 6,
+    "shot_seed": 0,
+    "shot_source": "train, same level",
+    "per_level": 200,
+    "cot_per_level": 50,
+    "max_new": 6,
+    "cot_max_new": 200,
+    "reach_floor": 0.08,
+    "loops": null,
+    "cot_loops": null,
+    "decoding": "greedy",
+    "backend": "vllm"
+  },
+  "seed": 0,
+  "hardware": "RunPod A100 SXM 80GB (secure)",
+  "author": "Henning Lindig",
+  "notes": "depth2 few-shot no-CoT scan of a pretrained model: accuracy by rule count vs layer count",
+  "timestamp_utc": "2026-10-17T23:15:56.685292+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

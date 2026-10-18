@@ -1,0 +1,225 @@
+{
+  "run_id": "20261018-024718_baseline_fewshot_nocot_depth2-fewshot-ouro-2.6b",
+  "mechanism": "baseline_fewshot_nocot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "ByteDance/Ouro-2.6B",
+    "checkpoint": "ByteDance/Ouro-2.6B",
+    "n_params": 2667974657
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 800,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.2375,
+    "compute_steps": 0,
+    "extra": {
+      "task": "depth2",
+      "design": "depth-vs-layers scan: pretrained model, few-shot same-level shots, no CoT, per-level accuracy on the first per_level test items of each level; CoT reference",
+      "n_layers": 48,
+      "effective_layers": {
+        "l1": 48,
+        "l2": 96,
+        "l3": 144,
+        "l4": 192
+      },
+      "nocot": {
+        "l1": {
+          "per_level_accuracy": {
+            "1": 0.25,
+            "2": 0.04,
+            "3": 0.015,
+            "4": 0.02
+          },
+          "per_level_ci95": {
+            "1": [
+              0.19508076816296532,
+              0.3143422347961952
+            ],
+            "2": [
+              0.02040538715065641,
+              0.07693293829419882
+            ],
+            "3": [
+              0.005114145184492387,
+              0.043166480556278884
+            ],
+            "4": [
+              0.007804300176394188,
+              0.050287865505193874
+            ]
+          },
+          "overall": 0.08125,
+          "crossing_50": null,
+          "crossing_25": 1.0,
+          "reach_above_floor": 1
+        },
+        "l2": {
+          "per_level_accuracy": {
+            "1": 0.46,
+            "2": 0.045,
+            "3": 0.035,
+            "4": 0.01
+          },
+          "per_level_ci95": {
+            "1": [
+              0.39232931140961247,
+              0.5291783690638533
+            ],
+            "2": [
+              0.023852271724704166,
+              0.08329759366096785
+            ],
+            "3": [
+              0.017055324637357105,
+              0.07047146086668134
+            ],
+            "4": [
+              0.0027466006037749346,
+              0.03572248519617954
+            ]
+          },
+          "overall": 0.1375,
+          "crossing_50": null,
+          "crossing_25": 1.5060240963855422,
+          "reach_above_floor": 1
+        },
+        "l3": {
+          "per_level_accuracy": {
+            "1": 0.835,
+            "2": 0.03,
+            "3": 0.015,
+            "4": 0.025
+          },
+          "per_level_ci95": {
+            "1": [
+              0.7773410172613647,
+              0.8800321587733603
+            ],
+            "2": [
+              0.013820125830748327,
+              0.06389511973247333
+            ],
+            "3": [
+              0.005114145184492387,
+              0.043166480556278884
+            ],
+            "4": [
+              0.010724561470787711,
+              0.05717914415161715
+            ]
+          },
+          "overall": 0.22625,
+          "crossing_50": 1.4161490683229814,
+          "crossing_25": 1.7267080745341614,
+          "reach_above_floor": 1
+        },
+        "l4": {
+          "per_level_accuracy": {
+            "1": 0.895,
+            "2": 0.03,
+            "3": 0.0,
+            "4": 0.025
+          },
+          "per_level_ci95": {
+            "1": [
+              0.8448186177864638,
+              0.9302930375380627
+            ],
+            "2": [
+              0.013820125830748327,
+              0.06389511973247333
+            ],
+            "3": [
+              0.0,
+              0.018846005918320894
+            ],
+            "4": [
+              0.010724561470787711,
+              0.05717914415161715
+            ]
+          },
+          "overall": 0.2375,
+          "crossing_50": 1.4566473988439306,
+          "crossing_25": 1.745664739884393,
+          "reach_above_floor": 1
+        }
+      },
+      "cot_reference": {
+        "per_level_accuracy": {
+          "1": 1.0,
+          "2": 0.9,
+          "3": 0.65,
+          "4": 0.7
+        },
+        "per_level_ci95": {
+          "1": [
+            0.8388698745050667,
+            1.0
+          ],
+          "2": [
+            0.6989617935882066,
+            0.9721341060158468
+          ],
+          "3": [
+            0.43285051021946463,
+            0.8188104521320554
+          ],
+          "4": [
+            0.4810232237710206,
+            0.854524726031006
+          ]
+        },
+        "overall": 0.8125,
+        "crossing_50": 5.0,
+        "crossing_25": 5.0,
+        "reach_above_floor": 4
+      },
+      "seconds": {
+        "l1": 403.405718385,
+        "l2": 564.4952180330001,
+        "l3": 735.3013635360003,
+        "l4": 891.397991926,
+        "cot": 593.7372200309992
+      },
+      "main_condition": "l4"
+    }
+  },
+  "hyperparams": {
+    "n_shots": 6,
+    "shot_seed": 0,
+    "shot_source": "train, same level",
+    "per_level": 200,
+    "levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "cot_per_level": 20,
+    "max_new": 6,
+    "cot_max_new": 200,
+    "reach_floor": 0.08,
+    "loops": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "cot_loops": 4,
+    "decoding": "greedy",
+    "backend": "hf-bs1"
+  },
+  "seed": 0,
+  "hardware": "RunPod A100 SXM 80GB (secure)",
+  "author": "Henning Lindig",
+  "notes": "depth2 few-shot no-CoT scan of a pretrained model: accuracy by rule count vs layer count",
+  "timestamp_utc": "2026-10-18T02:47:18.846657+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

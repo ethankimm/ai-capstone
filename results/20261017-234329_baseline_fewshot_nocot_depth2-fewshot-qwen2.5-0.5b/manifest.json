@@ -1,0 +1,198 @@
+{
+  "run_id": "20261017-234329_baseline_fewshot_nocot_depth2-fewshot-qwen2.5-0.5b",
+  "mechanism": "baseline_fewshot_nocot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "Qwen/Qwen2.5-0.5B",
+    "checkpoint": "Qwen/Qwen2.5-0.5B",
+    "n_params": null
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 2400,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.03208333333333333,
+    "compute_steps": 0,
+    "extra": {
+      "task": "depth2",
+      "design": "depth-vs-layers scan: pretrained model, few-shot same-level shots, no CoT, per-level accuracy on the first per_level test items of each level; CoT reference",
+      "n_layers": 24,
+      "effective_layers": {
+        "nocot": 24
+      },
+      "nocot": {
+        "nocot": {
+          "per_level_accuracy": {
+            "1": 0.19,
+            "2": 0.025,
+            "3": 0.025,
+            "4": 0.015,
+            "5": 0.01,
+            "6": 0.015,
+            "7": 0.02,
+            "8": 0.02,
+            "9": 0.02,
+            "10": 0.02,
+            "11": 0.01,
+            "12": 0.015
+          },
+          "per_level_ci95": {
+            "1": [
+              0.14167093792456506,
+              0.250013585744794
+            ],
+            "2": [
+              0.010724561470787711,
+              0.05717914415161715
+            ],
+            "3": [
+              0.010724561470787711,
+              0.05717914415161715
+            ],
+            "4": [
+              0.005114145184492387,
+              0.043166480556278884
+            ],
+            "5": [
+              0.0027466006037749346,
+              0.03572248519617954
+            ],
+            "6": [
+              0.005114145184492387,
+              0.043166480556278884
+            ],
+            "7": [
+              0.007804300176394188,
+              0.050287865505193874
+            ],
+            "8": [
+              0.007804300176394188,
+              0.050287865505193874
+            ],
+            "9": [
+              0.007804300176394188,
+              0.050287865505193874
+            ],
+            "10": [
+              0.007804300176394188,
+              0.050287865505193874
+            ],
+            "11": [
+              0.0027466006037749346,
+              0.03572248519617954
+            ],
+            "12": [
+              0.005114145184492387,
+              0.043166480556278884
+            ]
+          },
+          "overall": 0.03208333333333333,
+          "crossing_50": null,
+          "crossing_25": null,
+          "reach_above_floor": 1
+        }
+      },
+      "cot_reference": {
+        "per_level_accuracy": {
+          "1": 0.6,
+          "2": 0.18,
+          "3": 0.0,
+          "4": 0.02,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.02,
+          "9": 0.0,
+          "10": 0.02,
+          "11": 0.0,
+          "12": 0.0
+        },
+        "per_level_ci95": {
+          "1": [
+            0.4618118910275937,
+            0.7239181021375425
+          ],
+          "2": [
+            0.0977008273245379,
+            0.3079631945470261
+          ],
+          "3": [
+            0.0,
+            0.07135003417431873
+          ],
+          "4": [
+            0.0035391680889764604,
+            0.10495686471836953
+          ],
+          "5": [
+            0.0,
+            0.07135003417431873
+          ],
+          "6": [
+            0.0,
+            0.07135003417431873
+          ],
+          "7": [
+            0.0,
+            0.07135003417431873
+          ],
+          "8": [
+            0.0035391680889764604,
+            0.10495686471836953
+          ],
+          "9": [
+            0.0,
+            0.07135003417431873
+          ],
+          "10": [
+            0.0035391680889764604,
+            0.10495686471836953
+          ],
+          "11": [
+            0.0,
+            0.07135003417431873
+          ],
+          "12": [
+            0.0,
+            0.07135003417431873
+          ]
+        },
+        "overall": 0.07,
+        "crossing_50": 1.2380952380952381,
+        "crossing_25": 1.8333333333333333,
+        "reach_above_floor": 2
+      },
+      "seconds": {
+        "nocot": 4.471995268017054,
+        "cot": 6.091998028976377
+      },
+      "main_condition": "nocot"
+    }
+  },
+  "hyperparams": {
+    "n_shots": 6,
+    "shot_seed": 0,
+    "shot_source": "train, same level",
+    "per_level": 200,
+    "cot_per_level": 50,
+    "max_new": 6,
+    "cot_max_new": 200,
+    "reach_floor": 0.08,
+    "loops": null,
+    "cot_loops": null,
+    "decoding": "greedy",
+    "backend": "vllm"
+  },
+  "seed": 0,
+  "hardware": "RunPod A100 SXM 80GB (secure)",
+  "author": "Henning Lindig",
+  "notes": "depth2 few-shot no-CoT scan of a pretrained model: accuracy by rule count vs layer count",
+  "timestamp_utc": "2026-10-17T23:43:29.578595+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}
