@@ -1,0 +1,99 @@
+{
+  "run_id": "20261018-031828_baseline_fewshot_nocot_depth2-fewshot-qwen3-8b-base-24shot",
+  "mechanism": "baseline_fewshot_nocot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "Qwen/Qwen3-8B-Base",
+    "checkpoint": "Qwen/Qwen3-8B-Base",
+    "n_params": null
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 400,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.25,
+    "compute_steps": 0,
+    "extra": {
+      "task": "depth2",
+      "design": "depth-vs-layers scan: pretrained model, few-shot same-level shots, no CoT, per-level accuracy on the first per_level test items of each level; CoT reference",
+      "n_layers": 36,
+      "effective_layers": {
+        "nocot": 36
+      },
+      "nocot": {
+        "nocot": {
+          "per_level_accuracy": {
+            "1": 0.8,
+            "2": 0.13,
+            "3": 0.04,
+            "4": 0.03
+          },
+          "per_level_ci95": {
+            "1": [
+              0.7111690380734977,
+              0.8666340774409013
+            ],
+            "2": [
+              0.07757093858414264,
+              0.20980521894809878
+            ],
+            "3": [
+              0.015663050551848016,
+              0.09837217232607373
+            ],
+            "4": [
+              0.010254338223414816,
+              0.08452078080402699
+            ]
+          },
+          "overall": 0.25,
+          "crossing_50": 1.4477611940298507,
+          "crossing_25": 1.8208955223880596,
+          "reach_above_floor": 1,
+          "bare_number_rate": 1.0
+        }
+      },
+      "cot_reference": null,
+      "seconds": {
+        "nocot": 6.204774760641158
+      },
+      "main_condition": "nocot"
+    }
+  },
+  "hyperparams": {
+    "n_shots": 24,
+    "shot_seed": 0,
+    "shot_source": "train, same level",
+    "per_level": 100,
+    "levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "cot_per_level": 0,
+    "max_new": 6,
+    "cot_max_new": 200,
+    "reach_floor": 0.08,
+    "loops": null,
+    "cot_loops": null,
+    "decoding": "greedy",
+    "backend": "vllm",
+    "chat": false,
+    "instruction": null,
+    "thinking": null,
+    "force_number": false
+  },
+  "seed": 0,
+  "hardware": "RunPod A40 (secure)",
+  "author": "Henning Lindig",
+  "notes": "depth2 few-shot no-CoT scan of a pretrained model: accuracy by rule count vs layer count",
+  "timestamp_utc": "2026-10-18T03:18:28.188347+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

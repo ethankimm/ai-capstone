@@ -1,0 +1,99 @@
+{
+  "run_id": "20261018-032116_baseline_fewshot_nocot_depth2-fewshot-qwen3-8b-instr-0shot",
+  "mechanism": "baseline_fewshot_nocot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "Qwen/Qwen3-8B",
+    "checkpoint": "Qwen/Qwen3-8B",
+    "n_params": null
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 400,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.005,
+    "compute_steps": 0,
+    "extra": {
+      "task": "depth2",
+      "design": "depth-vs-layers scan: pretrained model, few-shot same-level shots, no CoT, per-level accuracy on the first per_level test items of each level; CoT reference",
+      "n_layers": 36,
+      "effective_layers": {
+        "nocot": 36
+      },
+      "nocot": {
+        "nocot": {
+          "per_level_accuracy": {
+            "1": 0.02,
+            "2": 0.0,
+            "3": 0.0,
+            "4": 0.0
+          },
+          "per_level_ci95": {
+            "1": [
+              0.005501852234968185,
+              0.07001316294199365
+            ],
+            "2": [
+              0.0,
+              0.03699480747600191
+            ],
+            "3": [
+              0.0,
+              0.03699480747600191
+            ],
+            "4": [
+              0.0,
+              0.03699480747600191
+            ]
+          },
+          "overall": 0.005,
+          "crossing_50": null,
+          "crossing_25": null,
+          "reach_above_floor": 0,
+          "bare_number_rate": 1.0
+        }
+      },
+      "cot_reference": null,
+      "seconds": {
+        "nocot": 4.950646522454917
+      },
+      "main_condition": "nocot"
+    }
+  },
+  "hyperparams": {
+    "n_shots": 0,
+    "shot_seed": 0,
+    "shot_source": "train, same level",
+    "per_level": 100,
+    "levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "cot_per_level": 0,
+    "max_new": 12,
+    "cot_max_new": 200,
+    "reach_floor": 0.08,
+    "loops": null,
+    "cot_loops": null,
+    "decoding": "greedy",
+    "backend": "vllm",
+    "chat": true,
+    "instruction": "You will get a start number and a list of rules. Apply each rule, in order, to the running number (each rule's condition is checked on the current number). Do all the work in your head: reply with only the final number, nothing else.",
+    "thinking": false,
+    "force_number": true
+  },
+  "seed": 0,
+  "hardware": "RunPod A40 (secure)",
+  "author": "Henning Lindig",
+  "notes": "depth2 few-shot no-CoT scan of a pretrained model: accuracy by rule count vs layer count",
+  "timestamp_utc": "2026-10-18T03:21:16.125783+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

@@ -24,6 +24,7 @@ import argparse
 import json
 import math
 import random
+import re
 import time
 from collections import defaultdict
 from pathlib import Path
@@ -52,13 +53,28 @@ def build_prefix(shots: list[dict], cot: bool) -> str:
     return "\n\n".join(parts) + "\n\n"
 
 
+INSTRUCTION = ("You will get a start number and a list of rules. Apply each rule, in order, to the running number "
+               "(each rule's condition is checked on the current number). Do all the work in your head: reply with "
+               "only the final number, nothing else.")
+
+
+def chat_prompt(tok, instruction: str, shots: list[dict], question: str, thinking: bool) -> str:
+    """Chat-template prompt for instruct models: instruction as the system message, each shot as a user/assistant
+    turn with the bare answer, then the question. enable_thinking only matters for Qwen3 (other templates ignore it)."""
+    msgs = [{"role": "system", "content": instruction}]
+    for s in shots:
+        msgs += [{"role": "user", "content": s["question"]}, {"role": "assistant", "content": s["answer"]}]
+    msgs.append({"role": "user", "content": question})
+    return tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True, enable_thinking=thinking)
+
+
 def parse(text: str, cot: bool) -> str | None:
     if cot:
         head = text.split("Question:")[0]
         if "The answer is" in head:
             head = head.split("The answer is")[1]
         return extract_final_number(head)
-    return extract_final_number(text.split("\n")[0])
+    return extract_final_number(text.strip().split("\n")[0])
 
 
 def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
@@ -101,9 +117,16 @@ class VLLMBackend:
         self.n_layers = getattr(cfg, "num_hidden_layers", None) or getattr(cfg, "n_layer", None)
         self.n_params = None
 
+    def tokenizer(self):
+        return self.llm.get_tokenizer()
+
+    force_number = False  # set by main: regex-guided decoding so the reply can only be digits
+
     def generate(self, prompts: list[str], max_new: int, stop: list[str]) -> list[str]:
         from vllm import SamplingParams
-        sp = SamplingParams(temperature=0.0, max_tokens=max_new, stop=stop)
+        from vllm.sampling_params import GuidedDecodingParams
+        guided = GuidedDecodingParams(regex=r"[0-9]{1,3}") if self.force_number else None
+        sp = SamplingParams(temperature=0.0, max_tokens=max_new, stop=stop, guided_decoding=guided)
         return [o.outputs[0].text for o in self.llm.generate(prompts, sp)]
 
 
@@ -140,8 +163,9 @@ class OuroBackend:
         return outs
 
 
-def score(backend, items, prefixes, cot: bool, max_new: int, stop: list[str], tag: str, rows: dict):
-    prompts = [prefixes[q["level"]] + f"Question: {q['question']}\nAnswer:" for q in items]
+def score(backend, items, prefixes, cot: bool, max_new: int, stop: list[str], tag: str, rows: dict, make_prompt=None):
+    prompts = [make_prompt(q) if make_prompt else prefixes[q["level"]] + f"Question: {q['question']}\nAnswer:"
+               for q in items]
     t0 = time.perf_counter()
     outs = backend.generate(prompts, max_new, stop)
     secs = time.perf_counter() - t0
@@ -152,7 +176,8 @@ def score(backend, items, prefixes, cot: bool, max_new: int, stop: list[str], ta
         k[q["level"]] += ok
         n[q["level"]] += 1
         rows[q["id"]].update({f"raw_{tag}": o, f"pred_{tag}": pred, f"correct_{tag}": ok})
-    return dict(k), dict(n), secs
+    bare = sum(bool(re.fullmatch(r"\s*-?\d+\.?\s*", o)) for o in outs) / len(outs)
+    return dict(k), dict(n), secs, bare
 
 
 def summarize(k: dict, n: dict, floor: float) -> dict:
@@ -186,6 +211,11 @@ def main() -> None:
     p.add_argument("--stage", default="pilot")
     p.add_argument("--hardware", default="RunPod")
     p.add_argument("--out-dir", default=None)
+    p.add_argument("--chat", action="store_true", help="instruct model: chat template, INSTRUCTION as system message")
+    p.add_argument("--thinking", action="store_true", help="Qwen3 chat: leave thinking on (default off)")
+    p.add_argument("--slug-suffix", default="")
+    p.add_argument("--force-number", action="store_true",
+                   help="vLLM regex-guided decoding: reply must be 1-3 digits (instruct models otherwise start CoT)")
     a = p.parse_args()
     seed = set_seed(0)
 
@@ -206,21 +236,32 @@ def main() -> None:
     loops = [int(x) for x in a.loops.split(",") if x]
     backend = OuroBackend(a.model, a.attn) if loops else VLLMBackend(a.model, a.max_len, a.tp)
     print(f"loaded {a.model}: {backend.n_layers} layers")
+    make_prompt = None
+    backend.force_number = a.force_number
+    if a.chat:
+        tok = backend.tokenizer()
+        make_prompt = lambda q: chat_prompt(tok, INSTRUCTION, shots[q["level"]], q["question"], a.thinking)
+        a.cot_per_level, cot_items = 0, []  # the CoT reference is a completion-format prompt; not used in chat mode
+        print(make_prompt(items[-1]))
 
     res, secs = {}, {}
     for tag, k_loop in ([(f"l{k}", k) for k in loops] or [("nocot", None)]):
         if k_loop:
             backend.set_loops(k_loop)
-        k, n, secs[tag] = score(backend, items, prefix, False, a.max_new, ["\n"], tag, rows)
-        res[tag] = summarize(k, n, a.floor)
+        # chat replies can open with a newline (Qwen3's no-think template), so chat mode has no newline stop
+        k, n, secs[tag], bare = score(backend, items, prefix, False, a.max_new, [] if a.chat else ["\n"], tag, rows,
+                                      make_prompt)
+        if a.smoke_n:
+            print([rows[q["id"]][f"raw_{tag}"] for q in items[::max(1, len(items) // 6)]])
+        res[tag] = summarize(k, n, a.floor) | {"bare_number_rate": bare}
         pl = " ".join(f"{L}:{v:.2f}" for L, v in res[tag]["per_level_accuracy"].items())
-        print(f"{tag} no-CoT overall {res[tag]['overall']:.3f} reach {res[tag]['reach_above_floor']} | {pl}")
+        print(f"{tag} no-CoT bare-number {bare:.2f} overall {res[tag]['overall']:.3f} reach {res[tag]['reach_above_floor']} | {pl}")
 
     cot = None
     if cot_items:
         if loops:
             backend.set_loops(a.cot_loops)
-        k, n, secs["cot"] = score(backend, cot_items, cot_prefix, True, a.cot_max_new, ["\n\nQuestion"], "cot", rows)
+        k, n, secs["cot"], _ = score(backend, cot_items, cot_prefix, True, a.cot_max_new, ["\n\nQuestion"], "cot", rows)
         cot = summarize(k, n, a.floor)
         pl = " ".join(f"{L}:{v:.2f}" for L, v in cot["per_level_accuracy"].items())
         print(f"CoT reference overall {cot['overall']:.3f} | {pl}")
@@ -231,7 +272,7 @@ def main() -> None:
 
     main_tag = f"l{max(loops)}" if loops else "nocot"
     eff = {t: backend.n_layers * (int(t[1:]) if loops else 1) for t in res}
-    slug = "depth2-fewshot-" + a.model.split("/")[-1].lower()
+    slug = "depth2-fewshot-" + a.model.split("/")[-1].lower() + a.slug_suffix
     record = RunRecord(
         run_id=new_run_id("baseline_fewshot_nocot", slug), mechanism="baseline_fewshot_nocot", stage=a.stage,
         model=ModelInfo(backbone=a.model, checkpoint=a.model, n_params=backend.n_params),
@@ -254,7 +295,9 @@ def main() -> None:
                      "per_level": a.per_level, "levels": sorted(test), "cot_per_level": a.cot_per_level, "max_new": a.max_new,
                      "cot_max_new": a.cot_max_new, "reach_floor": a.floor, "loops": loops or None,
                      "cot_loops": a.cot_loops if loops else None, "decoding": "greedy",
-                     "backend": "hf-bs1" if loops else "vllm"},
+                     "backend": "hf-bs1" if loops else "vllm", "chat": a.chat,
+                     "instruction": INSTRUCTION if a.chat else None, "thinking": a.thinking if a.chat else None,
+                     "force_number": a.force_number},
         seed=seed, hardware=a.hardware,
         notes="depth2 few-shot no-CoT scan of a pretrained model: accuracy by rule count vs layer count",
     )
