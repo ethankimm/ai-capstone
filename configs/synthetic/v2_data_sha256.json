@@ -1,0 +1,13 @@
+{
+ "_note": "sha256 of synthetic v2 data files (generator 2.0.0, seed 5980). load_synthetic asserts these for files in a depth2/ or modal/ dir. Regenerating the data changes them: update deliberately.",
+ "files": {
+  "depth2/test.json": "d85db05312379cee830e619ccfca48f525207b9997baa4d859c60bea28f02df1",
+  "depth2/valid.json": "f2f53ade718c238711e8e21cf7f8cabc4367e8dbb81a1e61c9d7e172d4dd8d9a",
+  "depth2/valid_monitor.json": "00720d1e6bfc920f42cc8c469459d3d639e9fa10c470b22860020d9768932cd4",
+  "depth2/train.json": "3592d97759602caf0decb8d7d880f7b16df3e9ff2ae940f2da2b38724cdb2885",
+  "modal/test.json": "3c0c94c1a05bd4d8facec5aec6631c4d3a586414726368ee9f8da88a6c950645",
+  "modal/valid.json": "42fab64c221bcf891d08e0832ced5094e98365816da5acd1c6559fe2273447b1",
+  "modal/valid_monitor.json": "4dd8790677bb09294b3cbd28830ca614c7373c182abe336cd642b34a235736a5",
+  "modal/train.json": "0b1f403d238c1a62707f27efd91186248e64b389aa73b76e63b3881dbc5a8a93"
+ }
+}

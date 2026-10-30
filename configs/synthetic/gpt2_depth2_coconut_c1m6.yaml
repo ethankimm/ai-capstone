@@ -1,0 +1,44 @@
+# v2 task (depth2), main Coconut run (TRAINING_PROTOCOL.md). c_thought 1 x max_latent_stage 6:
+# one latent per rule for rules 1-6, epochs_per_stage 1, initialised from the Coconut-stack CoT run gpt2_depth2_cot
+# (load_model_path; HF checkpoints from train_synthetic.py are NOT loadable here). resume 1 skips the stage-0 (CoT) epoch,
+# so with num_epochs 10 the loop runs epochs 1..9: epochs 1-6 = stages 1-6 (first s written steps -> s latents, rest
+# written), epochs 7-9 = the FINAL all-latent stage (all written steps dropped, 6 latents for every item via
+# pad_latent_to_max). Checkpoints: checkpoint_2..checkpoint_10; the final-stage ones are checkpoint_8, _9, _10 (best of
+# the 3 on valid.json, mean over all levels, is the evaluated one). Rules 7-12 never get a latent: expect a drop near
+# k = M + d50 - 1 = 8. Supersedes gpt2_depth2_coconut_A.yaml (c 2 x M 3), kept for provenance of older runs.
+# save_only_improve False: one checkpoint per epoch (stage switches drop accuracy, "best" would freeze at an early stage).
+# load_model_path is rendered by scripts/pod/coconut_v2.sh (it substitutes the real CoT checkpoint, and name/seed for reruns).
+# Launch via scripts/pod/coconut_v2.sh, not by hand.
+
+project: coconut
+save_path: /workspace/coconut_runs
+name: gpt2_depth2_coconut_c1m6
+
+only_eval: False
+
+coconut: True
+cot: False
+no_thoughts: False
+no_cot: False
+
+c_thought: 1
+epochs_per_stage: 1
+max_latent_stage: 6
+pad_latent_to_max: True
+
+save_only_improve: False
+uniform_prob: 0.0
+model_id: openai-community/gpt2
+load_model_path: /workspace/coconut_runs/gpt2_depth2_cot/checkpoint_<BEST>  # SET to the newest checkpoint_N of the CoT run
+seed: 0
+resume: 1
+bf16: False
+train_path: /workspace/synthetic_data_v2/depth2/train.json
+val_path: /workspace/synthetic_data_v2/depth2/valid_monitor.json
+reset_optimizer: True
+batch_size_training: 32
+debug: False
+gradient_accumulation_steps: 4
+num_epochs: 10  # resume 1 skips stage 0: epochs 1-6 = stages 1-6, 7-9 = final (3 final-stage epochs)
+lr: !!float "1e-4"
+weight_decay: 0.01

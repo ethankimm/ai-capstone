@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# DRAFT -- not launched. CODI on GPT-2 / synthetic depth task. Adapted from Dilgren &
+# CODI on GPT-2 / synthetic tasks (main RuleChain runs: TRAINING_PROTOCOL.md). Adapted from Dilgren &
 # Wiegreffe's args_codi/train_gpt2_prosqa_codi.sh (are-lrms-easily-interpretable), run the
 # way scripts/train_codi.sh runs CODI (reference repo @ 2c23146, its own venv from
 # scripts/codi_setup.sh). Needs scripts/codi_synthetic.patch applied on top of
@@ -18,19 +18,50 @@
 #        EXTRA_ARGS="--exp_mode True --exp_data_num 16 --max_steps 2 --per_device_train_batch_size 4 --gradient_accumulation_steps 1"
 #   5. include_last_cot: left at the default False, i.e. the final step "<<c+9=41>>" (which
 #      computes the answer) is NOT in the teacher CoT -- same as icot (GSM8K) and prosqa.
-#      For the WIDTH task the last step is just the last product, not an answer step: a
-#      width copy of this script should pass --include_last_cot True (otherwise the teacher
-#      never sees the last product), and say so in notes.md.
+#      modal (v2) also keeps False: its last step <<m+0=m>> is the answer step by design
+#      (synthetic_v2.py), so True would put the answer in the teacher CoT before "The answer is:".
+#      Only width-style tasks whose last step is NOT an answer step (width, paircount, distinct)
+#      need --include_last_cot True; say so in notes.md.
 # Kept from the prosqa script: lr 3e-3, 40 epochs, 64 x accum 2 = 128 effective on 1 GPU,
 # LoRA r128/a32, bf16, cosine + 3% warmup, wd 0.1, 6 latents, projection 768, seed 11,
-# model_max_length 1024, save each epoch (save_total_limit 1).
+# model_max_length 1024, save each epoch.
+# Added for the RuleChain main runs (TRAINING_PROTOCOL.md, 2026-10-29), not in the prosqa script:
+#   6. --fix_attn_mask True: the answer pass masks the question's left padding (upstream default False attends to it).
+#   7. --save_total_limit 3: the evaluated checkpoint is the best of the last 3 epochs on valid.json.
+#   8. NUM_LATENT env (default 6); NUM_LATENT=0 = the CODI-0 reference. Needs scripts/codi_model_fixes.patch.
+#   9. --pad_invariant True (codi_model_fixes.patch): the latent passes get the running attention mask (as in Liang & Pan's
+#      code) and every student pass gets mask-derived position ids, so a left-padded question computes the same as alone.
+#      scripts/eval_codi.py applies the same rule at inference; scripts/check_codi_padding.py tests it.
+#  10. REF_LOSS_FACTOR / DISTILL_LOSS_FACTOR env (default 1.0); both 0 with NUM_LATENT=0 = the student-only run.
+#  11. Data hash check, smoke-name guard, per-run logging dir.
 set -euo pipefail
 
 CODI_DIR="${CODI_DIR:-/workspace/codi}"
 SAVE_DIR="${SAVE_DIR:-/workspace/codi_runs}"
 export CODI_SYNTHETIC_DATA_DIR="${CODI_SYNTHETIC_DATA_DIR:-/workspace/synthetic_data}"
-EXP_NAME=gpt2_depth_codi
+# TASK = depth | width | depth2 | modal | paircount | distinct (data dir name under CODI_SYNTHETIC_DATA_DIR).
+# INCLUDE_LAST_COT=True for width-style tasks whose last step is not an answer step (paircount, distinct,
+# width), so the teacher must see it. Leave False for depth / depth2 / modal (modal's last step IS the answer).
+TASK="${TASK:-depth}"
+INCLUDE_LAST_COT="${INCLUDE_LAST_COT:-False}"
+# NUM_LATENT=0 trains the CODI-0 reference (TRAINING_PROTOCOL.md); needs scripts/codi_model_fixes.patch applied.
+NUM_LATENT="${NUM_LATENT:-6}"
+# REF_LOSS_FACTOR=0 DISTILL_LOSS_FACTOR=0 with NUM_LATENT=0 = the student-only run (plain no-CoT in CODI's code).
+REF_LOSS_FACTOR="${REF_LOSS_FACTOR:-1.0}"
+DISTILL_LOSS_FACTOR="${DISTILL_LOSS_FACTOR:-1.0}"
+EXP_NAME="${EXP_NAME:-gpt2_${TASK}_codi}"
+REPO="${REPO:-/workspace/ai-capstone}"
 mkdir -p "$SAVE_DIR"
+
+# A smoke run (--max_steps) writes into $SAVE_DIR/$EXP_NAME/gpt2/ep_40/... exactly like the real run (--max_steps does not
+# change the ep_40 folder), so it must have its own name.
+if [[ "${EXTRA_ARGS:-}" == *--max_steps* && "$EXP_NAME" != *_smoke ]]; then
+    echo "ERROR: smoke run (--max_steps) needs EXP_NAME ending in _smoke, got $EXP_NAME" >&2; exit 1
+fi
+# Data hashes (configs/synthetic/v2_data_sha256.json) before any training.
+python3 "$REPO/scripts/check_data_hashes.py" "$CODI_SYNTHETIC_DATA_DIR" "$TASK" || { echo "ERROR: data hash check failed" >&2; exit 1; }
+# codi_model_fixes.patch must be applied: it adds --pad_invariant (and makes NUM_LATENT=0 train the student).
+grep -q "pad_invariant" "$CODI_DIR/src/model.py" || { echo "ERROR: scripts/codi_model_fixes.patch not applied in $CODI_DIR" >&2; exit 1; }
 cd "$CODI_DIR"
 
 export PYTHONBREAKPOINT=0
@@ -41,16 +72,17 @@ fi
 # shellcheck disable=SC2206
 EXTRA=(${EXTRA_ARGS:-})
 
-echo "codi commit: $(git rev-parse --short HEAD) | data: $CODI_SYNTHETIC_DATA_DIR/depth | SAVE_DIR=$SAVE_DIR | EXTRA_ARGS=${EXTRA_ARGS:-<none>}"
+echo "codi commit: $(git rev-parse --short HEAD) | data: $CODI_SYNTHETIC_DATA_DIR/$TASK | include_last_cot=$INCLUDE_LAST_COT | num_latent=$NUM_LATENT | ref/distill factors=$REF_LOSS_FACTOR/$DISTILL_LOSS_FACTOR | SAVE_DIR=$SAVE_DIR | EXTRA_ARGS=${EXTRA_ARGS:-<none>}"
 echo "start: $(date -u +%FT%TZ)"
 
 .venv/bin/python train.py \
 	--output_dir "$SAVE_DIR" \
 	--expt_name "$EXP_NAME" \
-	--logging_dir "$SAVE_DIR/logs" \
+	--logging_dir "$SAVE_DIR/logs/$EXP_NAME" \
 	--logging_steps 10 \
 	--model_name_or_path gpt2 \
-	--data_name depth \
+	--data_name "$TASK" \
+	--include_last_cot "$INCLUDE_LAST_COT" \
 	--seed 11 \
 	--model_max_length 1024 \
 	--per_device_train_batch_size 64 \
@@ -63,13 +95,17 @@ echo "start: $(date -u +%FT%TZ)"
 	--lora_r 128 --lora_alpha 32 --lora_init \
 	--save_strategy "epoch" \
 	--save_safetensors False \
-	--save_total_limit 1 \
+	--save_total_limit 3 \
 	--weight_decay 0.1 \
 	--warmup_ratio 0.03 \
 	--lr_scheduler_type "cosine" \
 	--do_train \
 	--report_to tensorboard \
-	--num_latent 6 \
+	--num_latent "$NUM_LATENT" \
+	--fix_attn_mask True \
+	--pad_invariant True \
+	--ref_loss_factor "$REF_LOSS_FACTOR" \
+	--distill_loss_factor "$DISTILL_LOSS_FACTOR" \
 	--logging_strategy "steps" \
 	--use_prj True \
 	--prj_dim 768 \

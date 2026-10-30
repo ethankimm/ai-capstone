@@ -1,0 +1,41 @@
+# v2 task (depth2). Coconut-stack "no_thoughts" reference for gpt2_depth2_coconut_c1m6.yaml (TRAINING_PROTOCOL.md): same
+# init (gpt2_depth2_cot), same curriculum and schedule, but with NO latent tokens (Coconut's "w/o thought").
+# run.py `no_thoughts: True` sets c_thought = 0 and coconut = False and builds inputs without <|start-latent|>/<|end-latent|>
+# (no_special_marker), so stages 1-6 drop the first s written steps with nothing in their place and epochs 7-9 train
+# question -> "### answer" directly. c_thought / max_latent_stage below are kept identical to the Coconut run for the
+# schedule (c_thought is overridden to 0 inside run.py). Evaluated with eval_synthetic_coconut.py --method no_thoughts.
+# Checkpoints checkpoint_2..10; final-stage ones = 8, 9, 10; best of the 3 on valid.json (mean over all levels) is evaluated.
+# Supersedes gpt2_depth2_no_thoughts.yaml (M 3 schedule). load_model_path is rendered by scripts/pod/coconut_v2.sh.
+
+project: coconut
+save_path: /workspace/coconut_runs
+name: gpt2_depth2_no_thoughts_m6
+
+only_eval: False
+
+coconut: False
+cot: False
+no_thoughts: True
+no_cot: False
+
+c_thought: 1
+epochs_per_stage: 1
+max_latent_stage: 6
+pad_latent_to_max: True
+
+save_only_improve: False
+uniform_prob: 0.0
+model_id: openai-community/gpt2
+load_model_path: /workspace/coconut_runs/gpt2_depth2_cot/checkpoint_<BEST>  # rendered by coconut_v2.sh
+seed: 0
+resume: 1
+bf16: False
+train_path: /workspace/synthetic_data_v2/depth2/train.json
+val_path: /workspace/synthetic_data_v2/depth2/valid_monitor.json
+reset_optimizer: True
+batch_size_training: 32
+debug: False
+gradient_accumulation_steps: 4
+num_epochs: 10
+lr: !!float "1e-4"
+weight_decay: 0.01

@@ -1,0 +1,58 @@
+# Step 2: GPT-2 no_cot on the synthetic v2 depth2 task, trained with the VANILLA Coconut repo
+# (github.com/facebookresearch/coconut @ 27273cb8), adapted from Dilgren & Wiegreffe's
+# args_coconut-cot-no_cot/gpt2_prosqa_no_cot.yaml. Differences from that file, all deliberate:
+#   * 1 GPU instead of 4: batch_size_training 32 x gradient_accumulation_steps 4 = effective
+#     128 (= their 4 GPUs x 32). Per-device batch is unchanged from the reference, so peak
+#     memory is what it was there; 64 x 2 likely also fits a 24 GB card for GPT-2 at these
+#     sequence lengths (<= ~230 tokens) but is untested -- kept the safe choice.
+#   * train/val paths -> our synthetic JSON; val_path = valid_monitor.json (30 per level)
+#     so run.py's per-epoch generation eval stays cheap (it decodes val at batch size 1).
+#   * save_only_improve False (as their file): v2 plan D13 evaluates the LAST epoch of this
+#     reference at a fixed 25 epochs (no best-on-monitor pick, no kill-at-plateau). run.py then writes
+#     checkpoint_<epoch> every epoch (~0.5 GB each): scripts/pod/coconut_v2.sh prunes all but the newest 2.
+# Role: secondary same-stack no-latent reference for the GAIN axis of H1; the
+# primary reference is gpt2_depth2_no_thoughts.yaml (same init and curriculum as Coconut A).
+#
+# Launch (from the Coconut checkout -- run.py imports coconut.py/dataset.py from cwd;
+# Coconut venv: torch 2.5.1 / transformers 4.46.2 / wandb 0.18.7):
+#   cd /workspace/coconut && WANDB_MODE=offline torchrun --nnodes 1 --nproc_per_node 1 \
+#       run.py /workspace/ai-capstone/configs/synthetic/gpt2_depth2_no_cot.yaml 2>&1 | tee /workspace/logs/gpt2_depth2_no_cot.log
+# (keep the log: scripts/eval_synthetic_coconut.py --train_log parses per-epoch training
+# seconds and monitor accuracy from it). Then evaluate per level on test.json with
+# scripts/eval_synthetic_coconut.py --method no_cot --checkpoint_path <save_path>/<name>/checkpoint_<latest>.
+# Edit save_path / *_path if the directory layout differs. If save_path/name already contains
+# checkpoints, run.py silently RESUMES from the newest one (preemption logic) -- use a
+# fresh name for a fresh run.
+
+project: coconut
+save_path: /workspace/coconut_runs
+name: gpt2_depth2_no_cot
+
+only_eval: False
+
+coconut: False
+cot: False
+no_thoughts: False
+no_cot: True
+
+c_thought: 0
+epochs_per_stage: 1
+max_latent_stage: 0
+pad_latent_to_max: True
+
+save_only_improve: False
+uniform_prob: 0.0
+model_id: openai-community/gpt2
+load_model_path: None
+seed: 0
+resume: 0
+bf16: False
+train_path: /workspace/synthetic_data_v2/depth2/train.json
+val_path: /workspace/synthetic_data_v2/depth2/valid_monitor.json
+reset_optimizer: False
+batch_size_training: 32
+debug: False
+gradient_accumulation_steps: 4
+num_epochs: 25
+lr: !!float "1e-4"
+weight_decay: 0.01

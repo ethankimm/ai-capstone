@@ -1,12 +1,22 @@
 diff --git a/train.py b/train.py
-index 7dd4e06..aaa054f 100644
+index 456f281..12c6774 100644
 --- a/train.py
 +++ b/train.py
-@@ -309,6 +309,24 @@ def train():
+@@ -61,6 +61,9 @@ class CustomTrainer(Trainer):
+             for k, v in logs.items():
+                 super().log({k: v})
+ 
++# ai-capstone synthetic tasks (v1: depth, width; v2: depth2, modal, paircount, distinct)
++SYNTHETIC_TASKS = ("depth", "width", "depth2", "modal", "paircount", "distinct")
++
+ def _tokenize_fn(strings: Sequence[str], tokenizer: transformers.PreTrainedTokenizer) -> Dict:
+     """Tokenize a list of strings."""
+     tokenized_list = [
+@@ -309,6 +312,28 @@ def train():
                      questions.append(question)
                      cots.append(cot)
                      answers.append(answer)
-+                elif data_args.data_name in ("depth", "width"):
++                elif data_args.data_name in SYNTHETIC_TASKS:
 +                    # ai-capstone synthetic tasks (scripts/codi_synthetic.patch). Same format as the
 +                    # prontoqa branch above / Dilgren & Wiegreffe's prosqa branch: steps joined by "\n"
 +                    # (also Coconut's step separator), last step dropped unless --include_last_cot
@@ -20,6 +30,10 @@ index 7dd4e06..aaa054f 100644
 +                    # avoid OOM: remove very long data
 +                    token_num = len(tokenizer.encode(question + " " + cot + " " + answer))
 +                    if token_num > training_args.max_token_num:
++                        # silently dropping long items would bias the per-level mix of the training set
++                        if os.environ.get("CODI_SYNTHETIC_ALLOW_DROP") != "1":
++                            raise ValueError(f"synthetic example has {token_num} > max_token_num={training_args.max_token_num} "
++                                             "tokens; raise --max_token_num or set CODI_SYNTHETIC_ALLOW_DROP=1")
 +                        continue
 +                    questions.append(question)
 +                    cots.append(cot)
@@ -27,11 +41,11 @@ index 7dd4e06..aaa054f 100644
                  else:
                      raise NotImplementedError
              if training_args.exp_mode:
-@@ -388,6 +406,15 @@ def train():
+@@ -388,6 +413,15 @@ def train():
              train_dataset = SupervisedDataset(data_name=data_args.data_name, raw_data=dataset, tokenizer=tokenizer, bot=model.bot_id, eot=model.eot_id)
              data_collator = DataCollatorForSupervisedDataset(tokenizer=tokenizer)
              return dict(train_dataset=train_dataset, eval_dataset=None, data_collator=data_collator)
-+        elif data_args.data_name in ("depth", "width"):
++        elif data_args.data_name in SYNTHETIC_TASKS:
 +            # ai-capstone synthetic tasks: $CODI_SYNTHETIC_DATA_DIR/<task>/train.json
 +            # (default data/synthetic/<task>/train.json, relative to the CODI checkout)
 +            synth_dir = os.environ.get("CODI_SYNTHETIC_DATA_DIR", "data/synthetic")

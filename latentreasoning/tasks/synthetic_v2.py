@@ -3,7 +3,8 @@
 v1 depth was affine (``+ - *``, no wrap) so nominal depth overstated serial depth ~3x, and v1
 width was solved at 0.997 by everything. v2:
 
-* **depth2** -- a *rule chain* (modelled on Nanda's nocot-bench ``chain`` bank): a start value
+* **depth2** (called **RuleChain** in the paper; ``depth2`` stays the task id in data paths, hash keys,
+  run names and CODI's ``--data_name``) -- a *rule chain* (modelled on Nanda's nocot-bench ``chain`` bank): a start value
   and ``n`` data-dependent rules, each applied once to the running value ``s`` in 0..99::
 
       Start with 57. Rule 1: if it is even, halve it; otherwise add 5.

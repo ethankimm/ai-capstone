@@ -15,6 +15,7 @@ instead -- that's `coconut_cot_text` below, used only on the Coconut side.)
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -51,7 +52,26 @@ class SyntheticSet:
         return SyntheticSet(self.path, self.rows[:n], self.examples[:n])
 
 
+_HASH_REGISTRY = REPO_ROOT / "configs/synthetic/v2_data_sha256.json"
+
+
+def assert_known_hash(path: str | Path) -> str | None:
+    """sha256-assert a v2 data file against `configs/synthetic/v2_data_sha256.json` (keyed
+    "<task>/<file>"). Files not in the registry (v1 data, other tasks) are not checked: returns None.
+    Raises SystemExit on a mismatch so a regenerated / edited split can never be scored silently."""
+    p = Path(path)
+    key = f"{p.parent.name}/{p.name}"
+    registry = json.loads(_HASH_REGISTRY.read_text())["files"] if _HASH_REGISTRY.exists() else {}
+    if key not in registry:
+        return None
+    got = hashlib.sha256(p.read_bytes()).hexdigest()
+    if got != registry[key]:
+        raise SystemExit(f"sha256 mismatch for {key}: {got[:12]}... != registered {registry[key][:12]}... ({p})")
+    return got
+
+
 def load_synthetic(path: str | Path) -> SyntheticSet:
+    assert_known_hash(path)
     rows = json.loads(Path(path).read_text())
     examples = [
         Example(question=r["question"], rationale=" ".join(r["steps"]), answer=str(r["answer"]).strip(), idx=i)

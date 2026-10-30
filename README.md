@@ -40,6 +40,23 @@ Three things are shared:
    `results/<run_id>/notes.md`, then `scripts/rebuild_index.py`. Convention:
    [`.claude/skills/record-run/SKILL.md`](.claude/skills/record-run/SKILL.md).
 
+**RuleChain = `depth2`.** The paper's RuleChain task is `depth2` in code (`latentreasoning/tasks/synthetic_v2.py`,
+data in `synthetic_data_v2/depth2/`, run names `gpt2_depth2_*`). The main Coconut/CODI runs on it follow
+[`TRAINING_PROTOCOL.md`](TRAINING_PROTOCOL.md).
+
+### Generating the synthetic data
+
+The v2 data files (`synthetic_data_v2/<task>/{train,valid,valid_monitor,test}.json` + `stats.json`) are not
+committed; regenerate them and check them against the committed hashes:
+
+```bash
+uv run python -m latentreasoning.tasks.synthetic_v2 --task depth2 --out synthetic_data_v2   # or --task all
+python3 scripts/check_data_hashes.py synthetic_data_v2 depth2                               # must print ok for every file
+```
+
+Keep the defaults (generator 2.0.0, seed 5980, 100,000 train, 2,000 valid, 500 test per level): the hashes in
+`configs/synthetic/v2_data_sha256.json` and every v2 run assume them. Hashes are recorded for `depth2` and `modal` only.
+
 `latentreasoning/mechanisms/<name>.py` is each owner's notes (citation, reference repo, what
 `compute_steps` means for it, gotchas) — not an implementation.
 

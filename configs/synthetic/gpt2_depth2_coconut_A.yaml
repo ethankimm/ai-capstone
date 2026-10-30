@@ -1,0 +1,44 @@
+# v2 task (depth2). Coconut A = Coconut's args/gsm_coconut.yaml curriculum (c_thought 2, max_latent_stage 3) with
+# epochs_per_stage 1, initialised from the Coconut-stack CoT run gpt2_depth2_cot (load_model_path; HF checkpoints from
+# train_synthetic.py are NOT loadable here). resume 1 skips the stage-0 (CoT) epoch, so with num_epochs 7 the loop runs
+# epochs 1..6: epochs 1-3 = stages 1-3 (first k written steps -> 2k latents, rest written), epochs 4-6 = the FINAL
+# all-latent stage (all written steps dropped, 6 latents via pad_latent_to_max). Checkpoints: checkpoint_2..checkpoint_7;
+# the final-stage ones are checkpoint_5, _6, _7 (best of the 3 on valid.json is the evaluated one, plan D13).
+# This is the "minimum budget" schedule of plan D11 (3 final-stage epochs = prereg line 18's minimum; the 1-final-epoch
+# "A-lite" of v1 is below it and would be labelled under-trained). Latent budget: 6 latents replacing only steps 1-3.
+# save_only_improve False: one checkpoint per epoch (stage switches drop accuracy, "best" would freeze at an early stage).
+# load_model_path is rendered by scripts/pod/coconut_v2.sh (it substitutes the real CoT checkpoint, and name/seed for reruns).
+# Launch via scripts/pod/coconut_v2.sh, not by hand.
+
+project: coconut
+save_path: /workspace/coconut_runs
+name: gpt2_depth2_coconut_A
+
+only_eval: False
+
+coconut: True
+cot: False
+no_thoughts: False
+no_cot: False
+
+c_thought: 2
+epochs_per_stage: 1
+max_latent_stage: 3
+pad_latent_to_max: True
+
+save_only_improve: False
+uniform_prob: 0.0
+model_id: openai-community/gpt2
+load_model_path: /workspace/coconut_runs/gpt2_depth2_cot/checkpoint_<BEST>  # SET to the newest checkpoint_N of the CoT run
+seed: 0
+resume: 1
+bf16: False
+train_path: /workspace/synthetic_data_v2/depth2/train.json
+val_path: /workspace/synthetic_data_v2/depth2/valid_monitor.json
+reset_optimizer: True
+batch_size_training: 32
+debug: False
+gradient_accumulation_steps: 4
+num_epochs: 7   # 3 curriculum stages + 3 final all-latent epochs (A-lite had 1); resume 1 skips stage 0 so epochs 1-3 = stages 1-3, 4-6 = final
+lr: !!float "1e-4"
+weight_decay: 0.01

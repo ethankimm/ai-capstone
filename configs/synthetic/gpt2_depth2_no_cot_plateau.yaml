@@ -1,0 +1,40 @@
+# v2 task (depth2 = RuleChain). Plain no-CoT on the Coconut stack, trained TO PLATEAU (TRAINING_PROTOCOL.md section 4.6):
+# the single-pass-reach member of the d50 envelope. Same as gpt2_depth2_no_cot.yaml (pretrained GPT-2, question -> "### answer"
+# from epoch 1, no curriculum, full fine-tune, lr 1e-4, effective batch 128) except: num_epochs 60 is only a cap -- the run is
+# stopped by scripts/pod/coconut_watch.py when monitor accuracy gains < 0.5 pt over 3 epochs (coconut_v2.sh `ref no_cot`).
+# save_only_improve False: a checkpoint every epoch; coconut_v2.sh prunes all but the newest 3 and checkpoint_12, the
+# data-matched checkpoint (12 passes over the train set = CoT 3 + Coconut 9). Selected checkpoint = best of the last 3 on
+# valid.json. Launch via scripts/pod/coconut_v2.sh, not by hand (run.py silently resumes an existing name).
+
+project: coconut
+save_path: /workspace/coconut_runs
+name: gpt2_depth2_no_cot_plateau
+
+only_eval: False
+
+coconut: False
+cot: False
+no_thoughts: False
+no_cot: True
+
+c_thought: 0
+epochs_per_stage: 1
+max_latent_stage: 0
+pad_latent_to_max: True
+
+save_only_improve: False
+uniform_prob: 0.0
+model_id: openai-community/gpt2
+load_model_path: None
+seed: 0
+resume: 0
+bf16: False
+train_path: /workspace/synthetic_data_v2/depth2/train.json
+val_path: /workspace/synthetic_data_v2/depth2/valid_monitor.json
+reset_optimizer: False
+batch_size_training: 32
+debug: False
+gradient_accumulation_steps: 4
+num_epochs: 60
+lr: !!float "1e-4"
+weight_decay: 0.01

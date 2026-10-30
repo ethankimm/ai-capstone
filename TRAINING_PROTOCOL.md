@@ -1,177 +1,264 @@
 # RuleChain training protocol: Coconut, CODI and their references
 
-Status: **agreed 2026-10-29.** This is how we train and evaluate the main latent models on RuleChain (`depth2`).
-This file is the runbook. If you change a value, change it here.
+Status: **agreed 2026-10-30** (first version 2026-10-29). This is how we train and evaluate the main latent models on
+RuleChain. It is the runbook: if you change a value, change it here. Earlier plans
+(`c_thought 2 x max_latent_stage 3`) are superseded where they disagree with this file.
 
-Earlier plans (`c_thought 2 x max_latent_stage 3`) are superseded where they disagree with this file.
+**Naming.** The paper calls the task **RuleChain**. In code it keeps the task ID `depth2` (generator 2.0.0): the data
+folder `synthetic_data_v2/depth2/`, the keys in `configs/synthetic/v2_data_sha256.json`, run names (`gpt2_depth2_*`), and
+CODI's `--data_name depth2`. Renaming it would change data paths and hashes and break the link to logged runs, so
+`depth2` stays. When writing, RuleChain = `depth2`.
 
 ---
 
-## 1. What we train
+## 1. Key parameter decisions
 
-Every model uses GPT-2 small (`gpt2`, 124M) on the same data files. Five models in total:
+The decisions that shape every result. Section 6 and 7 list the remaining settings.
+
+| Decision | Value | Why |
+|---|---|---|
+| Backbone | GPT-2 small (124M), pretrained, for every model | Shared backbone; d50 ≈ 3 for GPT-2 small no-CoT, so the task spans below and above single-pass reach |
+| Latent budget | **6 latents** for Coconut and CODI, at training and test, for every k | Same total budget for both methods; fixed per item, as in every published Coconut/CODI configuration |
+| Coconut latents per rule (`c_thought`) | **1** | One forward pass already handles about 3 rules, so one latent per rule is enough, and latent j can be probed for step s_j (Coconut also uses 1 on ProsQA/ProntoQA) |
+| Coconut rules replaced (`max_latent_stage`, M) | **6** | Covers single-pass reach with room above it; rules 7–12 never get a latent, so accuracy should fall near k ≈ M + d50 (a check of the setup, not a finding) |
+| `pad_latent_to_max` | **True** | Fixed budget (6 latents even when k < 6); a null result below d50 is then stronger, since unused latent compute was available |
+| Coconut schedule | 1 epoch per stage, 3 final-stage epochs, start from the CoT checkpoint | About as many items per stage and final-stage items as Coconut's ProsQA schedule |
+| CODI teacher CoT (`include_last_cot`) | **False** | Keeping the answer-computing step lets the teacher copy the answer into the distillation position (CODI's ablation); dropping it makes the teacher apply the last rule itself, as in Liang & Pan |
+| CODI padding | **`fix_attn_mask True` + `pad_invariant True`** (our patch) | Upstream's latent passes attend to left padding (up to ~160 tokens when k = 1 and k = 12 share a batch) and get shifted positions; that varies with k, our analysis axis. Liang & Pan mask the latent passes the same way; we also fix positions so batch size cannot change results (tested) |
+| CODI recipe | Published GPT-2 recipe: LoRA r 128/α 32, lr 3e-3, cosine, 40 epochs | Each method keeps its published recipe; comparisons go through each method's own reference |
+| Matched references | `no_thoughts` (Coconut), CODI-0 (CODI) | Same code, data and schedule as the latent model, minus the latents |
+| Single-pass reach (d50) | **Envelope**: per level, the best no-latent model (section 2) | A weakly trained reference would put d50 too low and inflate latent gains below it |
+| Primary ablation | **Resample swap within level**; mean (train split), zero and truncation secondary | The latent models never trained without latents; a swap keeps inputs in-distribution and shows direction (follows donor vs keeps own answer) |
+| Checkpoint rule | Best of the last 3 checkpoints on `valid.json` by mean accuracy over all 12 levels; test touched once | One rule for every model |
+| Answer format | Each method's own: Coconut `### N`, CODI `The answer is: N` | Changing either edits the method (CODI distills at the token after "The answer is:"); both are a marker before one answer token |
+| Seeds (round 1) | Coconut stack 0, CODI 11 (CODI's published seed); one seed per model | Supports existence claims only; any claim about where onset happens needs a second seed of the four latent/reference runs |
+
+## 2. Reference models
+
+All references start from pretrained GPT-2 small (or from the CoT model trained from it) and see the same 100,000
+training items.
+
+| Reference | How it is trained | Role | What we expect to show |
+|---|---|---|---|
+| **`no_thoughts`** (Coconut stack) | Coconut `run.py` with `no_thoughts: True`: starts from the CoT checkpoint, runs Coconut's exact curriculum (stage s drops the first s steps with nothing in their place), then 3 final epochs of question → `### N`. Same schedule, seed and checkpoint rule as the Coconut run | **Matched reference for Coconut.** Gain G(k) = Coconut − `no_thoughts` | Close to the envelope at small k. Coconut's gain should be near zero below d50 and positive above it. Large-k items get only the 3 final epochs, so it may sit below the envelope there |
+| **Plain no-CoT, to plateau** (Coconut stack) | Coconut `run.py` with `no_cot: True`: pretrained GPT-2, question → `### N` from epoch 1, no curriculum, full fine-tune, lr 1e-4. Stopped when monitor accuracy gains < 0.5 pt over 3 epochs (cap 60). Keeps the last 3 checkpoints and `checkpoint_12` | **Single-pass reach** (feeds the envelope). `checkpoint_12` = **data-matched** point: 12 passes over the train set, as many as CoT (3) + Coconut (9) | The best direct-answer accuracy GPT-2 small reaches here; d50 near or a little above 3. The gap between `checkpoint_12` and the plateau checkpoint shows how much extra training moves d50 |
+| **CODI-0** (CODI stack) | CODI `train.py` with `num_latent 0` (our patch): student goes from question + `<bot>` straight to `<eot>` "The answer is: N". Keeps teacher CE (writes the CoT) and distillation toward the teacher's hidden state. Same LoRA recipe, 40 epochs | **Matched reference for CODI.** Gain G(k) = CODI − CODI-0. Also the intermediate-supervision control: it gets the teacher's step supervision but no inference-time steps | Close to student-only and the envelope. If it falls clearly below them, distillation toward an unreachable target is hurting it, and CODI's gain is also reported against student-only and the envelope |
+| **Student-only CODI** (CODI stack) | CODI-0 with `ref_loss_factor 0` and `distill_loss_factor 0`: only question → "The answer is: N" CE. A plain no-CoT in CODI's code, same LoRA recipe. Existing flags, no new code | **Health check for CODI-0**, and an envelope member (LoRA no-CoT) | ≈ CODI-0. A clear gap means CODI-0's extra losses help or hurt direct answering. First run to drop if budget is short |
+| **Envelope** (derived, not trained) | Per level, the best valid accuracy among plain no-CoT (plateau), `no_thoughts`, CODI-0 and student-only | **Defines d50** for the onset prediction | Reach is at least what any no-latent model of this size shows; this is the conservative threshold |
+
+Older runs (25-epoch `train_synthetic.py` no-CoT, d50 ≈ 3.0) are context only, not references.
+
+**Health checks (pass before reading gains):** each matched reference is within a few points of the envelope at every
+level. A reference far below it is flagged as handicapped, and its method's gain is also reported against the envelope.
+
+## 3. Analysis rules fixed before training
+
+- **d50**: from a logistic fit of accuracy against k with a bootstrap interval over items, for every reference and for the
+  envelope. The onset prediction uses the envelope's d50; the others are sensitivity checks.
+- **Gain**: report G(k) and the normalized gain G(k) / (1 − acc_ref(k)), so the ceiling at k = 1 (reference ≈ 0.96) does
+  not decide the result.
+- **Necessity**: primary = resample swap. Replace the latents with those of another item at the same level (excluding
+  donors with the same answer), scored follows-donor / keeps-own / other. Secondary = mean ablation with the mean taken
+  over the train split, zero ablation, truncation; claim only when they agree in direction. The prediction is a rise in
+  the swap effect from about 0 below the envelope d50 to clearly positive above it. Ablated accuracy is also compared with
+  the reference: below the reference means dependence, not computation.
+- **Latents beyond the rule count** (j > k at small k) have no rule to stand for; per-position analyses use j ≤ k and
+  report j > k separately.
+- **Coconut's expected fall**: Coconut's own d50 should land in about [8, 10] (M = 6 latents plus about 3 rules in the
+  final pass). A miss suggests the latents are not one per rule.
+- **Scoring**: same answer comparison (`latentreasoning.eval.metrics.is_correct`) for all, with each method's own
+  extraction: Coconut takes the text after the last `###` (none = unparseable), CODI takes the last number. Report the
+  unparseable rate for every model.
+
+## 4. Runs
 
 | # | Run name | Code | What it is | Depends on |
 |---|---|---|---|---|
-| 1 | `gpt2_depth2_cot` | Coconut `run.py` | CoT model, used to initialize 2 and 3 | data |
-| 2 | `gpt2_depth2_coconut_c1m6` | Coconut `run.py` | Coconut, 6 latents (c = 1, M = 6) | 1 passes gate G1 |
-| 3 | `gpt2_depth2_no_thoughts_m6` | Coconut `run.py` | Coconut reference: same curriculum, no latent slots | 1 passes gate G1 |
-| 4 | `gpt2_depth2_codi` | CODI `train.py` | CODI, 6 latents | data |
-| 5 | `gpt2_depth2_codi0` | CODI `train.py` + CODI-0 patch | CODI reference: same losses, 0 latents | data, CODI-0 patch |
+| 1 | `gpt2_depth2_cot` | Coconut | CoT model, initializes 2 and 3 (retrained, section 6.2) | data |
+| 2 | `gpt2_depth2_coconut_c1m6` | Coconut | Coconut, 6 latents | 1 passes G1 |
+| 3 | `gpt2_depth2_no_thoughts_m6` | Coconut | Matched reference for Coconut | 1 passes G1 |
+| 4 | `gpt2_depth2_no_cot_plateau` | Coconut | Plain no-CoT to plateau | data |
+| 5 | `gpt2_depth2_codi` | CODI | CODI, 6 latents | data, padding check |
+| 6 | `gpt2_depth2_codi0` | CODI | Matched reference for CODI | data, padding check |
+| 7 | `gpt2_depth2_codi_student` | CODI | Student-only health check | data, padding check |
 
-Runs 2 and 3 share the same CoT checkpoint. Runs 4 and 5 are independent of the Coconut stack and can start right away.
-Use **one job per GPU** (sharing a GPU changes timings and has crashed runs before).
+Use **one job per GPU** (sharing a GPU changes timings and has crashed runs before). Runs 4–7 can start immediately; the Coconut chain (1 → timing → 2) is the critical path.
 
-Seeds for the first round: Coconut-stack runs use seed 0, CODI runs use seed 11 (CODI's published seed).
-Whether we run a second seed is decided after the first round's results are in.
+## 5. Code changes for this protocol (2026-10-29/30)
 
-## 2. Before anyone launches: code changes still needed
+- **Configs**: `gpt2_depth2_coconut_c1m6.yaml`, `gpt2_depth2_no_thoughts_m6.yaml`, `gpt2_depth2_no_cot_plateau.yaml`
+  (`configs/synthetic/`). The older `coconut_A`, `no_thoughts`, `no_cot` configs stay for provenance.
+- **`scripts/pod/coconut_v2.sh`**: new configs and run names; final-stage checkpoints 8/9/10; `select` ranks by mean
+  valid accuracy over all levels and verifies batched decoding for no-latent models; hash check covers `TASKS` (default
+  depth2 only); `COT_EPOCHS` override; `timing` runs stages 1–6 plus one final epoch; `ref no_cot` trains to plateau
+  with the watcher and keeps `checkpoint_12`; the manifest now includes CODI optimizer/scheduler state.
+- **`scripts/coconut_timing.py`**: projects any M (`--max-latent-stage`), times every stage, warns when one is missing.
+- **`scripts/codi_model_fixes.patch`** (replaces the earlier `codi_zero_latent.patch`; apply after
+  `codi_streaming.patch` and `codi_synthetic.patch`): (a) `num_latent 0` trains the student (upstream skipped the
+  student branch and crashed); (b) `--pad_invariant`: latent passes get the running attention mask and all student passes
+  get mask-derived position ids. With 6 latents and `pad_invariant` off, the computation equals upstream.
+- **`configs/synthetic/train_gpt2_depth_codi.sh`**: `--fix_attn_mask True --pad_invariant True --save_total_limit 3`;
+  `NUM_LATENT`, `REF_LOSS_FACTOR`, `DISTILL_LOSS_FACTOR` from the environment; data hash check; refuses a smoke run
+  without a `_smoke` name; checks the patch is applied; per-run logging dir.
+- **`scripts/eval_codi.py`**: shared `tokenize_questions` / `encode_and_think` / `PadInvariant` helpers; batch-size-1
+  crash fixed (`argmax(...).squeeze(-1)`); device follows the model; `pad_invariant`-aware decoding.
+- **`scripts/eval_synthetic_codi.py`**: fails if eval flags differ from the checkpoint's `training_args.bin` or weights
+  are missing; adds teacher-forced student accuracy at the distillation position, teacher accuracy per level, accuracy
+  by answer value; records the data sha256 and the split.
+- **`scripts/check_codi_padding.py`** (new): the padding test (section 7.2).
+- **`scripts/pod/pull_artifacts.sh`, `sync_loop.sh`**: optimizer state pulled; one local folder per machine; retries with
+  an alert after 3 failures; crash/finish alerts from the training logs (`WATCH_LOGS`).
 
-None of these are done yet. Each one blocks the runs listed next to it.
+## 6. Coconut stack (runs 1–4)
 
-- [ ] **Coconut config** (blocks 2): in `configs/synthetic/gpt2_depth2_coconut_A.yaml` (or a new copy named `gpt2_depth2_coconut_c1m6.yaml`), set `c_thought: 1`, `max_latent_stage: 6`, `num_epochs: 10`, and update the header comment. Keep `pad_latent_to_max: True`, `epochs_per_stage: 1`, `resume: 1`, `uniform_prob: 0`, `reset_optimizer: True`, `save_only_improve: False`, lr 1e-4, weight decay 0.01.
-- [ ] **no_thoughts config** (blocks 3): same three changes in `gpt2_depth2_no_thoughts.yaml`, so its schedule matches run 2 exactly.
-- [ ] **`scripts/pod/coconut_v2.sh`** (blocks 2, 3): set `FINAL_STAGE_CKPTS="8 9 10"`, point the `coconut` job at the new config, give the new runs new names (otherwise `run.py` resumes old checkpoints), and change `select` to rank by mean valid accuracy over **all 12 levels** (it currently uses L1–5).
-- [ ] **CODI launch script** `configs/synthetic/train_gpt2_depth_codi.sh` (blocks 4, 5): add `--fix_attn_mask True`, change `--save_total_limit 1` to `3` (we select among the last 3 epochs), and let `NUM_LATENT` be set from the environment (default 6).
-- [ ] **CODI-0 patch** (blocks 5): upstream CODI skips the student branch entirely when `num_latent` is 0 (`src/model.py:331`). Patch it so that with 0 latents the student still runs: question + `<bot>`, then directly `<eot>` + "The answer is: N", with student CE and distillation as usual. Teacher CE stays. The projection is unused. Add it to `scripts/codi_synthetic.patch` (or a separate `codi_zero_latent.patch`), and check on a 16-item smoke run that the student loss is non-zero.
-
-`eval_synthetic_coconut.py` already supports `--method no_thoughts` and reads the latent count from the config (c × M = 6). `eval_synthetic_codi.py` already passes `--inf_latent_iterations`, and 0 works (the loop is skipped).
-
-## 3. Data
-
-RuleChain v2, generator 2.0.0, seed 5980: 100,000 train items, 2,000 valid, 500 test items per level, levels k = 1–12.
+### 6.1 Data and setup
 
 ```bash
 uv run python -m latentreasoning.tasks.synthetic_v2 --task depth2 --out /workspace/synthetic_data_v2
-python3 scripts/check_data_hashes.py /workspace/synthetic_data_v2 depth2
+python3 scripts/check_data_hashes.py /workspace/synthetic_data_v2 depth2      # must pass; do not regenerate with other args
+bash scripts/pod/coconut_v2.sh setup      # Coconut @ 27273cb, .venv_coconut, hash check
 ```
 
-The hash check must pass (hashes in `configs/synthetic/v2_data_sha256.json`). Every launch script re-checks it. Do not regenerate with other arguments.
+RuleChain v2, generator 2.0.0, seed 5980: 100,000 train, 2,000 valid, 500 test per level, k = 1–12. Selection uses
+`depth2/valid.json`; `depth2/test.json` is evaluated once per model, for the selected checkpoint. Effective batch is
+always 128 (micro-batch 16 × accumulation 8; `MICRO_BS=32` on 48 GB cards, though it will not speed up Coconut).
 
-- **Selection** of checkpoints uses `depth2/valid.json`.
-- **Test** (`depth2/test.json`) is touched once per model, for the selected checkpoint only.
+### 6.2 CoT model and gate G1
 
-## 4. Coconut stack (runs 1–3)
-
-### 4.1 Setup
-
-```bash
-bash scripts/pod/coconut_v2.sh setup      # clones Coconut @ 27273cb, builds .venv_coconut, checks data hashes
-```
-
-The effective batch is always 128. The script sets micro-batch 16 × accumulation 8 by default; use `MICRO_BS=32` on 48 GB cards.
-
-### 4.2 CoT model and gate G1
+**The CoT model is retrained from scratch for this protocol.** The CoT model from 2026-10-15 (run record
+`results/20261015-065640_explicit_cot_v2-depth2-coconutstack-cot`) used the same config and passed G1 (all levels 1.000
+except L11 0.994). It shows what to expect; do not reuse its checkpoint. Start from an empty
+`/workspace/coconut_runs/gpt2_depth2_cot/`: `run.py` resumes from any checkpoint it finds there.
 
 ```bash
-bash scripts/pod/coconut_v2.sh cot        # 3 epochs
+bash scripts/pod/coconut_v2.sh cot        # COT_EPOCHS=3
 bash scripts/pod/coconut_v2.sh gate       # G1 on valid.json, uncapped decoding
 ```
 
-**G1:** CoT accuracy ≥ 0.97 at **every** level on valid. If it fails, resume to 5 epochs under the same name and re-check. If it fails a second time, stop and tell the team.
+**G1:** CoT accuracy ≥ 0.97 at every level on valid. On failure: `COT_EPOCHS=5 bash scripts/pod/coconut_v2.sh cot` under
+the same name (resumes), re-gate; a second failure stops Coconut.
 
-### 4.3 Timing test
+### 6.3 Timing test
 
 ```bash
-bash scripts/pod/coconut_v2.sh timing     # stages 1-4 on 5k items: seconds/step and peak memory per stage
+bash scripts/pod/coconut_v2.sh timing     # stages 1-6 + one final epoch on 5k items; s/step and peak memory per stage
 ```
 
-Stage time grows with the number of latents (each latent is a sequential forward pass). With M = 6 there are 6 curriculum stages plus 3 final epochs, so the old Coconut A time estimate is too low. **Project the full run from the per-stage timings before launching.**
+Run it on the GPU that will run Coconut. The projection excludes per-epoch validation (add about 10%).
 
-### 4.4 What the Coconut run does
+### 6.4 What the Coconut run does
 
-`resume 1` skips stage 0 (the CoT checkpoint stands in for it), so `num_epochs 10` runs epochs 1–9:
+`resume 1` skips stage 0, so `num_epochs 10` runs epochs 1–9:
 
 | Epoch | Stage | Training input | Checkpoint |
 |---|---|---|---|
-| 1–6 | 1–6 | First s steps replaced by s latents (one per rule); later steps stay written | `checkpoint_2` … `checkpoint_7` |
-| 7–9 | final | All steps dropped; 6 latents for every item (`pad_latent_to_max`), then `### answer` | `checkpoint_8`, `_9`, `_10` |
+| 1–6 | 1–6 | First s steps replaced by s latents (one per rule); later steps written | `checkpoint_2` … `_7` |
+| 7–9 | final | All steps dropped; 6 latents for every item, then `### N` | `checkpoint_8`, `_9`, `_10` |
 
-The `no_thoughts` reference runs the identical schedule with no latent tokens: steps are dropped stage by stage, and the question goes straight to `### answer`.
-
-### 4.5 Launch, select, test
+### 6.5 Launch, select, test
 
 ```bash
 bash scripts/pod/coconut_v2.sh coconut gpt2_depth2_coconut_c1m6 0
 bash scripts/pod/coconut_v2.sh ref no_thoughts                 # separate GPU
+bash scripts/pod/coconut_v2.sh ref no_cot                      # separate GPU; plateau watcher starts with it
 
-# after training
 bash scripts/pod/coconut_v2.sh select gpt2_depth2_coconut_c1m6 coconut
 bash scripts/pod/coconut_v2.sh select gpt2_depth2_no_thoughts_m6 no_thoughts
-bash scripts/pod/coconut_v2.sh test gpt2_depth2_coconut_c1m6 coconut <SELECTED_CKPT>
-bash scripts/pod/coconut_v2.sh test gpt2_depth2_no_thoughts_m6 no_thoughts <SELECTED_CKPT>
+bash scripts/pod/coconut_v2.sh select gpt2_depth2_no_cot_plateau no_cot     # last 3 checkpoints of the plateau run
+bash scripts/pod/coconut_v2.sh test <NAME> <METHOD> <SELECTED_CKPT>
+bash scripts/pod/coconut_v2.sh test gpt2_depth2_no_cot_plateau no_cot <...>/checkpoint_12 v2-depth2-no-cot-datamatched
 ```
 
-- **Checkpoint rule:** the best of the 3 final-stage checkpoints by mean valid accuracy over all levels (ties go to the later one).
-- **Under-trained flag:** if valid accuracy still rises between the last two final-stage epochs, label the run "under-trained" in `notes.md`.
-- **Inference** always uses the trained count of 6 latents. Do not evaluate at other latent counts and report it as a smaller model.
-- **Crash recovery:** relaunch under the **same** name (`run.py` resumes from the newest checkpoint). A new run needs a **new** name.
+- **Under-trained flag:** valid accuracy still rising between the last two final-stage epochs → label "under-trained".
+- **Inference** uses the trained 6 latents only.
+- **Never attach `coconut_watch.py` to runs 2 or 3**: its patience rule would stop them at a curriculum stage switch. It
+  is only for run 4.
+- **Crash recovery:** relaunch under the same name (`run.py` resumes from the newest checkpoint, losing up to one epoch).
+  A new run needs a new name.
 
-## 5. CODI stack (runs 4–5)
+## 7. CODI stack (runs 5–7)
 
-### 5.1 Setup
+### 7.1 Setup
 
 ```bash
-bash scripts/codi_setup.sh /workspace/codi                     # CODI @ 2c23146, own venv
-cd /workspace/codi && git apply /workspace/ai-capstone/scripts/codi_synthetic.patch
-# run 5 only: also apply the CODI-0 patch (section 2)
+bash scripts/codi_setup.sh /workspace/codi           # CODI @ 2c23146, own venv, applies codi_streaming.patch
+cd /workspace/codi
+git apply /workspace/ai-capstone/scripts/codi_synthetic.patch
+git apply /workspace/ai-capstone/scripts/codi_model_fixes.patch
 ```
 
-### 5.2 Settings
+### 7.2 Padding check (required, CPU is fine)
 
-Everything else is CODI's published GPT-2 recipe, kept as in the launch script.
+```bash
+cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/check_codi_padding.py \
+    --data_json /workspace/synthetic_data_v2/depth2/valid.json
+```
+
+Must print `RESULT: OK`. It compares items of levels 1/4/8/12 alone vs in one padded batch: training forward, eval
+logits at the distillation position, greedy generation, and training vs eval. On 2026-10-30 (CPU, random LoRA) the
+`pad_invariant` path matched to ≤ 2e-4, while upstream's path differed by about 100 in logits and changed 3 of 4
+generations.
+
+**Rule for every CODI script on depth2** (eval, probes, patching, logit lens): run the question and latent passes
+through `eval_codi.encode_and_think` / `PadInvariant`, or reproduce the same mask and position rule. The older GSM8K
+scripts (`decode_patch_codi.py`, `necessity_codi.py`, …) do not; port them before using them on these checkpoints.
+
+### 7.3 Settings
 
 | Setting | Value |
 |---|---|
-| Latents | `--num_latent 6` at training, `--inf_latent_iterations 6` at test (run 5: 0 and 0) |
-| Teacher CoT | `INCLUDE_LAST_COT=False`: the step that computes the answer is dropped, so the teacher applies the last rule itself |
-| Attention mask | `--fix_attn_mask True` |
-| Distillation | At the token after "The answer is:"; smooth L1 divided by teacher std (`--distill_loss_div_std True`); all loss weights 1 |
-| Projection | `--use_prj True --prj_dim 768`, LayerNorm on |
-| Optimization | LoRA r 128 / α 32, lr 3e-3, cosine with 3% warmup, weight decay 0.1, 40 epochs, bf16, 64 × 2 = 128 effective batch, max grad norm 2.0 |
-| Checkpoints | Saved each epoch, last 3 kept (`--save_total_limit 3`) |
+| Latents | `--num_latent 6` training, `--inf_latent_iterations 6` test (CODI-0, student-only: 0 and 0) |
+| Teacher CoT | `INCLUDE_LAST_COT=False` |
+| Padding | `--fix_attn_mask True --pad_invariant True` |
+| Distillation | Token after "The answer is:"; smooth L1 / teacher std; weights 1 (student-only: teacher and distillation weights 0) |
+| Projection | `--use_prj True --prj_dim 768`, LayerNorm |
+| Optimization | LoRA r 128 / α 32, lr 3e-3, cosine, 3% warmup, wd 0.1, 40 epochs, bf16, 64 × 2 = 128, grad norm 2.0 |
+| Checkpoints | Each epoch, last 3 kept, in `$SAVE_DIR/$EXP_NAME/gpt2/ep_40/lr_0.003/seed_11/checkpoint-<step>/` |
 
-### 5.3 Launch
+### 7.4 Smoke run, then launch
 
 ```bash
-TASK=depth2 INCLUDE_LAST_COT=False EXP_NAME=gpt2_depth2_codi \
-  SAVE_DIR=/workspace/codi_runs CODI_SYNTHETIC_DATA_DIR=/workspace/synthetic_data_v2 \
+COMMON="TASK=depth2 INCLUDE_LAST_COT=False SAVE_DIR=/workspace/codi_runs CODI_SYNTHETIC_DATA_DIR=/workspace/synthetic_data_v2"
+# smoke (own name, required by the script)
+env $COMMON EXP_NAME=gpt2_depth2_codi_smoke \
+  EXTRA_ARGS="--exp_mode True --exp_data_num 16 --max_steps 2 --per_device_train_batch_size 4 --gradient_accumulation_steps 1" \
   bash configs/synthetic/train_gpt2_depth_codi.sh
 
-# run 5, separate GPU, CODI-0 patch applied
-TASK=depth2 INCLUDE_LAST_COT=False EXP_NAME=gpt2_depth2_codi0 NUM_LATENT=0 \
-  SAVE_DIR=/workspace/codi_runs CODI_SYNTHETIC_DATA_DIR=/workspace/synthetic_data_v2 \
-  bash configs/synthetic/train_gpt2_depth_codi.sh
+env $COMMON EXP_NAME=gpt2_depth2_codi bash configs/synthetic/train_gpt2_depth_codi.sh                      # run 5
+env $COMMON EXP_NAME=gpt2_depth2_codi0 NUM_LATENT=0 bash configs/synthetic/train_gpt2_depth_codi.sh         # run 6
+env $COMMON EXP_NAME=gpt2_depth2_codi_student NUM_LATENT=0 REF_LOSS_FACTOR=0 DISTILL_LOSS_FACTOR=0 \
+  bash configs/synthetic/train_gpt2_depth_codi.sh                                                        # run 7
 ```
 
-Before the full run, do a smoke run with `EXTRA_ARGS="--exp_mode True --exp_data_num 16 --max_steps 2 --per_device_train_batch_size 4 --gradient_accumulation_steps 1"`. Also run a short timing test before the 40-epoch run.
+Each on its own GPU. Micro-batch 64 has not been tested on a 24 GB card: watch `nvidia-smi` for the first 50 steps; if it
+does not fit, use 32 × 4 (`EXTRA_ARGS`) and note the deviation. Resume after a crash with
+`RESUME_FROM=<...>/checkpoint-<step>` (needs `optimizer.pt` and `scheduler.pt`, which the sync now keeps).
 
-### 5.4 Select and test
+### 7.5 Select and test
 
-Evaluate each of the 3 kept checkpoints on `valid.json` with `eval_synthetic_codi.py --no_log True`. Pick the best by mean accuracy over all levels (ties go to the later one), then run one logged test eval on it (command template in the script's docstring).
+Evaluate the 3 kept checkpoints on `valid.json` with `eval_synthetic_codi.py --no_log True` (command in its docstring;
+the flags must match training or it stops). Pick the best by mean accuracy over all levels (ties → later), then one
+logged test eval. Batched eval is fine with `pad_invariant`. Do a 100-item run first (`--smoke_n 100`) and check s/item
+and how many outputs run to 256 tokens. Each eval also reports teacher-forced accuracy at the distillation position,
+teacher accuracy per level (the teacher's CoT is empty at k = 1, so its k = 1 result is a no-CoT result) and accuracy by
+answer value.
 
-**Evaluate CODI at batch size 1 (`--batch_size 1`).** CODI's inference loop runs the latent and answer passes with no attention mask, so in a padded batch they attend to the question's left padding. That padding varies by 1–8 tokens within a level. Batch 1 has no padding, which also makes inference match training with `fix_attn_mask True`.
-
-For run 5 use `--num_latent 0 --inf_latent_iterations 0`.
-
-## 6. What must be identical across all runs
+## 8. Matched vs not matched across methods
 
 | Matched | Not matched (each method keeps its published recipe) |
 |---|---|
-| Data files and hashes, test set, answer scoring | Optimizer, learning rate, schedule |
-| 6 latents for both latent methods, at training and test | LoRA (CODI) vs. full fine-tuning (Coconut) |
-| GPT-2 small, greedy decoding | Number of epochs |
-| Checkpoint rule: best of last 3 on valid, mean over all levels | |
-| d50 measured from each method's own reference (run 3 for Coconut, run 5 for CODI), not from the older no-CoT run | |
+| Data files and hashes, test set, answer comparison (`is_correct`) | Answer extraction (Coconut `###`, CODI last number) |
+| 6 latents for both latent methods, at training and test | Optimizer, learning rate, schedule |
+| GPT-2 small, greedy decoding | LoRA (CODI) vs full fine-tuning (Coconut) |
+| Checkpoint rule: best of last 3 on valid, mean over all levels | Number of epochs |
+| d50 from the envelope; gains from each method's own reference | |
 
-Cross-method statements always go through each method's own reference. A raw Coconut-vs-CODI accuracy gap is reported as description, not as a finding.
+A raw Coconut-vs-CODI accuracy gap is description, not a finding.
 
-## 7. Logging and safety
+## 9. Logging and operations
 
-- **Log every real run with `record-run`** (`RunRecord` → `notes.md` → `scripts/rebuild_index.py` → commit), including failed runs. Write the run name, commit, config, selected checkpoint and the under-trained flag in `notes.md`.
-- **Copy checkpoints off the training machine as they appear** and checksum them: `bash scripts/pod/coconut_v2.sh manifest` covers all run roots, including Coconut's extensionless `checkpoint_N`.
-
-## 8. Expected results (so nobody is surprised)
-
-- Coconut should hold up through about k = 6 and then fall near k ≈ M + d50 − 1 ≈ 8, because rules beyond 6 never got a latent and must be done in one forward pass. That fall is a check that the setup works, not a finding about latent capacity.
-- Latents beyond the rule count (j > k) have no rule to stand for. Necessity analyses use only latents j ≤ k and report j > k separately.
+- **Log every real run with `record-run`**, failed runs included: run name, commit, config, selected checkpoint,
+  under-trained flag, and any deviation (e.g. a micro-batch change).
+- **Sync each training machine** while it runs:
+  `WATCH_LOGS="/workspace/logs/<run>.log" bash scripts/pod/sync_loop.sh <ip> <port>` (own folder per machine, alerts on
+  crash, finish or 3 failed syncs). Do not delete a run's files until `pull_artifacts.sh` verifies.

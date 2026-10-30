@@ -51,20 +51,24 @@ from coconut_common import (encode_question, extract_answer_after_delimiter, fin
                             load_coconut, run_passes)
 from depth_curve import curve_metrics  # noqa: E402
 from swap_random_coconut import load_model  # noqa: E402
-from synthetic_common import annotate_records, coconut_cot_text, load_synthetic, parse_coconut_log  # noqa: E402
+from synthetic_common import (annotate_records, assert_known_hash, coconut_cot_text, load_synthetic,  # noqa: E402
+                              parse_coconut_log)
 
 from latentreasoning.eval.metrics import is_correct  # noqa: E402
 from latentreasoning.runlog.manifest import DatasetInfo, ModelInfo, RunRecord, new_run_id  # noqa: E402
 
-MECHANISM = {"cot": "explicit_cot", "no_cot": "baseline_no_cot", "coconut": "coconut"}
+# no_thoughts = the Coconut curriculum with the latent tokens removed (run.py `no_thoughts: True`): a same-stack
+# no-latent reference; it evaluates exactly like no_cot (no markers, question + "\n", greedy).
+MECHANISM = {"cot": "explicit_cot", "no_cot": "baseline_no_cot", "no_thoughts": "baseline_no_cot", "coconut": "coconut"}
+NO_LATENT_METHODS = ("cot", "no_cot", "no_thoughts")
 
 
 @dataclass
 class EvalArguments:
     checkpoint_path: str = field(metadata={"help": "Coconut run.py checkpoint_N (state dict)"})
     test_json: str = field(metadata={"help": "synthetic test.json"})
-    method: str = field(default="cot", metadata={"help": "cot | no_cot | coconut"})
-    num_latents: int = field(default=0, metadata={"help": "coconut: latents per question; 0 = c_thought x max_latent_stage from --config_path"})
+    method: str = field(default="cot", metadata={"help": "cot | no_cot | no_thoughts | coconut"})
+    num_latents: int = field(default=-1, metadata={"help": "coconut: latents per question; -1 = c_thought x max_latent_stage from --config_path; 0 = no latents (start/end markers kept, i.e. truncation k=0, not the no_thoughts model)"})
     model_id: str = field(default="openai-community/gpt2")
     checkpoint_label: Optional[str] = field(default=None)
     config_path: Optional[str] = field(default=None, metadata={"help": "Coconut yaml used for training (recorded)"})
@@ -77,6 +81,7 @@ class EvalArguments:
     stage: str = field(default="full_run")
     hardware: str = field(default="RunPod GPU")
     smoke_n: int = field(default=0, metadata={"help": ">0: first n examples only, don't log"})
+    no_log: bool = field(default=False, metadata={"help": "score the full file but write no RunRecord (checkpoint selection on valid.json)"})
     device: str = field(default="cuda")
 
 
@@ -157,13 +162,15 @@ def main() -> None:
         train_cfg = yaml.safe_load(Path(ea.config_path).read_text())
     if ea.method == "coconut":
         tokenizer, model, embedding, special_ids = load_coconut(ea.model_id, ea.checkpoint_path, ea.device)
-        num_latents = ea.num_latents or train_cfg["c_thought"] * train_cfg["max_latent_stage"]
+        num_latents = ea.num_latents if ea.num_latents >= 0 else train_cfg["c_thought"] * train_cfg["max_latent_stage"]
     else:
         tokenizer, model, _, _ = load_model(ea.model_id, ea.checkpoint_path, ea.device)
         num_latents = 0
     n_params = sum(p.numel() for p in model.parameters())
 
-    ds = load_synthetic(ea.test_json).subset(ea.smoke_n)
+    ds = load_synthetic(ea.test_json).subset(ea.smoke_n)  # sha256-asserted for registered v2 files
+    data_sha = assert_known_hash(ea.test_json)
+    split = "validation" if Path(ea.test_json).name.startswith("valid") else "test"
     task = ds.task
     if ea.max_new_tokens:
         max_new = ea.max_new_tokens
@@ -173,7 +180,7 @@ def main() -> None:
         max_new = 16
     print(f"method={ea.method} task={task} n={len(ds.rows)} levels={ds.level_range} max_new_tokens={max_new}", flush=True)
 
-    if ea.verify_batched_n and ea.method != "coconut":  # coconut decodes at batch 1 only
+    if ea.verify_batched_n and ea.method in NO_LATENT_METHODS:  # coconut decodes at batch 1 only
         sub = ds.subset(ea.verify_batched_n)
         r1, _ = run_eval(model, tokenizer, sub, ea, max_new, 1)
         rb, _ = run_eval(model, tokenizer, sub, ea, max_new, ea.batch_size)
@@ -202,8 +209,8 @@ def main() -> None:
         print(f"  [{r['id']} L{r['level']}] gold={r['gold_answer']} pred={r['predicted_answer']} "
               f"out={r['raw_output'][:120]!r}", flush=True)
 
-    if ea.smoke_n:
-        print("smoke run -- not logging")
+    if ea.smoke_n or ea.no_log:
+        print("smoke / --no_log run -- not logging")
         return
 
     train_info = parse_coconut_log(Path(ea.train_log).read_text()) if ea.train_log else None
@@ -219,7 +226,7 @@ def main() -> None:
         mechanism=mechanism,
         stage=ea.stage,
         model=ModelInfo(backbone=ea.model_id, checkpoint=label, n_params=n_params),
-        dataset=DatasetInfo(name=f"synthetic-{task}", split="test", n_examples=n, seed=None),
+        dataset=DatasetInfo(name=f"synthetic-{task}", split=split, n_examples=n, seed=None),
         metrics={
             "final_answer_accuracy": acc,
             "unparseable_rate": unparseable,
@@ -232,6 +239,7 @@ def main() -> None:
                 "seconds_per_epoch_all": train_info["seconds_train_epoch"] if train_info else None,
                 "monitor_accuracy_by_epoch": [v["accuracy"] for v in train_info["val_accuracy"]] if train_info else None,
                 "coconut_native_accuracy": native_acc,
+                "data_sha256": data_sha,
                 "cot_tokens": sum(r["n_generated_tokens"] for r in records) / n,
                 **({"num_latents": num_latents} if ea.method == "coconut" else {}),
                 **curve,

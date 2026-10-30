@@ -141,18 +141,39 @@ def build_model(model_args, training_args, device: str = "cuda", dtype: torch.dt
     return model, tokenizer, load_result
 
 
-@torch.no_grad()
-def generate_batches(model, tokenizer, question: list[str], data_args, training_args):
-    """test.py's tokenization + generation loop, verbatim (minus per-question printing).
-    Returns the decoded output per question, in order."""
-    device = "cuda"
-    eval_step = math.ceil(len(question) / data_args.batch_size)
+class PadInvariant:
+    """Attention mask + position ids for the passes after the question when `pad_invariant` is on. Same rule as
+    training in scripts/codi_model_fixes.patch: positions count real tokens only (a left-padded question starts at
+    position 0, like an unpadded one), and every later pass appends ones to the running mask. Every depth2 script that
+    runs CODI latents (eval, probes, patching) must use this rule (and `question_position_ids` for the question pass)
+    when the checkpoint was trained with pad_invariant, or its activations differ from training."""
+
+    def __init__(self, question_mask: torch.Tensor):
+        self.mask = question_mask.long()
+        self.pos = self.mask.sum(-1, keepdim=True)  # next position = number of real question tokens
+
+    def next(self, n: int) -> dict:
+        b = self.mask.size(0)
+        self.mask = torch.cat((self.mask, torch.ones((b, n), dtype=self.mask.dtype, device=self.mask.device)), dim=1)
+        pos = self.pos + torch.arange(n, device=self.mask.device)[None]
+        self.pos = self.pos + n
+        return {"attention_mask": self.mask, "position_ids": pos}
+
+
+def question_position_ids(question_mask: torch.Tensor) -> torch.Tensor:
+    """Positions for the (left-padded) question pass under pad_invariant: real tokens numbered from 0."""
+    return (question_mask.long().cumsum(-1) - 1).clamp(min=0)
+
+
+def tokenize_questions(model, tokenizer, question: list[str], batch_size: int, training_args, device) -> list:
+    """test.py's tokenization: left-padded question batches + <bot> (+ eos unless remove_eos)."""
+    eval_step = math.ceil(len(question) / batch_size)
     question_data = []
     for i in range(eval_step):
         if i < eval_step - 1:
-            batch = tokenizer(question[i * data_args.batch_size: (i + 1) * data_args.batch_size], return_tensors="pt", padding="longest")
+            batch = tokenizer(question[i * batch_size: (i + 1) * batch_size], return_tensors="pt", padding="longest")
         else:
-            batch = tokenizer(question[i * data_args.batch_size:], return_tensors="pt", padding="longest")
+            batch = tokenizer(question[i * batch_size:], return_tensors="pt", padding="longest")
         if training_args.remove_eos:
             bot_tensor = torch.tensor([model.bot_id], dtype=torch.long).expand(batch["input_ids"].size(0), 1)
         else:
@@ -161,42 +182,75 @@ def generate_batches(model, tokenizer, question: list[str], data_args, training_
         batch["attention_mask"] = torch.cat((batch["attention_mask"], torch.ones_like(bot_tensor)), dim=1)
         batch['input_len'] = len(batch['input_ids'][0])
         question_data.append(batch.to(device))
+    return question_data
+
+
+def encode_and_think(model, batch, training_args):
+    """Question pass + `inf_latent_iterations` latent passes, as in test.py (pad_invariant-aware).
+    Returns (past_key_values, PadInvariant or None, list of the latent inputs fed in, each [B, 1, d])."""
+    pad_inv = getattr(training_args, "pad_invariant", False)
+    q_pos = question_position_ids(batch["attention_mask"]) if pad_inv else None
+    outputs = model.codi(input_ids=batch["input_ids"], use_cache=True, output_hidden_states=True, past_key_values=None,
+                         attention_mask=batch["attention_mask"], position_ids=q_pos)
+    past_key_values = outputs.past_key_values
+    latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1)
+    if training_args.use_prj:
+        latent_embd = model.prj(latent_embd)
+    pi = PadInvariant(batch["attention_mask"]) if pad_inv else None
+    latents = []
+    for i in range(training_args.inf_latent_iterations):
+        latents.append(latent_embd)
+        outputs = model.codi(inputs_embeds=latent_embd, use_cache=True, output_hidden_states=True, past_key_values=past_key_values,
+                             **(pi.next(1) if pi else {}))
+        past_key_values = outputs.past_key_values
+        latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1)
+        if training_args.use_prj:
+            latent_embd = model.prj(latent_embd)
+    return past_key_values, pi, latents
+
+
+@torch.no_grad()
+def generate_batches(model, tokenizer, question: list[str], data_args, training_args):
+    """test.py's tokenization + generation loop, verbatim (minus per-question printing), with three deliberate
+    changes (2026-10-29, TRAINING_PROTOCOL.md):
+      * greedy `argmax(...)` no longer `.squeeze(-1)`s: at batch size 1 that made a 0-dim tensor and crashed;
+        for batch size > 1 the result is identical.
+      * the device follows the model (was hard-coded "cuda"), so the padding check runs on CPU too.
+      * if `training_args.pad_invariant` (scripts/codi_model_fixes.patch), the latent and decode passes get the
+        running attention mask and mask-derived position ids (`codi_pad_invariant_inputs`), exactly as in training,
+        so a padded item computes the same as when alone. Without the flag the loop is upstream's (no masks).
+    Returns the decoded output per question, in order."""
+    device = next(model.parameters()).device
+    question_data = tokenize_questions(model, tokenizer, question, data_args.batch_size, training_args, device)
+    eval_step = len(question_data)
 
     model.eval()
     gen_kwargs = {"max_new_tokens": 256, "temperature": 0.1, "top_k": 40, "top_p": 0.95, "do_sample": True}
     decoded_all: list[str] = []
     for step, batch in enumerate(question_data):
         batch_size = batch["input_ids"].size(0)
-        past_key_values = None
-        outputs = model.codi(input_ids=batch["input_ids"], use_cache=True, output_hidden_states=True, past_key_values=past_key_values, attention_mask=batch["attention_mask"])
-        past_key_values = outputs.past_key_values
-        latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1)
-        if training_args.use_prj:
-            latent_embd = model.prj(latent_embd)
-
-        for i in range(training_args.inf_latent_iterations):
-            outputs = model.codi(inputs_embeds=latent_embd, use_cache=True, output_hidden_states=True, past_key_values=past_key_values)
-            past_key_values = outputs.past_key_values
-            latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1)
-            if training_args.use_prj:
-                latent_embd = model.prj(latent_embd)
+        past_key_values, pi, _ = encode_and_think(model, batch, training_args)
 
         if training_args.remove_eos:
-            eot_emb = model.get_embd(model.codi, model.model_name)(torch.tensor([model.eot_id], dtype=torch.long, device='cuda')).unsqueeze(0).to(device)
+            eot_emb = model.get_embd(model.codi, model.model_name)(torch.tensor([model.eot_id], dtype=torch.long, device=device)).unsqueeze(0).to(device)
         else:
-            eot_emb = model.get_embd(model.codi, model.model_name)(torch.tensor([model.eot_id, tokenizer.eos_token_id], dtype=torch.long, device='cuda')).unsqueeze(0).to(device)
+            eot_emb = model.get_embd(model.codi, model.model_name)(torch.tensor([model.eot_id, tokenizer.eos_token_id], dtype=torch.long, device=device)).unsqueeze(0).to(device)
         eot_emb = eot_emb.expand(batch["input_ids"].size(0), -1, -1)
         output = eot_emb
 
-        finished = torch.zeros(batch_size, dtype=torch.bool, device="cuda")
+        finished = torch.zeros(batch_size, dtype=torch.bool, device=device)
         pred_tokens = [[] for _ in range(batch_size)]
         for i in range(gen_kwargs["max_new_tokens"]):
-            out = model.codi(inputs_embeds=output, output_hidden_states=False, attention_mask=None, use_cache=True, output_attentions=False, past_key_values=past_key_values)
+            if pi:
+                out = model.codi(inputs_embeds=output, output_hidden_states=False, use_cache=True, output_attentions=False, past_key_values=past_key_values,
+                                 **pi.next(output.size(1)))
+            else:
+                out = model.codi(inputs_embeds=output, output_hidden_states=False, attention_mask=None, use_cache=True, output_attentions=False, past_key_values=past_key_values)
             past_key_values = out.past_key_values
             logits = out.logits[:, -1, :model.codi.config.vocab_size - 1]
 
             if training_args.greedy:
-                next_token_ids = torch.argmax(logits, dim=-1).squeeze(-1)
+                next_token_ids = torch.argmax(logits, dim=-1)
             else:
                 logits /= gen_kwargs["temperature"]
                 if gen_kwargs["top_k"] > 1:
