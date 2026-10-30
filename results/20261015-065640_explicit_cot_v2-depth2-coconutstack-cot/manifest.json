@@ -1,0 +1,184 @@
+{
+  "run_id": "20261015-065640_explicit_cot_v2-depth2-coconutstack-cot",
+  "mechanism": "explicit_cot",
+  "stage": "full_run",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "/workspace/coconut_runs/gpt2_depth2_cot/checkpoint_2",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 6000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.9958333333333333,
+    "unparseable_rate": 0.0,
+    "sec_per_example": 0.024731295380666173,
+    "extra": {
+      "task": "depth2",
+      "task_level_range": [
+        1,
+        12
+      ],
+      "seconds_per_epoch": 975.3333333333334,
+      "seconds_per_epoch_all": {
+        "1": 976,
+        "2": 977,
+        "3": 973
+      },
+      "monitor_accuracy_by_epoch": [
+        0.9805555555555555,
+        1.0,
+        1.0
+      ],
+      "coconut_native_accuracy": 0.9958333333333333,
+      "data_sha256": "d85db05312379cee830e619ccfca48f525207b9997baa4d859c60bea28f02df1",
+      "cot_tokens": 54.0,
+      "per_level_accuracy": {
+        "1": 1.0,
+        "2": 1.0,
+        "3": 0.998,
+        "4": 0.998,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 0.998,
+        "8": 0.998,
+        "9": 0.998,
+        "10": 0.996,
+        "11": 0.984,
+        "12": 0.98
+      },
+      "per_level_n": {
+        "1": 500,
+        "2": 500,
+        "3": 500,
+        "4": 500,
+        "5": 500,
+        "6": 500,
+        "7": 500,
+        "8": 500,
+        "9": 500,
+        "10": 500,
+        "11": 500,
+        "12": 500
+      },
+      "per_level_ci95": {
+        "1": [
+          0.9923756595384479,
+          1.0
+        ],
+        "2": [
+          0.9923756595384479,
+          1.0
+        ],
+        "3": [
+          0.9887592932948532,
+          0.9996468636054407
+        ],
+        "4": [
+          0.9887592932948532,
+          0.9996468636054407
+        ],
+        "5": [
+          0.9923756595384479,
+          1.0
+        ],
+        "6": [
+          0.9923756595384479,
+          1.0
+        ],
+        "7": [
+          0.9887592932948532,
+          0.9996468636054407
+        ],
+        "8": [
+          0.9887592932948532,
+          0.9996468636054407
+        ],
+        "9": [
+          0.9887592932948532,
+          0.9996468636054407
+        ],
+        "10": [
+          0.9855342847848231,
+          0.9989023694773173
+        ],
+        "11": [
+          0.9687488914666058,
+          0.9918707469666117
+        ],
+        "12": [
+          0.9635798167531208,
+          0.9891008164037892
+        ]
+      },
+      "curve_fit": {
+        "floor": 0.9796604707785272,
+        "ceiling": 0.9989233085962486,
+        "midpoint_param": 10.57825,
+        "slope": 2.89225109918385,
+        "sse": 0.004284680606883118,
+        "rmse": 0.0008450523264748282,
+        "best_observed": 1.0,
+        "halfway_target": 0.9898302353892636,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": null,
+      "midpoint_status": "beyond_range",
+      "flat": true,
+      "midpoint_extrapolated": 10.539558294863287,
+      "auc": 0.9963636363636362
+    }
+  },
+  "hyperparams": {
+    "method": "cot",
+    "trainer": "facebookresearch/coconut run.py @27273cb",
+    "config_path": "/workspace/logs/configs/gpt2_depth2_cot.yaml",
+    "max_new_tokens": 114,
+    "batch_size": 64,
+    "test_json": "/workspace/synthetic_data_v2/depth2/test.json",
+    "decoding": "greedy",
+    "train_config": {
+      "project": "coconut",
+      "save_path": "/workspace/coconut_runs",
+      "name": "gpt2_depth2_cot",
+      "only_eval": false,
+      "coconut": false,
+      "cot": true,
+      "no_thoughts": false,
+      "no_cot": false,
+      "c_thought": 0,
+      "epochs_per_stage": 1,
+      "max_latent_stage": 0,
+      "pad_latent_to_max": true,
+      "save_only_improve": true,
+      "uniform_prob": 0.0,
+      "model_id": "openai-community/gpt2",
+      "load_model_path": "None",
+      "seed": 0,
+      "resume": 0,
+      "bf16": false,
+      "train_path": "/workspace/synthetic_data_v2/depth2/train.json",
+      "val_path": "/workspace/synthetic_data_v2/depth2/valid_monitor.json",
+      "reset_optimizer": false,
+      "batch_size_training": 16,
+      "debug": false,
+      "gradient_accumulation_steps": 8,
+      "num_epochs": 3,
+      "lr": 0.0001,
+      "weight_decay": 0.01
+    }
+  },
+  "seed": 0,
+  "hardware": "RunPod RTX 4090 (secure) / NVIDIA GeForce RTX 4090",
+  "author": "Henning Lindig",
+  "notes": "Coconut-repo cot GPT-2 on synthetic depth2, per-level test eval.",
+  "timestamp_utc": "2026-10-15T06:56:40.817065+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

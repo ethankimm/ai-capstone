@@ -1,0 +1,24 @@
+{
+  "seconds_train_epoch": {
+    "1": 976,
+    "2": 977,
+    "3": 973
+  },
+  "val_accuracy": [
+    {
+      "correct": 353,
+      "total": 360,
+      "accuracy": 0.9805555555555555
+    },
+    {
+      "correct": 360,
+      "total": 360,
+      "accuracy": 1.0
+    },
+    {
+      "correct": 360,
+      "total": 360,
+      "accuracy": 1.0
+    }
+  ]
+}

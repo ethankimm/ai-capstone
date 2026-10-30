@@ -1,0 +1,217 @@
+{
+  "run_id": "20261014-021704_filler_tokens_v2-depth2-nocot-25ep",
+  "mechanism": "filler_tokens",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "/workspace/synthetic_runs/pilot-depth2_nocot/best",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 6000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.255,
+    "unparseable_rate": 0.0,
+    "compute_steps": 0,
+    "train_loss": 0.6593791137266037,
+    "sec_per_example": 0.0023450240495149046,
+    "extra": {
+      "task": "depth2",
+      "task_level_range": [
+        1,
+        12
+      ],
+      "seconds_per_epoch": 1868.080898393728,
+      "seconds_per_epoch_all": [
+        2308.4611985166557,
+        2304.4449512069114,
+        2303.445568175055,
+        2303.6476518097334,
+        2305.36554567283,
+        2304.1108662448823,
+        2303.5836468809284,
+        2304.7342982529663,
+        2303.9811504771933,
+        2304.542542731855,
+        2304.27787136985,
+        2018.2264205566607,
+        1576.7659644577652,
+        1575.3531579570845,
+        1573.5978138940409,
+        1574.5821170108393,
+        1576.052457688842,
+        1573.6038267808035,
+        1578.7487663263455,
+        1577.268708317075,
+        1577.6025878246874,
+        1576.964794580359,
+        1576.805425627157,
+        1270.8011018550023,
+        725.0540256276727
+      ],
+      "epochs_trained": 25,
+      "best_epoch": 22,
+      "best_monitor_accuracy": 0.259,
+      "eval_only_ckpt": null,
+      "batched_decode_check": {
+        "verify_n": 32,
+        "verify_mismatches": 0,
+        "on_mismatch": "abort"
+      },
+      "monitor_accuracy_by_epoch": [
+        0.046,
+        0.064,
+        0.093,
+        0.114,
+        0.1235,
+        0.1475,
+        0.1525,
+        0.165,
+        0.179,
+        0.179,
+        0.2055,
+        0.1885,
+        0.215,
+        0.233,
+        0.2275,
+        0.231,
+        0.2485,
+        0.248,
+        0.242,
+        0.258,
+        0.249,
+        0.259,
+        0.255,
+        0.2565,
+        0.255
+      ],
+      "early_stopped": false,
+      "eval_checkpoint": "best",
+      "test_eval_seconds": 14.070144297089428,
+      "per_level_accuracy": {
+        "1": 0.958,
+        "2": 0.772,
+        "3": 0.492,
+        "4": 0.272,
+        "5": 0.162,
+        "6": 0.098,
+        "7": 0.078,
+        "8": 0.044,
+        "9": 0.038,
+        "10": 0.052,
+        "11": 0.046,
+        "12": 0.048
+      },
+      "per_level_n": {
+        "1": 500,
+        "2": 500,
+        "3": 500,
+        "4": 500,
+        "5": 500,
+        "6": 500,
+        "7": 500,
+        "8": 500,
+        "9": 500,
+        "10": 500,
+        "11": 500,
+        "12": 500
+      },
+      "per_level_ci95": {
+        "1": [
+          0.9366484142456699,
+          0.9723676898915483
+        ],
+        "2": [
+          0.7332341279039163,
+          0.8066182308849994
+        ],
+        "3": [
+          0.44840780608924286,
+          0.535714183358142
+        ],
+        "4": [
+          0.2348440922052204,
+          0.31263260704524753
+        ],
+        "5": [
+          0.13230178838983928,
+          0.19685226576217005
+        ],
+        "6": [
+          0.07492391886460623,
+          0.12720605086648182
+        ],
+        "7": [
+          0.05758139347616159,
+          0.10485354987338852
+        ],
+        "8": [
+          0.02923395562860718,
+          0.06571944287232845
+        ],
+        "9": [
+          0.024460118055830385,
+          0.05858477253064388
+        ],
+        "10": [
+          0.035730265115705276,
+          0.07510114393784553
+        ],
+        "11": [
+          0.030845108370816204,
+          0.06807779276827323
+        ],
+        "12": [
+          0.03246520694135317,
+          0.07042719683589006
+        ]
+      },
+      "curve_fit": {
+        "floor": 0.05377252211677075,
+        "ceiling": 1.0,
+        "midpoint_param": 2.966250000000001,
+        "slope": 1.1906181445652015,
+        "sse": 2.239740714315355,
+        "rmse": 0.019320717353466955,
+        "best_observed": 0.958,
+        "halfway_target": 0.5058862610583854,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": 3.0408599401058973,
+      "midpoint_status": "in_range",
+      "flat": false,
+      "midpoint_extrapolated": 3.0408599401058973,
+      "auc": 0.23245454545454544,
+      "cot_leak_rate": 0.0
+    }
+  },
+  "hyperparams": {
+    "lr": 0.0001,
+    "max_epochs": 25.0,
+    "batch_size": 32,
+    "grad_accum": 4,
+    "train_n": 100000,
+    "train_json": "/workspace/synthetic_data_v2/depth2/train.json",
+    "val_json": "/workspace/synthetic_data_v2/depth2/valid.json",
+    "test_json": "/workspace/synthetic_data_v2/depth2/test.json",
+    "max_new_tokens": 19,
+    "gen_batch_size": 64,
+    "early_stop_patience": 0,
+    "early_stop_min_delta": 0.005,
+    "filler_token": ".",
+    "faithful": false
+  },
+  "seed": 42,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "filler_tokens on synthetic depth2 (levels 1-12), 100000 train examples, per-level eval on /workspace/synthetic_data_v2/depth2/test.json",
+  "timestamp_utc": "2026-10-14T15:19:28.580882+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}

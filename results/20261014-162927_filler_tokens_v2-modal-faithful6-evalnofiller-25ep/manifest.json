@@ -1,0 +1,128 @@
+{
+  "run_id": "20261014-162927_filler_tokens_v2-modal-faithful6-evalnofiller-25ep",
+  "mechanism": "filler_tokens",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "/workspace/synthetic_runs/ckpt_faithful6_best",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "synthetic-modal",
+    "split": "test",
+    "n_examples": 3000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.5783333333333334,
+    "unparseable_rate": 0.0,
+    "compute_steps": 0,
+    "sec_per_example": 0.006561413055906693,
+    "extra": {
+      "task": "modal",
+      "task_level_range": [
+        6,
+        16
+      ],
+      "seconds_per_epoch": null,
+      "seconds_per_epoch_all": [],
+      "epochs_trained": 0,
+      "best_epoch": null,
+      "best_monitor_accuracy": null,
+      "eval_only_ckpt": "/workspace/synthetic_runs/ckpt_faithful6_best",
+      "batched_decode_check": {
+        "verify_n": 32,
+        "verify_mismatches": 0,
+        "on_mismatch": "batch1"
+      },
+      "monitor_accuracy_by_epoch": [],
+      "early_stopped": false,
+      "eval_checkpoint": "best",
+      "test_eval_seconds": 19.68423916772008,
+      "per_level_accuracy": {
+        "6": 0.67,
+        "8": 0.652,
+        "10": 0.6,
+        "12": 0.578,
+        "14": 0.498,
+        "16": 0.472
+      },
+      "per_level_n": {
+        "6": 500,
+        "8": 500,
+        "10": 500,
+        "12": 500,
+        "14": 500,
+        "16": 500
+      },
+      "per_level_ci95": {
+        "6": [
+          0.6276256239722534,
+          0.709782100270819
+        ],
+        "8": [
+          0.6092325025566356,
+          0.6924496979430526
+        ],
+        "10": [
+          0.5564541227024271,
+          0.6420210092052625
+        ],
+        "12": [
+          0.534276977868969,
+          0.6205336250190289
+        ],
+        "14": [
+          0.45435686059170843,
+          0.5416736367701378
+        ],
+        "16": [
+          0.42862273473006285,
+          0.5158042283357841
+        ]
+      },
+      "curve_fit": {
+        "floor": 0.4162886475900349,
+        "ceiling": 0.690892269923756,
+        "midpoint_param": 12.31,
+        "slope": 0.3936901049745012,
+        "sse": 0.2810155522640903,
+        "rmse": 0.00967842191448052,
+        "best_observed": 0.67,
+        "halfway_target": 0.5431443237950175,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": 12.697253123333448,
+      "midpoint_status": "in_range",
+      "flat": false,
+      "midpoint_extrapolated": 12.697253123333448,
+      "auc": 0.5797999999999999,
+      "cot_leak_rate": 0.328
+    }
+  },
+  "hyperparams": {
+    "lr": 0.0001,
+    "max_epochs": 25.0,
+    "batch_size": 32,
+    "grad_accum": 4,
+    "train_n": 100000,
+    "train_json": "/workspace/synthetic_data_v2/modal/train.json",
+    "val_json": "/workspace/synthetic_data_v2/modal/valid.json",
+    "test_json": "/workspace/synthetic_data_v2/modal/test.json",
+    "max_new_tokens": 19,
+    "gen_batch_size": 64,
+    "early_stop_patience": 0,
+    "early_stop_min_delta": 0.005,
+    "filler_token": ".",
+    "faithful": false
+  },
+  "seed": 42,
+  "hardware": "RunPod A40 (secure) / NVIDIA A40",
+  "author": "Henning Lindig",
+  "notes": "filler_tokens on synthetic modal (levels 6-16), 100000 train examples, per-level eval on /workspace/synthetic_data_v2/modal/test.json",
+  "timestamp_utc": "2026-10-14T16:29:54.298486+00:00",
+  "git": {
+    "commit": "unknown",
+    "dirty": null
+  }
+}
