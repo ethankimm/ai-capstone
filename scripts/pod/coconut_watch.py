@@ -19,10 +19,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from synthetic_common import parse_coconut_log  # noqa: E402
 
 
-def should_stop(accs: list[float], patience: int, min_delta: float, max_epochs: int) -> str | None:
+def should_stop(accs: list[float], patience: int, min_delta: float, max_epochs: int,
+                min_epochs: int = 0) -> str | None:
     if len(accs) >= max_epochs:
         return f"max_epochs={max_epochs} reached"
-    if len(accs) > patience:
+    if len(accs) > patience and len(accs) >= min_epochs:
         best_before = max(accs[:-patience])
         if max(accs[-patience:]) < best_before + min_delta:
             return f"no gain >= {min_delta} in last {patience} epochs (best before {best_before:.4f})"
@@ -37,6 +38,9 @@ def main() -> None:
     ap.add_argument("--min-delta", type=float, default=0.005)
     ap.add_argument("--max-epochs", type=int, default=10)
     ap.add_argument("--interval", type=int, default=60)
+    # never stop on patience before this many epochs (the no_cot plateau run must reach checkpoint_12, the
+    # data-matched point; a flat stretch near zero accuracy early on would otherwise end it)
+    ap.add_argument("--min-epochs", type=int, default=0)
     args = ap.parse_args()
     while True:
         try:
@@ -46,7 +50,7 @@ def main() -> None:
             return
         text = Path(args.log).read_text(errors="replace") if Path(args.log).exists() else ""
         accs = [v["accuracy"] for v in parse_coconut_log(text)["val_accuracy"]]
-        reason = should_stop(accs, args.patience, args.min_delta, args.max_epochs)
+        reason = should_stop(accs, args.patience, args.min_delta, args.max_epochs, args.min_epochs)
         if reason:
             print(f"watch: stopping after {len(accs)} epochs: {reason}; accs={accs}", flush=True)
             # give run.py a moment to finish writing a checkpoint saved right after the eval

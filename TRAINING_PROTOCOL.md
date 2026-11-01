@@ -92,6 +92,14 @@ Use **one job per GPU** (sharing a GPU changes timings and has crashed runs befo
   valid accuracy over all levels and verifies batched decoding for no-latent models; hash check covers `TASKS` (default
   depth2 only); `COT_EPOCHS` override; `timing` runs stages 1–6 plus one final epoch; `ref no_cot` trains to plateau
   with the watcher and keeps `checkpoint_12`; the manifest now includes CODI optimizer/scheduler state.
+- **`scripts/pod/coconut_v2.sh` off RunPod (2026-10-31)**: paths only, no protocol value changes. `COCONUT_DIR`,
+  `CODI_RUNS`, `HW` are environment overrides (RunPod defaults unchanged), and `render_cfg` now rewrites the yamls'
+  `save_path` / `train_path` / `val_path` from `CRUNS` / `DATA` (before, they stayed at `/workspace/...` whatever the env said).
+  The timing test's memory log reads only the job's GPU (`CUDA_VISIBLE_DEVICES`), not every GPU on the node.
+  `launch` falls back to a free port when its fixed `--master_port` is taken (shared nodes; no effect on training).
+- **`scripts/pod/coconut_watch.py --min-epochs` (2026-10-31)**: the plateau rule (patience 3, 0.5 pt) is not applied
+  before epoch 12 (`KEEP_CKPT`). Without it a flat stretch near zero early on could stop run 4 before `checkpoint_12`,
+  the data-matched point, exists. Patience rule and cap 60 unchanged after epoch 12.
 - **`scripts/coconut_timing.py`**: projects any M (`--max-latent-stage`), times every stage, warns when one is missing.
 - **`scripts/codi_model_fixes.patch`** (replaces the earlier `codi_zero_latent.patch`; apply after
   `codi_streaming.patch` and `codi_synthetic.patch`): (a) `num_latent 0` trains the student (upstream skipped the

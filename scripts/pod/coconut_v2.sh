@@ -5,6 +5,7 @@
 # `cot`, `ref no_thoughts`, `ref no_cot`, `coconut` on its own pod unless you are deliberately sharing.
 #
 # Expects /workspace/ai-capstone (repo rsynced; .git may be absent) and /workspace/synthetic_data_v2/{depth2,modal}.
+# Off RunPod, override the paths: REPO DATA LOGS CRUNS COCONUT_DIR CODI_RUNS (and HW for the run record).
 #   bash scripts/pod/coconut_v2.sh setup
 #   bash scripts/pod/coconut_v2.sh cot                      # train the Coconut-stack CoT (COT_EPOCHS, default 3), background
 #   bash scripts/pod/coconut_v2.sh gate                     # G1: valid.json CoT >= 0.97 at EVERY level, uncapped
@@ -21,8 +22,10 @@ REPO=${REPO:-/workspace/ai-capstone}
 DATA=${DATA:-/workspace/synthetic_data_v2}
 LOGS=${LOGS:-/workspace/logs}
 CRUNS=${CRUNS:-/workspace/coconut_runs}
+COCONUT_DIR=${COCONUT_DIR:-/workspace/coconut}   # Coconut repo checkout (run.py)
+CODI_RUNS=${CODI_RUNS:-/workspace/codi_runs}      # only read by `manifest`
 COCONUT_COMMIT=27273cb8cca4bb763c041a63b036d0c3b7cbbb48
-HW="RunPod ${GPU_LABEL:-GPU} (secure)"
+HW=${HW:-"RunPod ${GPU_LABEL:-GPU} (secure)"}
 COT_NAME=${COT_NAME:-gpt2_depth2_cot}
 COCONUT_CFG=${COCONUT_CFG:-configs/synthetic/gpt2_depth2_coconut_c1m6.yaml}
 NO_THOUGHTS_CFG=${NO_THOUGHTS_CFG:-configs/synthetic/gpt2_depth2_no_thoughts_m6.yaml}
@@ -39,8 +42,8 @@ hashes_ok() { python3 scripts/check_data_hashes.py "$DATA" $TASKS; }
 setup() {
   command -v uv >/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh
   export PATH="$HOME/.local/bin:$PATH"
-  [ -d /workspace/coconut/.git ] || git clone -q https://github.com/facebookresearch/coconut.git /workspace/coconut
-  git -C /workspace/coconut checkout -q "$COCONUT_COMMIT"
+  [ -d "$COCONUT_DIR/.git" ] || git clone -q https://github.com/facebookresearch/coconut.git "$COCONUT_DIR"
+  git -C "$COCONUT_DIR" checkout -q "$COCONUT_COMMIT"
   [ -x $PY ] || uv venv -q --python 3.11 .venv_coconut
   uv pip install -q --python $PY torch==2.5.1 transformers==4.46.2 wandb==0.18.7 datasets pyyaml tqdm numpy scipy
   $PY -c "import torch; print('cuda', torch.cuda.is_available(), torch.cuda.get_device_name(0), torch.version.cuda)"
@@ -60,7 +63,11 @@ export PYTORCH_CUDA_ALLOC_CONF=${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:Tr
 # render_cfg SRC_YAML NAME SEED LOADPATH -> path of a per-run copy under $LOGS/configs (kept for provenance)
 render_cfg() {
   local src=$1 name=$2 seed=$3 load=$4 out="$LOGS/configs/$2.yaml"
+  # save_path / train_path / val_path follow CRUNS / DATA (the yamls hard-code the RunPod /workspace defaults).
   sed -e "s|^name: .*|name: $name|" -e "s|^seed: .*|seed: $seed|" \
+      -e "s|^save_path: .*|save_path: $CRUNS|" \
+      -e "s|^train_path: /workspace/synthetic_data_v2/|train_path: $DATA/|" \
+      -e "s|^val_path: /workspace/synthetic_data_v2/|val_path: $DATA/|" \
       -e "s|^load_model_path: .*|load_model_path: $load|" \
       -e "s|^batch_size_training: .*|batch_size_training: $MICRO_BS|" \
       -e "s|^gradient_accumulation_steps: .*|gradient_accumulation_steps: $((128 / MICRO_BS))|" "$src" > "$out"
@@ -70,10 +77,15 @@ render_cfg() {
 # Launch run.py in its own session; pid file = process group id (killpg-safe; see phase_a_step2.sh).
 launch() {  # CFG NAME PORT
   local cfg=$1 name=$2 port=$3
+  # Shared nodes: the fixed port can be taken (2026-10-31, EADDRINUSE on 29522); fall back to a free one from the OS.
+  if ! python3 -c "import socket,sys; s=socket.socket(); s.bind(('', int(sys.argv[1])))" "$port" 2>/dev/null; then
+    local p2; p2=$(python3 -c "import socket; s=socket.socket(); s.bind(('', 0)); print(s.getsockname()[1])")
+    echo "NOTE: port $port in use -> master_port $p2"; port=$p2
+  fi
   [ -d "$CRUNS/$name" ] && ls "$CRUNS/$name"/checkpoint_* >/dev/null 2>&1 \
     && echo "NOTE: $CRUNS/$name already has checkpoints -> run.py will RESUME (intended only for crash recovery)"
   hashes_ok
-  (cd /workspace/coconut && WANDB_MODE=disabled setsid bash -c 'echo $$ > '"$LOGS/$name.pid"'; exec "$@"' _ \
+  (cd "$COCONUT_DIR" && WANDB_MODE=disabled setsid bash -c 'echo $$ > '"$LOGS/$name.pid"'; exec "$@"' _ \
       "$REPO/$PY" -m torch.distributed.run --nnodes 1 --nproc_per_node 1 --master_port "$port" run.py "$cfg" \
       >> "$LOGS/$name.log" 2>&1) &
   sleep 5
@@ -122,9 +134,9 @@ PY
     name=timing_scratch_$(date +%H%M%S)
     cfg=$(render_cfg "$COCONUT_CFG" "$name" 0 "$ck")
     sed -i -e 's|^debug: .*|debug: True|' -e 's|^num_epochs: .*|num_epochs: 8|' "$cfg"
-    ( while true; do nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits >> "$LOGS/$name.mem"; sleep 10; done ) &
+    ( while true; do nvidia-smi ${CUDA_VISIBLE_DEVICES:+-i ${CUDA_VISIBLE_DEVICES%%,*}} --query-gpu=memory.used --format=csv,noheader,nounits >> "$LOGS/$name.mem"; sleep 10; done ) &
     memloop=$!
-    ( cd /workspace/coconut && WANDB_MODE=disabled "$REPO/$PY" -m torch.distributed.run --nnodes 1 --nproc_per_node 1 \
+    ( cd "$COCONUT_DIR" && WANDB_MODE=disabled "$REPO/$PY" -m torch.distributed.run --nnodes 1 --nproc_per_node 1 \
         --master_port 29530 run.py "$cfg" > "$LOGS/$name.log" 2>&1 ) || true
     kill $memloop 2>/dev/null || true
     grep -a "missing_keys\|_IncompatibleKeys\|unexpected" "$LOGS/$name.log" | head -3 || true
@@ -150,7 +162,7 @@ PY
         cfg=$(render_cfg configs/synthetic/gpt2_depth2_no_cot_plateau.yaml "$name" 0 None)
         launch "$cfg" "$name" 29524; prune_loop "$name"
         nohup python3 scripts/pod/coconut_watch.py --log "$LOGS/$name.log" --pid "$(cat "$LOGS/$name.pid")" \
-            --patience 3 --min-delta 0.005 --max-epochs 60 > "$LOGS/$name.watch" 2>&1 &
+            --patience 3 --min-delta 0.005 --max-epochs 60 --min-epochs "$KEEP_CKPT" > "$LOGS/$name.watch" 2>&1 &
         echo "plateau watcher started, log $LOGS/$name.watch" ;;
     esac ;;
 
@@ -184,7 +196,7 @@ PY
   prune) prune_loop "${2:?run name}" ;;
 
   manifest)  # sha256 of every checkpoint under EVERY run root (incl. extensionless Coconut checkpoint_N) older than 2 min
-    for root in /workspace/synthetic_runs "$CRUNS" /workspace/codi_runs; do
+    for root in /workspace/synthetic_runs "$CRUNS" "$CODI_RUNS"; do
       [ -d "$root" ] || continue
       # includes CODI's optimizer.pt / scheduler.pt / rng_state.pth: without them a CODI resume restarts the cosine schedule
       (cd "$root" && find . -type f -mmin +2 \( -name 'checkpoint_*' -o -name '*.safetensors' -o -name '*.bin' -o -name '*.pt' -o -name '*.pth' \) \
