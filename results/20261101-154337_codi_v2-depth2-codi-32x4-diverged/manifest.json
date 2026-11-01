@@ -1,0 +1,57 @@
+{
+  "run_id": "20261101-154337_codi_v2-depth2-codi-32x4-diverged",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "/local-ssd/ktn48/lrm_work/codi_runs/gpt2_depth2_codi/gpt2/ep_40/lr_0.003/seed_11/checkpoint-28934 (post-divergence, NaN weights; no usable checkpoint)",
+    "n_params": null
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "train",
+    "n_examples": 100000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": null,
+    "compute_steps": 6,
+    "extra": {
+      "diverged": true,
+      "diverged_at_epoch": 6.1,
+      "nan_from_epoch": 6.69,
+      "stopped_at_step": 29140,
+      "planned_steps": 31280
+    }
+  },
+  "hyperparams": {
+    "recipe": "TRAINING_PROTOCOL.md section 7.3 (CODI @2c23146 + codi_streaming/synthetic/model_fixes patches)",
+    "num_latent": 6,
+    "include_last_cot": false,
+    "fix_attn_mask": true,
+    "pad_invariant": true,
+    "lr": 0.003,
+    "scheduler": "cosine",
+    "warmup_ratio": 0.03,
+    "epochs": 40,
+    "lora_r": 128,
+    "lora_alpha": 32,
+    "per_device_train_batch_size": 32,
+    "gradient_accumulation_steps": 4,
+    "effective_batch": 128,
+    "bf16": true,
+    "max_grad_norm": 2.0,
+    "weight_decay": 0.1,
+    "save_total_limit": 3
+  },
+  "seed": 11,
+  "hardware": "cci-p124 H100 NVL 94GB (shared node), GPU 7",
+  "author": "Kevin Nguyen",
+  "notes": "CODI run 5 diverged (grad norm -> inf at epoch 6.10, NaN from 6.69); no eval; rerun at 64x2 as gpt2_depth2_codi_bs64",
+  "timestamp_utc": "2026-11-01T15:43:37.886585+00:00",
+  "git": {
+    "commit": "16e1d52",
+    "dirty": true
+  }
+}

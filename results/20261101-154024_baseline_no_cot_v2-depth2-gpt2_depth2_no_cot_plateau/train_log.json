@@ -1,0 +1,78 @@
+{
+  "seconds_train_epoch": {
+    "1": 1168,
+    "2": 775,
+    "3": 781,
+    "4": 781,
+    "5": 782,
+    "6": 782,
+    "7": 784,
+    "8": 782,
+    "9": 782,
+    "10": 783,
+    "11": 782,
+    "12": 786
+  },
+  "val_accuracy": [
+    {
+      "correct": 14,
+      "total": 360,
+      "accuracy": 0.03888888888888889
+    },
+    {
+      "correct": 18,
+      "total": 360,
+      "accuracy": 0.05
+    },
+    {
+      "correct": 24,
+      "total": 360,
+      "accuracy": 0.06666666666666667
+    },
+    {
+      "correct": 36,
+      "total": 360,
+      "accuracy": 0.1
+    },
+    {
+      "correct": 39,
+      "total": 360,
+      "accuracy": 0.10833333333333334
+    },
+    {
+      "correct": 36,
+      "total": 360,
+      "accuracy": 0.1
+    },
+    {
+      "correct": 57,
+      "total": 360,
+      "accuracy": 0.15833333333333333
+    },
+    {
+      "correct": 60,
+      "total": 360,
+      "accuracy": 0.16666666666666666
+    },
+    {
+      "correct": 50,
+      "total": 360,
+      "accuracy": 0.1388888888888889
+    },
+    {
+      "correct": 60,
+      "total": 360,
+      "accuracy": 0.16666666666666666
+    },
+    {
+      "correct": 61,
+      "total": 360,
+      "accuracy": 0.16944444444444445
+    },
+    {
+      "correct": 61,
+      "total": 360,
+      "accuracy": 0.16944444444444445
+    }
+  ]
+}
