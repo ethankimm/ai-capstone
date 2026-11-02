@@ -1,4 +1,4 @@
-# Pilot: can Coconut learn to use its latents on RuleChain? (k ≤ 8, GSM8K recipe)
+# Pilot: can Coconut learn to use its latents on RuleChain? (k ≤ 8, longer schedule, GSM8K-style latents)
 
 Status: **running**, launched 2026-11-02 12:57 PT on cci-p124, GPUs 4 and 7. Branch `kevin/lrm-training-2`.
 
@@ -8,7 +8,8 @@ Round 1 (`RULECHAIN_RESULTS.md`) found no latent gain: Coconut c1m6 is *below* i
 CODI matches CODI-0. Round 1 used Coconut's **ProsQA** recipe (1 latent per step, here with 1 epoch per stage), the
 setting where Dilgren & Wiegreffe (2026) and Rizvi-Martel et al. (2026) find latents unnecessary. RuleChain is arithmetic,
 closer to GSM8K-Aug, the one setting where Dilgren & Wiegreffe find Coconut's latents in use. Coconut's GSM8K recipe uses
-**2 latents per step and 3 epochs per stage**. This pilot asks whether that recipe gets Coconut to beat its matched
+**2 latents per step × 3 replaced steps = 6 latents, 3 epochs per stage**. Every published Coconut configuration uses 6
+latents in total. This pilot asks whether that recipe (or 2 latents per rule over 6 rules) gets Coconut to beat its matched
 reference at all; it is a positive-control search, not a replacement for round 1's protocol.
 
 Seed 2 of round 1 (Coconut s1, CODI / CODI-0 s12) was **stopped by user decision** at 12:55 PT 2026-11-02 to free the GPUs:
@@ -23,31 +24,44 @@ started. None reached an eval, so there are no run records; `no_thoughts_m6_s1` 
 | Train data | 100k items, k = 1-12 | **25k items, k = 1-8**, 3,125 per level (`scripts/make_pilot_k8.py`, seed 5980) |
 | Valid / test | `depth2/valid.json` / `test.json` | k ≤ 8 subsets of the same files (1,336 / 4,000 items; test L1-8 = the same items as round 1) |
 | Init | CoT `gpt2_depth2_cot/checkpoint_3` | same |
-| Latents per rule (`c_thought`) × `max_latent_stage` | 1 × 6 | **2 × 6 = 12 latents** (main arm); 1 × 6 (schedule-only arm) |
+| Latents per rule (`c_thought`) × `max_latent_stage` | 1 × 6 | **2 × 3 = 6** (published GSM8K recipe); 2 × 6 = 12 (wider budget); 1 × 6 = 6 (schedule-only) |
 | Epochs per stage | 1 | **3** (`resume 3` skips stage 0) |
-| Final all-latent stage | 3 epochs | **5 epochs** (epochs 22-26) |
-| Selection / test | best of last 3 on valid, one test | same: best of `checkpoint_24/25/26` on k ≤ 8 valid, one test |
+| Final all-latent stage | 3 epochs | **5 epochs** (M 6: epochs 22-26; M 3: epochs 13-17) |
+| Selection / test | best of last 3 on valid, one test | same: best of the last 3 final-stage checkpoints (`24/25/26` for M 6, `15/16/17` for M 3) on k ≤ 8 valid, one test |
 | lr / wd / effective batch | 1e-4 / 0.01 / 128 | same (c2 arm at micro-batch 16 × 8 for memory; others 32 × 4) |
 
-Rules 7-8 never get a latent (M = 6), as in round 1; L7-8 test what the final pass does beyond the latents.
+With M = 6, rules 7-8 never get a latent, as in round 1; with M = 3 (the GSM8K recipe), rules 4-8 never do. The
+reference's curriculum depends on M (stage s drops the first s written steps), so each M has its own `no_thoughts`.
+
+**Correction (2026-11-02 13:10 PT):** the first version of this file called 2 × 6 "the GSM8K recipe". It is not: the
+recipe is 2 × 3 = 6 latents; 2 × 6 doubles the latent budget to 12, which breaks the protocol's 6-latent budget and mixes
+latent width with total budget. The 2 × 3 arm and its reference were added (user decision) and run before the 1 × 6 arm.
 
 ### Runs
 
 | Run | GPU | Config | Role |
 |---|---|---|---|
-| `pilot_k8_coconut_c2m6` | 7 | `configs/synthetic/pilot_k8_coconut_c2m6.yaml` | **Main arm**: GSM8K recipe |
-| `pilot_k8_no_thoughts_m6` | 4 | `configs/synthetic/pilot_k8_no_thoughts_m6.yaml` | Matched reference for both arms (same data, schedule, init; no latents) |
-| `pilot_k8_coconut_c1m6` | 4 (after the reference) | `configs/synthetic/pilot_k8_coconut_c1m6.yaml` | Schedule-only arm: separates 2 latents per rule from the longer schedule |
+| Run | GPU | Config | Latents | Reference | Role |
+|---|---|---|---|---|---|
+| `pilot_k8_coconut_c2m3` | 4 (2nd) | `pilot_k8_coconut_c2m3.yaml` | 2 × 3 = 6 | `no_thoughts_m3` | **Published GSM8K recipe** |
+| `pilot_k8_coconut_c2m6` | 7 | `pilot_k8_coconut_c2m6.yaml` | 2 × 6 = 12 | `no_thoughts_m6` | 2 latents for every rule up to 6; double budget |
+| `pilot_k8_coconut_c1m6` | 4 (3rd) | `pilot_k8_coconut_c1m6.yaml` | 1 × 6 = 6 | `no_thoughts_m6` | Schedule-only: round 1's layout on the longer schedule |
+| `pilot_k8_no_thoughts_m6` | 4 (1st) | `pilot_k8_no_thoughts_m6.yaml` | 0 | — | Reference for the M 6 arms |
+| `pilot_k8_no_thoughts_m3` | 4 (2nd) | `pilot_k8_no_thoughts_m3.yaml` | 0 | — | Reference for the M 3 arm |
 
-Queues: `lrm_work/queue_pilot_k8_gpu{4,7}.sh` (helpers `lrm_work/pilot_k8_lib.sh`), log `lrm_work/logs/queue_pilot_k8.log`.
+Configs in `configs/synthetic/`. Queues: `lrm_work/queue_pilot_k8_gpu7.sh`, `lrm_work/queue_pilot_k8_gpu4_v2.sh` (replaced
+`queue_pilot_k8_gpu4.sh` at 13:07 PT, taking over the running `no_thoughts_m6`); helpers `lrm_work/pilot_k8_lib.sh`; log
+`lrm_work/logs/queue_pilot_k8.log`. Expected finish (PT): `no_thoughts_m6` ~14:05, `no_thoughts_m3` ~14:50, `c2m3`
+~19:30, `c2m6` ~01:00 Tue, `c1m6` ~02:15 Tue.
 
 ## What counts as a result
 
 - **Positive:** a Coconut arm above `pilot_k8_no_thoughts_m6` by a paired test at L4-6 (above single-pass reach for this
   stack, within the latent budget). That would be the first RuleChain model whose latents add accuracy, and the candidate
   for the resample-swap necessity test and for decoding (proposal steps 2-3).
-- **c2 > c1 at matched schedule** says latent width matters; **c1 > round-1 c1** at matched reference says the schedule
-  matters.
+- **c2m3 vs c1m6** (both 6 latents): how the budget is spent (2 per rule for 3 rules vs 1 per rule for 6). **c2m6 vs
+  c1m6** (same M): latent width, confounded with total budget (12 vs 6). **c1m6 vs round-1 c1m6**, each against its own
+  reference: the longer schedule.
 - **Null:** both arms ≈ reference again → the GSM8K recipe does not rescue Coconut here either; the next candidates are
   step-supervised latents (SIM-CoT-style) or the from-scratch regime.
 
