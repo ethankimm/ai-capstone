@@ -19,3 +19,12 @@
 **Gotchas hit:** none.
 **Caveats:** Logit lens only sees what is aligned with the unembedding; information in other directions is invisible to it (the probes are the complement, with their own overfitting caveat). Layer-0 readout of z_j is a reading of the projection output, a vector 11x larger than any token embedding, so "decodes to a number" is about its direction only. The collapse check is on 600 items and was not saved as its own run; numbers above are from the session log. Chance baseline is approximate (assumes uniform numbers). One checkpoint, one seed.
 **Next:** Same lens and collapse check on the released GSM8K CODI (`zen-E/CODI-gpt2`): if its latents are not collapsed and decode in order there (as CODI's paper and the LessWrong analysis suggest), the RuleChain collapse is task/training-specific. For retraining on RuleChain: per-latent step supervision (SIM-CoT style) directly targets the collapse; fresh items per epoch target the memorisation found in `20261102-225018`.
+
+**Addendum (2026-11-02, same session): the collapse holds at every layer, not just the fed vectors.** Same 600 items,
+hidden states of latent passes 1-6 at all 13 layers. Raw cosine within an item: z1 vs z2..z6 0.978-0.997, among z2..z6
+0.995-0.999 at every layer (raw cosines in GPT-2's middle layers are inflated by its outlier dimensions: different items
+also reach 0.68-0.86 there; at layer 12, after ln_f, different items are 0.11 while one item's latents stay 0.978/0.995).
+After subtracting the per-layer mean over items and positions: z1 vs z2..z6 0.944-0.975, among z2..z6 0.993-0.996,
+different items ~0.00; only 0.9-1.7% of the variance at any layer is between the latent positions of an item, the rest
+is between items. So each latent pass computes nearly the same state as the previous one at every depth: a fixed point
+of the whole pass, not just of the projection.
