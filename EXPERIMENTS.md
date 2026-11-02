@@ -9999,6 +9999,15 @@ Probes, best test accuracy over layers (majority baseline): v1 (0.015): <bot> 0.
 **Caveats:** Logit lens only sees what is aligned with the unembedding; information in other directions is invisible to it (the probes are the complement, with their own overfitting caveat). Layer-0 readout of z_j is a reading of the projection output, a vector 11x larger than any token embedding, so "decodes to a number" is about its direction only. The collapse check is on 600 items and was not saved as its own run; numbers above are from the session log. Chance baseline is approximate (assumes uniform numbers). One checkpoint, one seed.
 **Next:** Same lens and collapse check on the released GSM8K CODI (`zen-E/CODI-gpt2`): if its latents are not collapsed and decode in order there (as CODI's paper and the LessWrong analysis suggest), the RuleChain collapse is task/training-specific. For retraining on RuleChain: per-latent step supervision (SIM-CoT style) directly targets the collapse; fresh items per epoch target the memorisation found in `20261102-225018`.
 
+**Addendum (2026-11-02, same session): the collapse holds at every layer, not just the fed vectors.** Same 600 items,
+hidden states of latent passes 1-6 at all 13 layers. Raw cosine within an item: z1 vs z2..z6 0.978-0.997, among z2..z6
+0.995-0.999 at every layer (raw cosines in GPT-2's middle layers are inflated by its outlier dimensions: different items
+also reach 0.68-0.86 there; at layer 12, after ln_f, different items are 0.11 while one item's latents stay 0.978/0.995).
+After subtracting the per-layer mean over items and positions: z1 vs z2..z6 0.944-0.975, among z2..z6 0.993-0.996,
+different items ~0.00; only 0.9-1.7% of the variance at any layer is between the latent positions of an item, the rest
+is between items. So each latent pass computes nearly the same state as the previous one at every depth: a fixed point
+of the whole pass, not just of the projection.
+
 ---
 
 ## 2026-11-02 — RuleChain CODI-0 logit lens (reference for CODI's): answer readable only at the answer position's last layer (0.407), <bot> decodes to 'The' (codi, run_id: 20261102-233932_codi_v2-depth2-codi0-logit-lens)
@@ -10013,3 +10022,23 @@ Probes, best test accuracy over layers (majority baseline): v1 (0.015): <bot> 0.
 **Gotchas hit:** none.
 **Caveats:** Logit lens only sees unembedding-aligned directions. One checkpoint, one seed.
 **Next:** see the CODI run.
+
+---
+
+## 2026-11-02 — Released GSM8K CODI: latents NOT collapsed (only 1-2% vs 58-77% of variance between positions on RuleChain vs GSM8K); odd latents decode to operators, even latents to the item's intermediate values (47-56%) (codi, run_id: 20261102-235641_codi_gsm8k-released-lens-collapse)
+
+**Goal:** Is the latent collapse found on RuleChain (`20261102-233815_codi_v2-depth2-codi-logit-lens` + addendum: six latents = one repeated vector, within-item centred cos >= 0.94 at every layer) a general CODI property, which would undercut prior CODI results, or specific to RuleChain / our training? Same logit lens and collapse statistics on the authors' released GSM8K GPT-2 CODI.
+**Mechanism / model:** `codi`, `zen-E/CODI-gpt2` @ fd641b3 (local HF cache; 43.7% paper / 41.9% our eval in `20260918-021217_codi_released-weights-6lat`), 6 latents, trained with upstream masking (no pad_invariant).
+**Data:** GSM8K-Aug test, all 1319, file order. Intermediate values from `Example.intermediate_values` (the `<<...=x>>` results); a top-1 token counts as v if it is the first token of v (with or without a leading space).
+**Hyperparams:** batch size 1 (no padding, so upstream masking is exact), fp32, MPS. Lens = final LayerNorm + tied unembedding (layer 12 already normed). Collapse statistics as in the RuleChain addendum (raw / centred within-item cosine across latent positions, share of variance between positions).
+**Command:** `scripts/gsm8k_codi_lens_collapse.py --ckpt_dir <HF snapshot>`, see `eval_command.txt`.
+**Headline results:** teacher-forced first-token accuracy 0.434 (sanity, matches 41.9-43.7%).
+- **Logit lens, layer 12 of each latent pass:** latents 1/3/5 decode to operator / bracket tokens ('-', '/', ' <<', '>>', '*'; number 0.2-0.7%); latents 2/4/6 decode to numbers 89-92% of the time and to one of the item's intermediate values **56% / 48% / 47%**. By step: latent 2 = step 1 0.24, **step 2 0.30**, step 3 0.09; latent 4 = 0.22 / 0.18 / **0.12** / 0.07; latent 6 = 0.21 / 0.18 / 0.12 / 0.07.
+- **Collapse statistics:** centred within-item cosine 0.08-0.33 across layers (RuleChain 0.94-0.98); **share of variance between latent positions 0.56-0.77** (RuleChain 0.009-0.017). Centred cosine at layer 12: odd latents resemble each other (1-3 0.49, 3-5 0.80), even latents too (2-4 0.69, **4-6 0.94**), odd vs even ~0.02-0.14.
+**Interpretation:**
+- **The collapse is not a general CODI property.** On GSM8K the latents are distinct states with a period-2 structure: an "operator" latent then a "number" latent, which is what CODI's paper reports from decoding its latents. The number latents hold the item's own intermediate results about half the time, at the last layer (the state that becomes the next latent input). On RuleChain the same method gives one repeated vector whose readable content sits only at the projection output and has no order.
+- Ordering on GSM8K is partial: latent 2 favours steps 1-2, latents 4/6 shift weight toward step 3, and latents 4 and 6 are nearly the same (0.94): the chain does not keep advancing to step 4+ (mean GSM8K-Aug rationale ~3 steps, so 6 latents = 3 operator/number pairs cover most items).
+- Together with the GSM8K necessity results (41.9% -> 23.8% with latents truncated, `20260918-*`), this argues against "CODI's latents never mattered in prior work". The RuleChain null is specific: a task where one pass already reaches ~5 rules and values are single tokens, plus 40 epochs over 100k items (memorisation). Whether the latents account for all of CODI's gain over No-CoT on GSM8K still needs the CODI-0 GSM8K control.
+**Gotchas hit:** CODI's resized vocabulary has ids past the tokenizer (added tokens) that `decode` cannot render: number detection limited to `len(tokenizer)`.
+**Caveats:** Logit lens sees only unembedding-aligned content; "first token of v" over-counts multi-token values that share a first token (e.g. '1' for 12, 150). Teacher-forced first token, not the paper metric. One released checkpoint (seed 11). Different training conditions from our RuleChain checkpoint (upstream masking, include_last_cot False on GSM8K too, 385k items x 40 epochs), so "task vs training" is not separated by this run alone.
+**Next:** CODI-0 on GSM8K (cost estimate in session: ~$18-25 for a 20-epoch RunPod run, or free on cci-p124). On RuleChain: retrain with fresh items per epoch and/or per-latent step supervision to see whether the collapse lifts.
