@@ -100,6 +100,9 @@ Use **one job per GPU** (sharing a GPU changes timings and has crashed runs befo
 - **`scripts/pod/coconut_watch.py --min-epochs` (2026-10-31)**: the plateau rule (patience 3, 0.5 pt) is not applied
   before epoch 12 (`KEEP_CKPT`). Without it a flat stretch near zero early on could stop run 4 before `checkpoint_12`,
   the data-matched point, exists. Patience rule and cap 60 unchanged after epoch 12.
+- **`scripts/codi_zero_loss_log.patch` (2026-11-01)**: upstream turns logged losses into floats only `if x != 0`; with
+  `REF_LOSS_FACTOR=0 DISTILL_LOSS_FACTOR=0` (run 7) they stay graph tensors and the first checkpoint save crashes
+  (deepcopy of a non-leaf tensor). The patch converts every tensor; logging only, the loss is unchanged.
 - **`scripts/coconut_timing.py`**: projects any M (`--max-latent-stage`), times every stage, warns when one is missing.
 - **`scripts/codi_model_fixes.patch`** (replaces the earlier `codi_zero_latent.patch`; apply after
   `codi_streaming.patch` and `codi_synthetic.patch`): (a) `num_latent 0` trains the student (upstream skipped the
@@ -193,6 +196,7 @@ bash scripts/codi_setup.sh /workspace/codi           # CODI @ 2c23146, own venv,
 cd /workspace/codi
 git apply /workspace/ai-capstone/scripts/codi_synthetic.patch
 git apply /workspace/ai-capstone/scripts/codi_model_fixes.patch
+git apply /workspace/ai-capstone/scripts/codi_zero_loss_log.patch   # needed for student-only (run 7)
 ```
 
 ### 7.2 Padding check (required, CPU is fine)

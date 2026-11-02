@@ -1,0 +1,19 @@
+--- a/src/model.py
++++ b/src/model.py
+@@ -422,11 +422,13 @@
+ 
+         loss = ce_loss_total + distill_loss_total + ref_ce_loss
+         
+-        if ce_loss_total != 0:
++        # logging only: a loss weighted by 0 (student-only run) is still a graph tensor; upstream's `!= 0` test left it one, and
++        # the trainer's checkpoint save then failed deep-copying it (2026-11-01). Convert every tensor; the loss above is unchanged.
++        if torch.is_tensor(ce_loss_total):
+             ce_loss_total = ce_loss_total.detach().item()
+-        if distill_loss_total != 0:
++        if torch.is_tensor(distill_loss_total):
+             distill_loss_total = distill_loss_total.detach().item()
+-        if ref_ce_loss != 0:
++        if torch.is_tensor(ref_ce_loss):
+             ref_ce_loss = ref_ce_loss.detach().item()
+ 
+         return {"loss": loss, "logits": logits, "ce_loss": ce_loss_total, "distill_loss": distill_loss_total, "ref_ce_loss": ref_ce_loss}
