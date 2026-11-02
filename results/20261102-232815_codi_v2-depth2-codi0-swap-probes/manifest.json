@@ -1,0 +1,602 @@
+{
+  "run_id": "20261102-232815_codi_v2-depth2-codi0-swap-probes",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "gpt2_depth2_codi0/checkpoint-29716 (epoch 38, selected; run 20261102-060537)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 6000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.407,
+    "unparseable_rate": 0.0,
+    "compute_steps": 0,
+    "sec_per_example": 0.030282966069498797,
+    "extra": {
+      "accuracy_kind": "teacher-forced answer token at the distillation position",
+      "data_sha256": "d85db05312379cee830e619ccfca48f525207b9997baa4d859c60bea28f02df1",
+      "matched_flags": {
+        "pad_invariant": true,
+        "fix_attn_mask": true,
+        "use_prj": true,
+        "prj_dim": 768,
+        "prj_no_ln": false,
+        "remove_eos": true,
+        "include_last_cot": false
+      },
+      "clean": {
+        "1": {
+          "keeps_own": 1.0,
+          "follows_donor": 0.0,
+          "other": 0.0,
+          "n": 500
+        },
+        "2": {
+          "keeps_own": 0.988,
+          "follows_donor": 0.0,
+          "other": 0.012,
+          "n": 500
+        },
+        "3": {
+          "keeps_own": 0.964,
+          "follows_donor": 0.0,
+          "other": 0.036,
+          "n": 500
+        },
+        "4": {
+          "keeps_own": 0.764,
+          "follows_donor": 0.0,
+          "other": 0.236,
+          "n": 500
+        },
+        "5": {
+          "keeps_own": 0.498,
+          "follows_donor": 0.0,
+          "other": 0.502,
+          "n": 500
+        },
+        "6": {
+          "keeps_own": 0.242,
+          "follows_donor": 0.0,
+          "other": 0.758,
+          "n": 500
+        },
+        "7": {
+          "keeps_own": 0.13,
+          "follows_donor": 0.0,
+          "other": 0.87,
+          "n": 500
+        },
+        "8": {
+          "keeps_own": 0.082,
+          "follows_donor": 0.0,
+          "other": 0.918,
+          "n": 500
+        },
+        "9": {
+          "keeps_own": 0.052,
+          "follows_donor": 0.0,
+          "other": 0.948,
+          "n": 500
+        },
+        "10": {
+          "keeps_own": 0.058,
+          "follows_donor": 0.0,
+          "other": 0.942,
+          "n": 500
+        },
+        "11": {
+          "keeps_own": 0.056,
+          "follows_donor": 0.0,
+          "other": 0.944,
+          "n": 500
+        },
+        "12": {
+          "keeps_own": 0.05,
+          "follows_donor": 0.0,
+          "other": 0.95,
+          "n": 500
+        }
+      },
+      "probes": {
+        "v1": {
+          "n_train": 6000,
+          "n_test": 6000,
+          "majority_baseline": 0.0145,
+          "bot": {
+            "0": {
+              "test": 0.0183,
+              "train": 0.0475
+            },
+            "2": {
+              "test": 0.124,
+              "train": 0.2603
+            },
+            "4": {
+              "test": 0.1547,
+              "train": 0.3128
+            },
+            "6": {
+              "test": 0.2008,
+              "train": 0.4282
+            },
+            "8": {
+              "test": 0.2042,
+              "train": 0.5728
+            },
+            "10": {
+              "test": 0.2173,
+              "train": 0.7148
+            },
+            "12": {
+              "test": 0.3945,
+              "train": 0.9908
+            }
+          },
+          "ans": {
+            "0": {
+              "test": 0.0187,
+              "train": 0.0475
+            },
+            "2": {
+              "test": 0.0282,
+              "train": 0.0572
+            },
+            "4": {
+              "test": 0.0633,
+              "train": 0.1645
+            },
+            "6": {
+              "test": 0.085,
+              "train": 0.2445
+            },
+            "8": {
+              "test": 0.0882,
+              "train": 0.6088
+            },
+            "10": {
+              "test": 0.0797,
+              "train": 0.8865
+            },
+            "12": {
+              "test": 0.1013,
+              "train": 0.963
+            }
+          }
+        },
+        "v2": {
+          "n_train": 5500,
+          "n_test": 5500,
+          "majority_baseline": 0.0229,
+          "bot": {
+            "0": {
+              "test": 0.0145,
+              "train": 0.0516
+            },
+            "2": {
+              "test": 0.0296,
+              "train": 0.1487
+            },
+            "4": {
+              "test": 0.0324,
+              "train": 0.1795
+            },
+            "6": {
+              "test": 0.0375,
+              "train": 0.2693
+            },
+            "8": {
+              "test": 0.0411,
+              "train": 0.4069
+            },
+            "10": {
+              "test": 0.0736,
+              "train": 0.6029
+            },
+            "12": {
+              "test": 0.184,
+              "train": 0.9296
+            }
+          },
+          "ans": {
+            "0": {
+              "test": 0.0145,
+              "train": 0.0511
+            },
+            "2": {
+              "test": 0.0251,
+              "train": 0.0955
+            },
+            "4": {
+              "test": 0.0236,
+              "train": 0.1151
+            },
+            "6": {
+              "test": 0.0267,
+              "train": 0.17
+            },
+            "8": {
+              "test": 0.0349,
+              "train": 0.5427
+            },
+            "10": {
+              "test": 0.0476,
+              "train": 0.8833
+            },
+            "12": {
+              "test": 0.0833,
+              "train": 0.9711
+            }
+          }
+        },
+        "v3": {
+          "n_train": 5000,
+          "n_test": 5000,
+          "majority_baseline": 0.0228,
+          "bot": {
+            "0": {
+              "test": 0.0152,
+              "train": 0.0546
+            },
+            "2": {
+              "test": 0.0244,
+              "train": 0.1418
+            },
+            "4": {
+              "test": 0.0186,
+              "train": 0.1054
+            },
+            "6": {
+              "test": 0.0242,
+              "train": 0.2604
+            },
+            "8": {
+              "test": 0.0234,
+              "train": 0.3924
+            },
+            "10": {
+              "test": 0.0422,
+              "train": 0.5916
+            },
+            "12": {
+              "test": 0.1042,
+              "train": 0.9324
+            }
+          },
+          "ans": {
+            "0": {
+              "test": 0.0174,
+              "train": 0.0556
+            },
+            "2": {
+              "test": 0.0156,
+              "train": 0.0262
+            },
+            "4": {
+              "test": 0.0224,
+              "train": 0.1114
+            },
+            "6": {
+              "test": 0.021,
+              "train": 0.1608
+            },
+            "8": {
+              "test": 0.024,
+              "train": 0.5236
+            },
+            "10": {
+              "test": 0.0394,
+              "train": 0.899
+            },
+            "12": {
+              "test": 0.0684,
+              "train": 0.9864
+            }
+          }
+        },
+        "v4": {
+          "n_train": 4500,
+          "n_test": 4500,
+          "majority_baseline": 0.0178,
+          "bot": {
+            "0": {
+              "test": 0.0133,
+              "train": 0.0584
+            },
+            "2": {
+              "test": 0.0167,
+              "train": 0.1093
+            },
+            "4": {
+              "test": 0.018,
+              "train": 0.1469
+            },
+            "6": {
+              "test": 0.0218,
+              "train": 0.286
+            },
+            "8": {
+              "test": 0.0242,
+              "train": 0.4364
+            },
+            "10": {
+              "test": 0.0313,
+              "train": 0.6362
+            },
+            "12": {
+              "test": 0.0553,
+              "train": 0.9449
+            }
+          },
+          "ans": {
+            "0": {
+              "test": 0.0144,
+              "train": 0.0587
+            },
+            "2": {
+              "test": 0.0209,
+              "train": 0.1104
+            },
+            "4": {
+              "test": 0.0196,
+              "train": 0.104
+            },
+            "6": {
+              "test": 0.0173,
+              "train": 0.1631
+            },
+            "8": {
+              "test": 0.0213,
+              "train": 0.5542
+            },
+            "10": {
+              "test": 0.0229,
+              "train": 0.9322
+            },
+            "12": {
+              "test": 0.0518,
+              "train": 0.992
+            }
+          }
+        },
+        "v5": {
+          "n_train": 4000,
+          "n_test": 4000,
+          "majority_baseline": 0.0237,
+          "bot": {
+            "0": {
+              "test": 0.0203,
+              "train": 0.0593
+            },
+            "2": {
+              "test": 0.0225,
+              "train": 0.1795
+            },
+            "4": {
+              "test": 0.023,
+              "train": 0.224
+            },
+            "6": {
+              "test": 0.0207,
+              "train": 0.3442
+            },
+            "8": {
+              "test": 0.0198,
+              "train": 0.5138
+            },
+            "10": {
+              "test": 0.024,
+              "train": 0.6775
+            },
+            "12": {
+              "test": 0.047,
+              "train": 0.9452
+            }
+          },
+          "ans": {
+            "0": {
+              "test": 0.0192,
+              "train": 0.0587
+            },
+            "2": {
+              "test": 0.0237,
+              "train": 0.1382
+            },
+            "4": {
+              "test": 0.0217,
+              "train": 0.154
+            },
+            "6": {
+              "test": 0.024,
+              "train": 0.1745
+            },
+            "8": {
+              "test": 0.0195,
+              "train": 0.5853
+            },
+            "10": {
+              "test": 0.0233,
+              "train": 0.959
+            },
+            "12": {
+              "test": 0.0428,
+              "train": 0.998
+            }
+          }
+        },
+        "v6": {
+          "n_train": 3500,
+          "n_test": 3500,
+          "majority_baseline": 0.024,
+          "bot": {
+            "0": {
+              "test": 0.0214,
+              "train": 0.0589
+            },
+            "2": {
+              "test": 0.018,
+              "train": 0.2389
+            },
+            "4": {
+              "test": 0.0189,
+              "train": 0.2237
+            },
+            "6": {
+              "test": 0.0203,
+              "train": 0.4231
+            },
+            "8": {
+              "test": 0.0226,
+              "train": 0.6049
+            },
+            "10": {
+              "test": 0.0206,
+              "train": 0.7574
+            },
+            "12": {
+              "test": 0.0277,
+              "train": 0.9786
+            }
+          },
+          "ans": {
+            "0": {
+              "test": 0.0206,
+              "train": 0.0589
+            },
+            "2": {
+              "test": 0.0169,
+              "train": 0.0974
+            },
+            "4": {
+              "test": 0.018,
+              "train": 0.1757
+            },
+            "6": {
+              "test": 0.0174,
+              "train": 0.2191
+            },
+            "8": {
+              "test": 0.0209,
+              "train": 0.6711
+            },
+            "10": {
+              "test": 0.0166,
+              "train": 0.9811
+            },
+            "12": {
+              "test": 0.0337,
+              "train": 0.9991
+            }
+          }
+        },
+        "answer": {
+          "n_train": 6000,
+          "n_test": 6000,
+          "majority_baseline": 0.0203,
+          "bot": {
+            "0": {
+              "test": 0.0177,
+              "train": 0.0545
+            },
+            "2": {
+              "test": 0.0318,
+              "train": 0.1277
+            },
+            "4": {
+              "test": 0.0328,
+              "train": 0.149
+            },
+            "6": {
+              "test": 0.0327,
+              "train": 0.2108
+            },
+            "8": {
+              "test": 0.0438,
+              "train": 0.3217
+            },
+            "10": {
+              "test": 0.0395,
+              "train": 0.4238
+            },
+            "12": {
+              "test": 0.0685,
+              "train": 0.7542
+            }
+          },
+          "ans": {
+            "0": {
+              "test": 0.0197,
+              "train": 0.0542
+            },
+            "2": {
+              "test": 0.0245,
+              "train": 0.0568
+            },
+            "4": {
+              "test": 0.027,
+              "train": 0.0925
+            },
+            "6": {
+              "test": 0.0308,
+              "train": 0.1408
+            },
+            "8": {
+              "test": 0.0525,
+              "train": 0.4987
+            },
+            "10": {
+              "test": 0.1075,
+              "train": 0.8692
+            },
+            "12": {
+              "test": 0.3752,
+              "train": 0.9953
+            }
+          }
+        }
+      },
+      "probe_layers": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12
+      ]
+    }
+  },
+  "hyperparams": {
+    "latent_count": 0,
+    "batch_size": 32,
+    "train_per_level": 500,
+    "probe_steps": 300,
+    "probe_layers": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12
+    ],
+    "donor_seed": 5980,
+    "device": "mps",
+    "dtype": "float32"
+  },
+  "seed": null,
+  "hardware": "MacBook-AppleSilicon / mps",
+  "author": "Henning Lindig",
+  "notes": "RuleChain CODI latent swap/ablation and intermediate-value probes.",
+  "timestamp_utc": "2026-11-02T23:28:15.603261+00:00",
+  "git": {
+    "commit": "2c17c34",
+    "dirty": true
+  }
+}
