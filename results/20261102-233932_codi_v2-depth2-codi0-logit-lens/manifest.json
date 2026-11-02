@@ -1,0 +1,412 @@
+{
+  "run_id": "20261102-233932_codi_v2-depth2-codi0-logit-lens",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "gpt2_depth2_codi0/checkpoint-29716 (epoch 38, selected; run 20261102-060537)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 6000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.407,
+    "unparseable_rate": 0.0,
+    "compute_steps": 0,
+    "sec_per_example": 0.011762650187500792,
+    "extra": {
+      "accuracy_kind": "teacher-forced answer token at the distillation position",
+      "data_sha256": "d85db05312379cee830e619ccfca48f525207b9997baa4d859c60bea28f02df1",
+      "matched_flags": {
+        "pad_invariant": true,
+        "fix_attn_mask": true,
+        "use_prj": true,
+        "prj_dim": 768,
+        "prj_no_ln": false,
+        "remove_eos": true,
+        "include_last_cot": false
+      },
+      "logit_lens": {
+        "positions": [
+          "bot",
+          "ans"
+        ],
+        "layers": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12
+        ],
+        "bot": {
+          "0": {
+            "top1_is_number": 0.0,
+            "v1_top1": 0.0,
+            "v1_top5": 0.0,
+            "v2_top1": 0.0,
+            "v2_top5": 0.0,
+            "v3_top1": 0.0,
+            "v3_top5": 0.0,
+            "v4_top1": 0.0,
+            "v4_top5": 0.0,
+            "v5_top1": 0.0,
+            "v5_top5": 0.0,
+            "v6_top1": 0.0,
+            "v6_top5": 0.0,
+            "answer_top1": 0.0,
+            "answer_top5": 0.0,
+            "any_intermediate_top1": 0.0
+          },
+          "2": {
+            "top1_is_number": 0.0,
+            "v1_top1": 0.0,
+            "v1_top5": 0.0,
+            "v2_top1": 0.0,
+            "v2_top5": 0.0,
+            "v3_top1": 0.0,
+            "v3_top5": 0.0,
+            "v4_top1": 0.0,
+            "v4_top5": 0.0,
+            "v5_top1": 0.0,
+            "v5_top5": 0.0,
+            "v6_top1": 0.0,
+            "v6_top5": 0.0,
+            "answer_top1": 0.0,
+            "answer_top5": 0.0,
+            "any_intermediate_top1": 0.0
+          },
+          "4": {
+            "top1_is_number": 0.0,
+            "v1_top1": 0.0,
+            "v1_top5": 0.0,
+            "v2_top1": 0.0,
+            "v2_top5": 0.0,
+            "v3_top1": 0.0,
+            "v3_top5": 0.0,
+            "v4_top1": 0.0,
+            "v4_top5": 0.0,
+            "v5_top1": 0.0,
+            "v5_top5": 0.0,
+            "v6_top1": 0.0,
+            "v6_top5": 0.0,
+            "answer_top1": 0.0,
+            "answer_top5": 0.0,
+            "any_intermediate_top1": 0.0
+          },
+          "6": {
+            "top1_is_number": 0.0,
+            "v1_top1": 0.0,
+            "v1_top5": 0.0,
+            "v2_top1": 0.0,
+            "v2_top5": 0.0,
+            "v3_top1": 0.0,
+            "v3_top5": 0.0,
+            "v4_top1": 0.0,
+            "v4_top5": 0.0,
+            "v5_top1": 0.0,
+            "v5_top5": 0.0,
+            "v6_top1": 0.0,
+            "v6_top5": 0.0,
+            "answer_top1": 0.0,
+            "answer_top5": 0.0,
+            "any_intermediate_top1": 0.0
+          },
+          "8": {
+            "top1_is_number": 0.0,
+            "v1_top1": 0.0,
+            "v1_top5": 0.0,
+            "v2_top1": 0.0,
+            "v2_top5": 0.0,
+            "v3_top1": 0.0,
+            "v3_top5": 0.0,
+            "v4_top1": 0.0,
+            "v4_top5": 0.0,
+            "v5_top1": 0.0,
+            "v5_top5": 0.0,
+            "v6_top1": 0.0,
+            "v6_top5": 0.0,
+            "answer_top1": 0.0,
+            "answer_top5": 0.0,
+            "any_intermediate_top1": 0.0
+          },
+          "10": {
+            "top1_is_number": 0.0,
+            "v1_top1": 0.0,
+            "v1_top5": 0.0,
+            "v2_top1": 0.0,
+            "v2_top5": 0.0,
+            "v3_top1": 0.0,
+            "v3_top5": 0.0,
+            "v4_top1": 0.0,
+            "v4_top5": 0.0,
+            "v5_top1": 0.0,
+            "v5_top5": 0.0,
+            "v6_top1": 0.0,
+            "v6_top5": 0.0,
+            "answer_top1": 0.0,
+            "answer_top5": 0.0,
+            "any_intermediate_top1": 0.0
+          },
+          "12": {
+            "top1_is_number": 0.0,
+            "v1_top1": 0.0,
+            "v1_top5": 0.0,
+            "v2_top1": 0.0,
+            "v2_top5": 0.0,
+            "v3_top1": 0.0,
+            "v3_top5": 0.0,
+            "v4_top1": 0.0,
+            "v4_top5": 0.0,
+            "v5_top1": 0.0,
+            "v5_top5": 0.0,
+            "v6_top1": 0.0,
+            "v6_top5": 0.0,
+            "answer_top1": 0.0,
+            "answer_top5": 0.0,
+            "any_intermediate_top1": 0.0
+          }
+        },
+        "ans": {
+          "0": {
+            "top1_is_number": 0.0,
+            "v1_top1": 0.0,
+            "v1_top5": 0.0,
+            "v2_top1": 0.0,
+            "v2_top5": 0.0,
+            "v3_top1": 0.0,
+            "v3_top5": 0.0,
+            "v4_top1": 0.0,
+            "v4_top5": 0.0,
+            "v5_top1": 0.0,
+            "v5_top5": 0.0,
+            "v6_top1": 0.0,
+            "v6_top5": 0.0,
+            "answer_top1": 0.0,
+            "answer_top5": 0.0,
+            "any_intermediate_top1": 0.0
+          },
+          "2": {
+            "top1_is_number": 0.0,
+            "v1_top1": 0.0,
+            "v1_top5": 0.0005,
+            "v2_top1": 0.0,
+            "v2_top5": 0.0015,
+            "v3_top1": 0.0,
+            "v3_top5": 0.001,
+            "v4_top1": 0.0,
+            "v4_top5": 0.0,
+            "v5_top1": 0.0,
+            "v5_top5": 0.0,
+            "v6_top1": 0.0,
+            "v6_top5": 0.0,
+            "answer_top1": 0.0,
+            "answer_top5": 0.0013,
+            "any_intermediate_top1": 0.0
+          },
+          "4": {
+            "top1_is_number": 0.0,
+            "v1_top1": 0.0,
+            "v1_top5": 0.0,
+            "v2_top1": 0.0,
+            "v2_top5": 0.0,
+            "v3_top1": 0.0,
+            "v3_top5": 0.0,
+            "v4_top1": 0.0,
+            "v4_top5": 0.0,
+            "v5_top1": 0.0,
+            "v5_top5": 0.0,
+            "v6_top1": 0.0,
+            "v6_top5": 0.0,
+            "answer_top1": 0.0,
+            "answer_top5": 0.0,
+            "any_intermediate_top1": 0.0
+          },
+          "6": {
+            "top1_is_number": 0.0,
+            "v1_top1": 0.0,
+            "v1_top5": 0.0005,
+            "v2_top1": 0.0,
+            "v2_top5": 0.0,
+            "v3_top1": 0.0,
+            "v3_top5": 0.0002,
+            "v4_top1": 0.0,
+            "v4_top5": 0.0,
+            "v5_top1": 0.0,
+            "v5_top5": 0.0003,
+            "v6_top1": 0.0,
+            "v6_top5": 0.0,
+            "answer_top1": 0.0,
+            "answer_top5": 0.0002,
+            "any_intermediate_top1": 0.0
+          },
+          "8": {
+            "top1_is_number": 0.0727,
+            "v1_top1": 0.0048,
+            "v1_top5": 0.0138,
+            "v2_top1": 0.0024,
+            "v2_top5": 0.0105,
+            "v3_top1": 0.001,
+            "v3_top5": 0.0052,
+            "v4_top1": 0.0011,
+            "v4_top5": 0.0031,
+            "v5_top1": 0.0003,
+            "v5_top5": 0.002,
+            "v6_top1": 0.0003,
+            "v6_top5": 0.0017,
+            "answer_top1": 0.0015,
+            "answer_top5": 0.0085,
+            "any_intermediate_top1": 0.0082
+          },
+          "10": {
+            "top1_is_number": 0.228,
+            "v1_top1": 0.0073,
+            "v1_top5": 0.0272,
+            "v2_top1": 0.0055,
+            "v2_top5": 0.0309,
+            "v3_top1": 0.0048,
+            "v3_top5": 0.0266,
+            "v4_top1": 0.0053,
+            "v4_top5": 0.0204,
+            "v5_top1": 0.0035,
+            "v5_top5": 0.022,
+            "v6_top1": 0.0031,
+            "v6_top5": 0.0186,
+            "answer_top1": 0.0102,
+            "answer_top5": 0.0478,
+            "any_intermediate_top1": 0.0182
+          },
+          "12": {
+            "top1_is_number": 1.0,
+            "v1_top1": 0.0975,
+            "v1_top5": 0.1455,
+            "v2_top1": 0.104,
+            "v2_top5": 0.1633,
+            "v3_top1": 0.114,
+            "v3_top5": 0.1716,
+            "v4_top1": 0.1011,
+            "v4_top5": 0.178,
+            "v5_top1": 0.0758,
+            "v5_top5": 0.1822,
+            "v6_top1": 0.0489,
+            "v6_top5": 0.1777,
+            "answer_top1": 0.4068,
+            "answer_top5": 0.6102,
+            "any_intermediate_top1": 0.0947
+          }
+        },
+        "top_tokens": {
+          "bot@8": [
+            [
+              "The",
+              6000
+            ]
+          ],
+          "bot@12": [
+            [
+              "The",
+              6000
+            ]
+          ],
+          "ans@8": [
+            [
+              " and",
+              1270
+            ],
+            [
+              ".",
+              674
+            ],
+            [
+              "-",
+              432
+            ],
+            [
+              "'",
+              390
+            ],
+            [
+              "\".",
+              346
+            ],
+            [
+              "oa",
+              294
+            ],
+            [
+              " ...",
+              273
+            ],
+            [
+              "12",
+              217
+            ]
+          ],
+          "ans@12": [
+            [
+              " 28",
+              141
+            ],
+            [
+              " 30",
+              140
+            ],
+            [
+              " 31",
+              131
+            ],
+            [
+              " 42",
+              130
+            ],
+            [
+              " 16",
+              127
+            ],
+            [
+              " 36",
+              124
+            ],
+            [
+              " 21",
+              123
+            ],
+            [
+              " 18",
+              120
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "latent_count": 0,
+    "batch_size": 32,
+    "layers": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12
+    ],
+    "lens": "final LayerNorm + tied unembedding",
+    "device": "mps"
+  },
+  "seed": null,
+  "hardware": "MacBook-AppleSilicon / mps",
+  "author": "Henning Lindig",
+  "notes": "RuleChain CODI logit lens on <bot>, latent passes and answer position.",
+  "timestamp_utc": "2026-11-02T23:39:32.396387+00:00",
+  "git": {
+    "commit": "197eda5",
+    "dirty": true
+  }
+}

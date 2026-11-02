@@ -9974,3 +9974,42 @@ Probes, best test accuracy over layers (majority baseline): v1 (0.015): <bot> 0.
 **Gotchas hit:** none.
 **Caveats:** Probes overfit (train ~0.93-0.99 vs test): lower bounds, see the CODI run. Pooled over levels. One checkpoint, one seed.
 **Next:** see the CODI run.
+
+---
+
+## 2026-11-02 — RuleChain CODI logit lens: the 6 latents collapse to one repeated vector (within-item cos >= 0.987) that reads as "a number" and hits one of the item's intermediate values 30% of the time, with no per-rule order (codi, run_id: 20261102-233815_codi_v2-depth2-codi-logit-lens)
+
+**Goal:** Training-free counterpart to the linear probes of `20261102-232507_codi_v2-depth2-codi-swap-probes` (which overfit): project hidden states at <bot>, latent passes 1-6 and the answer position (":") through GPT-2's final LayerNorm + tied unembedding, at layers 0, 2, ..., 12, and check whether the top tokens are the item's intermediate values v_1..v_k. CODI's paper reads GSM8K latents the same way. CODI-0 counterpart: `20261102-233932_codi_v2-depth2-codi0-logit-lens`.
+**Mechanism / model:** `codi`, `gpt2_depth2_codi_bs64/checkpoint-31280` (epoch 40, round-1 run 20261102-000204), 6 latents, pad_invariant.
+**Data:** RuleChain (depth2) test, all 6000.
+**Hyperparams:** see manifest. Layer 0 at a latent position = the fed vector z_j (+ position embedding); layer 12 is post-ln_f in HF GPT-2, other layers get ln_f applied. A token "counts" as value v if it spells v with or without a leading space (all 0..99 are single tokens). "any_intermediate" = top-1 equals any of the item's v_1..v_{k-1}.
+**Command:** `scripts/logit_lens_codi_latents.py` from `../codi`, see `eval_command.txt`. Collapse check (ad hoc, same checkpoint, 50 test items/level = 600, `probe_swap_codi_latents.run`): cosines and norms of the fed vectors z_1..z_6.
+**Headline results:**
+- **Latent positions, layer 0 (the fed vectors):** top-1 is a number token 84% of the time; it equals one of the item's intermediate values 30-32% (chance ~ 0.84 x 5.5 distinct intermediates / 100 values ~ 0.05); v1 0.070, v2 0.081, v3 0.067-0.070, v4 0.044-0.047 (top-5: v1 0.13, v2 0.15). **Identical for z1 through z6** (any_intermediate 0.301 / 0.312 / 0.315 / 0.315 / 0.317 / 0.315). Layers 2-12 at latent positions: falls to ~0 (layer 12 top tokens are '-', ',', '.').
+- **Answer position, layer 12:** answer top-1 0.402 (= model accuracy); v1-v4 0.10-0.12 (mostly items where v_j is the answer or equal to it). Layers 0-8: no numbers.
+- **<bot>:** nothing (top tokens 'The', ' of').
+- **Collapse check:** within an item, cos(z_i, z_j) = 0.987-0.989 between z1 and the rest, 0.997-1.000 among z2..z6. Across items, cos 0.73-0.76 at every position. Norm ~44 for every z_j vs 3.96 for token embeddings (11x).
+
+**Interpretation:**
+- **CODI's six latents are one vector repeated.** After the first latent pass the recurrence sits at a fixed point (z2..z6 cos >= 0.997 with each other). That explains the earlier results directly: one latent recovers almost all accuracy (`20261102-225018`), extra latents at 8/12 change nothing, swapping z1 does nothing (pass 1 recomputes the fixed point from the question), and swapping z2..z6 breaks the model (the answer attends to five copies of another item's vector). This is the "homogeneous latents" failure SIM-CoT (Wei et al., ICLR 2026) reports for Coconut/CODI without step-level supervision.
+- **The vector does carry item content, in token-embedding space:** read through the unembedding it is a number ~84% of the time and one of the item's own intermediate values ~30% (about 6x chance), but with no order: v1, v2, v3 are equally likely at every latent position. It looks like one blended "intermediate-number" embedding per item, not a chain v1 -> v2 -> v3.
+- Latent hidden states inside the passes (layers 2-12) do not decode to numbers; the answer appears in the vocabulary basis only at the answer position's last layer.
+
+**Gotchas hit:** none.
+**Caveats:** Logit lens only sees what is aligned with the unembedding; information in other directions is invisible to it (the probes are the complement, with their own overfitting caveat). Layer-0 readout of z_j is a reading of the projection output, a vector 11x larger than any token embedding, so "decodes to a number" is about its direction only. The collapse check is on 600 items and was not saved as its own run; numbers above are from the session log. Chance baseline is approximate (assumes uniform numbers). One checkpoint, one seed.
+**Next:** Same lens and collapse check on the released GSM8K CODI (`zen-E/CODI-gpt2`): if its latents are not collapsed and decode in order there (as CODI's paper and the LessWrong analysis suggest), the RuleChain collapse is task/training-specific. For retraining on RuleChain: per-latent step supervision (SIM-CoT style) directly targets the collapse; fresh items per epoch target the memorisation found in `20261102-225018`.
+
+---
+
+## 2026-11-02 — RuleChain CODI-0 logit lens (reference for CODI's): answer readable only at the answer position's last layer (0.407), <bot> decodes to 'The' (codi, run_id: 20261102-233932_codi_v2-depth2-codi0-logit-lens)
+
+**Goal:** No-latent reference for `20261102-233815_codi_v2-depth2-codi-logit-lens` (full story there).
+**Mechanism / model:** `codi` with `num_latent 0` (CODI-0), `gpt2_depth2_codi0/checkpoint-29716` (epoch 38, round-1 run 20261102-060537).
+**Data:** RuleChain (depth2) test, all 6000.
+**Hyperparams:** identical lens to the CODI run.
+**Command:** `scripts/logit_lens_codi_latents.py --num_latent 0 --inf_latent_iterations 0`, see `eval_command.txt`.
+**Headline results:** answer position, layer 12: answer top-1 0.407 (= model accuracy), v1-v3 0.10-0.11, any intermediate 0.095; layers 0-10 no numbers. <bot>: top-1 'The' for all 6000 items at layer 12, no numbers at any layer.
+**Interpretation:** Same picture as CODI at the answer position. The intermediate values that linear probes find at CODI-0's <bot> (v1 0.395, `20261102-232815`) are not in the vocabulary basis: they are linearly present but not "written as tokens".
+**Gotchas hit:** none.
+**Caveats:** Logit lens only sees unembedding-aligned directions. One checkpoint, one seed.
+**Next:** see the CODI run.
