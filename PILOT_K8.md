@@ -39,8 +39,6 @@ latent width with total budget. The 2 × 3 arm and its reference were added (use
 
 ### Runs
 
-| Run | GPU | Config | Role |
-|---|---|---|---|
 | Run | GPU | Config | Latents | Reference | Role |
 |---|---|---|---|---|---|
 | `pilot_k8_coconut_c2m3` | 4 (2nd) | `pilot_k8_coconut_c2m3.yaml` | 2 × 3 = 6 | `no_thoughts_m3` | **Published GSM8K recipe** |
@@ -56,13 +54,13 @@ Configs in `configs/synthetic/`. Queues: `lrm_work/queue_pilot_k8_gpu7.sh`, `lrm
 
 ## What counts as a result
 
-- **Positive:** a Coconut arm above `pilot_k8_no_thoughts_m6` by a paired test at L4-6 (above single-pass reach for this
+- **Positive:** a Coconut arm above its matched `no_thoughts` (`_m3` or `_m6`) by a paired test at L4-6 (above single-pass reach for this
   stack, within the latent budget). That would be the first RuleChain model whose latents add accuracy, and the candidate
   for the resample-swap necessity test and for decoding (proposal steps 2-3).
 - **c2m3 vs c1m6** (both 6 latents): how the budget is spent (2 per rule for 3 rules vs 1 per rule for 6). **c2m6 vs
   c1m6** (same M): latent width, confounded with total budget (12 vs 6). **c1m6 vs round-1 c1m6**, each against its own
   reference: the longer schedule.
-- **Null:** both arms ≈ reference again → the GSM8K recipe does not rescue Coconut here either; the next candidates are
+- **Null:** every arm ≈ its reference again → the GSM8K recipe does not rescue Coconut here either; the next candidates are
   step-supervised latents (SIM-CoT-style) or the from-scratch regime.
 
 Caveats fixed in advance: one seed; 25k items is a quarter of round 1's data, so absolute accuracies are not comparable to
