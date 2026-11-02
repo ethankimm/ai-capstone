@@ -1,0 +1,49 @@
+{
+  "run_id": "20261102-054552_baseline_no_cot_v2-depth2-codi-student-diverged",
+  "mechanism": "baseline_no_cot",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "/local-ssd/ktn48/lrm_work/codi_runs/gpt2_depth2_codi_student/gpt2/ep_40/lr_0.003/seed_11/checkpoint-5474 (epoch 7, last pre-divergence; not evaluated)",
+    "n_params": null
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "train",
+    "n_examples": 100000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": null,
+    "compute_steps": 0,
+    "extra": {
+      "diverged": true,
+      "diverged_at_epoch": 7.28,
+      "resume_diverged_at_epoch": 7.31,
+      "dropped": true
+    }
+  },
+  "hyperparams": {
+    "recipe": "TRAINING_PROTOCOL.md section 7.3, student-only: NUM_LATENT 0, ref_loss_factor 0, distill_loss_factor 0",
+    "lr": 0.003,
+    "scheduler": "cosine",
+    "epochs": 40,
+    "lora_r": 128,
+    "lora_alpha": 32,
+    "per_device_train_batch_size": 64,
+    "gradient_accumulation_steps": 2,
+    "bf16": true,
+    "max_grad_norm": 2.0,
+    "save_total_limit": 40
+  },
+  "seed": 11,
+  "hardware": "cci-p124 H100 NVL 94GB (shared node), GPU 7 (alone)",
+  "author": "Kevin Nguyen",
+  "notes": "CODI student-only (run 7) diverged at epoch 7.28; resume from epoch 7 diverged again at 7.31; dropped (user decision)",
+  "timestamp_utc": "2026-11-02T05:45:52.016094+00:00",
+  "git": {
+    "commit": "d503330",
+    "dirty": false
+  }
+}
