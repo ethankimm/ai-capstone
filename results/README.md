@@ -196,3 +196,4 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261102-054552_baseline_no_cot_v2-depth2-codi-student-diverged](20261102-054552_baseline_no_cot_v2-depth2-codi-student-diverged/) | baseline_no_cot | gpt2 | train (n=100000) | 0 | - | 11 | full_run | Kevin Nguyen |
 | [20261102-060537_codi_v2-depth2-gpt2_depth2_codi0](20261102-060537_codi_v2-depth2-gpt2_depth2_codi0/) | codi | gpt2 | test (n=6000) | 0 | 0.405 | 11 | full_run | Kevin Nguyen |
 | [20261102-190130_baseline_no_cot_v2-depth2-gpt2_depth2_no_thoughts_m6_s1](20261102-190130_baseline_no_cot_v2-depth2-gpt2_depth2_no_thoughts_m6_s1/) | baseline_no_cot | openai-community/gpt2 | test (n=6000) | - | 0.158 | 1 | full_run | Kevin Nguyen |
+| [20261102-215045_baseline_no_cot_v2-depth2-pilot_k8_no_thoughts_m6](20261102-215045_baseline_no_cot_v2-depth2-pilot_k8_no_thoughts_m6/) | baseline_no_cot | openai-community/gpt2 | test (n=4000) | - | 0.216 | 0 | full_run | Kevin Nguyen |
