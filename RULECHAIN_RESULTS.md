@@ -111,8 +111,9 @@ the same at 32 and 64.
    training is stable.
 4. **Resample-swap necessity test on CODI's latents**: whether it is still informative when G ≈ 0. It could show whether
    the latents carry content even though they add no accuracy.
-5. **Second seed** of the four latent/reference runs: **running** (round 2, launched 2026-11-02 09:15 PT, GPUs 4 and 7;
-   Coconut / `no_thoughts` seed 1, CODI / CODI-0 seed 12, same CoT init). `no_thoughts` s1 done.
+5. **Second seed** of the four latent/reference runs: started 2026-11-02 09:15 PT, **stopped 12:55 PT by user decision**
+   for the k ≤ 8 Coconut pilot (`PILOT_K8.md`). Only `no_thoughts` s1 finished (logged); Coconut s1 stopped after stage 3,
+   CODI s12 at step 7,029 / 31,280, CODI-0 s12 not started. Still needed for any round-1 claim.
 
 ## Where things are
 

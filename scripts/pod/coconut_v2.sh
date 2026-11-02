@@ -30,7 +30,9 @@ HW=${HW:-"RunPod ${GPU_LABEL:-GPU} (secure)"}
 COT_NAME=${COT_NAME:-gpt2_depth2_cot}
 COCONUT_CFG=${COCONUT_CFG:-configs/synthetic/gpt2_depth2_coconut_c1m6.yaml}
 NO_THOUGHTS_CFG=${NO_THOUGHTS_CFG:-configs/synthetic/gpt2_depth2_no_thoughts_m6.yaml}
-FINAL_STAGE_CKPTS=${FINAL_STAGE_CKPTS:-"8 9 10"}   # num_epochs 10, resume 1, max_latent_stage 6: epochs 7-9 = final stage -> checkpoint_8..10
+FINAL_STAGE_CKPTS=${FINAL_STAGE_CKPTS:-"8 9 10"}
+# VALID_JSON / TEST_JSON: selection / test files for `select` / `test` (default depth2/valid.json, depth2/test.json;
+# the k<=8 pilot, PILOT_K8.md, sets them to depth2_k8/).   # num_epochs 10, resume 1, max_latent_stage 6: epochs 7-9 = final stage -> checkpoint_8..10
 export PATH="$HOME/.local/bin:$PATH"
 mkdir -p "$LOGS" "$CRUNS" "$LOGS/configs"
 cd "$REPO"
@@ -179,7 +181,7 @@ PY
       ck="$CRUNS/$name/checkpoint_$n"; [ -f "$ck" ] || { echo "missing $ck"; continue; }
       extra=""; [ "$method" != coconut ] && extra="--verify_batched_n 32"   # batched no-latent eval: check vs batch 1
       out=$($PY scripts/eval_synthetic_coconut.py --method "$method" --checkpoint_path "$ck" \
-          --config_path "$LOGS/configs/$name.yaml" --test_json "$DATA/depth2/valid.json" --no_log $extra 2>&1)
+          --config_path "$LOGS/configs/$name.yaml" --test_json "${VALID_JSON:-$DATA/depth2/valid.json}" --no_log $extra 2>&1)
       line=$(echo "$out" | parse_valid_levels)
       echo "checkpoint_$n: $line" | tee -a "$LOGS/select_$name.txt"
       v=$(echo "$line" | awk '{print $2}')
@@ -191,7 +193,7 @@ PY
     name=${2:?}; method=${3:?}; ck=${4:?}; slug=${5:-v2-depth2-$name}
     extra=""; [ "$method" != coconut ] && extra="--verify_batched_n 32"
     $PY scripts/eval_synthetic_coconut.py --method "$method" --checkpoint_path "$ck" --checkpoint_label "$ck" \
-        --test_json "$DATA/depth2/test.json" --train_log "$LOGS/$name.log" --config_path "$LOGS/configs/$name.yaml" \
+        --test_json "${TEST_JSON:-$DATA/depth2/test.json}" --train_log "$LOGS/$name.log" --config_path "$LOGS/configs/$name.yaml" \
         --slug "$slug" --stage full_run --hardware "$HW" $extra 2>&1 | tee "$LOGS/test_$name.txt" ;;
 
   prune) prune_loop "${2:?run name}" ;;

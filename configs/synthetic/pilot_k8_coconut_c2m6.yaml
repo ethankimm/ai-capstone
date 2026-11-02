@@ -1,0 +1,39 @@
+# PILOT_K8.md: main pilot arm. Coconut c_thought 2 x max_latent_stage 6 = 12 latents (2 per rule for rules 1-6).
+# Data depth2_k8 (scripts/make_pilot_k8.py): 25k train items, k = 1-8 only. Init = round-1 CoT gpt2_depth2_cot/checkpoint_3.
+# Schedule (Coconut's GSM8K recipe): epochs_per_stage 3; resume 3 skips stage 0 (epochs 0-2); epochs 3-20 = stages 1-6;
+# epochs 21-25 = final all-latent stage (5 epochs, rules 7-8 never get latents); checkpoints checkpoint_4 .. checkpoint_26,
+# final-stage ones checkpoint_22 .. _26; selection = best of checkpoint_24/25/26 on depth2_k8/valid.json.
+# load_model_path / paths / micro-batch are rendered by scripts/pod/coconut_v2.sh. Launch via lrm_work/queue_pilot_k8_*.sh.
+
+project: coconut
+save_path: /workspace/coconut_runs
+name: pilot_k8_coconut_c2m6
+
+only_eval: False
+
+coconut: True
+cot: False
+no_thoughts: False
+no_cot: False
+
+c_thought: 2
+epochs_per_stage: 3
+max_latent_stage: 6
+pad_latent_to_max: True
+
+save_only_improve: False
+uniform_prob: 0.0
+model_id: openai-community/gpt2
+load_model_path: /workspace/coconut_runs/gpt2_depth2_cot/checkpoint_<BEST>  # rendered by coconut_v2.sh
+seed: 0
+resume: 3
+bf16: False
+train_path: /workspace/synthetic_data_v2/depth2_k8/train.json
+val_path: /workspace/synthetic_data_v2/depth2_k8/valid_monitor.json
+reset_optimizer: True
+batch_size_training: 32
+debug: False
+gradient_accumulation_steps: 4
+num_epochs: 26
+lr: !!float "1e-4"
+weight_decay: 0.01
