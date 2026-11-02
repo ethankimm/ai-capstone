@@ -12,6 +12,7 @@
 #   bash scripts/pod/coconut_v2.sh timing                   # debug run of Coconut c1m6 stages 1-6 + final (5k examples), s/step + peak mem
 #   bash scripts/pod/coconut_v2.sh coconut [NAME] [SEED]    # Coconut c1m6, background (NAME/SEED default gpt2_depth2_coconut_c1m6 / 0)
 #   bash scripts/pod/coconut_v2.sh ref no_thoughts|no_cot   # no_thoughts (Coconut schedule) | no_cot trained to plateau, background
+#   bash scripts/pod/coconut_v2.sh ref no_thoughts [NAME] [SEED]   # no_thoughts rerun under a new name/seed
 #   bash scripts/pod/coconut_v2.sh select NAME METHOD       # best final-stage checkpoint on valid.json (no RunRecord)
 #   bash scripts/pod/coconut_v2.sh test NAME METHOD CKPT [SLUG]   # logged test eval of the selected checkpoint
 #   bash scripts/pod/coconut_v2.sh manifest | status | prune NAME
@@ -154,8 +155,8 @@ PY
     case $kind in
       no_thoughts)
         ck=$(newest_ckpt "$COT_NAME"); [ -n "$ck" ] || { echo "no CoT checkpoint"; exit 1; }
-        name=gpt2_depth2_no_thoughts_m6
-        cfg=$(render_cfg "$NO_THOUGHTS_CFG" "$name" 0 "$ck")
+        name=${3:-gpt2_depth2_no_thoughts_m6}; seed=${4:-0}   # NAME/SEED for second-seed reruns (new name per seed)
+        cfg=$(render_cfg "$NO_THOUGHTS_CFG" "$name" "$seed" "$ck")
         launch "$cfg" "$name" 29523 ;;
       no_cot)  # trained to plateau: stop when monitor accuracy gains < 0.5 pt over 3 epochs, cap 60 (coconut_watch.py)
         name=gpt2_depth2_no_cot_plateau

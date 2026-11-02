@@ -50,6 +50,8 @@ NUM_LATENT="${NUM_LATENT:-6}"
 REF_LOSS_FACTOR="${REF_LOSS_FACTOR:-1.0}"
 DISTILL_LOSS_FACTOR="${DISTILL_LOSS_FACTOR:-1.0}"
 EXP_NAME="${EXP_NAME:-gpt2_${TASK}_codi}"
+# SEED (default 11, the published seed); the checkpoint dir is .../ep_40/lr_0.003/seed_$SEED. Second-seed runs: SEED=12.
+SEED="${SEED:-11}"
 REPO="${REPO:-/workspace/ai-capstone}"
 mkdir -p "$SAVE_DIR"
 
@@ -72,7 +74,7 @@ fi
 # shellcheck disable=SC2206
 EXTRA=(${EXTRA_ARGS:-})
 
-echo "codi commit: $(git rev-parse --short HEAD) | data: $CODI_SYNTHETIC_DATA_DIR/$TASK | include_last_cot=$INCLUDE_LAST_COT | num_latent=$NUM_LATENT | ref/distill factors=$REF_LOSS_FACTOR/$DISTILL_LOSS_FACTOR | SAVE_DIR=$SAVE_DIR | EXTRA_ARGS=${EXTRA_ARGS:-<none>}"
+echo "codi commit: $(git rev-parse --short HEAD) | data: $CODI_SYNTHETIC_DATA_DIR/$TASK | include_last_cot=$INCLUDE_LAST_COT | num_latent=$NUM_LATENT | ref/distill factors=$REF_LOSS_FACTOR/$DISTILL_LOSS_FACTOR | seed=$SEED | SAVE_DIR=$SAVE_DIR | EXTRA_ARGS=${EXTRA_ARGS:-<none>}"
 echo "start: $(date -u +%FT%TZ)"
 
 .venv/bin/python train.py \
@@ -83,7 +85,7 @@ echo "start: $(date -u +%FT%TZ)"
 	--model_name_or_path gpt2 \
 	--data_name "$TASK" \
 	--include_last_cot "$INCLUDE_LAST_COT" \
-	--seed 11 \
+	--seed "$SEED" \
 	--model_max_length 1024 \
 	--per_device_train_batch_size 64 \
 	--gradient_accumulation_steps 2 \
