@@ -9877,3 +9877,53 @@ absolute position >= `ans_start`. For CODI that is every row, so behaviour there
 **Gotchas hit:** The proxy (ssh.runpod.io) readiness loop never reported, so the pod idled ~1 h before launch; the completion monitor only watched the T5 job, so the pod idled ~1 h 50 min after Ouro finished (04:41 -> 06:30 UTC). Pod total ~4.7 h x $0.59 = ~$2.75 for this run plus the T5 pilot, about half of it idle. Use the direct SSH port for readiness checks and watch every job's terminal state.
 **Caveats:** One seed, one model size, n=200 per level (95% CI about +-0.07 at 0.5). The 1-3 loop exits were trained directly (loss on every exit), so this is 'depth as a trained readout', not extrapolation; loops > 4 untested. Training ran at 4 loops, so the earlier exits saw gradients shaped by later loops. Levels 5+ not evaluated.
 **Next:** Loops 5-8 at eval (does reach keep growing past the trained depth?), levels 5-6, and a second seed. Probe per-loop hidden states for the intermediate values (rule 1 result decodable at loop 1, rule 2 at loop 2?): a direct test of the serial-composition-per-loop story.
+
+---
+
+## 2026-11-02 — RuleChain CODI latent diagnostics: CODI needs 1-2 latents (k=0 drops 0.40 -> 0.22) but they rehost, not extend, CODI-0's computation; train-test gap 0.19-0.30 at L4-L8 (codi, run_id: 20261102-225018_codi_v2-depth2-codi-latent-diagnostics)
+
+**Goal:** Debug round 1's null gain (CODI = CODI-0 on RuleChain, `RULECHAIN_RESULTS.md` on `kevin/lrm-training-1`). Three checks on the selected CODI checkpoint: (1) does it use its latents (latent-count sweep at inference, k = 0..12 on a model trained with 6); (2) where its answer-position state matches the teacher, per hidden-state layer and level (the distillation objective); (3) train vs test accuracy per level (memorisation). Paired with the same diagnostics on CODI-0: `20261102-225353_codi_v2-depth2-codi0-latent-diagnostics`.
+**Mechanism / model:** `codi`, GPT-2 small + LoRA r128 + projection, `gpt2_depth2_codi_bs64/checkpoint-31280` (epoch 40, the checkpoint behind round-1 run 20261102-000204; downloaded copy in `rulechain-checkpoints/`, sha256-verified against Kevin's SHA256SUMS). Trained with 6 latents, `pad_invariant`, `include_last_cot False`.
+**Data:** RuleChain (depth2, generator 2.0.0) test, all 6000 items (500/level), hashes verified; train check = 500 seeded-random items/level from `train.json`.
+**Hyperparams:** see manifest. Teacher-forced: one forward through question, `<bot>`, k latents, `<eot>`, "The answer is:", argmax answer token at ":" (the distillation position). No generation: round-1 logged teacher-forced accuracy equals generated accuracy within +-0.004/level, and k=6 here reproduces round 1's teacher-forced numbers (L4 0.758 vs 0.756, L5 0.442 vs 0.436; MPS fp32 vs H100 bf16). Distillation loss as CODI's: SmoothL1(student, teacher) / teacher std per layer, mean over the 13 hidden-state layers; std over the whole set, not per batch of 128 as in training.
+**Command:** `scripts/diagnose_codi_latents.py` from the CODI checkout (`../codi` @ 2c23146 + codi_streaming / codi_synthetic / codi_model_fixes / codi_zero_loss_log patches, own venv = upstream pins minus CUDA packages), see `eval_command.txt`. `--latent_counts 0,1,2,3,4,5,6,8,12 --train_per_level 500 --batch_size 32`, MPS, PYTORCH_MPS_HIGH_WATERMARK_RATIO 0.7.
+**Headline results:** `final_answer_accuracy=0.402` (teacher-forced, k=6), `early_termination_necessity=0.177` (k=6 minus k=0). Teacher 1.000 at every level.
+
+| k (latents at inference) | 0 | 1 | 2 | 3 | 4 | 6 (trained) | 8 | 12 |
+|---|---|---|---|---|---|---|---|---|
+| overall | 0.225 | 0.389 | 0.398 | 0.401 | 0.401 | 0.402 | 0.401 | 0.401 |
+| L3 | 0.334 | 0.988 | 0.990 | 0.992 | 0.992 | 0.992 | 0.992 | 0.992 |
+| L4 | 0.100 | 0.716 | 0.754 | 0.756 | 0.754 | 0.758 | 0.758 | 0.752 |
+| L5 | 0.064 | 0.382 | 0.422 | 0.428 | 0.432 | 0.442 | 0.452 | 0.444 |
+| distill loss | 0.136 | 0.104 | 0.095 | 0.091 | 0.089 | 0.088 | 0.087 | 0.089 |
+
+CODI-0 (no latents, its own run): overall 0.407, L3 0.964, L4 0.764, L5 0.498, distill 0.141.
+
+Per-layer distillation loss (layer 0 = embeddings): CODI k=6 vs CODI-0 — L1-5 both ~0.002-0.006; **L6 0.004 vs 0.045, L7 0.054 vs 0.113, L8 0.058 vs 0.258**, L9 0.166 vs 0.305, L10 0.306 vs 0.407, L11 0.402 vs 0.457, L12 0.112 vs 0.214. CODI with k=0 is worse than CODI-0 at layers 1-5 (0.016-0.023).
+
+Train vs test accuracy (k=6): L4 0.948 / 0.758, L5 0.728 / 0.442, L6 0.542 / 0.238, L7 0.332 / 0.110, L8 0.260 / 0.090, L9-12 train 0.15-0.23 vs test 0.04-0.05. L1-3 no gap.
+
+**Interpretation:**
+- **CODI depends on its latents, but only on the first one or two.** Removing all latents collapses L3 from 0.99 to 0.33 and L4 from 0.76 to 0.10 (overall 0.40 -> 0.22, well below CODI-0's 0.41: dependence, not added computation, per the protocol's rule). One latent restores almost everything (0.389), two saturate; latents 3-6 and extra ones at 8/12 change nothing. So CODI moved part of the computation CODI-0 does inside the answer pass into latent pass 1(-2), without adding reach: the same ~5-rule envelope, split over two forward passes instead of one. Six latents were available; the model behaves as if it had one.
+- **The latents buy teacher-state similarity in the middle layers, not answer accuracy.** CODI's answer-position state is much closer to the teacher's at layers 6-9 than CODI-0's (L8 0.058 vs 0.258), and per level the gap is largest at L2-3 (0.013-0.017 vs 0.036-0.097) where both are already right. At L5-12 distill stays high (0.08-0.14) and accuracy is CODI-0's. The 30% lower training distillation loss (trainer_state) is this: closer imitation of the teacher's representation where the answer is computable anyway.
+- **Both models memorise beyond their reach.** At L4-L8 train accuracy exceeds test by 0.17-0.30 (CODI-0: 0.21-0.43, see its run). 40 epochs over the same 100k items: at levels a single pass can't compute, the CE and distillation losses are lowered by fitting individual training items. That is a competing, easier route than learning to chain rules across latents, and it explains the training loss still falling at epoch 40 while test accuracy is flat.
+- Together: there was pressure on the latents (teacher at 1.000, student far from it at k >= 5), but the losses were satisfied by (a) rehosting the in-reach computation into latent 1 and (b) memorising out-of-reach items, not by using latents 2-6 for later rules.
+
+**Gotchas hit:** (1) The Mac slept during the first launch, then the run swapped (30 GB): CODI's eval helpers call the LM-head model on full sequences, building [B, T, 50k] logits (~5 GB/batch at L12) that are never used. `diagnose_codi_latents.py` runs the teacher and question passes through the transformer body (identical numbers on a smoke set, checked) and caps MPS memory; `scripts/eval_codi.encode_and_think` itself is unchanged. (2) Checkpoints were saved on CUDA: the script maps `torch.load` to CPU when CUDA is absent. (3) zsh does not word-split `$VAR` arguments: the runner is a bash script.
+**Caveats:** One checkpoint, one seed (11). Truncating to k < 6 is off-distribution for CODI (never trained with fewer latents), so part of the k=0 drop may be distribution shift rather than lost computation; the resample-swap test (latents from another item of the same level) is the in-distribution version and is not run yet. Distillation losses of CODI and CODI-0 are each against their own teacher (same recipe, different weights; teacher stds differ, e.g. layer 11 8.6 vs 11.5), so the cross-model comparison is approximate; within-CODI comparisons across k are exact. Train sample 500/level (95% CI about +-0.04). Teacher-forced, not generated, accuracy.
+**Next:** Resample swap and per-latent probes for v1, v2 (does latent 1 hold an intermediate value?). Retraining fixes this points to: fresh items every epoch (RuleChain is generated, so memorisation can be removed outright), and pressure to spread work over latents (step supervision per latent, or a curriculum that varies the latent count).
+
+---
+
+## 2026-11-02 — RuleChain CODI-0 diagnostics (reference for CODI's): train-test gap 0.21-0.43 at L4-L8, mid-layer distillation mismatch (codi, run_id: 20261102-225353_codi_v2-depth2-codi0-latent-diagnostics)
+
+**Goal:** The no-latent side of the CODI latent diagnostics (`20261102-225018_codi_v2-depth2-codi-latent-diagnostics`, which has the full story): per-layer and per-level distillation loss and train vs test accuracy for CODI-0, so CODI's numbers have a matched reference.
+**Mechanism / model:** `codi` with `num_latent 0` (CODI-0, round-1 run 6), `gpt2_depth2_codi0/checkpoint-29716` (epoch 38, the checkpoint behind 20261102-060537; downloaded copy in `rulechain-checkpoints/`, sha256-verified).
+**Data:** RuleChain (depth2) test, all 6000 items; train check = 500 seeded-random items/level of `train.json` (same items as the CODI run).
+**Hyperparams:** see manifest; same script and settings as the CODI run, `--num_latent 0 --inf_latent_iterations 0 --latent_counts 0`.
+**Command:** `scripts/diagnose_codi_latents.py`, see `eval_command.txt`.
+**Headline results:** `final_answer_accuracy=0.407` (teacher-forced; round 1 logged 0.405 generated). Per level: 1.000 / 0.988 / 0.964 / 0.764 / 0.498 / 0.242 / 0.130 / 0.082 / 0.052 / 0.058 / 0.056 / 0.050. Teacher 0.9965. Distillation loss 0.141 (CODI k=6: 0.088). Per layer: ~0.002-0.006 at layers 1-5, then 0.045 / 0.113 / 0.258 / 0.305 / 0.407 / 0.457 / 0.214 at layers 6-12. Train vs test: L4 0.978 / 0.764, L5 0.884 / 0.498, L6 0.676 / 0.242, L7 0.476 / 0.130, L8 0.368 / 0.082, L9-12 train 0.19-0.24 vs test 0.05-0.06.
+**Interpretation:** CODI-0 matches the teacher's answer-position state in the lower layers and diverges from layer 6 up; the teacher reads the previous value from written steps, which a single pass has to compute instead. It memorises more than CODI: train-test gaps of 0.21-0.43 at L4-L8 (CODI 0.17-0.30). See the CODI run's notes for the joint reading.
+**Gotchas hit:** see the CODI run (memory, CUDA-saved checkpoint).
+**Caveats:** One checkpoint, one seed. Distillation loss is against CODI-0's own teacher, so comparisons with CODI's are approximate. Train sample 500/level (+-0.04).
+**Next:** see the CODI run.

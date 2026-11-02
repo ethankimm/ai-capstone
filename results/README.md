@@ -186,3 +186,5 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261019-042951_recurrent_depth_depth2-lora-ouro-1.4b-n20000-l2](20261019-042951_recurrent_depth_depth2-lora-ouro-1.4b-n20000-l2/) | recurrent_depth | ByteDance/Ouro-1.4B | test (n=800) | 2 | 0.629 | 0 | pilot | Henning Lindig |
 | [20261019-043514_recurrent_depth_depth2-lora-ouro-1.4b-n20000-l3](20261019-043514_recurrent_depth_depth2-lora-ouro-1.4b-n20000-l3/) | recurrent_depth | ByteDance/Ouro-1.4B | test (n=800) | 3 | 0.721 | 0 | pilot | Henning Lindig |
 | [20261019-044140_recurrent_depth_depth2-lora-ouro-1.4b-n20000-l4](20261019-044140_recurrent_depth_depth2-lora-ouro-1.4b-n20000-l4/) | recurrent_depth | ByteDance/Ouro-1.4B | test (n=800) | 4 | 0.750 | 0 | pilot | Henning Lindig |
+| [20261102-225018_codi_v2-depth2-codi-latent-diagnostics](20261102-225018_codi_v2-depth2-codi-latent-diagnostics/) | codi | gpt2 | test (n=6000) | 6 | 0.402 | None | full_run | Henning Lindig |
+| [20261102-225353_codi_v2-depth2-codi0-latent-diagnostics](20261102-225353_codi_v2-depth2-codi0-latent-diagnostics/) | codi | gpt2 | test (n=6000) | 0 | 0.407 | None | full_run | Henning Lindig |
