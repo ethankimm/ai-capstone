@@ -1,0 +1,176 @@
+{
+  "run_id": "20261103-174232_codi_v2-l1to7w-depth2-codi0-diverged",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "codi_runs/gpt2_l1to7w_codi0/gpt2/ep_12/lr_0.003/seed_11 (diverged; pre-divergence checkpoint-2970 kept at ../codi_runs_l1to7w/gpt2_l1to7w_codi0/)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2-l1to7w",
+    "split": "train",
+    "n_examples": 190000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": null,
+    "compute_steps": 0,
+    "extra": {
+      "diverged": true,
+      "diverged_at_epoch": 2.76,
+      "loss_before": 0.8,
+      "loss_after": "3.7 -> 2.4 -> ~37 (epoch 3.1) -> ~31-33 to the end",
+      "stopped_at_step": 17820,
+      "planned_steps": 17820,
+      "valid_per_level_by_checkpoint": {
+        "1485": {
+          "1": 0.881,
+          "2": 0.049,
+          "3": 0.035,
+          "4": 0.031,
+          "5": 0.028,
+          "6": 0.025,
+          "7": 0.018
+        },
+        "2970": {
+          "1": 0.969,
+          "2": 0.066,
+          "3": 0.035,
+          "4": 0.035,
+          "5": 0.024,
+          "6": 0.042,
+          "7": 0.025
+        },
+        "4455": {
+          "1": 0.007,
+          "2": 0.038,
+          "3": 0.028,
+          "4": 0.017,
+          "5": 0.014,
+          "6": 0.042,
+          "7": 0.039
+        },
+        "5940": {
+          "1": 0.014,
+          "2": 0.014,
+          "3": 0.014,
+          "4": 0.028,
+          "5": 0.017,
+          "6": 0.004,
+          "7": 0.014
+        },
+        "7425": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0
+        },
+        "8910": {
+          "1": 0.003,
+          "2": 0.0,
+          "3": 0.003,
+          "4": 0.007,
+          "5": 0.007,
+          "6": 0.004,
+          "7": 0.007
+        },
+        "10395": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0
+        },
+        "11880": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0
+        },
+        "13365": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0
+        },
+        "14850": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0
+        },
+        "16335": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0
+        },
+        "17820": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0,
+          "7": 0.0
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "recipe": "configs/synthetic/train_gpt2_depth_codi.sh via scripts/pod/codi_l4to7.sh (NAME=gpt2_l1to7w EPOCHS=12)",
+    "num_latent": 0,
+    "include_last_cot": false,
+    "fix_attn_mask": true,
+    "pad_invariant": true,
+    "lr": 0.003,
+    "scheduler": "cosine",
+    "warmup_ratio": 0.03,
+    "epochs": 12,
+    "lora_r": 128,
+    "lora_alpha": 32,
+    "per_device_train_batch_size": 64,
+    "gradient_accumulation_steps": 2,
+    "effective_batch": 128,
+    "bf16": true,
+    "max_grad_norm": 2.0,
+    "weight_decay": 0.1,
+    "train_per_level": {
+      "1": 10000,
+      "2": 10000,
+      "3": 10000,
+      "4": 40000,
+      "5": 40000,
+      "6": 40000,
+      "7": 40000
+    }
+  },
+  "seed": 11,
+  "hardware": "RunPod A40 48GB",
+  "author": "Henning Lindig",
+  "notes": "CODI-0 reference on RuleChain levels 1-7 with 4-7 up-weighted; diverged at epoch 2.76, no usable result.",
+  "timestamp_utc": "2026-11-03T17:42:32.114732+00:00",
+  "git": {
+    "commit": "c21fdc0",
+    "dirty": true
+  }
+}
