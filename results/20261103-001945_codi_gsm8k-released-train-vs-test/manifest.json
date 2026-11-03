@@ -1,0 +1,117 @@
+{
+  "run_id": "20261103-001945_codi_gsm8k-released-train-vs-test",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.4246,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "sec_per_example": 0.2027451577546354,
+    "extra": {
+      "seen_train": {
+        "n": 1000,
+        "paper_metric_accuracy": 0.796,
+        "shared_metric_accuracy": 0.796,
+        "unparseable_rate": 0.0,
+        "accuracy_by_steps": {
+          "1": [
+            0.8732,
+            142
+          ],
+          "2": [
+            0.8713,
+            404
+          ],
+          "3": [
+            0.7978,
+            267
+          ],
+          "4": [
+            0.7049,
+            122
+          ],
+          "5": [
+            0.3659,
+            41
+          ],
+          "6": [
+            0.25,
+            24
+          ]
+        }
+      },
+      "test": {
+        "n": 1319,
+        "paper_metric_accuracy": 0.4246,
+        "shared_metric_accuracy": 0.4246,
+        "unparseable_rate": 0.0,
+        "accuracy_by_steps": {
+          "0": [
+            0.2778,
+            18
+          ],
+          "1": [
+            0.4,
+            65
+          ],
+          "2": [
+            0.6583,
+            357
+          ],
+          "3": [
+            0.489,
+            364
+          ],
+          "4": [
+            0.3138,
+            290
+          ],
+          "5": [
+            0.1377,
+            138
+          ],
+          "6": [
+            0.069,
+            87
+          ]
+        }
+      },
+      "gap_by_steps": {
+        "1": 0.4732,
+        "2": 0.213,
+        "3": 0.3088,
+        "4": 0.3911,
+        "5": 0.2282,
+        "6": 0.181
+      },
+      "seen_split_note": "repo split='validation' = 1000 fixed items of GSM8K-Aug train, all in CODI's training data"
+    }
+  },
+  "hyperparams": {
+    "latent_count": 6,
+    "batch_size": 1,
+    "greedy": true,
+    "masking": "upstream (no padding at batch 1)",
+    "device": "mps"
+  },
+  "seed": null,
+  "hardware": "MacBook-AppleSilicon / mps",
+  "author": "Henning Lindig",
+  "notes": "Released GSM8K CODI: accuracy on seen train items vs test (memorisation check).",
+  "timestamp_utc": "2026-11-03T00:19:45.995639+00:00",
+  "git": {
+    "commit": "7e7bf54",
+    "dirty": true
+  }
+}
