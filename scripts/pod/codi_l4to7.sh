@@ -6,6 +6,9 @@
 #   bash scripts/pod/codi_l4to7.sh setup              # CODI @ 2c23146 + patches, data hash check
 #   bash scripts/pod/codi_l4to7.sh timing             # 100 steps each of CODI (6 latents) and CODI-0; s/step, memory
 #   bash scripts/pod/codi_l4to7.sh train codi|codi0   # full run
+# Other level mixes (e.g. levels 1-7 with 4-7 up-weighted): override DATA, HASH_FILE, NAME (run prefix) and EPOCHS, e.g.
+#   DATA=/workspace/synthetic_data_v2_l1to7w HASH_FILE=$REPO/configs/synthetic/v2_l1to7w_data_sha256.json \
+#   NAME=gpt2_l1to7w EPOCHS=12 bash scripts/pod/codi_l4to7.sh train codi
 set -euo pipefail
 REPO=${REPO:-/workspace/ai-capstone}
 CODI_DIR=${CODI_DIR:-/workspace/codi}
@@ -13,12 +16,14 @@ DATA=${DATA:-/workspace/synthetic_data_v2_l4to7}
 RUNS=${RUNS:-/workspace/codi_runs}
 LOGS=${LOGS:-/workspace/logs}
 EPOCHS=${EPOCHS:-4}
+HASH_FILE=${HASH_FILE:-$REPO/configs/synthetic/v2_l4to7_data_sha256.json}
+NAME=${NAME:-gpt2_l4to7}
 export PATH="$HOME/.local/bin:$PATH"
 mkdir -p "$RUNS" "$LOGS"
 
 common_env() {
   export TASK=depth2 INCLUDE_LAST_COT=False SAVE_DIR=$RUNS CODI_SYNTHETIC_DATA_DIR=$DATA CODI_DIR REPO \
-         HASH_FILE=$REPO/configs/synthetic/v2_l4to7_data_sha256.json
+         HASH_FILE
 }
 
 case "${1:?setup|timing|train}" in
@@ -30,12 +35,12 @@ case "${1:?setup|timing|train}" in
       else echo "skip $p (already applied?)"; fi
     done
     .venv/bin/python -c "import torch; print('cuda', torch.cuda.is_available(), torch.cuda.get_device_name(0), torch.__version__)"
-    HASH_FILE=$REPO/configs/synthetic/v2_l4to7_data_sha256.json python3 "$REPO/scripts/check_data_hashes.py" "$DATA" depth2
+    HASH_FILE=$HASH_FILE python3 "$REPO/scripts/check_data_hashes.py" "$DATA" depth2
     ;;
   timing)
     common_env
     for nl in 6 0; do
-      name=gpt2_l4to7_timing_nl${nl}_smoke
+      name=${NAME}_timing_nl${nl}_smoke
       NUM_LATENT=$nl EXP_NAME=$name EXTRA_ARGS="--max_steps 100 --save_strategy no --num_train_epochs $EPOCHS" \
         bash "$REPO/configs/synthetic/train_gpt2_depth_codi.sh" > "$LOGS/$name.log" 2>&1 &
       pid=$!
@@ -53,7 +58,7 @@ case "${1:?setup|timing|train}" in
     common_env
     kind=${2:?codi|codi0}
     nl=6; [ "$kind" = codi0 ] && nl=0
-    NUM_LATENT=$nl EXP_NAME=gpt2_l4to7_${kind} EXTRA_ARGS="--num_train_epochs $EPOCHS --save_total_limit $EPOCHS" \
-      bash "$REPO/configs/synthetic/train_gpt2_depth_codi.sh" > "$LOGS/gpt2_l4to7_${kind}.log" 2>&1
+    NUM_LATENT=$nl EXP_NAME=${NAME}_${kind} EXTRA_ARGS="--num_train_epochs $EPOCHS --save_total_limit $EPOCHS" \
+      bash "$REPO/configs/synthetic/train_gpt2_depth_codi.sh" > "$LOGS/${NAME}_${kind}.log" 2>&1
     ;;
 esac

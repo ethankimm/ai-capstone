@@ -26,6 +26,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--levels", default="4-7")
     ap.add_argument("--train-total", type=int, default=200_000)
+    ap.add_argument("--train-per-level", default=None,
+                    help='per-level train counts overriding --train-total, e.g. "1:10000,2:10000,4:40000"')
     ap.add_argument("--valid-total", type=int, default=2_000)
     ap.add_argument("--out", required=True)
     ap.add_argument("--canonical", default=None, help="canonical synthetic_data_v2 root, to verify the test split")
@@ -33,8 +35,15 @@ def main() -> None:
     a = ap.parse_args()
     lo, hi = map(int, a.levels.split("-"))
     levels = list(range(lo, hi + 1))
+    quota = None
+    if a.train_per_level:
+        quota = {int(k): int(v) for k, v in (kv.split(":") for kv in a.train_per_level.split(","))}
+        assert sorted(quota) == levels, f"--train-per-level must cover exactly levels {levels}"
+        a.train_total = sum(quota.values())
     splits, stats = build_task("depth2", seed=DEFAULT_SEED, train_total=a.train_total, valid_total=a.valid_total,
-                               test_per_level=500, levels=levels)
+                               test_per_level=500, levels=levels, train_quota=quota)
+    if quota:
+        stats["train_per_level"] = quota
     d = Path(a.out).expanduser() / "depth2"
     d.mkdir(parents=True, exist_ok=True)
     sha = {}
@@ -59,7 +68,8 @@ def main() -> None:
     hf = Path(a.hash_file) if a.hash_file else \
         Path(__file__).resolve().parents[1] / f"configs/synthetic/v2_l{lo}to{hi}_data_sha256.json"
     hf.write_text(json.dumps({"_note": f"sha256 of RuleChain (depth2) restricted to levels {lo}-{hi}, generator "
-                              f"{stats['generator_version']}, seed {DEFAULT_SEED}, train_total {a.train_total}, made by "
+                              f"{stats['generator_version']}, seed {DEFAULT_SEED}, train_total {a.train_total}"
+                              f"{', train_per_level ' + a.train_per_level if a.train_per_level else ''}, made by "
                               "scripts/make_rulechain_levels.py. Use with HASH_FILE=<this> "
                               "scripts/check_data_hashes.py.", "files": sha}, indent=1) + "\n")
     print(f"hashes -> {hf}")

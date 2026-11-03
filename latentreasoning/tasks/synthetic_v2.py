@@ -468,14 +468,18 @@ def build_task(
     test_per_level: int = 500,
     monitor_per_level: int = 30,
     levels: list[int] | None = None,
+    train_quota: dict[int, int] | None = None,
 ) -> tuple[dict[str, list[dict]], dict]:
     """Return ({split: records}, stats). Pure function of its arguments.
+
+    `train_quota` ({level: n}) overrides the even split of `train_total` (for up-weighting levels). Test and valid are
+    drawn before train from each level's own RNG stream, so they do not depend on the train quota.
 
     Every level is sampled (the content spaces are far larger than the quotas); the splits
     are made disjoint by rejecting canonical keys already drawn (test, then valid, then train).
     """
     levels = levels or TASK_LEVELS[task]
-    train_q = _split_quota(train_total, levels)
+    train_q = dict(train_quota) if train_quota else _split_quota(train_total, levels)
     valid_q = _split_quota(valid_total, levels)
     splits: dict[str, list[dict]] = {"train": [], "valid": [], "valid_monitor": [], "test": []}
     level_stats: dict[str, dict] = {}

@@ -1,0 +1,9 @@
+{
+ "_note": "sha256 of RuleChain (depth2) restricted to levels 1-7, generator 2.0.0, seed 5980, train_total 190000, train_per_level 1:10000,2:10000,3:10000,4:40000,5:40000,6:40000,7:40000, made by scripts/make_rulechain_levels.py. Use with HASH_FILE=<this> scripts/check_data_hashes.py.",
+ "files": {
+  "depth2/train.json": "2e83939d68d2bb337cb568d857cf65747a9a146f01bb160aef54a4b51427beb8",
+  "depth2/valid.json": "c6d501ffe133a997458093eb5656a6aa4fe7499c18c66090557d15dc56592b84",
+  "depth2/valid_monitor.json": "b4a1792265abb242193391364a35b415e91ec9d5d63c74d852ba19a176c88a2a",
+  "depth2/test.json": "67690675996913d0fc809ae49ae43f3878994d880a75e0e12f2113651f7860ee"
+ }
+}
