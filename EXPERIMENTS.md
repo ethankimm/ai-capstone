@@ -10042,3 +10042,33 @@ absolute position >= `ans_start`. For CODI that is every row, so behaviour there
 **Gotchas hit:** The GPU 4 queue script was replaced mid-run (13:07 PT, to insert the 2x3 arm ahead of 1x6); the training process was not touched, only the waiting queue, and the new queue did this run's select + test unchanged.
 **Caveats:** One seed (0). Under-trained flag: valid mean 0.214 -> 0.216 -> 0.223 over the last 3 final-stage checkpoints, still rising -> **label under-trained** (protocol rule), though the monitor is flat (0.175-0.208) over the final stage. Trained on k <= 8 only, so not comparable to round-1 models at k > 8; test is L1-8 only.
 **Next:** Paired G(k) for pilot_k8_coconut_c2m6 (GPU 7, ETA ~2:30 AM PT Tue) and pilot_k8_coconut_c1m6 (GPU 4, ETA ~3 AM PT Tue) against this run.
+
+---
+
+## 2026-11-02 — RuleChain k<=8 pilot: no_thoughts reference for the 2x3 arm (M 3), test L1-8 0.184, d50 1.80 (baseline_no_cot, run_id: 20261102-222423_baseline_no_cot_v2-depth2-pilot_k8_no_thoughts_m3)
+
+**Goal:** Matched reference for `pilot_k8_coconut_c2m3` (Coconut's published GSM8K recipe, 2 latents x 3 replaced steps; PILOT_K8.md). Same data (depth2_k8: 25k train items, k = 1-8), CoT init (gpt2_depth2_cot/checkpoint_3), curriculum (3 epochs per stage, stages 1-3 drop the first s written steps with nothing in their place, then 5 final epochs question -> `### N`), seed and selection rule, minus the latents. Its own run because the curriculum depends on M.
+**Mechanism / model:** `baseline_no_cot`, openai-community/gpt2 / /local-ssd/ktn48/lrm_work/coconut_runs/pilot_k8_no_thoughts_m3/checkpoint_16, compute_steps=-.
+**Data:** synthetic-depth2 test n=4000 seed=None; run seed=0.
+**Hyperparams:** {'method': 'no_thoughts', 'trainer': 'facebookresearch/coconut run.py @27273cb', 'config_path': '/local-ssd/ktn48/lrm_work/logs/configs/pilot_k8_no_thoughts_m3.yaml', 'max_new_tokens': 16, 'batch_size': 64, 'test_json': '/local-ssd/ktn48/lrm_work/synthetic_data_v2/depth2_k8/test.json', 'decoding': 'greedy', 'train_config': {'project': 'coconut', 'save_path': '/local-ssd/ktn48/lrm_work/coconut_runs', 'name': 'pilot_k8_no_thoughts_m3', 'only_eval': False, 'coconut': False, 'cot': False, 'no_thoughts': True, 'no_cot': False, 'c_thought': 1, 'epochs_per_stage': 3, 'max_latent_stage': 3, 'pad_latent_to_max': True, 'save_only_improve': False, 'uniform_prob': 0.0, 'model_id': 'openai-community/gpt2', 'load_model_path': '/local-ssd/ktn48/lrm_work/coconut_runs/gpt2_depth2_cot/checkpoint_3', 'seed': 0, 'resume': 3, 'bf16': False, 'train_path': '/local-ssd/ktn48/lrm_work/synthetic_data_v2/depth2_k8/train.json', 'val_path': '/local-ssd/ktn48/lrm_work/synthetic_data_v2/depth2_k8/valid_monitor.json', 'reset_optimizer': True, 'batch_size_training': 32, 'debug': False, 'gradient_accumulation_steps': 4, 'num_epochs': 17, 'lr': 0.0001, 'weight_decay': 0.01}}
+**Command:** GPU 4, cci-p124, queue `lrm_work/queue_pilot_k8_gpu4_v2.sh` (helpers `lrm_work/pilot_k8_lib.sh`): `run_pilot` launches via `scripts/pod/coconut_v2.sh` with `MICRO_BS=32` and the config below, then select (`FINAL_STAGE_CKPTS="15 16 17"`, `VALID_JSON=$DATA/depth2_k8/valid.json`) and one test (`TEST_JSON=$DATA/depth2_k8/test.json`); see eval_command.txt. Config `configs/synthetic/pilot_k8_no_thoughts_m3.yaml`. Trained 13:50-14:23 PT 2026-11-02.
+**Headline results:** `final_answer_accuracy=0.184`, `unparseable_rate=0.000`, d50 (halfway midpoint) = 1.80. Per level (test, n=500 each, L1-8): 0.974 / 0.258 / 0.086 / 0.034 / 0.038 / 0.048 / 0.008 / 0.028. Selection on depth2_k8/valid.json (mean over L1-8): checkpoint_15 0.177, **checkpoint_16 0.179** (selected), checkpoint_17 0.178. Monitor (240, each epoch in its stage's format), by stage: 1: 0.200 / 0.892 / 0.996; 2: 0.188 / 0.263 / 0.338; 3: 0.175 / 0.208 / 0.204; final: 0.196 / 0.200 / 0.175 / 0.179 / 0.196.
+**Interpretation:** Below the M 6 reference (`pilot_k8_no_thoughts_m6`, 0.216) on the same items: paired overall -0.032 (p 1e-10), L2 **-0.172** (p 6e-13). With M 3 the final stage drops steps 4-8 all at once after only 3 curriculum stages, and the model has 9 fewer epochs of step-by-step weaning; direct answering at L2 suffers. This is the reference the 2x3 arm is judged against, so the gap does not bias that gain, but it means the M 3 and M 6 arms sit on different baselines.
+**Gotchas hit:** none. Selection rule (best mean on valid, ties -> later) picked checkpoint_16 over 17 by 0.0008.
+**Caveats:** One seed (0). Under-trained flag: valid 0.177 -> 0.179 -> 0.178, not rising between the last two -> not flagged. Trained and tested on k <= 8 only.
+**Next:** Paired G(k) for `pilot_k8_coconut_c2m3` against this run (20261103-033009).
+
+---
+
+## 2026-11-03 — TODO short title (coconut, run_id: 20261103-033009_coconut_v2-depth2-pilot_k8_coconut_c2m3)
+
+**Goal:** TODO what question this run was trying to answer.
+**Mechanism / model:** `coconut`, openai-community/gpt2 / /local-ssd/ktn48/lrm_work/coconut_runs/pilot_k8_coconut_c2m3/checkpoint_17, compute_steps=6.
+**Data:** synthetic-depth2 test n=4000 seed=None; run seed=0.
+**Hyperparams:** {'method': 'coconut', 'trainer': 'facebookresearch/coconut run.py @27273cb', 'config_path': '/local-ssd/ktn48/lrm_work/logs/configs/pilot_k8_coconut_c2m3.yaml', 'max_new_tokens': 16, 'batch_size': 64, 'test_json': '/local-ssd/ktn48/lrm_work/synthetic_data_v2/depth2_k8/test.json', 'decoding': 'greedy', 'train_config': {'project': 'coconut', 'save_path': '/local-ssd/ktn48/lrm_work/coconut_runs', 'name': 'pilot_k8_coconut_c2m3', 'only_eval': False, 'coconut': True, 'cot': False, 'no_thoughts': False, 'no_cot': False, 'c_thought': 2, 'epochs_per_stage': 3, 'max_latent_stage': 3, 'pad_latent_to_max': True, 'save_only_improve': False, 'uniform_prob': 0.0, 'model_id': 'openai-community/gpt2', 'load_model_path': '/local-ssd/ktn48/lrm_work/coconut_runs/gpt2_depth2_cot/checkpoint_3', 'seed': 0, 'resume': 3, 'bf16': False, 'train_path': '/local-ssd/ktn48/lrm_work/synthetic_data_v2/depth2_k8/train.json', 'val_path': '/local-ssd/ktn48/lrm_work/synthetic_data_v2/depth2_k8/valid_monitor.json', 'reset_optimizer': True, 'batch_size_training': 32, 'debug': False, 'gradient_accumulation_steps': 4, 'num_epochs': 17, 'lr': 0.0001, 'weight_decay': 0.01}}
+**Command:** TODO
+**Headline results:** `final_answer_accuracy=0.180`, `unparseable_rate=0.000`, `compute_steps=6`
+**Interpretation:** TODO
+**Gotchas hit:** TODO / none
+**Caveats:** TODO
+**Next:** TODO
