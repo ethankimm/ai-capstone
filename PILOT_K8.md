@@ -52,6 +52,16 @@ Configs in `configs/synthetic/`. Queues: `lrm_work/queue_pilot_k8_gpu7.sh`, `lrm
 `lrm_work/logs/queue_pilot_k8.log`. Expected finish (PT): `no_thoughts_m6` ~14:05, `no_thoughts_m3` ~14:50, `c2m3`
 ~19:30, `c2m6` ~01:00 Tue, `c1m6` ~02:15 Tue.
 
+## Results so far
+
+- **`pilot_k8_coconut_c2m3` (published GSM8K recipe, 6 latents): null.** Test L1-8 0.180 vs `pilot_k8_no_thoughts_m3`
+  0.184. Paired G: overall −0.004 [−0.013, +0.005]; **L4-6 −0.002 [−0.015, +0.011] (p 0.84)**; L1-3 −0.018 (p 0.07); L7-8
+  +0.013 (p 0.06); no level survives Holm. d50 1.71 vs 1.80. Run records `20261103-033009_…c2m3`,
+  `20261102-222423_…no_thoughts_m3`.
+- `pilot_k8_no_thoughts_m6`: test 0.216, d50 1.90 (`20261102-215045_…`). The M 3 reference is below it (L2 −0.172), so the
+  M 3 and M 6 arms sit on different baselines; each is judged only against its own.
+- Pending: `c2m6` (GPU 7), `c1m6` (GPU 4).
+
 ## What counts as a result
 
 - **Positive:** a Coconut arm above its matched `no_thoughts` (`_m3` or `_m6`) by a paired test at L4-6 (above single-pass reach for this
