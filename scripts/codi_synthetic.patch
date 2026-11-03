@@ -6,8 +6,8 @@ index 456f281..12c6774 100644
              for k, v in logs.items():
                  super().log({k: v})
  
-+# ai-capstone synthetic tasks (v1: depth, width; v2: depth2, modal, paircount, distinct)
-+SYNTHETIC_TASKS = ("depth", "width", "depth2", "modal", "paircount", "distinct")
++# ai-capstone synthetic tasks (v1: depth, width; v2: depth2, modal, paircount, distinct; gsm8k_aug: GSM8K-Aug in the v2 schema)
++SYNTHETIC_TASKS = ("depth", "width", "depth2", "modal", "paircount", "distinct", "gsm8k_aug")
 +
  def _tokenize_fn(strings: Sequence[str], tokenizer: transformers.PreTrainedTokenizer) -> Dict:
      """Tokenize a list of strings."""
