@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import sys
 from dataclasses import dataclass
@@ -52,7 +53,8 @@ class SyntheticSet:
         return SyntheticSet(self.path, self.rows[:n], self.examples[:n])
 
 
-_HASH_REGISTRY = REPO_ROOT / "configs/synthetic/v2_data_sha256.json"
+_HASH_REGISTRY = Path(os.environ["HASH_FILE"]) if os.environ.get("HASH_FILE") \
+    else REPO_ROOT / "configs/synthetic/v2_data_sha256.json"  # HASH_FILE: another registry, e.g. v2_l4to7_data_sha256.json
 
 
 def assert_known_hash(path: str | Path) -> str | None:

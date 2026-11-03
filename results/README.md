@@ -197,3 +197,5 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261103-021023_codi_prosqa-released-lens-collapse](20261103-021023_codi_prosqa-released-lens-collapse/) | codi | gpt2 | test (n=500) | 6 | 0.816 | None | full_run | Henning Lindig |
 | [20261103-021408_codi_prontoqa-released-lens-collapse](20261103-021408_codi_prontoqa-released-lens-collapse/) | codi | gpt2 | test (n=800) | 6 | 0.953 | None | full_run | Henning Lindig |
 | [20261103-063912_codi_v2-depth2-codi0-branch-probes](20261103-063912_codi_v2-depth2-codi0-branch-probes/) | codi | gpt2 | test (n=4000) | 0 | 0.584 | 0 | full_run | Henning Lindig |
+| [20261103-074957_codi_v2-l4to7-depth2-codi0](20261103-074957_codi_v2-l4to7-depth2-codi0/) | codi | gpt2 | test (n=2000) | 0 | 0.043 | 11 | full_run | Henning Lindig |
+| [20261103-074958_codi_v2-l4to7-depth2-codi](20261103-074958_codi_v2-l4to7-depth2-codi/) | codi | gpt2 | test (n=2000) | 6 | 0.071 | 11 | full_run | Henning Lindig |
