@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """Verify the registered synthetic v2 data files (configs/synthetic/v2_data_sha256.json) under a data root.
   python scripts/check_data_hashes.py /workspace/synthetic_data_v2 [depth2 modal]
-Exit 0 only if every registered file for the requested tasks exists and matches. Run at the start of every pod job."""
+Exit 0 only if every registered file for the requested tasks exists and matches. Run at the start of every pod job.
+HASH_FILE=<json> checks another registry (e.g. configs/synthetic/v2_l4to7_data_sha256.json)."""
 import hashlib
+import os
 import json
 import sys
 from pathlib import Path
 
 root = Path(sys.argv[1])
 tasks = set(sys.argv[2:])
-reg = json.loads((Path(__file__).resolve().parents[1] / "configs/synthetic/v2_data_sha256.json").read_text())["files"]
+reg_file = os.environ.get("HASH_FILE") or Path(__file__).resolve().parents[1] / "configs/synthetic/v2_data_sha256.json"
+reg = json.loads(Path(reg_file).read_text())["files"]
 bad = 0
 for key, want in sorted(reg.items()):
     if tasks and key.split("/")[0] not in tasks:
