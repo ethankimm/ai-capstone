@@ -10060,3 +10060,33 @@ of the whole pass, not just of the projection.
 **Gotchas hit:** First full run crashed after the seen split on a gold answer "$165" (float parse); gold now parsed with the same last-number rule as predictions.
 **Caveats:** **Distribution shift is not controlled:** GSM8K-Aug train is model-generated augmentation of GSM8K train, test is the original GSM8K test, so part of the gap may be that train items are easier, not memorised. Step-count stratification controls only length. No held-out item from the train distribution exists for this model (it trained on all of train). One released checkpoint.
 **Next:** To separate memorisation from shift on GSM8K, a CODI(-0) trained with the 1000-item carve-out held out would give a same-distribution unseen set (the GSM8K CODI-0 run could do this for free by training on `split="train"`). For RuleChain: the collapse-over-epochs check (needs Kevin's 40 epoch checkpoints) and the combined retrain (lr 1e-3, fresh data, levels 1-6).
+
+---
+
+## 2026-11-03 — Released ProsQA CODI: latents are one constant vector for every item and position (98.7-99.9% of energy shared, raw cross-item cos >= 0.995); 0 latents = 6 latents (0.820 vs 0.816) (codi, run_id: 20261103-021023_codi_prosqa-released-lens-collapse)
+
+**Goal:** Kevin's question after the RuleChain collapse finding: do CODI latents also collapse on ProsQA/ProntoQA, where our Zhang swap (`20261011-062104`) showed the latents are ignored? Hypothesis: unneeded latents -> the recurrently fed state barely changes. Same collapse statistics as the GSM8K (`20261102-235641`, not collapsed) and RuleChain (`20261102-233815` + addendum, collapsed within item) runs, plus a variance decomposition and 0-latent truncation. ProntoQA counterpart: `20261103-021408_codi_prontoqa-released-lens-collapse`.
+**Mechanism / model:** `codi`, `connordilgren/gpt2-prosqa-codi` (Dilgren & Wiegreffe grid, GPT-2, 6 latents, projection + LN, LoRA r128), loaded with the grid's `CODIInference`.
+**Data:** Dilgren & Wiegreffe `prosqa_test.json`, all 500, file order.
+**Hyperparams:** batch 1 (no padding), fp32, CPU, greedy, max 48 new tokens; answer = text after "The answer is:", exact match (same as `swap_random_codi.py`). 0-latent condition = question + <bot> + <eot> (off-distribution). Lens = ln_f + tied unembedding. New: decomposition of the uncentred energy ||X||^2 at each layer into constant (grand mean) / position / item / item x position.
+**Command:** `scripts/logic_codi_lens_collapse.py --dataset prosqa`, see `eval_command.txt` (codi venv: torch 2.7.1, transformers 4.52.4, peft 0.15.2).
+**Headline results:** accuracy 0.816 (matches our Oct 11 run and D&W's 80.0); **0 latents 0.820**. Raw within-item cos 0.999-1.000 and **raw cross-item cos 0.995-1.000** at every layer. Energy share, layer 12: constant **0.987**, item 0.012, position 0.001, item x position 0.0001 (layer 6: constant 0.9985). Logit lens: top-1 is ' truth' (layer 0) / '.' (layer 12) for every item; step-word and question-word hits 0.000 at every layer and position.
+**Interpretation:** The collapse here is stronger than on RuleChain: not one vector per item but **one vector for all items**, i.e. a learned constant "thinking" embedding that carries (almost) no input information. Together with 0 latents = 6 latents and the 0% swap effect, the latents are inert padding on ProsQA, consistent with D&W's latent = no-CoT parity. Supports Kevin's hypothesis that unneeded latents stop changing. Three regimes now: GSM8K (latents needed, distinct, stepwise content), RuleChain (needed but collapsed to one item-specific vector, opaque), ProsQA/ProntoQA (not needed, collapsed to a global constant). The cheap diagnostic should report both within-item and cross-item similarity (or the decomposition) to tell the last two apart.
+**Gotchas hit:** The centred statistics (centred within-item cos 0.48-0.94, "share of variance between positions" 0.03-0.40) look moderate but describe a residual that is ~1% of the energy; read them with the decomposition. The centred position drift is smooth (cos decays with distance), shared by all items.
+**Caveats:** One released checkpoint per task. Lens-based word matching only sees unembedding-aligned content (and ProsQA concept names are multi-token; first-token match). The 1.2% item energy at layer 12 may still carry something a probe could read; not probed. 0-latent condition is off-distribution.
+**Next:** Same check on the grid Coconut ProsQA/ProntoQA checkpoints and on Kevin's RuleChain Coconut pilots; add the decomposition to the RuleChain/GSM8K numbers for one comparable table.
+
+---
+
+## 2026-11-03 — Released ProntoQA CODI: latents are one constant vector for every item and position (99.3-99.9% of energy shared, raw cross-item cos 1.000); 0 latents = 6 latents (0.946 vs 0.953) (codi, run_id: 20261103-021408_codi_prontoqa-released-lens-collapse)
+
+**Goal:** ProntoQA half of the logic-task collapse check; full story in `20261103-021023_codi_prosqa-released-lens-collapse`.
+**Mechanism / model:** `codi`, `connordilgren/gpt2-prontoqa-codi`, grid `CODIInference`, 6 latents.
+**Data:** D&W `prontoqa_test.json`, all 800.
+**Hyperparams:** identical to the ProsQA run.
+**Command:** `scripts/logic_codi_lens_collapse.py --dataset prontoqa`, see `eval_command.txt`.
+**Headline results:** accuracy 0.953 (D&W 94.8; our Oct 11 run 0.953); **0 latents 0.946**. Raw within-item cos 0.998-0.999, **raw cross-item cos 1.000** at every layer. Energy share: constant 0.9925-0.9989 at every layer (layer 12: 0.997, item 0.002, position 0.0005). Logit lens: 'ito' (layer 0) / ',' (layer 12) for every item; step-word hits 0.000.
+**Interpretation:** Same as ProsQA: a global constant latent, inert (0 latents and random swap change nothing). Strongest collapse of the four settings checked.
+**Gotchas hit:** Centred "share of variance between positions" is 0.91-0.95 here, which would look un-collapsed on its own; it is a fraction of a residual that is ~0.1-0.7% of the energy. Use the decomposition.
+**Caveats:** As ProsQA. ProntoQA answers are binary, so accuracy differences are coarse.
+**Next:** see the ProsQA run.
