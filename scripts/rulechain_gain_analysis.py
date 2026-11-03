@@ -17,6 +17,12 @@ What it computes
   * Health check: each matched reference vs the envelope, per level.
 
 Usage: uv run python scripts/rulechain_gain_analysis.py [--boot 2000] [--json out.json] [--md out.md]
+       uv run python scripts/rulechain_gain_analysis.py --pilot [--boot 2000] [--json ...] [--md ...]
+
+--pilot: the k <= 8 pilot (PILOT_K8.md), levels 1-8: each Coconut arm vs its matched no_thoughts (c2m3 vs no_thoughts_m3,
+c2m6 and c1m6 vs no_thoughts_m6) and the arm-vs-arm contrasts c2m3 - c1m6 and c2m6 - c1m6. Same per-level paired tests,
+Holm, normalized gain, pooled bands (L1-3, L4-6, L7-8) and paired d50 bootstrap; no envelope (all pilot references are
+from one stack).
 """
 from __future__ import annotations
 
@@ -130,7 +136,10 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=5980)
     ap.add_argument("--json")
     ap.add_argument("--md")
+    ap.add_argument("--pilot", action="store_true", help="k <= 8 pilot runs (PILOT_K8.md)")
     args = ap.parse_args()
+    if args.pilot:
+        return pilot_main(args)
     rng = np.random.default_rng(args.seed)
 
     test, unparse = {}, {}
@@ -275,6 +284,80 @@ def render(out, acc, valid) -> str:
     L.append("\n## Unparseable rate (test)\n")
     L.append(" · ".join(f"{k} {v:.3f}" for k, v in out["unparseable_rate"].items()))
     return "\n".join(L) + "\n"
+
+
+# ------------------------------------------------------------------------------------------------ pilot (PILOT_K8.md)
+PILOT_RUNS = {
+    "no_thoughts_m6": "20261102-215045_baseline_no_cot_v2-depth2-pilot_k8_no_thoughts_m6",
+    "no_thoughts_m3": "20261102-222423_baseline_no_cot_v2-depth2-pilot_k8_no_thoughts_m3",
+    "c2m3": "20261103-033009_coconut_v2-depth2-pilot_k8_coconut_c2m3",
+    "c2m6": "20261103-110209_coconut_v2-depth2-pilot_k8_coconut_c2m6",
+    "c1m6": "20261103-105353_coconut_v2-depth2-pilot_k8_coconut_c1m6",
+}
+PILOT_PAIRS = [("c2m3", "no_thoughts_m3"), ("c2m6", "no_thoughts_m6"), ("c1m6", "no_thoughts_m6"),
+               ("c2m3", "c1m6"), ("c2m6", "c1m6")]
+PILOT_BANDS = {"all": list(range(1, 9)), "L1-3": [1, 2, 3], "L4-6": [4, 5, 6], "L7-8": [7, 8]}
+
+
+def pilot_main(args) -> None:
+    global LEVELS, RUNS
+    LEVELS, RUNS = list(range(1, 9)), PILOT_RUNS
+    rng = np.random.default_rng(args.seed)
+    test, unparse, ref_ids = {}, {}, None
+    for name in RUNS:
+        corr, ids, up = load_test(name)
+        ref_ids = ids if ref_ids is None else ref_ids
+        assert (ids == ref_ids).all(), f"{name}: item ids differ"
+        test[name], unparse[name] = corr, up
+    n_item = next(iter(test.values())).shape[1]
+    n_lvl = np.full(len(LEVELS), n_item)
+    B = args.boot
+    idx = rng.integers(0, n_item, size=(B, len(LEVELS), n_item))
+    bacc = {k: np.take_along_axis(v[None].repeat(B, 0), idx, axis=2).mean(2) for k, v in test.items()}
+    bd50 = {k: np.array([d50(bacc[k][i], n_lvl) for i in range(B)]) for k in RUNS}
+    d50s = {k: {"d50": d50(test[k].mean(1), n_lvl), "ci95": pct_ci(bd50[k]),
+                "boot_undefined_frac": float(np.isnan(bd50[k]).mean())} for k in RUNS}
+    gains = {}
+    for lat, ref in PILOT_PAIRS:
+        rows = []
+        for li, k in enumerate(LEVELS):
+            t = paired_table(test[lat][li], test[ref][li])
+            bg = (bacc[lat][:, li] - bacc[ref][:, li]) / np.where(bacc[ref][:, li] < 1, 1 - bacc[ref][:, li], np.nan)
+            t.update(level=k, norm_gain=norm_gain(test[lat][li], test[ref][li]), norm_gain_ci95=pct_ci(bg))
+            rows.append(t)
+        for r, pv in zip(rows, holm([r["mcnemar_p"] for r in rows])):
+            r["mcnemar_p_holm"] = pv
+        pooled = {b: paired_table(test[lat][[k - 1 for k in lv]].ravel(), test[ref][[k - 1 for k in lv]].ravel())
+                  for b, lv in PILOT_BANDS.items()}
+        gains[f"{lat}-{ref}"] = {"per_level": rows, "pooled": pooled, "d50_diff": d50s[lat]["d50"] - d50s[ref]["d50"],
+                                 "d50_diff_ci95": pct_ci(bd50[lat] - bd50[ref])}
+    out = {"boot": B, "seed": args.seed, "runs": RUNS, "unparseable_rate": unparse, "d50": d50s, "gains": gains}
+    if args.json:
+        Path(args.json).write_text(json.dumps(out, indent=1))
+    L = [f"# RuleChain k <= 8 pilot: paired gain analysis\n\nPILOT_K8.md. Bootstrap B = {B} (seed {args.seed}), items "
+         "resampled within level, shared across models. Test L1-8, 500 items per level. G = first − second.\n",
+         "## d50 with 95% bootstrap CI\n", "| Run | d50 | 95% CI |\n|---|---|---|"]
+    L += [f"| {k} | {v['d50']:.2f} | [{v['ci95'][0]:.2f}, {v['ci95'][1]:.2f}] |" for k, v in d50s.items()]
+    L.append("\n## Per-level accuracy (test)\n")
+    L.append("| Run | " + " | ".join(f"L{k}" for k in LEVELS) + " | all |\n|---|" + "---|" * (len(LEVELS) + 1))
+    L += [f"| {k} | " + " | ".join(f"{a:.3f}" for a in v.mean(1)) + f" | {v.mean():.3f} |" for k, v in test.items()]
+    for label, g in gains.items():
+        L.append(f"\n## {label}\n\nd50 difference {g['d50_diff']:+.2f}, 95% CI {ci(g['d50_diff_ci95'])}.\n")
+        L.append("| Level | first | second | G | 95% CI (Newcombe) | first-only / second-only | McNemar p | Holm p | "
+                 "norm. gain | 95% CI |\n|---|---|---|---|---|---|---|---|---|---|")
+        for r in g["per_level"]:
+            L.append(f"| {r['level']} | {r['acc_latent']:.3f} | {r['acc_ref']:.3f} | {f3(r['G'])} | {ci(r['G_ci95'])} | "
+                     f"{r['latent_only']} / {r['ref_only']} | {pfmt(r['mcnemar_p'])} | {pfmt(r['mcnemar_p_holm'])} | "
+                     f"{f3(r['norm_gain'])} | {ci(r['norm_gain_ci95'])} |")
+        L.append("\n| Pooled | n | G | 95% CI | first-only / second-only | McNemar p |\n|---|---|---|---|---|---|")
+        for b, r in g["pooled"].items():
+            L.append(f"| {b} | {r['n']} | {f3(r['G'])} | {ci(r['G_ci95'])} | {r['latent_only']} / {r['ref_only']} | "
+                     f"{pfmt(r['mcnemar_p'])} |")
+    L.append("\n## Unparseable rate (test)\n\n" + " · ".join(f"{k} {v:.3f}" for k, v in unparse.items()))
+    md = "\n".join(L) + "\n"
+    if args.md:
+        Path(args.md).write_text(md)
+    print(md)
 
 
 if __name__ == "__main__":

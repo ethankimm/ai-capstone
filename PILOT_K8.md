@@ -1,6 +1,7 @@
 # Pilot: can Coconut learn to use its latents on RuleChain? (k ≤ 8, longer schedule, GSM8K-style latents)
 
-Status: **running**, launched 2026-11-02 12:57 PT on cci-p124, GPUs 4 and 7. Branch `kevin/lrm-training-2`.
+Status: **done** (2026-11-03 03:02 PT). **Verdict: null — no Coconut arm beats its matched no-latent reference at L4-6.**
+Ran 2026-11-02 12:57 PT to 2026-11-03 03:02 PT on cci-p124, GPUs 4 and 7. Branch `kevin/lrm-training-2`.
 
 ## Why
 
@@ -52,15 +53,49 @@ Configs in `configs/synthetic/`. Queues: `lrm_work/queue_pilot_k8_gpu7.sh`, `lrm
 `lrm_work/logs/queue_pilot_k8.log`. Expected finish (PT): `no_thoughts_m6` ~14:05, `no_thoughts_m3` ~14:50, `c2m3`
 ~19:30, `c2m6` ~01:00 Tue, `c1m6` ~02:15 Tue.
 
-## Results so far
+## Results
 
-- **`pilot_k8_coconut_c2m3` (published GSM8K recipe, 6 latents): null.** Test L1-8 0.180 vs `pilot_k8_no_thoughts_m3`
-  0.184. Paired G: overall −0.004 [−0.013, +0.005]; **L4-6 −0.002 [−0.015, +0.011] (p 0.84)**; L1-3 −0.018 (p 0.07); L7-8
-  +0.013 (p 0.06); no level survives Holm. d50 1.71 vs 1.80. Run records `20261103-033009_…c2m3`,
-  `20261102-222423_…no_thoughts_m3`.
-- `pilot_k8_no_thoughts_m6`: test 0.216, d50 1.90 (`20261102-215045_…`). The M 3 reference is below it (L2 −0.172), so the
-  M 3 and M 6 arms sit on different baselines; each is judged only against its own.
-- Pending: `c2m6` (GPU 7), `c1m6` (GPU 4).
+Paired tests on test L1-8 (500 items per level), exact McNemar, Newcombe CIs, Holm over 8 levels, 2,000 item bootstraps
+(`scripts/rulechain_gain_analysis.py --pilot`; full tables in `PILOT_K8_GAIN_ANALYSIS.md`). G = first − second.
+
+| Comparison | All L1-8 | L1-3 | **L4-6 (decision band)** | L7-8 | L2 (Holm p) | d50 diff |
+|---|---|---|---|---|---|---|
+| c2m3 − no_thoughts_m3 | −0.004 (p 0.39) | −0.018 (0.07) | **−0.002 [−0.015, +0.011] (0.84)** | +0.013 (0.06) | −0.036 (0.89) | −0.10 [−0.12, +0.07] |
+| c2m6 − no_thoughts_m6 | −0.021 (8e-6) | −0.052 (4e-8) | **−0.003 [−0.017, +0.010] (0.70)** | −0.002 (0.89) | **−0.126 (1.5e-7)** | −0.10 [−0.15, −0.05] |
+| c1m6 − no_thoughts_m6 | −0.026 (1e-7) | −0.063 (4e-11) | **−0.007 [−0.020, +0.007] (0.38)** | +0.002 (0.90) | **−0.170 (1.8e-13)** | −0.12 [−0.17, −0.07] |
+| c2m3 − c1m6 (both 6 latents) | −0.011 (0.02) | −0.025 (0.008) | −0.001 (0.92) | −0.003 (0.77) | −0.038 (0.63) | −0.08 |
+| c2m6 − c1m6 (same M) | +0.005 (0.35) | +0.011 (0.23) | +0.003 (0.69) | −0.004 (0.67) | +0.044 (0.36) | +0.02 |
+
+| Run | Test L1-8 | d50 [95% CI] | Run record |
+|---|---|---|---|
+| `pilot_k8_no_thoughts_m6` | 0.216 | 1.90 [1.86, 1.96] | `20261102-215045_…` |
+| `pilot_k8_no_thoughts_m3` | 0.184 | 1.80 [1.71, 1.81] | `20261102-222423_…` |
+| `pilot_k8_coconut_c2m3` | 0.180 | 1.71 [1.67, 1.80] | `20261103-033009_…` |
+| `pilot_k8_coconut_c2m6` | 0.195 | 1.81 [1.78, 1.84] | `20261103-110209_…` |
+| `pilot_k8_coconut_c1m6` | 0.191 | 1.79 [1.75, 1.82] | `20261103-105353_…` |
+
+Unparseable rate 0.000 for all. Every Coconut arm is flagged under-trained by the protocol rule (valid still rising between
+the last two checkpoints), though every monitor curve is flat over the final stage.
+
+### Verdict against the decision rules
+
+- **Positive: no.** No arm is above its matched reference at L4-6; all three L4-6 gains are within ±0.007 with CIs
+  inside ±0.02, against references at 0.03-0.06 (~95% headroom). Neither the published GSM8K recipe (2 × 3), nor 2
+  latents for every rule (2 × 6, double budget), nor round 1's layout on a 3× longer schedule (1 × 6) makes the latents
+  add accuracy above single-pass reach.
+- **Budget allocation (c2m3 vs c1m6): no difference at L4-6**; c2m3 is slightly lower at L1-3. **Width (c2m6 vs c1m6): no
+  difference.** **Schedule (pilot c1m6 vs round-1 c1m6, each vs its reference): no change** — round 1 L2 −0.136 / L1-3
+  −0.065, pilot L2 −0.170 / L1-3 −0.063.
+- **Null → next candidates** per this file: step-supervised latents (SIM-CoT-style) or the from-scratch regime.
+
+### The L2 deficit replicates
+
+With M = 6, Coconut is clearly below `no_thoughts` at L2 in all three independently trained models: round 1 c1m6 −0.136,
+pilot c1m6 −0.170, pilot c2m6 −0.126 (each Holm p < 1e-6). Each exceeds round-1 `no_thoughts`' seed-to-seed L2 swing
+(0.084). The M = 3 arm shows the same sign (−0.036), not significant, against a reference that is itself weak at L2.
+Training with latents costs direct-answer accuracy at k = 2 without the latents doing that computation. This is the
+round-1 L2 result that seed 2 was meant to check; it now holds across three models, two layouts and two schedules
+(still one seed each, and all share the CoT init).
 
 ## What counts as a result
 
