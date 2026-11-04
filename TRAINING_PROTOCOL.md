@@ -262,3 +262,58 @@ A raw Coconut-vs-CODI accuracy gap is description, not a finding.
 - **Sync each training machine** while it runs:
   `WATCH_LOGS="/workspace/logs/<run>.log" bash scripts/pod/sync_loop.sh <ip> <port>` (own folder per machine, alerts on
   crash, finish or 3 failed syncs). Do not delete a run's files until `pull_artifacts.sh` verifies.
+
+## 10. Amendment (2026-11-04): CODI stack on RuleChain L1-7w, stabilised optimizer
+
+Applies to every CODI-stack run on RuleChain from now on (CODI, CODI-0, and the planned SIM-CoT-decoder arm). The
+round-1 settings in section 7.3 stay as they were for the round-1 records.
+
+### 10.1 Why the change
+
+At the published lr 3e-3, 3 of 6 CODI-stack runs on RuleChain diverged (round-1 CODI 32 x 4 at epoch 6.1, student-only
+at 7.3 twice, the L1-7w CODI-0 `20261103-174232` at epoch 2.76), and the survivors had loss spikes. A review of the
+L1-7w log histories (2026-11-04) found:
+- Every burst is led by the teacher-CoT CE and happens while lr >= 1.7e-3. In the surviving CODI run there are none
+  after step 8,500, although the teacher CE is then 10-30x lower than before any spike. The CODI-0 run's fatal second
+  blow-up started with the teacher CE at 1.45. So the trigger is the learning rate, not a near-zero teacher CE.
+- Ruled out: bf16 overflow, the distillation term's division by the teacher std (flat 0.13-0.22 through every event),
+  weight decay.
+- Most likely mechanism: lr at the edge of stability in the teacher-CE direction, with Adam's slow second moment
+  (beta2 0.999) amplifying each burst; CODI-0 died when a second burst hit before it had recovered.
+- `adam_epsilon` 1e-6 is mostly cosmetic here (~5% of a typical sqrt(v)); kept only because it is harmless.
+
+### 10.2 Settings (both arms identical; only `num_latent` differs)
+
+| | Value |
+|---|---|
+| Data | `synthetic_data_v2_l1to7w` (`scripts/make_rulechain_levels.py --levels 1-7 --train-per-level "1:10000,2:10000,3:10000,4:40000,5:40000,6:40000,7:40000"`), hashes `configs/synthetic/v2_l1to7w_data_sha256.json` |
+| Schedule | 12 epochs = 17,820 steps, cosine, 3% warmup |
+| **Optimizer** | **lr 2e-3, adam_beta2 0.98, adam_epsilon 1e-6, max_grad_norm 1.0** (rest as 7.3: wd 0.1, 64 x 2, bf16, LoRA r128/a32, seed 11) |
+| Model flags | `fix_attn_mask` + `pad_invariant`, `include_last_cot False`, projection 768 + LayerNorm; 6 latents (CODI-0: 0) |
+| Checkpoints | every epoch, all 12 kept (`--save_total_limit 12`) |
+| Command | `DATA=... HASH_FILE=$REPO/configs/synthetic/v2_l1to7w_data_sha256.json NAME=gpt2_l1to7w_stab EPOCHS=12 TRAIN_EXTRA="--learning_rate 2e-3 --adam_beta2 0.98 --adam_epsilon 1e-6 --max_grad_norm 1.0" bash scripts/pod/codi_l4to7.sh train codi|codi0` (later flags override the recipe's) |
+| Watchdog | `scripts/pod/divergence_watchdog.py <log>` on every run: kills on non-finite loss/grad, grad_norm > 50, loss > 20x or > 3x (50 logs) the running median of the Trainer's 10-step losses. Replayed on the 2026-11-03 logs: never kills the surviving CODI, kills the diverged CODI-0 at its second blow-up (step ~4590) |
+
+Check after launch that the logged learning rate matches 2e-3 (first logged value ~3.4e-5 at step 10) and that
+`training_args.bin` of the first checkpoint shows the four optimizer values.
+
+### 10.3 Selection, test and decision rule (fixed before looking at test)
+
+- Valid eval of every epoch checkpoint for both arms (after training on the CODI pod; mid-run evals OOM on an A40).
+  Selection: best of the last 3 on valid, unweighted mean over levels. One test eval on canonical L1-L7 (500/level);
+  L8-L12 canonical test items as a secondary out-of-range check.
+- **Primary:** pooled L5-L7 paired gain CODI - CODI-0, exact McNemar. Secondary: per level L4-L7, Holm.
+- **Gain:** pooled L5-7 gain >= 0.05 and p < 0.05. **Null:** 95% CI inside +-0.05. **Otherwise ambiguous:** second seed
+  pair (possibly 20 epochs).
+- Reported as a gain at a matched 12-epoch budget, with both arms' per-epoch valid curves.
+- **If either arm diverges again** (watchdog fires): rerun both arms at lr 1e-3.
+- Power: minimum detectable paired gain ~0.05 per level (n = 500), ~0.03 pooled L5-7.
+- After selection, rerun `scripts/ablate_latents_rulechain_codi.py` and `scripts/probe_latents_rulechain_codi.py` on
+  the selected CODI, so "uses its latents" and "gains from its latents" describe the same model.
+
+### 10.4 Notes
+
+- Single seed (11): any gain under ~0.05 is not interpretable without a second seed.
+- Hardware: CODI on an A40, CODI-0 on an L40S (A40 stock ran out), both bf16. Record in each run's notes.
+- The test split cannot be enlarged by raising `test_per_level`: `build_task` draws test, valid, train from one stream
+  per level with a shared duplicate-rejection set, so the train data would change.

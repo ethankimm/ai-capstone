@@ -9,6 +9,7 @@
 # Other level mixes (e.g. levels 1-7 with 4-7 up-weighted): override DATA, HASH_FILE, NAME (run prefix) and EPOCHS, e.g.
 #   DATA=/workspace/synthetic_data_v2_l1to7w HASH_FILE=$REPO/configs/synthetic/v2_l1to7w_data_sha256.json \
 #   NAME=gpt2_l1to7w EPOCHS=12 bash scripts/pod/codi_l4to7.sh train codi
+# Optimizer variants: TRAIN_EXTRA="--adam_epsilon 1e-6" NAME=gpt2_l1to7w_eps6 ... (same flags for codi and codi0)
 set -euo pipefail
 REPO=${REPO:-/workspace/ai-capstone}
 CODI_DIR=${CODI_DIR:-/workspace/codi}
@@ -18,6 +19,7 @@ LOGS=${LOGS:-/workspace/logs}
 EPOCHS=${EPOCHS:-4}
 HASH_FILE=${HASH_FILE:-$REPO/configs/synthetic/v2_l4to7_data_sha256.json}
 NAME=${NAME:-gpt2_l4to7}
+TRAIN_EXTRA=${TRAIN_EXTRA:-}  # extra train.py flags for both kinds, e.g. "--adam_epsilon 1e-6"
 export PATH="$HOME/.local/bin:$PATH"
 mkdir -p "$RUNS" "$LOGS"
 
@@ -58,7 +60,7 @@ case "${1:?setup|timing|train}" in
     common_env
     kind=${2:?codi|codi0}
     nl=6; [ "$kind" = codi0 ] && nl=0
-    NUM_LATENT=$nl EXP_NAME=${NAME}_${kind} EXTRA_ARGS="--num_train_epochs $EPOCHS --save_total_limit $EPOCHS" \
+    NUM_LATENT=$nl EXP_NAME=${NAME}_${kind} EXTRA_ARGS="--num_train_epochs $EPOCHS --save_total_limit $EPOCHS $TRAIN_EXTRA" \
       bash "$REPO/configs/synthetic/train_gpt2_depth_codi.sh" > "$LOGS/${NAME}_${kind}.log" 2>&1
     ;;
 esac
