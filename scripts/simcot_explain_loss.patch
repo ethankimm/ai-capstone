@@ -1,0 +1,56 @@
+# ai-capstone patch for InternLM/SIM-CoT @ cd3291d (Coconut fork): wire the SIM-CoT step loss into training
+# (the released run.py never passes explainable_ids_list, so the step loss is never computed) and log it. Apply in the checkout root:
+#   git apply /path/to/ai-capstone/scripts/simcot_explain_loss.patch
+diff --git a/Coconut/coconut.py b/Coconut/coconut.py
+index e0c200b..19e2d58 100755
+--- a/Coconut/coconut.py
++++ b/Coconut/coconut.py
+@@ -783,6 +783,7 @@ class CoconutGPT_Same_Word_Embedding(nn.Module):
+             if loss is None:
+                 loss = 0.0
+             loss += 1.0 * loss_explain_all / c_thought_num
++            self.last_step_loss = float(loss_explain_all / c_thought_num)  # ai-capstone patch: logged by run.py
+ 
+         return Outputs(loss=loss, inputs_embeds=inputs_embeds, logits=logits)
+ 
+diff --git a/Coconut/run.py b/Coconut/run.py
+index 43f1f1b..8d88798 100755
+--- a/Coconut/run.py
++++ b/Coconut/run.py
+@@ -292,7 +292,14 @@ def main():
+ 
+         if not configs.only_eval:
+ 
+-            dataset_train = get_cot_latent_dataset(
++            # ai-capstone patch (scripts/simcot_explain_loss.patch): the released run.py builds the training set with
++            # get_cot_latent_dataset + MyCollator, so `explainable_ids_list` never reaches
++            # CoconutGPT_Same_Word_Embedding.forward and the SIM-CoT step loss is never computed. With the SIM-CoT model
++            # (and step_loss not disabled), use the explainable dataset/collator, which yield the same input_ids/labels
++            # plus the step token ids for the auxiliary decoder.
++            use_step_loss = configs.coconut and getattr(configs, "mode", "coconut_baseline") == "coconutgpt_same_word_embedding" \
++                and getattr(configs, "step_loss", True)
++            dataset_train = (get_cot_with_explainable_latent_dataset if use_step_loss else get_cot_latent_dataset)(
+                 scheduled_stage,
+                 base_dataset_train,
+                 configs,
+@@ -309,7 +316,7 @@ def main():
+                 shuffle=False,
+                 pin_memory=True,
+                 batch_size=configs.batch_size_training,
+-                collate_fn=collator,
++                collate_fn=MyExplainableCollator(tokenizer, latent_id=latent_id, label_pad_token_id=-100) if use_step_loss else collator,
+                 sampler=DistributedSampler(dataset_train, shuffle=True),
+             )
+ 
+@@ -414,6 +421,11 @@ def main():
+                     f"Training Epoch: {epoch+1}/{configs.num_epochs}, batch {step}/{len(train_dataloader)} "
+                     f"completed (loss: {round(float(loss.detach().float() * configs.gradient_accumulation_steps), 4)}"
+                 )
++                # ai-capstone patch: total and SIM-CoT step loss as plain lines (the pbar overwrites itself)
++                if rank == 0 and step % 200 == 0:
++                    print(f"steplog epoch {epoch+1} batch {step}/{len(train_dataloader)} "
++                          f"loss {float(loss.detach().float() * configs.gradient_accumulation_steps):.4f} "
++                          f"step_loss {getattr(parallel_model.module, 'last_step_loss', float('nan')):.4f}", flush=True)
+             pbar.close()
+             dist.barrier()
+ 

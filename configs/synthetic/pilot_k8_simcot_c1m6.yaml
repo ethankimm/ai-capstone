@@ -1,0 +1,52 @@
+# SIM-CoT pilot (SIMCOT_PILOT.md): pilot_k8_coconut_c1m6.yaml (k <= 8 data, c_thought 1 x max_latent_stage 6, 3 epochs per
+# stage, 5 final epochs, CoT init, resume 3, 26 epochs) PLUS SIM-CoT's step-level supervision (Wei et al. 2026): an
+# auxiliary GPT-2 decoder (fresh pretrained weights, training only) decodes latent k into rule step k ("<<a op b = c>>"),
+# loss = LM loss + 1.0 x mean step loss over latents. Code = InternLM/SIM-CoT @ cd3291d Coconut fork with
+# scripts/simcot_explain_loss.patch (the released run.py never computes the step loss). SIM-CoT's latent/step mapping:
+# stage s: latent j decodes step j; final stage: latents 1-5 decode steps 1-5, latent 6 decodes steps 6..k joined, and
+# when k < 6 the spare latents decode the answer ("### N"). Only differences from pilot_k8_coconut_c1m6.yaml: the
+# SIM-CoT keys at the bottom. References: pilot_k8_no_thoughts_m6 (matched), pilot_k8_coconut_c1m6 (no step loss).
+# Launch via scripts/pod/coconut_v2.sh with COCONUT_DIR=<SIM-CoT>/Coconut (lrm_work/simcot_lib.sh).
+
+project: coconut
+save_path: /workspace/coconut_runs
+name: pilot_k8_simcot_c1m6
+
+only_eval: False
+
+coconut: True
+cot: False
+no_thoughts: False
+no_cot: False
+
+c_thought: 1
+epochs_per_stage: 3
+max_latent_stage: 6
+pad_latent_to_max: True
+
+save_only_improve: False
+uniform_prob: 0.0
+model_id: openai-community/gpt2
+load_model_path: /workspace/coconut_runs/gpt2_depth2_cot/checkpoint_<BEST>  # rendered by coconut_v2.sh
+seed: 0
+resume: 3
+bf16: False
+train_path: /workspace/synthetic_data_v2/depth2_k8/train.json
+val_path: /workspace/synthetic_data_v2/depth2_k8/valid_monitor.json
+reset_optimizer: True
+batch_size_training: 32
+debug: False
+gradient_accumulation_steps: 4
+num_epochs: 26
+lr: !!float "1e-4"
+weight_decay: 0.01
+
+# SIM-CoT (from the fork's args/gsm_simcot.yaml)
+coconutgpt: True
+mode: coconutgpt_same_word_embedding
+explain_mode: v1_aug
+training_method: full
+w_prompt: False
+wandb: False
+# per-epoch monitor generation on val_path (the fork runs it only when train_or_eval == 'eval'; upstream always does)
+train_or_eval: eval
