@@ -69,6 +69,7 @@ def load_test(name: str) -> tuple[np.ndarray, np.ndarray, float]:
     recs = [json.loads(l) for l in open(REPO / "results" / RUNS[name] / "predictions.jsonl")]
     by_level: dict[int, list[tuple[str, bool]]] = {k: [] for k in LEVELS}
     unparse = 0
+    recs = [r for r in recs if int(r["level"]) in by_level]  # --simcot reads round-1 runs on L1-8 only
     for r in recs:
         by_level[int(r["level"])].append((r["id"], bool(r["correct"])))
         unparse += r.get("predicted_answer") in (None, "")
@@ -137,7 +138,10 @@ def main() -> None:
     ap.add_argument("--json")
     ap.add_argument("--md")
     ap.add_argument("--pilot", action="store_true", help="k <= 8 pilot runs (PILOT_K8.md)")
+    ap.add_argument("--simcot", action="store_true", help="SIM-CoT pilot (SIMCOT_PILOT.md)")
     args = ap.parse_args()
+    if args.simcot:
+        return pilot_main(args, SIMCOT_RUNS, SIMCOT_PAIRS, "SIM-CoT pilot (SIMCOT_PILOT.md)")
     if args.pilot:
         return pilot_main(args)
     rng = np.random.default_rng(args.seed)
@@ -299,9 +303,21 @@ PILOT_PAIRS = [("c2m3", "no_thoughts_m3"), ("c2m6", "no_thoughts_m6"), ("c1m6", 
 PILOT_BANDS = {"all": list(range(1, 9)), "L1-3": [1, 2, 3], "L4-6": [4, 5, 6], "L7-8": [7, 8]}
 
 
-def pilot_main(args) -> None:
+# --simcot (SIMCOT_PILOT.md): SIM-CoT c1m6 vs its matched no_thoughts_m6, vs plain c1m6 (same recipe, no step loss), and
+# vs round-1 CODI-0 on the same L1-8 test items (the round-1 envelope member at L2-8; trained on 100k items, k = 1-12).
+SIMCOT_RUNS = {
+    "simcot_c1m6": "20261104-144235_coconut_v2-depth2-pilot_k8_simcot_c1m6",
+    "no_thoughts_m6": PILOT_RUNS["no_thoughts_m6"],
+    "c1m6": PILOT_RUNS["c1m6"],
+    "codi0_round1": "20261102-060537_codi_v2-depth2-gpt2_depth2_codi0",
+}
+SIMCOT_PAIRS = [("simcot_c1m6", "no_thoughts_m6"), ("simcot_c1m6", "c1m6"), ("simcot_c1m6", "codi0_round1")]
+
+
+def pilot_main(args, runs=None, pairs=None, title="RuleChain k <= 8 pilot (PILOT_K8.md)") -> None:
     global LEVELS, RUNS
-    LEVELS, RUNS = list(range(1, 9)), PILOT_RUNS
+    LEVELS, RUNS = list(range(1, 9)), runs or PILOT_RUNS
+    PAIRS_ = pairs or PILOT_PAIRS
     rng = np.random.default_rng(args.seed)
     test, unparse, ref_ids = {}, {}, None
     for name in RUNS:
@@ -318,7 +334,7 @@ def pilot_main(args) -> None:
     d50s = {k: {"d50": d50(test[k].mean(1), n_lvl), "ci95": pct_ci(bd50[k]),
                 "boot_undefined_frac": float(np.isnan(bd50[k]).mean())} for k in RUNS}
     gains = {}
-    for lat, ref in PILOT_PAIRS:
+    for lat, ref in PAIRS_:
         rows = []
         for li, k in enumerate(LEVELS):
             t = paired_table(test[lat][li], test[ref][li])
@@ -334,7 +350,7 @@ def pilot_main(args) -> None:
     out = {"boot": B, "seed": args.seed, "runs": RUNS, "unparseable_rate": unparse, "d50": d50s, "gains": gains}
     if args.json:
         Path(args.json).write_text(json.dumps(out, indent=1))
-    L = [f"# RuleChain k <= 8 pilot: paired gain analysis\n\nPILOT_K8.md. Bootstrap B = {B} (seed {args.seed}), items "
+    L = [f"# {title}: paired gain analysis\n\nBootstrap B = {B} (seed {args.seed}), items "
          "resampled within level, shared across models. Test L1-8, 500 items per level. G = first − second.\n",
          "## d50 with 95% bootstrap CI\n", "| Run | d50 | 95% CI |\n|---|---|---|"]
     L += [f"| {k} | {v['d50']:.2f} | [{v['ci95'][0]:.2f}, {v['ci95'][1]:.2f}] |" for k, v in d50s.items()]
