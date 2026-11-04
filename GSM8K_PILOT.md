@@ -1,6 +1,7 @@
 # Pilot: does the RuleChain protocol find a CODI latent gain on GSM8K-Aug?
 
-Status: **training** (launched 2026-11-03 12:07 PT on cci-p124, GPUs 4 and 7). Branch `kevin/lrm-training-2`.
+Status: **done** (2026-11-03 17:23 PT). **Verdict: sanity passed: CODI beats CODI-0 by +0.074 on GSM8K test (McNemar p 2e-11).**
+Ran 2026-11-03 12:07-17:23 PT on cci-p124, GPUs 4 and 7. Branch `kevin/lrm-training-2`.
 
 ## Why
 
@@ -39,10 +40,10 @@ Published reference points (full data): CODI GPT-2 43.7% (Shao et al.); no-CoT G
 
 ### Runs
 
-| Run | GPU | Latents | Role | Training ETA (PT) |
+| Run | GPU | Latents | Role | Training (PT) |
 |---|---|---|---|---|
-| `gpt2_gsm8k_aug_codi` | 4 | 6 | CODI | ~17:40, then select + test |
-| `gpt2_gsm8k_aug_codi0` | 7 | 0 | Matched reference (CODI-0) | ~15:05, then select + test |
+| `gpt2_gsm8k_aug_codi` | 4 | 6 | CODI | done 17:22, tested 17:23 |
+| `gpt2_gsm8k_aug_codi0` | 7 | 0 | Matched reference (CODI-0) | done 14:56, tested 14:57 |
 
 Queue `lrm_work/queue_gsm8k_codi.sh GPU NAME NUM_LATENT`; select/test `lrm_work/codi_select_test_gsm8k.sh`; log
 `lrm_work/logs/queue_gsm8k.log`. Smoke runs (2 steps, both latent counts) and an eval-path check passed before launch.
@@ -61,4 +62,40 @@ Caveats fixed in advance: one seed; a quarter of the published training data.
 
 ## Results
 
-Pending.
+Paired tests on GSM8K test (1,319 items): exact McNemar, Newcombe CIs, Holm over step counts, 2,000 item bootstraps
+(`scripts/gsm8k_gain_analysis.py`; full tables in `GSM8K_GAIN_ANALYSIS.md`). G = CODI − CODI-0.
+
+| Run | Test acc | Teacher (CoT) | Selected (valid acc) | Trained (PT, 2026-11-03) | Run record |
+|---|---|---|---|---|---|
+| `gpt2_gsm8k_aug_codi` | **0.261** | 0.429 | checkpoint-31280, epoch 40 (0.573) | 12:07-17:22 | `20261104-012327_…` |
+| `gpt2_gsm8k_aug_codi0` | **0.187** | 0.370 | checkpoint-30498, epoch 39 (0.510) | 12:07-14:56 | `20261103-225715_…` |
+
+| | All | 0-2 steps | 3-4 steps | 5-8 steps | 2 steps (Holm p) | 3 steps (Holm p) |
+|---|---|---|---|---|---|---|
+| n | 1,319 | 440 | 654 | 225 | 357 | 364 |
+| G | **+0.074 [+0.052, +0.095]** | +0.111 | +0.075 | −0.004 | +0.104 (2e-4) | +0.118 (6e-6) |
+| CODI-only / CODI-0-only | 155 / 58 (p 2e-11) | 70 / 21 | 79 / 30 | 6 / 7 | 57 / 20 | 59 / 16 |
+
+Normalized gain overall 0.09. Unparseable 0.000 for both. Training was clean (no NaN; loss 11 → 0.3).
+
+### Verdict
+
+- **Sanity passed.** On GSM8K the protocol finds a clear CODI latent gain over its matched reference. The same setup on
+  RuleChain gave G ≈ 0 at every level. The protocol and the CODI-0 reference can detect a latent gain, so RuleChain's
+  null is about the task.
+- **Where the gain sits:** at 1-3 steps (+0.10 to +0.12). It vanishes from 4 steps up, where both models are near the
+  floor. The latents help where CODI-0 is partly right, not at the hardest items.
+- **Recipe health:** the teacher's CoT accuracy (0.429) is about the published GPT-2 CoT figure (42.9%, Hao et al.), and
+  CODI-0 (0.187) is about published no-CoT (16.5%). CODI itself (0.261) is well below the published 43.7%. That gap is
+  most likely from using 100k of 385k items and our code path; not tested.
+- **Valid ≠ test.** Valid accuracy (0.51-0.57) is about twice test accuracy. GSM8K-Aug has about 50 augmentations of each
+  GSM8K train problem, so the held-out valid items are near-duplicates of training items. 29% of valid items share an
+  exact step sequence with a training item, against 10% of test items. Valid still ranks checkpoints, but do not read it
+  as an accuracy estimate.
+
+Caveats: one seed; CODI only (Coconut not run on GSM8K).
+
+**Next candidates:**
+- A resample-swap necessity test on these CODI latents, since there is now a gain to explain.
+- Decoding the latents (proposal steps 2-3) on this checkpoint.
+- Optionally a second seed, or Coconut under the protocol on GSM8K.
