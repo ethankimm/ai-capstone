@@ -317,3 +317,11 @@ Check after launch that the logged learning rate matches 2e-3 (first logged valu
 - Hardware: CODI on an A40, CODI-0 on an L40S (A40 stock ran out), both bf16. Record in each run's notes.
 - The test split cannot be enlarged by raising `test_per_level`: `build_task` draws test, valid, train from one stream
   per level with a shared duplicate-rejection set, so the train data would change.
+
+### 10.5 Operations safeguards (added 2026-11-04, after the first stabilised pair was lost)
+
+The first section-10 pair was lost when the RunPod balance ran out and RunPod terminated both pods (records
+`*_v2-l1to7w-stab-depth2-*-lost`). Container disk does not survive termination. For every RunPod training run:
+- Before launch, run `runpodctl user` and confirm the balance covers the full estimated cost plus 50%.
+- Sync checkpoints and logs off the pod during training (section 9), at least every epoch, without `optimizer.pt`.
+- Chain the valid evals and an end-of-run marker onto the training command, so a pod does not sit idle when training ends.

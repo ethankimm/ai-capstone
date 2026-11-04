@@ -1,0 +1,51 @@
+{
+  "run_id": "20261104-163703_codi_v2-l1to7w-stab-depth2-codi-lost",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "gpt2_l1to7w_stab_codi (lost with the pod, nothing pulled)",
+    "n_params": null
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "train",
+    "n_examples": 190000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": null,
+    "compute_steps": 6,
+    "sec_per_example": null,
+    "extra": {
+      "status": "lost: pod terminated by RunPod at 2026-11-04T14:28:20Z, balance exhausted",
+      "last_observed": {
+        "step": 2408,
+        "epoch": 1.62,
+        "loss": 0.8325,
+        "max_grad_norm_after_warmup": 1.56
+      }
+    }
+  },
+  "hyperparams": {
+    "learning_rate": 0.002,
+    "adam_beta2": 0.98,
+    "adam_epsilon": 1e-06,
+    "max_grad_norm": 1.0,
+    "num_train_epochs": 12,
+    "seed": 11,
+    "protocol": "TRAINING_PROTOCOL.md section 10",
+    "source": "launch command (training_args.bin lost with the pod)",
+    "num_latent": 6
+  },
+  "seed": 11,
+  "hardware": "RunPod A40 48GB",
+  "author": "Henning Lindig",
+  "notes": "Lost run: no checkpoint, log or eval survives.",
+  "timestamp_utc": "2026-11-04T16:37:03.376516+00:00",
+  "git": {
+    "commit": "ee1406f",
+    "dirty": true
+  }
+}
