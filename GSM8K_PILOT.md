@@ -100,7 +100,7 @@ Caveats: one seed; CODI only (Coconut not run on GSM8K).
 - Decoding the latents (proposal steps 2-3) on this checkpoint.
 - Optionally a second seed, or Coconut under the protocol on GSM8K.
 
-## Latent diagnostics (2026-11-03 PT)
+## Latent diagnostics (2026-11-03 PT; full tables in `GSM8K_LATENT_DIAGNOSTICS.md`)
 
 Task brief: repeat Henning's RuleChain latent ablation (`20261104-022824`, origin/main) on the selected CODI
 checkpoint-31280, then probe what the latents encode.
