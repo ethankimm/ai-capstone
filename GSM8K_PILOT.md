@@ -99,3 +99,21 @@ Caveats: one seed; CODI only (Coconut not run on GSM8K).
 - A resample-swap necessity test on these CODI latents, since there is now a gain to explain.
 - Decoding the latents (proposal steps 2-3) on this checkpoint.
 - Optionally a second seed, or Coconut under the protocol on GSM8K.
+
+## Latent diagnostics (2026-11-03 PT)
+
+Task brief: repeat Henning's RuleChain latent ablation (`20261104-022824`, origin/main) on the selected CODI
+checkpoint-31280, then probe what the latents encode.
+
+- **Ablation** (`20261104-034313_…latent-ablation`, teacher-forced first answer token, 1,195 of 1,319 items scored, clean 0.283):
+  - **No fixed point.** The latents alternate in a 2-cycle: z_1/z_3/z_5 vs z_2/z_4, with odd-even centered cosine about 0.2.
+  - Every odd site carries item content (resample z_1 / z_3 / z_5: −0.085 / −0.062 / −0.063). Even sites cost ≤ 0.03; z_0 is unused.
+  - The mean-ablated tail declines in steps (s = 5…1: −0.028, −0.037, −0.073, −0.078, −0.165), with significant increments
+    from z_1, z_3 and z_5. On RuleChain, tail ≥ 3 cost 0.01.
+  - Mean-ablating every latent (0.115) is below CODI-0 (0.204 on the same items).
+- **Probes + logit lens** (`20261104-034608_…latent-probes`):
+  - v_1 peaks at z_1 (probe 0.45, lens 0.43; majority 0.03); v_2 peaks at z_3 (0.21).
+  - Even sites decode CoT punctuation (">>", "."), not values.
+  - v_3, v_4 and the final answer are near the majority baseline at every site.
+- **Reading:** GSM8K's latent gain comes from a short serial computation over the odd passes, covering about the first
+  one or two step results. It is not one extra pass of parallel compute, and it is not a full chain.

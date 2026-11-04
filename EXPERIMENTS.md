@@ -10138,3 +10138,91 @@ absolute position >= `ans_start`. For CODI that is every row, so behaviour there
 **Gotchas hit:** Selection uses OVERALL valid accuracy, not the protocol's unweighted mean over levels (step counts are unbalanced: valid has 1-3 items at 7-9 steps vs 404 at 2; GSM8K_PILOT.md). **Valid accuracy is not an estimate of test accuracy**: GSM8K-Aug has ~50 augmentations per GSM8K train problem, so the held-out valid items are near-duplicates of training items (29% share an exact step sequence with an item in the 100k train subset, vs 10% of test items); valid ~0.5-0.57 vs test ~0.19-0.26. It still ranks checkpoints. Training clean: no NaN, loss 11 -> 0.3 smoothly. Unparseable 0.000.
 **Caveats:** One seed (11). 100k of 385k GSM8K-Aug training items, and RuleChain's code path (steps joined by newline, non-digit-leading answers kept), so absolute accuracy is below the published CODI 43.7%; only the matched gain is the result. Per-step-count cells at 0 and 6-8 steps are tiny (n 9-57).
 **Next:** Resample-swap necessity test on these latents (they now have a gain to explain); decoding (proposal steps 2-3) on GSM8K; optionally a second seed and student-only.
+
+---
+
+## 2026-11-04 — GSM8K CODI latent ablation: odd sites z_1, z_3, z_5 each carry item content (2-cycle, not RuleChain's fixed point); all latents mean-ablated falls below CODI-0 (codi, run_id: 20261104-034313_codi_v2-gsm8k-aug-codi-latent-ablation)
+
+**Goal:** Henning's RuleChain latent ablation (20261104-022824: z_0 unused, z_1 carries the item, z_1..z_5 near-copies at a fixed point) repeated on the GSM8K-Aug CODI checkpoint, where CODI beats CODI-0 by +0.074 (GSM8K_PILOT.md). Does GSM8K's gain come from serial latent passes (accuracy falls gradually as the mean-ablated tail starts earlier) or from one extra pass (falls only at s = 1)?
+**Mechanism / model:** `codi`, gpt2 / checkpoint-31280, compute_steps=6.
+**Data:** synthetic-gsm8k_aug test n=1319 seed=None; run seed=None.
+**Hyperparams:** {'inference': {'latent_iterations': 6, 'batch_size': 64, 'dtype': 'float32', 'device': 'cuda', 'perm_seed': 0}, 'test_json': '/local-ssd/ktn48/lrm_work/synthetic_data_v2/gsm8k_aug/test.json'}
+**Command:** `lrm_work/gsm8k_ablate.sh` (GPU 7, cci-p124 H100 NVL) = `scripts/ablate_latents_rulechain_codi.py` from origin/main (only change: the run record's dataset name and notes follow the task) on `gpt2_gsm8k_aug_codi` checkpoint-31280 (the selected, logged checkpoint, 20261104-012327), same model flags as the GSM8K eval (6 latents, fix_attn_mask + pad_invariant, include_last_cot False, prj 768 + LayerNorm), fp32, means from gsm8k_aug/valid.json (1,000), resample donor = seeded permutation of test items (any step count). Smoke on 64 items first. See eval_command.txt.
+**Headline results:** `final_answer_accuracy=0.283`, `unparseable_rate=0.000`, `compute_steps=6`
+**Scored items:** accuracy is the teacher-forced answer token at the ':' of "<eot> The answer is:"; items whose answer is more than one GPT-2 token are skipped: **1,195 of 1,319 scored** (124 skipped). Clean = 0.283 on those items. Generated accuracy on the same items is 0.274; teacher-forced and generated agree on 99.2% of items. CODI-0's teacher-forced accuracy on the same 1,195 items is 0.204. All conditions below are compared with this run's own clean 0.283.
+
+| Condition (Δ vs clean 0.283; McNemar p) | s=0 | s=1 | s=2 | s=3 | s=4 | s=5 |
+|---|---|---|---|---|---|---|
+| mean_s | 0.277 (−0.006; 0.14) | **0.224 (−0.059; 3e-13)** | 0.271 (−0.012; 0.04) | **0.255 (−0.028; 3e-5)** | 0.265 (−0.018; 0.003) | **0.254 (−0.029; 5e-6)** |
+| resample_s | 0.280 (−0.003; 0.56) | **0.198 (−0.085; 7e-18)** | 0.267 (−0.016; 0.004) | **0.221 (−0.062; 2e-13)** | 0.256 (−0.027; 3e-5) | **0.220 (−0.063; 6e-14)** |
+| mean_tail_ge_s | — | **0.118** | 0.205 | 0.210 | 0.246 | 0.254 |
+
+mean_all 0.115. Adding each site back, from all-ablated to clean: z_1 +0.087 (120 vs 16 items, p 7e-21), z_2 +0.005 (p 0.26), **z_3 +0.036 (62 vs 19, p 2e-6)**, z_4 +0.008 (p 0.02), **z_5 +0.028**. Note that mean_tail_ge_5 = mean_5.
+
+Geometry (clean test latents, means from valid):
+- Centered cosine between sites:
+  - **2-cycle** among the odd sites: z_1·z_3 0.635, z_1·z_5 0.628, z_3·z_5 0.930.
+  - Even sites: z_2·z_4 0.902.
+  - **Odd vs even 0.16-0.23.**
+  - z_0 is closer to the even sites (0.51 / 0.46) than to the odd sites (~0.19).
+- Raw cosine shows the same pattern: z_3·z_5 0.977, z_2·z_4 0.955, odd·even ~0.47-0.51.
+- Cross-item cosine per site: 0.872 / 0.677 / 0.706 / 0.698 / 0.702 / 0.702.
+- Item-specific energy share: 0.138 / 0.330 / 0.331 / 0.316 / 0.333 / 0.312.
+- Norms: about 47-51 at every site.
+
+**Interpretation:**
+- **Neither RuleChain's fixed point nor a clean one-step-per-latent chain.** The recurrence alternates between two states. The odd state (z_1, z_3, z_5) carries what the answer reads: every odd site matters on its own (resample costs −0.06 to −0.09), and ablating one is not covered by the other odd copies. The even state (z_2, z_4) costs at most −0.03 alone and adds little to the tail.
+- **The tail curve declines in steps:** −0.028 (s=5), −0.037 (s=4), −0.073 (s=3), −0.078 (s=2), −0.165 (s=1). Each odd site adds a significant increment: z_1 +0.087, z_3 +0.036, z_5 +0.028. So on GSM8K later latents keep adding accuracy, unlike RuleChain, where tail >= 3 cost 0.01. That is evidence against "one extra pass" and for something done over several passes. It does not show one step per latent, because z_3 and z_5 are near-copies (centered cosine 0.93) yet each still matters.
+- **z_0 is unused** here too: mean −0.006, resample −0.003, both n.s.
+- **Mean-ablating every latent (0.115) falls far below CODI-0 (0.204 teacher-forced on the same items; 40 vs 147, p 1e-15).** CODI's answer depends on its latents. It is not a no-latent model with spare positions.
+**Gotchas hit:** Our branch lacked the two scripts; checked them out from origin/main (`git checkout origin/main -- scripts/ablate_latents_rulechain_codi.py scripts/diagnose_codi_latents.py`), not merged. The record's dataset name was hard-coded `synthetic-depth2`; it now follows the task. The 64-item smoke test already showed the odd/even structure. Run took ~1 min on the H100.
+**Caveats:** One checkpoint, one seed. 124 multi-token-answer items (mostly answers > 999) are not scored, so the scored set is easier than the full test set. Resample donors are drawn from any step count, not within level. Mean ablation uses valid means; valid items are near-duplicates of training items (GSM8K_PILOT.md), which should make the means typical rather than off-distribution. Teacher-forced first token only.
+**Next:** Task 2 (probes + logit lens per site) to see what the odd and even states encode; a within-step-count resample swap scored follows-donor / keeps-own.
+
+---
+
+## 2026-11-04 — GSM8K CODI latent probes + logit lens: odd sites hold step 1-2 results (v_1 peaks at z_1, v_2 at z_3), even sites decode CoT punctuation; v_3+, v_4 and the answer not decodable (codi, run_id: 20261104-034608_codi_v2-gsm8k-aug-codi-latent-probes)
+
+**Goal:** Task 2 of the GSM8K latent diagnostics. What do CODI's latents encode on GSM8K-Aug (checkpoint-31280 of gpt2_gsm8k_aug_codi)? Does site j decode step result v_j (one step per latent), or do all sites decode the same thing (one shared state)? Companion to the ablation run 20261104-034313, which found an odd/even 2-cycle.
+**Mechanism / model:** `codi`, gpt2 / checkpoint-31280, compute_steps=6.
+**Data:** synthetic-gsm8k_aug test n=1319 seed=None; run seed=None.
+**Hyperparams:** {'train_n': 20000, 'min_count': 3, 'wds': [0.0001, 0.001, 0.01, 0.1], 'epochs': 300, 'batch_size': 64, 'dtype': 'float32', 'device': 'cuda'}
+**Command:** `lrm_work/gsm8k_probe.sh` (GPU 7, cci-p124 H100 NVL) = `scripts/probe_gsm8k_codi_latents.py` (new), same model flags as the ablation run, fp32. The latents come from `ablate_latents_rulechain_codi.run()`'s loop, extended only to read the LM head; it was checked against `run()` on 128 test items (max |dz| = 0). Probes: multinomial logistic regression on standardized z_s, one per (site, target), fit on the first 20,000 items of gsm8k_aug/train.json, weight decay chosen on valid.json (1e-4..1e-1), then one evaluation on test. Classes = values seen at least 3 times in the fitting set. Test items with an unseen value count as wrong. Smoke run (200 items) first.
+**Headline results:** `final_answer_accuracy=None`, `unparseable_rate=None`, `compute_steps=6`
+**Probe accuracy on test (linear, class over training values):**
+
+| Site | v_1 (n 1,301) | v_2 (n 1,235) | v_3 (n 879) | v_4 (n 515) | answer (n 1,319) |
+|---|---|---|---|---|---|
+| z_0 | 0.150 | 0.042 | 0.032 | 0.021 | 0.030 |
+| **z_1** | **0.447** | 0.090 | 0.031 | 0.021 | 0.038 |
+| z_2 | 0.197 | 0.054 | 0.032 | 0.014 | 0.029 |
+| **z_3** | 0.218 | **0.208** | 0.065 | 0.043 | 0.046 |
+| z_4 | 0.095 | 0.074 | 0.032 | 0.033 | 0.035 |
+| **z_5** | 0.227 | 0.164 | 0.060 | 0.025 | 0.039 |
+| majority baseline | 0.029 | 0.028 | 0.026 | 0.018 | 0.014 |
+| coverage (ceiling) | 0.956 | 0.941 | 0.908 | 0.851 | 0.910 |
+
+Classes: 355 / 438 / 389 / 260 / 586. Fit/valid accuracy at the best site: v_1 0.63 / 0.57, v_2 0.21 / 0.12, answer 0.32 / 0.08 (answer and v_4 overfit).
+
+**Logit lens on test, top-1 token = target:**
+- Hidden state behind z_s, hit rate for v_1 / v_2 / v_3, then the share of items whose top token matches any step value ("any"):
+  - z_1: 0.433 / 0.077 / 0.035, any 0.51
+  - z_3: 0.202 / 0.210 / 0.059, any 0.43
+  - z_5: 0.203 / 0.164 / 0.077, any 0.40
+  - z_0, z_2, z_4: ≤ 0.013
+  - Answer hit ≤ 0.027 at every site.
+- Most frequent top tokens:
+  - z_0: "The", "*", "-", "(".
+  - Odd sites: numbers ("20", "6", "24", "12").
+  - **Even sites: CoT punctuation (">>", ".", "-", "<|endoftext|>").**
+- Through z_s itself (tied embedding) the pattern is the same but weaker: z_1 v_1 0.34, z_3 v_1/v_2 0.15/0.15. Even sites and z_0 decode ":", "the", etc.
+
+**Interpretation:**
+- **Neither "one step per latent" nor "one shared state."** The odd sites hold step results, and these shift with depth: v_1 peaks at z_1 (0.45 probe, 0.43 lens), v_2 peaks at z_3 (0.21, about equal to v_1 there). z_5 holds about the same mix as z_3 (z_3 and z_5 have centered cosine 0.93 in the ablation run).
+- **Even sites carry no step values in the lens.** They decode delimiters: the chain alternates number / delimiter like the teacher's "<<a op b = c>>" text, about one step per odd/even pair. Linear probes still recover some v_1 from z_2 (0.20).
+- **Nothing beyond step 2 is decodable:** v_3 ≤ 0.065, v_4 ≤ 0.043, near the 0.02-0.03 majority baseline.
+- **The final answer is not linearly decodable from any latent** (≤ 0.046). It is computed after the latents, in the answer pass.
+- This matches the ablation: z_1 and z_3 are the sites whose removal costs the most, and the gain over CODI-0 sits at 1-3 steps (GSM8K_GAIN_ANALYSIS.md). On GSM8K the latents compute the first one or two intermediate results in sequence (v_1 then v_2), not the whole chain.
+**Gotchas hit:** `probe_codi.py` did not fit: it uses the released checkpoint's prompt without pad_invariant, and it regresses with a tolerance. Hence a new class-probe script on Henning's loop. Values are normalized ("6.0" -> "6"). Lens hits compare the stripped top token to the value string, so multi-token values (>= 1000 and most decimals) can never hit. The run record has `final_answer_accuracy: null` (probe run, no answer accuracy).
+**Caveats:** One checkpoint, one seed. Linear class probes over seen values: values unseen in training are unreachable (coverage 0.85-0.96), and rare classes are hard. A digit-wise or MLP probe could find more, so low numbers at v_3+ are an upper bound on linear-class decodability, not proof of absence. Fitting on train (near-duplicates of valid); test never used for fitting or selection. Probe accuracy is not conditioned on the model being right.
+**Next:** Condition probe and lens hits on items CODI gets right vs wrong; check whether patching z_1's v_1 content (swap from a donor with a different v_1) changes the answer accordingly (causal test, proposal step 3).

@@ -203,3 +203,5 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261103-110209_coconut_v2-depth2-pilot_k8_coconut_c2m6](20261103-110209_coconut_v2-depth2-pilot_k8_coconut_c2m6/) | coconut | openai-community/gpt2 | test (n=4000) | 12 | 0.195 | 0 | full_run | Kevin Nguyen |
 | [20261103-225715_codi_gsm8k-aug-pilot-gpt2_gsm8k_aug_codi0](20261103-225715_codi_gsm8k-aug-pilot-gpt2_gsm8k_aug_codi0/) | codi | gpt2 | test (n=1319) | 0 | 0.187 | 11 | full_run | Kevin Nguyen |
 | [20261104-012327_codi_gsm8k-aug-pilot-gpt2_gsm8k_aug_codi](20261104-012327_codi_gsm8k-aug-pilot-gpt2_gsm8k_aug_codi/) | codi | gpt2 | test (n=1319) | 6 | 0.261 | 11 | full_run | Kevin Nguyen |
+| [20261104-034313_codi_v2-gsm8k-aug-codi-latent-ablation](20261104-034313_codi_v2-gsm8k-aug-codi-latent-ablation/) | codi | gpt2 | test (n=1319) | 6 | 0.283 | None | full_run | Kevin Nguyen |
+| [20261104-034608_codi_v2-gsm8k-aug-codi-latent-probes](20261104-034608_codi_v2-gsm8k-aug-codi-latent-probes/) | codi | gpt2 | test (n=1319) | 6 | - | None | full_run | Kevin Nguyen |
