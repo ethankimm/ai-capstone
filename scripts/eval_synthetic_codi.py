@@ -233,7 +233,7 @@ def main() -> None:
         },
         hyperparams=hp,
         seed=hp.get("seed"),
-        hardware=f"{ea.hardware} / {torch.cuda.get_device_name(0)}",
+        hardware=f"{ea.hardware} / {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU'}",
         notes=f"CODI GPT-2 on synthetic {ds.task}, per-level test eval.",
     )
     manifest = record.save(predictions=records)

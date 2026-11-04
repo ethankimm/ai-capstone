@@ -114,7 +114,7 @@ def build_model(model_args, training_args, device: str = "cuda", dtype: torch.dt
         from safetensors.torch import load_file
         state_dict = load_file(os.path.join(model_args.ckpt_dir, "model.safetensors"))
     except Exception:
-        state_dict = torch.load(os.path.join(model_args.ckpt_dir, "pytorch_model.bin"))
+        state_dict = torch.load(os.path.join(model_args.ckpt_dir, "pytorch_model.bin"), map_location="cpu")
     load_result = model.load_state_dict(state_dict, strict=False)
     model.codi.tie_weights()
 
