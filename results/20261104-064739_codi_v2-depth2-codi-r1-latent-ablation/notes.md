@@ -1,0 +1,11 @@
+## 2026-11-04 — Round-1 RuleChain CODI (40 epochs, L1-12): same fixed point as L1-7w, even z_0 is a copy (centered cosine 0.95-0.99); single latents cost <= 0.008, all latents 0.22 (codi, run_id: 20261104-064739_codi_v2-depth2-codi-r1-latent-ablation)
+
+**Goal:** Is the L1-7w CODI's fixed point (20261104-022824) caused by its short 12-epoch schedule? Kevin's GSM8K CODI (40 epochs) chains ~2 steps in an odd/even 2-cycle (`GSM8K_LATENT_DIAGNOSTICS.md` on kevin/lrm-training-2). Round 1's RuleChain CODI used the same 40-epoch schedule, so the same measurement on it separates schedule from task.
+**Mechanism / model:** `codi`, round-1 `gpt2_depth2_codi_bs64/checkpoint-31280` (canonical data 100k, L1-12, 40 epochs, lr 3e-3; test record 20261102-000204), CPU fp32.
+**Data:** canonical depth2 test (6,000 items, L1-L12); means from canonical valid.
+**Command:** `scripts/ablate_latents_rulechain_codi.py` (`eval_command.txt`).
+**Headline results:** clean 0.402 (= logged test 0.401). Single site mean / resample: z_0..z_5 0.3995-0.4012 / 0.392-0.3995. Tail mean-ablation z_t >= s: s=1 0.312, s=2 0.376, s=3 0.393, s=4 0.400, s=5 0.400; all six 0.182. Per level (L2 / L3 / L4 / L5): clean 1.000 / 0.992 / 0.758 / 0.442; tail >= 1 0.902 / 0.768 / 0.476 / 0.224; tail >= 2 0.980 / 0.974 / 0.688 / 0.354; all 0.628 / 0.170 / 0.076 / 0.066. Centered cosine between all sites z_0..z_5: 0.95-0.99; cross-item cosine 0.73-0.76; item-specific energy 24-27%.
+**Interpretation:** The 40-epoch schedule does not produce GSM8K's alternating chain on RuleChain: no single latent matters (the others hold a copy), and the tail ablation fades after z_2, as on L1-7w. Here z_0 is part of the copy set too (all-ablated 0.182 vs tail >= 1 0.312), whereas on L1-7w z_0 was unused. So the fixed point is a property of CODI on RuleChain, not of the short schedule; the 12-epoch protocol (TRAINING_PROTOCOL section 10) stays.
+**Gotchas hit:** ~3.5 min per condition on CPU (6,000 items up to 12 rules); 20 conditions ~70 min.
+**Caveats:** One checkpoint, one seed. Pooled numbers are diluted by L8-12, where every condition is near floor; per-level numbers in the manifest.
+**Next:** Step-level supervision (SIM-CoT decoder arm, Kevin) on L1-7w against the stabilised CODI / CODI-0 pair.

@@ -10294,3 +10294,32 @@ Decodes: lm_head(h_s) is almost never a number (0-16%) and equals any v_j or the
 **Gotchas hit:** Some GPT-2 ids have no token string (decode raises), handled as non-number.
 **Caveats:** Linear probes on the last layer only, which is what z_s carries forward, but the readout also reads the latents' keys/values at every layer and those are not probed. Linear-probe failure is not proof the value is absent (could be nonlinear). One checkpoint, one seed.
 **Next:** Same probe on Kevin's GSM8K-Aug CODI checkpoint (does GSM8K show a staircase?). For RuleChain, a step-level target (SIM-CoT decoder, or per-step distillation / value head) would have to create this structure; currently latent j does not hold v_j even partially beyond j = 2.
+
+---
+
+## 2026-11-04 — Round-1 RuleChain CODI (40 epochs, L1-12): same fixed point as L1-7w, even z_0 is a copy (centered cosine 0.95-0.99); single latents cost <= 0.008, all latents 0.22 (codi, run_id: 20261104-064739_codi_v2-depth2-codi-r1-latent-ablation)
+
+**Goal:** Is the L1-7w CODI's fixed point (20261104-022824) caused by its short 12-epoch schedule? Kevin's GSM8K CODI (40 epochs) chains ~2 steps in an odd/even 2-cycle (`GSM8K_LATENT_DIAGNOSTICS.md` on kevin/lrm-training-2). Round 1's RuleChain CODI used the same 40-epoch schedule, so the same measurement on it separates schedule from task.
+**Mechanism / model:** `codi`, round-1 `gpt2_depth2_codi_bs64/checkpoint-31280` (canonical data 100k, L1-12, 40 epochs, lr 3e-3; test record 20261102-000204), CPU fp32.
+**Data:** canonical depth2 test (6,000 items, L1-L12); means from canonical valid.
+**Command:** `scripts/ablate_latents_rulechain_codi.py` (`eval_command.txt`).
+**Headline results:** clean 0.402 (= logged test 0.401). Single site mean / resample: z_0..z_5 0.3995-0.4012 / 0.392-0.3995. Tail mean-ablation z_t >= s: s=1 0.312, s=2 0.376, s=3 0.393, s=4 0.400, s=5 0.400; all six 0.182. Per level (L2 / L3 / L4 / L5): clean 1.000 / 0.992 / 0.758 / 0.442; tail >= 1 0.902 / 0.768 / 0.476 / 0.224; tail >= 2 0.980 / 0.974 / 0.688 / 0.354; all 0.628 / 0.170 / 0.076 / 0.066. Centered cosine between all sites z_0..z_5: 0.95-0.99; cross-item cosine 0.73-0.76; item-specific energy 24-27%.
+**Interpretation:** The 40-epoch schedule does not produce GSM8K's alternating chain on RuleChain: no single latent matters (the others hold a copy), and the tail ablation fades after z_2, as on L1-7w. Here z_0 is part of the copy set too (all-ablated 0.182 vs tail >= 1 0.312), whereas on L1-7w z_0 was unused. So the fixed point is a property of CODI on RuleChain, not of the short schedule; the 12-epoch protocol (TRAINING_PROTOCOL section 10) stays.
+**Gotchas hit:** ~3.5 min per condition on CPU (6,000 items up to 12 rules); 20 conditions ~70 min.
+**Caveats:** One checkpoint, one seed. Pooled numbers are diluted by L8-12, where every condition is near floor; per-level numbers in the manifest.
+**Next:** Step-level supervision (SIM-CoT decoder arm, Kevin) on L1-7w against the stabilised CODI / CODI-0 pair.
+
+---
+
+## 2026-11-04 — Round-1 RuleChain CODI (40 epochs) latent probes: flat across sites, weaker than L1-7w (v_1 0.22, v_2 0.14, v_3 0.08, v_4+ <= 0.05); answer only at the readout (0.37) (codi, run_id: 20261104-070914_codi_v2-depth2-codi-r1-latent-probes)
+
+**Goal:** Companion to the round-1 ablation (20261104-064739): does the 40-epoch RuleChain CODI hold a step per latent, like GSM8K's v_1 at z_1 / v_2 at z_3, or one shared state like L1-7w (20261104-034628)?
+**Mechanism / model:** `codi`, round-1 `gpt2_depth2_codi_bs64/checkpoint-31280`, CPU fp32.
+**Data:** probes fit on 2,000 canonical train items per level (24,000), scored on canonical test (6,000, L1-L12).
+**Command:** `scripts/probe_latents_rulechain_codi.py` (`eval_command.txt`).
+**Headline results:** exact accuracy (two digit heads), sites h_0 (<bot>) .. h_6, h_ans; majority 0.02-0.03.
+v_1: 0.220 / 0.214-0.216 at h_1..h_6 / 0.153 at h_ans. v_2: 0.129 / 0.137-0.142 / 0.133. v_3: 0.066 / 0.074-0.083 / 0.107. v_4: 0.039 / 0.045-0.048 / 0.082. v_5+: at or near majority everywhere. Answer: 0.065 / 0.091-0.095 / 0.371. LM-head decode of any site is almost never a number (<= 5%); embedding decode is a number 80% of the time but equals v_j in <= 10%.
+**Interpretation:** Same shape as L1-7w: every latent holds the same weak early-rule summary, nothing moves forward site by site, and the answer exists only at the readout position. Weaker than L1-7w (v_1 0.22 vs 0.39), consistent with less training on L4-7. Neither schedule nor data mix makes CODI's latents carry a step each on RuleChain.
+**Gotchas hit:** none.
+**Caveats:** Linear probes on the last layer (what z_s carries forward); one checkpoint, one seed.
+**Next:** as the ablation record.
