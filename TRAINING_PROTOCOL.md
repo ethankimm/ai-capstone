@@ -355,6 +355,10 @@ As section 10.3: best of the last 3 epochs on valid, one test eval on L1-L7 (500
 If either arm diverges, rerun both at lr 1e-3. If valid is still climbing at epoch 12, report the result as budget-limited; do not
 extend without a new amendment.
 
+Latent use is tracked during training on the laptop, from the synced checkpoints, using valid only (`scripts/codi_null_audit/b18_track.py`):
+accuracy by level, all latents mean-ablated, and the donor routes, for both arms and for the section 10 CODI as the reference. It is reported
+with the final result and does not change selection.
+
 ### 11.3 Analysis, fixed before training
 
 Reach is the `midpoint` in the run record (section 10 pair: CODI-0 4.86, CODI 5.25). The primary levels move to L2-L7 because CODI-0's
@@ -387,7 +391,7 @@ reach is expected to fall, which would put L5-L7 at the floor.
 | Prefill not closed | CODI-0 reach falls by less than 1.0 level | The CODI comparison cannot answer the question | Rerun Tests 2-4 to find how the chain still runs |
 | Latents take over | Gain >= 0.05, p < 0.05, reach difference >= +1.0, and a CODI gain before the last rule | Latents can do serial work when prefill cannot | Write up, then latents between rules |
 | Latents help | Gain >= 0.05, p < 0.05, but reach difference below +1.0 or gain at the last rule only | Latents add less than one hop even here | Step supervision (SIM-CODI) |
-| Null | 95% CI inside +-0.05 | CODI's objective does not move the chain into latents | Step supervision (SIM-CODI) |
+| Null | 95% CI inside +-0.05 | Not yet separable from the recipe: stabilised latents stayed quiet (section 10), while lr-3e-3 models route through theirs | Repeat with the non-stabilised recipe (lr 3e-3, beta2 0.999, epsilon 1e-8, clip 2.0), then step supervision (SIM-CODI) |
 | Otherwise | Ambiguous | | Second seed pair |
 
 One seed, as section 10.4: a gain under about 0.05 is not interpretable without a second.
