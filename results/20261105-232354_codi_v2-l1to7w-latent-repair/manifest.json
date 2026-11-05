@@ -1,0 +1,165 @@
+{
+  "run_id": "20261105-232354_codi_v2-l1to7w-latent-repair",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "stabilised CODI checkpoint-17820 (20261105-044444); lr-3e-3 CODI (20261103-193425); round-1 CODI",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 600,
+    "seed": 71
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.998,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "round-1 CODI: share of its wrong L3-7 answers made right by latents from a short donor with the true value; not task accuracy",
+      "repair": {
+        "r1 CODI": {
+          "wrong_items": 600,
+          "same length donor": {
+            "n": 438,
+            "hits_target": 0.719,
+            "within_2": 0.911,
+            "unchanged": 0.053,
+            "by_level": {
+              "4": 0.982,
+              "5": 0.802,
+              "6": 0.655,
+              "7": 0.571
+            }
+          },
+          "short donor": {
+            "n": 600,
+            "hits_target": 0.998,
+            "within_2": 0.998,
+            "unchanged": 0.0,
+            "by_level": {
+              "4": 1.0,
+              "5": 1.0,
+              "6": 1.0,
+              "7": 0.995
+            }
+          },
+          "wrong value donor": {
+            "n": 438,
+            "hits_target": 0.715,
+            "within_2": 0.893,
+            "unchanged": 0.037,
+            "by_level": {
+              "4": 0.931,
+              "5": 0.806,
+              "6": 0.725,
+              "7": 0.496
+            }
+          }
+        },
+        "lr3 CODI": {
+          "wrong_items": 600,
+          "same length donor": {
+            "n": 529,
+            "hits_target": 0.805,
+            "within_2": 0.96,
+            "unchanged": 0.051,
+            "by_level": {
+              "4": 0.98,
+              "5": 0.873,
+              "6": 0.827,
+              "7": 0.701
+            }
+          },
+          "short donor": {
+            "n": 600,
+            "hits_target": 0.997,
+            "within_2": 0.997,
+            "unchanged": 0.0,
+            "by_level": {
+              "4": 1.0,
+              "5": 1.0,
+              "6": 0.995,
+              "7": 0.996
+            }
+          },
+          "wrong value donor": {
+            "n": 528,
+            "hits_target": 0.818,
+            "within_2": 0.956,
+            "unchanged": 0.045,
+            "by_level": {
+              "4": 0.959,
+              "5": 0.881,
+              "6": 0.864,
+              "7": 0.703
+            }
+          }
+        },
+        "stab CODI": {
+          "wrong_items": 600,
+          "same length donor": {
+            "n": 528,
+            "hits_target": 0.074,
+            "within_2": 0.642,
+            "unchanged": 0.824,
+            "by_level": {
+              "4": 0.123,
+              "5": 0.132,
+              "6": 0.05,
+              "7": 0.044
+            }
+          },
+          "short donor": {
+            "n": 600,
+            "hits_target": 0.092,
+            "within_2": 0.577,
+            "unchanged": 0.725,
+            "by_level": {
+              "4": 0.179,
+              "5": 0.139,
+              "6": 0.095,
+              "7": 0.019
+            }
+          },
+          "wrong value donor": {
+            "n": 519,
+            "hits_target": 0.012,
+            "within_2": 0.318,
+            "unchanged": 0.78,
+            "by_level": {
+              "4": 0.013,
+              "5": 0.01,
+              "6": 0.014,
+              "7": 0.013
+            }
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "scripts": "scripts/codi_null_audit/b17_repair.py",
+    "wrong_items_per_model": 600,
+    "levels": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "seed": 17,
+    "dtype": "float32"
+  },
+  "seed": 71,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Where do wrong answers come from? Patch latents holding the true value into wrongly answered items.",
+  "timestamp_utc": "2026-11-05T23:23:54.534363+00:00",
+  "git": {
+    "commit": "73c8358",
+    "dirty": true
+  }
+}
