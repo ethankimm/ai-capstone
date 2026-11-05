@@ -363,7 +363,12 @@ reach is expected to fall, which would put L5-L7 at the floor.
 - **Manipulation check:** start-last CODI-0 reach against the section 10 CODI-0, paired by item.
 - **Primary:** pooled L2-L7 paired gain, CODI - CODI-0, exact McNemar (n = 3000).
 - **Position test:** tight thresholds at each rule, as `a20_lasthop.py`, on the selected pair.
-- Rerun `scripts/ablate_latents_rulechain_codi.py` on the selected CODI.
+- **Latent reliance (added 2026-11-05, before any result):** `scripts/ablate_latents_rulechain_codi.py` on the selected CODI, reported per
+  site, per tail (`mean_tail_ge_s`) and for all sites, by level. Single-site ablation alone is not enough: on the three existing CODI
+  models any one site costs almost nothing because the latents are near copies, while all sites cost far more.
+- **Donor patch (added 2026-11-05, before any result):** the paper draft's RQ2 test. Pairs of correctly answered items that differ in one
+  intermediate value; patch the donor's latents into the recipient, one site and all sites; score each as correct anyway, follows the
+  donor, or other. Run on the selected CODI and on the three existing CODI models as the reference.
 
 | Outcome | Rule | Reading | Next |
 |---|---|---|---|
