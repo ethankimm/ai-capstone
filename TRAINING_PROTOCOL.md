@@ -314,7 +314,7 @@ Check after launch that the logged learning rate matches 2e-3 (first logged valu
 ### 10.4 Notes
 
 - Single seed (11): any gain under ~0.05 is not interpretable without a second seed.
-- Hardware: CODI on an A40, CODI-0 on an L40S (A40 stock ran out), both bf16. Record in each run's notes.
+- Hardware: both arms of the completed pair ran on A40s (bf16). The earlier lost attempt used an A40 and an L40S.
 - The test split cannot be enlarged by raising `test_per_level`: `build_task` draws test, valid, train from one stream
   per level with a shared duplicate-rejection set, so the train data would change.
 

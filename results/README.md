@@ -209,3 +209,7 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261104-070914_codi_v2-depth2-codi-r1-latent-probes](20261104-070914_codi_v2-depth2-codi-r1-latent-probes/) | codi | gpt2 | test (n=6000) | 6 | - | None | full_run | Henning Lindig |
 | [20261104-163703_codi_v2-l1to7w-stab-depth2-codi-lost](20261104-163703_codi_v2-l1to7w-stab-depth2-codi-lost/) | codi | gpt2 | train (n=190000) | 6 | - | 11 | full_run | Henning Lindig |
 | [20261104-163703_codi_v2-l1to7w-stab-depth2-codi0-lost](20261104-163703_codi_v2-l1to7w-stab-depth2-codi0-lost/) | codi | gpt2 | train (n=190000) | 0 | - | 11 | full_run | Henning Lindig |
+| [20261105-024111_codi_v2-l1to7w-stab-depth2-codi0](20261105-024111_codi_v2-l1to7w-stab-depth2-codi0/) | codi | gpt2 | test (n=3500) | 0 | 0.679 | 11 | full_run | Henning Lindig |
+| [20261105-024204_codi_v2-l1to7w-stab-depth2-codi0-canonical](20261105-024204_codi_v2-l1to7w-stab-depth2-codi0-canonical/) | codi | gpt2 | test (n=6000) | 0 | 0.409 | 11 | full_run | Henning Lindig |
+| [20261105-044444_codi_v2-l1to7w-stab-depth2-codi](20261105-044444_codi_v2-l1to7w-stab-depth2-codi/) | codi | gpt2 | test (n=3500) | 6 | 0.688 | 11 | full_run | Henning Lindig |
+| [20261105-044550_codi_v2-l1to7w-stab-depth2-codi-canonical](20261105-044550_codi_v2-l1to7w-stab-depth2-codi-canonical/) | codi | gpt2 | test (n=6000) | 6 | 0.417 | 11 | full_run | Henning Lindig |

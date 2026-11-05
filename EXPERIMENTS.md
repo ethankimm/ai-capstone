@@ -10351,3 +10351,59 @@ v_1: 0.220 / 0.214-0.216 at h_1..h_6 / 0.153 at h_ans. v_2: 0.129 / 0.137-0.142 
 **Gotchas hit:** RunPod's audit log shows actor `runpod` deleting both pods at 14:28:20 UTC; balance afterwards -$0.07. The pods used container disk only, so all data was lost. Causes on our side: the balance was never checked before launch; no sync ran during training although protocol section 9 requires one; nothing was armed to pull results or run valid evals when training ended. Spend on these pods (including two A40 pods that never got a machine): $15.79. Estimated, not observed: CODI-0 finished ~12:00 UTC and sat idle ~2.5 h (~$2.7); CODI was near step 13,500 (epoch ~9) when terminated.
 **Caveats:** Times after 07:45 UTC are estimates from the observed step rate.
 **Next:** Rerun both arms after topping up, with the safeguards in TRAINING_PROTOCOL section 10.5.
+
+---
+
+## 2026-11-04 — RuleChain L1-7w stabilised pair: CODI-0 matched reference, stabilised: test 0.679, d50 4.86; first L1-7w reference to survive; matches CODI (codi, run_id: 20261105-024111_codi_v2-l1to7w-stab-depth2-codi0)
+
+**Goal:** Pre-registered matched comparison (TRAINING_PROTOCOL section 10): do CODI's latents add accuracy over a 0-latent reference when training is stable and the data favours the hard levels?
+**Mechanism / model:** `codi`, gpt2, num_latent 0, RunPod A40, 12 epochs, lr 2e-3 cosine, adam_beta2 0.98, adam_epsilon 1e-6, max_grad_norm 1.0, LoRA r128/a32, 64 x 2, bf16, seed 11 (TRAINING_PROTOCOL section 10; values confirmed from training_args.bin).
+**Data:** `synthetic_data_v2_l1to7w` (190k train, 10k/10k/10k/40k x4), test = canonical L1-L7, 500/level.
+**Command:** `scripts/pod/codi_stab_arm.sh` (train, watchdog, valid sweep, selection, test), `scripts/pod/pair_watcher.py` on the laptop; `eval_command.txt`.
+**Headline results:** Test 0.679 (L1 1.000, L2 0.994, L3 0.860, L4 0.722, L5 0.560, L6 0.376, L7 0.242), d50 4.86. Selected checkpoint-17820 (best of last 3 on valid: 0.637, 0.670, 0.682). Paired CODI - CODI-0 on test (exact McNemar): L1 0, L2 0, L3 -0.006 (p 0.82), L4 +0.006 (0.85), L5 +0.038 (0.16), L6 +0.030 (0.28), L7 -0.008 (0.78); Holm over L4-7 all >= 0.63. **Primary, pooled L5-7: CODI 0.413, CODI-0 0.393, G +0.020, 95% CI [-0.008, +0.048], 240 vs 210 discordant, p 0.17.** All levels: 0.688 vs 0.679, G +0.009, p 0.25.
+**Interpretation:** By the pre-registered rule (section 10.3) this is a **null**: the 95% CI lies inside +-0.05, though its upper end (+0.048) is close to the line, so a gain just under 0.05 is not excluded. Round 1's result replicates on fresh, up-weighted data under a stable optimizer: CODI's latents add no detectable accuracy over CODI-0 at a matched 12-epoch budget. The data mix, not the latents, moved the hard levels: CODI-0 went from round-1 L5-7 0.494 / 0.240 / 0.120 to 0.560 / 0.376 / 0.242.
+**Gotchas hit:** Stable: no burst after warmup except one gradient-norm reading above 1, watchdog never fired, replay clean. Max gradient norm 1.64; passed the steps where the lr-3e-3 run diverged (4,090 and 4,590).
+**Caveats:** One seed. Matched 12-epoch budget, not each model's ceiling: valid was still rising at epoch 12 in both arms. The lower lr cost accuracy: this CODI (test 0.688, L3 0.854) is well below the lr-3e-3 CODI 20261103-193425 (0.743, L3 0.992), past the review's 0.02 falsification line, so both arms here are under-trained, most visibly at L3-L4. A null at this budget may not hold at a longer schedule.
+**Next:** Reference for the SIM-CoT decoder arm.
+
+---
+
+## 2026-11-04 — RuleChain L1-7w stabilised CODI-0: canonical L1-L12 test, secondary out-of-range check; near floor beyond the trained levels (codi, run_id: 20261105-024204_codi_v2-l1to7w-stab-depth2-codi0-canonical)
+
+**Goal:** Secondary check from TRAINING_PROTOCOL 10.3: how far past its trained levels does the selected checkpoint reach?
+**Mechanism / model:** `codi`, gpt2, num_latent 0, selected checkpoint-17820, RunPod A40.
+**Data:** canonical depth2 test, 6,000 items, L1-L12. Levels 8-12 were never trained on.
+**Command:** `eval_command.txt`.
+**Headline results:** L1-7 as the test record; L8 0.072, L9 0.030, L10 0.018, L11 0.018, L12 0.018; overall 0.409.
+**Interpretation:** Neither model extends beyond its training levels; L8-12 sit near floor. Not part of the decision rule.
+**Gotchas hit:** none.
+**Caveats:** One seed.
+**Next:** none.
+
+---
+
+## 2026-11-04 — RuleChain L1-7w stabilised pair: CODI 6 latents, stabilised: test 0.688, pooled L5-7 gain over CODI-0 +0.020 [-0.008, +0.048], pre-registered NULL (codi, run_id: 20261105-044444_codi_v2-l1to7w-stab-depth2-codi)
+
+**Goal:** Pre-registered matched comparison (TRAINING_PROTOCOL section 10): do CODI's latents add accuracy over a 0-latent reference when training is stable and the data favours the hard levels?
+**Mechanism / model:** `codi`, gpt2, num_latent 6, RunPod A40, 12 epochs, lr 2e-3 cosine, adam_beta2 0.98, adam_epsilon 1e-6, max_grad_norm 1.0, LoRA r128/a32, 64 x 2, bf16, seed 11 (TRAINING_PROTOCOL section 10; values confirmed from training_args.bin).
+**Data:** `synthetic_data_v2_l1to7w` (190k train, 10k/10k/10k/40k x4), test = canonical L1-L7, 500/level.
+**Command:** `scripts/pod/codi_stab_arm.sh` (train, watchdog, valid sweep, selection, test), `scripts/pod/pair_watcher.py` on the laptop; `eval_command.txt`.
+**Headline results:** Test 0.688 (L1 1.000, L2 0.994, L3 0.854, L4 0.728, L5 0.598, L6 0.406, L7 0.234), d50 5.25. Selected checkpoint-17820 (best of last 3 on valid: 0.652, 0.682, 0.694). Paired CODI - CODI-0 on test (exact McNemar): L1 0, L2 0, L3 -0.006 (p 0.82), L4 +0.006 (0.85), L5 +0.038 (0.16), L6 +0.030 (0.28), L7 -0.008 (0.78); Holm over L4-7 all >= 0.63. **Primary, pooled L5-7: CODI 0.413, CODI-0 0.393, G +0.020, 95% CI [-0.008, +0.048], 240 vs 210 discordant, p 0.17.** All levels: 0.688 vs 0.679, G +0.009, p 0.25.
+**Interpretation:** By the pre-registered rule (section 10.3) this is a **null**: the 95% CI lies inside +-0.05, though its upper end (+0.048) is close to the line, so a gain just under 0.05 is not excluded. Round 1's result replicates on fresh, up-weighted data under a stable optimizer: CODI's latents add no detectable accuracy over CODI-0 at a matched 12-epoch budget. The data mix, not the latents, moved the hard levels: CODI-0 went from round-1 L5-7 0.494 / 0.240 / 0.120 to 0.560 / 0.376 / 0.242.
+**Gotchas hit:** Stable: no burst after warmup except one gradient-norm reading above 1, watchdog never fired, replay clean. Max gradient norm 1.55. First attempt lost when the balance ran out (20261104-163703 records). The launcher's last ssh hung, so the watcher started an hour late, then crashed on a zsh argument bug; a watcher bug later reported the finished CODI-0 pod as unreachable. All fixed, no data lost.
+**Caveats:** One seed. Matched 12-epoch budget, not each model's ceiling: valid was still rising at epoch 12 in both arms. The lower lr cost accuracy: this CODI (test 0.688, L3 0.854) is well below the lr-3e-3 CODI 20261103-193425 (0.743, L3 0.992), past the review's 0.02 falsification line, so both arms here are under-trained, most visibly at L3-L4. A null at this budget may not hold at a longer schedule.
+**Next:** Ablation and probes on this checkpoint (separate records); SIM-CoT decoder arm against this pair.
+
+---
+
+## 2026-11-04 — RuleChain L1-7w stabilised CODI: canonical L1-L12 test, secondary out-of-range check; near floor beyond the trained levels (codi, run_id: 20261105-044550_codi_v2-l1to7w-stab-depth2-codi-canonical)
+
+**Goal:** Secondary check from TRAINING_PROTOCOL 10.3: how far past its trained levels does the selected checkpoint reach?
+**Mechanism / model:** `codi`, gpt2, num_latent 6, selected checkpoint-17820, RunPod A40.
+**Data:** canonical depth2 test, 6,000 items, L1-L12. Levels 8-12 were never trained on.
+**Command:** `eval_command.txt`.
+**Headline results:** L1-7 as the test record; L8 0.078, L9 0.038, L10 0.046, L11 0.014, L12 0.016; overall 0.417.
+**Interpretation:** Neither model extends beyond its training levels; L8-12 sit near floor. Not part of the decision rule.
+**Gotchas hit:** none.
+**Caveats:** One seed.
+**Next:** none.

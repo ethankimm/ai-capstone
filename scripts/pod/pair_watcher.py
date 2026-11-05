@@ -66,7 +66,7 @@ class Arm:
         rc, out = self.ssh(f"tail -c 4000 {LOG.format(k=self.kind)} 2>/dev/null | tr '\\r' '\\n' | grep -E 'it\\]$' | tail -1;"
                            " echo; cat /workspace/ARM_DONE 2>/dev/null | sed 's/^/DONE /';"
                            " cat /workspace/ARM_FAILED 2>/dev/null | sed 's/^/FAILED /';"
-                           f" cat {LOG.format(k=self.kind)}.watchdog 2>/dev/null | sed 's/^/WD /'; pgrep -f '[c]odi_stab_arm' >/dev/null && echo ARM_UP")
+                           f" cat {LOG.format(k=self.kind)}.watchdog 2>/dev/null | sed 's/^/WD /'; pgrep -f '[c]odi_stab_arm' >/dev/null && echo ARM_UP; true")  # `true`: a finished arm must not look like an ssh failure
         if rc != 0:
             self.fails += 1
             if self.fails >= 3:
