@@ -1,0 +1,587 @@
+{
+  "run_id": "20261105-085236_codi_v2-l1to7w-codi0-shortcut-check",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "checkpoint-17820 of 20261105-024111 (also 20261105-044444, 20261103-193425, round-1 CODI-0)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 560,
+    "seed": 31
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.4625,
+    "unparseable_rate": 0.0,
+    "compute_steps": 0,
+    "extra": {
+      "accuracy_kind": "teacher-forced answer token at \":\"; final_answer_accuracy = CODI-0 on the 560 unedited L4-7 items; records hold every edited query",
+      "causal_edits_b12": {
+        "CODI-0 stab": {
+          "taken last rule": {
+            "n": 280,
+            "gain": 0.862,
+            "exact_shift": 0.536,
+            "right_sign": 0.961
+          },
+          "taken 1 before last": {
+            "n": 180,
+            "gain": 0.965,
+            "exact_shift": 0.556,
+            "right_sign": 0.978
+          },
+          "taken 2 before": {
+            "n": 113,
+            "gain": 0.916,
+            "exact_shift": 0.522,
+            "right_sign": 0.965
+          },
+          "taken 3 before": {
+            "n": 77,
+            "gain": 1.029,
+            "exact_shift": 0.545,
+            "right_sign": 0.987
+          },
+          "taken 4 before": {
+            "n": 42,
+            "gain": 0.913,
+            "exact_shift": 0.333,
+            "right_sign": 0.952
+          },
+          "taken 5 before": {
+            "n": 21,
+            "gain": 1.068,
+            "exact_shift": 0.429,
+            "right_sign": 0.952
+          },
+          "taken 6 before": {
+            "n": 14,
+            "gain": 1.088,
+            "exact_shift": 0.286,
+            "right_sign": 0.929
+          },
+          "x0 shift, same path": {
+            "n": 298,
+            "gain": 0.826,
+            "exact_shift": 0.49,
+            "right_sign": 0.725
+          },
+          "untaken last 2 rules": {
+            "n": 552,
+            "moved": 0.15,
+            "moved_ge3": 0.043
+          },
+          "untaken middle": {
+            "n": 527,
+            "moved": 0.175,
+            "moved_ge3": 0.044
+          },
+          "untaken early (>=4 before last)": {
+            "n": 331,
+            "moved": 0.082,
+            "moved_ge3": 0.033
+          },
+          "flip rule 1": {
+            "n": 68,
+            "follow_new": 0.824,
+            "stick_old": 0.015,
+            "exact_new": 0.515
+          },
+          "flip rule 2": {
+            "n": 95,
+            "follow_new": 0.853,
+            "stick_old": 0.0,
+            "exact_new": 0.6
+          },
+          "flip rule 3": {
+            "n": 106,
+            "follow_new": 0.811,
+            "stick_old": 0.009,
+            "exact_new": 0.575
+          },
+          "flip rule 4": {
+            "n": 128,
+            "follow_new": 0.844,
+            "stick_old": 0.008,
+            "exact_new": 0.625
+          },
+          "flip rule 5+": {
+            "n": 177,
+            "follow_new": 0.791,
+            "stick_old": 0.006,
+            "exact_new": 0.446
+          },
+          "new start value": {
+            "n": 418,
+            "follow_new": 0.797,
+            "stick_old": 0.033,
+            "exact_new": 0.545
+          },
+          "base L4": {
+            "exact": 0.721,
+            "close": 0.929
+          },
+          "base L5": {
+            "exact": 0.55,
+            "close": 0.829
+          },
+          "base L6": {
+            "exact": 0.343,
+            "close": 0.693
+          },
+          "base L7": {
+            "exact": 0.236,
+            "close": 0.536
+          }
+        },
+        "CODI stab": {
+          "taken last rule": {
+            "n": 289,
+            "gain": 0.956,
+            "exact_shift": 0.626,
+            "right_sign": 0.972
+          },
+          "taken 1 before last": {
+            "n": 184,
+            "gain": 0.95,
+            "exact_shift": 0.543,
+            "right_sign": 0.978
+          },
+          "taken 2 before": {
+            "n": 114,
+            "gain": 0.946,
+            "exact_shift": 0.526,
+            "right_sign": 0.939
+          },
+          "taken 3 before": {
+            "n": 83,
+            "gain": 0.957,
+            "exact_shift": 0.59,
+            "right_sign": 0.964
+          },
+          "taken 4 before": {
+            "n": 43,
+            "gain": 1.024,
+            "exact_shift": 0.395,
+            "right_sign": 0.953
+          },
+          "taken 5 before": {
+            "n": 24,
+            "gain": 0.889,
+            "exact_shift": 0.375,
+            "right_sign": 0.917
+          },
+          "taken 6 before": {
+            "n": 14,
+            "gain": 0.59,
+            "exact_shift": 0.357,
+            "right_sign": 0.786
+          },
+          "x0 shift, same path": {
+            "n": 304,
+            "gain": 0.87,
+            "exact_shift": 0.493,
+            "right_sign": 0.783
+          },
+          "untaken last 2 rules": {
+            "n": 570,
+            "moved": 0.132,
+            "moved_ge3": 0.033
+          },
+          "untaken middle": {
+            "n": 527,
+            "moved": 0.131,
+            "moved_ge3": 0.046
+          },
+          "untaken early (>=4 before last)": {
+            "n": 362,
+            "moved": 0.102,
+            "moved_ge3": 0.033
+          },
+          "flip rule 1": {
+            "n": 76,
+            "follow_new": 0.697,
+            "stick_old": 0.039,
+            "exact_new": 0.434
+          },
+          "flip rule 2": {
+            "n": 98,
+            "follow_new": 0.857,
+            "stick_old": 0.01,
+            "exact_new": 0.571
+          },
+          "flip rule 3": {
+            "n": 108,
+            "follow_new": 0.861,
+            "stick_old": 0.0,
+            "exact_new": 0.611
+          },
+          "flip rule 4": {
+            "n": 130,
+            "follow_new": 0.915,
+            "stick_old": 0.008,
+            "exact_new": 0.638
+          },
+          "flip rule 5+": {
+            "n": 194,
+            "follow_new": 0.84,
+            "stick_old": 0.0,
+            "exact_new": 0.479
+          },
+          "new start value": {
+            "n": 429,
+            "follow_new": 0.797,
+            "stick_old": 0.026,
+            "exact_new": 0.557
+          },
+          "base L4": {
+            "exact": 0.714,
+            "close": 0.907
+          },
+          "base L5": {
+            "exact": 0.636,
+            "close": 0.85
+          },
+          "base L6": {
+            "exact": 0.421,
+            "close": 0.693
+          },
+          "base L7": {
+            "exact": 0.243,
+            "close": 0.614
+          }
+        },
+        "CODI lr3e-3": {
+          "taken last rule": {
+            "n": 287,
+            "gain": 0.978,
+            "exact_shift": 0.728,
+            "right_sign": 0.979
+          },
+          "taken 1 before last": {
+            "n": 180,
+            "gain": 1.011,
+            "exact_shift": 0.622,
+            "right_sign": 0.994
+          },
+          "taken 2 before": {
+            "n": 110,
+            "gain": 0.954,
+            "exact_shift": 0.655,
+            "right_sign": 0.955
+          },
+          "taken 3 before": {
+            "n": 81,
+            "gain": 0.92,
+            "exact_shift": 0.617,
+            "right_sign": 0.988
+          },
+          "taken 4 before": {
+            "n": 41,
+            "gain": 0.834,
+            "exact_shift": 0.561,
+            "right_sign": 0.927
+          },
+          "taken 5 before": {
+            "n": 20,
+            "gain": 0.938,
+            "exact_shift": 0.35,
+            "right_sign": 0.9
+          },
+          "taken 6 before": {
+            "n": 13,
+            "gain": 1.02,
+            "exact_shift": 0.385,
+            "right_sign": 1.0
+          },
+          "x0 shift, same path": {
+            "n": 299,
+            "gain": 0.86,
+            "exact_shift": 0.605,
+            "right_sign": 0.846
+          },
+          "untaken last 2 rules": {
+            "n": 576,
+            "moved": 0.078,
+            "moved_ge3": 0.021
+          },
+          "untaken middle": {
+            "n": 533,
+            "moved": 0.113,
+            "moved_ge3": 0.03
+          },
+          "untaken early (>=4 before last)": {
+            "n": 353,
+            "moved": 0.136,
+            "moved_ge3": 0.04
+          },
+          "flip rule 1": {
+            "n": 72,
+            "follow_new": 0.833,
+            "stick_old": 0.014,
+            "exact_new": 0.583
+          },
+          "flip rule 2": {
+            "n": 98,
+            "follow_new": 0.857,
+            "stick_old": 0.041,
+            "exact_new": 0.622
+          },
+          "flip rule 3": {
+            "n": 107,
+            "follow_new": 0.869,
+            "stick_old": 0.009,
+            "exact_new": 0.664
+          },
+          "flip rule 4": {
+            "n": 134,
+            "follow_new": 0.896,
+            "stick_old": 0.022,
+            "exact_new": 0.657
+          },
+          "flip rule 5+": {
+            "n": 188,
+            "follow_new": 0.846,
+            "stick_old": 0.0,
+            "exact_new": 0.473
+          },
+          "new start value": {
+            "n": 435,
+            "follow_new": 0.823,
+            "stick_old": 0.016,
+            "exact_new": 0.618
+          },
+          "base L4": {
+            "exact": 0.843,
+            "close": 0.936
+          },
+          "base L5": {
+            "exact": 0.693,
+            "close": 0.886
+          },
+          "base L6": {
+            "exact": 0.464,
+            "close": 0.721
+          },
+          "base L7": {
+            "exact": 0.236,
+            "close": 0.564
+          }
+        },
+        "CODI-0 round1": {
+          "taken last rule": {
+            "n": 240,
+            "gain": 0.819,
+            "exact_shift": 0.596,
+            "right_sign": 0.908
+          },
+          "taken 1 before last": {
+            "n": 152,
+            "gain": 0.98,
+            "exact_shift": 0.48,
+            "right_sign": 0.908
+          },
+          "taken 2 before": {
+            "n": 91,
+            "gain": 1.055,
+            "exact_shift": 0.374,
+            "right_sign": 0.868
+          },
+          "taken 3 before": {
+            "n": 59,
+            "gain": 0.939,
+            "exact_shift": 0.407,
+            "right_sign": 0.847
+          },
+          "taken 4 before": {
+            "n": 28,
+            "gain": 0.996,
+            "exact_shift": 0.25,
+            "right_sign": 0.893
+          },
+          "taken 5 before": {
+            "n": 12,
+            "gain": 1.235,
+            "exact_shift": 0.25,
+            "right_sign": 0.917
+          },
+          "taken 6 before": {
+            "n": 8,
+            "gain": 0.6,
+            "exact_shift": 0.0,
+            "right_sign": 0.875
+          },
+          "x0 shift, same path": {
+            "n": 241,
+            "gain": 0.733,
+            "exact_shift": 0.49,
+            "right_sign": 0.722
+          },
+          "untaken last 2 rules": {
+            "n": 472,
+            "moved": 0.153,
+            "moved_ge3": 0.047
+          },
+          "untaken middle": {
+            "n": 444,
+            "moved": 0.135,
+            "moved_ge3": 0.047
+          },
+          "untaken early (>=4 before last)": {
+            "n": 256,
+            "moved": 0.156,
+            "moved_ge3": 0.094
+          },
+          "flip rule 1": {
+            "n": 58,
+            "follow_new": 0.707,
+            "stick_old": 0.103,
+            "exact_new": 0.5
+          },
+          "flip rule 2": {
+            "n": 82,
+            "follow_new": 0.805,
+            "stick_old": 0.024,
+            "exact_new": 0.5
+          },
+          "flip rule 3": {
+            "n": 86,
+            "follow_new": 0.779,
+            "stick_old": 0.0,
+            "exact_new": 0.581
+          },
+          "flip rule 4": {
+            "n": 113,
+            "follow_new": 0.805,
+            "stick_old": 0.027,
+            "exact_new": 0.637
+          },
+          "flip rule 5+": {
+            "n": 148,
+            "follow_new": 0.649,
+            "stick_old": 0.027,
+            "exact_new": 0.324
+          },
+          "new start value": {
+            "n": 355,
+            "follow_new": 0.715,
+            "stick_old": 0.028,
+            "exact_new": 0.518
+          },
+          "base L4": {
+            "exact": 0.764,
+            "close": 0.85
+          },
+          "base L5": {
+            "exact": 0.514,
+            "close": 0.771
+          },
+          "base L6": {
+            "exact": 0.286,
+            "close": 0.579
+          },
+          "base L7": {
+            "exact": 0.057,
+            "close": 0.336
+          }
+        }
+      },
+      "no_tracking_solvers": {
+        "L7": {
+          "CODI-0": [
+            0.242,
+            0.568
+          ],
+          "surface-prior branches": [
+            0.048,
+            0.08
+          ],
+          "last 4 rules only": [
+            0.054,
+            0.186
+          ],
+          "all rules, no start value": [
+            0.074,
+            0.212
+          ]
+        },
+        "L5": {
+          "CODI-0": [
+            0.56,
+            0.818
+          ],
+          "surface-prior branches": [
+            0.13,
+            0.142
+          ],
+          "last 4 rules only": [
+            0.048,
+            0.206
+          ],
+          "all rules, no start value": [
+            0.064,
+            0.206
+          ]
+        },
+        "key": "[exact, within +-2]; Bayes-optimal where no start value is given"
+      },
+      "train_overlap": {
+        "prefix x0 + rules 1-3": 0.0,
+        "last 3 rules": "0.006-0.020"
+      },
+      "same_stack_student_ce_round1": {
+        "epoch": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "student_only": [
+          0.8297,
+          0.8269,
+          0.7267,
+          0.716,
+          0.8245,
+          0.7313,
+          0.7261
+        ],
+        "codi0": [
+          0.8369,
+          0.6519,
+          0.6248,
+          0.7416,
+          0.7263,
+          0.7171,
+          0.7075
+        ]
+      }
+    }
+  },
+  "hyperparams": {
+    "scripts": "scripts/codi_null_audit/ (a13_shortcut, a14_curves, b12_causal)",
+    "items_per_level": 140,
+    "levels": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "edit_seed": 5,
+    "dtype": "float32"
+  },
+  "seed": 31,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Is CODI-0 reach a shortcut? No-tracking solvers and causal single-rule edits.",
+  "timestamp_utc": "2026-11-05T08:52:36.350381+00:00",
+  "git": {
+    "commit": "7e09444",
+    "dirty": true
+  }
+}
