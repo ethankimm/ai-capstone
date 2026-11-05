@@ -1,0 +1,411 @@
+{
+  "run_id": "20261105-052233_codi_v2-l1to7w-stab-depth2-codi-latent-ablation",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "checkpoint-17820",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 3500,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.6886,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "sec_per_example": 0.4771998299642832,
+    "extra": {
+      "accuracy_kind": "teacher-forced answer token at the distillation position (no generation)",
+      "conditions": {
+        "clean": {
+          "accuracy": 0.6886,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.852,
+            "4": 0.728,
+            "5": 0.602,
+            "6": 0.406,
+            "7": 0.238
+          }
+        },
+        "mean_0": {
+          "accuracy": 0.6897,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.852,
+            "4": 0.732,
+            "5": 0.604,
+            "6": 0.408,
+            "7": 0.238
+          }
+        },
+        "resample_0": {
+          "accuracy": 0.688,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.852,
+            "4": 0.734,
+            "5": 0.6,
+            "6": 0.4,
+            "7": 0.236
+          }
+        },
+        "mean_1": {
+          "accuracy": 0.6883,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.856,
+            "4": 0.73,
+            "5": 0.608,
+            "6": 0.396,
+            "7": 0.234
+          }
+        },
+        "resample_1": {
+          "accuracy": 0.6863,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.856,
+            "4": 0.728,
+            "5": 0.602,
+            "6": 0.394,
+            "7": 0.23
+          }
+        },
+        "mean_2": {
+          "accuracy": 0.6886,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.856,
+            "4": 0.728,
+            "5": 0.612,
+            "6": 0.398,
+            "7": 0.232
+          }
+        },
+        "resample_2": {
+          "accuracy": 0.6857,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.856,
+            "4": 0.728,
+            "5": 0.602,
+            "6": 0.396,
+            "7": 0.224
+          }
+        },
+        "mean_3": {
+          "accuracy": 0.6883,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.856,
+            "4": 0.728,
+            "5": 0.61,
+            "6": 0.4,
+            "7": 0.23
+          }
+        },
+        "resample_3": {
+          "accuracy": 0.6854,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.856,
+            "4": 0.736,
+            "5": 0.6,
+            "6": 0.39,
+            "7": 0.222
+          }
+        },
+        "mean_4": {
+          "accuracy": 0.688,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.856,
+            "4": 0.726,
+            "5": 0.61,
+            "6": 0.4,
+            "7": 0.23
+          }
+        },
+        "resample_4": {
+          "accuracy": 0.686,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.856,
+            "4": 0.73,
+            "5": 0.596,
+            "6": 0.396,
+            "7": 0.23
+          }
+        },
+        "mean_5": {
+          "accuracy": 0.6889,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.858,
+            "4": 0.728,
+            "5": 0.614,
+            "6": 0.396,
+            "7": 0.232
+          }
+        },
+        "resample_5": {
+          "accuracy": 0.6866,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.856,
+            "4": 0.732,
+            "5": 0.604,
+            "6": 0.392,
+            "7": 0.228
+          }
+        },
+        "mean_tail_ge_1": {
+          "accuracy": 0.6729,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.858,
+            "4": 0.714,
+            "5": 0.558,
+            "6": 0.368,
+            "7": 0.218
+          }
+        },
+        "mean_tail_ge_2": {
+          "accuracy": 0.6794,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.862,
+            "4": 0.728,
+            "5": 0.586,
+            "6": 0.364,
+            "7": 0.222
+          }
+        },
+        "mean_tail_ge_3": {
+          "accuracy": 0.6846,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.862,
+            "4": 0.74,
+            "5": 0.586,
+            "6": 0.388,
+            "7": 0.222
+          }
+        },
+        "mean_tail_ge_4": {
+          "accuracy": 0.6871,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.858,
+            "4": 0.738,
+            "5": 0.6,
+            "6": 0.396,
+            "7": 0.224
+          }
+        },
+        "mean_tail_ge_5": {
+          "accuracy": 0.6889,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.858,
+            "4": 0.728,
+            "5": 0.614,
+            "6": 0.396,
+            "7": 0.232
+          }
+        },
+        "mean_all": {
+          "accuracy": 0.6711,
+          "accuracy_per_level": {
+            "1": 1.0,
+            "2": 0.994,
+            "3": 0.86,
+            "4": 0.708,
+            "5": 0.556,
+            "6": 0.362,
+            "7": 0.218
+          }
+        }
+      },
+      "geometry": {
+        "cos_sites_raw": [
+          [
+            0.997,
+            0.958,
+            0.954,
+            0.947,
+            0.944,
+            0.939
+          ],
+          [
+            0.958,
+            0.997,
+            0.992,
+            0.991,
+            0.987,
+            0.984
+          ],
+          [
+            0.954,
+            0.992,
+            0.997,
+            0.993,
+            0.993,
+            0.989
+          ],
+          [
+            0.947,
+            0.991,
+            0.993,
+            0.997,
+            0.994,
+            0.994
+          ],
+          [
+            0.944,
+            0.987,
+            0.993,
+            0.994,
+            0.997,
+            0.995
+          ],
+          [
+            0.939,
+            0.984,
+            0.989,
+            0.994,
+            0.995,
+            0.997
+          ]
+        ],
+        "cos_sites_centered": [
+          [
+            0.997,
+            0.82,
+            0.804,
+            0.782,
+            0.774,
+            0.759
+          ],
+          [
+            0.82,
+            0.997,
+            0.963,
+            0.969,
+            0.946,
+            0.94
+          ],
+          [
+            0.804,
+            0.963,
+            0.997,
+            0.97,
+            0.98,
+            0.959
+          ],
+          [
+            0.782,
+            0.969,
+            0.97,
+            0.997,
+            0.977,
+            0.983
+          ],
+          [
+            0.774,
+            0.946,
+            0.98,
+            0.977,
+            0.997,
+            0.984
+          ],
+          [
+            0.759,
+            0.94,
+            0.959,
+            0.983,
+            0.984,
+            0.997
+          ]
+        ],
+        "cross_item_cos_per_site": [
+          0.827,
+          0.757,
+          0.761,
+          0.765,
+          0.768,
+          0.771
+        ],
+        "item_specific_energy_per_site": [
+          0.164,
+          0.236,
+          0.233,
+          0.23,
+          0.227,
+          0.225
+        ],
+        "norm_per_site": [
+          32.13,
+          31.17,
+          31.15,
+          31.1,
+          31.08,
+          31.03
+        ]
+      },
+      "mean_json": "../synthetic_data_v2_l1to7w/depth2/valid.json",
+      "data_sha256": "67690675996913d0fc809ae49ae43f3878994d880a75e0e12f2113651f7860ee",
+      "matched_flags": {
+        "pad_invariant": true,
+        "fix_attn_mask": true,
+        "use_prj": true,
+        "prj_dim": 768,
+        "prj_no_ln": false,
+        "remove_eos": true,
+        "include_last_cot": false
+      }
+    }
+  },
+  "hyperparams": {
+    "inference": {
+      "latent_iterations": 6,
+      "batch_size": 64,
+      "dtype": "float32",
+      "device": "cpu",
+      "perm_seed": 0
+    },
+    "test_json": "../synthetic_data_v2_l1to7w/depth2/test.json"
+  },
+  "seed": null,
+  "hardware": "MacBook CPU / cpu",
+  "author": "Henning Lindig",
+  "notes": "RuleChain CODI latent geometry + per-site mean/resample ablation, all positions kept.",
+  "timestamp_utc": "2026-11-05T05:22:33.985801+00:00",
+  "git": {
+    "commit": "0ed3fc3",
+    "dirty": true
+  }
+}

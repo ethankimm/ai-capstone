@@ -10407,3 +10407,31 @@ v_1: 0.220 / 0.214-0.216 at h_1..h_6 / 0.153 at h_ans. v_2: 0.129 / 0.137-0.142 
 **Gotchas hit:** none.
 **Caveats:** One seed.
 **Next:** none.
+
+---
+
+## 2026-11-04 — Stabilised L1-7w CODI barely uses its latents: all six mean-ablated costs 0.018 (0.689 -> 0.671), against 0.42 for the lr-3e-3 CODI (codi, run_id: 20261105-052233_codi_v2-l1to7w-stab-depth2-codi-latent-ablation)
+
+**Goal:** Protocol 10.3: rerun the ablation on the selected stabilised CODI, so "uses its latents" and "gains from its latents" describe the same model.
+**Mechanism / model:** `codi`, checkpoint-17820 of 20261105-044444, CPU fp32.
+**Data:** canonical L1-L7 test (3,500); means from valid.json.
+**Command:** `scripts/ablate_latents_rulechain_codi.py` (`eval_command.txt`).
+**Headline results:** Clean 0.689 (L3 0.852, L4 0.728, L5 0.602, L6 0.406, L7 0.238). Any single site, mean or resample: 0.685-0.690. Tail >= 1: 0.673; >= 2: 0.679; >= 3: 0.685. All six: 0.671 (L4 0.708, L5 0.556, L6 0.362, L7 0.218). Centered cosine z_1..z_5 0.94-0.98.
+**Interpretation:** This CODI solves the task almost entirely without its latents, which explains the pair's null (20261105-044444). It weakens that null: it shows that a CODI which ignores its latents equals CODI-0. The lr-3e-3 CODI (20261104-022824) depended on its latents (0.744 -> 0.315) and scored higher on test (0.743), but has no matched reference, so the flag change and its effect on latent use cannot be separated here.
+**Gotchas hit:** none.
+**Caveats:** One checkpoint, one seed. All-ablated keeps the six positions with mean inputs, so they may still add a little generic compute.
+**Next:** A CODI claim needs a matched pair where CODI actually uses its latents; low priority behind the SIM-CoT controls.
+
+---
+
+## 2026-11-04 — Stabilised L1-7w CODI latent probes: flat across sites, no step per latent (v_1 0.23-0.26, v_2 0.16, v_3 0.11); answer only at the readout (0.51) (codi, run_id: 20261105-053042_codi_v2-l1to7w-stab-depth2-codi-latent-probes)
+
+**Goal:** Companion to the ablation 20261105-052233: do the latents of the stabilised CODI hold one step each?
+**Mechanism / model:** `codi`, checkpoint-17820 of 20261105-044444, CPU fp32.
+**Data:** probes fit on 14,000 train items, scored on 3,500 test items; majority baseline 0.02-0.03.
+**Command:** `scripts/probe_latents_rulechain_codi.py` (`eval_command.txt`).
+**Headline results:** Exact accuracy, h_0 / h_1..h_6 / h_ans. v_1 0.397 / 0.234-0.263 / 0.271. v_2 0.197 / 0.157-0.163 / 0.234. v_3 0.111 / 0.104-0.117 / 0.133. v_4 0.071 / 0.076-0.092 / 0.090. v_5-v_7 <= 0.096 everywhere. Answer 0.079 / 0.110-0.121 / 0.511.
+**Interpretation:** No staircase across sites, as in the other RuleChain CODI models. Early values are most readable at <bot>, before any latent pass, and the answer appears only at the readout. Consistent with the ablation: the latents add little.
+**Gotchas hit:** none.
+**Caveats:** Linear probes on the last layer; one checkpoint, one seed.
+**Next:** as the ablation record.
