@@ -12,6 +12,7 @@ is at risk). Lines starting ALERT or ALL_DONE are what a waiting session looks f
   nohup python3 scripts/pod/pair_watcher.py <dest> codi:<ip>:<port>:<pod_id>:<rate> codi0:<ip>:<port>:<pod_id>:<rate> >> <dest>/watcher.log 2>&1 &
 """
 import json
+import os
 import re
 import subprocess
 import sys
@@ -19,8 +20,9 @@ import time
 from pathlib import Path
 
 INTERVAL, EVAL_H, MARGIN, TOTAL = 600, 0.45, 0.5, 17820
-RUN = "/workspace/codi_runs/gpt2_l1to7w_stab_{k}/gpt2/ep_12/lr_0.002/seed_11"
-LOG = "/workspace/logs/gpt2_l1to7w_stab_{k}.log"
+NAME = os.environ.get("ARM_NAME", "gpt2_l1to7w_stab")  # same value as the launcher's ARM_NAME
+RUN = "/workspace/codi_runs/" + NAME + "_{k}/gpt2/ep_12/lr_0.002/seed_11"
+LOG = "/workspace/logs/" + NAME + "_{k}.log"
 
 
 def say(msg: str) -> None:

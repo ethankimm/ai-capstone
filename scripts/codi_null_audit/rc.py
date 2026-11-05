@@ -4,7 +4,10 @@ RT=re.compile(r"if it is at least (\d+), subtract (\d+); otherwise add (\d+)$")
 RD=re.compile(r"if it is below (\d+), double it; otherwise subtract (\d+)$")
 def parse(q):
     m=re.match(r"Start with (\d+)\. (.*) What is the final number\?$",q.strip())
-    x0=int(m.group(1)); body=m.group(2)
+    if m: x0=int(m.group(1)); body=m.group(2)
+    else:   # start value last (TRAINING_PROTOCOL section 11)
+        m=re.match(r"(Rule 1: .*) Start with (\d+)\. What is the final number\?$",q.strip())
+        x0=int(m.group(2)); body=m.group(1)
     parts=re.split(r"Rule \d+: ",body)[1:]
     rules=[]
     for p in parts:

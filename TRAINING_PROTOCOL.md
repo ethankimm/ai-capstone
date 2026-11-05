@@ -325,3 +325,53 @@ The first section-10 pair was lost when the RunPod balance ran out and RunPod te
 - Before launch, run `runpodctl user` and confirm the balance covers the full estimated cost plus 50%.
 - Sync checkpoints and logs off the pod during training (section 9), at least every epoch, without `optimizer.pt`.
 - Chain the valid evals and an end-of-run marker onto the training command, so a pod does not sit idle when training ends.
+
+## 11. Amendment (2026-11-05): start value last
+
+**Question.** Can CODI's latents do serial work once prefill cannot run the chain? Run `20261105-185416` found that the state passes
+rule by rule through the rule tokens, which come before the latents and cannot see them, so latents add about one step at the end.
+Putting the start value after the rules means no running value can exist at the rule tokens.
+
+### 11.1 Change
+
+Only the question text changes: `Rule 1: ... Rule n: ... Start with 57. What is the final number?`. Chains, ids, levels, steps, answers
+and splits are those of section 10, so results pair item by item with the section 10 pair. All other settings are section 10.2,
+including seed 11 and the 12-epoch budget. Data: `synthetic_data_v2_l1to7w_startlast` and `synthetic_data_v2_startlast` (canonical
+L1-L12 test), made by `scripts/make_rulechain_startlast.py`, hashes `configs/synthetic/v2_l1to7w_startlast_data_sha256.json` and
+`v2_startlast_data_sha256.json`.
+
+Training stays on L1-7: it changes one thing against section 10, six latents cannot plausibly exceed about seven steps, and round 1
+trained through L12 yet scored 0.08-0.09 at L8 against 0.07-0.08 for the section 10 pair, which never saw L8. L8-L12 stay measured
+on the canonical test.
+
+Launch: `SRC_DATA=synthetic_data_v2_l1to7w_startlast SRC_CANON=synthetic_data_v2_startlast HASH_CFG=v2_l1to7w_startlast_data_sha256.json
+CANON_HASH_CFG=v2_startlast_data_sha256.json ARM_NAME=gpt2_l1to7w_startlast ARM_SLUG=v2-l1to7w-startlast-depth2 bash
+scripts/pod/launch_stab_arm.sh codi|codi0 <pod> <rate> "RunPod A40 48GB"`, with `ARM_NAME` also set for `pair_watcher.py`. Section 10.5
+applies. Estimate from the section 10 pair: about 20 pod-hours, $12.30 at $0.60/h, so the balance must be at least $18.50.
+
+### 11.2 Selection and test
+
+As section 10.3: best of the last 3 epochs on valid, one test eval on L1-L7 (500 per level), canonical L1-L12 as the secondary check.
+If either arm diverges, rerun both at lr 1e-3. If valid is still climbing at epoch 12, report the result as budget-limited; do not
+extend without a new amendment.
+
+### 11.3 Analysis, fixed before training
+
+Reach is the `midpoint` in the run record (section 10 pair: CODI-0 4.86, CODI 5.25). The primary levels move to L2-L7 because CODI-0's
+reach is expected to fall, which would put L5-L7 at the floor.
+
+- **Manipulation check:** start-last CODI-0 reach against the section 10 CODI-0, paired by item.
+- **Primary:** pooled L2-L7 paired gain, CODI - CODI-0, exact McNemar (n = 3000).
+- **Position test:** tight thresholds at each rule, as `a20_lasthop.py`, on the selected pair.
+- Rerun `scripts/ablate_latents_rulechain_codi.py` on the selected CODI.
+
+| Outcome | Rule | Reading | Next |
+|---|---|---|---|
+| Prefill not closed | CODI-0 reach falls by less than 1.0 level | The CODI comparison cannot answer the question | Rerun Tests 2-4 to find how the chain still runs |
+| Latents take over | Gain >= 0.05, p < 0.05, reach difference >= +1.0, and a CODI gain before the last rule | Latents can do serial work when prefill cannot | Write up, then latents between rules |
+| Latents help | Gain >= 0.05, p < 0.05, but reach difference below +1.0 or gain at the last rule only | Latents add less than one hop even here | Step supervision (SIM-CODI) |
+| Null | 95% CI inside +-0.05 | CODI's objective does not move the chain into latents | Step supervision (SIM-CODI) |
+| Otherwise | Ambiguous | | Second seed pair |
+
+One seed, as section 10.4: a gain under about 0.05 is not interpretable without a second.
+

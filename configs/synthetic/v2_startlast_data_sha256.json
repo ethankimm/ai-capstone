@@ -1,0 +1,6 @@
+{
+ "_note": "sha256 of the canonical L1-L12 RuleChain test with the start value after the rules (TRAINING_PROTOCOL section 11); same items as v2_data_sha256.json; made by scripts/make_rulechain_startlast.py.",
+ "files": {
+  "depth2/test.json": "e9e50d759b3d6043417960940d82697497c7cc81767f3d6893823f65cd80cdcd"
+ }
+}

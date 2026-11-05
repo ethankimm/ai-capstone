@@ -1,0 +1,9 @@
+{
+ "_note": "sha256 of RuleChain L1-7w with the start value after the rules (TRAINING_PROTOCOL section 11). Same chains, ids, steps and answers as v2_l1to7w_data_sha256.json; made by scripts/make_rulechain_startlast.py.",
+ "files": {
+  "depth2/train.json": "42fd458cec6b484dc7802920b0dae76f90c1200e8c54e23cb9d30df070fb1d3e",
+  "depth2/valid.json": "f98795d3169dd7717cc748f7a1aeddd727cc18b0111e67762683a919067cd734",
+  "depth2/valid_monitor.json": "ebb0182c0eb99cc8c6d2523049b898aa43238faf9bf61c83dcf6208f8f851c1c",
+  "depth2/test.json": "2836df2ddc769802f50399816b2d3db2b74d429fb1ae0dcd5234a3cd7a97ecdf"
+ }
+}
