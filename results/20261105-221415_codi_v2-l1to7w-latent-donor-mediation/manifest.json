@@ -1,0 +1,110 @@
+{
+  "run_id": "20261105-221415_codi_v2-l1to7w-latent-donor-mediation",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "stabilised CODI checkpoint-17820 (20261105-044444); lr-3e-3 CODI (20261103-193425); round-1 CODI",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 1200,
+    "seed": 61
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.964,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "round-1 CODI: share of edits before the last rule whose answer follows the donor when all latents are patched (exact); not task accuracy",
+      "routes": {
+        "stab CODI": {
+          "through_latents_before_last_rule": [
+            0.001,
+            701
+          ],
+          "direct_before_last_rule": [
+            0.899,
+            701
+          ],
+          "through_latents_last_rule": [
+            0.0,
+            305
+          ],
+          "direct_last_rule": [
+            1.0,
+            305
+          ],
+          "own_latent_control": 1.0
+        },
+        "lr3 CODI": {
+          "through_latents_before_last_rule": [
+            0.946,
+            865
+          ],
+          "direct_before_last_rule": [
+            0.001,
+            865
+          ],
+          "through_latents_last_rule": [
+            0.0,
+            387
+          ],
+          "direct_last_rule": [
+            1.0,
+            387
+          ],
+          "own_latent_control": 1.0
+        },
+        "r1 CODI": {
+          "through_latents_before_last_rule": [
+            0.964,
+            639
+          ],
+          "direct_before_last_rule": [
+            0.0,
+            639
+          ],
+          "through_latents_last_rule": [
+            0.0,
+            347
+          ],
+          "direct_last_rule": [
+            0.994,
+            347
+          ],
+          "own_latent_control": 1.0
+        }
+      },
+      "pairs": {
+        "different_value": 2187,
+        "same_value": 1200
+      }
+    }
+  },
+  "hyperparams": {
+    "scripts": "scripts/codi_null_audit/ (b16_donor, a21_donor)",
+    "items_per_level": 200,
+    "levels": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "build_seed": 16,
+    "dtype": "float32"
+  },
+  "seed": 61,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Which route carries the running value to the answer? Donor patch, mediation and same-value donors on three CODI models.",
+  "timestamp_utc": "2026-11-05T22:14:15.082589+00:00",
+  "git": {
+    "commit": "6faa8bd",
+    "dirty": true
+  }
+}
