@@ -215,3 +215,4 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261105-044550_codi_v2-l1to7w-stab-depth2-codi-canonical](20261105-044550_codi_v2-l1to7w-stab-depth2-codi-canonical/) | codi | gpt2 | test (n=6000) | 6 | 0.417 | 11 | full_run | Henning Lindig |
 | [20261105-052233_codi_v2-l1to7w-stab-depth2-codi-latent-ablation](20261105-052233_codi_v2-l1to7w-stab-depth2-codi-latent-ablation/) | codi | gpt2 | test (n=3500) | 6 | 0.689 | None | full_run | Henning Lindig |
 | [20261105-053042_codi_v2-l1to7w-stab-depth2-codi-latent-probes](20261105-053042_codi_v2-l1to7w-stab-depth2-codi-latent-probes/) | codi | gpt2 | test (n=3500) | 6 | - | None | full_run | Henning Lindig |
+| [20261105-074801_codi_v2-l1to7w-codi-null-audit](20261105-074801_codi_v2-l1to7w-codi-null-audit/) | codi | gpt2 | test (n=3500) | 6 | 0.688 | None | full_run | Henning Lindig |
