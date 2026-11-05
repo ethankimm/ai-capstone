@@ -1,0 +1,52 @@
+# SIM-CoT on the round-1 RuleChain protocol (full data). gpt2_depth2_coconut_c1m6.yaml (100k items, k = 1-12, c_thought 1 x
+# max_latent_stage 6, 1 epoch per stage, 3 final epochs, CoT init, resume 1, num_epochs 10 -> final-stage checkpoint_8/9/10,
+# selection on depth2/valid.json, test on depth2/test.json) PLUS SIM-CoT's step-level supervision, exactly as in
+# pilot_k8_simcot_c1m6.yaml (SIMCOT_PILOT.md): auxiliary GPT-2 decoder (training only) decodes latent j into rule step j;
+# final stage: latents 1-5 -> steps 1-5, latent 6 -> steps 6..k joined (here up to 7 steps), spare latents -> "### N".
+# Code = InternLM/SIM-CoT @ cd3291d Coconut fork + scripts/simcot_explain_loss.patch. Only differences from
+# gpt2_depth2_coconut_c1m6.yaml: name and the SIM-CoT keys at the bottom. References (already logged): round-1
+# gpt2_depth2_no_thoughts_m6 (s0, s1), gpt2_depth2_coconut_c1m6, gpt2_depth2_codi0.
+# Launch via lrm_work/queue_simcot_full_gpu4.sh (scripts/pod/coconut_v2.sh with COCONUT_DIR=<SIM-CoT>/Coconut).
+
+project: coconut
+save_path: /workspace/coconut_runs
+name: gpt2_depth2_simcot_c1m6
+
+only_eval: False
+
+coconut: True
+cot: False
+no_thoughts: False
+no_cot: False
+
+c_thought: 1
+epochs_per_stage: 1
+max_latent_stage: 6
+pad_latent_to_max: True
+
+save_only_improve: False
+uniform_prob: 0.0
+model_id: openai-community/gpt2
+load_model_path: /workspace/coconut_runs/gpt2_depth2_cot/checkpoint_<BEST>  # SET to the newest checkpoint_N of the CoT run
+seed: 0
+resume: 1
+bf16: False
+train_path: /workspace/synthetic_data_v2/depth2/train.json
+val_path: /workspace/synthetic_data_v2/depth2/valid_monitor.json
+reset_optimizer: True
+batch_size_training: 32
+debug: False
+gradient_accumulation_steps: 4
+num_epochs: 10  # resume 1 skips stage 0: epochs 1-6 = stages 1-6, 7-9 = final (3 final-stage epochs)
+lr: !!float "1e-4"
+weight_decay: 0.01
+
+# SIM-CoT (from the fork's args/gsm_simcot.yaml)
+coconutgpt: True
+mode: coconutgpt_same_word_embedding
+explain_mode: v1_aug
+training_method: full
+w_prompt: False
+wandb: False
+# per-epoch monitor generation on val_path (the fork runs it only when train_or_eval == 'eval'; upstream always does)
+train_or_eval: eval
