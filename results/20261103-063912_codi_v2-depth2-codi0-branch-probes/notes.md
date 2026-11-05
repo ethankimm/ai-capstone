@@ -38,3 +38,5 @@ At `ans`, intermediates are mostly not decodable (s_j ≤ 0.18 for every j, b_j 
 - Save tens-digit accuracy and probe the tokens after each "." to locate where s_j finishes.
 - Same probes on CODI (6 latents) and on the latents themselves.
 - Branch-free control C1/C2 as written in V2_TASKS_SPEC.md, now with the prediction "little gain".
+
+**Correction (2026-11-05, run 20261105-185416):** exact values here were read at the `.` closing each rule, and the "coarse value" reading leaned on them. Three tokens later, at the next rule's `:`, a separate probe on this checkpoint reads 0.95 / 0.80 / 0.47 for s_2 / s_3 / s_4, against 0.51 / 0.34 / 0.27 here. Threshold edits show the right branch 0.89 at margin 2 at rule 4, so the value is much sharper than these probes implied.

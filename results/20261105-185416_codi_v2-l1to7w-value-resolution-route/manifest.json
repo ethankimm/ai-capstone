@@ -1,0 +1,216 @@
+{
+  "run_id": "20261105-185416_codi_v2-l1to7w-value-resolution-route",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "checkpoint-17820 of 20261105-024111 and 20261105-044444; 20261103-193425; round-1 CODI-0 and CODI",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 1000,
+    "seed": 41
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.556,
+    "unparseable_rate": 0.0,
+    "compute_steps": 0,
+    "extra": {
+      "accuracy_kind": "stabilised CODI-0, exact, 200 test items per level L3-7; predictions.jsonl holds the 10,000 constructed chains",
+      "paired_exact_by_tight_decisions": {
+        "stabilised": {
+          "0": {
+            "n": 5000,
+            "codi": 0.606,
+            "codi0": 0.59,
+            "wins": 686,
+            "losses": 606
+          },
+          "1": {
+            "n": 633,
+            "codi": 0.795,
+            "codi0": 0.777,
+            "wins": 56,
+            "losses": 45
+          },
+          "2": {
+            "n": 1296,
+            "codi": 0.384,
+            "codi0": 0.33,
+            "wins": 181,
+            "losses": 111
+          },
+          "3": {
+            "n": 1459,
+            "codi": 0.136,
+            "codi0": 0.114,
+            "wins": 114,
+            "losses": 81
+          },
+          "4+": {
+            "n": 1612,
+            "codi": 0.027,
+            "codi0": 0.027,
+            "wins": 36,
+            "losses": 36
+          }
+        },
+        "round1": {
+          "0": {
+            "n": 5000,
+            "codi": 0.528,
+            "codi0": 0.554,
+            "wins": 490,
+            "losses": 620
+          },
+          "1": {
+            "n": 633,
+            "codi": 0.957,
+            "codi0": 0.878,
+            "wins": 66,
+            "losses": 16
+          },
+          "2": {
+            "n": 1296,
+            "codi": 0.471,
+            "codi0": 0.404,
+            "wins": 256,
+            "losses": 169
+          },
+          "3": {
+            "n": 1459,
+            "codi": 0.147,
+            "codi0": 0.122,
+            "wins": 144,
+            "losses": 107
+          },
+          "4+": {
+            "n": 1612,
+            "codi": 0.037,
+            "codi0": 0.025,
+            "wins": 50,
+            "losses": 31
+          }
+        }
+      },
+      "ablation_constructed": {
+        "stab CODI": {
+          "0 tight": {
+            "intact": 0.606,
+            "ablated": 0.587
+          },
+          "1-3 tight L3-4": {
+            "intact": 0.549,
+            "ablated": 0.521
+          },
+          "1-3 tight L5-7": {
+            "intact": 0.099,
+            "ablated": 0.095
+          }
+        },
+        "r1 CODI": {
+          "0 tight": {
+            "intact": 0.528,
+            "ablated": 0.08
+          },
+          "1-3 tight L3-4": {
+            "intact": 0.671,
+            "ablated": 0.062
+          },
+          "1-3 tight L5-7": {
+            "intact": 0.098,
+            "ablated": 0.026
+          }
+        },
+        "lr3 CODI": {
+          "0 tight": {
+            "intact": 0.678,
+            "ablated": 0.084
+          },
+          "1-3 tight L3-4": {
+            "intact": 0.777,
+            "ablated": 0.064
+          },
+          "1-3 tight L5-7": {
+            "intact": 0.15,
+            "ablated": 0.021
+          }
+        }
+      },
+      "one_rule_route_gain": {
+        "stab CODI-0": {
+          "edit": 1.01,
+          "Bnext": 0.09,
+          "Blast": 0.14,
+          "Anext": 0.9,
+          "Alast": 0.88,
+          "n": 211
+        },
+        "stab CODI": {
+          "edit": 1.0,
+          "Bnext": 0.01,
+          "Blast": 0.08,
+          "Anext": 0.98,
+          "Alast": 0.91,
+          "n": 204
+        },
+        "lr3 CODI": {
+          "edit": 1.01,
+          "Bnext": 0.02,
+          "Blast": 0.31,
+          "Anext": 0.99,
+          "Alast": 0.66,
+          "n": 203
+        },
+        "r1 CODI-0": {
+          "edit": 1.0,
+          "Bnext": 0.07,
+          "Blast": 0.08,
+          "Anext": 0.92,
+          "Alast": 0.91,
+          "n": 149
+        },
+        "r1 CODI": {
+          "edit": 0.98,
+          "Bnext": 0.05,
+          "Blast": 0.41,
+          "Anext": 0.99,
+          "Alast": 0.72,
+          "n": 139
+        }
+      },
+      "counts": {
+        "threshold_queries": 15129,
+        "small_edits": 3764,
+        "freeze_pairs": 647,
+        "route_pairs": 408,
+        "constructed": 10000
+      }
+    }
+  },
+  "hyperparams": {
+    "scripts": "scripts/codi_null_audit/ (a15-a19, b13-b15)",
+    "items_per_level": 200,
+    "levels": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "build_seed": 13,
+    "dtype": "float32",
+    "raw_outputs": "~/Documents/Penn/CIS5980/codi_audit_artifacts"
+  },
+  "seed": 41,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "How precise is the running value, how does it travel, and where does the CODI gain sit?",
+  "timestamp_utc": "2026-11-05T18:54:16.109439+00:00",
+  "git": {
+    "commit": "104cf01",
+    "dirty": true
+  }
+}

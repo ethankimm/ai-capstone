@@ -13,3 +13,11 @@ Memory: on a 24 GB Mac run one job at a time. With MPS set both `PYTORCH_MPS_HIG
 [B, T, 50k] logits, which took swap to 49 GB here, so `harness.py` uses the transformer body.
 
 `a11_sim.py` is a noisy-tracker simulator that FAILED its held-out checks; it is kept because the report cites that failure.
+
+`a15`-`a19` and `b13`-`b15` belong to run `*_codi_v2-l1to7w-value-resolution-route`. They take an output folder as well:
+
+    ../codi/.venv/bin/python scripts/codi_null_audit/b13_resolution.py $PWD/scripts/codi_null_audit mps <output dir>
+    ../codi/.venv/bin/python scripts/codi_null_audit/a16_resolution.py scripts/codi_null_audit <output dir>
+
+`b13` writes the edited items and constructed chains that `b15`, `a16`, `a17`, `a18` and `a19` read. `a15` takes a folder of the
+baseline prediction files. `b14` is independent. Use absolute paths for `b*`, because `harness.py` changes directory.
