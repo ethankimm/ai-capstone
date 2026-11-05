@@ -129,3 +129,5 @@ Run record `20261104-144235_coconut_v2-depth2-pilot_k8_simcot_c1m6`.
 1. Necessity: resample swap per latent within level, follows-donor vs keeps-own, plus mean / tail ablation.
 2. Does latent j carry rule j: swap only latent j and test whether the answer follows rule j's donor value.
 3. Second seed; vary M (e.g. M = 8) to check that the cliff moves with the number of latents.
+4. Full round-1 protocol (100k items, k 1-12, 1 epoch per stage): started 2026-11-04 on GPU 4, paused after stage 6.
+   See `SIMCOT_FULL.md` for its status and how to resume it.
