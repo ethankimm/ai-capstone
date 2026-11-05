@@ -10134,7 +10134,7 @@ At `ans`, intermediates are mostly not decodable (s_j ≤ 0.18 for every j, b_j 
 - Same probes on CODI (6 latents) and on the latents themselves.
 - Branch-free control C1/C2 as written in V2_TASKS_SPEC.md, now with the prediction "little gain".
 
-**Correction (2026-11-05, run 20261105-185416):** exact values here were read at the `.` closing each rule, and the "coarse value" reading leaned on them. One token later, at the next rule's `:`, this checkpoint reads 0.95 / 0.80 / 0.47 for s_2 / s_3 / s_4, against 0.51 / 0.34 / 0.27 here. Threshold edits show the right branch 0.89 at margin 2 at rule 4, so the value is much sharper than these probes implied.
+**Correction (2026-11-05, run 20261105-185416):** exact values here were read at the `.` closing each rule, and the "coarse value" reading leaned on them. Three tokens later, at the next rule's `:`, a separate probe on this checkpoint reads 0.95 / 0.80 / 0.47 for s_2 / s_3 / s_4, against 0.51 / 0.34 / 0.27 here. Threshold edits show the right branch 0.89 at margin 2 at rule 4, so the value is much sharper than these probes implied.
 
 ---
 
@@ -10483,6 +10483,8 @@ v_1: 0.220 / 0.214-0.216 at h_1..h_6 / 0.153 at h_ans. v_2: 0.129 / 0.137-0.142 
 
 **Correction (2026-11-05, run 20261105-185416):** the two-track reading above did not hold. Chosen constants are not combined near the end: edits reach the answer only through later rule tokens, rule by rule, in all five checkpoints tested. "Coarse value" also overstated it: the right branch is taken 0.97 of the time at margin 2 through rule 4. The exact-value figures quoted here (0.51, 0.27) were read at the `.` token; at the following `:` the same values read 0.95 and 0.47 on round-1 CODI-0.
 
+**Correction (2026-11-05, run 20261105-185416):** "reach is not serial depth" was also wrong. The state passes rule by rule through the rule tokens, so d50 is a serial reach.
+
 ---
 
 ## 2026-11-05 — How the running value travels in one pass: rule by rule through the rule tokens, not combined at the end; precision and parity fail in specific places, and CODI's gain sits on 1-3 tight decisions (codi, run_id: 20261105-185416_codi_v2-l1to7w-value-resolution-route)
@@ -10512,3 +10514,8 @@ v_1: 0.220 / 0.214-0.216 at h_1..h_6 / 0.153 at h_ans. v_2: 0.129 / 0.137-0.142 
 **Gotchas hit:** First sampler hung: L3 tight plus P-after-halving needs two P rules, and a "half T/D" constraint made it impossible (fixed to L-1). macOS has no `timeout`. zsh parsed `$br:results` as a `:r` modifier, so the first prediction restore silently found nothing. The session scratchpad disappeared mid-work, so scripts moved to the repo and outputs to `codi_audit_artifacts`.
 **Caveats:** One seed per recipe. Constructed chains are zero-shot and rare in training, so absolute accuracy may understate a model trained on them. The margin cut (<= 2) and tight-count split were chosen after seeing data; the gain replicates across two recipes but was not pre-registered. Natural stabilised L3-4 margin-1 items go the other way (13/21, n = 87, not significant). Effect sets use items the model answered within 2. Single-block gains are windows between arrival and last read, not arrival times, and overlap across layers. Probes are linear and the second bit stays near chance, which may be a probe limit.
 **Next:** Train one CODI / CODI-0 pair on a tight mix, because zero-shot cannot separate real limits from rarity. Check SIM-Coconut on the constructed chains if its checkpoint can be recovered; prediction: flat across tightness up to its depth.
+
+**Follow-up analysis (`a20_lasthop.py`, same raw outputs):** where along the chain does CODI gain precision? Threshold edits by rules left after the edited rule, right-branch rate on items both models answered within 2, CODI vs CODI-0. Round 1, margin 1: last rule 0.809 vs 0.591 (items 122/23, p < 1e-4); 1 left 0.469 vs 0.511; 2 left 0.591 vs 0.614; 3+ left 0.584 vs 0.647. Margin 2: last rule 0.888 vs 0.761; 1 left 0.654 vs 0.704; 2 left 0.733 vs 0.763; 3+ left 0.663 vs 0.709. Natural items with exactly one tight decision, exact wins/losses: last rule 28/7, 1 left 14/10, 2 left 6/4, 3+ left 13/33. Stabilised is weaker and less local: margin 1 last rule 0.642 vs 0.600 (p 0.04), margin 2 0.829 vs 0.782 (p 0.005), 1 left 0.590 vs 0.575 and 0.792 vs 0.751, 3+ left about 0; natural 14/15, 16/17, 20/11, 23/16.
+Reach on constructed chains (level where exact crosses 0.5; a full extra hop would be about +1.0): tight chains +0.20 and +0.14 (stabilised), +0.25 and +0.21 (round 1); wide chains +0.37 and +0.10 (stabilised), -0.11 and -0.15 (round 1).
+**Reading:** with used latents, the added precision is at the last rule only. That is one extra step at the end, worth about a fifth of a level of reach, not one level and not six. Rule count does measure serial steps, since the state passes rule by rule, so "reach is not serial depth" in 20261105-085236 was wrong. A tight threshold is a probe of the state at one rule, not a replacement for depth. The position split was chosen after seeing the data, though the earlier v_{n-1} result points the same way.
+**Next, revised:** step-supervised latents (SIM-CODI) ahead of a tight-trained pair, because the open question is whether latents can add more than one step. Score it with this position test.

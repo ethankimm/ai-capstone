@@ -17,3 +17,5 @@
 **Next:** Student-only and teacher-only arms under TRAINING_PROTOCOL section 10 flags, to split budget, teacher CE and distillation. Probe the tokens after each "." and the positions after <bot> for a sum track. Report d50 as reach, not serial depth, and treat `no_thoughts_m6` as a weak reference for SIM-Coconut's +0.73.
 
 **Correction (2026-11-05, run 20261105-185416):** the two-track reading above did not hold. Chosen constants are not combined near the end: edits reach the answer only through later rule tokens, rule by rule, in all five checkpoints tested. "Coarse value" also overstated it: the right branch is taken 0.97 of the time at margin 2 through rule 4. The exact-value figures quoted here (0.51, 0.27) were read at the `.` token; at the following `:` the same values read 0.95 and 0.47 on round-1 CODI-0.
+
+**Correction (2026-11-05, run 20261105-185416):** "reach is not serial depth" was also wrong. The state passes rule by rule through the rule tokens, so d50 is a serial reach.
