@@ -10666,3 +10666,37 @@ Same-length donor by level, L4 / L5 / L6 / L7: round 1 0.98 / 0.80 / 0.66 / 0.57
 **Next:** Break the fixed point, not train longer: give passes different jobs. Step supervision (SIM-CODI) on start-last is the pre-registered next step. A label-free alternative is depth-matched latents (n passes for an n-rule item). Score either with the k-sweep and per-latent readout. Second seed for the +0.099.
 
 **Correction (2026-11-06):** depth-matched latents, suggested under Next, would not force stepping: a model given n passes can still finish in two and copy, which is what it does with six. A stronger label-free option is rule-gated latents: at pass s, mask every rule but rule s+1, using the same per-pass masks as `b21_reads.py`. A later rule can then only reach the answer through earlier latents' state. Six passes plus the answer stage cover L7. Untested; tail tokens can still read all the rules, and CODI-0 shows they run about two hops.
+
+---
+
+## 2026-11-06 — Start-last CODI per-site ablation on test: all latents mean-ablated 0.047 against 0.447 clean, any single latent costs at most 0.14 overall, the curve is flat from three latents on (codi, run_id: 20261106-105537_codi_v2-l1to7w-startlast-depth2-codi-latent-ablation)
+
+**Goal:** TRAINING_PROTOCOL section 11.3 reliance, early-answering and filler analogues on the selected CODI.
+**Mechanism / model:** `codi`, gpt2, 6 latents, checkpoint-17820 of 20261106-083843, fp32, CPU.
+**Data:** Start-last test, n=3500, 500 per level. Means from start-last valid.
+**Command:** `scripts/ablate_latents_rulechain_codi.py`; `eval_command.txt`.
+**Headline results:** Exact by level L1-L7. Clean 1.00 / 1.00 / .48 / .31 / .16 / .12 / .08. All sites mean-ablated, positions kept: .09 / .05 / .04 / .04 / .04 / .03 / .03. Tail ablated from s, overall: s=1 .147, s=2 .369, s=3 .425, s=4 .441, s=5 .445, clean .447. L2 by the same tail: .05, .86, 1.00. L3: .04, .31, .41, .44, .47. Single sites: `mean_0` removes L1 (.01) and leaves L2 and above unchanged; `mean_1` to `mean_5` cost .00-.06 at L3. Centered cosine between z_1..z_5 .97-.996; z_0 against the rest .57.
+**Interpretation:** *Filler analogue:* with latent content removed and positions kept the model is at the floor, so positions alone do nothing, and the content is used. *Reliance without necessity at low levels:* L2 falls from 1.00 to .05 with latents ablated while CODI-0 scores .98 with none. *Early answering:* the curve is flat from three latents on, matching the true-truncation sweep in 20261106-101740. Single-site ablation stays near-free because later latents are near copies, so per-site `N_j(k)` alone would understate reliance.
+**Gotchas hit:** None.
+**Caveats:** One seed. Mean ablation is off-distribution; resampled latents, which are real ones, cost more per site (L3 .35-.38) and are shown in the manifest.
+**Next:** See 20261106-101740.
+
+---
+
+## 2026-11-06 — Start-last position and donor tests: CODI's gain now reaches two rules before the last, not just the last rule; everything before the last rule still passes through the latents (codi, run_id: 20261106-105634_codi_v2-l1to7w-startlast-position-donor)
+
+**Goal:** TRAINING_PROTOCOL section 11.3 position test, donor patch, mediation and same-value donors on the selected pair: does CODI's gain spread to earlier rules once prefill is closed?
+**Mechanism / model:** `codi`, gpt2. Start-last CODI (6 latents) and CODI-0, checkpoint-17820, fp32, MPS.
+**Data:** 200 test items per level, L3-L7 (position) and L2-L7 (donor). 15,129 threshold edits, 3,764 small edits, 10,000 constructed chains (in `predictions.jsonl`, with both models' answers). 424 different-value and 338 same-value donor pairs answered exactly right. Edited and constructed items are new questions.
+**Command:** `scripts/codi_null_audit/`: `FORMAT=startlast b13_resolution`, `a25_position`, `FORMAT=startlast b16_donor`, `a21_donor`. The freeze test was skipped because rule tokens hold no running value here.
+**Headline results:**
+- **Position.** Right branch, CODI vs CODI-0, on items both answered within 2, by rules left after the edited rule. Margin 1: last rule .550 / .225, 1 left .234 / .138 (p .007), 2 left .455 / .359 (p .013), 3+ left .466 / .414 (p .23). Margin 2: .674 / .322, .323 / .195 (p .0003), .507 / .408 (p .024), .480 / .450 (p .35). Margin 3+: .854 / .508, .508 / .348 (p 3e-5), .600 / .501 (p .001), .561 / .533 (p .41). With the start first, round-1 CODI gained at the last rule only (.81 / .59, then .47 / .51, .59 / .61, .58 / .65).
+- **Natural items** with exactly one tight decision, exact wins/losses: last rule 16/2 (p .001), 1 left 5/3, 2 left 6/6, 3+ left 16/10. These do not show a gain before the last rule.
+- **Constructed chains**, exact CODI / CODI-0. Wide: L3 .51 / .25, L4 .36 / .17, L5 .20 / .11, L6 .13 / .08, L7 .10 / .06. Tight: L3 .16 / .07, L4 .06 / .03, then both near floor.
+- **Mediation.** Share following the donor, through latents / direct route. Edit at the last rule 0.00 / .97. 1 rule left .97 / 0.00. 2 left .68 / 0.00. 3+ left .70 / .04. Own-latent control 1.0.
+- **Same-value donors** keep the answer 1.00 / .94 / .94 / .86 at L2-L5. Single latents follow the donor .00-.01; replacing from z_1, z_2, z_3 on gives .88, .76, .49.
+
+**Interpretation:** Section 11.3 stays "latents help", because reach difference is +0.23. But "gain at the last rule only" does not describe this model: on edited items the gain reaches one and two rules before the last and stops by three, which fits about two passes of real work (20261106-101740). The route split is the same as the working start-first models: latents carry everything before the last rule, the answer tokens apply it, and latents act through the value.
+**Gotchas hit:** `a20_lasthop.py` is written for the start-first runs, so `a25_position.py` repeats its first two tables for this pair.
+**Caveats:** One seed. The position split comes from the earlier post-hoc analysis, though it was pre-registered here. Edited items are conditioned on both models being within 2. Natural items do not confirm the earlier-rule gain, with few items and small counts (5/3, 6/6). Deep edits land on neither answer .26-.32 of the time through latents, unexplained.
+**Next:** See 20261106-101740.

@@ -1,0 +1,38 @@
+{
+  "run_id": "20261106-105634_codi_v2-l1to7w-startlast-position-donor",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "start-last CODI and CODI-0, checkpoint-17820 (20261106-083843, 20261106-052644)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 10000,
+    "seed": 13
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.173,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "CODI exact on constructed chains (tight and wide), not task accuracy"
+    }
+  },
+  "hyperparams": {
+    "scripts": "scripts/codi_null_audit/ (b13_resolution FORMAT=startlast, b16_donor FORMAT=startlast, a21_donor, a25_position)",
+    "dtype": "float32",
+    "raw_outputs": "~/Documents/Penn/CIS5980/codi_audit_artifacts"
+  },
+  "seed": 13,
+  "hardware": "MacBook MPS",
+  "author": "Henning Lindig",
+  "notes": "Section 11.3 position test and donor, mediation and same-value tests on the start-last pair",
+  "timestamp_utc": "2026-11-06T10:56:34.618157+00:00",
+  "git": {
+    "commit": "101baa9",
+    "dirty": true
+  }
+}
