@@ -220,3 +220,7 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261105-185416_codi_v2-l1to7w-value-resolution-route](20261105-185416_codi_v2-l1to7w-value-resolution-route/) | codi | gpt2 | test (n=1000) | 0 | 0.556 | 41 | full_run | Henning Lindig |
 | [20261105-221415_codi_v2-l1to7w-latent-donor-mediation](20261105-221415_codi_v2-l1to7w-latent-donor-mediation/) | codi | gpt2 | test (n=1200) | 6 | 0.964 | 61 | full_run | Henning Lindig |
 | [20261105-232354_codi_v2-l1to7w-latent-repair](20261105-232354_codi_v2-l1to7w-latent-repair/) | codi | gpt2 | test (n=600) | 6 | 0.998 | 71 | full_run | Henning Lindig |
+| [20261106-052644_codi_v2-l1to7w-startlast-depth2-codi0](20261106-052644_codi_v2-l1to7w-startlast-depth2-codi0/) | codi | gpt2 | test (n=3500) | 0 | 0.363 | 11 | full_run |  |
+| [20261106-052815_codi_v2-l1to7w-startlast-depth2-codi0-canonical](20261106-052815_codi_v2-l1to7w-startlast-depth2-codi0-canonical/) | codi | gpt2 | test (n=6000) | 0 | 0.224 | 11 | full_run |  |
+| [20261106-083843_codi_v2-l1to7w-startlast-depth2-codi](20261106-083843_codi_v2-l1to7w-startlast-depth2-codi/) | codi | gpt2 | test (n=3500) | 6 | 0.447 | 11 | full_run |  |
+| [20261106-083950_codi_v2-l1to7w-startlast-depth2-codi-canonical](20261106-083950_codi_v2-l1to7w-startlast-depth2-codi-canonical/) | codi | gpt2 | test (n=6000) | 6 | 0.274 | 11 | full_run |  |

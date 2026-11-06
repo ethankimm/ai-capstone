@@ -10580,3 +10580,59 @@ Same-length donor by level, L4 / L5 / L6 / L7: round 1 0.98 / 0.80 / 0.66 / 0.57
 **Gotchas hit:** The first version took the first 900 wrong items, which over-sampled low levels; items are now sampled at random. L3 rows are tiny for the working models (2-3 items).
 **Caveats:** One seed per recipe. Selected on model-correct donors, so "blur" is measured on items whose own answers were right. Why long-chain latents transfer worse is inferred: other item-specific information in them is not ruled out. Blur in prefill is inferred from the relay holding crisp values, not read directly.
 **Next:** Same test on the start-last pair.
+
+---
+
+## 2026-11-05 — RuleChain start value last, CODI-0 reference: test 0.363, reach 2.69 against 4.86 with the start first, manipulation check passed, budget-limited (codi, run_id: 20261106-052644_codi_v2-l1to7w-startlast-depth2-codi0)
+
+**Goal:** Pre-registered test (TRAINING_PROTOCOL section 11): can CODI's latents do serial work once prefill cannot run the chain? With the start value after the rules, no running value can exist at the rule tokens. This is the 0-latent reference and the manipulation check.
+**Mechanism / model:** `codi`, gpt2, num_latent 0, RunPod A40, 12 epochs, section 10.2 recipe (lr 2e-3 cosine, adam_beta2 0.98, adam_epsilon 1e-6, max_grad_norm 1.0, LoRA r128/a32, 64 x 2, bf16, seed 11).
+**Data:** `synthetic_data_v2_l1to7w_startlast`: same chains, ids and answers as the section 10 pair, question re-rendered with the start value after the rules. Test = canonical L1-L7, 500/level, paired item by item with the section 10 pair.
+**Command:** `scripts/pod/codi_stab_arm.sh` via `scripts/pod/launch_stab_arm.sh` with the section 11.1 flags, `scripts/pod/pair_watcher.py` on the laptop; `eval_command.txt`.
+**Headline results:** Test L1 1.000, L2 0.980, L3 0.232, L4 0.136, L5 0.080, L6 0.056, L7 0.054, d50 2.69. Selected checkpoint-17820 (best of last 3 on valid: 0.365, 0.369, 0.380). Paired against the section 10 CODI-0 on L2-L7 (start first / start last): 0.626 / 0.256 exact, 1164/56, p 3e-270.
+**Interpretation:** Manipulation check passed: reach fell 2.16 levels, past the 1.0 required. Moving the start value after the rules removes most of what a single pass could do. It does not remove all of it: L3 reaches 0.232 with no latents, so the tail and answer tokens still run about two hops.
+**Gotchas hit:** Stable: watchdog never fired, max gradient norm 1.57. First LR check passed (3.36e-5 at step 10). The L1-L12 eval would have failed silently on the old hash registry, fixed before launch.
+**Caveats:** One seed. Budget-limited: the section 11.4 rule fired (valid mean L2-L7 rose 0.036 in CODI-0 and 0.076 in CODI from epoch 9 to 12), and the extension was deferred before any test record was opened. Lower reach could partly be slower learning rather than a ceiling, since L3 was still rising at epoch 12 on valid.
+**Next:** Read with the CODI record. `b19_trend.py` reads what this model holds at `<bot>`.
+
+---
+
+## 2026-11-05 — RuleChain start value last, CODI-0 on the canonical L1-L12 test: 0.224, reach 2.89, secondary check (codi, run_id: 20261106-052815_codi_v2-l1to7w-startlast-depth2-codi0-canonical)
+
+**Goal:** Secondary check on L8-L12, levels this model never trained on (TRAINING_PROTOCOL section 11.2).
+**Mechanism / model:** `codi`, gpt2, num_latent 0, RunPod A40, 12 epochs, section 10.2 recipe (lr 2e-3 cosine, adam_beta2 0.98, adam_epsilon 1e-6, max_grad_norm 1.0, LoRA r128/a32, 64 x 2, bf16, seed 11).
+**Data:** `synthetic_data_v2_startlast`: canonical L1-L12 test, 500/level, start value after the rules.
+**Command:** `scripts/pod/codi_stab_arm.sh` via `scripts/pod/launch_stab_arm.sh` with the section 11.1 flags, `scripts/pod/pair_watcher.py` on the laptop; `eval_command.txt`.
+**Headline results:** Test 0.224, d50 2.89, AUC 0.197.
+**Interpretation:** Out of range for this model. Reported for continuity with the section 10 pair.
+**Gotchas hit:** None.
+**Caveats:** One seed. Budget-limited: the section 11.4 rule fired (valid mean L2-L7 rose 0.036 in CODI-0 and 0.076 in CODI from epoch 9 to 12), and the extension was deferred before any test record was opened. 
+**Next:** None for this record.
+
+---
+
+## 2026-11-05 — RuleChain start value last, CODI 6 latents: test 0.447, pooled L2-7 gain over CODI-0 +0.099 [+0.084, +0.114], reach difference +0.23, pre-registered LATENTS HELP, budget-limited (codi, run_id: 20261106-083843_codi_v2-l1to7w-startlast-depth2-codi)
+
+**Goal:** Pre-registered test (TRAINING_PROTOCOL section 11): can CODI's latents do serial work once prefill cannot run the chain? With the start value after the rules, no running value can exist at the rule tokens.
+**Mechanism / model:** `codi`, gpt2, num_latent 6, RunPod A40, 12 epochs, section 10.2 recipe (lr 2e-3 cosine, adam_beta2 0.98, adam_epsilon 1e-6, max_grad_norm 1.0, LoRA r128/a32, 64 x 2, bf16, seed 11).
+**Data:** `synthetic_data_v2_l1to7w_startlast`: same chains, ids and answers as the section 10 pair, question re-rendered with the start value after the rules. Test = canonical L1-L7, 500/level, paired item by item with the section 10 pair.
+**Command:** `scripts/pod/codi_stab_arm.sh` via `scripts/pod/launch_stab_arm.sh` with the section 11.1 flags, `scripts/pod/pair_watcher.py` on the laptop; `eval_command.txt`.
+**Headline results:** Test L1 1.000, L2 0.998, L3 0.476, L4 0.308, L5 0.158, L6 0.120, L7 0.072, d50 2.93. Selected checkpoint-17820 (best of last 3 on valid: 0.417, 0.443, 0.456). Paired CODI - CODI-0 on test, exact McNemar: pooled L2-L7 +0.099 [+0.084, +0.114], 442/145, p 7.3e-36. By level: L2 +0.018 (9/0, p 0.0039), L3 +0.244 (163/41, p 2e-18), L4 +0.172 (122/36, p 3.9e-12), L5 +0.078 (68/29, p 9.3e-05), L6 +0.064 (50/18, p 0.00013), L7 +0.018 (30/21, p 0.26). Same levels on the section 10 pair: +0.010 (336/306, p 0.25). Latent use on valid, epoch 12: L2 1.00 falls to 0.06 with all latents ablated; answer follows donor latents 0.93 (n=74) and the edited question with clean latents 0.00; last-rule edits go direct 1.00 (n=53).
+**Interpretation:** By section 11.3, this is **latents help**: manipulation check passed (see the CODI-0 record), gain at least 0.05 with p < 0.05, reach difference +0.23 is below +1.0. It is the first clear CODI gain over CODI-0 on RuleChain: about 10x the section 10 pair's gain on the same levels, and it spreads over L3-L6 instead of sitting at one level. The stabilised recipe now routes through its latents, which section 10's CODI never did, so closing prefill changed how the same recipe uses latents. Whether latents compute the chain or only carry a value is not settled here: see the trend run and the position test.
+**Gotchas hit:** Stable: watchdog never fired. Gradient norm 16.88 at the first logged step, in warmup, then at most 1.56; loss still falling at epoch 12 (0.569 to 0.535). First LR check passed (3.36e-5 at step 10). The L1-L12 eval would have failed silently on the old hash registry, fixed before launch.
+**Caveats:** One seed. Budget-limited: the section 11.4 rule fired (valid mean L2-L7 rose 0.036 in CODI-0 and 0.076 in CODI from epoch 9 to 12), and the extension was deferred before any test record was opened. Reach is a fitted midpoint, and the section 10 pair's reach difference was +0.39 on a far smaller gain, so reach alone understates this result. The reach rule uses exact accuracy; CODI's precision (exact within within-2) is 0.56 / 0.47 / 0.32 at L3-L5 against 0.36 / 0.32 / 0.28, far below SIM-Coconut's 0.97.
+**Next:** Epoch trend of latent readout and patches on valid (running); position test, per-site ablation, mediation and same-value donors on the selected checkpoint (section 11.3). Then choose between SIM-CODI (the table's next step), a second seed, the extension or a clean longer run.
+
+---
+
+## 2026-11-05 — RuleChain start value last, CODI on the canonical L1-L12 test: 0.274, reach 3.16, secondary check (codi, run_id: 20261106-083950_codi_v2-l1to7w-startlast-depth2-codi-canonical)
+
+**Goal:** Secondary check on L8-L12, levels this model never trained on (TRAINING_PROTOCOL section 11.2).
+**Mechanism / model:** `codi`, gpt2, num_latent 6, RunPod A40, 12 epochs, section 10.2 recipe (lr 2e-3 cosine, adam_beta2 0.98, adam_epsilon 1e-6, max_grad_norm 1.0, LoRA r128/a32, 64 x 2, bf16, seed 11).
+**Data:** `synthetic_data_v2_startlast`: canonical L1-L12 test, 500/level, start value after the rules.
+**Command:** `scripts/pod/codi_stab_arm.sh` via `scripts/pod/launch_stab_arm.sh` with the section 11.1 flags, `scripts/pod/pair_watcher.py` on the laptop; `eval_command.txt`.
+**Headline results:** Test 0.274, d50 3.16, AUC 0.253.
+**Interpretation:** Out of range for this model. Reported for continuity with the section 10 pair.
+**Gotchas hit:** None.
+**Caveats:** One seed. Budget-limited: the section 11.4 rule fired (valid mean L2-L7 rose 0.036 in CODI-0 and 0.076 in CODI from epoch 9 to 12), and the extension was deferred before any test record was opened. 
+**Next:** None for this record.

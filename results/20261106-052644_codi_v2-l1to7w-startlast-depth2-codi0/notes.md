@@ -1,0 +1,11 @@
+## 2026-11-05 — RuleChain start value last, CODI-0 reference: test 0.363, reach 2.69 against 4.86 with the start first, manipulation check passed, budget-limited (codi, run_id: 20261106-052644_codi_v2-l1to7w-startlast-depth2-codi0)
+
+**Goal:** Pre-registered test (TRAINING_PROTOCOL section 11): can CODI's latents do serial work once prefill cannot run the chain? With the start value after the rules, no running value can exist at the rule tokens. This is the 0-latent reference and the manipulation check.
+**Mechanism / model:** `codi`, gpt2, num_latent 0, RunPod A40, 12 epochs, section 10.2 recipe (lr 2e-3 cosine, adam_beta2 0.98, adam_epsilon 1e-6, max_grad_norm 1.0, LoRA r128/a32, 64 x 2, bf16, seed 11).
+**Data:** `synthetic_data_v2_l1to7w_startlast`: same chains, ids and answers as the section 10 pair, question re-rendered with the start value after the rules. Test = canonical L1-L7, 500/level, paired item by item with the section 10 pair.
+**Command:** `scripts/pod/codi_stab_arm.sh` via `scripts/pod/launch_stab_arm.sh` with the section 11.1 flags, `scripts/pod/pair_watcher.py` on the laptop; `eval_command.txt`.
+**Headline results:** Test L1 1.000, L2 0.980, L3 0.232, L4 0.136, L5 0.080, L6 0.056, L7 0.054, d50 2.69. Selected checkpoint-17820 (best of last 3 on valid: 0.365, 0.369, 0.380). Paired against the section 10 CODI-0 on L2-L7 (start first / start last): 0.626 / 0.256 exact, 1164/56, p 3e-270.
+**Interpretation:** Manipulation check passed: reach fell 2.16 levels, past the 1.0 required. Moving the start value after the rules removes most of what a single pass could do. It does not remove all of it: L3 reaches 0.232 with no latents, so the tail and answer tokens still run about two hops.
+**Gotchas hit:** Stable: watchdog never fired, max gradient norm 1.57. First LR check passed (3.36e-5 at step 10). The L1-L12 eval would have failed silently on the old hash registry, fixed before launch.
+**Caveats:** One seed. Budget-limited: the section 11.4 rule fired (valid mean L2-L7 rose 0.036 in CODI-0 and 0.076 in CODI from epoch 9 to 12), and the extension was deferred before any test record was opened. Lower reach could partly be slower learning rather than a ceiling, since L3 was still rising at epoch 12 on valid.
+**Next:** Read with the CODI record. `b19_trend.py` reads what this model holds at `<bot>`.
