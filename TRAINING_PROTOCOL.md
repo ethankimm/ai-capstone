@@ -379,6 +379,10 @@ reach is expected to fall, which would put L5-L7 at the floor.
 - **Per-latent readout (added 2026-11-05, before any start-last test result):** `scripts/probe_latents_rulechain_codi.py` on the selected CODI: which
   intermediate value each latent holds, by level. Chaining predicts different latents holding different steps. A relay predicts all of them converging on
   one late value, as the three existing CODI models do (`CODI_NULL_AUDIT.md` section 3).
+- **Closeness and precision (added 2026-11-05, before any start-last test record was opened):** secondary measures for both arms, by level. Exact stays
+  the primary. Report within 2 (chance about 0.08), precision (exact divided by within 2), and reach on within 2 (the level where it crosses 0.5, read the
+  same way as `midpoint`). Stepping through the chain with discrete values predicts precision near SIM-Coconut's 0.97-0.98. Relaying a blurred value predicts
+  precision no better than CODI-0's.
 - **Analogues of the explicit-CoT tests (added 2026-11-05, before any result):**
   - *Early answering* (Lanham et al.): `mean_tail_ge_s` by level, as a curve over s. Where the curve goes flat, the answer is already fixed.
   - *Filler* (Lanham et al.): all sites mean-ablated with positions kept, against CODI-0. Tests content against extra positions.
