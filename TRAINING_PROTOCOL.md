@@ -376,6 +376,9 @@ reach is expected to fall, which would put L5-L7 at the floor.
   intermediate value; patch the donor's latents into the recipient, one site and all sites; score each as correct anyway, follows the
   donor, or other. `scripts/codi_null_audit/b16_donor.py`, run on the selected CODI
   and on the three existing CODI models as the reference.
+- **Per-latent readout (added 2026-11-05, before any start-last test result):** `scripts/probe_latents_rulechain_codi.py` on the selected CODI: which
+  intermediate value each latent holds, by level. Chaining predicts different latents holding different steps. A relay predicts all of them converging on
+  one late value, as the three existing CODI models do (`CODI_NULL_AUDIT.md` section 3).
 - **Analogues of the explicit-CoT tests (added 2026-11-05, before any result):**
   - *Early answering* (Lanham et al.): `mean_tail_ge_s` by level, as a curve over s. Where the curve goes flat, the answer is already fixed.
   - *Filler* (Lanham et al.): all sites mean-ablated with positions kept, against CODI-0. Tests content against extra positions.
@@ -420,3 +423,8 @@ so the balance must be at least $18.
 follow section 11.2 on the last 3 epochs of the extension. The manipulation check stays at epoch 12, the budget the section 10 pair had. The
 section 11.3 outcome table is read at both points and both are reported, with epoch 24 labelled as an extension. If an extended arm diverges,
 stop and let epoch 12 stand. One extension only; anything longer needs a new amendment.
+
+**Outcome (2026-11-05, before CODI finished and before any start-last test record was opened).** The rule fired on CODI-0 (+0.036), so the
+epoch-12 result is labelled budget-limited. The launch is deferred by decision of the team, which overrides "extend both arms" above: this
+pair is a first look at whether latents chain and whether CODI beats CODI-0 at a matched budget, and a restart is not a clean longer run.
+Read section 11.3 at epoch 12 first, then choose between this extension, a second seed pair, or a clean longer run.
