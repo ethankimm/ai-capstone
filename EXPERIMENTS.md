@@ -10636,3 +10636,31 @@ Same-length donor by level, L4 / L5 / L6 / L7: round 1 0.98 / 0.80 / 0.66 / 0.57
 **Gotchas hit:** None.
 **Caveats:** One seed. Budget-limited: the section 11.4 rule fired (valid mean L2-L7 rose 0.036 in CODI-0 and 0.076 in CODI from epoch 9 to 12), and the extension was deferred before any test record was opened. 
 **Next:** None for this record.
+
+---
+
+## 2026-11-06 — How start-last CODI uses its latents: two passes of real work, then a fixed point; no step per latent at any epoch; latents depend on earlier latents, unlike the relay (codi, run_id: 20261106-101740_codi_v2-l1to7w-startlast-latent-use)
+
+**Goal:** Do start-last CODI's latents chain intermediates, would longer training make them, and what should change in training? Compared throughout with lr-3e-3 CODI, a known relay, which calibrates each method.
+**Mechanism / model:** `codi`, gpt2, 6 latents. Start-last CODI epochs 6-12, start-last CODI-0 epoch 12, lr-3e-3 CODI. fp32, MPS; gradient on CPU.
+**Data:** Valid only. Probes fit on train items of one level (2000 per level for the trend, 4000 for the grid), scored on about 286 valid items per level. `predictions.jsonl` holds start-last CODI's answers under the main attention blocks.
+**Command:** `scripts/codi_null_audit/`: `b19_trend`, `b20_grid`, `b21_reads` (also `EXTRA=1`), `b22_passes`, `b1_grad` (`STARTLAST=1`); tables from `a22_trend`, `a23_reads`, `a24_grid`. Raw outputs in `~/Documents/Penn/CIS5980/codi_audit_artifacts`.
+**Headline results:**
+- **Two passes, then a fixed point.** Exact after k latent passes, k = 1 / 2 / 3 / 6 / 12: L2 .03 / .96 / 1.00 / 1.00 / 1.00; L3 .07 / .41 / .45 / .52 / .51; L4 .05 / .27 / .29 / .33 / .32; L5 .06 / .14 / .16 / .14 / .10. Relay: L3 .42 / .99 / 1.00 / 1.00 / 1.00; L4 .18 / .83 / .87 / .89 / .88; L5 .08 / .62 / .66 / .66 / .63. Centered cosine between consecutive latents: .58, .97, .99, .996 then flat (relay .62, .97, .99, .997).
+- **No step per latent.** Value before the last rule, best layer, tail to latents: L3 .16 at h_1, .40 at h_2, .46 at h_4; L4 .07, .20, .23. It then stays flat. Earlier steps get no latent of their own (L4 v_2 stays at .12-.13 while v_3 reaches .24). No staircase in any of epochs 6-12. Attention by pass is flat, and no pass depends on one early rule: blocking rule 1 or 2 from any single pass keeps .99-1.00 at L3-L4.
+- **Trend.** Accuracy rises through epoch 12; structure is set by about epoch 8-9. L3 value within 2 at h_3: .37 at epoch 6, .73 at epoch 12.
+- **Where values sit.** In start-last the value appears after the first block of a latent pass, best at layers 1-4, and is weaker at layer 12 (L3 .46 against .27). In the relay it is already in the latent input (L3 .98). Number lens: .15 at L3 against .92 for the relay, so start-last latents are not close to number tokens. MLPs match linear probes at 4000 fit items; the fit-size curve at layer 12 is still rising, so these are lower bounds. Negative control: at the token before the start value, probes read .02-.06.
+- **Tail tokens.** CODI-0 reads v_1 .67 and v_2 .29 at L3 on tail tokens, v_2 .13 at L4. CODI reads v_1 .55 at the start number's own token, so it computes less in the tail than CODI-0.
+- **Latents depend on earlier latents.** Blocking earlier latents at all passes changes 20-31% of answers against 0-4% in the relay. Right answers lost / items newly right: L2 86/1, L3 39/20, L4 22/13, L5 9/6, L6 8/8. So the net accuracy cost is significant only at L2-L3. Blocking only the previous latent keeps .90-1.00.
+- **Rules.** Latents limited to the last rule keep .78 / .40 / .26 / .23 of right answers at L3-L6 (relay 1.00 / .59 / .18 / .08), so early rules matter jointly even though each alone is cheap to block. Answer tokens need the last rule (.07-.13 kept) in both models.
+- **Gradient.** Share through latents at epochs 3 / 4 / 5 / 6 / 9 / 12: .08 / .17 / .48 / .50 / .66 / .70, against 1-6% to epoch 9 with the start first. Per-latent gradient is about equal across z_1-z_5 (.017-.019 at epoch 12), z_0 .011.
+
+**Interpretation:**
+- Closing prefill worked: latents switched on at epoch 5 under the recipe where they stayed quiet, and depend on each other in a way the relay does not. That is a real change in how latents are used.
+- It is still not a chain. Both models compute the value before the last rule in about two passes and then repeat it. Later latents get gradient, so this is not starvation. Every pass has the same target, so a repeated value is a natural solution (inferred). That is why longer training and more latents do not look useful: extra passes change nothing at inference, and at L5 they hurt.
+- Counting hops, roughly one in the tail, about one or two in the latents and one at the answer tokens fits a reach near 3. This is a reading, not a measurement.
+- This corrects 20261106-083843's open question and my own earlier read: "L3 reads .26-.28 against .52 accuracy" was a last-layer artefact.
+
+**Gotchas hit:** The first read test blocked position 0, GPT-2's attention sink, which sat in rule 1 for start-last and damaged the model; it is now never blocked and reported apart. The last-layer readout understated values about 2x. "Kept .77" overstated the earlier-latent effect at L4+, where items also became newly right. A debug print could not decode `<bot>`.
+**Caveats:** One seed per model. Masks and k != 6 are outside training. Right answers at L5-L6 are few (39, 35) and selected for being easy. Patch pairs are mostly L2-L3. Linear and small MLP probes may miss structure. The learning rate fell through the trend window, so more time at a high rate is not fully excluded. Open puzzle: blocking the last rule from latents keeps .00-.05 in both models, though edits to that rule never pass through latents; this may be an artefact of removing their main attention target.
+**Next:** Break the fixed point, not train longer: give passes different jobs. Step supervision (SIM-CODI) on start-last is the pre-registered next step. A label-free alternative is depth-matched latents (n passes for an n-rule item). Score either with the k-sweep and per-latent readout. Second seed for the +0.099.

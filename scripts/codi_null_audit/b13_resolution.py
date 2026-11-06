@@ -9,15 +9,16 @@ from harness import *
 import numpy as np
 from rc import *
 from latentreasoning.tasks.synthetic_v2 import Rule, RuleChain, chain_accepted
-DEV=sys.argv[2]; OUT=sys.argv[3]; SMOKE=int(os.environ.get('SMOKE','0'))
-TE=BASE+'/synthetic_data_v2_l1to7w/depth2/test.json'
+DEV=sys.argv[2]; OUT=sys.argv[3]; SMOKE=int(os.environ.get('SMOKE','0')); FMT=os.environ.get('FORMAT','')   # FORMAT=startlast: section 11 pair, no freeze test (rule tokens hold no running value)
+TE=BASE+('/synthetic_data_v2_l1to7w_startlast' if FMT else '/synthetic_data_v2_l1to7w')+'/depth2/test.json'
 def text(ru):
     k,t,a,b=ru
     if k=='P': return f"if it is even, halve it; otherwise add {a}"
     if k=='T': return f"if it is at least {t}, subtract {b}; otherwise add {a}"
     return f"if it is below {t}, double it; otherwise subtract {b}"
 def render(x0,rules):
-    return f"Start with {x0}. "+' '.join(f"Rule {i+1}: {text(r)}." for i,r in enumerate(rules))+" What is the final number?"
+    body=' '.join(f"Rule {i+1}: {text(r)}." for i,r in enumerate(rules))
+    return f"{body} Start with {x0}. What is the final number?" if FMT else f"Start with {x0}. {body} What is the final number?"
 def inr(x): return 0<=x<=99
 def tail_from(s,rules):
     for r in rules:
@@ -231,15 +232,16 @@ def freeze(m,tok,nl,dec):
     return res
 STORE={}
 MODELS=(('stab CODI-0',CK['stab0']%17820,0),('stab CODI',CK['stab']%17820,6),('lr3 CODI',CK['lr3'],6),('r1 CODI-0',CK['r10'],0),('r1 CODI',CK['r1'],6))
+if FMT: MODELS=(('startlast CODI-0',BASE+'/codi_runs_l1to7w_startlast/codi0/run/checkpoint-17820',0),('startlast CODI',BASE+'/codi_runs_l1to7w_startlast/codi/run/checkpoint-17820',6))
 for name,ck,nl in MODELS:
     t0=time.time(); m,tok,ta=load(ck,nl,DEV); m.eval(); setup(tok)
     dec=torch.tensor([m.eot_id]+tok.encode('The answer is:'),device=DEV)
     pb=answers(m,tok,[r['question'].strip() for r in base],nl,dec)
     pq=answers(m,tok,[q['q'] for q in Q],nl,dec)
     pz=answers(m,tok,[z['q'] for z in ZS],nl,dec)
-    pf=freeze(m,tok,nl,dec)
+    pf=[] if FMT else freeze(m,tok,nl,dec)
     STORE[name]=dict(base=dict(zip([r['id'] for r in base],pb)),q=pq,z=pz,fz=pf); del m
     if DEV=='mps': torch.mps.empty_cache()
     print('##',name,f'{time.time()-t0:.0f}s',flush=True)
-    json.dump(dict(Q=Q,FZ=FZ,ZS=ZS,store=STORE,base=[dict(id=r['id'],level=int(r['level']),question=r['question'],answer=r['answer']) for r in base]),open(OUT+('/b13_smoke.json' if SMOKE else '/b13_raw.json'),'w'))
+    json.dump(dict(Q=Q,FZ=FZ,ZS=ZS,store=STORE,base=[dict(id=r['id'],level=int(r['level']),question=r['question'],answer=r['answer']) for r in base]),open(OUT+('/b13_smoke.json' if SMOKE else ('/b13_raw_startlast.json' if FMT else '/b13_raw.json')),'w'))
 print('DONE')

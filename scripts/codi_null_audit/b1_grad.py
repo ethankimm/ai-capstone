@@ -5,6 +5,9 @@ DEV='cpu'
 T1=BASE+'/synthetic_data_v2_l1to7w/depth2/train.json'
 tr=rows(T1,per_level=6,seed=2,levels=[3,4,5,6,7])   # 30 items at the levels that matter
 targets=[('stab e1',CK['stab']%1485),('stab e3',CK['stab']%4455),('stab e6',CK['stab']%8910),('stab e9',CK['stab']%13365),('stab e12',CK['stab']%17820),('lr3e-3 e12',CK['lr3']),('round1 e40',CK['r1'])]
+if os.environ.get('STARTLAST'):   # section 11: same measurement on the start-last checkpoints
+    S=BASE+'/codi_runs_l1to7w_startlast/codi/run/checkpoint-%d'; T1=BASE+'/synthetic_data_v2_l1to7w_startlast/depth2/train.json'
+    tr=rows(T1,per_level=6,seed=2,levels=[3,4,5,6,7]); targets=[(f'startlast e{e}',S%(1485*e)) for e in (3,4,5,6,9,12)]
 res={}
 for name,ck in targets:
     t0=time.time()
@@ -50,4 +53,4 @@ for name,ck in targets:
     res[name]=r
     print(name,json.dumps(r),f'{time.time()-t0:.0f}s',flush=True)
     del m
-json.dump(res,open(sys.argv[1]+'/b1_grad.json','w'),indent=1)
+json.dump(res,open(os.environ.get('OUT',sys.argv[1])+'/b1_grad'+('_startlast' if os.environ.get('STARTLAST') else '')+'.json','w'),indent=1)
