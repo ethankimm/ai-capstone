@@ -7,7 +7,7 @@ from harness import *
 import numpy as np
 from rc import *
 DEV=sys.argv[2]; OUT=sys.argv[3]; SMOKE=int(os.environ.get('SMOKE','0'))
-SL=BASE+'/codi_runs_l1to7w_startlast'; LAST=17820
+SL=BASE+os.environ.get('TRACK_ROOT','/codi_runs_l1to7w_startlast'); LAST=int(os.environ.get('TRACK_LAST','17820'))   # section 11.4 sets these for the extension
 ARMS=[('startlast CODI',SL+'/codi/run',6,True),('startlast CODI-0',SL+'/codi0/run',0,True),('original CODI',BASE+'/codi_runs_l1to7w_stab/codi/run',6,False)]
 def text(ru):
     k,t,a,b=ru
@@ -102,7 +102,7 @@ def measure(ck,nl,last):
     del m
     if DEV=='mps': torch.mps.empty_cache()
     return out
-PATH=OUT+('/b18_smoke.json' if SMOKE else '/b18_track.json')
+PATH=OUT+('/b18_smoke.json' if SMOKE else f"/b18_track{os.environ.get('TRACK_TAG','')}.json")
 RES=json.load(open(PATH)) if os.path.exists(PATH) else {}
 def ready(d):
     f=d+'/pytorch_model.bin'
@@ -114,6 +114,7 @@ def report(k,o):
     print(time.strftime('%H:%M'),msg,flush=True)
 fails={}
 if os.environ.get('ONLY'): ARMS=[a for a in ARMS if a[0]==os.environ['ONLY']]
+if LAST>17820: ARMS=[a for a in ARMS if a[3]]   # the section 10 reference stops at epoch 12
 while True:
     todo=[]
     for name,root,nl,last in ARMS:

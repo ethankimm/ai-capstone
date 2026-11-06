@@ -7,9 +7,11 @@
 set -uo pipefail
 K=${1:?codi|codi0}; HW=${2:?hardware label}
 # ARM_NAME, ARM_DATA, ARM_CANON, ARM_HASH, ARM_CANON_HASH, ARM_SLUG select another dataset (section 11); the defaults are the section 10 pair.
+# ARM_EPOCHS and ARM_RESUME (a checkpoint folder on the pod) extend a finished run (section 11.4).
+EP=${ARM_EPOCHS:-12}
 N=${ARM_NAME:-gpt2_l1to7w_stab}; nl=6; [ "$K" = codi0 ] && nl=0
 REPO=/workspace/ai-capstone; LOG=/workspace/logs/${N}_$K.log; VAL=/workspace/logs/valid_$K.log
-D=/workspace/codi_runs/${N}_$K/gpt2/ep_12/lr_0.002/seed_11
+D=/workspace/codi_runs/${N}_$K/gpt2/ep_$EP/lr_0.002/seed_11
 L17=${ARM_HASH:-$REPO/configs/synthetic/v2_l1to7w_data_sha256.json}
 DATA=${ARM_DATA:-/workspace/synthetic_data_v2_l1to7w}; CANON=${ARM_CANON:-/workspace/synthetic_data_v2/depth2/test.json}
 SLUG=${ARM_SLUG:-v2-l1to7w-stab-depth2}
@@ -21,7 +23,7 @@ fail() { echo "$1" > /workspace/ARM_FAILED; echo "ARM_FAILED: $1"; exit 1; }
 
 cd "$REPO"
 (while [ ! -f "$LOG" ]; do sleep 5; done; exec python3 scripts/pod/divergence_watchdog.py "$LOG") > /workspace/logs/watchdog_$K.log 2>&1 &
-DATA=$DATA HASH_FILE=$L17 NAME=$N EPOCHS=12 \
+RESUME_FROM=${ARM_RESUME:-} DATA=$DATA HASH_FILE=$L17 NAME=$N EPOCHS=$EP \
   TRAIN_EXTRA="--learning_rate 2e-3 --adam_beta2 0.98 --adam_epsilon 1e-6 --max_grad_norm 1.0" \
   bash scripts/pod/codi_l4to7.sh train "$K"
 rc=$?

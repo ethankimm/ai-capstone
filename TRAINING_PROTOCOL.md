@@ -352,8 +352,7 @@ applies. Estimate from the section 10 pair: about 20 pod-hours, $12.30 at $0.60/
 ### 11.2 Selection and test
 
 As section 10.3: best of the last 3 epochs on valid, one test eval on L1-L7 (500 per level), canonical L1-L12 as the secondary check.
-If either arm diverges, rerun both at lr 1e-3. If valid is still climbing at epoch 12, report the result as budget-limited; do not
-extend without a new amendment.
+If either arm diverges, rerun both at lr 1e-3. Section 11.4 decides whether the pair is extended.
 
 Latent use is tracked during training on the laptop, from the synced checkpoints, using valid only (`scripts/codi_null_audit/b18_track.py`):
 accuracy by level, all latents mean-ablated, and the donor routes, for both arms and for the section 10 CODI as the reference. It is reported
@@ -396,3 +395,28 @@ reach is expected to fall, which would put L5-L7 at the floor.
 
 One seed, as section 10.4: a gain under about 0.05 is not interpretable without a second.
 
+### 11.4 Extension to 24 epochs (added 2026-11-05, before epoch 12 and before any start-last test result)
+
+The cosine schedule is below 1e-4 from epoch 10 and reaches 0 at epoch 12, so a flat end says little about remaining room: the section 10
+pair rose 0.13 over epochs 9-12 but only 0.015 over the last epoch. This rule replaces "still climbing at epoch 12".
+
+**Rule.** Take the mean of L2-L7 exact accuracy on valid from `valid_<kind>.log`. If it rises by at least 0.03 from epoch 9 (checkpoint-13365)
+to epoch 12 (checkpoint-17820) in either arm, extend both arms. Decide from valid alone, before opening any start-last test record. For
+reference, the section 10 pair rose 0.129 (CODI) and 0.128 (CODI-0). If an arm diverged, section 11.2 applies instead. If the rule does not
+fire, the epoch-12 result stands.
+
+**How.** Both arms resume from checkpoint-17820 with optimizer and scheduler state and `--num_train_epochs 24`; same data, seed and flags.
+The trainer rebuilds the cosine for the new total, so the learning rate jumps from about 0 to 1.05e-3 with no warmup and decays to 0 at step
+35640 (checked against transformers 4.52.4 and a real `scheduler.pt`). This is a restart, not a 24-epoch run from scratch. The resume path has
+not been used in a real run, so check two gates at the first logged steps: learning rate about 1.05e-3, and loss near its epoch-12 level. If
+either fails, stop both pods.
+
+Launch as section 11.1, adding `RESUME_SRC=<dest>/<kind>/run/checkpoint-17820 ARM_EPOCHS=24 ARM_SLUG=v2-l1to7w-startlast24-depth2`, with
+`ARM_EPOCHS=24` also set for `pair_watcher.py` and a new destination folder, `codi_runs_l1to7w_startlast24`. Track with `b18_track.py` using
+`TRACK_ROOT=/codi_runs_l1to7w_startlast24 TRACK_LAST=35640 TRACK_TAG=24`. Estimate from the running pair: about 20 pod-hours, $12 at $0.59/h,
+so the balance must be at least $18.
+
+**Reporting.** Epoch-12 results are logged first and stay as pre-registered, labelled budget-limited if the rule fires. Selection and test
+follow section 11.2 on the last 3 epochs of the extension. The manipulation check stays at epoch 12, the budget the section 10 pair had. The
+section 11.3 outcome table is read at both points and both are reported, with epoch 24 labelled as an extension. If an extended arm diverges,
+stop and let epoch 12 stand. One extension only; anything longer needs a new amendment.

@@ -19,9 +19,10 @@ import sys
 import time
 from pathlib import Path
 
-INTERVAL, EVAL_H, MARGIN, TOTAL = 600, 0.45, 0.5, 17820
+EPOCHS = int(os.environ.get("ARM_EPOCHS", "12"))  # same value as the launcher's ARM_EPOCHS
+INTERVAL, EVAL_H, MARGIN, TOTAL = 600, 0.45, 0.5, 1485 * EPOCHS
 NAME = os.environ.get("ARM_NAME", "gpt2_l1to7w_stab")  # same value as the launcher's ARM_NAME
-RUN = "/workspace/codi_runs/" + NAME + "_{k}/gpt2/ep_12/lr_0.002/seed_11"
+RUN = "/workspace/codi_runs/" + NAME + f"_{{k}}/gpt2/ep_{EPOCHS}/lr_0.002/seed_11"
 LOG = "/workspace/logs/" + NAME + "_{k}.log"
 
 
@@ -46,7 +47,7 @@ class Arm:
     def __init__(self, spec: str, dest: Path):
         self.kind, self.host, self.port, self.pod, rate = spec.split(":")
         self.rate, self.dest, self.live, self.fails = float(rate), dest / self.kind, True, 0
-        self.step, self.sit = 0, 2.2
+        self.step, self.sit = (17820 if EPOCHS > 12 else 0), 2.2  # an extension starts where the 12-epoch run ended
         self.dest.mkdir(parents=True, exist_ok=True)
         self.e = f"ssh -p {self.port} -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20"
 
@@ -75,7 +76,7 @@ class Arm:
                 alert(f"{self.kind} pod unreachable {self.fails} checks in a row")
             return ""
         self.fails = 0
-        m = re.search(r"(\d+)/17820 \[.*?([0-9.]+)(s/it|it/s)\]", out)
+        m = re.search(rf"(\d+)/{TOTAL} \[.*?([0-9.]+)(s/it|it/s)\]", out)
         if m:
             self.step = int(m.group(1))
             self.sit = float(m.group(2)) if m.group(3) == "s/it" else 1 / float(m.group(2))
