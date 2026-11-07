@@ -229,3 +229,4 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261106-105634_codi_v2-l1to7w-startlast-position-donor](20261106-105634_codi_v2-l1to7w-startlast-position-donor/) | codi | gpt2 | test (n=10000) | 6 | 0.173 | 13 | full_run | Henning Lindig |
 | [20261107-084635_codi_v2-l1to7w-startlast-readability-right-wrong](20261107-084635_codi_v2-l1to7w-startlast-readability-right-wrong/) | codi | gpt2 | validation (n=858) | 6 | 0.329 | 20 | full_run | Henning Lindig |
 | [20261107-092430_coconut_v2-depth2-coconut-c1m6-latent-ablation](20261107-092430_coconut_v2-depth2-coconut-c1m6-latent-ablation/) | coconut | openai-community/gpt2 | test (n=800) | 6 | 0.364 | 0 | full_run | Henning Lindig |
+| [20261107-093340_codi_attention-across-passes-gsm8k-vs-startlast](20261107-093340_codi_attention-across-passes-gsm8k-vs-startlast/) | codi | gpt2 | test (n=879) | 6 | 0.391 | 0 | full_run | Henning Lindig |
