@@ -10781,3 +10781,52 @@ Same-length donor by level, L4 / L5 / L6 / L7: round 1 0.98 / 0.80 / 0.66 / 0.57
 **Gotchas hit:** My first summary, a slope over all rows, was dominated by the jump from `<bot>` to the first latent, which even the relay has, so it was dropped for same-parity moves between latent passes. The tokenizer here has no offsets, so they come from token bytes, checked against question length. The pass sweep first ran on a misaligned join (1,303 gold mismatches); it was discarded and rerun, with 0 mismatches.
 **Caveats:** Attention is not use. GSM8K sets cover digits in the question only, and questions often give numbers in solving order, so position and step are confounded. RuleChain sets are whole rules, so the two tasks are compared on shape, not size. Released model only; 57 items at 4 mapped steps.
 **Next:** Rule-gated latents test the cause directly. Kevin could repeat this on his GSM8K checkpoint.
+
+---
+
+## 2026-11-07 — Rule-gated start-last CODI: test L1-L6 1.000, L7 0.982; pooled L5-L6 gain over ungated CODI +0.861 [+0.840, +0.882], 861/0, pre-registered ROLLOUT (codi, run_id: 20261107-204814_codi_v2-l1to7w-startlast-gated-depth2-codi)
+
+**Goal:** Pre-registered test (TRAINING_PROTOCOL section 12). Ungated start-last CODI stops after about two passes and fails at L5-L7 with passes unused. If each latent pass is shown one rule, so it is told which rule comes next, does the model carry a value through the latents, one rule per pass? No values or step labels are given.
+**Mechanism / model:** `codi`, gpt2, num_latent 6, `--rule_gate True` (`scripts/codi_rule_gate.patch`, class `RuleGate`) in training and every eval. Otherwise the start-last CODI arm (20261106-083843): section 10.2 recipe (lr 2e-3 cosine, adam_beta2 0.98, adam_epsilon 1e-6, max_grad_norm 1.0, LoRA r128/a32, 64 x 2, bf16, seed 11), 12 epochs, RunPod A40 (pod y545w15vxjl80p, $0.59/h, about 11 pod-hours).
+**Data:** `synthetic_data_v2_l1to7w_startlast`, the same files as 20261106-083843. Test = canonical L1-L7, 500/level, paired item by item with that run (3,500 ids, 0 question or gold mismatches).
+**Command:** `scripts/pod/codi_stab_arm.sh` via `scripts/pod/launch_stab_arm.sh` with the section 12.1 flags (`ARM_EXTRA="--rule_gate True" ARM_NAME=gpt2_l1to7w_startlast_gated ARM_SLUG=v2-l1to7w-startlast-gated-depth2`), `scripts/pod/pair_watcher.py` on the laptop under `caffeinate -is`; `eval_command.txt`. Leak check before launch: `scripts/check_rule_gate.py`.
+**Headline results:**
+- **Test, exact:** L1-L6 1.000, L7 0.982 (9 wrong). Ungated: 1.000 / 0.998 / 0.476 / 0.308 / 0.158 / 0.120 / 0.072.
+- **Primary, pooled L5-L6 paired gain, gated minus ungated:** +0.861, 95% CI [+0.840, +0.882], discordant 861/0, exact McNemar p 1.3e-259.
+- **By level:** L2 +0.002 (1/0), L3 +0.524 (262/0), L4 +0.692 (346/0), L5 +0.842 (421/0), L6 +0.880 (440/0), L7 +0.910 (455/0). The ungated model is right on no item that the gated model gets wrong.
+- **Selection:** checkpoint-17820, best of the last 3 on valid (0.993 / 0.996 / 0.997 mean over levels).
+- **Valid by epoch, L1-L7:** epoch 5 .96 / .80 / .57 / .32 / .20 / .16 / .09; epoch 6 .97 / .91 / .92 / .86 / .82 / .79 / .19; epoch 8 1.00 / .99 / .99 / .98 / .98 / .97 / .89; from epoch 9 at least .99 on L1-L6.
+- **Mid-run checks on valid (laptop, teacher-forced answer token, not rerun on the selected checkpoint):** at epoch 6, one pass short of a level's last pass gives .01 / .00 / .02 / .01 / .06 at L2-L6 against .90 / .92 / .86 / .82 / .80 with it. At epoch 10 (checkpoint-14850), one pass short gives L5 .07 and L6 .08 against .99 and 1.00; gate off at eval gives L5 .02; on edited items (two rules swapped, or a new start value) the answer follows the new chain .99-1.00 of the time and never keeps the old answer under a rule swap. None of the 2,000 valid questions appear in train.
+- **Out of range:** see the canonical record (L8-L12): the model outputs the answer of exactly the rules the gate shows it.
+
+**Interpretation:**
+- By section 12.3 this is **Rollout**: gain at least 0.05 with p < 0.05, by a wide margin. With the same model, data, recipe and 12-epoch budget, the gated model solves L5-L7 where ungated CODI scores .07-.16. So this budget is enough to run a rollout through 6 latents; ungated training does not find one.
+- Through L3 and beyond, any accuracy above floor must pass through the latents, because the gate leaves no other route to the early rules (a solver missing one rule scores about 6%). The latents therefore carry a running value across at least five passes.
+- The protocol's correction at epoch 6 said six passes cover only L6 and L7 can get through only the upper layers of the last pass. L7 reaches .982, so that route works almost fully.
+- Section 12.3 also asks whether the shortfall at L2-L4 is the price of the gate: at the selected checkpoint there is none (L1-L2 1.000 against 1.000 / 0.998).
+- This does not show that rollouts emerge on their own. The gate supplies the schedule and also removes every other route, so routing and blocking are bundled.
+
+**Gotchas hit:** None in training: the watchdog never fired, the max gradient norm was 37.7 (step 10430), and the loss fell from 1.19 (epoch 1 mean) to 0.11 (epoch 12). First LR check passed (3.36e-5 at step 10). The pod could not get a self-terminate limit (runpodctl has no flag here, and self-deletion from the pod was blocked), so the laptop watcher was the only shutdown path.
+**Caveats:** One seed. No CODI-0 arm, by design: under this gate it can apply only the last rule. The reference is ungated CODI, which differs only in the gate. The mid-run checks are on valid at earlier checkpoints and use the teacher-forced answer token. A forced rollout is a diagnostic, not a natural result. GPT-2 small and CODI only.
+**Next:** Pre-registered: the shuffled-gate control, then the decoder control (probes as `b23` at every latent site, L3-L6), which is reported either way and is free on the laptop. Under discussion as an alternative to the shuffled gate: a partial gate that keeps per-pass routing but leaves the other routes open, to separate routing from blocking.
+
+---
+
+## 2026-11-07 — Rule-gated start-last CODI on the canonical L1-L12 test: L1-L7 as the main record, L8-L12 at floor because the gate hides their middle rules, and the output is the answer of the visible rules on 97-99% of items (codi, run_id: 20261107-204918_codi_v2-l1to7w-startlast-gated-depth2-codi-canonical)
+
+**Goal:** Secondary check on L8-L12 (TRAINING_PROTOCOL sections 10.3 and 12). Under the gate these levels cannot be solved by construction: six passes see rules 1-6, the answer tokens see the last rule, and rules 7 to L-1 are seen by nothing.
+**Mechanism / model:** As 20261107-204814 (rule-gated start-last CODI, checkpoint-17820).
+**Data:** `synthetic_data_v2_startlast`: canonical L1-L12 test, 500/level, start value after the rules. L1-L7 items are the main record's, item for item.
+**Command:** `scripts/pod/codi_stab_arm.sh`; `eval_command.txt`. The visible-rules check ran on the laptop from `predictions.jsonl`: simulate each chain from the question text (0 gold mismatches), applying only rules 1-6 and the last rule.
+**Headline results:**
+- **Test, exact:** L1-L6 1.000, L7 0.982, L8 0.006, L9 0.104, L10 0.014, L11 0.032, L12 0.014; overall 0.596. Ungated CODI on L8-L12: .054 / .038 / .036 / .010 / .018.
+- **Visible-rules answer:** applying rules 1-6 and then the last rule gives the gold answer on .004 / .104 / .014 / .032 / .014 of L8-L12 items, matching accuracy at every level. The model outputs that visible-rules answer on .988 / .986 / .982 / .968 / .982 of items.
+- **Teacher (written CoT, same weights):** L8-L12 .652 / .236 / .116 / .046 / .036.
+
+**Interpretation:**
+- L9's .104 is not a leak: on about 10% of L9 items the two hidden rules (7 and 8) cancel, for example halve then double, so the visible rules give the gold answer.
+- The model computes exactly the chain the gate shows it, even on levels it never trained on, extended past 6 rules only by the answer tokens' last rule. This is out-of-distribution evidence that its latents run the gated chain rule by rule.
+
+**Gotchas hit:** None.
+**Caveats:** One seed. Out of range by construction, so accuracy here says nothing about reach. The visible-rules check is behavioural, not a probe of the latents.
+**Next:** None for this record.

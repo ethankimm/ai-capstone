@@ -230,3 +230,5 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261107-084635_codi_v2-l1to7w-startlast-readability-right-wrong](20261107-084635_codi_v2-l1to7w-startlast-readability-right-wrong/) | codi | gpt2 | validation (n=858) | 6 | 0.329 | 20 | full_run | Henning Lindig |
 | [20261107-092430_coconut_v2-depth2-coconut-c1m6-latent-ablation](20261107-092430_coconut_v2-depth2-coconut-c1m6-latent-ablation/) | coconut | openai-community/gpt2 | test (n=800) | 6 | 0.364 | 0 | full_run | Henning Lindig |
 | [20261107-093340_codi_attention-across-passes-gsm8k-vs-startlast](20261107-093340_codi_attention-across-passes-gsm8k-vs-startlast/) | codi | gpt2 | test (n=879) | 6 | 0.391 | 0 | full_run | Henning Lindig |
+| [20261107-204814_codi_v2-l1to7w-startlast-gated-depth2-codi](20261107-204814_codi_v2-l1to7w-startlast-gated-depth2-codi/) | codi | gpt2 | test (n=3500) | 6 | 0.997 | 11 | full_run |  |
+| [20261107-204918_codi_v2-l1to7w-startlast-gated-depth2-codi-canonical](20261107-204918_codi_v2-l1to7w-startlast-gated-depth2-codi-canonical/) | codi | gpt2 | test (n=6000) | 6 | 0.596 | 11 | full_run |  |
