@@ -10681,6 +10681,8 @@ Same-length donor by level, L4 / L5 / L6 / L7: round 1 0.98 / 0.80 / 0.66 / 0.57
 **Caveats:** One seed. Mean ablation is off-distribution; resampled latents, which are real ones, cost more per site (L3 .35-.38) and are shown in the manifest.
 **Next:** See 20261106-101740.
 
+**Correction (2026-11-07, 20261107-220408_codi_v2-l1to7w-startlast-content-reliance).** The all-sites mean here is pooled over L1-L7, not taken per depth as the paper draft defines it. With the same-level mean, L1 stays at 1.000 (pooled: .092, reproduced), and donor latents with a different value leave every L1 answer unchanged. So "reliance without necessity at k=1" is wrong: L1 latents are not relied on, and the pooled mean breaks them because L1 latents differ from longer chains' (cosine .39 for z_0). L2 is unaffected: same-level mean .042, and donor latents move .994 of answers.
+
 ---
 
 ## 2026-11-06 — Start-last position and donor tests: CODI's gain now reaches two rules before the last, not just the last rule; everything before the last rule still passes through the latents (codi, run_id: 20261106-105634_codi_v2-l1to7w-startlast-position-donor)
@@ -10880,3 +10882,58 @@ Same-length donor by level, L4 / L5 / L6 / L7: round 1 0.98 / 0.80 / 0.66 / 0.57
 **Gotchas hit:** The Mac went to sleep on battery mid-run (pmset: sleep at 13:36 and 13:38), so the run took about 30 minutes instead of about 5. It saves after each level, and results are unaffected.
 **Caveats:** One seed, valid only. The swap moves the whole latent, not a value direction, so this does not show which features in z_j carry the value. Pairs are restricted to items the model got right with an in-range predicted answer.
 **Next:** On ungated start-last CODI below reach, swap all latents from a different-value donor against mean ablation, to separate content reliance from format damage at L1-L2. On this model, block the route in use and test whether the idle latents can stand in as a backup.
+
+---
+
+## 2026-11-07 — Ungated start-last CODI, content reliance: at L1 latents are ignored (donor latents keep 1.000, same-level mean keeps 1.000); from L2, below reach, the answer follows the latents' content (.994); the earlier ".09 at k=1" was a pooled-mean artefact (codi, run_id: 20261107-220408_codi_v2-l1to7w-startlast-content-reliance)
+
+**Goal:** Separate reliance on latent content from damage done by an off-distribution latent. 20261106-105537 found all latents mean-ablated take k=1 from 1.00 to .09, though CODI-0 needs no latents there, which contradicts the draft's prediction that reliance starts at d50 = 3.
+**Mechanism / model:** `codi`, gpt2. Start-last CODI checkpoint-17820 (20261106-083843), ungated, 6 latents. fp32, MPS.
+**Data:** Canonical test L1-L7, 500/level. Recipients: items the model answers right. Means come from train: 2,000 per level for the same-level mean, 500 per level over L1-L7 for the pooled mean (seed 21).
+**Command:** `codi_audit_artifacts/b29_ungated_resample.py` and `b29b_pooled_mean.py` under `run_guarded.sh` and `caffeinate -dims`; record from `record8.py`. All six latent inputs are replaced at once, because single latents are near copies. Different-value donor: same level, a different v_{L-1}, predicted answer = the recipient's last rule applied to the donor's v_{L-1} (in 0-99 and != gold). Same-value donor: same level, same v_{L-1}. Identity patch keeps every answer (smoke).
+**Headline results:**
+
+| Level | Clean | Diff donor: follows / keeps own (n) | Same-value donor keeps own | Same-level mean | Pooled mean |
+|---|---|---|---|---|---|
+| L1 | 1.000 | .000 / 1.000 (500) | 1.000 | 1.000 | .092 |
+| L2 | .998 | .994 / .002 (499) | 1.000 | .042 | .056 |
+| L3 | .476 | .374 / .017 (238) | .616 | .026 | .036 |
+| L4 | .306 | .275 / .033 (153) | .423 | .038 | – |
+| L5 | .160 | .150 / .025 (80) | .325 | .040 | – |
+| L6 | .116 | .034 / .017 (58) | .193 | .020 | – |
+| L7 | .076 | .105 / .079 (38) | .105 | .034 | – |
+
+Mean columns give accuracy on all items. At L1, z_0's same-level mean has cosine .39 with the pooled mean; at L2-L3 the cosine is .96-.97.
+
+**Interpretation:**
+- **L1: latents not relied on.** The answer keeps its own value whatever the latents hold, and the depth-matched mean (the draft's own N_j definition) changes nothing. The .09 in 20261106-105537 came from its pooled mean: L1 latents differ from those of longer chains, and a mean dominated by L4-L7 breaks the model. That is format damage, not reliance.
+- **L2: relied on, though not needed.** Donor latents move 99.4% of answers to the donor's value, and the same-value control keeps 1.000. Yet CODI-0 scores .98 at L2 with no latents. Reliance starts at k = 2, the first level with an intermediate value to carry, one level below d50 = 3. The latent gain starts at k = 3 (+.02 at k = 2, +.24 at k = 3; 20261106-083843).
+- **L3 and up: relied on, and not a clean carrier.** Donor latents change almost every answer (keeps own .02-.08), but only .37 / .28 / .15 follow the donor's v_{L-1}, and same-value donors keep only .62 / .42 / .33. The latents carry more than v_{L-1}, or carry it imprecisely, which fits the partial reads in 20261107-084635.
+- **For the draft:** "reliance near zero below d50" holds at k = 1 and fails at k = 2. Need and use separate by one level, and only content tests show it: mean ablation pooled over depth wrongly puts reliance at k = 1.
+
+**Gotchas hit:** The pooled mean in 20261106-105537 did not follow the draft's per-depth definition (its gotcha line flagged this for the Coconut record and said the CODI ablations shared it). A correction is appended to that record.
+**Caveats:** One seed, one checkpoint. Few right recipients at L5-L7 (80 / 58 / 38). Target "follows donor" assumes the latents carry v_{L-1}; at L3 and up they carry something less clean. Recipients are items answered right, which are easier.
+**Next:** Run the same test on any new arm, including a latent-only gate (prefill ungated, each latent pass shown one rule), to see whether reliance still starts at k = 2.
+
+---
+
+## 2026-11-07 — Rule-gated CODI, idle latents are not a backup: hiding the pass the answer reads leaves .08-.21, hiding everything but the idle passes leaves chance, though a probe reads v_{L-1} from them at 1.00 (codi, run_id: 20261107-220408_codi_v2-l1to7w-startlast-gated-idle-backup)
+
+**Goal:** Idle latents (after z_{L-1}) are ignored under swap and mean ablation (20261107-214950), yet a linear probe reads v_{L-1} from them at 1.00 (20261107-211610). Are they a working backup the model can fall back on, or inert?
+**Mechanism / model:** `codi`, gpt2. Rule-gated start-last CODI checkpoint-17820, gate on. fp32, MPS.
+**Data:** Valid L3-L5 (levels with idle passes), 286 per level.
+**Command:** `codi_audit_artifacts/b30_gated_backup.py` under `run_guarded.sh` and `caffeinate -dims`; record from `record8.py`. Only the answer tokens' attention to latent passes changes.
+**Headline results (exact, L3 / L4 / L5):**
+- Clean: 1.000 / 1.000 / 1.000.
+- Hide the pass the answer reads (input z_{L-1}): .206 / .108 / .084.
+- Hide passes 0 to L-1, leaving only the idle passes: .038 / .042 / .028.
+- Hide only the idle passes (control): 1.000 / 1.000 / 1.000.
+- Hide every latent pass (floor): .028 / .021 / .010.
+
+**Interpretation:**
+- The idle passes are inert. With every other route hidden, the answer cannot use them, so a probe's 1.00 read there is a value the model neither uses nor can fall back on. For a monitor this is a pure false alarm. The logit lens does not read these sites.
+- The residual .08-.21 after hiding the pass in use most likely comes from the pass before it, which computed v_{L-1} in its upper layers (inferred, not tested).
+
+**Gotchas hit:** None.
+**Caveats:** One seed, valid only. Blocking attention removes the route entirely; this does not test whether brief retraining would make the idle latents usable.
+**Next:** None for this model.

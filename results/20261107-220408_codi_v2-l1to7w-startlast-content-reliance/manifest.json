@@ -1,0 +1,181 @@
+{
+  "run_id": "20261107-220408_codi_v2-l1to7w-startlast-content-reliance",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "start-last CODI checkpoint-17820 (20261106-083843), ungated",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 3500,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.447,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "clean start-last CODI exact on canonical test L1-L7, this script",
+      "by_level": {
+        "1": {
+          "clean": 1.0,
+          "right": 500,
+          "diff_donor": {
+            "n": 500,
+            "follows_donor": 0.0,
+            "keeps_own": 1.0,
+            "donor_answer": 0.012
+          },
+          "same_value_donor": {
+            "n": 497,
+            "keeps_own": 1.0,
+            "same_start_share": 1.0
+          },
+          "same_level_mean": {
+            "acc_all": 1.0,
+            "keeps_own_right": 1.0
+          },
+          "pooled_mean_acc": 0.092
+        },
+        "2": {
+          "clean": 0.998,
+          "right": 499,
+          "diff_donor": {
+            "n": 499,
+            "follows_donor": 0.994,
+            "keeps_own": 0.002,
+            "donor_answer": 0.14
+          },
+          "same_value_donor": {
+            "n": 491,
+            "keeps_own": 1.0,
+            "same_start_share": 0.004
+          },
+          "same_level_mean": {
+            "acc_all": 0.044,
+            "keeps_own_right": 0.044
+          },
+          "pooled_mean_acc": 0.056
+        },
+        "3": {
+          "clean": 0.476,
+          "right": 238,
+          "diff_donor": {
+            "n": 238,
+            "follows_donor": 0.374,
+            "keeps_own": 0.017,
+            "donor_answer": 0.05
+          },
+          "same_value_donor": {
+            "n": 232,
+            "keeps_own": 0.616,
+            "same_start_share": 0.0
+          },
+          "same_level_mean": {
+            "acc_all": 0.032,
+            "keeps_own_right": 0.034
+          },
+          "pooled_mean_acc": 0.036
+        },
+        "4": {
+          "clean": 0.306,
+          "right": 153,
+          "diff_donor": {
+            "n": 153,
+            "follows_donor": 0.275,
+            "keeps_own": 0.033,
+            "donor_answer": 0.033
+          },
+          "same_value_donor": {
+            "n": 149,
+            "keeps_own": 0.423,
+            "same_start_share": 0.0
+          },
+          "same_level_mean": {
+            "acc_all": 0.038,
+            "keeps_own_right": 0.072
+          },
+          "pooled_mean_acc": null
+        },
+        "5": {
+          "clean": 0.16,
+          "right": 80,
+          "diff_donor": {
+            "n": 80,
+            "follows_donor": 0.15,
+            "keeps_own": 0.025,
+            "donor_answer": 0.037
+          },
+          "same_value_donor": {
+            "n": 80,
+            "keeps_own": 0.325,
+            "same_start_share": 0.0
+          },
+          "same_level_mean": {
+            "acc_all": 0.04,
+            "keeps_own_right": 0.113
+          },
+          "pooled_mean_acc": null
+        },
+        "6": {
+          "clean": 0.116,
+          "right": 58,
+          "diff_donor": {
+            "n": 58,
+            "follows_donor": 0.034,
+            "keeps_own": 0.017,
+            "donor_answer": 0.017
+          },
+          "same_value_donor": {
+            "n": 57,
+            "keeps_own": 0.193,
+            "same_start_share": 0.0
+          },
+          "same_level_mean": {
+            "acc_all": 0.02,
+            "keeps_own_right": 0.0
+          },
+          "pooled_mean_acc": null
+        },
+        "7": {
+          "clean": 0.076,
+          "right": 38,
+          "diff_donor": {
+            "n": 38,
+            "follows_donor": 0.105,
+            "keeps_own": 0.079,
+            "donor_answer": 0.026
+          },
+          "same_value_donor": {
+            "n": 38,
+            "keeps_own": 0.105,
+            "same_start_share": 0.0
+          },
+          "same_level_mean": {
+            "acc_all": 0.034,
+            "keeps_own_right": 0.132
+          },
+          "pooled_mean_acc": null
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/b29_ungated_resample.py, b29b_pooled_mean.py",
+    "swap": "all six latent inputs at once",
+    "means": "same level: 2,000 train items per level (seed 21); pooled: 500 per level over L1-L7",
+    "dtype": "float32"
+  },
+  "seed": 77,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Content reliance vs format damage: all-latent donors against same-level and pooled mean ablation.",
+  "timestamp_utc": "2026-11-07T22:04:08.265370+00:00",
+  "git": {
+    "commit": "1b9a89f",
+    "dirty": true
+  }
+}

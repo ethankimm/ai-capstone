@@ -9,3 +9,5 @@
 **Gotchas hit:** None.
 **Caveats:** One seed. Mean ablation is off-distribution; resampled latents, which are real ones, cost more per site (L3 .35-.38) and are shown in the manifest.
 **Next:** See 20261106-101740.
+
+**Correction (2026-11-07, 20261107-220408_codi_v2-l1to7w-startlast-content-reliance).** The all-sites mean here is pooled over L1-L7, not taken per depth as the paper draft defines it. With the same-level mean, L1 stays at 1.000 (pooled: .092, reproduced), and donor latents with a different value leave every L1 answer unchanged. So "reliance without necessity at k=1" is wrong: L1 latents are not relied on, and the pooled mean breaks them because L1 latents differ from longer chains' (cosine .39 for z_0). L2 is unaffected: same-level mean .042, and donor latents move .994 of answers.

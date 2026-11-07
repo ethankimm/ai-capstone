@@ -1,0 +1,157 @@
+{
+  "run_id": "20261107-220408_codi_v2-l1to7w-startlast-gated-idle-backup",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "rule-gated start-last CODI checkpoint-17820 (20261107-204814)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "validation",
+    "n_examples": 858,
+    "seed": 20
+  },
+  "metrics": {
+    "final_answer_accuracy": 1.0,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "rule-gated CODI exact on valid L3-L5, clean",
+      "conditions": {
+        "3": {
+          "clean": {
+            "hide": [],
+            "acc": 1.0
+          },
+          "block_used": {
+            "hide": [
+              2
+            ],
+            "acc": 0.206
+          },
+          "block_upto": {
+            "hide": [
+              0,
+              1,
+              2
+            ],
+            "acc": 0.038
+          },
+          "block_idle": {
+            "hide": [
+              3,
+              4,
+              5
+            ],
+            "acc": 1.0
+          },
+          "block_all": {
+            "hide": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "acc": 0.028
+          }
+        },
+        "4": {
+          "clean": {
+            "hide": [],
+            "acc": 1.0
+          },
+          "block_used": {
+            "hide": [
+              3
+            ],
+            "acc": 0.108
+          },
+          "block_upto": {
+            "hide": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "acc": 0.042
+          },
+          "block_idle": {
+            "hide": [
+              4,
+              5
+            ],
+            "acc": 1.0
+          },
+          "block_all": {
+            "hide": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "acc": 0.021
+          }
+        },
+        "5": {
+          "clean": {
+            "hide": [],
+            "acc": 1.0
+          },
+          "block_used": {
+            "hide": [
+              4
+            ],
+            "acc": 0.084
+          },
+          "block_upto": {
+            "hide": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "acc": 0.028
+          },
+          "block_idle": {
+            "hide": [
+              5
+            ],
+            "acc": 1.0
+          },
+          "block_all": {
+            "hide": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "acc": 0.01
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/b30_gated_backup.py",
+    "change": "answer tokens' attention mask over latent passes only",
+    "dtype": "float32"
+  },
+  "seed": 20,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Can idle latents stand in when the pass the answer reads is hidden?",
+  "timestamp_utc": "2026-11-07T22:04:08.318292+00:00",
+  "git": {
+    "commit": "1b9a89f",
+    "dirty": true
+  }
+}
