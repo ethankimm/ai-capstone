@@ -455,6 +455,8 @@ There is no CODI-0 arm: under this gate it can apply only the last rule, by cons
 
 Launch: section 11.1's command plus `ARM_EXTRA="--rule_gate True" ARM_NAME=gpt2_l1to7w_startlast_gated ARM_SLUG=v2-l1to7w-startlast-gated-depth2`, codi arm only. Estimate: about 11.5 pod-hours, $7 at $0.59/h, so the balance must be at least $10.50. Section 10.5 applies.
 
+**Correction (2026-11-07, at the epoch 6 check, before any test record).** "Six passes cover L7" above is wrong. The output of the pass that reads rule L-1 only reaches the answer tokens if it is fed into one more pass, so an L-rule item needs L passes: six passes cover L6. L7 can only get through the upper layers of the last pass. The primary analysis (L5-L6) is unaffected. Valid at epoch 6, read for the stop rule: L1-L7 .97 / .91 / .92 / .86 / .82 / .80 / .19, so the run continues.
+
 ### 12.2 Checks during training
 
 Latent use is tracked on the laptop from synced checkpoints, valid only. **Epoch 6:** read L2 exact. If it is below 0.20, read it again at epoch 8 and stop the run if it is still below 0.20. Ungated, L2 was 0.07 at epoch 4 and 0.94 at epoch 6, so a late jump is possible and epoch 6 alone does not stop the run. If the arm diverges, rerun at lr 1e-3, as section 11.2.
