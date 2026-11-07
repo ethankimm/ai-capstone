@@ -10830,3 +10830,29 @@ Same-length donor by level, L4 / L5 / L6 / L7: round 1 0.98 / 0.80 / 0.66 / 0.57
 **Gotchas hit:** None.
 **Caveats:** One seed. Out of range by construction, so accuracy here says nothing about reach. The visible-rules check is behavioural, not a probe of the latents.
 **Next:** None for this record.
+
+---
+
+## 2026-11-07 — Decoder control on rule-gated CODI: every intermediate value reads 1.00 from its own latent, by linear probe and by an untrained logit lens, in a two-site staircase; ungated CODI reads at control except the value before the last rule (codi, run_id: 20261107-211610_codi_v2-l1to7w-startlast-gated-decoder-control)
+
+**Goal:** RQ2 decoder control, pre-registered in TRAINING_PROTOCOL section 12.3 and reported either way. The gated model carries a known rollout (20261107-204814). Can the decoders used on ungated CODI read it? If they can, ungated CODI's late-only profile (20261107-084635) is an absence of a rollout, not a decoder failure.
+**Mechanism / model:** `codi`, gpt2, 6 latents. Rule-gated start-last CODI checkpoint-17820 with the gate on, as in training; ungated start-last CODI checkpoint-17820 as the comparison. fp32, MPS.
+**Data:** Valid only, L3-L6, 286 / 286 / 286 / 285 items. Probes fit on 8,000 train items of one level (seed 20), plus a 4,000 fit and a shuffled-label fit. `predictions.jsonl` holds, per model and item, the step values, the answer, and the probe and logit-lens reads of v_j from z_j.
+**Command:** `codi_audit_artifacts/b27_gated_decoder.py`, tables from `a29_gated_decoder.py`, under `run_guarded.sh` and `caffeinate -dims`; record from `record6.py`. Sites: t1 (`<bot>`), h1-h6 (pass s = h{s+1}, input z_s), colon; layers 0, 2, 4, 8, 12. Probes as `b23`. Logit lens: final LayerNorm, then the LM head on the 100 number tokens, all 13 layers. Headline cells, fixed in the script before any read: v_j at z_j (h{j+1} layer 0) and at h{j} layer 12, j = 1 to L-1.
+**Headline results:**
+- **Checks.** The collector matches `eval_codi.encode_and_think` exactly (max latent difference 0, same answers, gate on and off). Answers: gated 1.000 at L3-L6; ungated .521 / .329 / .136 / .123, with right counts 149 / 94 / 39 as in `b23`. Calibration: ungated value before the last rule at h4 layer 2 reads .49 / .21 / .12 at L3-L5, as `b23`.
+- **Gated, headline cells.** Every v_j at every level reads 1.00 from z_j, by probe and by logit lens, and 1.00 at h{j} layer 12. Shuffled labels .00-.05. The 4,000 fit already reads 1.00.
+- **Gated, logit-lens grid.** Each v_j reads about 1.00 at exactly two sites, h{j} (the pass that read rule j) and h{j+1} (whose input is z_j), and .01-.14 at every other latent site. The answer reads 1.00 at the colon. At intermediate layers the colon also reads the value before the last rule (.33-.38).
+- **Gated, probe grid.** Same staircase, but later sites keep earlier values in part (L6: v_1 .18-.43 at h5-h6). v_0 reads 1.00 almost everywhere, since every pass sees the start value.
+- **Negative control.** One step ahead of its rule, v_j reads .18-.34, at or below a guess from the exact previous value (.22-.38): halving an even value, for example, needs no constant. Two or more steps ahead, at most .05 (mean .02-.03).
+- **Ungated.** Probe reads of v_1 to v_{L-2} at z_j are .03-.22, near shuffled (.01-.04), and saturation is not the limit. The logit lens reads intermediates at .01-.07, except the value before the last rule (.06-.15). The colon reads the answer at about accuracy (.52 / .33 / .14 / .12).
+
+**Interpretation:**
+- The decoders are not blind. When a rollout exists, a linear probe reads every step perfectly from its own latent, and so does the untrained logit lens. So ungated CODI's late-only profile is an absence of a rollout, not something these decoders missed.
+- In the gated model each latent is in effect a number token: v_j decodes from z_j through the unembedding with no training. A monitor would need no probe here.
+- This latent is used as well as readable. Under the gate, z_j is the only route from rules 1 to j to the answer, and edited items follow the new chain (20261107-204814). So readable and used coincide at every site. That is the "readable and used" cell of the draft's grid, though forced by design.
+- Paper framing (link 2, use to readable): when computation is forced through the latents one step per pass, it is fully readable. The open question is link 1: plain training does not route computation this way.
+
+**Gotchas hit:** None. My pre-set negative control included one-step-ahead cells, which a value-only guess can partly solve. They are split out above, with a baseline that knows the previous value.
+**Caveats:** One seed per model, valid only. The state is one integer from 0 to 99, so a perfect read is weak evidence that richer latent computation would be readable. The gate forces the bottleneck, so this does not show what a naturally emerging rollout would look like. The headline cells are fixed, but the grids report the best layer per site, which leans slightly high. No per-latent patching yet: use is argued from the gate's construction and the edited-item test, not from swapping single z_j.
+**Next:** A per-latent causal test on the gated model: swap z_j from a donor with a different v_j and check that the answer follows the donor's chain from rule j+1. This is cheap on the Mac. The paid control (shuffled or partial gate) awaits the team's decision.

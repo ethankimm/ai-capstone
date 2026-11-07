@@ -1,0 +1,245 @@
+{
+  "run_id": "20261107-211610_codi_v2-l1to7w-startlast-gated-decoder-control",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "rule-gated start-last CODI checkpoint-17820 (20261107-204814); ungated start-last CODI checkpoint-17820 (20261106-083843) as comparison",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "validation",
+    "n_examples": 1143,
+    "seed": 20
+  },
+  "metrics": {
+    "final_answer_accuracy": 1.0,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "rule-gated CODI exact on valid L3-L6 from the probe collector, not test",
+      "reads": {
+        "gated": {
+          "3": {
+            "n": 286,
+            "answer_exact": 1.0,
+            "z_j_reads": {
+              "v1": {
+                "probe": 1.0,
+                "shuffled": 0.014,
+                "logit_lens": 1.0
+              },
+              "v2": {
+                "probe": 1.0,
+                "shuffled": 0.014,
+                "logit_lens": 0.997
+              }
+            },
+            "value_before_last_rule_h4_layer2": 1.0
+          },
+          "4": {
+            "n": 286,
+            "answer_exact": 1.0,
+            "z_j_reads": {
+              "v1": {
+                "probe": 1.0,
+                "shuffled": 0.052,
+                "logit_lens": 1.0
+              },
+              "v2": {
+                "probe": 1.0,
+                "shuffled": 0.01,
+                "logit_lens": 1.0
+              },
+              "v3": {
+                "probe": 1.0,
+                "shuffled": 0.0,
+                "logit_lens": 1.0
+              }
+            },
+            "value_before_last_rule_h4_layer2": 1.0
+          },
+          "5": {
+            "n": 286,
+            "answer_exact": 1.0,
+            "z_j_reads": {
+              "v1": {
+                "probe": 1.0,
+                "shuffled": 0.0,
+                "logit_lens": 1.0
+              },
+              "v2": {
+                "probe": 0.997,
+                "shuffled": 0.003,
+                "logit_lens": 1.0
+              },
+              "v3": {
+                "probe": 1.0,
+                "shuffled": 0.031,
+                "logit_lens": 1.0
+              },
+              "v4": {
+                "probe": 1.0,
+                "shuffled": 0.042,
+                "logit_lens": 0.997
+              }
+            },
+            "value_before_last_rule_h4_layer2": 0.318
+          },
+          "6": {
+            "n": 285,
+            "answer_exact": 1.0,
+            "z_j_reads": {
+              "v1": {
+                "probe": 1.0,
+                "shuffled": 0.032,
+                "logit_lens": 1.0
+              },
+              "v2": {
+                "probe": 1.0,
+                "shuffled": 0.021,
+                "logit_lens": 0.996
+              },
+              "v3": {
+                "probe": 1.0,
+                "shuffled": 0.011,
+                "logit_lens": 0.996
+              },
+              "v4": {
+                "probe": 1.0,
+                "shuffled": 0.025,
+                "logit_lens": 0.996
+              },
+              "v5": {
+                "probe": 1.0,
+                "shuffled": 0.0,
+                "logit_lens": 1.0
+              }
+            },
+            "value_before_last_rule_h4_layer2": 0.074
+          }
+        },
+        "ungated": {
+          "3": {
+            "n": 286,
+            "answer_exact": 0.521,
+            "z_j_reads": {
+              "v1": {
+                "probe": 0.154,
+                "shuffled": 0.014,
+                "logit_lens": 0.003
+              },
+              "v2": {
+                "probe": 0.22,
+                "shuffled": 0.017,
+                "logit_lens": 0.14
+              }
+            },
+            "value_before_last_rule_h4_layer2": 0.486
+          },
+          "4": {
+            "n": 286,
+            "answer_exact": 0.329,
+            "z_j_reads": {
+              "v1": {
+                "probe": 0.098,
+                "shuffled": 0.017,
+                "logit_lens": 0.01
+              },
+              "v2": {
+                "probe": 0.091,
+                "shuffled": 0.031,
+                "logit_lens": 0.007
+              },
+              "v3": {
+                "probe": 0.143,
+                "shuffled": 0.031,
+                "logit_lens": 0.15
+              }
+            },
+            "value_before_last_rule_h4_layer2": 0.21
+          },
+          "5": {
+            "n": 286,
+            "answer_exact": 0.136,
+            "z_j_reads": {
+              "v1": {
+                "probe": 0.045,
+                "shuffled": 0.007,
+                "logit_lens": 0.01
+              },
+              "v2": {
+                "probe": 0.042,
+                "shuffled": 0.017,
+                "logit_lens": 0.014
+              },
+              "v3": {
+                "probe": 0.049,
+                "shuffled": 0.014,
+                "logit_lens": 0.021
+              },
+              "v4": {
+                "probe": 0.084,
+                "shuffled": 0.01,
+                "logit_lens": 0.07
+              }
+            },
+            "value_before_last_rule_h4_layer2": 0.122
+          },
+          "6": {
+            "n": 285,
+            "answer_exact": 0.123,
+            "z_j_reads": {
+              "v1": {
+                "probe": 0.039,
+                "shuffled": 0.011,
+                "logit_lens": 0.018
+              },
+              "v2": {
+                "probe": 0.046,
+                "shuffled": 0.007,
+                "logit_lens": 0.007
+              },
+              "v3": {
+                "probe": 0.035,
+                "shuffled": 0.021,
+                "logit_lens": 0.014
+              },
+              "v4": {
+                "probe": 0.032,
+                "shuffled": 0.028,
+                "logit_lens": 0.011
+              },
+              "v5": {
+                "probe": 0.056,
+                "shuffled": 0.039,
+                "logit_lens": 0.063
+              }
+            },
+            "value_before_last_rule_h4_layer2": 0.084
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/b27_gated_decoder.py",
+    "analysis": "codi_audit_artifacts/a29_gated_decoder.py",
+    "probe": "ridge to digit one-hots, penalty picked on a held-out 15% of fit items (as b23)",
+    "fit_items_per_level": 8000,
+    "sites": "t1, h1-h6, colon at layers 0, 2, 4, 8, 12",
+    "logit_lens": "ln_f then LM head on the 100 number tokens, 13 layers",
+    "headline": "v_j at z_j (h{j+1} layer 0) and h{j} layer 12, fixed before any read",
+    "dtype": "float32"
+  },
+  "seed": 20,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Decoder control (TRAINING_PROTOCOL 12.3): can probes and the logit lens read a known rollout?",
+  "timestamp_utc": "2026-11-07T21:16:10.838222+00:00",
+  "git": {
+    "commit": "a5fa93a",
+    "dirty": true
+  }
+}
