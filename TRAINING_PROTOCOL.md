@@ -432,3 +432,47 @@ stop and let epoch 12 stand. One extension only; anything longer needs a new ame
 epoch-12 result is labelled budget-limited. The launch is deferred by decision of the team, which overrides "extend both arms" above: this
 pair is a first look at whether latents chain and whether CODI beats CODI-0 at a matched budget, and a restart is not a clean longer run.
 Read section 11.3 at epoch 12 first, then choose between this extension, a second seed pair, or a clean longer run.
+
+## 12. Amendment (2026-11-07): rule-gated latents
+
+**Question.** Start-last CODI gains past reach but stops after about two passes and fails at L5-L7 with passes unused (`20261106-101740`). GSM8K CODI's
+attention moves through the problem pass by pass; start-last's does not (`20261107-093340`), though near-copy latents would force that either way. If the
+model is told which rule comes next, does it carry a value through the latents, one rule per pass? Nothing here gives it the values.
+
+### 12.1 Change
+
+One change against the start-last CODI arm (`20261106-083843`): `--rule_gate True` (`scripts/codi_rule_gate.patch`, class `RuleGate`), in training and in every eval.
+Only attention masks change:
+- Question pass: each rule attends only to itself, so a rule's keys and values hold nothing about other rules. The tail (" Start" onward, with `<bot>`) attends only to itself. Without this, rule j's cache would carry rules 1 to j-1, and the tail would carry them all.
+- Latent pass i (from 0) sees the tail and rule i+1, unless that is the last rule. The answer tokens see the tail and the last rule.
+- Latents and answer tokens see earlier latents. The first real token, the attention sink, stays visible everywhere. The teacher pass is unchanged.
+
+So an L-rule item uses passes 0 to L-2, then the answer tokens. Rule L is applied where start-last CODI already applies it. Six passes cover L7. L8 and above cannot be solved by construction.
+
+Data, seed and recipe are section 11's, for 12 epochs. `scripts/check_rule_gate.py` passes on a real checkpoint: editing rule j leaves earlier latents and other rules' keys and values bit-identical, the same edit moves z_0 when ungated, padding has no effect, and training and eval logits match.
+
+There is no CODI-0 arm: under this gate it can apply only the last rule, by construction. The reference is the ungated start-last CODI, paired item by item.
+
+Launch: section 11.1's command plus `ARM_EXTRA="--rule_gate True" ARM_NAME=gpt2_l1to7w_startlast_gated ARM_SLUG=v2-l1to7w-startlast-gated-depth2`, codi arm only. Estimate: about 11.5 pod-hours, $7 at $0.59/h, so the balance must be at least $10.50. Section 10.5 applies.
+
+### 12.2 Checks during training
+
+Latent use is tracked on the laptop from synced checkpoints, valid only. **Epoch 6:** read L2 exact. If it is below 0.20, read it again at epoch 8 and stop the run if it is still below 0.20. Ungated, L2 was 0.07 at epoch 4 and 0.94 at epoch 6, so a late jump is possible and epoch 6 alone does not stop the run. If the arm diverges, rerun at lr 1e-3, as section 11.2.
+
+### 12.3 Analysis, fixed before training
+
+Selection and test as section 10.3. Any accuracy above floor at L3 and beyond must pass through the latents, because no other route to the early rules exists; a solver missing one rule scores about 6%.
+
+- **Primary:** pooled L5-L6 paired gain, gated minus start-last CODI, exact McNemar (n = 1000). Ungated test accuracy: L5 0.158, L6 0.120.
+
+| Outcome | Rule | Reading | Next |
+|---|---|---|---|
+| Rollout | Gain >= 0.05, p < 0.05 | Usable capacity existed at this budget, and plain CODI left it idle | Shuffled-gate control, then decoder control |
+| No rollout | 95% CI entirely below +0.05 | Routing alone is not enough at this budget, so the fault may lie in carrying state | SIM-CODI on start-last |
+| Otherwise | Ambiguous | | Report as such and decide with the team |
+
+- **Shuffled-gate control, if Rollout:** passes see rules 1 to L-1 in a random order per item; the last rule stays at the answer. The right order is unavailable from L3, so accuracy should collapse there. If it does not, the gain is not from stepping.
+- **Decoder control (RQ2), reported either way:** probes as `b23`, for every step at every latent site, L3-L6. If the gated model rolls out, reads of v_j at the site after rule j are the positive control for the late-only reading of ungated CODI.
+- **Also reported:** the pass sweep, accuracy by level to L7, and whether the shortfall at L2-L4 against ungated CODI is the price of the gate.
+
+A gated rollout is forced by design, so it does not show that rollouts emerge naturally. It is a diagnostic, not a replacement for section 11's result. One seed.

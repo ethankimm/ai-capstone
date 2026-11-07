@@ -1,0 +1,94 @@
+diff --git a/src/model.py b/src/model.py
+index 1328ffb..afc5bc8 100644
+--- a/src/model.py
++++ b/src/model.py
+@@ -113,6 +113,7 @@ class TrainingArguments(transformers.TrainingArguments):
+     include_last_cot: bool = field(default=False, metadata={"help": "Include the last CoT step in the training data."})
+     fix_attn_mask: bool = field(default=False, metadata={"help": "Correct a bug about attention mask."})
+     pad_invariant: bool = field(default=False, metadata={"help": "ai-capstone (codi_model_fixes.patch): mask the latent passes and use mask-derived position ids so padding has no effect; needs fix_attn_mask."})
++    rule_gate: bool = field(default=False, metadata={"help": "ai-capstone (codi_rule_gate.patch): start-last RuleChain only. Each rule is encoded alone, latent pass i sees rule i+1, the answer tokens see the last rule, the tail sees no rules; needs pad_invariant."})
+     log_full: bool = field(default=False, metadata={"help": "Log all losses."})
+     print_loss: bool = field(default=True)
+     max_token_num: int = field(default=1000, metadata={"help": "Limit the longest data to avoid OOM."})
+@@ -136,6 +137,43 @@ def freeze_model(model):
+     for _, param in model.named_parameters():
+         param.requires_grad = False
+ 
++class RuleGate:
++    """ai-capstone (codi_rule_gate.patch, TRAINING_PROTOCOL section 12): per-item attention gate for start-last RuleChain
++    ("Rule 1: ... Rule n: ... Start with x. What is the final number?\n<bot>"). Nothing but the masks changes.
++      question pass: each rule attends only to itself, so rule j's keys and values hold nothing about other rules;
++                     the tail (" Start" onward, with <bot>) attends only to itself;
++      latent pass i: sees the tail and rule i+1, if that is not the last rule;
++      answer tokens: see the tail and the last rule.
++    Latents and answer tokens always see earlier latents. The first real token, GPT-2's attention sink, stays visible
++    everywhere. scripts/eval_codi.py uses this class too, so training and evaluation share one rule."""
++
++    def __init__(self, ids, mask):
++        real = mask.bool()
++        rule = ((ids == 31929) | (ids == 14330)) & real  # GPT-2 ids of "Rule", " Rule"
++        tail = ((ids == 7253) & real).long().cumsum(1) > 0  # " Start" onward
++        self.n = rule.sum(1, keepdim=True)
++        assert (self.n > 0).all() and tail.any(1).all() and not (rule & tail).any(), "rule_gate needs start-last RuleChain questions"
++        self.g = torch.where(tail, torch.zeros_like(ids), rule.long().cumsum(1)).masked_fill(~real, -1)
++        self.sink = real & (real.long().cumsum(1) == 1)
++
++    def question(self, dtype):
++        """[B, 1, W, W] additive mask for the question pass. Pad rows see only themselves, so no row is empty."""
++        g = self.g
++        w = g.size(1)
++        see = (g[:, :, None] == g[:, None, :]) | self.sink[:, None, :]
++        see = see & (g[:, None, :] >= 0) & torch.ones(w, w, dtype=torch.bool, device=g.device).tril()
++        see = see | (torch.eye(w, dtype=torch.bool, device=g.device) & (g[:, :, None] < 0))
++        return torch.zeros(see.shape, dtype=dtype, device=g.device).masked_fill(~see, torch.finfo(dtype).min)[:, None]
++
++    def latent(self, i):
++        """[B, W] keys visible to latent pass i (from 0)."""
++        return ((self.g == 0) | self.sink | ((self.g == i + 1) & (i + 1 < self.n))).long()
++
++    def answer(self):
++        """[B, W] keys visible to the answer tokens."""
++        return ((self.g == 0) | self.sink | (self.g == self.n)).long()
++
++
+ class CODI(torch.nn.Module):
+     def __init__(self, model_args, training_args, lora_config):
+         super().__init__()
+@@ -225,6 +263,8 @@ class CODI(torch.nn.Module):
+         # mask, plus positions counting real tokens only); scripts/eval_codi.py applies the same rule at inference.
+         self.pad_invariant = getattr(training_args, "pad_invariant", False)
+         assert not self.pad_invariant or self.fix_attn_mask, "pad_invariant needs fix_attn_mask (the decoder-pass mask)"
++        self.rule_gate = getattr(training_args, "rule_gate", False)
++        assert not self.rule_gate or (self.pad_invariant and self.num_latent > 0), "rule_gate needs pad_invariant and latents"
+ 
+         if self.tokenizer.pad_token_id is None:
+             self.tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+@@ -288,7 +328,9 @@ class CODI(torch.nn.Module):
+         if self.pad_invariant:
+             enc_pos = (encoder_attention_mask.long().cumsum(-1) - 1).clamp(min=0)  # real tokens numbered from 0
+             n_real = encoder_attention_mask.long().sum(-1, keepdim=True)  # [B, 1]: position of the first latent
+-        outputs = self.codi(input_ids=encoder_input_ids, use_cache=True, output_hidden_states=True, past_key_values=past_key_values, attention_mask=encoder_attention_mask, position_ids=enc_pos)
++        gate = RuleGate(encoder_input_ids, encoder_attention_mask) if self.rule_gate else None
++        enc_mask = gate.question(self.get_embd(self.codi, self.model_name).weight.dtype) if gate else encoder_attention_mask
++        outputs = self.codi(input_ids=encoder_input_ids, use_cache=True, output_hidden_states=True, past_key_values=past_key_values, attention_mask=enc_mask, position_ids=enc_pos)
+         past_key_values = outputs.past_key_values
+         latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1) # as the next input
+         if self.use_prj:
+@@ -347,7 +389,7 @@ class CODI(torch.nn.Module):
+                 if num_latent > 0:
+                     # Implicit CoT generation
+                     if self.pad_invariant:
+-                        lat_mask = torch.cat((encoder_attention_mask.long(), torch.ones((latent_embd.size(0), i + 1), dtype=torch.long, device=latent_embd.device)), dim=1)
++                        lat_mask = torch.cat((gate.latent(i) if gate else encoder_attention_mask.long(), torch.ones((latent_embd.size(0), i + 1), dtype=torch.long, device=latent_embd.device)), dim=1)
+                         outputs = self.codi(inputs_embeds=latent_embd, use_cache=True, output_hidden_states=True, past_key_values=past_key_values,
+                                             attention_mask=lat_mask, position_ids=n_real + i)
+                     else:
+@@ -364,7 +406,7 @@ class CODI(torch.nn.Module):
+                   
+                     if dynamic_mask is not None: # Prevent attending the paddings
+                         decoder_mask = torch.ones((embds.size(0), embds.size(1)), dtype=torch.bool).to(dynamic_mask)
+-                        dynamic_mask = torch.cat((encoder_attention_mask, dynamic_mask, decoder_mask), dim=1)
++                        dynamic_mask = torch.cat((gate.answer().to(dynamic_mask) if gate else encoder_attention_mask, dynamic_mask, decoder_mask), dim=1)
+                         dynamic_mask = dynamic_mask.bool()
+                     # Student task's output
+                     dec_pos = None

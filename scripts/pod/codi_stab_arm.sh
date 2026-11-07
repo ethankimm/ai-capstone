@@ -15,16 +15,17 @@ D=/workspace/codi_runs/${N}_$K/gpt2/ep_$EP/lr_0.002/seed_11
 L17=${ARM_HASH:-$REPO/configs/synthetic/v2_l1to7w_data_sha256.json}
 DATA=${ARM_DATA:-/workspace/synthetic_data_v2_l1to7w}; CANON=${ARM_CANON:-/workspace/synthetic_data_v2/depth2/test.json}
 SLUG=${ARM_SLUG:-v2-l1to7w-stab-depth2}
+EXTRA=${ARM_EXTRA:-}  # extra model flags for training and every eval, e.g. "--rule_gate True" (section 12)
 FLAGS="--output_dir /tmp/u --model_name_or_path gpt2 --seed 11 --model_max_length 512 --bf16 --lora_r 128 --lora_alpha 32 --lora_init \
  --batch_size 64 --greedy True --num_latent $nl --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 \
  --inf_latent_iterations $nl --inf_num_iterations 1 --remove_eos True --use_lora True \
- --fix_attn_mask True --pad_invariant True --include_last_cot False"
+ --fix_attn_mask True --pad_invariant True --include_last_cot False $EXTRA"
 fail() { echo "$1" > /workspace/ARM_FAILED; echo "ARM_FAILED: $1"; exit 1; }
 
 cd "$REPO"
 (while [ ! -f "$LOG" ]; do sleep 5; done; exec python3 scripts/pod/divergence_watchdog.py "$LOG") > /workspace/logs/watchdog_$K.log 2>&1 &
 RESUME_FROM=${ARM_RESUME:-} DATA=$DATA HASH_FILE=$L17 NAME=$N EPOCHS=$EP \
-  TRAIN_EXTRA="--learning_rate 2e-3 --adam_beta2 0.98 --adam_epsilon 1e-6 --max_grad_norm 1.0" \
+  TRAIN_EXTRA="--learning_rate 2e-3 --adam_beta2 0.98 --adam_epsilon 1e-6 --max_grad_norm 1.0 $EXTRA" \
   bash scripts/pod/codi_l4to7.sh train "$K"
 rc=$?
 [ -f "$LOG.watchdog" ] && fail "diverged: $(tail -1 "$LOG.watchdog")"

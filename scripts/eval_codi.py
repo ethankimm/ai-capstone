@@ -190,22 +190,32 @@ def encode_and_think(model, batch, training_args):
     Returns (past_key_values, PadInvariant or None, list of the latent inputs fed in, each [B, 1, d])."""
     pad_inv = getattr(training_args, "pad_invariant", False)
     q_pos = question_position_ids(batch["attention_mask"]) if pad_inv else None
+    gate = None
+    if getattr(training_args, "rule_gate", False):  # TRAINING_PROTOCOL section 12: same class as training
+        from src.model import RuleGate
+        gate = RuleGate(batch["input_ids"], batch["attention_mask"])
+    q_mask = gate.question(model.get_embd(model.codi, model.model_name).weight.dtype) if gate else batch["attention_mask"]
     outputs = model.codi(input_ids=batch["input_ids"], use_cache=True, output_hidden_states=True, past_key_values=None,
-                         attention_mask=batch["attention_mask"], position_ids=q_pos)
+                         attention_mask=q_mask, position_ids=q_pos)
     past_key_values = outputs.past_key_values
     latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1)
     if training_args.use_prj:
         latent_embd = model.prj(latent_embd)
     pi = PadInvariant(batch["attention_mask"]) if pad_inv else None
+    width = batch["attention_mask"].size(1)
     latents = []
     for i in range(training_args.inf_latent_iterations):
         latents.append(latent_embd)
+        if gate:
+            pi.mask[:, :width] = gate.latent(i)
         outputs = model.codi(inputs_embeds=latent_embd, use_cache=True, output_hidden_states=True, past_key_values=past_key_values,
                              **(pi.next(1) if pi else {}))
         past_key_values = outputs.past_key_values
         latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1)
         if training_args.use_prj:
             latent_embd = model.prj(latent_embd)
+    if gate:
+        pi.mask[:, :width] = gate.answer()  # every later pass (answer tokens) sees the tail and the last rule
     return past_key_values, pi, latents
 
 

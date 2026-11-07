@@ -37,6 +37,6 @@ if [ -n "${RESUME_SRC:-}" ]; then
   rsync -az -e "$E" "$RESUME_SRC/" "root@$H:$ARM_RESUME/" || exit 1
 fi
 ssh -n -p "$P" "root@$H" "cd /workspace/ai-capstone && DATA=/workspace/$SRC_DATA HASH_FILE=/workspace/ai-capstone/configs/synthetic/$HASH_CFG bash scripts/pod/codi_l4to7.sh setup 2>&1 | tail -6" || exit 1
-ssh -n -p "$P" "root@$H" "cd /workspace/ai-capstone && ARM_NAME=$ARM_NAME ARM_SLUG=$ARM_SLUG ARM_DATA=/workspace/$SRC_DATA ARM_CANON=/workspace/$SRC_CANON/depth2/test.json ARM_HASH=/workspace/ai-capstone/configs/synthetic/$HASH_CFG ARM_CANON_HASH=$CANON_HASH ARM_EPOCHS=$ARM_EPOCHS ARM_RESUME=$ARM_RESUME setsid nohup bash scripts/pod/codi_stab_arm.sh $K '$HW' > /workspace/logs/arm_$K.log 2>&1 < /dev/null & disown; sleep 2; pgrep -f '[c]odi_stab_arm' >/dev/null && echo arm_started" < /dev/null > >(cat) &
+ssh -n -p "$P" "root@$H" "cd /workspace/ai-capstone && ARM_NAME=$ARM_NAME ARM_SLUG=$ARM_SLUG ARM_EXTRA='${ARM_EXTRA:-}' ARM_DATA=/workspace/$SRC_DATA ARM_CANON=/workspace/$SRC_CANON/depth2/test.json ARM_HASH=/workspace/ai-capstone/configs/synthetic/$HASH_CFG ARM_CANON_HASH=$CANON_HASH ARM_EPOCHS=$ARM_EPOCHS ARM_RESUME=$ARM_RESUME setsid nohup bash scripts/pod/codi_stab_arm.sh $K '$HW' > /workspace/logs/arm_$K.log 2>&1 < /dev/null & disown; sleep 2; pgrep -f '[c]odi_stab_arm' >/dev/null && echo arm_started" < /dev/null > >(cat) &
 sleep 20; kill %1 2>/dev/null  # the ssh above can hang after detaching; it has done its job by now
 echo "ARM $K:$H:$P:$POD:$RATE"
