@@ -10937,3 +10937,40 @@ Mean columns give accuracy on all items. At L1, z_0's same-level mean has cosine
 **Gotchas hit:** None.
 **Caveats:** One seed, valid only. Blocking attention removes the route entirely; this does not test whether brief retraining would make the idle latents usable.
 **Next:** None for this model.
+
+---
+
+## 2026-11-07 — SIM-CODI on start-last RuleChain: test L1-L6 1.000, L7 0.998; pooled L2-L7 gain over start-last CODI +0.644 (1933/0), over CODI-0 +0.743; primary passed, latent use not yet tested (codi, run_id: 20261107-225603_codi_v2-l1to7w-startlast-sim-depth2-codi)
+
+**Goal:** Pre-registered test (TRAINING_PROTOCOL section 13): with the start value after the rules, does a step decoder on each latent (SIM-CoT on CODI) give a readable, used trace and more depth than start-last CODI? Primary: pooled L2-L7 paired gain over start-last CODI (20261106-083843).
+**Mechanism / model:** `codi`, gpt2, num_latent 6, RunPod A40, 12 epochs, section 10.2 recipe unchanged (lr 2e-3 cosine, adam_beta2 0.98, adam_epsilon 1e-6, max_grad_norm 1.0, LoRA r128/a32, 64 x 2, bf16, seed 11), plus `--step_decoder True`: a separate fp32 GPT-2 reads latent z_j as a one-position prefix and writes teacher step j+1 (`<<a op b=c>>` + EOS), teacher-forced, decoder lr 1e-4, loss factor 1.0, training only (patch `scripts/codi_step_decoder.patch`). `n_params` 268,939,008 counts the decoder; the answer path has 144,499,200 as before.
+**Data:** `synthetic_data_v2_l1to7w_startlast`, as the start-last pair. Test = canonical L1-L7, 500/level, paired item by item with start-last CODI and CODI-0. No valid or test question appears in train (exact-match check, 0/2000 and 0/3500).
+**Command:** `scripts/pod/codi_stab_arm.sh` via `scripts/pod/launch_stab_arm.sh` with `ARM_EXTRA="--step_decoder True" ARM_SMOKE=1` (exact launch line in TRAINING_PROTOCOL section 13 and the `sim-codi-launch` handoff), `scripts/pod/pair_watcher.py` on the laptop; `eval_command.txt`. Paired tests from the three `predictions.jsonl` files.
+**Headline results:**
+- **Test, exact:** L1-L6 1.000, L7 0.998; overall 0.9997. Teacher-forced identical. d50 beyond range (no level below 50%).
+- **Primary, against start-last CODI (exact McNemar):** pooled L2-L7 **+0.644, 1933/0, p < 1e-300**. By level: L2 +0.002 (1/0), L3 +0.524 (262/0), L4 +0.692 (346/0), L5 +0.842 (421/0), L6 +0.880 (440/0), L7 +0.926 (463/0). No item that CODI solved is lost.
+- **Secondary, against start-last CODI-0:** pooled L2-L7 +0.743 (2230/0); L2 +0.020 (10/0, p 0.002), L3 +0.768, L4 +0.864, L5 +0.920, L6 +0.944, L7 +0.944.
+- **Selection:** checkpoint-16335 (valid 0.999, tied with 17820). Valid by epoch: 0.216, 0.340, 0.503, 0.596, 0.674, 0.824, 0.966, 0.984, 0.994, 0.997, 0.999, 0.999. Start-last CODI ended at 0.456.
+- **Training:** student CE by epoch .68, .50, .42, .36, .31, .25, .12, .06, .03, .010, .005 (start-last CODI .69 to .42); explain loss 8.8 at step 0, median .48 in epoch 1, about 1e-4 per latent by epoch 11.
+
+**Interpretation:** Primary passed by a wide margin: the step decoder turns start-last CODI's L3-L7 .48-.07 into .998-1.000 with the answer path, data and recipe unchanged. This matches rule-gated start-last CODI (20261107-204814, L1-L6 1.000, L7 0.982) without a gate. It is not yet an outcome-table row: "Trace used, steps, gain" needs the ablation, donor, pass-sweep and probe checks of section 13.3, and "readable trace, answers ignore latents" is not ruled out by accuracy alone, although start-last CODI already depends on its latents. A low explain loss shows the latents carry each step's operands, since the decoder cannot see the question; it does not show they carry the result, which the decoder could compute from `<<a op b=`.
+**Gotchas hit:** Pod smoke gate passed (explain loss 7.81 to 1.89 in 20 steps, optimizer groups [(98, .002), (4, .002), (50, 1e-4), (98, 1e-4)], peak 42.5 GB). First LR check passed (3.36e-5 at step 10). Gradient norm 71.7 at the first logged step, in warmup; median 1.26 in epoch 0 with 84% of logged steps above the 1.0 clip, then medians .83, .69, .64, .60, .60, .74, .60, .51, .31, .06 with 3-19% above 1. So clipping was active mostly in epoch 0 and partly in epochs 6-8. The norm includes the decoder, so it is not comparable with start-last CODI's .07-.22. Watchdog never fired (`GRAD_MAX` 500). The laptop slept about 21:13-21:46 UTC on battery; training on the pod was unaffected.
+**Caveats:** One seed. Not bit-matched to start-last CODI: LoRA, `prj` and new token rows are built before `set_seed`, and the dropout stream diverges; data order matches. At this size the gain cannot be a seed effect (1933/0), but a second seed is still needed before quoting per-level numbers as stable. The step loss could also improve the ordinary pass, so a gain alone does not show that the latents do the work (section 13.3 table, last row).
+**Next:** Section 13.3 secondaries on checkpoint-16335: `ablate_latents_rulechain_codi.py`, donor and same-value donor patches, the pass sweep (`b22_passes.py`), `b19_trend.py`, `b23`-style frozen linear probes for every step at every latent, and decoded value plus last rule against the model's own errors (few errors exist: 1 on test). Then the table's next step.
+
+---
+
+## 2026-11-07 — SIM-CODI start-last on the canonical L1-L12 test: L1-L7 as the main record, L8 0.006; out of range it mostly applies rules 1-6 plus the last rule (65% at L8, falling to 16% at L12) (codi, run_id: 20261107-225709_codi_v2-l1to7w-startlast-sim-depth2-codi-canonical)
+
+**Goal:** Secondary check on L8-L12, levels this model never trained on (TRAINING_PROTOCOL sections 11.2 and 13).
+**Mechanism / model:** As 20261107-225603 (SIM-CODI, start-last, checkpoint-16335).
+**Data:** `synthetic_data_v2_startlast`: canonical L1-L12 test, 500/level, start value after the rules. L1-L7 items are the main record's, item for item.
+**Command:** `scripts/pod/codi_stab_arm.sh`; `eval_command.txt`. The rule-subset check ran on the laptop from `predictions.jsonl`: parse each chain from the question (`parse_chain_question`, 0 gold mismatches), then for every split "first k rules + last m rules" ask whether the prediction equals that subset's final value.
+**Headline results:**
+- **Test, exact:** L1-L6 1.000, L7 0.998, L8 0.006, L9 0.070, L10 0.014, L11 0.014, L12 0.030; overall 0.594, d50 7.22, AUC 0.602. Start-last CODI on L8-L12: .054, .038, .036, .010, .018. The CoT teacher in the same model: L8 .622, L9 .356, L10 .186, L11 .082, L12 .086.
+- **What it outputs out of range:** the final value of rules 1-6 plus the last rule on 65% of L8 items, 42% at L9, 26% at L10, 19% at L11, 16% at L12. Rules 1-7 only: 32%, 20%, 22%, 20%, 22%. A random subset matches about 10% by coincidence. Rule-gated start-last CODI (20261107-204918) gives rules 1-6 plus the last rule on 97-99% at every level; start-last CODI shows no such pattern.
+
+**Interpretation:** The drop from 0.998 to 0.006 sits at the edge of training, not at a reach limit, so d50 7.22 marks the training range and should not be quoted as reach. The output pattern says how this model splits the work: at L8 it mostly runs six rules and then applies the last rule in the answer pass, which is the split the gate forces and fits one rule per latent. Unlike the gated model it does this less cleanly and less often as chains grow, and a third of L8 answers instead stop after rule 7. Behavioural evidence only; the latent ablation, donor and probe checks on the main record test it directly.
+**Gotchas hit:** None.
+**Caveats:** One seed. Subsets overlap (two subsets can give the same value), so the shares need not sum to 1. The CoT teacher also fails past L7, so length generalisation is weak for every arm here.
+**Next:** None for this record; see the main record.
