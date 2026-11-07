@@ -305,7 +305,8 @@ def hyperparams_from_ckpt(ckpt_dir: str) -> dict | None:
     keys = ["learning_rate", "num_train_epochs", "per_device_train_batch_size", "gradient_accumulation_steps",
             "num_latent", "use_prj", "prj_dim", "prj_no_ln", "distill_loss_type", "distill_loss_div_std",
             "distill_loss_factor", "ref_loss_factor", "weight_decay", "warmup_ratio", "lr_scheduler_type",
-            "max_grad_norm", "bf16", "remove_eos", "seed", "exp_mode", "exp_data_num", "max_steps", "max_token_num"]
+            "max_grad_norm", "bf16", "remove_eos", "seed", "exp_mode", "exp_data_num", "max_steps", "max_token_num",
+            "step_decoder", "decoder_lr", "explain_loss_factor"]
     hp = {k: getattr(ta, k) for k in keys if hasattr(ta, k)}
     hp["lr_scheduler_type"] = str(hp.get("lr_scheduler_type"))
     hp["effective_batch_size"] = hp["per_device_train_batch_size"] * hp["gradient_accumulation_steps"]

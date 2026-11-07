@@ -7,7 +7,8 @@ Parses only the HF Trainer's logging-step lines (10-step averages), which the pa
 (the per-micro-batch `loss=...` lines are ignored: single micro-batches spike to ~12x the median in healthy runs).
 Kills train.py (pkill -f; one run per pod) and appends DIVERGED to LOG.watchdog when, after WARMUP logging steps:
   * loss or grad_norm is non-finite, or
-  * grad_norm > GRAD_MAX (healthy l1to7w CODI max after warmup: 7.5; the diverged CODI-0 went 1185 -> 6e17 -> inf), or
+  * grad_norm > GRAD_MAX (healthy l1to7w CODI max after warmup: 7.5; the diverged CODI-0 went 1185 -> 6e17 -> inf; raised from 50 for the
+    step decoder, whose gradients count in the norm and are clipped anyway; replay still kills that CODI-0 at step 4590 and nothing else), or
   * loss > HARD x the median of the previous WINDOW losses, or
   * loss > SOFT x that median for SUSTAIN consecutive logs.
 Checked against the 2026-11-03 l1to7w logs (--simulate): the surviving CODI run is never killed; the diverged CODI-0
@@ -23,7 +24,7 @@ import subprocess
 import sys
 import time
 
-WINDOW, WARMUP, HARD, SOFT, SUSTAIN, GRAD_MAX = 200, 100, 20.0, 3.0, 50, 50.0
+WINDOW, WARMUP, HARD, SOFT, SUSTAIN, GRAD_MAX = 200, 100, 20.0, 3.0, 50, 500.0
 PAT = re.compile(r"\{'loss': ([^,]+), 'epoch': ([0-9.]+)\}\n\{'grad_norm': ([^,]+), 'epoch'")
 
 

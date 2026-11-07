@@ -476,3 +476,55 @@ Selection and test as section 10.3. Any accuracy above floor at L3 and beyond mu
 - **Also reported:** the pass sweep, accuracy by level to L7, and whether the shortfall at L2-L4 against ungated CODI is the price of the gate.
 
 A gated rollout is forced by design, so it does not show that rollouts emerge naturally. It is a diagnostic, not a replacement for section 11's result. One seed.
+
+## 13. Amendment (2026-11-07): SIM-CODI on start-last
+
+**Question.** Forced rollout guarantees a readable trace, not that the answer depends on it. With the start value last and each latent given a step target, is the
+trace what the answer uses, and does it add depth over start-last CODI? `PAPER_DIRECTION_2026-11-07.md` has the reasoning; start-last runs first because it can be
+read alone, so a failure here saves the start-first run.
+
+### 13.1 Change
+
+One change against the start-last CODI arm (`20261106-083843`): `--step_decoder True` (`scripts/codi_step_decoder.patch`), adding SIM-CoT's step loss to CODI's three losses
+(Wei et al.; InternLM/SIM-CoT @ `cd3291d`, `CODI/`). Data, seed, flags and the section 10.2 recipe are unchanged, 12 epochs, so start-last CODI (`20261106-083843`) and
+start-last CODI-0 (`20261106-052644`) stay valid references and no new reference is trained first.
+
+- A separate GPT-2 reads latent z_j (z_0 = `prj` at `<bot>`, the vector pass j receives) as a one-position prefix and writes teacher step j+1, `<<a op b=c>>` then EOS. Teacher-forced.
+- With `include_last_cot False` an L-rule item has L-1 steps, so L7 fills z_0 to z_5, and the answer tokens apply the last rule as in start-last CODI. Latents past the last step get no step loss.
+- Step loss: token-mean CE per latent, then the mean over latents with a step in the batch, weight 1.0. It is added to the total. The decoder is dropped at inference; answers never pass through it.
+
+**Deviations from the reference code, all in the decoder path:**
+
+| | Reference | Here | Why |
+|---|---|---|---|
+| Decoder dtype | bf16 weights | fp32 weights under autocast | It is a full fine-tune; bf16 weights lose small updates |
+| Decoder lr | The model's lr | `--decoder_lr` 1e-4 | 2e-3 would wreck a full fine-tune; 1e-4 is what SIM-Coconut's decoder used. CODI's parameters keep 2e-3 |
+| Calls | One per latent | One over all (item, latent) pairs | Same loss, less time |
+| `dedup_trailing_pads` | Inside the batch loop, truncates rows | Not used | Bug noted in `NEXT_STEPS_2026-11-04.md` |
+| Step parser | Stops at the first pad or EOS | Scans the whole row | Same steps here; checked on every train item |
+
+Global gradient clipping at 1.0 now includes the decoder's gradients. The reference run never clipped after step 1000 (median grad_norm 0.11), so if the step loss pushes the norm far above 1, clipping becomes new behaviour: CODI's lr is 2e-3 nominally, and its updates could be damped. Report grad_norm with the result. There is no curriculum, unlike SIM-Coconut. `n_params` in the run record includes the decoder.
+
+`scripts/check_step_decoder.py` must pass first: the parser equals `steps[:-1]` on every train item, gradients from the step loss reach the decoder, projection and LoRA, latent j only gets step j+1's loss, and answer logits are bit-identical with the decoder on and off.
+
+Launch: section 11.1's command plus `ARM_EXTRA="--step_decoder True" ARM_NAME=gpt2_l1to7w_startlast_sim ARM_SLUG=v2-l1to7w-startlast-sim-depth2`, codi arm only. `ARM_EXTRA` also reaches eval, which then loads the decoder weights and never calls them. Estimate: about 14 pod-hours, $8.50 at $0.59/h. The checkpoint folders are about 2 GB each, not 0.5 GB.
+
+### 13.2 Checks at launch
+
+`ARM_SMOKE=1` runs `scripts/pod/codi_arm_smoke.sh` before the arm: 20 steps on 4,000 items, a checkpoint, then an eval, on the pod's GPU. It fails if the decoder's 1e-4 groups are missing, the step loss is 0 or never reaches latent 5, the eval does not run, or peak memory is near 48 GB, and then the arm does not start. On the real arm, CODI's learning rate is about 3.4e-5 at step 10 (the smoke's warmup differs). A step loss stuck at 0 means the parser found nothing: stop the run. `GRAD_MAX` in the watchdog is 500 from this section on, because the decoder's gradients count in the norm and clipping makes a norm of 50 harmless; replaying every past log still kills the diverged CODI-0 at step 4590 and nothing else. If the watchdog fires, section 10.3 applies, but a changed recipe needs a new CODI-0 before any comparison.
+
+### 13.3 Analysis, fixed before training
+
+Selection and test as section 10.3. "Ignores latents" means mean-ablated accuracy is unchanged and answers follow donors about .00. "Steps" means accuracy depends on the number of passes by depth (`b22_passes.py`) and different latents hold different steps (`b19_trend.py`).
+
+- **Primary:** pooled L2-L7 paired gain, SIM-CODI minus start-last CODI, exact McNemar (n = 3000). The recipe differs only by the step decoder, but this is not a bit-matched pair: LoRA, `prj` and the new token rows are built before the first `set_seed`, so they are unseeded in every arm, and the dropout stream diverges. Data order matches.
+- **Secondary:** the same against start-last CODI-0; `ablate_latents_rulechain_codi.py`, donor patch and same-value donors (section 11.3); the pass sweep; `b23`-style frozen linear probes for every step at every latent, because the decoder is a full GPT-2 and can work out a step's result from its operands; decoded value plus last rule against the model's own wrong answers.
+
+| Outcome | Reading | Next |
+|---|---|---|
+| Does not train | Port or recipe problem | Stop, use the existing cells plus SIM-Coconut |
+| Readable trace, answers ignore latents | Unfaithful even with the bypass closed; surprising, since start-last CODI depends on its latents | Check the tail tokens, then start-first |
+| Trace used, no gain over start-last CODI | Readable, but forced rollout adds no reach | Start-first |
+| Trace used, steps, gain over start-last CODI | Forced rollout adds real depth | Start-first, then a step-supervision control with no latents, since the step loss could also improve the ordinary pass |
+
+One seed, as section 10.4: a gain under about 0.05 is not interpretable without a second.

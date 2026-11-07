@@ -1,0 +1,158 @@
+diff --git a/src/model.py b/src/model.py
+index afc5bc8..d9b93be 100644
+--- a/src/model.py
++++ b/src/model.py
+@@ -113,6 +113,9 @@ class TrainingArguments(transformers.TrainingArguments):
+     include_last_cot: bool = field(default=False, metadata={"help": "Include the last CoT step in the training data."})
+     fix_attn_mask: bool = field(default=False, metadata={"help": "Correct a bug about attention mask."})
+     pad_invariant: bool = field(default=False, metadata={"help": "ai-capstone (codi_model_fixes.patch): mask the latent passes and use mask-derived position ids so padding has no effect; needs fix_attn_mask."})
++    step_decoder: bool = field(default=False, metadata={"help": "ai-capstone (codi_step_decoder.patch): SIM-CoT step supervision. A separate GPT-2 reads latent j and writes teacher step j+1; training only, the answer path does not use it."})
++    explain_loss_factor: float = field(default=1.0, metadata={"help": "Weight of the step loss (SIM-CoT's default)."})
++    decoder_lr: float = field(default=1e-4, metadata={"help": "Learning rate of the step decoder, a full fine-tune; the rest of the model keeps --learning_rate."})
+     rule_gate: bool = field(default=False, metadata={"help": "ai-capstone (codi_rule_gate.patch): start-last RuleChain only. Each rule is encoded alone, latent pass i sees rule i+1, the answer tokens see the last rule, the tail sees no rules; needs pad_invariant."})
+     log_full: bool = field(default=False, metadata={"help": "Log all losses."})
+     print_loss: bool = field(default=True)
+@@ -174,6 +177,26 @@ class RuleGate:
+         return ((self.g == 0) | self.sink | (self.g == self.n)).long()
+ 
+ 
++STEP_OPEN, STEP_CLOSE = (16791, 9959), 4211  # GPT-2 "<<", " <<", ">>"
++
++
++def teacher_steps(ref_input_ids, end_id):
++    """Per item, the token ids of each <<...>> step in the teacher sequence, each ending in end_id. As SIM-CoT's get_steps, but
++    it scans the whole row: the teacher text holds only the steps it was given, so with include_last_cot False the last rule
++    has no step."""
++    out = []
++    for seq in ref_input_ids.tolist():
++        steps, start = [], None
++        for i, t in enumerate(seq):
++            if t in STEP_OPEN:
++                start = i
++            elif t == STEP_CLOSE and start is not None:
++                steps.append(seq[start:i + 1] + [end_id])
++                start = None
++        out.append(steps)
++    return out
++
++
+ class CODI(torch.nn.Module):
+     def __init__(self, model_args, training_args, lora_config):
+         super().__init__()
+@@ -265,6 +288,12 @@ class CODI(torch.nn.Module):
+         assert not self.pad_invariant or self.fix_attn_mask, "pad_invariant needs fix_attn_mask (the decoder-pass mask)"
+         self.rule_gate = getattr(training_args, "rule_gate", False)
+         assert not self.rule_gate or (self.pad_invariant and self.num_latent > 0), "rule_gate needs pad_invariant and latents"
++        self.step_decoder = getattr(training_args, "step_decoder", False)
++        self.explain_loss_factor = getattr(training_args, "explain_loss_factor", 1.0)
++        if self.step_decoder:
++            assert self.num_latent > 0 and "gpt2" in self.model_name, "step_decoder needs latents and the GPT-2 step tokens"
++            # fp32 master weights: it is fully fine-tuned, unlike the bf16 LoRA base; autocast still runs it in bf16.
++            self.decoder = model_wrapper_class.from_pretrained(self.model_name, torch_dtype=torch.float32)
+ 
+         if self.tokenizer.pad_token_id is None:
+             self.tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+@@ -305,6 +334,25 @@ class CODI(torch.nn.Module):
+             self.load_state_dict(state_dict)
+             print(f"Finished loading from {self.training_args.restore_from}")
+ 
++    def explain_loss(self, latents, steps):
++        """SIM-CoT's step loss, one decoder call for all (item, latent) pairs: token-mean CE per latent, then the mean over
++        latents that have a step in this batch. latents[j] [B, 1, D] is what pass j reads; it writes teacher step j+1."""
++        pairs = [(b, j) for b, row in enumerate(steps) for j in range(len(row))]
++        if not pairs:
++            return latents[0].new_zeros(()), []
++        assert max(j for _, j in pairs) < len(latents), "more teacher steps than latents"
++        dev, pad, L = latents[0].device, self.pad_token_id, max(len(steps[b][j]) for b, j in pairs)
++        ids = torch.tensor([steps[b][j] + [pad] * (L - len(steps[b][j])) for b, j in pairs], device=dev)
++        b_idx, j_idx = (torch.tensor(x, device=dev) for x in zip(*pairs))
++        z = torch.cat(latents, dim=1)[b_idx, j_idx].unsqueeze(1)  # [N, 1, D]
++        embds = torch.cat((z.float(), self.get_embd(self.codi, self.model_name)(ids).float()), dim=1)
++        real = ids != pad
++        mask = torch.cat((torch.ones_like(real[:, :1]), real), dim=1).long()
++        logits = self.decoder(inputs_embeds=embds, attention_mask=mask).logits[:, :-1]  # position t predicts token t
++        ce = F.cross_entropy(logits.reshape(-1, logits.size(-1)).float(), ids.masked_fill(~real, -100).reshape(-1), ignore_index=-100, reduction="none").view_as(ids)
++        per = [ce[j_idx == j][real[j_idx == j]].mean() for j in sorted(set(j_idx.tolist()))]
++        return torch.stack(per).mean(), [float(x.detach()) for x in per]
++
+     def forward(
+         self,
+         encoder_input_ids: torch.LongTensor = None,
+@@ -335,6 +383,7 @@ class CODI(torch.nn.Module):
+         latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1) # as the next input
+         if self.use_prj:
+             latent_embd = self.prj(latent_embd)
++        step_latents = [latent_embd]  # step_decoder only
+ 
+         len_pred_loss = 0
+         dynamic_mask = None
+@@ -349,6 +398,7 @@ class CODI(torch.nn.Module):
+             ref_outputs = self.codi(input_ids=ref_input_ids, output_hidden_states=True, attention_mask=ref_attention_mask)
+         ref_outputs_with_grad = self.codi(input_ids=ref_input_ids, output_hidden_states=True, attention_mask=ref_attention_mask) 
+         
++        steps = teacher_steps(ref_input_ids, self.tokenizer.eos_token_id) if self.step_decoder else None
+         # Formatting for deprecated exps
+         ref_outputs_list = [ref_outputs] 
+         ref_input_ids = [ref_input_ids] 
+@@ -398,6 +448,7 @@ class CODI(torch.nn.Module):
+                     latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1)
+                     if self.use_prj:
+                         latent_embd = self.prj(latent_embd)
++                    step_latents.append(latent_embd)
+ 
+                 # Calculate the distillation loss
+                 if i == n_iter - 1: # the last latent embedding
+@@ -463,6 +514,12 @@ class CODI(torch.nn.Module):
+             print(f'loss={ce_loss+distill_loss}, ce_loss={ce_loss}, distill_loss={distill_loss}, ce_loss_total={ce_loss_total}, distill_loss_total={distill_loss_total}, ref_ce_loss={ref_ce_loss}')
+ 
+         loss = ce_loss_total + distill_loss_total + ref_ce_loss
++        explain_loss, explain_by_latent = 0.0, []
++        if self.step_decoder:
++            explain_loss, explain_by_latent = self.explain_loss(step_latents, steps)
++            explain_loss = explain_loss * self.explain_loss_factor
++            loss = loss + explain_loss
++            explain_loss = float(explain_loss.detach())
+         
+         if ce_loss_total != 0:
+             ce_loss_total = ce_loss_total.detach().item()
+@@ -471,5 +528,6 @@ class CODI(torch.nn.Module):
+         if ref_ce_loss != 0:
+             ref_ce_loss = ref_ce_loss.detach().item()
+ 
+-        return {"loss": loss, "logits": logits, "ce_loss": ce_loss_total, "distill_loss": distill_loss_total, "ref_ce_loss": ref_ce_loss}
++        return {"loss": loss, "logits": logits, "ce_loss": ce_loss_total, "distill_loss": distill_loss_total, "ref_ce_loss": ref_ce_loss,
++                "explain_loss": explain_loss, "explain_by_latent": explain_by_latent}
+ 
+diff --git a/train.py b/train.py
+index 12c6774..233ef8c 100644
+--- a/train.py
++++ b/train.py
+@@ -32,6 +32,19 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+ print(device)
+ 
+ class CustomTrainer(Trainer):
++    def create_optimizer(self):
++        # step_decoder: the decoder is a full fine-tune, so it gets its own rate and CODI's parameters keep --learning_rate.
++        # Added groups go last, so the logged learning rate stays CODI's; the same cosine schedule scales both.
++        opt = super().create_optimizer()
++        if self.args.step_decoder:
++            mine = {id(p) for p in self.model.decoder.parameters()}
++            for g in list(opt.param_groups):
++                dec = [p for p in g["params"] if id(p) in mine]
++                g["params"] = [p for p in g["params"] if id(p) not in mine]
++                opt.add_param_group({**{k: v for k, v in g.items() if k != "params"}, "params": dec, "lr": self.args.decoder_lr})
++            print("optimizer groups (params, lr):", [(len(g["params"]), g["lr"]) for g in opt.param_groups], flush=True)
++        return opt
++
+     def compute_loss(self, model, inputs, num_items_in_batch):
+         # Extract the global step from the optimizer
+         step = self.state.global_step
+@@ -54,6 +67,8 @@ class CustomTrainer(Trainer):
+         #"ce_loss": ce_loss_total, "mse_loss": mse_loss_total, "ref_ce_loss": ref_ce_loss
+         if step % self.args.logging_steps == 0:
+             self.log({"loss": loss.item(), "ce_loss": outputs["ce_loss"], "distill_loss": outputs["distill_loss"], "ref_ce_loss": outputs["ref_ce_loss"],})
++            if self.args.step_decoder:  # a step loss stuck at 0 means the parser found no steps
++                self.log({"explain_loss": outputs["explain_loss"], **{f"explain_z{j}": v for j, v in enumerate(outputs["explain_by_latent"])}})
+         return loss
+ 
+     def log(self, logs, start_time=None):

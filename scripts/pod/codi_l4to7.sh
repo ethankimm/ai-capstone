@@ -32,7 +32,7 @@ case "${1:?setup|timing|train}" in
   setup)
     bash "$REPO/scripts/codi_setup.sh" "$CODI_DIR"
     cd "$CODI_DIR"
-    for p in codi_synthetic codi_model_fixes codi_zero_loss_log codi_rule_gate; do
+    for p in codi_synthetic codi_model_fixes codi_zero_loss_log codi_rule_gate codi_step_decoder; do
       if git apply --check "$REPO/scripts/$p.patch" 2>/dev/null; then git apply "$REPO/scripts/$p.patch"; echo "applied $p"
       else echo "skip $p (already applied?)"; fi
     done
