@@ -1,0 +1,271 @@
+{
+  "run_id": "20261107-214950_codi_v2-l1to7w-startlast-gated-latent-swap",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "rule-gated start-last CODI checkpoint-17820 (20261107-204814)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "validation",
+    "n_examples": 1428,
+    "seed": 20
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.996,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "rule-gated CODI exact on valid L3-L7, clean run of this script, not test",
+      "swap": {
+        "3": {
+          "n": 286,
+          "clean": 1.0,
+          "by_latent": {
+            "z1": {
+              "carries": "v1",
+              "n_pairs": 286,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.014,
+              "mean_ablated_acc": 0.024
+            },
+            "z2": {
+              "carries": "v2",
+              "n_pairs": 286,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.115,
+              "mean_ablated_acc": 0.049
+            },
+            "z3": {
+              "carries": "v2",
+              "n_pairs": 286,
+              "follows_donor": 0.0,
+              "keeps_own": 1.0,
+              "donor_answer": 0.014,
+              "mean_ablated_acc": 1.0
+            },
+            "z4": {
+              "carries": "v2",
+              "n_pairs": 286,
+              "follows_donor": 0.0,
+              "keeps_own": 1.0,
+              "donor_answer": 0.01,
+              "mean_ablated_acc": 1.0
+            },
+            "z5": {
+              "carries": "v2",
+              "n_pairs": 286,
+              "follows_donor": 0.0,
+              "keeps_own": 1.0,
+              "donor_answer": 0.0,
+              "mean_ablated_acc": 1.0
+            }
+          }
+        },
+        "4": {
+          "n": 286,
+          "clean": 1.0,
+          "by_latent": {
+            "z1": {
+              "carries": "v1",
+              "n_pairs": 286,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.01,
+              "mean_ablated_acc": 0.028
+            },
+            "z2": {
+              "carries": "v2",
+              "n_pairs": 286,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.01,
+              "mean_ablated_acc": 0.035
+            },
+            "z3": {
+              "carries": "v3",
+              "n_pairs": 286,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.087,
+              "mean_ablated_acc": 0.059
+            },
+            "z4": {
+              "carries": "v3",
+              "n_pairs": 286,
+              "follows_donor": 0.0,
+              "keeps_own": 1.0,
+              "donor_answer": 0.014,
+              "mean_ablated_acc": 1.0
+            },
+            "z5": {
+              "carries": "v3",
+              "n_pairs": 286,
+              "follows_donor": 0.0,
+              "keeps_own": 1.0,
+              "donor_answer": 0.003,
+              "mean_ablated_acc": 1.0
+            }
+          }
+        },
+        "5": {
+          "n": 286,
+          "clean": 1.0,
+          "by_latent": {
+            "z1": {
+              "carries": "v1",
+              "n_pairs": 286,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.007,
+              "mean_ablated_acc": 0.049
+            },
+            "z2": {
+              "carries": "v2",
+              "n_pairs": 286,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.014,
+              "mean_ablated_acc": 0.049
+            },
+            "z3": {
+              "carries": "v3",
+              "n_pairs": 286,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.031,
+              "mean_ablated_acc": 0.042
+            },
+            "z4": {
+              "carries": "v4",
+              "n_pairs": 286,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.126,
+              "mean_ablated_acc": 0.038
+            },
+            "z5": {
+              "carries": "v4",
+              "n_pairs": 286,
+              "follows_donor": 0.0,
+              "keeps_own": 1.0,
+              "donor_answer": 0.003,
+              "mean_ablated_acc": 1.0
+            }
+          }
+        },
+        "6": {
+          "n": 285,
+          "clean": 1.0,
+          "by_latent": {
+            "z1": {
+              "carries": "v1",
+              "n_pairs": 285,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.011,
+              "mean_ablated_acc": 0.028
+            },
+            "z2": {
+              "carries": "v2",
+              "n_pairs": 285,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.014,
+              "mean_ablated_acc": 0.042
+            },
+            "z3": {
+              "carries": "v3",
+              "n_pairs": 285,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.018,
+              "mean_ablated_acc": 0.046
+            },
+            "z4": {
+              "carries": "v4",
+              "n_pairs": 285,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.032,
+              "mean_ablated_acc": 0.039
+            },
+            "z5": {
+              "carries": "v5",
+              "n_pairs": 285,
+              "follows_donor": 1.0,
+              "keeps_own": 0.0,
+              "donor_answer": 0.151,
+              "mean_ablated_acc": 0.035
+            }
+          }
+        },
+        "7": {
+          "n": 285,
+          "clean": 0.979,
+          "by_latent": {
+            "z1": {
+              "carries": "v1",
+              "n_pairs": 279,
+              "follows_donor": 0.986,
+              "keeps_own": 0.0,
+              "donor_answer": 0.004,
+              "mean_ablated_acc": 0.025
+            },
+            "z2": {
+              "carries": "v2",
+              "n_pairs": 279,
+              "follows_donor": 0.993,
+              "keeps_own": 0.0,
+              "donor_answer": 0.011,
+              "mean_ablated_acc": 0.063
+            },
+            "z3": {
+              "carries": "v3",
+              "n_pairs": 279,
+              "follows_donor": 0.982,
+              "keeps_own": 0.0,
+              "donor_answer": 0.022,
+              "mean_ablated_acc": 0.053
+            },
+            "z4": {
+              "carries": "v4",
+              "n_pairs": 279,
+              "follows_donor": 0.993,
+              "keeps_own": 0.0,
+              "donor_answer": 0.011,
+              "mean_ablated_acc": 0.049
+            },
+            "z5": {
+              "carries": "v5",
+              "n_pairs": 279,
+              "follows_donor": 0.982,
+              "keeps_own": 0.0,
+              "donor_answer": 0.039,
+              "mean_ablated_acc": 0.028
+            }
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/b28_gated_swap.py",
+    "donors": "same level, seeded shuffle, v_k differs, predicted answer in 0..99 and != gold; recipients answered right",
+    "mean_ablation": "z_j replaced by its mean over 2,000 train items of the same level (seed 21)",
+    "dtype": "float32"
+  },
+  "seed": 20,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Per-latent use in the gated model: does swapping one latent move the answer, and which latents are idle?",
+  "timestamp_utc": "2026-11-07T21:49:50.154939+00:00",
+  "git": {
+    "commit": "f64f50f",
+    "dirty": true
+  }
+}
