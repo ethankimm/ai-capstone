@@ -1,0 +1,685 @@
+{
+  "run_id": "20261104-034608_codi_v2-gsm8k-aug-codi-latent-probes",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "checkpoint-31280",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-gsm8k_aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": null,
+    "compute_steps": 6,
+    "sec_per_example": 0.0038848303176131833,
+    "extra": {
+      "probe_kind": "multinomial logistic regression on standardized z_s, wd picked on valid",
+      "probes": {
+        "v1": {
+          "n_fit": 19973,
+          "n_test": 1301,
+          "n_classes": 355,
+          "coverage_test": 0.9562,
+          "majority_class": "30",
+          "majority_acc_test": 0.0292,
+          "sites": {
+            "0": {
+              "wd": 0.0001,
+              "acc_fit": 0.2757,
+              "acc_valid": 0.2052,
+              "acc_test": 0.1499
+            },
+            "1": {
+              "wd": 0.001,
+              "acc_fit": 0.6326,
+              "acc_valid": 0.5736,
+              "acc_test": 0.4473
+            },
+            "2": {
+              "wd": 0.0001,
+              "acc_fit": 0.3707,
+              "acc_valid": 0.2923,
+              "acc_test": 0.1968
+            },
+            "3": {
+              "wd": 0.001,
+              "acc_fit": 0.4015,
+              "acc_valid": 0.3493,
+              "acc_test": 0.2175
+            },
+            "4": {
+              "wd": 0.0001,
+              "acc_fit": 0.2519,
+              "acc_valid": 0.1782,
+              "acc_test": 0.0945
+            },
+            "5": {
+              "wd": 0.0001,
+              "acc_fit": 0.5019,
+              "acc_valid": 0.3473,
+              "acc_test": 0.2267
+            }
+          }
+        },
+        "v2": {
+          "n_fit": 16758,
+          "n_test": 1235,
+          "n_classes": 438,
+          "coverage_test": 0.9409,
+          "majority_class": "20",
+          "majority_acc_test": 0.0283,
+          "sites": {
+            "0": {
+              "wd": 0.001,
+              "acc_fit": 0.0949,
+              "acc_valid": 0.0572,
+              "acc_test": 0.0421
+            },
+            "1": {
+              "wd": 0.001,
+              "acc_fit": 0.2143,
+              "acc_valid": 0.1157,
+              "acc_test": 0.0899
+            },
+            "2": {
+              "wd": 0.0001,
+              "acc_fit": 0.1761,
+              "acc_valid": 0.0724,
+              "acc_test": 0.0543
+            },
+            "3": {
+              "wd": 0.01,
+              "acc_fit": 0.2973,
+              "acc_valid": 0.2535,
+              "acc_test": 0.2081
+            },
+            "4": {
+              "wd": 0.0001,
+              "acc_fit": 0.2306,
+              "acc_valid": 0.1016,
+              "acc_test": 0.0737
+            },
+            "5": {
+              "wd": 0.01,
+              "acc_fit": 0.2627,
+              "acc_valid": 0.2313,
+              "acc_test": 0.1644
+            }
+          }
+        },
+        "v3": {
+          "n_fit": 9406,
+          "n_test": 879,
+          "n_classes": 389,
+          "coverage_test": 0.9078,
+          "majority_class": "30",
+          "majority_acc_test": 0.0262,
+          "sites": {
+            "0": {
+              "wd": 0.01,
+              "acc_fit": 0.0482,
+              "acc_valid": 0.022,
+              "acc_test": 0.0319
+            },
+            "1": {
+              "wd": 0.01,
+              "acc_fit": 0.1122,
+              "acc_valid": 0.0529,
+              "acc_test": 0.0307
+            },
+            "2": {
+              "wd": 0.0001,
+              "acc_fit": 0.2521,
+              "acc_valid": 0.0264,
+              "acc_test": 0.0319
+            },
+            "3": {
+              "wd": 0.01,
+              "acc_fit": 0.1511,
+              "acc_valid": 0.0683,
+              "acc_test": 0.0648
+            },
+            "4": {
+              "wd": 0.001,
+              "acc_fit": 0.1506,
+              "acc_valid": 0.033,
+              "acc_test": 0.0319
+            },
+            "5": {
+              "wd": 0.01,
+              "acc_fit": 0.1575,
+              "acc_valid": 0.0903,
+              "acc_test": 0.0603
+            }
+          }
+        },
+        "v4": {
+          "n_fit": 3831,
+          "n_test": 515,
+          "n_classes": 260,
+          "coverage_test": 0.8505,
+          "majority_class": "30",
+          "majority_acc_test": 0.0175,
+          "sites": {
+            "0": {
+              "wd": 0.001,
+              "acc_fit": 0.3145,
+              "acc_valid": 0.016,
+              "acc_test": 0.0214
+            },
+            "1": {
+              "wd": 0.001,
+              "acc_fit": 0.527,
+              "acc_valid": 0.0535,
+              "acc_test": 0.0214
+            },
+            "2": {
+              "wd": 0.0001,
+              "acc_fit": 0.4753,
+              "acc_valid": 0.0321,
+              "acc_test": 0.0136
+            },
+            "3": {
+              "wd": 0.1,
+              "acc_fit": 0.1112,
+              "acc_valid": 0.0749,
+              "acc_test": 0.0427
+            },
+            "4": {
+              "wd": 0.0001,
+              "acc_fit": 0.4999,
+              "acc_valid": 0.0749,
+              "acc_test": 0.033
+            },
+            "5": {
+              "wd": 0.001,
+              "acc_fit": 0.6583,
+              "acc_valid": 0.0588,
+              "acc_test": 0.0252
+            }
+          }
+        },
+        "answer": {
+          "n_fit": 19995,
+          "n_test": 1319,
+          "n_classes": 586,
+          "coverage_test": 0.9098,
+          "majority_class": "30",
+          "majority_acc_test": 0.0144,
+          "sites": {
+            "0": {
+              "wd": 0.001,
+              "acc_fit": 0.0756,
+              "acc_valid": 0.049,
+              "acc_test": 0.0303
+            },
+            "1": {
+              "wd": 0.0001,
+              "acc_fit": 0.3161,
+              "acc_valid": 0.084,
+              "acc_test": 0.0379
+            },
+            "2": {
+              "wd": 0.0001,
+              "acc_fit": 0.1681,
+              "acc_valid": 0.065,
+              "acc_test": 0.0288
+            },
+            "3": {
+              "wd": 0.0001,
+              "acc_fit": 0.376,
+              "acc_valid": 0.097,
+              "acc_test": 0.0455
+            },
+            "4": {
+              "wd": 0.001,
+              "acc_fit": 0.1042,
+              "acc_valid": 0.063,
+              "acc_test": 0.0349
+            },
+            "5": {
+              "wd": 0.0001,
+              "acc_fit": 0.3777,
+              "acc_valid": 0.101,
+              "acc_test": 0.0387
+            }
+          }
+        }
+      },
+      "lens": {
+        "lens_hidden": {
+          "0": {
+            "hit": {
+              "v1": 0.0061,
+              "v2": 0.0024,
+              "v3": 0.0034,
+              "v4": 0.0078,
+              "answer": 0.0053
+            },
+            "hit_any_step": 0.0129,
+            "top_tokens": [
+              [
+                "The",
+                429
+              ],
+              [
+                "*",
+                330
+              ],
+              [
+                "-",
+                95
+              ],
+              [
+                "(",
+                87
+              ],
+              [
+                "/",
+                62
+              ]
+            ]
+          },
+          "1": {
+            "hit": {
+              "v1": 0.4327,
+              "v2": 0.0769,
+              "v3": 0.0353,
+              "v4": 0.035,
+              "answer": 0.0205
+            },
+            "hit_any_step": 0.5095,
+            "top_tokens": [
+              [
+                "20",
+                55
+              ],
+              [
+                "6",
+                52
+              ],
+              [
+                "24",
+                42
+              ],
+              [
+                "10",
+                41
+              ],
+              [
+                "12",
+                38
+              ]
+            ]
+          },
+          "2": {
+            "hit": {
+              "v1": 0.0,
+              "v2": 0.0008,
+              "v3": 0.0023,
+              "v4": 0.0,
+              "answer": 0.0008
+            },
+            "hit_any_step": 0.0023,
+            "top_tokens": [
+              [
+                ">>",
+                371
+              ],
+              [
+                ".",
+                209
+              ],
+              [
+                "-",
+                172
+              ],
+              [
+                "<|endoftext|>",
+                126
+              ],
+              [
+                "/",
+                88
+              ]
+            ]
+          },
+          "3": {
+            "hit": {
+              "v1": 0.2022,
+              "v2": 0.2097,
+              "v3": 0.0592,
+              "v4": 0.0427,
+              "answer": 0.0273
+            },
+            "hit_any_step": 0.4253,
+            "top_tokens": [
+              [
+                "12",
+                47
+              ],
+              [
+                "2",
+                45
+              ],
+              [
+                "4",
+                37
+              ],
+              [
+                "6",
+                37
+              ],
+              [
+                "20",
+                34
+              ]
+            ]
+          },
+          "4": {
+            "hit": {
+              "v1": 0.0008,
+              "v2": 0.0,
+              "v3": 0.0,
+              "v4": 0.0,
+              "answer": 0.0
+            },
+            "hit_any_step": 0.0008,
+            "top_tokens": [
+              [
+                ">>",
+                297
+              ],
+              [
+                ".",
+                282
+              ],
+              [
+                "<|endoftext|>",
+                223
+              ],
+              [
+                "-",
+                138
+              ],
+              [
+                "",
+                95
+              ]
+            ]
+          },
+          "5": {
+            "hit": {
+              "v1": 0.2029,
+              "v2": 0.1644,
+              "v3": 0.0774,
+              "v4": 0.0311,
+              "answer": 0.022
+            },
+            "hit_any_step": 0.3973,
+            "top_tokens": [
+              [
+                "12",
+                40
+              ],
+              [
+                "5",
+                37
+              ],
+              [
+                "10",
+                37
+              ],
+              [
+                "2",
+                35
+              ],
+              [
+                "8",
+                34
+              ]
+            ]
+          }
+        },
+        "lens_z": {
+          "0": {
+            "hit": {
+              "v1": 0.0,
+              "v2": 0.0,
+              "v3": 0.0,
+              "v4": 0.0,
+              "answer": 0.0
+            },
+            "hit_any_step": 0.0,
+            "top_tokens": [
+              [
+                ":",
+                1137
+              ],
+              [
+                "the",
+                161
+              ],
+              [
+                "'",
+                9
+              ],
+              [
+                ".",
+                5
+              ],
+              [
+                "-",
+                3
+              ]
+            ]
+          },
+          "1": {
+            "hit": {
+              "v1": 0.3436,
+              "v2": 0.0607,
+              "v3": 0.0216,
+              "v4": 0.0272,
+              "answer": 0.0106
+            },
+            "hit_any_step": 0.3973,
+            "top_tokens": [
+              [
+                "",
+                145
+              ],
+              [
+                ".",
+                67
+              ],
+              [
+                "20",
+                51
+              ],
+              [
+                "challeng",
+                37
+              ],
+              [
+                "-",
+                36
+              ]
+            ]
+          },
+          "2": {
+            "hit": {
+              "v1": 0.0,
+              "v2": 0.0,
+              "v3": 0.0,
+              "v4": 0.0,
+              "answer": 0.0
+            },
+            "hit_any_step": 0.0,
+            "top_tokens": [
+              [
+                ":",
+                359
+              ],
+              [
+                "...\"",
+                298
+              ],
+              [
+                "the",
+                242
+              ],
+              [
+                "",
+                115
+              ],
+              [
+                "inka",
+                110
+              ]
+            ]
+          },
+          "3": {
+            "hit": {
+              "v1": 0.153,
+              "v2": 0.1522,
+              "v3": 0.0353,
+              "v4": 0.0233,
+              "answer": 0.0152
+            },
+            "hit_any_step": 0.3048,
+            "top_tokens": [
+              [
+                "",
+                257
+              ],
+              [
+                ".",
+                89
+              ],
+              [
+                "-",
+                46
+              ],
+              [
+                "80",
+                37
+              ],
+              [
+                "3",
+                30
+              ]
+            ]
+          },
+          "4": {
+            "hit": {
+              "v1": 0.0,
+              "v2": 0.0008,
+              "v3": 0.0,
+              "v4": 0.0,
+              "answer": 0.0
+            },
+            "hit_any_step": 0.0008,
+            "top_tokens": [
+              [
+                ":",
+                471
+              ],
+              [
+                "the",
+                328
+              ],
+              [
+                "",
+                90
+              ],
+              [
+                "inka",
+                89
+              ],
+              [
+                "...\"",
+                56
+              ]
+            ]
+          },
+          "5": {
+            "hit": {
+              "v1": 0.1445,
+              "v2": 0.1134,
+              "v3": 0.0432,
+              "v4": 0.0214,
+              "answer": 0.0136
+            },
+            "hit_any_step": 0.2699,
+            "top_tokens": [
+              [
+                "",
+                287
+              ],
+              [
+                ".",
+                90
+              ],
+              [
+                "-",
+                45
+              ],
+              [
+                "80",
+                36
+              ],
+              [
+                "ive",
+                32
+              ]
+            ]
+          }
+        }
+      },
+      "check_max_abs_dz_vs_run": 0.0,
+      "fit_json": "/local-ssd/ktn48/lrm_work/synthetic_data_v2/gsm8k_aug/train.json",
+      "fit_n": 20000,
+      "valid_json": "/local-ssd/ktn48/lrm_work/synthetic_data_v2/gsm8k_aug/valid.json",
+      "min_count": 3,
+      "matched_flags": {
+        "pad_invariant": true,
+        "fix_attn_mask": true,
+        "use_prj": true,
+        "prj_dim": 768,
+        "prj_no_ln": false,
+        "remove_eos": true,
+        "include_last_cot": false
+      },
+      "data_sha256": "a7890ef56ed47a0d5f2bcc4343bd5e13328b5b4cf203d90e35fd5a46fb5c01e9"
+    }
+  },
+  "hyperparams": {
+    "train_n": 20000,
+    "min_count": 3,
+    "wds": [
+      0.0001,
+      0.001,
+      0.01,
+      0.1
+    ],
+    "epochs": 300,
+    "batch_size": 64,
+    "dtype": "float32",
+    "device": "cuda"
+  },
+  "seed": null,
+  "hardware": "cci-p124 H100 NVL / cuda",
+  "author": "Kevin Nguyen",
+  "notes": "GSM8K CODI: linear class probes per latent site for step results v_1..v_4 and the answer, plus logit lens.",
+  "timestamp_utc": "2026-11-04T03:46:08.097283+00:00",
+  "git": {
+    "commit": "0ede21a",
+    "dirty": true
+  }
+}

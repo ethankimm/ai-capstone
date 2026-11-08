@@ -1,0 +1,202 @@
+{
+  "run_id": "20261103-110209_coconut_v2-depth2-pilot_k8_coconut_c2m6",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "openai-community/gpt2",
+    "checkpoint": "/local-ssd/ktn48/lrm_work/coconut_runs/pilot_k8_coconut_c2m6/checkpoint_26",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 4000,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.19525,
+    "unparseable_rate": 0.0,
+    "sec_per_example": 0.050944904483039864,
+    "compute_steps": 12,
+    "extra": {
+      "task": "depth2",
+      "task_level_range": [
+        1,
+        8
+      ],
+      "seconds_per_epoch": 2058.1739130434785,
+      "seconds_per_epoch_all": {
+        "4": 603,
+        "5": 609,
+        "6": 612,
+        "7": 1108,
+        "8": 1119,
+        "9": 1107,
+        "10": 1585,
+        "11": 1575,
+        "12": 1690,
+        "13": 2054,
+        "14": 2036,
+        "15": 2114,
+        "16": 2603,
+        "17": 2626,
+        "18": 2623,
+        "19": 3049,
+        "20": 3059,
+        "21": 3048,
+        "22": 2831,
+        "23": 2816,
+        "24": 2823,
+        "25": 2822,
+        "26": 2826
+      },
+      "monitor_accuracy_by_epoch": [
+        0.04583333333333333,
+        0.6583333333333333,
+        0.9833333333333333,
+        0.19166666666666668,
+        0.25833333333333336,
+        0.2875,
+        0.17916666666666667,
+        0.1625,
+        0.16666666666666666,
+        0.1875,
+        0.15,
+        0.17916666666666667,
+        0.20833333333333334,
+        0.16666666666666666,
+        0.1875,
+        0.17916666666666667,
+        0.16666666666666666,
+        0.16666666666666666,
+        0.21666666666666667,
+        0.17083333333333334,
+        0.16666666666666666,
+        0.17916666666666667,
+        0.1875
+      ],
+      "coconut_native_accuracy": 0.19525,
+      "data_sha256": null,
+      "cot_tokens": 2.0005,
+      "num_latents": 12,
+      "per_level_accuracy": {
+        "1": 0.988,
+        "2": 0.304,
+        "3": 0.082,
+        "4": 0.056,
+        "5": 0.044,
+        "6": 0.028,
+        "7": 0.03,
+        "8": 0.03
+      },
+      "per_level_n": {
+        "1": 500,
+        "2": 500,
+        "3": 500,
+        "4": 500,
+        "5": 500,
+        "6": 500,
+        "7": 500,
+        "8": 500
+      },
+      "per_level_ci95": {
+        "1": [
+          0.9740696388835527,
+          0.9944890048259724
+        ],
+        "2": [
+          0.26530206305726467,
+          0.34568667840366385
+        ],
+        "3": [
+          0.06101908946846894,
+          0.10935485915738875
+        ],
+        "4": [
+          0.03902562068315149,
+          0.0797447936467069
+        ],
+        "5": [
+          0.02923395562860718,
+          0.06571944287232845
+        ],
+        "6": [
+          0.01675097472075645,
+          0.04644640267494888
+        ],
+        "7": [
+          0.018263213197913384,
+          0.04890366683594573
+        ],
+        "8": [
+          0.018263213197913384,
+          0.04890366683594573
+        ]
+      },
+      "curve_fit": {
+        "floor": 0.044371679034672325,
+        "ceiling": 1.0,
+        "midpoint_param": 1.8032499999999994,
+        "slope": 4.999329056438335,
+        "sse": 1.0406839200446716,
+        "rmse": 0.016129816490312837,
+        "best_observed": 0.988,
+        "halfway_target": 0.5161858395173362,
+        "model": "floor + (ceiling-floor)/(1+exp(slope*(level-midpoint_param)))"
+      },
+      "midpoint": 1.8082738114936894,
+      "midpoint_status": "in_range",
+      "flat": false,
+      "midpoint_extrapolated": 1.8082738114936894,
+      "auc": 0.1504285714285714
+    }
+  },
+  "hyperparams": {
+    "method": "coconut",
+    "trainer": "facebookresearch/coconut run.py @27273cb",
+    "config_path": "/local-ssd/ktn48/lrm_work/logs/configs/pilot_k8_coconut_c2m6.yaml",
+    "max_new_tokens": 16,
+    "batch_size": 64,
+    "test_json": "/local-ssd/ktn48/lrm_work/synthetic_data_v2/depth2_k8/test.json",
+    "decoding": "greedy",
+    "train_config": {
+      "project": "coconut",
+      "save_path": "/local-ssd/ktn48/lrm_work/coconut_runs",
+      "name": "pilot_k8_coconut_c2m6",
+      "only_eval": false,
+      "coconut": true,
+      "cot": false,
+      "no_thoughts": false,
+      "no_cot": false,
+      "c_thought": 2,
+      "epochs_per_stage": 3,
+      "max_latent_stage": 6,
+      "pad_latent_to_max": true,
+      "save_only_improve": false,
+      "uniform_prob": 0.0,
+      "model_id": "openai-community/gpt2",
+      "load_model_path": "/local-ssd/ktn48/lrm_work/coconut_runs/gpt2_depth2_cot/checkpoint_3",
+      "seed": 0,
+      "resume": 3,
+      "bf16": false,
+      "train_path": "/local-ssd/ktn48/lrm_work/synthetic_data_v2/depth2_k8/train.json",
+      "val_path": "/local-ssd/ktn48/lrm_work/synthetic_data_v2/depth2_k8/valid_monitor.json",
+      "reset_optimizer": true,
+      "batch_size_training": 16,
+      "debug": false,
+      "gradient_accumulation_steps": 8,
+      "num_epochs": 26,
+      "lr": 0.0001,
+      "weight_decay": 0.01
+    }
+  },
+  "seed": 0,
+  "hardware": "cci-p124 H100 NVL 94GB (shared node) / NVIDIA H100 NVL",
+  "author": "Kevin Nguyen",
+  "notes": "Coconut-repo coconut GPT-2 on synthetic depth2, per-level test eval.",
+  "timestamp_utc": "2026-11-03T11:02:09.214574+00:00",
+  "git": {
+    "commit": "f9a655a",
+    "dirty": true
+  }
+}
