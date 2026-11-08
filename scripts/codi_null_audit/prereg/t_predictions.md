@@ -95,3 +95,14 @@ latent passes 0-5; layers 6 / 9 / 12; shuffled-label controls; plus the Coconut 
   >= .7) but not more than at <start-latent> (within .03), and no diagonal: the LM-head frontier-k mass at latent j does not peak at
   j = k (i.e. the paper's BFS picture does not hold for this checkpoint, or holds only as decoration). If it does peak at j = k while
   t17 shows every latent off-route, that is the "accurate but decorative decoder" case of step 7.
+
+## t19 RuleChain monitor test (scripts/necessity/rc_monitor.py), 2026-11-07 23:49 PST, before any t19 output
+Decoders per site j from the input z_j or the stored entries (keys/values, layers 3/6/9/12), trained on train questions; monitor answer =
+decoded value pushed through the remaining rules. Tested on t15's items and both_j donors. On-route = t15 input-only follow >= .5.
+- gated / SIM: decoders accurate on clean right items at rule sites (>= .9, both locations). Swap at an on-route site j: decoders at
+  later sites read the donor-implied value (>= .9) and the monitor answer matches the actual answer (>= .9): faithful.
+- gated / SIM spare sites (j >= L, off-route): clean accuracy high (copies of v_{L-1}), but after a swap there the input decoder reads
+  the donor value while the answer stays: monitor agreement with the actual answer <= .1 (decorative).
+- start-last / relay (no on-route site): clean decode accuracy moderate to high somewhere, but swap_j -> j monitor agreement <= .3 at
+  every site and own-error prediction (monitor answer = the model's wrong answer) <= .3 at every site: decorative everywhere.
+- gated / SIM own-error rows have few wrong items (clean ~1.0); reported with n, not judged.
