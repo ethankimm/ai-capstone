@@ -586,3 +586,66 @@ Selection and test as section 10.3.
 | Not readable | Unexpected for a model trained to decode its latents | Check the decoder loss by latent; report |
 
 One seed, as section 10.4: a gain under about .05 cannot be read without a second.
+
+## 15. Amendment (2026-11-08): pause-token control for start-last CODI
+
+**Question.** Is start-last CODI's gain over CODI-0 explained by six extra positions after the question, or does it need the recurrence (each latent pass receiving the
+previous pass's output)? Start-last CODI (`20261106-083843`) is our one model where latents add depth without step labels (matched gain over CODI-0 +.244 at L3, pooled L2-L7
++.099). The 2026-11-08 mechanism records show parallel noisy estimates the answer averages (donor swaps follow the *number* of swapped passes, not their position; blends move the
+answer monotonically), a magnitude rather than an exact value, and no chain on either route (`20261108-032531`, `-040037`, `-042557`). The reading "mostly width plus about one hop
+of depth" is an interpretation; this run is the pause-token / filler-token control (Goyal et al. 2023; Pfau et al. 2024) that tests it. `HANDOFF_PAUSE_TOKEN_2026-11-08.md` has the reasoning.
+
+### 15.1 Change
+
+One change against the start-last CODI arm (`20261106-083843`): `--pause_latents True` (`scripts/codi_pause.patch`, applied last by `scripts/pod/codi_l4to7.sh`). The input to latent pass i is
+a learned vector `pause[i]` (a 6 x 768 fp32 parameter, initialised to the embedding of "."), not `prj(h_{i-1})`. Pass 0 gets `pause[0]` instead of `prj` of the `<bot>` state.
+
+- Unchanged: the question pass, the answer tokens, the attention mask (`pad_invariant`, `fix_attn_mask`), all three CODI losses, the data (`synthetic_data_v2_l1to7w_startlast`), seed 11, the section 10.2 recipe, 12 epochs.
+- `prj` is still built and still saved, so the architecture matches; it feeds nothing and gets no gradient. `pause` adds 4,608 trainable parameters and is trained at the model's lr (2e-3 nominal), like `prj`.
+- `pause` is built after the existing weights and initialised from the embedding table, so it adds no random draw; LoRA, `prj` and the new token rows are unseeded as in every arm (section 13.3), so the pair is not bit-matched. Data order matches.
+- `scripts/eval_codi.py` (`encode_and_think`) applies the same rule and `pause_latents` is in its saved-args list, so evaluation reloads it. `ARM_EXTRA` reaches training and every eval.
+- Launch: section 11.1's command plus `ARM_EXTRA="--pause_latents True" ARM_NAME=gpt2_l1to7w_startlast_pause ARM_SLUG=v2-l1to7w-startlast-pause-depth2 ARM_SMOKE=1`, codi arm only (CODI-0 `20261106-052644` is the floor). Estimate about 12 pod-hours, $7.20 at $0.59/h on an A6000 ($0.27/h on an A5000 if in stock). The user's go is needed before any paid launch.
+
+### 15.2 Checks at launch
+
+`scripts/check_pause.py` must pass first (CPU, fp32, on the start-last CODI checkpoint `checkpoint-17820` with `pause` perturbed so its rows differ, on `synthetic_data_v2_l1to7w_startlast/depth2/train.json`, against an unpatched checkout):
+
+```
+ok   pause is a trainable fp32 parameter of shape [6, 768]
+ok   latent inputs are exactly pause[i], whatever the question
+ok   editing the question changes no latent input
+ok   positive control: flag off, the same edit moves a latent input
+ok   flag off: latent 0 is prj of the <bot> state, not pause[0]
+ok   flag off: latent inputs and answer logits bit-identical to the unpatched checkout
+ok   train and eval answer logits match   max diff 8.39e-05
+ok   loss finite; gradient reaches every pause row and the LoRA weights   loss 1.813, pause grad row norms [0.059, 0.057, 0.042, 0.046, 0.098, 0.099]
+ok   prj gets no gradient (it feeds nothing)
+ok   padding: batched equals alone (latent inputs, answer logits)   max diff 0.00e+00 / 9.73e-05
+ALL PASSED
+```
+
+Then `ARM_SMOKE=1` (`scripts/pod/codi_arm_smoke.sh`: 20 steps, a checkpoint, an eval) must pass on the pod. Its step-decoder checks do not apply to this arm. Watchdog as section 13.2; if it fires, section 10.3 applies.
+The patch was checked against the chain without `codi_zero_loss_log.patch`, which is missing from `main` (it lives in `d503330` on another branch); it touches only the loss logging far below these hunks, but run `git apply --check` on the pod before training.
+
+### 15.3 Analysis, fixed before training
+
+Selection and test as section 10.3 (valid selection, best of the last 3; test L1-L7; canonical L1-L12 record; predictions in notes before opening test).
+
+- **Primary:** pooled **L3-L5** paired accuracy, pause model minus start-last CODI (`20261106-083843`), exact McNemar, test, n = 1,500. L3-L5 is where start-last CODI's gain sits (+.244 / +.172 / +.078 over CODI-0).
+- **Secondaries:** per-level gains L1-L7 with Holm, and pause minus CODI-0; the pass sweep (accuracy with k = 1..6 positions); the t6 vote-count test, the t7 magnitude probes and the t10 look-back cut on the pause model; the t12 attention-route test; canonical L8-L12 out of range.
+
+| Outcome | Rule | Reading |
+|---|---|---|
+| Positions suffice | pause within .05 of CODI (95% CI inside +-.05) and above CODI-0 by >= .05 | The gain needs extra positions with attention between them; recurrence adds nothing measurable. Not yet "width": see below |
+| Recurrence matters | pause below CODI by >= .05, p < .05, still above CODI-0 | Positions give part of the gain; the handoff through the input gives the rest (size = the gap) |
+| All recurrence | pause within .05 of CODI-0 | Positions alone give nothing; the gain needs the recurrent input |
+| Pause beats CODI | pause above CODI by >= .05 | Recurrence hurts here (unexpected); check training curves |
+| Below the floor | pause below CODI-0 by >= .05 | Learned constant inputs hurt; check training curves and the init before any reading |
+| In between | none of the rows above | Report the gap with its CI; no label |
+| Does not train | crash, or loss far above both arms after epoch 1 | Port problem; report, no reading |
+
+**Positions suffice does not mean width.** Pause tokens remove the recurrent input but keep attention between positions, so a pause model can still chain horizontally (later positions read earlier positions' results by attention), as released GSM8K CODI may (cutting the look-back cost a lot in the 19-pair smoke, unlike gated and SIM). The t6 vote-count test (interchangeable votes?) and t10 look-back cut on the pause model are therefore required to name the cell, not optional.
+
+**Predictions, before training.** "Recurrence matters, a little" is the likelier outcome at L3: start-last passes re-derive their estimate from the question, but each estimate is computed at the end of one pass and exposed through the next pass's input, and pause positions lose that handoff. The first two passes may hold the one hop of depth (accuracy .07 with one pass, .41 with two at L3); a pause gap of .05-.15 at L3 reads as "recurrence matters, a little", within .05 as "positions suffice". Pause positions should still vote and hold magnitude (t6 / t7), and the look-back cut should hurt pause more than CODI, since attention is its only route between positions.
+
+One seed, as section 10.4: a difference under about .05 is not interpretable without a second.

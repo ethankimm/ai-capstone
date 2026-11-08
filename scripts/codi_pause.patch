@@ -1,0 +1,43 @@
+diff --git a/src/model.py b/src/model.py
+index d9b93be..6000392 100644
+--- a/src/model.py
++++ b/src/model.py
+@@ -117,6 +117,7 @@ class TrainingArguments(transformers.TrainingArguments):
+     explain_loss_factor: float = field(default=1.0, metadata={"help": "Weight of the step loss (SIM-CoT's default)."})
+     decoder_lr: float = field(default=1e-4, metadata={"help": "Learning rate of the step decoder, a full fine-tune; the rest of the model keeps --learning_rate."})
+     rule_gate: bool = field(default=False, metadata={"help": "ai-capstone (codi_rule_gate.patch): start-last RuleChain only. Each rule is encoded alone, latent pass i sees rule i+1, the answer tokens see the last rule, the tail sees no rules; needs pad_invariant."})
++    pause_latents: bool = field(default=False, metadata={"help": "ai-capstone (codi_pause.patch, TRAINING_PROTOCOL section 15): pause-token control. Latent pass i receives a learned vector pause[i] instead of prj(previous output); no recurrence. Needs pad_invariant."})
+     log_full: bool = field(default=False, metadata={"help": "Log all losses."})
+     print_loss: bool = field(default=True)
+     max_token_num: int = field(default=1000, metadata={"help": "Limit the longest data to avoid OOM."})
+@@ -288,6 +289,12 @@ class CODI(torch.nn.Module):
+         assert not self.pad_invariant or self.fix_attn_mask, "pad_invariant needs fix_attn_mask (the decoder-pass mask)"
+         self.rule_gate = getattr(training_args, "rule_gate", False)
+         assert not self.rule_gate or (self.pad_invariant and self.num_latent > 0), "rule_gate needs pad_invariant and latents"
++        self.pause_latents = getattr(training_args, "pause_latents", False)
++        assert not self.pause_latents or (self.pad_invariant and self.num_latent > 0), "pause_latents needs pad_invariant and latents"
++        if self.pause_latents:  # one learned input per latent pass, initialised to the embedding of "." (fp32, cast at use)
++            period = self.tokenizer.encode(".")[0]
++            w = self.get_embd(self.codi, self.model_name).weight[period].detach().float().clone()
++            self.pause = nn.Parameter(w[None].repeat(self.num_latent, 1))
+         self.step_decoder = getattr(training_args, "step_decoder", False)
+         self.explain_loss_factor = getattr(training_args, "explain_loss_factor", 1.0)
+         if self.step_decoder:
+@@ -383,6 +390,8 @@ class CODI(torch.nn.Module):
+         latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1) # as the next input
+         if self.use_prj:
+             latent_embd = self.prj(latent_embd)
++        if self.pause_latents:  # no recurrence: pass 0 gets pause[0], whatever the <bot> state is
++            latent_embd = self.pause[0].to(latent_embd.dtype).expand(latent_embd.size(0), 1, -1)
+         step_latents = [latent_embd]  # step_decoder only
+ 
+         len_pred_loss = 0
+@@ -448,6 +457,8 @@ class CODI(torch.nn.Module):
+                     latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1)
+                     if self.use_prj:
+                         latent_embd = self.prj(latent_embd)
++                    if self.pause_latents:  # input of pass i+1 (after the last pass it feeds nothing)
++                        latent_embd = self.pause[min(i + 1, num_latent - 1)].to(latent_embd.dtype).expand(latent_embd.size(0), 1, -1)
+                     step_latents.append(latent_embd)
+ 
+                 # Calculate the distillation loss

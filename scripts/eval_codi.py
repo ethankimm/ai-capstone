@@ -201,6 +201,9 @@ def encode_and_think(model, batch, training_args):
     latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1)
     if training_args.use_prj:
         latent_embd = model.prj(latent_embd)
+    pause = getattr(training_args, "pause_latents", False)  # TRAINING_PROTOCOL section 15: learned inputs, no recurrence
+    if pause:
+        latent_embd = model.pause[0].to(latent_embd.dtype).expand(latent_embd.size(0), 1, -1)
     pi = PadInvariant(batch["attention_mask"]) if pad_inv else None
     width = batch["attention_mask"].size(1)
     latents = []
@@ -214,6 +217,8 @@ def encode_and_think(model, batch, training_args):
         latent_embd = outputs.hidden_states[-1][:, -1, :].unsqueeze(1)
         if training_args.use_prj:
             latent_embd = model.prj(latent_embd)
+        if pause:
+            latent_embd = model.pause[min(i + 1, model.num_latent - 1)].to(latent_embd.dtype).expand(latent_embd.size(0), 1, -1)
     if gate:
         pi.mask[:, :width] = gate.answer()  # every later pass (answer tokens) sees the tail and the last rule
     return past_key_values, pi, latents
@@ -306,7 +311,7 @@ def hyperparams_from_ckpt(ckpt_dir: str) -> dict | None:
             "num_latent", "use_prj", "prj_dim", "prj_no_ln", "distill_loss_type", "distill_loss_div_std",
             "distill_loss_factor", "ref_loss_factor", "weight_decay", "warmup_ratio", "lr_scheduler_type",
             "max_grad_norm", "bf16", "remove_eos", "seed", "exp_mode", "exp_data_num", "max_steps", "max_token_num",
-            "step_decoder", "decoder_lr", "explain_loss_factor"]
+            "step_decoder", "decoder_lr", "explain_loss_factor", "pause_latents"]
     hp = {k: getattr(ta, k) for k in keys if hasattr(ta, k)}
     hp["lr_scheduler_type"] = str(hp.get("lr_scheduler_type"))
     hp["effective_batch_size"] = hp["per_device_train_batch_size"] * hp["gradient_accumulation_steps"]
