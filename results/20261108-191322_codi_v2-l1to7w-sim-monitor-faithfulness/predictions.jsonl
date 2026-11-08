@@ -1,0 +1,270 @@
+{"idx": 0, "level": 3, "cell": "input_0", "dec_right": 0.972, "dec_wrong": 1.0, "mon_right": 0.972, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 1, "level": 3, "cell": "input_1", "dec_right": 0.828, "dec_wrong": 1.0, "mon_right": 0.828, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 2, "level": 3, "cell": "input_2", "dec_right": 0.537, "dec_wrong": 0.0, "mon_right": 0.537, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 3, "level": 3, "cell": "input_3", "dec_right": 0.418, "dec_wrong": 0.0, "mon_right": 0.418, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 4, "level": 3, "cell": "input_4", "dec_right": 0.242, "dec_wrong": 0.0, "mon_right": 0.246, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 5, "level": 3, "cell": "input_5", "dec_right": 0.246, "dec_wrong": 0.0, "mon_right": 0.246, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 6, "level": 3, "cell": "entries_0", "dec_right": 1.0, "dec_wrong": 1.0, "mon_right": 1.0, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 7, "level": 3, "cell": "entries_1", "dec_right": 0.986, "dec_wrong": 1.0, "mon_right": 0.986, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 8, "level": 3, "cell": "entries_2", "dec_right": 0.796, "dec_wrong": 1.0, "mon_right": 0.796, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 9, "level": 3, "cell": "entries_3", "dec_right": 0.653, "dec_wrong": 0.0, "mon_right": 0.653, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 10, "level": 3, "cell": "entries_4", "dec_right": 0.779, "dec_wrong": 0.0, "mon_right": 0.779, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 11, "level": 3, "cell": "entries_5", "dec_right": 0.8, "dec_wrong": 0.0, "mon_right": 0.8, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 12, "level": 3, "cell": "swap0_input_0", "n": 285, "dec_donor": 0.972, "mon_actual": 0.972, "answer_follows": 1.0}
+{"idx": 13, "level": 3, "cell": "swap0_entries_0", "n": 285, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 14, "level": 3, "cell": "swap0_input_1", "n": 285, "dec_donor": 0.814, "mon_actual": 0.814, "answer_follows": 1.0}
+{"idx": 15, "level": 3, "cell": "swap0_entries_1", "n": 285, "dec_donor": 0.975, "mon_actual": 0.975, "answer_follows": 1.0}
+{"idx": 16, "level": 3, "cell": "swap0_input_2", "n": 285, "dec_donor": 0.495, "mon_actual": 0.495, "answer_follows": 1.0}
+{"idx": 17, "level": 3, "cell": "swap0_entries_2", "n": 285, "dec_donor": 0.779, "mon_actual": 0.779, "answer_follows": 1.0}
+{"idx": 18, "level": 3, "cell": "swap0_input_3", "n": 285, "dec_donor": 0.354, "mon_actual": 0.361, "answer_follows": 1.0}
+{"idx": 19, "level": 3, "cell": "swap0_entries_3", "n": 285, "dec_donor": 0.614, "mon_actual": 0.614, "answer_follows": 1.0}
+{"idx": 20, "level": 3, "cell": "swap0_input_4", "n": 285, "dec_donor": 0.196, "mon_actual": 0.207, "answer_follows": 1.0}
+{"idx": 21, "level": 3, "cell": "swap0_entries_4", "n": 285, "dec_donor": 0.716, "mon_actual": 0.716, "answer_follows": 1.0}
+{"idx": 22, "level": 3, "cell": "swap0_input_5", "n": 285, "dec_donor": 0.256, "mon_actual": 0.27, "answer_follows": 1.0}
+{"idx": 23, "level": 3, "cell": "swap0_entries_5", "n": 285, "dec_donor": 0.719, "mon_actual": 0.719, "answer_follows": 1.0}
+{"idx": 24, "level": 3, "cell": "swap1_input_1", "n": 285, "dec_donor": 0.832, "mon_actual": 0.832, "answer_follows": 1.0}
+{"idx": 25, "level": 3, "cell": "swap1_entries_1", "n": 285, "dec_donor": 0.982, "mon_actual": 0.982, "answer_follows": 1.0}
+{"idx": 26, "level": 3, "cell": "swap1_input_2", "n": 285, "dec_donor": 0.481, "mon_actual": 0.481, "answer_follows": 1.0}
+{"idx": 27, "level": 3, "cell": "swap1_entries_2", "n": 285, "dec_donor": 0.8, "mon_actual": 0.8, "answer_follows": 1.0}
+{"idx": 28, "level": 3, "cell": "swap1_input_3", "n": 285, "dec_donor": 0.407, "mon_actual": 0.407, "answer_follows": 1.0}
+{"idx": 29, "level": 3, "cell": "swap1_entries_3", "n": 285, "dec_donor": 0.649, "mon_actual": 0.649, "answer_follows": 1.0}
+{"idx": 30, "level": 3, "cell": "swap1_input_4", "n": 285, "dec_donor": 0.232, "mon_actual": 0.239, "answer_follows": 1.0}
+{"idx": 31, "level": 3, "cell": "swap1_entries_4", "n": 285, "dec_donor": 0.737, "mon_actual": 0.737, "answer_follows": 1.0}
+{"idx": 32, "level": 3, "cell": "swap1_input_5", "n": 285, "dec_donor": 0.246, "mon_actual": 0.249, "answer_follows": 1.0}
+{"idx": 33, "level": 3, "cell": "swap1_entries_5", "n": 285, "dec_donor": 0.747, "mon_actual": 0.747, "answer_follows": 1.0}
+{"idx": 34, "level": 3, "cell": "swap2_input_2", "n": 285, "dec_donor": 0.519, "mon_actual": 0.196, "answer_follows": 0.242}
+{"idx": 35, "level": 3, "cell": "swap2_entries_2", "n": 285, "dec_donor": 0.754, "mon_actual": 0.235, "answer_follows": 0.242}
+{"idx": 36, "level": 3, "cell": "swap2_input_3", "n": 285, "dec_donor": 0.393, "mon_actual": 0.182, "answer_follows": 0.242}
+{"idx": 37, "level": 3, "cell": "swap2_entries_3", "n": 285, "dec_donor": 0.579, "mon_actual": 0.228, "answer_follows": 0.242}
+{"idx": 38, "level": 3, "cell": "swap2_input_4", "n": 285, "dec_donor": 0.242, "mon_actual": 0.123, "answer_follows": 0.242}
+{"idx": 39, "level": 3, "cell": "swap2_entries_4", "n": 285, "dec_donor": 0.646, "mon_actual": 0.218, "answer_follows": 0.242}
+{"idx": 40, "level": 3, "cell": "swap2_input_5", "n": 285, "dec_donor": 0.239, "mon_actual": 0.126, "answer_follows": 0.242}
+{"idx": 41, "level": 3, "cell": "swap2_entries_5", "n": 285, "dec_donor": 0.618, "mon_actual": 0.228, "answer_follows": 0.242}
+{"idx": 42, "level": 3, "cell": "swap3_input_3", "n": 285, "dec_donor": 0.414, "mon_actual": 0.011, "answer_follows": 0.0}
+{"idx": 43, "level": 3, "cell": "swap3_entries_3", "n": 285, "dec_donor": 0.161, "mon_actual": 0.168, "answer_follows": 0.0}
+{"idx": 44, "level": 3, "cell": "swap3_input_4", "n": 285, "dec_donor": 0.102, "mon_actual": 0.056, "answer_follows": 0.0}
+{"idx": 45, "level": 3, "cell": "swap3_entries_4", "n": 285, "dec_donor": 0.018, "mon_actual": 0.614, "answer_follows": 0.0}
+{"idx": 46, "level": 3, "cell": "swap3_input_5", "n": 285, "dec_donor": 0.035, "mon_actual": 0.158, "answer_follows": 0.0}
+{"idx": 47, "level": 3, "cell": "swap3_entries_5", "n": 285, "dec_donor": 0.018, "mon_actual": 0.702, "answer_follows": 0.0}
+{"idx": 48, "level": 3, "cell": "swap4_input_4", "n": 285, "dec_donor": 0.277, "mon_actual": 0.021, "answer_follows": 0.0}
+{"idx": 49, "level": 3, "cell": "swap4_entries_4", "n": 285, "dec_donor": 0.011, "mon_actual": 0.635, "answer_follows": 0.0}
+{"idx": 50, "level": 3, "cell": "swap4_input_5", "n": 285, "dec_donor": 0.021, "mon_actual": 0.2, "answer_follows": 0.0}
+{"idx": 51, "level": 3, "cell": "swap4_entries_5", "n": 285, "dec_donor": 0.0, "mon_actual": 0.768, "answer_follows": 0.0}
+{"idx": 52, "level": 3, "cell": "swap5_input_5", "n": 285, "dec_donor": 0.274, "mon_actual": 0.021, "answer_follows": 0.0}
+{"idx": 53, "level": 3, "cell": "swap5_entries_5", "n": 285, "dec_donor": 0.004, "mon_actual": 0.726, "answer_follows": 0.0}
+{"idx": 54, "level": 4, "cell": "input_0", "dec_right": 0.965, "dec_wrong": null, "mon_right": 0.965, "mon_wrong": null, "n_wrong": 0}
+{"idx": 55, "level": 4, "cell": "input_1", "dec_right": 0.818, "dec_wrong": null, "mon_right": 0.818, "mon_wrong": null, "n_wrong": 0}
+{"idx": 56, "level": 4, "cell": "input_2", "dec_right": 0.699, "dec_wrong": null, "mon_right": 0.699, "mon_wrong": null, "n_wrong": 0}
+{"idx": 57, "level": 4, "cell": "input_3", "dec_right": 0.462, "dec_wrong": null, "mon_right": 0.462, "mon_wrong": null, "n_wrong": 0}
+{"idx": 58, "level": 4, "cell": "input_4", "dec_right": 0.346, "dec_wrong": null, "mon_right": 0.35, "mon_wrong": null, "n_wrong": 0}
+{"idx": 59, "level": 4, "cell": "input_5", "dec_right": 0.252, "dec_wrong": null, "mon_right": 0.262, "mon_wrong": null, "n_wrong": 0}
+{"idx": 60, "level": 4, "cell": "entries_0", "dec_right": 0.993, "dec_wrong": null, "mon_right": 0.993, "mon_wrong": null, "n_wrong": 0}
+{"idx": 61, "level": 4, "cell": "entries_1", "dec_right": 0.979, "dec_wrong": null, "mon_right": 0.979, "mon_wrong": null, "n_wrong": 0}
+{"idx": 62, "level": 4, "cell": "entries_2", "dec_right": 0.916, "dec_wrong": null, "mon_right": 0.916, "mon_wrong": null, "n_wrong": 0}
+{"idx": 63, "level": 4, "cell": "entries_3", "dec_right": 0.752, "dec_wrong": null, "mon_right": 0.752, "mon_wrong": null, "n_wrong": 0}
+{"idx": 64, "level": 4, "cell": "entries_4", "dec_right": 0.664, "dec_wrong": null, "mon_right": 0.664, "mon_wrong": null, "n_wrong": 0}
+{"idx": 65, "level": 4, "cell": "entries_5", "dec_right": 0.727, "dec_wrong": null, "mon_right": 0.727, "mon_wrong": null, "n_wrong": 0}
+{"idx": 66, "level": 4, "cell": "swap0_input_0", "n": 285, "dec_donor": 0.979, "mon_actual": 0.975, "answer_follows": 0.996}
+{"idx": 67, "level": 4, "cell": "swap0_entries_0", "n": 285, "dec_donor": 0.996, "mon_actual": 0.993, "answer_follows": 0.996}
+{"idx": 68, "level": 4, "cell": "swap0_input_1", "n": 285, "dec_donor": 0.775, "mon_actual": 0.772, "answer_follows": 0.996}
+{"idx": 69, "level": 4, "cell": "swap0_entries_1", "n": 285, "dec_donor": 0.947, "mon_actual": 0.944, "answer_follows": 0.996}
+{"idx": 70, "level": 4, "cell": "swap0_input_2", "n": 285, "dec_donor": 0.677, "mon_actual": 0.681, "answer_follows": 0.996}
+{"idx": 71, "level": 4, "cell": "swap0_entries_2", "n": 285, "dec_donor": 0.905, "mon_actual": 0.902, "answer_follows": 0.996}
+{"idx": 72, "level": 4, "cell": "swap0_input_3", "n": 285, "dec_donor": 0.411, "mon_actual": 0.411, "answer_follows": 0.996}
+{"idx": 73, "level": 4, "cell": "swap0_entries_3", "n": 285, "dec_donor": 0.674, "mon_actual": 0.674, "answer_follows": 0.996}
+{"idx": 74, "level": 4, "cell": "swap0_input_4", "n": 285, "dec_donor": 0.309, "mon_actual": 0.319, "answer_follows": 0.996}
+{"idx": 75, "level": 4, "cell": "swap0_entries_4", "n": 285, "dec_donor": 0.604, "mon_actual": 0.607, "answer_follows": 0.996}
+{"idx": 76, "level": 4, "cell": "swap0_input_5", "n": 285, "dec_donor": 0.274, "mon_actual": 0.288, "answer_follows": 0.996}
+{"idx": 77, "level": 4, "cell": "swap0_entries_5", "n": 285, "dec_donor": 0.653, "mon_actual": 0.653, "answer_follows": 0.996}
+{"idx": 78, "level": 4, "cell": "swap1_input_1", "n": 285, "dec_donor": 0.839, "mon_actual": 0.839, "answer_follows": 0.996}
+{"idx": 79, "level": 4, "cell": "swap1_entries_1", "n": 285, "dec_donor": 0.975, "mon_actual": 0.972, "answer_follows": 0.996}
+{"idx": 80, "level": 4, "cell": "swap1_input_2", "n": 285, "dec_donor": 0.688, "mon_actual": 0.684, "answer_follows": 0.996}
+{"idx": 81, "level": 4, "cell": "swap1_entries_2", "n": 285, "dec_donor": 0.954, "mon_actual": 0.958, "answer_follows": 0.996}
+{"idx": 82, "level": 4, "cell": "swap1_input_3", "n": 285, "dec_donor": 0.453, "mon_actual": 0.453, "answer_follows": 0.996}
+{"idx": 83, "level": 4, "cell": "swap1_entries_3", "n": 285, "dec_donor": 0.719, "mon_actual": 0.719, "answer_follows": 0.996}
+{"idx": 84, "level": 4, "cell": "swap1_input_4", "n": 285, "dec_donor": 0.34, "mon_actual": 0.347, "answer_follows": 0.996}
+{"idx": 85, "level": 4, "cell": "swap1_entries_4", "n": 285, "dec_donor": 0.611, "mon_actual": 0.611, "answer_follows": 0.996}
+{"idx": 86, "level": 4, "cell": "swap1_input_5", "n": 285, "dec_donor": 0.291, "mon_actual": 0.305, "answer_follows": 0.996}
+{"idx": 87, "level": 4, "cell": "swap1_entries_5", "n": 285, "dec_donor": 0.698, "mon_actual": 0.698, "answer_follows": 0.996}
+{"idx": 88, "level": 4, "cell": "swap2_input_2", "n": 285, "dec_donor": 0.702, "mon_actual": 0.695, "answer_follows": 0.993}
+{"idx": 89, "level": 4, "cell": "swap2_entries_2", "n": 285, "dec_donor": 0.954, "mon_actual": 0.954, "answer_follows": 0.993}
+{"idx": 90, "level": 4, "cell": "swap2_input_3", "n": 285, "dec_donor": 0.439, "mon_actual": 0.442, "answer_follows": 0.993}
+{"idx": 91, "level": 4, "cell": "swap2_entries_3", "n": 285, "dec_donor": 0.681, "mon_actual": 0.677, "answer_follows": 0.993}
+{"idx": 92, "level": 4, "cell": "swap2_input_4", "n": 285, "dec_donor": 0.361, "mon_actual": 0.361, "answer_follows": 0.993}
+{"idx": 93, "level": 4, "cell": "swap2_entries_4", "n": 285, "dec_donor": 0.593, "mon_actual": 0.593, "answer_follows": 0.993}
+{"idx": 94, "level": 4, "cell": "swap2_input_5", "n": 285, "dec_donor": 0.256, "mon_actual": 0.277, "answer_follows": 0.993}
+{"idx": 95, "level": 4, "cell": "swap2_entries_5", "n": 285, "dec_donor": 0.695, "mon_actual": 0.688, "answer_follows": 0.993}
+{"idx": 96, "level": 4, "cell": "swap3_input_3", "n": 285, "dec_donor": 0.491, "mon_actual": 0.137, "answer_follows": 0.225}
+{"idx": 97, "level": 4, "cell": "swap3_entries_3", "n": 285, "dec_donor": 0.765, "mon_actual": 0.218, "answer_follows": 0.225}
+{"idx": 98, "level": 4, "cell": "swap3_input_4", "n": 285, "dec_donor": 0.358, "mon_actual": 0.151, "answer_follows": 0.225}
+{"idx": 99, "level": 4, "cell": "swap3_entries_4", "n": 285, "dec_donor": 0.67, "mon_actual": 0.2, "answer_follows": 0.225}
+{"idx": 100, "level": 4, "cell": "swap3_input_5", "n": 285, "dec_donor": 0.27, "mon_actual": 0.168, "answer_follows": 0.225}
+{"idx": 101, "level": 4, "cell": "swap3_entries_5", "n": 285, "dec_donor": 0.695, "mon_actual": 0.2, "answer_follows": 0.225}
+{"idx": 102, "level": 4, "cell": "swap4_input_4", "n": 285, "dec_donor": 0.389, "mon_actual": 0.021, "answer_follows": 0.0}
+{"idx": 103, "level": 4, "cell": "swap4_entries_4", "n": 285, "dec_donor": 0.13, "mon_actual": 0.235, "answer_follows": 0.0}
+{"idx": 104, "level": 4, "cell": "swap4_input_5", "n": 285, "dec_donor": 0.119, "mon_actual": 0.074, "answer_follows": 0.0}
+{"idx": 105, "level": 4, "cell": "swap4_entries_5", "n": 285, "dec_donor": 0.035, "mon_actual": 0.561, "answer_follows": 0.0}
+{"idx": 106, "level": 4, "cell": "swap5_input_5", "n": 285, "dec_donor": 0.239, "mon_actual": 0.021, "answer_follows": 0.0}
+{"idx": 107, "level": 4, "cell": "swap5_entries_5", "n": 285, "dec_donor": 0.011, "mon_actual": 0.582, "answer_follows": 0.0}
+{"idx": 108, "level": 5, "cell": "input_0", "dec_right": 0.972, "dec_wrong": 0.8, "mon_right": 0.972, "mon_wrong": 0.2, "n_wrong": 5}
+{"idx": 109, "level": 5, "cell": "input_1", "dec_right": 0.783, "dec_wrong": 0.6, "mon_right": 0.783, "mon_wrong": 0.4, "n_wrong": 5}
+{"idx": 110, "level": 5, "cell": "input_2", "dec_right": 0.676, "dec_wrong": 0.8, "mon_right": 0.676, "mon_wrong": 0.0, "n_wrong": 5}
+{"idx": 111, "level": 5, "cell": "input_3", "dec_right": 0.651, "dec_wrong": 0.2, "mon_right": 0.651, "mon_wrong": 0.0, "n_wrong": 5}
+{"idx": 112, "level": 5, "cell": "input_4", "dec_right": 0.502, "dec_wrong": 0.0, "mon_right": 0.502, "mon_wrong": 0.0, "n_wrong": 5}
+{"idx": 113, "level": 5, "cell": "input_5", "dec_right": 0.381, "dec_wrong": 0.0, "mon_right": 0.381, "mon_wrong": 0.0, "n_wrong": 5}
+{"idx": 114, "level": 5, "cell": "entries_0", "dec_right": 1.0, "dec_wrong": 1.0, "mon_right": 1.0, "mon_wrong": 0.0, "n_wrong": 5}
+{"idx": 115, "level": 5, "cell": "entries_1", "dec_right": 0.975, "dec_wrong": 1.0, "mon_right": 0.975, "mon_wrong": 0.0, "n_wrong": 5}
+{"idx": 116, "level": 5, "cell": "entries_2", "dec_right": 0.961, "dec_wrong": 0.8, "mon_right": 0.961, "mon_wrong": 0.0, "n_wrong": 5}
+{"idx": 117, "level": 5, "cell": "entries_3", "dec_right": 0.897, "dec_wrong": 0.4, "mon_right": 0.897, "mon_wrong": 0.4, "n_wrong": 5}
+{"idx": 118, "level": 5, "cell": "entries_4", "dec_right": 0.783, "dec_wrong": 0.0, "mon_right": 0.783, "mon_wrong": 0.2, "n_wrong": 5}
+{"idx": 119, "level": 5, "cell": "entries_5", "dec_right": 0.641, "dec_wrong": 0.0, "mon_right": 0.641, "mon_wrong": 0.2, "n_wrong": 5}
+{"idx": 120, "level": 5, "cell": "swap0_input_0", "n": 281, "dec_donor": 0.972, "mon_actual": 0.968, "answer_follows": 0.993}
+{"idx": 121, "level": 5, "cell": "swap0_entries_0", "n": 281, "dec_donor": 1.0, "mon_actual": 0.993, "answer_follows": 0.993}
+{"idx": 122, "level": 5, "cell": "swap0_input_1", "n": 281, "dec_donor": 0.765, "mon_actual": 0.765, "answer_follows": 0.993}
+{"idx": 123, "level": 5, "cell": "swap0_entries_1", "n": 281, "dec_donor": 0.964, "mon_actual": 0.957, "answer_follows": 0.993}
+{"idx": 124, "level": 5, "cell": "swap0_input_2", "n": 281, "dec_donor": 0.665, "mon_actual": 0.662, "answer_follows": 0.993}
+{"idx": 125, "level": 5, "cell": "swap0_entries_2", "n": 281, "dec_donor": 0.918, "mon_actual": 0.915, "answer_follows": 0.993}
+{"idx": 126, "level": 5, "cell": "swap0_input_3", "n": 281, "dec_donor": 0.587, "mon_actual": 0.591, "answer_follows": 0.993}
+{"idx": 127, "level": 5, "cell": "swap0_entries_3", "n": 281, "dec_donor": 0.865, "mon_actual": 0.861, "answer_follows": 0.993}
+{"idx": 128, "level": 5, "cell": "swap0_input_4", "n": 281, "dec_donor": 0.459, "mon_actual": 0.463, "answer_follows": 0.993}
+{"idx": 129, "level": 5, "cell": "swap0_entries_4", "n": 281, "dec_donor": 0.733, "mon_actual": 0.737, "answer_follows": 0.993}
+{"idx": 130, "level": 5, "cell": "swap0_input_5", "n": 281, "dec_donor": 0.338, "mon_actual": 0.345, "answer_follows": 0.993}
+{"idx": 131, "level": 5, "cell": "swap0_entries_5", "n": 281, "dec_donor": 0.612, "mon_actual": 0.612, "answer_follows": 0.993}
+{"idx": 132, "level": 5, "cell": "swap1_input_1", "n": 281, "dec_donor": 0.737, "mon_actual": 0.737, "answer_follows": 0.986}
+{"idx": 133, "level": 5, "cell": "swap1_entries_1", "n": 281, "dec_donor": 0.975, "mon_actual": 0.961, "answer_follows": 0.986}
+{"idx": 134, "level": 5, "cell": "swap1_input_2", "n": 281, "dec_donor": 0.737, "mon_actual": 0.726, "answer_follows": 0.986}
+{"idx": 135, "level": 5, "cell": "swap1_entries_2", "n": 281, "dec_donor": 0.932, "mon_actual": 0.922, "answer_follows": 0.986}
+{"idx": 136, "level": 5, "cell": "swap1_input_3", "n": 281, "dec_donor": 0.623, "mon_actual": 0.616, "answer_follows": 0.986}
+{"idx": 137, "level": 5, "cell": "swap1_entries_3", "n": 281, "dec_donor": 0.861, "mon_actual": 0.858, "answer_follows": 0.986}
+{"idx": 138, "level": 5, "cell": "swap1_input_4", "n": 281, "dec_donor": 0.495, "mon_actual": 0.502, "answer_follows": 0.986}
+{"idx": 139, "level": 5, "cell": "swap1_entries_4", "n": 281, "dec_donor": 0.73, "mon_actual": 0.73, "answer_follows": 0.986}
+{"idx": 140, "level": 5, "cell": "swap1_input_5", "n": 281, "dec_donor": 0.367, "mon_actual": 0.37, "answer_follows": 0.986}
+{"idx": 141, "level": 5, "cell": "swap1_entries_5", "n": 281, "dec_donor": 0.584, "mon_actual": 0.584, "answer_follows": 0.986}
+{"idx": 142, "level": 5, "cell": "swap2_input_2", "n": 281, "dec_donor": 0.669, "mon_actual": 0.662, "answer_follows": 0.993}
+{"idx": 143, "level": 5, "cell": "swap2_entries_2", "n": 281, "dec_donor": 0.929, "mon_actual": 0.922, "answer_follows": 0.993}
+{"idx": 144, "level": 5, "cell": "swap2_input_3", "n": 281, "dec_donor": 0.623, "mon_actual": 0.626, "answer_follows": 0.993}
+{"idx": 145, "level": 5, "cell": "swap2_entries_3", "n": 281, "dec_donor": 0.861, "mon_actual": 0.865, "answer_follows": 0.993}
+{"idx": 146, "level": 5, "cell": "swap2_input_4", "n": 281, "dec_donor": 0.48, "mon_actual": 0.484, "answer_follows": 0.993}
+{"idx": 147, "level": 5, "cell": "swap2_entries_4", "n": 281, "dec_donor": 0.783, "mon_actual": 0.786, "answer_follows": 0.993}
+{"idx": 148, "level": 5, "cell": "swap2_input_5", "n": 281, "dec_donor": 0.395, "mon_actual": 0.395, "answer_follows": 0.993}
+{"idx": 149, "level": 5, "cell": "swap2_entries_5", "n": 281, "dec_donor": 0.658, "mon_actual": 0.662, "answer_follows": 0.993}
+{"idx": 150, "level": 5, "cell": "swap3_input_3", "n": 281, "dec_donor": 0.665, "mon_actual": 0.669, "answer_follows": 0.993}
+{"idx": 151, "level": 5, "cell": "swap3_entries_3", "n": 281, "dec_donor": 0.904, "mon_actual": 0.911, "answer_follows": 0.993}
+{"idx": 152, "level": 5, "cell": "swap3_input_4", "n": 281, "dec_donor": 0.509, "mon_actual": 0.512, "answer_follows": 0.993}
+{"idx": 153, "level": 5, "cell": "swap3_entries_4", "n": 281, "dec_donor": 0.762, "mon_actual": 0.758, "answer_follows": 0.993}
+{"idx": 154, "level": 5, "cell": "swap3_input_5", "n": 281, "dec_donor": 0.409, "mon_actual": 0.413, "answer_follows": 0.993}
+{"idx": 155, "level": 5, "cell": "swap3_entries_5", "n": 281, "dec_donor": 0.658, "mon_actual": 0.658, "answer_follows": 0.993}
+{"idx": 156, "level": 5, "cell": "swap4_input_4", "n": 281, "dec_donor": 0.527, "mon_actual": 0.132, "answer_follows": 0.164}
+{"idx": 157, "level": 5, "cell": "swap4_entries_4", "n": 281, "dec_donor": 0.726, "mon_actual": 0.149, "answer_follows": 0.164}
+{"idx": 158, "level": 5, "cell": "swap4_input_5", "n": 281, "dec_donor": 0.406, "mon_actual": 0.125, "answer_follows": 0.164}
+{"idx": 159, "level": 5, "cell": "swap4_entries_5", "n": 281, "dec_donor": 0.587, "mon_actual": 0.178, "answer_follows": 0.164}
+{"idx": 160, "level": 5, "cell": "swap5_input_5", "n": 281, "dec_donor": 0.327, "mon_actual": 0.014, "answer_follows": 0.0}
+{"idx": 161, "level": 5, "cell": "swap5_entries_5", "n": 281, "dec_donor": 0.039, "mon_actual": 0.384, "answer_follows": 0.0}
+{"idx": 162, "level": 6, "cell": "input_0", "dec_right": 0.968, "dec_wrong": 0.714, "mon_right": 0.971, "mon_wrong": 0.143, "n_wrong": 7}
+{"idx": 163, "level": 6, "cell": "input_1", "dec_right": 0.773, "dec_wrong": 0.429, "mon_right": 0.773, "mon_wrong": 0.143, "n_wrong": 7}
+{"idx": 164, "level": 6, "cell": "input_2", "dec_right": 0.633, "dec_wrong": 0.571, "mon_right": 0.633, "mon_wrong": 0.143, "n_wrong": 7}
+{"idx": 165, "level": 6, "cell": "input_3", "dec_right": 0.604, "dec_wrong": 0.286, "mon_right": 0.604, "mon_wrong": 0.286, "n_wrong": 7}
+{"idx": 166, "level": 6, "cell": "input_4", "dec_right": 0.568, "dec_wrong": 0.143, "mon_right": 0.568, "mon_wrong": 0.286, "n_wrong": 7}
+{"idx": 167, "level": 6, "cell": "input_5", "dec_right": 0.522, "dec_wrong": 0.0, "mon_right": 0.522, "mon_wrong": 0.286, "n_wrong": 7}
+{"idx": 168, "level": 6, "cell": "entries_0", "dec_right": 0.989, "dec_wrong": 1.0, "mon_right": 0.989, "mon_wrong": 0.0, "n_wrong": 7}
+{"idx": 169, "level": 6, "cell": "entries_1", "dec_right": 0.982, "dec_wrong": 0.857, "mon_right": 0.982, "mon_wrong": 0.143, "n_wrong": 7}
+{"idx": 170, "level": 6, "cell": "entries_2", "dec_right": 0.939, "dec_wrong": 0.857, "mon_right": 0.939, "mon_wrong": 0.0, "n_wrong": 7}
+{"idx": 171, "level": 6, "cell": "entries_3", "dec_right": 0.906, "dec_wrong": 0.714, "mon_right": 0.906, "mon_wrong": 0.286, "n_wrong": 7}
+{"idx": 172, "level": 6, "cell": "entries_4", "dec_right": 0.878, "dec_wrong": 0.286, "mon_right": 0.878, "mon_wrong": 0.286, "n_wrong": 7}
+{"idx": 173, "level": 6, "cell": "entries_5", "dec_right": 0.741, "dec_wrong": 0.286, "mon_right": 0.741, "mon_wrong": 0.143, "n_wrong": 7}
+{"idx": 174, "level": 6, "cell": "swap0_input_0", "n": 278, "dec_donor": 0.957, "mon_actual": 0.946, "answer_follows": 0.989}
+{"idx": 175, "level": 6, "cell": "swap0_entries_0", "n": 278, "dec_donor": 0.993, "mon_actual": 0.982, "answer_follows": 0.989}
+{"idx": 176, "level": 6, "cell": "swap0_input_1", "n": 278, "dec_donor": 0.773, "mon_actual": 0.773, "answer_follows": 0.989}
+{"idx": 177, "level": 6, "cell": "swap0_entries_1", "n": 278, "dec_donor": 0.968, "mon_actual": 0.96, "answer_follows": 0.989}
+{"idx": 178, "level": 6, "cell": "swap0_input_2", "n": 278, "dec_donor": 0.709, "mon_actual": 0.701, "answer_follows": 0.989}
+{"idx": 179, "level": 6, "cell": "swap0_entries_2", "n": 278, "dec_donor": 0.924, "mon_actual": 0.924, "answer_follows": 0.989}
+{"idx": 180, "level": 6, "cell": "swap0_input_3", "n": 278, "dec_donor": 0.594, "mon_actual": 0.594, "answer_follows": 0.989}
+{"idx": 181, "level": 6, "cell": "swap0_entries_3", "n": 278, "dec_donor": 0.892, "mon_actual": 0.888, "answer_follows": 0.989}
+{"idx": 182, "level": 6, "cell": "swap0_input_4", "n": 278, "dec_donor": 0.554, "mon_actual": 0.554, "answer_follows": 0.989}
+{"idx": 183, "level": 6, "cell": "swap0_entries_4", "n": 278, "dec_donor": 0.82, "mon_actual": 0.817, "answer_follows": 0.989}
+{"idx": 184, "level": 6, "cell": "swap0_input_5", "n": 278, "dec_donor": 0.543, "mon_actual": 0.543, "answer_follows": 0.989}
+{"idx": 185, "level": 6, "cell": "swap0_entries_5", "n": 278, "dec_donor": 0.723, "mon_actual": 0.727, "answer_follows": 0.989}
+{"idx": 186, "level": 6, "cell": "swap1_input_1", "n": 278, "dec_donor": 0.752, "mon_actual": 0.752, "answer_follows": 0.982}
+{"idx": 187, "level": 6, "cell": "swap1_entries_1", "n": 278, "dec_donor": 0.975, "mon_actual": 0.978, "answer_follows": 0.982}
+{"idx": 188, "level": 6, "cell": "swap1_input_2", "n": 278, "dec_donor": 0.691, "mon_actual": 0.694, "answer_follows": 0.982}
+{"idx": 189, "level": 6, "cell": "swap1_entries_2", "n": 278, "dec_donor": 0.917, "mon_actual": 0.924, "answer_follows": 0.982}
+{"idx": 190, "level": 6, "cell": "swap1_input_3", "n": 278, "dec_donor": 0.597, "mon_actual": 0.59, "answer_follows": 0.982}
+{"idx": 191, "level": 6, "cell": "swap1_entries_3", "n": 278, "dec_donor": 0.871, "mon_actual": 0.871, "answer_follows": 0.982}
+{"idx": 192, "level": 6, "cell": "swap1_input_4", "n": 278, "dec_donor": 0.568, "mon_actual": 0.565, "answer_follows": 0.982}
+{"idx": 193, "level": 6, "cell": "swap1_entries_4", "n": 278, "dec_donor": 0.835, "mon_actual": 0.835, "answer_follows": 0.982}
+{"idx": 194, "level": 6, "cell": "swap1_input_5", "n": 278, "dec_donor": 0.525, "mon_actual": 0.529, "answer_follows": 0.982}
+{"idx": 195, "level": 6, "cell": "swap1_entries_5", "n": 278, "dec_donor": 0.719, "mon_actual": 0.723, "answer_follows": 0.982}
+{"idx": 196, "level": 6, "cell": "swap2_input_2", "n": 278, "dec_donor": 0.662, "mon_actual": 0.658, "answer_follows": 0.996}
+{"idx": 197, "level": 6, "cell": "swap2_entries_2", "n": 278, "dec_donor": 0.942, "mon_actual": 0.939, "answer_follows": 0.996}
+{"idx": 198, "level": 6, "cell": "swap2_input_3", "n": 278, "dec_donor": 0.644, "mon_actual": 0.647, "answer_follows": 0.996}
+{"idx": 199, "level": 6, "cell": "swap2_entries_3", "n": 278, "dec_donor": 0.892, "mon_actual": 0.896, "answer_follows": 0.996}
+{"idx": 200, "level": 6, "cell": "swap2_input_4", "n": 278, "dec_donor": 0.558, "mon_actual": 0.558, "answer_follows": 0.996}
+{"idx": 201, "level": 6, "cell": "swap2_entries_4", "n": 278, "dec_donor": 0.813, "mon_actual": 0.817, "answer_follows": 0.996}
+{"idx": 202, "level": 6, "cell": "swap2_input_5", "n": 278, "dec_donor": 0.504, "mon_actual": 0.504, "answer_follows": 0.996}
+{"idx": 203, "level": 6, "cell": "swap2_entries_5", "n": 278, "dec_donor": 0.748, "mon_actual": 0.752, "answer_follows": 0.996}
+{"idx": 204, "level": 6, "cell": "swap3_input_3", "n": 278, "dec_donor": 0.615, "mon_actual": 0.604, "answer_follows": 0.982}
+{"idx": 205, "level": 6, "cell": "swap3_entries_3", "n": 278, "dec_donor": 0.917, "mon_actual": 0.899, "answer_follows": 0.982}
+{"idx": 206, "level": 6, "cell": "swap3_input_4", "n": 278, "dec_donor": 0.579, "mon_actual": 0.572, "answer_follows": 0.982}
+{"idx": 207, "level": 6, "cell": "swap3_entries_4", "n": 278, "dec_donor": 0.809, "mon_actual": 0.799, "answer_follows": 0.982}
+{"idx": 208, "level": 6, "cell": "swap3_input_5", "n": 278, "dec_donor": 0.529, "mon_actual": 0.529, "answer_follows": 0.982}
+{"idx": 209, "level": 6, "cell": "swap3_entries_5", "n": 278, "dec_donor": 0.784, "mon_actual": 0.777, "answer_follows": 0.982}
+{"idx": 210, "level": 6, "cell": "swap4_input_4", "n": 278, "dec_donor": 0.536, "mon_actual": 0.532, "answer_follows": 0.996}
+{"idx": 211, "level": 6, "cell": "swap4_entries_4", "n": 278, "dec_donor": 0.827, "mon_actual": 0.824, "answer_follows": 0.996}
+{"idx": 212, "level": 6, "cell": "swap4_input_5", "n": 278, "dec_donor": 0.536, "mon_actual": 0.536, "answer_follows": 0.996}
+{"idx": 213, "level": 6, "cell": "swap4_entries_5", "n": 278, "dec_donor": 0.77, "mon_actual": 0.77, "answer_follows": 0.996}
+{"idx": 214, "level": 6, "cell": "swap5_input_5", "n": 278, "dec_donor": 0.486, "mon_actual": 0.158, "answer_follows": 0.198}
+{"idx": 215, "level": 6, "cell": "swap5_entries_5", "n": 278, "dec_donor": 0.608, "mon_actual": 0.212, "answer_follows": 0.198}
+{"idx": 216, "level": 7, "cell": "input_0", "dec_right": 0.978, "dec_wrong": 1.0, "mon_right": 0.978, "mon_wrong": 0.0, "n_wrong": 12}
+{"idx": 217, "level": 7, "cell": "input_1", "dec_right": 0.773, "dec_wrong": 0.583, "mon_right": 0.777, "mon_wrong": 0.083, "n_wrong": 12}
+{"idx": 218, "level": 7, "cell": "input_2", "dec_right": 0.711, "dec_wrong": 0.417, "mon_right": 0.711, "mon_wrong": 0.167, "n_wrong": 12}
+{"idx": 219, "level": 7, "cell": "input_3", "dec_right": 0.623, "dec_wrong": 0.583, "mon_right": 0.626, "mon_wrong": 0.333, "n_wrong": 12}
+{"idx": 220, "level": 7, "cell": "input_4", "dec_right": 0.575, "dec_wrong": 0.333, "mon_right": 0.575, "mon_wrong": 0.167, "n_wrong": 12}
+{"idx": 221, "level": 7, "cell": "input_5", "dec_right": 0.407, "dec_wrong": 0.25, "mon_right": 0.407, "mon_wrong": 0.167, "n_wrong": 12}
+{"idx": 222, "level": 7, "cell": "entries_0", "dec_right": 0.985, "dec_wrong": 1.0, "mon_right": 0.985, "mon_wrong": 0.0, "n_wrong": 12}
+{"idx": 223, "level": 7, "cell": "entries_1", "dec_right": 0.963, "dec_wrong": 0.75, "mon_right": 0.963, "mon_wrong": 0.0, "n_wrong": 12}
+{"idx": 224, "level": 7, "cell": "entries_2", "dec_right": 0.941, "dec_wrong": 0.583, "mon_right": 0.941, "mon_wrong": 0.167, "n_wrong": 12}
+{"idx": 225, "level": 7, "cell": "entries_3", "dec_right": 0.908, "dec_wrong": 0.75, "mon_right": 0.908, "mon_wrong": 0.083, "n_wrong": 12}
+{"idx": 226, "level": 7, "cell": "entries_4", "dec_right": 0.806, "dec_wrong": 0.333, "mon_right": 0.806, "mon_wrong": 0.25, "n_wrong": 12}
+{"idx": 227, "level": 7, "cell": "entries_5", "dec_right": 0.78, "dec_wrong": 0.083, "mon_right": 0.78, "mon_wrong": 0.25, "n_wrong": 12}
+{"idx": 228, "level": 7, "cell": "swap0_input_0", "n": 273, "dec_donor": 0.989, "mon_actual": 0.956, "answer_follows": 0.967}
+{"idx": 229, "level": 7, "cell": "swap0_entries_0", "n": 273, "dec_donor": 1.0, "mon_actual": 0.967, "answer_follows": 0.967}
+{"idx": 230, "level": 7, "cell": "swap0_input_1", "n": 273, "dec_donor": 0.751, "mon_actual": 0.74, "answer_follows": 0.967}
+{"idx": 231, "level": 7, "cell": "swap0_entries_1", "n": 273, "dec_donor": 0.945, "mon_actual": 0.916, "answer_follows": 0.967}
+{"idx": 232, "level": 7, "cell": "swap0_input_2", "n": 273, "dec_donor": 0.703, "mon_actual": 0.696, "answer_follows": 0.967}
+{"idx": 233, "level": 7, "cell": "swap0_entries_2", "n": 273, "dec_donor": 0.934, "mon_actual": 0.908, "answer_follows": 0.967}
+{"idx": 234, "level": 7, "cell": "swap0_input_3", "n": 273, "dec_donor": 0.663, "mon_actual": 0.656, "answer_follows": 0.967}
+{"idx": 235, "level": 7, "cell": "swap0_entries_3", "n": 273, "dec_donor": 0.897, "mon_actual": 0.864, "answer_follows": 0.967}
+{"idx": 236, "level": 7, "cell": "swap0_input_4", "n": 273, "dec_donor": 0.586, "mon_actual": 0.579, "answer_follows": 0.967}
+{"idx": 237, "level": 7, "cell": "swap0_entries_4", "n": 273, "dec_donor": 0.81, "mon_actual": 0.791, "answer_follows": 0.967}
+{"idx": 238, "level": 7, "cell": "swap0_input_5", "n": 273, "dec_donor": 0.429, "mon_actual": 0.41, "answer_follows": 0.967}
+{"idx": 239, "level": 7, "cell": "swap0_entries_5", "n": 273, "dec_donor": 0.725, "mon_actual": 0.714, "answer_follows": 0.967}
+{"idx": 240, "level": 7, "cell": "swap1_input_1", "n": 273, "dec_donor": 0.78, "mon_actual": 0.766, "answer_follows": 0.974}
+{"idx": 241, "level": 7, "cell": "swap1_entries_1", "n": 273, "dec_donor": 0.96, "mon_actual": 0.938, "answer_follows": 0.974}
+{"idx": 242, "level": 7, "cell": "swap1_input_2", "n": 273, "dec_donor": 0.707, "mon_actual": 0.692, "answer_follows": 0.974}
+{"idx": 243, "level": 7, "cell": "swap1_entries_2", "n": 273, "dec_donor": 0.941, "mon_actual": 0.919, "answer_follows": 0.974}
+{"idx": 244, "level": 7, "cell": "swap1_input_3", "n": 273, "dec_donor": 0.619, "mon_actual": 0.612, "answer_follows": 0.974}
+{"idx": 245, "level": 7, "cell": "swap1_entries_3", "n": 273, "dec_donor": 0.883, "mon_actual": 0.883, "answer_follows": 0.974}
+{"idx": 246, "level": 7, "cell": "swap1_input_4", "n": 273, "dec_donor": 0.542, "mon_actual": 0.549, "answer_follows": 0.974}
+{"idx": 247, "level": 7, "cell": "swap1_entries_4", "n": 273, "dec_donor": 0.821, "mon_actual": 0.817, "answer_follows": 0.974}
+{"idx": 248, "level": 7, "cell": "swap1_input_5", "n": 273, "dec_donor": 0.443, "mon_actual": 0.436, "answer_follows": 0.974}
+{"idx": 249, "level": 7, "cell": "swap1_entries_5", "n": 273, "dec_donor": 0.696, "mon_actual": 0.703, "answer_follows": 0.974}
+{"idx": 250, "level": 7, "cell": "swap2_input_2", "n": 273, "dec_donor": 0.722, "mon_actual": 0.696, "answer_follows": 0.952}
+{"idx": 251, "level": 7, "cell": "swap2_entries_2", "n": 273, "dec_donor": 0.949, "mon_actual": 0.912, "answer_follows": 0.952}
+{"idx": 252, "level": 7, "cell": "swap2_input_3", "n": 273, "dec_donor": 0.63, "mon_actual": 0.637, "answer_follows": 0.952}
+{"idx": 253, "level": 7, "cell": "swap2_entries_3", "n": 273, "dec_donor": 0.89, "mon_actual": 0.864, "answer_follows": 0.952}
+{"idx": 254, "level": 7, "cell": "swap2_input_4", "n": 273, "dec_donor": 0.542, "mon_actual": 0.538, "answer_follows": 0.952}
+{"idx": 255, "level": 7, "cell": "swap2_entries_4", "n": 273, "dec_donor": 0.799, "mon_actual": 0.766, "answer_follows": 0.952}
+{"idx": 256, "level": 7, "cell": "swap2_input_5", "n": 273, "dec_donor": 0.381, "mon_actual": 0.377, "answer_follows": 0.952}
+{"idx": 257, "level": 7, "cell": "swap2_entries_5", "n": 273, "dec_donor": 0.725, "mon_actual": 0.711, "answer_follows": 0.952}
+{"idx": 258, "level": 7, "cell": "swap3_input_3", "n": 273, "dec_donor": 0.59, "mon_actual": 0.575, "answer_follows": 0.934}
+{"idx": 259, "level": 7, "cell": "swap3_entries_3", "n": 273, "dec_donor": 0.875, "mon_actual": 0.835, "answer_follows": 0.934}
+{"idx": 260, "level": 7, "cell": "swap3_input_4", "n": 273, "dec_donor": 0.527, "mon_actual": 0.524, "answer_follows": 0.934}
+{"idx": 261, "level": 7, "cell": "swap3_entries_4", "n": 273, "dec_donor": 0.799, "mon_actual": 0.784, "answer_follows": 0.934}
+{"idx": 262, "level": 7, "cell": "swap3_input_5", "n": 273, "dec_donor": 0.425, "mon_actual": 0.421, "answer_follows": 0.934}
+{"idx": 263, "level": 7, "cell": "swap3_entries_5", "n": 273, "dec_donor": 0.722, "mon_actual": 0.711, "answer_follows": 0.934}
+{"idx": 264, "level": 7, "cell": "swap4_input_4", "n": 273, "dec_donor": 0.505, "mon_actual": 0.487, "answer_follows": 0.945}
+{"idx": 265, "level": 7, "cell": "swap4_entries_4", "n": 273, "dec_donor": 0.736, "mon_actual": 0.711, "answer_follows": 0.945}
+{"idx": 266, "level": 7, "cell": "swap4_input_5", "n": 273, "dec_donor": 0.414, "mon_actual": 0.414, "answer_follows": 0.945}
+{"idx": 267, "level": 7, "cell": "swap4_entries_5", "n": 273, "dec_donor": 0.711, "mon_actual": 0.696, "answer_follows": 0.945}
+{"idx": 268, "level": 7, "cell": "swap5_input_5", "n": 273, "dec_donor": 0.421, "mon_actual": 0.414, "answer_follows": 0.945}
+{"idx": 269, "level": 7, "cell": "swap5_entries_5", "n": 273, "dec_donor": 0.703, "mon_actual": 0.718, "answer_follows": 0.945}

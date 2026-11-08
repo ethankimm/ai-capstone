@@ -1,0 +1,984 @@
+{"idx": 0, "model": "simsf", "level": 3, "cell": "rule1|4|v1", "acc": 0.304, "shuf": 0.007}
+{"idx": 1, "model": "simsf", "level": 3, "cell": "rule1|4|v2", "acc": 0.042}
+{"idx": 2, "model": "simsf", "level": 3, "cell": "rule2|4|v1", "acc": 0.252}
+{"idx": 3, "model": "simsf", "level": 3, "cell": "rule2|4|v2", "acc": 0.038, "shuf": 0.021}
+{"idx": 4, "model": "simsf", "level": 3, "cell": "rule3|4|v1", "acc": 0.231}
+{"idx": 5, "model": "simsf", "level": 3, "cell": "rule3|4|v2", "acc": 0.028}
+{"idx": 6, "model": "simsf", "level": 3, "cell": "bot|4|v1", "acc": 0.29, "shuf": 0.017}
+{"idx": 7, "model": "simsf", "level": 3, "cell": "bot|4|v2", "acc": 0.028, "shuf": 0.014}
+{"idx": 8, "model": "simsf", "level": 3, "cell": "rule1|8|v1", "acc": 0.339, "shuf": 0.017}
+{"idx": 9, "model": "simsf", "level": 3, "cell": "rule1|8|v2", "acc": 0.035}
+{"idx": 10, "model": "simsf", "level": 3, "cell": "rule2|8|v1", "acc": 0.164}
+{"idx": 11, "model": "simsf", "level": 3, "cell": "rule2|8|v2", "acc": 0.031, "shuf": 0.003}
+{"idx": 12, "model": "simsf", "level": 3, "cell": "rule3|8|v1", "acc": 0.105}
+{"idx": 13, "model": "simsf", "level": 3, "cell": "rule3|8|v2", "acc": 0.021}
+{"idx": 14, "model": "simsf", "level": 3, "cell": "bot|8|v1", "acc": 0.322, "shuf": 0.017}
+{"idx": 15, "model": "simsf", "level": 3, "cell": "bot|8|v2", "acc": 0.028, "shuf": 0.01}
+{"idx": 16, "model": "simsf", "level": 3, "cell": "rule1|12|v1", "acc": 0.458, "shuf": 0.017}
+{"idx": 17, "model": "simsf", "level": 3, "cell": "rule1|12|v2", "acc": 0.08}
+{"idx": 18, "model": "simsf", "level": 3, "cell": "rule2|12|v1", "acc": 0.122}
+{"idx": 19, "model": "simsf", "level": 3, "cell": "rule2|12|v2", "acc": 0.031, "shuf": 0.021}
+{"idx": 20, "model": "simsf", "level": 3, "cell": "rule3|12|v1", "acc": 0.101}
+{"idx": 21, "model": "simsf", "level": 3, "cell": "rule3|12|v2", "acc": 0.017}
+{"idx": 22, "model": "simsf", "level": 3, "cell": "bot|12|v1", "acc": 0.517, "shuf": 0.028}
+{"idx": 23, "model": "simsf", "level": 3, "cell": "bot|12|v2", "acc": 0.108, "shuf": 0.031}
+{"idx": 24, "model": "simsf", "level": 4, "cell": "rule1|4|v1", "acc": 0.283, "shuf": 0.024}
+{"idx": 25, "model": "simsf", "level": 4, "cell": "rule1|4|v2", "acc": 0.035}
+{"idx": 26, "model": "simsf", "level": 4, "cell": "rule1|4|v3", "acc": 0.014}
+{"idx": 27, "model": "simsf", "level": 4, "cell": "rule2|4|v1", "acc": 0.196}
+{"idx": 28, "model": "simsf", "level": 4, "cell": "rule2|4|v2", "acc": 0.038, "shuf": 0.014}
+{"idx": 29, "model": "simsf", "level": 4, "cell": "rule2|4|v3", "acc": 0.021}
+{"idx": 30, "model": "simsf", "level": 4, "cell": "rule3|4|v1", "acc": 0.199}
+{"idx": 31, "model": "simsf", "level": 4, "cell": "rule3|4|v2", "acc": 0.038}
+{"idx": 32, "model": "simsf", "level": 4, "cell": "rule3|4|v3", "acc": 0.021, "shuf": 0.031}
+{"idx": 33, "model": "simsf", "level": 4, "cell": "rule4|4|v1", "acc": 0.182}
+{"idx": 34, "model": "simsf", "level": 4, "cell": "rule4|4|v2", "acc": 0.021}
+{"idx": 35, "model": "simsf", "level": 4, "cell": "rule4|4|v3", "acc": 0.017}
+{"idx": 36, "model": "simsf", "level": 4, "cell": "bot|4|v1", "acc": 0.248, "shuf": 0.007}
+{"idx": 37, "model": "simsf", "level": 4, "cell": "bot|4|v2", "acc": 0.049, "shuf": 0.01}
+{"idx": 38, "model": "simsf", "level": 4, "cell": "bot|4|v3", "acc": 0.017, "shuf": 0.017}
+{"idx": 39, "model": "simsf", "level": 4, "cell": "rule1|8|v1", "acc": 0.329, "shuf": 0.007}
+{"idx": 40, "model": "simsf", "level": 4, "cell": "rule1|8|v2", "acc": 0.049}
+{"idx": 41, "model": "simsf", "level": 4, "cell": "rule1|8|v3", "acc": 0.014}
+{"idx": 42, "model": "simsf", "level": 4, "cell": "rule2|8|v1", "acc": 0.133}
+{"idx": 43, "model": "simsf", "level": 4, "cell": "rule2|8|v2", "acc": 0.031, "shuf": 0.017}
+{"idx": 44, "model": "simsf", "level": 4, "cell": "rule2|8|v3", "acc": 0.024}
+{"idx": 45, "model": "simsf", "level": 4, "cell": "rule3|8|v1", "acc": 0.122}
+{"idx": 46, "model": "simsf", "level": 4, "cell": "rule3|8|v2", "acc": 0.038}
+{"idx": 47, "model": "simsf", "level": 4, "cell": "rule3|8|v3", "acc": 0.031, "shuf": 0.024}
+{"idx": 48, "model": "simsf", "level": 4, "cell": "rule4|8|v1", "acc": 0.108}
+{"idx": 49, "model": "simsf", "level": 4, "cell": "rule4|8|v2", "acc": 0.028}
+{"idx": 50, "model": "simsf", "level": 4, "cell": "rule4|8|v3", "acc": 0.017}
+{"idx": 51, "model": "simsf", "level": 4, "cell": "bot|8|v1", "acc": 0.283, "shuf": 0.017}
+{"idx": 52, "model": "simsf", "level": 4, "cell": "bot|8|v2", "acc": 0.066, "shuf": 0.021}
+{"idx": 53, "model": "simsf", "level": 4, "cell": "bot|8|v3", "acc": 0.024, "shuf": 0.01}
+{"idx": 54, "model": "simsf", "level": 4, "cell": "rule1|12|v1", "acc": 0.378, "shuf": 0.01}
+{"idx": 55, "model": "simsf", "level": 4, "cell": "rule1|12|v2", "acc": 0.052}
+{"idx": 56, "model": "simsf", "level": 4, "cell": "rule1|12|v3", "acc": 0.01}
+{"idx": 57, "model": "simsf", "level": 4, "cell": "rule2|12|v1", "acc": 0.101}
+{"idx": 58, "model": "simsf", "level": 4, "cell": "rule2|12|v2", "acc": 0.024, "shuf": 0.031}
+{"idx": 59, "model": "simsf", "level": 4, "cell": "rule2|12|v3", "acc": 0.031}
+{"idx": 60, "model": "simsf", "level": 4, "cell": "rule3|12|v1", "acc": 0.08}
+{"idx": 61, "model": "simsf", "level": 4, "cell": "rule3|12|v2", "acc": 0.031}
+{"idx": 62, "model": "simsf", "level": 4, "cell": "rule3|12|v3", "acc": 0.024, "shuf": 0.031}
+{"idx": 63, "model": "simsf", "level": 4, "cell": "rule4|12|v1", "acc": 0.077}
+{"idx": 64, "model": "simsf", "level": 4, "cell": "rule4|12|v2", "acc": 0.028}
+{"idx": 65, "model": "simsf", "level": 4, "cell": "rule4|12|v3", "acc": 0.021}
+{"idx": 66, "model": "simsf", "level": 4, "cell": "bot|12|v1", "acc": 0.458, "shuf": 0.038}
+{"idx": 67, "model": "simsf", "level": 4, "cell": "bot|12|v2", "acc": 0.084, "shuf": 0.007}
+{"idx": 68, "model": "simsf", "level": 4, "cell": "bot|12|v3", "acc": 0.017, "shuf": 0.014}
+{"idx": 69, "model": "simsf", "level": 5, "cell": "rule1|4|v1", "acc": 0.287, "shuf": 0.021}
+{"idx": 70, "model": "simsf", "level": 5, "cell": "rule1|4|v2", "acc": 0.042}
+{"idx": 71, "model": "simsf", "level": 5, "cell": "rule1|4|v3", "acc": 0.028}
+{"idx": 72, "model": "simsf", "level": 5, "cell": "rule1|4|v4", "acc": 0.021}
+{"idx": 73, "model": "simsf", "level": 5, "cell": "rule2|4|v1", "acc": 0.231}
+{"idx": 74, "model": "simsf", "level": 5, "cell": "rule2|4|v2", "acc": 0.031, "shuf": 0.014}
+{"idx": 75, "model": "simsf", "level": 5, "cell": "rule2|4|v3", "acc": 0.01}
+{"idx": 76, "model": "simsf", "level": 5, "cell": "rule2|4|v4", "acc": 0.028}
+{"idx": 77, "model": "simsf", "level": 5, "cell": "rule3|4|v1", "acc": 0.178}
+{"idx": 78, "model": "simsf", "level": 5, "cell": "rule3|4|v2", "acc": 0.021}
+{"idx": 79, "model": "simsf", "level": 5, "cell": "rule3|4|v3", "acc": 0.021, "shuf": 0.007}
+{"idx": 80, "model": "simsf", "level": 5, "cell": "rule3|4|v4", "acc": 0.031}
+{"idx": 81, "model": "simsf", "level": 5, "cell": "rule4|4|v1", "acc": 0.189}
+{"idx": 82, "model": "simsf", "level": 5, "cell": "rule4|4|v2", "acc": 0.017}
+{"idx": 83, "model": "simsf", "level": 5, "cell": "rule4|4|v3", "acc": 0.017}
+{"idx": 84, "model": "simsf", "level": 5, "cell": "rule4|4|v4", "acc": 0.017, "shuf": 0.01}
+{"idx": 85, "model": "simsf", "level": 5, "cell": "rule5|4|v1", "acc": 0.175}
+{"idx": 86, "model": "simsf", "level": 5, "cell": "rule5|4|v2", "acc": 0.021}
+{"idx": 87, "model": "simsf", "level": 5, "cell": "rule5|4|v3", "acc": 0.035}
+{"idx": 88, "model": "simsf", "level": 5, "cell": "rule5|4|v4", "acc": 0.028}
+{"idx": 89, "model": "simsf", "level": 5, "cell": "bot|4|v1", "acc": 0.262, "shuf": 0.017}
+{"idx": 90, "model": "simsf", "level": 5, "cell": "bot|4|v2", "acc": 0.045, "shuf": 0.028}
+{"idx": 91, "model": "simsf", "level": 5, "cell": "bot|4|v3", "acc": 0.031, "shuf": 0.014}
+{"idx": 92, "model": "simsf", "level": 5, "cell": "bot|4|v4", "acc": 0.035, "shuf": 0.01}
+{"idx": 93, "model": "simsf", "level": 5, "cell": "rule1|8|v1", "acc": 0.318, "shuf": 0.017}
+{"idx": 94, "model": "simsf", "level": 5, "cell": "rule1|8|v2", "acc": 0.049}
+{"idx": 95, "model": "simsf", "level": 5, "cell": "rule1|8|v3", "acc": 0.017}
+{"idx": 96, "model": "simsf", "level": 5, "cell": "rule1|8|v4", "acc": 0.017}
+{"idx": 97, "model": "simsf", "level": 5, "cell": "rule2|8|v1", "acc": 0.171}
+{"idx": 98, "model": "simsf", "level": 5, "cell": "rule2|8|v2", "acc": 0.035, "shuf": 0.01}
+{"idx": 99, "model": "simsf", "level": 5, "cell": "rule2|8|v3", "acc": 0.021}
+{"idx": 100, "model": "simsf", "level": 5, "cell": "rule2|8|v4", "acc": 0.024}
+{"idx": 101, "model": "simsf", "level": 5, "cell": "rule3|8|v1", "acc": 0.08}
+{"idx": 102, "model": "simsf", "level": 5, "cell": "rule3|8|v2", "acc": 0.01}
+{"idx": 103, "model": "simsf", "level": 5, "cell": "rule3|8|v3", "acc": 0.028, "shuf": 0.014}
+{"idx": 104, "model": "simsf", "level": 5, "cell": "rule3|8|v4", "acc": 0.017}
+{"idx": 105, "model": "simsf", "level": 5, "cell": "rule4|8|v1", "acc": 0.084}
+{"idx": 106, "model": "simsf", "level": 5, "cell": "rule4|8|v2", "acc": 0.01}
+{"idx": 107, "model": "simsf", "level": 5, "cell": "rule4|8|v3", "acc": 0.024}
+{"idx": 108, "model": "simsf", "level": 5, "cell": "rule4|8|v4", "acc": 0.021, "shuf": 0.031}
+{"idx": 109, "model": "simsf", "level": 5, "cell": "rule5|8|v1", "acc": 0.084}
+{"idx": 110, "model": "simsf", "level": 5, "cell": "rule5|8|v2", "acc": 0.007}
+{"idx": 111, "model": "simsf", "level": 5, "cell": "rule5|8|v3", "acc": 0.028}
+{"idx": 112, "model": "simsf", "level": 5, "cell": "rule5|8|v4", "acc": 0.024}
+{"idx": 113, "model": "simsf", "level": 5, "cell": "bot|8|v1", "acc": 0.297, "shuf": 0.01}
+{"idx": 114, "model": "simsf", "level": 5, "cell": "bot|8|v2", "acc": 0.052, "shuf": 0.014}
+{"idx": 115, "model": "simsf", "level": 5, "cell": "bot|8|v3", "acc": 0.028, "shuf": 0.014}
+{"idx": 116, "model": "simsf", "level": 5, "cell": "bot|8|v4", "acc": 0.031, "shuf": 0.003}
+{"idx": 117, "model": "simsf", "level": 5, "cell": "rule1|12|v1", "acc": 0.409, "shuf": 0.017}
+{"idx": 118, "model": "simsf", "level": 5, "cell": "rule1|12|v2", "acc": 0.052}
+{"idx": 119, "model": "simsf", "level": 5, "cell": "rule1|12|v3", "acc": 0.024}
+{"idx": 120, "model": "simsf", "level": 5, "cell": "rule1|12|v4", "acc": 0.028}
+{"idx": 121, "model": "simsf", "level": 5, "cell": "rule2|12|v1", "acc": 0.101}
+{"idx": 122, "model": "simsf", "level": 5, "cell": "rule2|12|v2", "acc": 0.045, "shuf": 0.01}
+{"idx": 123, "model": "simsf", "level": 5, "cell": "rule2|12|v3", "acc": 0.028}
+{"idx": 124, "model": "simsf", "level": 5, "cell": "rule2|12|v4", "acc": 0.024}
+{"idx": 125, "model": "simsf", "level": 5, "cell": "rule3|12|v1", "acc": 0.059}
+{"idx": 126, "model": "simsf", "level": 5, "cell": "rule3|12|v2", "acc": 0.007}
+{"idx": 127, "model": "simsf", "level": 5, "cell": "rule3|12|v3", "acc": 0.021, "shuf": 0.028}
+{"idx": 128, "model": "simsf", "level": 5, "cell": "rule3|12|v4", "acc": 0.014}
+{"idx": 129, "model": "simsf", "level": 5, "cell": "rule4|12|v1", "acc": 0.052}
+{"idx": 130, "model": "simsf", "level": 5, "cell": "rule4|12|v2", "acc": 0.017}
+{"idx": 131, "model": "simsf", "level": 5, "cell": "rule4|12|v3", "acc": 0.017}
+{"idx": 132, "model": "simsf", "level": 5, "cell": "rule4|12|v4", "acc": 0.021, "shuf": 0.017}
+{"idx": 133, "model": "simsf", "level": 5, "cell": "rule5|12|v1", "acc": 0.049}
+{"idx": 134, "model": "simsf", "level": 5, "cell": "rule5|12|v2", "acc": 0.01}
+{"idx": 135, "model": "simsf", "level": 5, "cell": "rule5|12|v3", "acc": 0.017}
+{"idx": 136, "model": "simsf", "level": 5, "cell": "rule5|12|v4", "acc": 0.017}
+{"idx": 137, "model": "simsf", "level": 5, "cell": "bot|12|v1", "acc": 0.479, "shuf": 0.021}
+{"idx": 138, "model": "simsf", "level": 5, "cell": "bot|12|v2", "acc": 0.084, "shuf": 0.007}
+{"idx": 139, "model": "simsf", "level": 5, "cell": "bot|12|v3", "acc": 0.028, "shuf": 0.017}
+{"idx": 140, "model": "simsf", "level": 5, "cell": "bot|12|v4", "acc": 0.042, "shuf": 0.017}
+{"idx": 141, "model": "simsf", "level": 6, "cell": "rule1|4|v1", "acc": 0.267, "shuf": 0.007}
+{"idx": 142, "model": "simsf", "level": 6, "cell": "rule1|4|v2", "acc": 0.056}
+{"idx": 143, "model": "simsf", "level": 6, "cell": "rule1|4|v3", "acc": 0.028}
+{"idx": 144, "model": "simsf", "level": 6, "cell": "rule1|4|v4", "acc": 0.018}
+{"idx": 145, "model": "simsf", "level": 6, "cell": "rule1|4|v5", "acc": 0.032}
+{"idx": 146, "model": "simsf", "level": 6, "cell": "rule2|4|v1", "acc": 0.161}
+{"idx": 147, "model": "simsf", "level": 6, "cell": "rule2|4|v2", "acc": 0.014, "shuf": 0.011}
+{"idx": 148, "model": "simsf", "level": 6, "cell": "rule2|4|v3", "acc": 0.028}
+{"idx": 149, "model": "simsf", "level": 6, "cell": "rule2|4|v4", "acc": 0.011}
+{"idx": 150, "model": "simsf", "level": 6, "cell": "rule2|4|v5", "acc": 0.018}
+{"idx": 151, "model": "simsf", "level": 6, "cell": "rule3|4|v1", "acc": 0.14}
+{"idx": 152, "model": "simsf", "level": 6, "cell": "rule3|4|v2", "acc": 0.025}
+{"idx": 153, "model": "simsf", "level": 6, "cell": "rule3|4|v3", "acc": 0.021, "shuf": 0.028}
+{"idx": 154, "model": "simsf", "level": 6, "cell": "rule3|4|v4", "acc": 0.011}
+{"idx": 155, "model": "simsf", "level": 6, "cell": "rule3|4|v5", "acc": 0.018}
+{"idx": 156, "model": "simsf", "level": 6, "cell": "rule4|4|v1", "acc": 0.14}
+{"idx": 157, "model": "simsf", "level": 6, "cell": "rule4|4|v2", "acc": 0.032}
+{"idx": 158, "model": "simsf", "level": 6, "cell": "rule4|4|v3", "acc": 0.014}
+{"idx": 159, "model": "simsf", "level": 6, "cell": "rule4|4|v4", "acc": 0.014, "shuf": 0.028}
+{"idx": 160, "model": "simsf", "level": 6, "cell": "rule4|4|v5", "acc": 0.018}
+{"idx": 161, "model": "simsf", "level": 6, "cell": "rule5|4|v1", "acc": 0.14}
+{"idx": 162, "model": "simsf", "level": 6, "cell": "rule5|4|v2", "acc": 0.018}
+{"idx": 163, "model": "simsf", "level": 6, "cell": "rule5|4|v3", "acc": 0.018}
+{"idx": 164, "model": "simsf", "level": 6, "cell": "rule5|4|v4", "acc": 0.025}
+{"idx": 165, "model": "simsf", "level": 6, "cell": "rule5|4|v5", "acc": 0.021, "shuf": 0.014}
+{"idx": 166, "model": "simsf", "level": 6, "cell": "rule6|4|v1", "acc": 0.137}
+{"idx": 167, "model": "simsf", "level": 6, "cell": "rule6|4|v2", "acc": 0.011}
+{"idx": 168, "model": "simsf", "level": 6, "cell": "rule6|4|v3", "acc": 0.014}
+{"idx": 169, "model": "simsf", "level": 6, "cell": "rule6|4|v4", "acc": 0.035}
+{"idx": 170, "model": "simsf", "level": 6, "cell": "rule6|4|v5", "acc": 0.011}
+{"idx": 171, "model": "simsf", "level": 6, "cell": "bot|4|v1", "acc": 0.2, "shuf": 0.011}
+{"idx": 172, "model": "simsf", "level": 6, "cell": "bot|4|v2", "acc": 0.025, "shuf": 0.014}
+{"idx": 173, "model": "simsf", "level": 6, "cell": "bot|4|v3", "acc": 0.007, "shuf": 0.007}
+{"idx": 174, "model": "simsf", "level": 6, "cell": "bot|4|v4", "acc": 0.018, "shuf": 0.035}
+{"idx": 175, "model": "simsf", "level": 6, "cell": "bot|4|v5", "acc": 0.014, "shuf": 0.025}
+{"idx": 176, "model": "simsf", "level": 6, "cell": "rule1|8|v1", "acc": 0.298, "shuf": 0.014}
+{"idx": 177, "model": "simsf", "level": 6, "cell": "rule1|8|v2", "acc": 0.046}
+{"idx": 178, "model": "simsf", "level": 6, "cell": "rule1|8|v3", "acc": 0.028}
+{"idx": 179, "model": "simsf", "level": 6, "cell": "rule1|8|v4", "acc": 0.021}
+{"idx": 180, "model": "simsf", "level": 6, "cell": "rule1|8|v5", "acc": 0.004}
+{"idx": 181, "model": "simsf", "level": 6, "cell": "rule2|8|v1", "acc": 0.137}
+{"idx": 182, "model": "simsf", "level": 6, "cell": "rule2|8|v2", "acc": 0.021, "shuf": 0.007}
+{"idx": 183, "model": "simsf", "level": 6, "cell": "rule2|8|v3", "acc": 0.028}
+{"idx": 184, "model": "simsf", "level": 6, "cell": "rule2|8|v4", "acc": 0.021}
+{"idx": 185, "model": "simsf", "level": 6, "cell": "rule2|8|v5", "acc": 0.011}
+{"idx": 186, "model": "simsf", "level": 6, "cell": "rule3|8|v1", "acc": 0.081}
+{"idx": 187, "model": "simsf", "level": 6, "cell": "rule3|8|v2", "acc": 0.011}
+{"idx": 188, "model": "simsf", "level": 6, "cell": "rule3|8|v3", "acc": 0.011, "shuf": 0.014}
+{"idx": 189, "model": "simsf", "level": 6, "cell": "rule3|8|v4", "acc": 0.018}
+{"idx": 190, "model": "simsf", "level": 6, "cell": "rule3|8|v5", "acc": 0.021}
+{"idx": 191, "model": "simsf", "level": 6, "cell": "rule4|8|v1", "acc": 0.053}
+{"idx": 192, "model": "simsf", "level": 6, "cell": "rule4|8|v2", "acc": 0.018}
+{"idx": 193, "model": "simsf", "level": 6, "cell": "rule4|8|v3", "acc": 0.014}
+{"idx": 194, "model": "simsf", "level": 6, "cell": "rule4|8|v4", "acc": 0.025, "shuf": 0.004}
+{"idx": 195, "model": "simsf", "level": 6, "cell": "rule4|8|v5", "acc": 0.014}
+{"idx": 196, "model": "simsf", "level": 6, "cell": "rule5|8|v1", "acc": 0.088}
+{"idx": 197, "model": "simsf", "level": 6, "cell": "rule5|8|v2", "acc": 0.035}
+{"idx": 198, "model": "simsf", "level": 6, "cell": "rule5|8|v3", "acc": 0.018}
+{"idx": 199, "model": "simsf", "level": 6, "cell": "rule5|8|v4", "acc": 0.032}
+{"idx": 200, "model": "simsf", "level": 6, "cell": "rule5|8|v5", "acc": 0.021, "shuf": 0.018}
+{"idx": 201, "model": "simsf", "level": 6, "cell": "rule6|8|v1", "acc": 0.07}
+{"idx": 202, "model": "simsf", "level": 6, "cell": "rule6|8|v2", "acc": 0.007}
+{"idx": 203, "model": "simsf", "level": 6, "cell": "rule6|8|v3", "acc": 0.014}
+{"idx": 204, "model": "simsf", "level": 6, "cell": "rule6|8|v4", "acc": 0.011}
+{"idx": 205, "model": "simsf", "level": 6, "cell": "rule6|8|v5", "acc": 0.021}
+{"idx": 206, "model": "simsf", "level": 6, "cell": "bot|8|v1", "acc": 0.267, "shuf": 0.018}
+{"idx": 207, "model": "simsf", "level": 6, "cell": "bot|8|v2", "acc": 0.053, "shuf": 0.007}
+{"idx": 208, "model": "simsf", "level": 6, "cell": "bot|8|v3", "acc": 0.011, "shuf": 0.014}
+{"idx": 209, "model": "simsf", "level": 6, "cell": "bot|8|v4", "acc": 0.028, "shuf": 0.018}
+{"idx": 210, "model": "simsf", "level": 6, "cell": "bot|8|v5", "acc": 0.007, "shuf": 0.028}
+{"idx": 211, "model": "simsf", "level": 6, "cell": "rule1|12|v1", "acc": 0.365, "shuf": 0.018}
+{"idx": 212, "model": "simsf", "level": 6, "cell": "rule1|12|v2", "acc": 0.056}
+{"idx": 213, "model": "simsf", "level": 6, "cell": "rule1|12|v3", "acc": 0.021}
+{"idx": 214, "model": "simsf", "level": 6, "cell": "rule1|12|v4", "acc": 0.025}
+{"idx": 215, "model": "simsf", "level": 6, "cell": "rule1|12|v5", "acc": 0.011}
+{"idx": 216, "model": "simsf", "level": 6, "cell": "rule2|12|v1", "acc": 0.063}
+{"idx": 217, "model": "simsf", "level": 6, "cell": "rule2|12|v2", "acc": 0.025, "shuf": 0.025}
+{"idx": 218, "model": "simsf", "level": 6, "cell": "rule2|12|v3", "acc": 0.011}
+{"idx": 219, "model": "simsf", "level": 6, "cell": "rule2|12|v4", "acc": 0.011}
+{"idx": 220, "model": "simsf", "level": 6, "cell": "rule2|12|v5", "acc": 0.018}
+{"idx": 221, "model": "simsf", "level": 6, "cell": "rule3|12|v1", "acc": 0.067}
+{"idx": 222, "model": "simsf", "level": 6, "cell": "rule3|12|v2", "acc": 0.021}
+{"idx": 223, "model": "simsf", "level": 6, "cell": "rule3|12|v3", "acc": 0.018, "shuf": 0.018}
+{"idx": 224, "model": "simsf", "level": 6, "cell": "rule3|12|v4", "acc": 0.021}
+{"idx": 225, "model": "simsf", "level": 6, "cell": "rule3|12|v5", "acc": 0.018}
+{"idx": 226, "model": "simsf", "level": 6, "cell": "rule4|12|v1", "acc": 0.025}
+{"idx": 227, "model": "simsf", "level": 6, "cell": "rule4|12|v2", "acc": 0.032}
+{"idx": 228, "model": "simsf", "level": 6, "cell": "rule4|12|v3", "acc": 0.021}
+{"idx": 229, "model": "simsf", "level": 6, "cell": "rule4|12|v4", "acc": 0.032, "shuf": 0.007}
+{"idx": 230, "model": "simsf", "level": 6, "cell": "rule4|12|v5", "acc": 0.021}
+{"idx": 231, "model": "simsf", "level": 6, "cell": "rule5|12|v1", "acc": 0.021}
+{"idx": 232, "model": "simsf", "level": 6, "cell": "rule5|12|v2", "acc": 0.007}
+{"idx": 233, "model": "simsf", "level": 6, "cell": "rule5|12|v3", "acc": 0.014}
+{"idx": 234, "model": "simsf", "level": 6, "cell": "rule5|12|v4", "acc": 0.028}
+{"idx": 235, "model": "simsf", "level": 6, "cell": "rule5|12|v5", "acc": 0.014, "shuf": 0.025}
+{"idx": 236, "model": "simsf", "level": 6, "cell": "rule6|12|v1", "acc": 0.053}
+{"idx": 237, "model": "simsf", "level": 6, "cell": "rule6|12|v2", "acc": 0.011}
+{"idx": 238, "model": "simsf", "level": 6, "cell": "rule6|12|v3", "acc": 0.018}
+{"idx": 239, "model": "simsf", "level": 6, "cell": "rule6|12|v4", "acc": 0.021}
+{"idx": 240, "model": "simsf", "level": 6, "cell": "rule6|12|v5", "acc": 0.025}
+{"idx": 241, "model": "simsf", "level": 6, "cell": "bot|12|v1", "acc": 0.442, "shuf": 0.007}
+{"idx": 242, "model": "simsf", "level": 6, "cell": "bot|12|v2", "acc": 0.067, "shuf": 0.014}
+{"idx": 243, "model": "simsf", "level": 6, "cell": "bot|12|v3", "acc": 0.028, "shuf": 0.025}
+{"idx": 244, "model": "simsf", "level": 6, "cell": "bot|12|v4", "acc": 0.011, "shuf": 0.014}
+{"idx": 245, "model": "simsf", "level": 6, "cell": "bot|12|v5", "acc": 0.007, "shuf": 0.007}
+{"idx": 246, "model": "stab", "level": 3, "cell": "rule1|4|v1", "acc": 0.332, "shuf": 0.014}
+{"idx": 247, "model": "stab", "level": 3, "cell": "rule1|4|v2", "acc": 0.045}
+{"idx": 248, "model": "stab", "level": 3, "cell": "rule2|4|v1", "acc": 0.105}
+{"idx": 249, "model": "stab", "level": 3, "cell": "rule2|4|v2", "acc": 0.038, "shuf": 0.024}
+{"idx": 250, "model": "stab", "level": 3, "cell": "rule3|4|v1", "acc": 0.052}
+{"idx": 251, "model": "stab", "level": 3, "cell": "rule3|4|v2", "acc": 0.021}
+{"idx": 252, "model": "stab", "level": 3, "cell": "bot|4|v1", "acc": 0.294, "shuf": 0.028}
+{"idx": 253, "model": "stab", "level": 3, "cell": "bot|4|v2", "acc": 0.031, "shuf": 0.014}
+{"idx": 254, "model": "stab", "level": 3, "cell": "rule1|8|v1", "acc": 0.392, "shuf": 0.024}
+{"idx": 255, "model": "stab", "level": 3, "cell": "rule1|8|v2", "acc": 0.077}
+{"idx": 256, "model": "stab", "level": 3, "cell": "rule2|8|v1", "acc": 0.199}
+{"idx": 257, "model": "stab", "level": 3, "cell": "rule2|8|v2", "acc": 0.077, "shuf": 0.014}
+{"idx": 258, "model": "stab", "level": 3, "cell": "rule3|8|v1", "acc": 0.157}
+{"idx": 259, "model": "stab", "level": 3, "cell": "rule3|8|v2", "acc": 0.059}
+{"idx": 260, "model": "stab", "level": 3, "cell": "bot|8|v1", "acc": 0.378, "shuf": 0.024}
+{"idx": 261, "model": "stab", "level": 3, "cell": "bot|8|v2", "acc": 0.084, "shuf": 0.017}
+{"idx": 262, "model": "stab", "level": 3, "cell": "rule1|12|v1", "acc": 0.455, "shuf": 0.021}
+{"idx": 263, "model": "stab", "level": 3, "cell": "rule1|12|v2", "acc": 0.108}
+{"idx": 264, "model": "stab", "level": 3, "cell": "rule2|12|v1", "acc": 0.685}
+{"idx": 265, "model": "stab", "level": 3, "cell": "rule2|12|v2", "acc": 0.353, "shuf": 0.028}
+{"idx": 266, "model": "stab", "level": 3, "cell": "rule3|12|v1", "acc": 0.339}
+{"idx": 267, "model": "stab", "level": 3, "cell": "rule3|12|v2", "acc": 0.552}
+{"idx": 268, "model": "stab", "level": 3, "cell": "bot|12|v1", "acc": 0.57, "shuf": 0.028}
+{"idx": 269, "model": "stab", "level": 3, "cell": "bot|12|v2", "acc": 0.357, "shuf": 0.014}
+{"idx": 270, "model": "stab", "level": 4, "cell": "rule1|4|v1", "acc": 0.297, "shuf": 0.007}
+{"idx": 271, "model": "stab", "level": 4, "cell": "rule1|4|v2", "acc": 0.045}
+{"idx": 272, "model": "stab", "level": 4, "cell": "rule1|4|v3", "acc": 0.014}
+{"idx": 273, "model": "stab", "level": 4, "cell": "rule2|4|v1", "acc": 0.08}
+{"idx": 274, "model": "stab", "level": 4, "cell": "rule2|4|v2", "acc": 0.021, "shuf": 0.003}
+{"idx": 275, "model": "stab", "level": 4, "cell": "rule2|4|v3", "acc": 0.031}
+{"idx": 276, "model": "stab", "level": 4, "cell": "rule3|4|v1", "acc": 0.052}
+{"idx": 277, "model": "stab", "level": 4, "cell": "rule3|4|v2", "acc": 0.031}
+{"idx": 278, "model": "stab", "level": 4, "cell": "rule3|4|v3", "acc": 0.028, "shuf": 0.014}
+{"idx": 279, "model": "stab", "level": 4, "cell": "rule4|4|v1", "acc": 0.056}
+{"idx": 280, "model": "stab", "level": 4, "cell": "rule4|4|v2", "acc": 0.021}
+{"idx": 281, "model": "stab", "level": 4, "cell": "rule4|4|v3", "acc": 0.014}
+{"idx": 282, "model": "stab", "level": 4, "cell": "bot|4|v1", "acc": 0.262, "shuf": 0.01}
+{"idx": 283, "model": "stab", "level": 4, "cell": "bot|4|v2", "acc": 0.049, "shuf": 0.007}
+{"idx": 284, "model": "stab", "level": 4, "cell": "bot|4|v3", "acc": 0.021, "shuf": 0.017}
+{"idx": 285, "model": "stab", "level": 4, "cell": "rule1|8|v1", "acc": 0.36, "shuf": 0.028}
+{"idx": 286, "model": "stab", "level": 4, "cell": "rule1|8|v2", "acc": 0.045}
+{"idx": 287, "model": "stab", "level": 4, "cell": "rule1|8|v3", "acc": 0.01}
+{"idx": 288, "model": "stab", "level": 4, "cell": "rule2|8|v1", "acc": 0.161}
+{"idx": 289, "model": "stab", "level": 4, "cell": "rule2|8|v2", "acc": 0.08, "shuf": 0.003}
+{"idx": 290, "model": "stab", "level": 4, "cell": "rule2|8|v3", "acc": 0.017}
+{"idx": 291, "model": "stab", "level": 4, "cell": "rule3|8|v1", "acc": 0.143}
+{"idx": 292, "model": "stab", "level": 4, "cell": "rule3|8|v2", "acc": 0.08}
+{"idx": 293, "model": "stab", "level": 4, "cell": "rule3|8|v3", "acc": 0.08, "shuf": 0.017}
+{"idx": 294, "model": "stab", "level": 4, "cell": "rule4|8|v1", "acc": 0.091}
+{"idx": 295, "model": "stab", "level": 4, "cell": "rule4|8|v2", "acc": 0.08}
+{"idx": 296, "model": "stab", "level": 4, "cell": "rule4|8|v3", "acc": 0.028}
+{"idx": 297, "model": "stab", "level": 4, "cell": "bot|8|v1", "acc": 0.294, "shuf": 0.024}
+{"idx": 298, "model": "stab", "level": 4, "cell": "bot|8|v2", "acc": 0.091, "shuf": 0.021}
+{"idx": 299, "model": "stab", "level": 4, "cell": "bot|8|v3", "acc": 0.017, "shuf": 0.0}
+{"idx": 300, "model": "stab", "level": 4, "cell": "rule1|12|v1", "acc": 0.43, "shuf": 0.031}
+{"idx": 301, "model": "stab", "level": 4, "cell": "rule1|12|v2", "acc": 0.084}
+{"idx": 302, "model": "stab", "level": 4, "cell": "rule1|12|v3", "acc": 0.021}
+{"idx": 303, "model": "stab", "level": 4, "cell": "rule2|12|v1", "acc": 0.668}
+{"idx": 304, "model": "stab", "level": 4, "cell": "rule2|12|v2", "acc": 0.322, "shuf": 0.024}
+{"idx": 305, "model": "stab", "level": 4, "cell": "rule2|12|v3", "acc": 0.042}
+{"idx": 306, "model": "stab", "level": 4, "cell": "rule3|12|v1", "acc": 0.392}
+{"idx": 307, "model": "stab", "level": 4, "cell": "rule3|12|v2", "acc": 0.577}
+{"idx": 308, "model": "stab", "level": 4, "cell": "rule3|12|v3", "acc": 0.252, "shuf": 0.017}
+{"idx": 309, "model": "stab", "level": 4, "cell": "rule4|12|v1", "acc": 0.122}
+{"idx": 310, "model": "stab", "level": 4, "cell": "rule4|12|v2", "acc": 0.175}
+{"idx": 311, "model": "stab", "level": 4, "cell": "rule4|12|v3", "acc": 0.287}
+{"idx": 312, "model": "stab", "level": 4, "cell": "bot|12|v1", "acc": 0.448, "shuf": 0.024}
+{"idx": 313, "model": "stab", "level": 4, "cell": "bot|12|v2", "acc": 0.329, "shuf": 0.017}
+{"idx": 314, "model": "stab", "level": 4, "cell": "bot|12|v3", "acc": 0.213, "shuf": 0.017}
+{"idx": 315, "model": "stab", "level": 5, "cell": "rule1|4|v1", "acc": 0.297, "shuf": 0.014}
+{"idx": 316, "model": "stab", "level": 5, "cell": "rule1|4|v2", "acc": 0.017}
+{"idx": 317, "model": "stab", "level": 5, "cell": "rule1|4|v3", "acc": 0.021}
+{"idx": 318, "model": "stab", "level": 5, "cell": "rule1|4|v4", "acc": 0.028}
+{"idx": 319, "model": "stab", "level": 5, "cell": "rule2|4|v1", "acc": 0.108}
+{"idx": 320, "model": "stab", "level": 5, "cell": "rule2|4|v2", "acc": 0.014, "shuf": 0.021}
+{"idx": 321, "model": "stab", "level": 5, "cell": "rule2|4|v3", "acc": 0.017}
+{"idx": 322, "model": "stab", "level": 5, "cell": "rule2|4|v4", "acc": 0.017}
+{"idx": 323, "model": "stab", "level": 5, "cell": "rule3|4|v1", "acc": 0.042}
+{"idx": 324, "model": "stab", "level": 5, "cell": "rule3|4|v2", "acc": 0.003}
+{"idx": 325, "model": "stab", "level": 5, "cell": "rule3|4|v3", "acc": 0.017, "shuf": 0.024}
+{"idx": 326, "model": "stab", "level": 5, "cell": "rule3|4|v4", "acc": 0.01}
+{"idx": 327, "model": "stab", "level": 5, "cell": "rule4|4|v1", "acc": 0.035}
+{"idx": 328, "model": "stab", "level": 5, "cell": "rule4|4|v2", "acc": 0.024}
+{"idx": 329, "model": "stab", "level": 5, "cell": "rule4|4|v3", "acc": 0.021}
+{"idx": 330, "model": "stab", "level": 5, "cell": "rule4|4|v4", "acc": 0.021, "shuf": 0.014}
+{"idx": 331, "model": "stab", "level": 5, "cell": "rule5|4|v1", "acc": 0.052}
+{"idx": 332, "model": "stab", "level": 5, "cell": "rule5|4|v2", "acc": 0.014}
+{"idx": 333, "model": "stab", "level": 5, "cell": "rule5|4|v3", "acc": 0.017}
+{"idx": 334, "model": "stab", "level": 5, "cell": "rule5|4|v4", "acc": 0.021}
+{"idx": 335, "model": "stab", "level": 5, "cell": "bot|4|v1", "acc": 0.262, "shuf": 0.021}
+{"idx": 336, "model": "stab", "level": 5, "cell": "bot|4|v2", "acc": 0.038, "shuf": 0.024}
+{"idx": 337, "model": "stab", "level": 5, "cell": "bot|4|v3", "acc": 0.017, "shuf": 0.014}
+{"idx": 338, "model": "stab", "level": 5, "cell": "bot|4|v4", "acc": 0.014, "shuf": 0.017}
+{"idx": 339, "model": "stab", "level": 5, "cell": "rule1|8|v1", "acc": 0.374, "shuf": 0.01}
+{"idx": 340, "model": "stab", "level": 5, "cell": "rule1|8|v2", "acc": 0.052}
+{"idx": 341, "model": "stab", "level": 5, "cell": "rule1|8|v3", "acc": 0.01}
+{"idx": 342, "model": "stab", "level": 5, "cell": "rule1|8|v4", "acc": 0.028}
+{"idx": 343, "model": "stab", "level": 5, "cell": "rule2|8|v1", "acc": 0.175}
+{"idx": 344, "model": "stab", "level": 5, "cell": "rule2|8|v2", "acc": 0.098, "shuf": 0.024}
+{"idx": 345, "model": "stab", "level": 5, "cell": "rule2|8|v3", "acc": 0.017}
+{"idx": 346, "model": "stab", "level": 5, "cell": "rule2|8|v4", "acc": 0.024}
+{"idx": 347, "model": "stab", "level": 5, "cell": "rule3|8|v1", "acc": 0.15}
+{"idx": 348, "model": "stab", "level": 5, "cell": "rule3|8|v2", "acc": 0.038}
+{"idx": 349, "model": "stab", "level": 5, "cell": "rule3|8|v3", "acc": 0.021, "shuf": 0.021}
+{"idx": 350, "model": "stab", "level": 5, "cell": "rule3|8|v4", "acc": 0.021}
+{"idx": 351, "model": "stab", "level": 5, "cell": "rule4|8|v1", "acc": 0.098}
+{"idx": 352, "model": "stab", "level": 5, "cell": "rule4|8|v2", "acc": 0.042}
+{"idx": 353, "model": "stab", "level": 5, "cell": "rule4|8|v3", "acc": 0.01}
+{"idx": 354, "model": "stab", "level": 5, "cell": "rule4|8|v4", "acc": 0.021, "shuf": 0.038}
+{"idx": 355, "model": "stab", "level": 5, "cell": "rule5|8|v1", "acc": 0.101}
+{"idx": 356, "model": "stab", "level": 5, "cell": "rule5|8|v2", "acc": 0.042}
+{"idx": 357, "model": "stab", "level": 5, "cell": "rule5|8|v3", "acc": 0.014}
+{"idx": 358, "model": "stab", "level": 5, "cell": "rule5|8|v4", "acc": 0.021}
+{"idx": 359, "model": "stab", "level": 5, "cell": "bot|8|v1", "acc": 0.322, "shuf": 0.007}
+{"idx": 360, "model": "stab", "level": 5, "cell": "bot|8|v2", "acc": 0.07, "shuf": 0.01}
+{"idx": 361, "model": "stab", "level": 5, "cell": "bot|8|v3", "acc": 0.038, "shuf": 0.021}
+{"idx": 362, "model": "stab", "level": 5, "cell": "bot|8|v4", "acc": 0.017, "shuf": 0.024}
+{"idx": 363, "model": "stab", "level": 5, "cell": "rule1|12|v1", "acc": 0.413, "shuf": 0.017}
+{"idx": 364, "model": "stab", "level": 5, "cell": "rule1|12|v2", "acc": 0.056}
+{"idx": 365, "model": "stab", "level": 5, "cell": "rule1|12|v3", "acc": 0.021}
+{"idx": 366, "model": "stab", "level": 5, "cell": "rule1|12|v4", "acc": 0.021}
+{"idx": 367, "model": "stab", "level": 5, "cell": "rule2|12|v1", "acc": 0.647}
+{"idx": 368, "model": "stab", "level": 5, "cell": "rule2|12|v2", "acc": 0.332, "shuf": 0.007}
+{"idx": 369, "model": "stab", "level": 5, "cell": "rule2|12|v3", "acc": 0.063}
+{"idx": 370, "model": "stab", "level": 5, "cell": "rule2|12|v4", "acc": 0.021}
+{"idx": 371, "model": "stab", "level": 5, "cell": "rule3|12|v1", "acc": 0.364}
+{"idx": 372, "model": "stab", "level": 5, "cell": "rule3|12|v2", "acc": 0.538}
+{"idx": 373, "model": "stab", "level": 5, "cell": "rule3|12|v3", "acc": 0.238, "shuf": 0.021}
+{"idx": 374, "model": "stab", "level": 5, "cell": "rule3|12|v4", "acc": 0.038}
+{"idx": 375, "model": "stab", "level": 5, "cell": "rule4|12|v1", "acc": 0.08}
+{"idx": 376, "model": "stab", "level": 5, "cell": "rule4|12|v2", "acc": 0.189}
+{"idx": 377, "model": "stab", "level": 5, "cell": "rule4|12|v3", "acc": 0.301}
+{"idx": 378, "model": "stab", "level": 5, "cell": "rule4|12|v4", "acc": 0.122, "shuf": 0.014}
+{"idx": 379, "model": "stab", "level": 5, "cell": "rule5|12|v1", "acc": 0.038}
+{"idx": 380, "model": "stab", "level": 5, "cell": "rule5|12|v2", "acc": 0.07}
+{"idx": 381, "model": "stab", "level": 5, "cell": "rule5|12|v3", "acc": 0.154}
+{"idx": 382, "model": "stab", "level": 5, "cell": "rule5|12|v4", "acc": 0.168}
+{"idx": 383, "model": "stab", "level": 5, "cell": "bot|12|v1", "acc": 0.28, "shuf": 0.021}
+{"idx": 384, "model": "stab", "level": 5, "cell": "bot|12|v2", "acc": 0.164, "shuf": 0.01}
+{"idx": 385, "model": "stab", "level": 5, "cell": "bot|12|v3", "acc": 0.189, "shuf": 0.017}
+{"idx": 386, "model": "stab", "level": 5, "cell": "bot|12|v4", "acc": 0.203, "shuf": 0.007}
+{"idx": 387, "model": "stab", "level": 6, "cell": "rule1|4|v1", "acc": 0.242, "shuf": 0.025}
+{"idx": 388, "model": "stab", "level": 6, "cell": "rule1|4|v2", "acc": 0.021}
+{"idx": 389, "model": "stab", "level": 6, "cell": "rule1|4|v3", "acc": 0.014}
+{"idx": 390, "model": "stab", "level": 6, "cell": "rule1|4|v4", "acc": 0.021}
+{"idx": 391, "model": "stab", "level": 6, "cell": "rule1|4|v5", "acc": 0.007}
+{"idx": 392, "model": "stab", "level": 6, "cell": "rule2|4|v1", "acc": 0.014}
+{"idx": 393, "model": "stab", "level": 6, "cell": "rule2|4|v2", "acc": 0.032, "shuf": 0.018}
+{"idx": 394, "model": "stab", "level": 6, "cell": "rule2|4|v3", "acc": 0.025}
+{"idx": 395, "model": "stab", "level": 6, "cell": "rule2|4|v4", "acc": 0.025}
+{"idx": 396, "model": "stab", "level": 6, "cell": "rule2|4|v5", "acc": 0.018}
+{"idx": 397, "model": "stab", "level": 6, "cell": "rule3|4|v1", "acc": 0.042}
+{"idx": 398, "model": "stab", "level": 6, "cell": "rule3|4|v2", "acc": 0.025}
+{"idx": 399, "model": "stab", "level": 6, "cell": "rule3|4|v3", "acc": 0.035, "shuf": 0.018}
+{"idx": 400, "model": "stab", "level": 6, "cell": "rule3|4|v4", "acc": 0.018}
+{"idx": 401, "model": "stab", "level": 6, "cell": "rule3|4|v5", "acc": 0.028}
+{"idx": 402, "model": "stab", "level": 6, "cell": "rule4|4|v1", "acc": 0.021}
+{"idx": 403, "model": "stab", "level": 6, "cell": "rule4|4|v2", "acc": 0.025}
+{"idx": 404, "model": "stab", "level": 6, "cell": "rule4|4|v3", "acc": 0.018}
+{"idx": 405, "model": "stab", "level": 6, "cell": "rule4|4|v4", "acc": 0.028, "shuf": 0.032}
+{"idx": 406, "model": "stab", "level": 6, "cell": "rule4|4|v5", "acc": 0.025}
+{"idx": 407, "model": "stab", "level": 6, "cell": "rule5|4|v1", "acc": 0.053}
+{"idx": 408, "model": "stab", "level": 6, "cell": "rule5|4|v2", "acc": 0.011}
+{"idx": 409, "model": "stab", "level": 6, "cell": "rule5|4|v3", "acc": 0.018}
+{"idx": 410, "model": "stab", "level": 6, "cell": "rule5|4|v4", "acc": 0.014}
+{"idx": 411, "model": "stab", "level": 6, "cell": "rule5|4|v5", "acc": 0.025, "shuf": 0.011}
+{"idx": 412, "model": "stab", "level": 6, "cell": "rule6|4|v1", "acc": 0.018}
+{"idx": 413, "model": "stab", "level": 6, "cell": "rule6|4|v2", "acc": 0.014}
+{"idx": 414, "model": "stab", "level": 6, "cell": "rule6|4|v3", "acc": 0.018}
+{"idx": 415, "model": "stab", "level": 6, "cell": "rule6|4|v4", "acc": 0.032}
+{"idx": 416, "model": "stab", "level": 6, "cell": "rule6|4|v5", "acc": 0.032}
+{"idx": 417, "model": "stab", "level": 6, "cell": "bot|4|v1", "acc": 0.207, "shuf": 0.004}
+{"idx": 418, "model": "stab", "level": 6, "cell": "bot|4|v2", "acc": 0.046, "shuf": 0.014}
+{"idx": 419, "model": "stab", "level": 6, "cell": "bot|4|v3", "acc": 0.014, "shuf": 0.018}
+{"idx": 420, "model": "stab", "level": 6, "cell": "bot|4|v4", "acc": 0.018, "shuf": 0.028}
+{"idx": 421, "model": "stab", "level": 6, "cell": "bot|4|v5", "acc": 0.032, "shuf": 0.021}
+{"idx": 422, "model": "stab", "level": 6, "cell": "rule1|8|v1", "acc": 0.302, "shuf": 0.021}
+{"idx": 423, "model": "stab", "level": 6, "cell": "rule1|8|v2", "acc": 0.042}
+{"idx": 424, "model": "stab", "level": 6, "cell": "rule1|8|v3", "acc": 0.018}
+{"idx": 425, "model": "stab", "level": 6, "cell": "rule1|8|v4", "acc": 0.021}
+{"idx": 426, "model": "stab", "level": 6, "cell": "rule1|8|v5", "acc": 0.018}
+{"idx": 427, "model": "stab", "level": 6, "cell": "rule2|8|v1", "acc": 0.154}
+{"idx": 428, "model": "stab", "level": 6, "cell": "rule2|8|v2", "acc": 0.091, "shuf": 0.014}
+{"idx": 429, "model": "stab", "level": 6, "cell": "rule2|8|v3", "acc": 0.021}
+{"idx": 430, "model": "stab", "level": 6, "cell": "rule2|8|v4", "acc": 0.028}
+{"idx": 431, "model": "stab", "level": 6, "cell": "rule2|8|v5", "acc": 0.011}
+{"idx": 432, "model": "stab", "level": 6, "cell": "rule3|8|v1", "acc": 0.102}
+{"idx": 433, "model": "stab", "level": 6, "cell": "rule3|8|v2", "acc": 0.081}
+{"idx": 434, "model": "stab", "level": 6, "cell": "rule3|8|v3", "acc": 0.032, "shuf": 0.011}
+{"idx": 435, "model": "stab", "level": 6, "cell": "rule3|8|v4", "acc": 0.028}
+{"idx": 436, "model": "stab", "level": 6, "cell": "rule3|8|v5", "acc": 0.018}
+{"idx": 437, "model": "stab", "level": 6, "cell": "rule4|8|v1", "acc": 0.07}
+{"idx": 438, "model": "stab", "level": 6, "cell": "rule4|8|v2", "acc": 0.032}
+{"idx": 439, "model": "stab", "level": 6, "cell": "rule4|8|v3", "acc": 0.039}
+{"idx": 440, "model": "stab", "level": 6, "cell": "rule4|8|v4", "acc": 0.018, "shuf": 0.025}
+{"idx": 441, "model": "stab", "level": 6, "cell": "rule4|8|v5", "acc": 0.021}
+{"idx": 442, "model": "stab", "level": 6, "cell": "rule5|8|v1", "acc": 0.098}
+{"idx": 443, "model": "stab", "level": 6, "cell": "rule5|8|v2", "acc": 0.035}
+{"idx": 444, "model": "stab", "level": 6, "cell": "rule5|8|v3", "acc": 0.035}
+{"idx": 445, "model": "stab", "level": 6, "cell": "rule5|8|v4", "acc": 0.025}
+{"idx": 446, "model": "stab", "level": 6, "cell": "rule5|8|v5", "acc": 0.021, "shuf": 0.007}
+{"idx": 447, "model": "stab", "level": 6, "cell": "rule6|8|v1", "acc": 0.074}
+{"idx": 448, "model": "stab", "level": 6, "cell": "rule6|8|v2", "acc": 0.011}
+{"idx": 449, "model": "stab", "level": 6, "cell": "rule6|8|v3", "acc": 0.025}
+{"idx": 450, "model": "stab", "level": 6, "cell": "rule6|8|v4", "acc": 0.021}
+{"idx": 451, "model": "stab", "level": 6, "cell": "rule6|8|v5", "acc": 0.032}
+{"idx": 452, "model": "stab", "level": 6, "cell": "bot|8|v1", "acc": 0.27, "shuf": 0.011}
+{"idx": 453, "model": "stab", "level": 6, "cell": "bot|8|v2", "acc": 0.053, "shuf": 0.021}
+{"idx": 454, "model": "stab", "level": 6, "cell": "bot|8|v3", "acc": 0.035, "shuf": 0.007}
+{"idx": 455, "model": "stab", "level": 6, "cell": "bot|8|v4", "acc": 0.028, "shuf": 0.032}
+{"idx": 456, "model": "stab", "level": 6, "cell": "bot|8|v5", "acc": 0.007, "shuf": 0.025}
+{"idx": 457, "model": "stab", "level": 6, "cell": "rule1|12|v1", "acc": 0.456, "shuf": 0.014}
+{"idx": 458, "model": "stab", "level": 6, "cell": "rule1|12|v2", "acc": 0.074}
+{"idx": 459, "model": "stab", "level": 6, "cell": "rule1|12|v3", "acc": 0.025}
+{"idx": 460, "model": "stab", "level": 6, "cell": "rule1|12|v4", "acc": 0.025}
+{"idx": 461, "model": "stab", "level": 6, "cell": "rule1|12|v5", "acc": 0.014}
+{"idx": 462, "model": "stab", "level": 6, "cell": "rule2|12|v1", "acc": 0.653}
+{"idx": 463, "model": "stab", "level": 6, "cell": "rule2|12|v2", "acc": 0.298, "shuf": 0.028}
+{"idx": 464, "model": "stab", "level": 6, "cell": "rule2|12|v3", "acc": 0.056}
+{"idx": 465, "model": "stab", "level": 6, "cell": "rule2|12|v4", "acc": 0.025}
+{"idx": 466, "model": "stab", "level": 6, "cell": "rule2|12|v5", "acc": 0.028}
+{"idx": 467, "model": "stab", "level": 6, "cell": "rule3|12|v1", "acc": 0.291}
+{"idx": 468, "model": "stab", "level": 6, "cell": "rule3|12|v2", "acc": 0.523}
+{"idx": 469, "model": "stab", "level": 6, "cell": "rule3|12|v3", "acc": 0.232, "shuf": 0.018}
+{"idx": 470, "model": "stab", "level": 6, "cell": "rule3|12|v4", "acc": 0.046}
+{"idx": 471, "model": "stab", "level": 6, "cell": "rule3|12|v5", "acc": 0.042}
+{"idx": 472, "model": "stab", "level": 6, "cell": "rule4|12|v1", "acc": 0.091}
+{"idx": 473, "model": "stab", "level": 6, "cell": "rule4|12|v2", "acc": 0.189}
+{"idx": 474, "model": "stab", "level": 6, "cell": "rule4|12|v3", "acc": 0.267}
+{"idx": 475, "model": "stab", "level": 6, "cell": "rule4|12|v4", "acc": 0.13, "shuf": 0.028}
+{"idx": 476, "model": "stab", "level": 6, "cell": "rule4|12|v5", "acc": 0.025}
+{"idx": 477, "model": "stab", "level": 6, "cell": "rule5|12|v1", "acc": 0.035}
+{"idx": 478, "model": "stab", "level": 6, "cell": "rule5|12|v2", "acc": 0.06}
+{"idx": 479, "model": "stab", "level": 6, "cell": "rule5|12|v3", "acc": 0.116}
+{"idx": 480, "model": "stab", "level": 6, "cell": "rule5|12|v4", "acc": 0.172}
+{"idx": 481, "model": "stab", "level": 6, "cell": "rule5|12|v5", "acc": 0.119, "shuf": 0.032}
+{"idx": 482, "model": "stab", "level": 6, "cell": "rule6|12|v1", "acc": 0.011}
+{"idx": 483, "model": "stab", "level": 6, "cell": "rule6|12|v2", "acc": 0.039}
+{"idx": 484, "model": "stab", "level": 6, "cell": "rule6|12|v3", "acc": 0.06}
+{"idx": 485, "model": "stab", "level": 6, "cell": "rule6|12|v4", "acc": 0.098}
+{"idx": 486, "model": "stab", "level": 6, "cell": "rule6|12|v5", "acc": 0.161}
+{"idx": 487, "model": "stab", "level": 6, "cell": "bot|12|v1", "acc": 0.133, "shuf": 0.021}
+{"idx": 488, "model": "stab", "level": 6, "cell": "bot|12|v2", "acc": 0.116, "shuf": 0.025}
+{"idx": 489, "model": "stab", "level": 6, "cell": "bot|12|v3", "acc": 0.091, "shuf": 0.014}
+{"idx": 490, "model": "stab", "level": 6, "cell": "bot|12|v4", "acc": 0.13, "shuf": 0.011}
+{"idx": 491, "model": "stab", "level": 6, "cell": "bot|12|v5", "acc": 0.154, "shuf": 0.011}
+{"idx": 492, "model": "sim", "level": 3, "cell": "rule1|4|v1", "acc": 0.024, "shuf": 0.0}
+{"idx": 493, "model": "sim", "level": 3, "cell": "rule1|4|v2", "acc": 0.017}
+{"idx": 494, "model": "sim", "level": 3, "cell": "rule2|4|v1", "acc": 0.01}
+{"idx": 495, "model": "sim", "level": 3, "cell": "rule2|4|v2", "acc": 0.031, "shuf": 0.017}
+{"idx": 496, "model": "sim", "level": 3, "cell": "rule3|4|v1", "acc": 0.028}
+{"idx": 497, "model": "sim", "level": 3, "cell": "rule3|4|v2", "acc": 0.024}
+{"idx": 498, "model": "sim", "level": 3, "cell": "bot|4|v1", "acc": 0.29, "shuf": 0.01}
+{"idx": 499, "model": "sim", "level": 3, "cell": "bot|4|v2", "acc": 0.017, "shuf": 0.021}
+{"idx": 500, "model": "sim", "level": 3, "cell": "rule1|8|v1", "acc": 0.024, "shuf": 0.014}
+{"idx": 501, "model": "sim", "level": 3, "cell": "rule1|8|v2", "acc": 0.024}
+{"idx": 502, "model": "sim", "level": 3, "cell": "rule2|8|v1", "acc": 0.017}
+{"idx": 503, "model": "sim", "level": 3, "cell": "rule2|8|v2", "acc": 0.028, "shuf": 0.021}
+{"idx": 504, "model": "sim", "level": 3, "cell": "rule3|8|v1", "acc": 0.021}
+{"idx": 505, "model": "sim", "level": 3, "cell": "rule3|8|v2", "acc": 0.017}
+{"idx": 506, "model": "sim", "level": 3, "cell": "bot|8|v1", "acc": 0.378, "shuf": 0.024}
+{"idx": 507, "model": "sim", "level": 3, "cell": "bot|8|v2", "acc": 0.073, "shuf": 0.014}
+{"idx": 508, "model": "sim", "level": 3, "cell": "rule1|12|v1", "acc": 0.024, "shuf": 0.017}
+{"idx": 509, "model": "sim", "level": 3, "cell": "rule1|12|v2", "acc": 0.024}
+{"idx": 510, "model": "sim", "level": 3, "cell": "rule2|12|v1", "acc": 0.024}
+{"idx": 511, "model": "sim", "level": 3, "cell": "rule2|12|v2", "acc": 0.028, "shuf": 0.014}
+{"idx": 512, "model": "sim", "level": 3, "cell": "rule3|12|v1", "acc": 0.024}
+{"idx": 513, "model": "sim", "level": 3, "cell": "rule3|12|v2", "acc": 0.017}
+{"idx": 514, "model": "sim", "level": 3, "cell": "bot|12|v1", "acc": 0.524, "shuf": 0.028}
+{"idx": 515, "model": "sim", "level": 3, "cell": "bot|12|v2", "acc": 0.101, "shuf": 0.021}
+{"idx": 516, "model": "sim", "level": 4, "cell": "rule1|4|v1", "acc": 0.01, "shuf": 0.021}
+{"idx": 517, "model": "sim", "level": 4, "cell": "rule1|4|v2", "acc": 0.031}
+{"idx": 518, "model": "sim", "level": 4, "cell": "rule1|4|v3", "acc": 0.031}
+{"idx": 519, "model": "sim", "level": 4, "cell": "rule2|4|v1", "acc": 0.021}
+{"idx": 520, "model": "sim", "level": 4, "cell": "rule2|4|v2", "acc": 0.01, "shuf": 0.014}
+{"idx": 521, "model": "sim", "level": 4, "cell": "rule2|4|v3", "acc": 0.017}
+{"idx": 522, "model": "sim", "level": 4, "cell": "rule3|4|v1", "acc": 0.014}
+{"idx": 523, "model": "sim", "level": 4, "cell": "rule3|4|v2", "acc": 0.049}
+{"idx": 524, "model": "sim", "level": 4, "cell": "rule3|4|v3", "acc": 0.021, "shuf": 0.024}
+{"idx": 525, "model": "sim", "level": 4, "cell": "rule4|4|v1", "acc": 0.028}
+{"idx": 526, "model": "sim", "level": 4, "cell": "rule4|4|v2", "acc": 0.017}
+{"idx": 527, "model": "sim", "level": 4, "cell": "rule4|4|v3", "acc": 0.024}
+{"idx": 528, "model": "sim", "level": 4, "cell": "bot|4|v1", "acc": 0.266, "shuf": 0.003}
+{"idx": 529, "model": "sim", "level": 4, "cell": "bot|4|v2", "acc": 0.052, "shuf": 0.014}
+{"idx": 530, "model": "sim", "level": 4, "cell": "bot|4|v3", "acc": 0.031, "shuf": 0.028}
+{"idx": 531, "model": "sim", "level": 4, "cell": "rule1|8|v1", "acc": 0.014, "shuf": 0.007}
+{"idx": 532, "model": "sim", "level": 4, "cell": "rule1|8|v2", "acc": 0.028}
+{"idx": 533, "model": "sim", "level": 4, "cell": "rule1|8|v3", "acc": 0.028}
+{"idx": 534, "model": "sim", "level": 4, "cell": "rule2|8|v1", "acc": 0.017}
+{"idx": 535, "model": "sim", "level": 4, "cell": "rule2|8|v2", "acc": 0.017, "shuf": 0.021}
+{"idx": 536, "model": "sim", "level": 4, "cell": "rule2|8|v3", "acc": 0.035}
+{"idx": 537, "model": "sim", "level": 4, "cell": "rule3|8|v1", "acc": 0.014}
+{"idx": 538, "model": "sim", "level": 4, "cell": "rule3|8|v2", "acc": 0.052}
+{"idx": 539, "model": "sim", "level": 4, "cell": "rule3|8|v3", "acc": 0.038, "shuf": 0.017}
+{"idx": 540, "model": "sim", "level": 4, "cell": "rule4|8|v1", "acc": 0.024}
+{"idx": 541, "model": "sim", "level": 4, "cell": "rule4|8|v2", "acc": 0.021}
+{"idx": 542, "model": "sim", "level": 4, "cell": "rule4|8|v3", "acc": 0.01}
+{"idx": 543, "model": "sim", "level": 4, "cell": "bot|8|v1", "acc": 0.325, "shuf": 0.035}
+{"idx": 544, "model": "sim", "level": 4, "cell": "bot|8|v2", "acc": 0.052, "shuf": 0.021}
+{"idx": 545, "model": "sim", "level": 4, "cell": "bot|8|v3", "acc": 0.021, "shuf": 0.01}
+{"idx": 546, "model": "sim", "level": 4, "cell": "rule1|12|v1", "acc": 0.017, "shuf": 0.017}
+{"idx": 547, "model": "sim", "level": 4, "cell": "rule1|12|v2", "acc": 0.031}
+{"idx": 548, "model": "sim", "level": 4, "cell": "rule1|12|v3", "acc": 0.031}
+{"idx": 549, "model": "sim", "level": 4, "cell": "rule2|12|v1", "acc": 0.017}
+{"idx": 550, "model": "sim", "level": 4, "cell": "rule2|12|v2", "acc": 0.021, "shuf": 0.024}
+{"idx": 551, "model": "sim", "level": 4, "cell": "rule2|12|v3", "acc": 0.021}
+{"idx": 552, "model": "sim", "level": 4, "cell": "rule3|12|v1", "acc": 0.014}
+{"idx": 553, "model": "sim", "level": 4, "cell": "rule3|12|v2", "acc": 0.021}
+{"idx": 554, "model": "sim", "level": 4, "cell": "rule3|12|v3", "acc": 0.021, "shuf": 0.017}
+{"idx": 555, "model": "sim", "level": 4, "cell": "rule4|12|v1", "acc": 0.014}
+{"idx": 556, "model": "sim", "level": 4, "cell": "rule4|12|v2", "acc": 0.024}
+{"idx": 557, "model": "sim", "level": 4, "cell": "rule4|12|v3", "acc": 0.01}
+{"idx": 558, "model": "sim", "level": 4, "cell": "bot|12|v1", "acc": 0.444, "shuf": 0.028}
+{"idx": 559, "model": "sim", "level": 4, "cell": "bot|12|v2", "acc": 0.07, "shuf": 0.014}
+{"idx": 560, "model": "sim", "level": 4, "cell": "bot|12|v3", "acc": 0.017, "shuf": 0.01}
+{"idx": 561, "model": "sim", "level": 5, "cell": "rule1|4|v1", "acc": 0.021, "shuf": 0.017}
+{"idx": 562, "model": "sim", "level": 5, "cell": "rule1|4|v2", "acc": 0.0}
+{"idx": 563, "model": "sim", "level": 5, "cell": "rule1|4|v3", "acc": 0.021}
+{"idx": 564, "model": "sim", "level": 5, "cell": "rule1|4|v4", "acc": 0.021}
+{"idx": 565, "model": "sim", "level": 5, "cell": "rule2|4|v1", "acc": 0.021}
+{"idx": 566, "model": "sim", "level": 5, "cell": "rule2|4|v2", "acc": 0.021, "shuf": 0.035}
+{"idx": 567, "model": "sim", "level": 5, "cell": "rule2|4|v3", "acc": 0.024}
+{"idx": 568, "model": "sim", "level": 5, "cell": "rule2|4|v4", "acc": 0.021}
+{"idx": 569, "model": "sim", "level": 5, "cell": "rule3|4|v1", "acc": 0.024}
+{"idx": 570, "model": "sim", "level": 5, "cell": "rule3|4|v2", "acc": 0.01}
+{"idx": 571, "model": "sim", "level": 5, "cell": "rule3|4|v3", "acc": 0.021, "shuf": 0.007}
+{"idx": 572, "model": "sim", "level": 5, "cell": "rule3|4|v4", "acc": 0.017}
+{"idx": 573, "model": "sim", "level": 5, "cell": "rule4|4|v1", "acc": 0.021}
+{"idx": 574, "model": "sim", "level": 5, "cell": "rule4|4|v2", "acc": 0.017}
+{"idx": 575, "model": "sim", "level": 5, "cell": "rule4|4|v3", "acc": 0.021}
+{"idx": 576, "model": "sim", "level": 5, "cell": "rule4|4|v4", "acc": 0.021, "shuf": 0.035}
+{"idx": 577, "model": "sim", "level": 5, "cell": "rule5|4|v1", "acc": 0.01}
+{"idx": 578, "model": "sim", "level": 5, "cell": "rule5|4|v2", "acc": 0.007}
+{"idx": 579, "model": "sim", "level": 5, "cell": "rule5|4|v3", "acc": 0.021}
+{"idx": 580, "model": "sim", "level": 5, "cell": "rule5|4|v4", "acc": 0.017}
+{"idx": 581, "model": "sim", "level": 5, "cell": "bot|4|v1", "acc": 0.245, "shuf": 0.007}
+{"idx": 582, "model": "sim", "level": 5, "cell": "bot|4|v2", "acc": 0.052, "shuf": 0.017}
+{"idx": 583, "model": "sim", "level": 5, "cell": "bot|4|v3", "acc": 0.028, "shuf": 0.024}
+{"idx": 584, "model": "sim", "level": 5, "cell": "bot|4|v4", "acc": 0.017, "shuf": 0.017}
+{"idx": 585, "model": "sim", "level": 5, "cell": "rule1|8|v1", "acc": 0.017, "shuf": 0.01}
+{"idx": 586, "model": "sim", "level": 5, "cell": "rule1|8|v2", "acc": 0.021}
+{"idx": 587, "model": "sim", "level": 5, "cell": "rule1|8|v3", "acc": 0.014}
+{"idx": 588, "model": "sim", "level": 5, "cell": "rule1|8|v4", "acc": 0.028}
+{"idx": 589, "model": "sim", "level": 5, "cell": "rule2|8|v1", "acc": 0.028}
+{"idx": 590, "model": "sim", "level": 5, "cell": "rule2|8|v2", "acc": 0.017, "shuf": 0.017}
+{"idx": 591, "model": "sim", "level": 5, "cell": "rule2|8|v3", "acc": 0.028}
+{"idx": 592, "model": "sim", "level": 5, "cell": "rule2|8|v4", "acc": 0.01}
+{"idx": 593, "model": "sim", "level": 5, "cell": "rule3|8|v1", "acc": 0.031}
+{"idx": 594, "model": "sim", "level": 5, "cell": "rule3|8|v2", "acc": 0.024}
+{"idx": 595, "model": "sim", "level": 5, "cell": "rule3|8|v3", "acc": 0.017, "shuf": 0.021}
+{"idx": 596, "model": "sim", "level": 5, "cell": "rule3|8|v4", "acc": 0.028}
+{"idx": 597, "model": "sim", "level": 5, "cell": "rule4|8|v1", "acc": 0.024}
+{"idx": 598, "model": "sim", "level": 5, "cell": "rule4|8|v2", "acc": 0.024}
+{"idx": 599, "model": "sim", "level": 5, "cell": "rule4|8|v3", "acc": 0.021}
+{"idx": 600, "model": "sim", "level": 5, "cell": "rule4|8|v4", "acc": 0.024, "shuf": 0.031}
+{"idx": 601, "model": "sim", "level": 5, "cell": "rule5|8|v1", "acc": 0.014}
+{"idx": 602, "model": "sim", "level": 5, "cell": "rule5|8|v2", "acc": 0.01}
+{"idx": 603, "model": "sim", "level": 5, "cell": "rule5|8|v3", "acc": 0.021}
+{"idx": 604, "model": "sim", "level": 5, "cell": "rule5|8|v4", "acc": 0.01}
+{"idx": 605, "model": "sim", "level": 5, "cell": "bot|8|v1", "acc": 0.339, "shuf": 0.014}
+{"idx": 606, "model": "sim", "level": 5, "cell": "bot|8|v2", "acc": 0.056, "shuf": 0.014}
+{"idx": 607, "model": "sim", "level": 5, "cell": "bot|8|v3", "acc": 0.021, "shuf": 0.024}
+{"idx": 608, "model": "sim", "level": 5, "cell": "bot|8|v4", "acc": 0.017, "shuf": 0.003}
+{"idx": 609, "model": "sim", "level": 5, "cell": "rule1|12|v1", "acc": 0.01, "shuf": 0.01}
+{"idx": 610, "model": "sim", "level": 5, "cell": "rule1|12|v2", "acc": 0.017}
+{"idx": 611, "model": "sim", "level": 5, "cell": "rule1|12|v3", "acc": 0.017}
+{"idx": 612, "model": "sim", "level": 5, "cell": "rule1|12|v4", "acc": 0.021}
+{"idx": 613, "model": "sim", "level": 5, "cell": "rule2|12|v1", "acc": 0.021}
+{"idx": 614, "model": "sim", "level": 5, "cell": "rule2|12|v2", "acc": 0.028, "shuf": 0.01}
+{"idx": 615, "model": "sim", "level": 5, "cell": "rule2|12|v3", "acc": 0.024}
+{"idx": 616, "model": "sim", "level": 5, "cell": "rule2|12|v4", "acc": 0.031}
+{"idx": 617, "model": "sim", "level": 5, "cell": "rule3|12|v1", "acc": 0.028}
+{"idx": 618, "model": "sim", "level": 5, "cell": "rule3|12|v2", "acc": 0.007}
+{"idx": 619, "model": "sim", "level": 5, "cell": "rule3|12|v3", "acc": 0.024, "shuf": 0.017}
+{"idx": 620, "model": "sim", "level": 5, "cell": "rule3|12|v4", "acc": 0.024}
+{"idx": 621, "model": "sim", "level": 5, "cell": "rule4|12|v1", "acc": 0.031}
+{"idx": 622, "model": "sim", "level": 5, "cell": "rule4|12|v2", "acc": 0.01}
+{"idx": 623, "model": "sim", "level": 5, "cell": "rule4|12|v3", "acc": 0.01}
+{"idx": 624, "model": "sim", "level": 5, "cell": "rule4|12|v4", "acc": 0.028, "shuf": 0.0}
+{"idx": 625, "model": "sim", "level": 5, "cell": "rule5|12|v1", "acc": 0.0}
+{"idx": 626, "model": "sim", "level": 5, "cell": "rule5|12|v2", "acc": 0.003}
+{"idx": 627, "model": "sim", "level": 5, "cell": "rule5|12|v3", "acc": 0.021}
+{"idx": 628, "model": "sim", "level": 5, "cell": "rule5|12|v4", "acc": 0.024}
+{"idx": 629, "model": "sim", "level": 5, "cell": "bot|12|v1", "acc": 0.493, "shuf": 0.024}
+{"idx": 630, "model": "sim", "level": 5, "cell": "bot|12|v2", "acc": 0.07, "shuf": 0.014}
+{"idx": 631, "model": "sim", "level": 5, "cell": "bot|12|v3", "acc": 0.024, "shuf": 0.028}
+{"idx": 632, "model": "sim", "level": 5, "cell": "bot|12|v4", "acc": 0.017, "shuf": 0.01}
+{"idx": 633, "model": "sim", "level": 6, "cell": "rule1|4|v1", "acc": 0.014, "shuf": 0.028}
+{"idx": 634, "model": "sim", "level": 6, "cell": "rule1|4|v2", "acc": 0.011}
+{"idx": 635, "model": "sim", "level": 6, "cell": "rule1|4|v3", "acc": 0.021}
+{"idx": 636, "model": "sim", "level": 6, "cell": "rule1|4|v4", "acc": 0.021}
+{"idx": 637, "model": "sim", "level": 6, "cell": "rule1|4|v5", "acc": 0.018}
+{"idx": 638, "model": "sim", "level": 6, "cell": "rule2|4|v1", "acc": 0.007}
+{"idx": 639, "model": "sim", "level": 6, "cell": "rule2|4|v2", "acc": 0.007, "shuf": 0.011}
+{"idx": 640, "model": "sim", "level": 6, "cell": "rule2|4|v3", "acc": 0.014}
+{"idx": 641, "model": "sim", "level": 6, "cell": "rule2|4|v4", "acc": 0.028}
+{"idx": 642, "model": "sim", "level": 6, "cell": "rule2|4|v5", "acc": 0.014}
+{"idx": 643, "model": "sim", "level": 6, "cell": "rule3|4|v1", "acc": 0.018}
+{"idx": 644, "model": "sim", "level": 6, "cell": "rule3|4|v2", "acc": 0.011}
+{"idx": 645, "model": "sim", "level": 6, "cell": "rule3|4|v3", "acc": 0.021, "shuf": 0.025}
+{"idx": 646, "model": "sim", "level": 6, "cell": "rule3|4|v4", "acc": 0.011}
+{"idx": 647, "model": "sim", "level": 6, "cell": "rule3|4|v5", "acc": 0.018}
+{"idx": 648, "model": "sim", "level": 6, "cell": "rule4|4|v1", "acc": 0.011}
+{"idx": 649, "model": "sim", "level": 6, "cell": "rule4|4|v2", "acc": 0.011}
+{"idx": 650, "model": "sim", "level": 6, "cell": "rule4|4|v3", "acc": 0.021}
+{"idx": 651, "model": "sim", "level": 6, "cell": "rule4|4|v4", "acc": 0.025, "shuf": 0.021}
+{"idx": 652, "model": "sim", "level": 6, "cell": "rule4|4|v5", "acc": 0.021}
+{"idx": 653, "model": "sim", "level": 6, "cell": "rule5|4|v1", "acc": 0.007}
+{"idx": 654, "model": "sim", "level": 6, "cell": "rule5|4|v2", "acc": 0.007}
+{"idx": 655, "model": "sim", "level": 6, "cell": "rule5|4|v3", "acc": 0.025}
+{"idx": 656, "model": "sim", "level": 6, "cell": "rule5|4|v4", "acc": 0.018}
+{"idx": 657, "model": "sim", "level": 6, "cell": "rule5|4|v5", "acc": 0.025, "shuf": 0.007}
+{"idx": 658, "model": "sim", "level": 6, "cell": "rule6|4|v1", "acc": 0.011}
+{"idx": 659, "model": "sim", "level": 6, "cell": "rule6|4|v2", "acc": 0.014}
+{"idx": 660, "model": "sim", "level": 6, "cell": "rule6|4|v3", "acc": 0.021}
+{"idx": 661, "model": "sim", "level": 6, "cell": "rule6|4|v4", "acc": 0.018}
+{"idx": 662, "model": "sim", "level": 6, "cell": "rule6|4|v5", "acc": 0.018}
+{"idx": 663, "model": "sim", "level": 6, "cell": "bot|4|v1", "acc": 0.239, "shuf": 0.007}
+{"idx": 664, "model": "sim", "level": 6, "cell": "bot|4|v2", "acc": 0.046, "shuf": 0.025}
+{"idx": 665, "model": "sim", "level": 6, "cell": "bot|4|v3", "acc": 0.011, "shuf": 0.014}
+{"idx": 666, "model": "sim", "level": 6, "cell": "bot|4|v4", "acc": 0.021, "shuf": 0.011}
+{"idx": 667, "model": "sim", "level": 6, "cell": "bot|4|v5", "acc": 0.0, "shuf": 0.035}
+{"idx": 668, "model": "sim", "level": 6, "cell": "rule1|8|v1", "acc": 0.007, "shuf": 0.018}
+{"idx": 669, "model": "sim", "level": 6, "cell": "rule1|8|v2", "acc": 0.014}
+{"idx": 670, "model": "sim", "level": 6, "cell": "rule1|8|v3", "acc": 0.021}
+{"idx": 671, "model": "sim", "level": 6, "cell": "rule1|8|v4", "acc": 0.025}
+{"idx": 672, "model": "sim", "level": 6, "cell": "rule1|8|v5", "acc": 0.011}
+{"idx": 673, "model": "sim", "level": 6, "cell": "rule2|8|v1", "acc": 0.007}
+{"idx": 674, "model": "sim", "level": 6, "cell": "rule2|8|v2", "acc": 0.014, "shuf": 0.004}
+{"idx": 675, "model": "sim", "level": 6, "cell": "rule2|8|v3", "acc": 0.011}
+{"idx": 676, "model": "sim", "level": 6, "cell": "rule2|8|v4", "acc": 0.032}
+{"idx": 677, "model": "sim", "level": 6, "cell": "rule2|8|v5", "acc": 0.021}
+{"idx": 678, "model": "sim", "level": 6, "cell": "rule3|8|v1", "acc": 0.014}
+{"idx": 679, "model": "sim", "level": 6, "cell": "rule3|8|v2", "acc": 0.011}
+{"idx": 680, "model": "sim", "level": 6, "cell": "rule3|8|v3", "acc": 0.018, "shuf": 0.018}
+{"idx": 681, "model": "sim", "level": 6, "cell": "rule3|8|v4", "acc": 0.011}
+{"idx": 682, "model": "sim", "level": 6, "cell": "rule3|8|v5", "acc": 0.011}
+{"idx": 683, "model": "sim", "level": 6, "cell": "rule4|8|v1", "acc": 0.011}
+{"idx": 684, "model": "sim", "level": 6, "cell": "rule4|8|v2", "acc": 0.014}
+{"idx": 685, "model": "sim", "level": 6, "cell": "rule4|8|v3", "acc": 0.007}
+{"idx": 686, "model": "sim", "level": 6, "cell": "rule4|8|v4", "acc": 0.021, "shuf": 0.014}
+{"idx": 687, "model": "sim", "level": 6, "cell": "rule4|8|v5", "acc": 0.014}
+{"idx": 688, "model": "sim", "level": 6, "cell": "rule5|8|v1", "acc": 0.007}
+{"idx": 689, "model": "sim", "level": 6, "cell": "rule5|8|v2", "acc": 0.011}
+{"idx": 690, "model": "sim", "level": 6, "cell": "rule5|8|v3", "acc": 0.018}
+{"idx": 691, "model": "sim", "level": 6, "cell": "rule5|8|v4", "acc": 0.007}
+{"idx": 692, "model": "sim", "level": 6, "cell": "rule5|8|v5", "acc": 0.011, "shuf": 0.014}
+{"idx": 693, "model": "sim", "level": 6, "cell": "rule6|8|v1", "acc": 0.011}
+{"idx": 694, "model": "sim", "level": 6, "cell": "rule6|8|v2", "acc": 0.011}
+{"idx": 695, "model": "sim", "level": 6, "cell": "rule6|8|v3", "acc": 0.014}
+{"idx": 696, "model": "sim", "level": 6, "cell": "rule6|8|v4", "acc": 0.025}
+{"idx": 697, "model": "sim", "level": 6, "cell": "rule6|8|v5", "acc": 0.028}
+{"idx": 698, "model": "sim", "level": 6, "cell": "bot|8|v1", "acc": 0.309, "shuf": 0.007}
+{"idx": 699, "model": "sim", "level": 6, "cell": "bot|8|v2", "acc": 0.06, "shuf": 0.011}
+{"idx": 700, "model": "sim", "level": 6, "cell": "bot|8|v3", "acc": 0.011, "shuf": 0.014}
+{"idx": 701, "model": "sim", "level": 6, "cell": "bot|8|v4", "acc": 0.018, "shuf": 0.021}
+{"idx": 702, "model": "sim", "level": 6, "cell": "bot|8|v5", "acc": 0.0, "shuf": 0.028}
+{"idx": 703, "model": "sim", "level": 6, "cell": "rule1|12|v1", "acc": 0.007, "shuf": 0.011}
+{"idx": 704, "model": "sim", "level": 6, "cell": "rule1|12|v2", "acc": 0.011}
+{"idx": 705, "model": "sim", "level": 6, "cell": "rule1|12|v3", "acc": 0.021}
+{"idx": 706, "model": "sim", "level": 6, "cell": "rule1|12|v4", "acc": 0.025}
+{"idx": 707, "model": "sim", "level": 6, "cell": "rule1|12|v5", "acc": 0.025}
+{"idx": 708, "model": "sim", "level": 6, "cell": "rule2|12|v1", "acc": 0.004}
+{"idx": 709, "model": "sim", "level": 6, "cell": "rule2|12|v2", "acc": 0.021, "shuf": 0.011}
+{"idx": 710, "model": "sim", "level": 6, "cell": "rule2|12|v3", "acc": 0.021}
+{"idx": 711, "model": "sim", "level": 6, "cell": "rule2|12|v4", "acc": 0.028}
+{"idx": 712, "model": "sim", "level": 6, "cell": "rule2|12|v5", "acc": 0.028}
+{"idx": 713, "model": "sim", "level": 6, "cell": "rule3|12|v1", "acc": 0.018}
+{"idx": 714, "model": "sim", "level": 6, "cell": "rule3|12|v2", "acc": 0.014}
+{"idx": 715, "model": "sim", "level": 6, "cell": "rule3|12|v3", "acc": 0.011, "shuf": 0.028}
+{"idx": 716, "model": "sim", "level": 6, "cell": "rule3|12|v4", "acc": 0.011}
+{"idx": 717, "model": "sim", "level": 6, "cell": "rule3|12|v5", "acc": 0.021}
+{"idx": 718, "model": "sim", "level": 6, "cell": "rule4|12|v1", "acc": 0.011}
+{"idx": 719, "model": "sim", "level": 6, "cell": "rule4|12|v2", "acc": 0.025}
+{"idx": 720, "model": "sim", "level": 6, "cell": "rule4|12|v3", "acc": 0.021}
+{"idx": 721, "model": "sim", "level": 6, "cell": "rule4|12|v4", "acc": 0.021, "shuf": 0.018}
+{"idx": 722, "model": "sim", "level": 6, "cell": "rule4|12|v5", "acc": 0.025}
+{"idx": 723, "model": "sim", "level": 6, "cell": "rule5|12|v1", "acc": 0.007}
+{"idx": 724, "model": "sim", "level": 6, "cell": "rule5|12|v2", "acc": 0.011}
+{"idx": 725, "model": "sim", "level": 6, "cell": "rule5|12|v3", "acc": 0.011}
+{"idx": 726, "model": "sim", "level": 6, "cell": "rule5|12|v4", "acc": 0.004}
+{"idx": 727, "model": "sim", "level": 6, "cell": "rule5|12|v5", "acc": 0.011, "shuf": 0.018}
+{"idx": 728, "model": "sim", "level": 6, "cell": "rule6|12|v1", "acc": 0.018}
+{"idx": 729, "model": "sim", "level": 6, "cell": "rule6|12|v2", "acc": 0.014}
+{"idx": 730, "model": "sim", "level": 6, "cell": "rule6|12|v3", "acc": 0.021}
+{"idx": 731, "model": "sim", "level": 6, "cell": "rule6|12|v4", "acc": 0.021}
+{"idx": 732, "model": "sim", "level": 6, "cell": "rule6|12|v5", "acc": 0.028}
+{"idx": 733, "model": "sim", "level": 6, "cell": "bot|12|v1", "acc": 0.453, "shuf": 0.014}
+{"idx": 734, "model": "sim", "level": 6, "cell": "bot|12|v2", "acc": 0.077, "shuf": 0.018}
+{"idx": 735, "model": "sim", "level": 6, "cell": "bot|12|v3", "acc": 0.032, "shuf": 0.028}
+{"idx": 736, "model": "sim", "level": 6, "cell": "bot|12|v4", "acc": 0.007, "shuf": 0.011}
+{"idx": 737, "model": "sim", "level": 6, "cell": "bot|12|v5", "acc": 0.0, "shuf": 0.011}
+{"idx": 738, "model": "startlast", "level": 3, "cell": "rule1|4|v1", "acc": 0.017, "shuf": 0.01}
+{"idx": 739, "model": "startlast", "level": 3, "cell": "rule1|4|v2", "acc": 0.028}
+{"idx": 740, "model": "startlast", "level": 3, "cell": "rule2|4|v1", "acc": 0.014}
+{"idx": 741, "model": "startlast", "level": 3, "cell": "rule2|4|v2", "acc": 0.014, "shuf": 0.031}
+{"idx": 742, "model": "startlast", "level": 3, "cell": "rule3|4|v1", "acc": 0.028}
+{"idx": 743, "model": "startlast", "level": 3, "cell": "rule3|4|v2", "acc": 0.028}
+{"idx": 744, "model": "startlast", "level": 3, "cell": "bot|4|v1", "acc": 0.294, "shuf": 0.017}
+{"idx": 745, "model": "startlast", "level": 3, "cell": "bot|4|v2", "acc": 0.042, "shuf": 0.014}
+{"idx": 746, "model": "startlast", "level": 3, "cell": "rule1|8|v1", "acc": 0.01, "shuf": 0.017}
+{"idx": 747, "model": "startlast", "level": 3, "cell": "rule1|8|v2", "acc": 0.024}
+{"idx": 748, "model": "startlast", "level": 3, "cell": "rule2|8|v1", "acc": 0.017}
+{"idx": 749, "model": "startlast", "level": 3, "cell": "rule2|8|v2", "acc": 0.021, "shuf": 0.01}
+{"idx": 750, "model": "startlast", "level": 3, "cell": "rule3|8|v1", "acc": 0.028}
+{"idx": 751, "model": "startlast", "level": 3, "cell": "rule3|8|v2", "acc": 0.021}
+{"idx": 752, "model": "startlast", "level": 3, "cell": "bot|8|v1", "acc": 0.318, "shuf": 0.017}
+{"idx": 753, "model": "startlast", "level": 3, "cell": "bot|8|v2", "acc": 0.042, "shuf": 0.003}
+{"idx": 754, "model": "startlast", "level": 3, "cell": "rule1|12|v1", "acc": 0.021, "shuf": 0.021}
+{"idx": 755, "model": "startlast", "level": 3, "cell": "rule1|12|v2", "acc": 0.024}
+{"idx": 756, "model": "startlast", "level": 3, "cell": "rule2|12|v1", "acc": 0.021}
+{"idx": 757, "model": "startlast", "level": 3, "cell": "rule2|12|v2", "acc": 0.031, "shuf": 0.01}
+{"idx": 758, "model": "startlast", "level": 3, "cell": "rule3|12|v1", "acc": 0.017}
+{"idx": 759, "model": "startlast", "level": 3, "cell": "rule3|12|v2", "acc": 0.014}
+{"idx": 760, "model": "startlast", "level": 3, "cell": "bot|12|v1", "acc": 0.392, "shuf": 0.024}
+{"idx": 761, "model": "startlast", "level": 3, "cell": "bot|12|v2", "acc": 0.133, "shuf": 0.017}
+{"idx": 762, "model": "startlast", "level": 4, "cell": "rule1|4|v1", "acc": 0.024, "shuf": 0.021}
+{"idx": 763, "model": "startlast", "level": 4, "cell": "rule1|4|v2", "acc": 0.031}
+{"idx": 764, "model": "startlast", "level": 4, "cell": "rule1|4|v3", "acc": 0.017}
+{"idx": 765, "model": "startlast", "level": 4, "cell": "rule2|4|v1", "acc": 0.024}
+{"idx": 766, "model": "startlast", "level": 4, "cell": "rule2|4|v2", "acc": 0.017, "shuf": 0.007}
+{"idx": 767, "model": "startlast", "level": 4, "cell": "rule2|4|v3", "acc": 0.024}
+{"idx": 768, "model": "startlast", "level": 4, "cell": "rule3|4|v1", "acc": 0.017}
+{"idx": 769, "model": "startlast", "level": 4, "cell": "rule3|4|v2", "acc": 0.024}
+{"idx": 770, "model": "startlast", "level": 4, "cell": "rule3|4|v3", "acc": 0.024, "shuf": 0.01}
+{"idx": 771, "model": "startlast", "level": 4, "cell": "rule4|4|v1", "acc": 0.01}
+{"idx": 772, "model": "startlast", "level": 4, "cell": "rule4|4|v2", "acc": 0.017}
+{"idx": 773, "model": "startlast", "level": 4, "cell": "rule4|4|v3", "acc": 0.024}
+{"idx": 774, "model": "startlast", "level": 4, "cell": "bot|4|v1", "acc": 0.255, "shuf": 0.024}
+{"idx": 775, "model": "startlast", "level": 4, "cell": "bot|4|v2", "acc": 0.059, "shuf": 0.01}
+{"idx": 776, "model": "startlast", "level": 4, "cell": "bot|4|v3", "acc": 0.024, "shuf": 0.007}
+{"idx": 777, "model": "startlast", "level": 4, "cell": "rule1|8|v1", "acc": 0.024, "shuf": 0.014}
+{"idx": 778, "model": "startlast", "level": 4, "cell": "rule1|8|v2", "acc": 0.031}
+{"idx": 779, "model": "startlast", "level": 4, "cell": "rule1|8|v3", "acc": 0.017}
+{"idx": 780, "model": "startlast", "level": 4, "cell": "rule2|8|v1", "acc": 0.024}
+{"idx": 781, "model": "startlast", "level": 4, "cell": "rule2|8|v2", "acc": 0.014, "shuf": 0.017}
+{"idx": 782, "model": "startlast", "level": 4, "cell": "rule2|8|v3", "acc": 0.024}
+{"idx": 783, "model": "startlast", "level": 4, "cell": "rule3|8|v1", "acc": 0.031}
+{"idx": 784, "model": "startlast", "level": 4, "cell": "rule3|8|v2", "acc": 0.031}
+{"idx": 785, "model": "startlast", "level": 4, "cell": "rule3|8|v3", "acc": 0.01, "shuf": 0.024}
+{"idx": 786, "model": "startlast", "level": 4, "cell": "rule4|8|v1", "acc": 0.035}
+{"idx": 787, "model": "startlast", "level": 4, "cell": "rule4|8|v2", "acc": 0.024}
+{"idx": 788, "model": "startlast", "level": 4, "cell": "rule4|8|v3", "acc": 0.021}
+{"idx": 789, "model": "startlast", "level": 4, "cell": "bot|8|v1", "acc": 0.308, "shuf": 0.014}
+{"idx": 790, "model": "startlast", "level": 4, "cell": "bot|8|v2", "acc": 0.038, "shuf": 0.014}
+{"idx": 791, "model": "startlast", "level": 4, "cell": "bot|8|v3", "acc": 0.024, "shuf": 0.003}
+{"idx": 792, "model": "startlast", "level": 4, "cell": "rule1|12|v1", "acc": 0.017, "shuf": 0.024}
+{"idx": 793, "model": "startlast", "level": 4, "cell": "rule1|12|v2", "acc": 0.035}
+{"idx": 794, "model": "startlast", "level": 4, "cell": "rule1|12|v3", "acc": 0.021}
+{"idx": 795, "model": "startlast", "level": 4, "cell": "rule2|12|v1", "acc": 0.028}
+{"idx": 796, "model": "startlast", "level": 4, "cell": "rule2|12|v2", "acc": 0.031, "shuf": 0.024}
+{"idx": 797, "model": "startlast", "level": 4, "cell": "rule2|12|v3", "acc": 0.038}
+{"idx": 798, "model": "startlast", "level": 4, "cell": "rule3|12|v1", "acc": 0.028}
+{"idx": 799, "model": "startlast", "level": 4, "cell": "rule3|12|v2", "acc": 0.038}
+{"idx": 800, "model": "startlast", "level": 4, "cell": "rule3|12|v3", "acc": 0.031, "shuf": 0.024}
+{"idx": 801, "model": "startlast", "level": 4, "cell": "rule4|12|v1", "acc": 0.017}
+{"idx": 802, "model": "startlast", "level": 4, "cell": "rule4|12|v2", "acc": 0.038}
+{"idx": 803, "model": "startlast", "level": 4, "cell": "rule4|12|v3", "acc": 0.049}
+{"idx": 804, "model": "startlast", "level": 4, "cell": "bot|12|v1", "acc": 0.252, "shuf": 0.007}
+{"idx": 805, "model": "startlast", "level": 4, "cell": "bot|12|v2", "acc": 0.094, "shuf": 0.007}
+{"idx": 806, "model": "startlast", "level": 4, "cell": "bot|12|v3", "acc": 0.059, "shuf": 0.021}
+{"idx": 807, "model": "startlast", "level": 5, "cell": "rule1|4|v1", "acc": 0.01, "shuf": 0.014}
+{"idx": 808, "model": "startlast", "level": 5, "cell": "rule1|4|v2", "acc": 0.014}
+{"idx": 809, "model": "startlast", "level": 5, "cell": "rule1|4|v3", "acc": 0.024}
+{"idx": 810, "model": "startlast", "level": 5, "cell": "rule1|4|v4", "acc": 0.014}
+{"idx": 811, "model": "startlast", "level": 5, "cell": "rule2|4|v1", "acc": 0.014}
+{"idx": 812, "model": "startlast", "level": 5, "cell": "rule2|4|v2", "acc": 0.028, "shuf": 0.021}
+{"idx": 813, "model": "startlast", "level": 5, "cell": "rule2|4|v3", "acc": 0.014}
+{"idx": 814, "model": "startlast", "level": 5, "cell": "rule2|4|v4", "acc": 0.024}
+{"idx": 815, "model": "startlast", "level": 5, "cell": "rule3|4|v1", "acc": 0.024}
+{"idx": 816, "model": "startlast", "level": 5, "cell": "rule3|4|v2", "acc": 0.01}
+{"idx": 817, "model": "startlast", "level": 5, "cell": "rule3|4|v3", "acc": 0.017, "shuf": 0.028}
+{"idx": 818, "model": "startlast", "level": 5, "cell": "rule3|4|v4", "acc": 0.021}
+{"idx": 819, "model": "startlast", "level": 5, "cell": "rule4|4|v1", "acc": 0.007}
+{"idx": 820, "model": "startlast", "level": 5, "cell": "rule4|4|v2", "acc": 0.021}
+{"idx": 821, "model": "startlast", "level": 5, "cell": "rule4|4|v3", "acc": 0.014}
+{"idx": 822, "model": "startlast", "level": 5, "cell": "rule4|4|v4", "acc": 0.017, "shuf": 0.01}
+{"idx": 823, "model": "startlast", "level": 5, "cell": "rule5|4|v1", "acc": 0.0}
+{"idx": 824, "model": "startlast", "level": 5, "cell": "rule5|4|v2", "acc": 0.01}
+{"idx": 825, "model": "startlast", "level": 5, "cell": "rule5|4|v3", "acc": 0.035}
+{"idx": 826, "model": "startlast", "level": 5, "cell": "rule5|4|v4", "acc": 0.024}
+{"idx": 827, "model": "startlast", "level": 5, "cell": "bot|4|v1", "acc": 0.273, "shuf": 0.021}
+{"idx": 828, "model": "startlast", "level": 5, "cell": "bot|4|v2", "acc": 0.042, "shuf": 0.024}
+{"idx": 829, "model": "startlast", "level": 5, "cell": "bot|4|v3", "acc": 0.017, "shuf": 0.01}
+{"idx": 830, "model": "startlast", "level": 5, "cell": "bot|4|v4", "acc": 0.014, "shuf": 0.014}
+{"idx": 831, "model": "startlast", "level": 5, "cell": "rule1|8|v1", "acc": 0.021, "shuf": 0.021}
+{"idx": 832, "model": "startlast", "level": 5, "cell": "rule1|8|v2", "acc": 0.007}
+{"idx": 833, "model": "startlast", "level": 5, "cell": "rule1|8|v3", "acc": 0.024}
+{"idx": 834, "model": "startlast", "level": 5, "cell": "rule1|8|v4", "acc": 0.014}
+{"idx": 835, "model": "startlast", "level": 5, "cell": "rule2|8|v1", "acc": 0.014}
+{"idx": 836, "model": "startlast", "level": 5, "cell": "rule2|8|v2", "acc": 0.021, "shuf": 0.024}
+{"idx": 837, "model": "startlast", "level": 5, "cell": "rule2|8|v3", "acc": 0.014}
+{"idx": 838, "model": "startlast", "level": 5, "cell": "rule2|8|v4", "acc": 0.021}
+{"idx": 839, "model": "startlast", "level": 5, "cell": "rule3|8|v1", "acc": 0.017}
+{"idx": 840, "model": "startlast", "level": 5, "cell": "rule3|8|v2", "acc": 0.01}
+{"idx": 841, "model": "startlast", "level": 5, "cell": "rule3|8|v3", "acc": 0.031, "shuf": 0.014}
+{"idx": 842, "model": "startlast", "level": 5, "cell": "rule3|8|v4", "acc": 0.01}
+{"idx": 843, "model": "startlast", "level": 5, "cell": "rule4|8|v1", "acc": 0.017}
+{"idx": 844, "model": "startlast", "level": 5, "cell": "rule4|8|v2", "acc": 0.021}
+{"idx": 845, "model": "startlast", "level": 5, "cell": "rule4|8|v3", "acc": 0.014}
+{"idx": 846, "model": "startlast", "level": 5, "cell": "rule4|8|v4", "acc": 0.021, "shuf": 0.042}
+{"idx": 847, "model": "startlast", "level": 5, "cell": "rule5|8|v1", "acc": 0.003}
+{"idx": 848, "model": "startlast", "level": 5, "cell": "rule5|8|v2", "acc": 0.014}
+{"idx": 849, "model": "startlast", "level": 5, "cell": "rule5|8|v3", "acc": 0.031}
+{"idx": 850, "model": "startlast", "level": 5, "cell": "rule5|8|v4", "acc": 0.024}
+{"idx": 851, "model": "startlast", "level": 5, "cell": "bot|8|v1", "acc": 0.308, "shuf": 0.014}
+{"idx": 852, "model": "startlast", "level": 5, "cell": "bot|8|v2", "acc": 0.038, "shuf": 0.014}
+{"idx": 853, "model": "startlast", "level": 5, "cell": "bot|8|v3", "acc": 0.028, "shuf": 0.035}
+{"idx": 854, "model": "startlast", "level": 5, "cell": "bot|8|v4", "acc": 0.035, "shuf": 0.017}
+{"idx": 855, "model": "startlast", "level": 5, "cell": "rule1|12|v1", "acc": 0.01, "shuf": 0.014}
+{"idx": 856, "model": "startlast", "level": 5, "cell": "rule1|12|v2", "acc": 0.007}
+{"idx": 857, "model": "startlast", "level": 5, "cell": "rule1|12|v3", "acc": 0.021}
+{"idx": 858, "model": "startlast", "level": 5, "cell": "rule1|12|v4", "acc": 0.014}
+{"idx": 859, "model": "startlast", "level": 5, "cell": "rule2|12|v1", "acc": 0.003}
+{"idx": 860, "model": "startlast", "level": 5, "cell": "rule2|12|v2", "acc": 0.017, "shuf": 0.017}
+{"idx": 861, "model": "startlast", "level": 5, "cell": "rule2|12|v3", "acc": 0.028}
+{"idx": 862, "model": "startlast", "level": 5, "cell": "rule2|12|v4", "acc": 0.01}
+{"idx": 863, "model": "startlast", "level": 5, "cell": "rule3|12|v1", "acc": 0.003}
+{"idx": 864, "model": "startlast", "level": 5, "cell": "rule3|12|v2", "acc": 0.01}
+{"idx": 865, "model": "startlast", "level": 5, "cell": "rule3|12|v3", "acc": 0.028, "shuf": 0.014}
+{"idx": 866, "model": "startlast", "level": 5, "cell": "rule3|12|v4", "acc": 0.024}
+{"idx": 867, "model": "startlast", "level": 5, "cell": "rule4|12|v1", "acc": 0.014}
+{"idx": 868, "model": "startlast", "level": 5, "cell": "rule4|12|v2", "acc": 0.007}
+{"idx": 869, "model": "startlast", "level": 5, "cell": "rule4|12|v3", "acc": 0.017}
+{"idx": 870, "model": "startlast", "level": 5, "cell": "rule4|12|v4", "acc": 0.014, "shuf": 0.003}
+{"idx": 871, "model": "startlast", "level": 5, "cell": "rule5|12|v1", "acc": 0.01}
+{"idx": 872, "model": "startlast", "level": 5, "cell": "rule5|12|v2", "acc": 0.028}
+{"idx": 873, "model": "startlast", "level": 5, "cell": "rule5|12|v3", "acc": 0.021}
+{"idx": 874, "model": "startlast", "level": 5, "cell": "rule5|12|v4", "acc": 0.028}
+{"idx": 875, "model": "startlast", "level": 5, "cell": "bot|12|v1", "acc": 0.234, "shuf": 0.024}
+{"idx": 876, "model": "startlast", "level": 5, "cell": "bot|12|v2", "acc": 0.042, "shuf": 0.014}
+{"idx": 877, "model": "startlast", "level": 5, "cell": "bot|12|v3", "acc": 0.028, "shuf": 0.028}
+{"idx": 878, "model": "startlast", "level": 5, "cell": "bot|12|v4", "acc": 0.042, "shuf": 0.021}
+{"idx": 879, "model": "startlast", "level": 6, "cell": "rule1|4|v1", "acc": 0.011, "shuf": 0.011}
+{"idx": 880, "model": "startlast", "level": 6, "cell": "rule1|4|v2", "acc": 0.011}
+{"idx": 881, "model": "startlast", "level": 6, "cell": "rule1|4|v3", "acc": 0.014}
+{"idx": 882, "model": "startlast", "level": 6, "cell": "rule1|4|v4", "acc": 0.014}
+{"idx": 883, "model": "startlast", "level": 6, "cell": "rule1|4|v5", "acc": 0.025}
+{"idx": 884, "model": "startlast", "level": 6, "cell": "rule2|4|v1", "acc": 0.007}
+{"idx": 885, "model": "startlast", "level": 6, "cell": "rule2|4|v2", "acc": 0.018, "shuf": 0.011}
+{"idx": 886, "model": "startlast", "level": 6, "cell": "rule2|4|v3", "acc": 0.025}
+{"idx": 887, "model": "startlast", "level": 6, "cell": "rule2|4|v4", "acc": 0.011}
+{"idx": 888, "model": "startlast", "level": 6, "cell": "rule2|4|v5", "acc": 0.011}
+{"idx": 889, "model": "startlast", "level": 6, "cell": "rule3|4|v1", "acc": 0.018}
+{"idx": 890, "model": "startlast", "level": 6, "cell": "rule3|4|v2", "acc": 0.014}
+{"idx": 891, "model": "startlast", "level": 6, "cell": "rule3|4|v3", "acc": 0.021, "shuf": 0.014}
+{"idx": 892, "model": "startlast", "level": 6, "cell": "rule3|4|v4", "acc": 0.018}
+{"idx": 893, "model": "startlast", "level": 6, "cell": "rule3|4|v5", "acc": 0.021}
+{"idx": 894, "model": "startlast", "level": 6, "cell": "rule4|4|v1", "acc": 0.004}
+{"idx": 895, "model": "startlast", "level": 6, "cell": "rule4|4|v2", "acc": 0.007}
+{"idx": 896, "model": "startlast", "level": 6, "cell": "rule4|4|v3", "acc": 0.011}
+{"idx": 897, "model": "startlast", "level": 6, "cell": "rule4|4|v4", "acc": 0.032, "shuf": 0.025}
+{"idx": 898, "model": "startlast", "level": 6, "cell": "rule4|4|v5", "acc": 0.028}
+{"idx": 899, "model": "startlast", "level": 6, "cell": "rule5|4|v1", "acc": 0.004}
+{"idx": 900, "model": "startlast", "level": 6, "cell": "rule5|4|v2", "acc": 0.018}
+{"idx": 901, "model": "startlast", "level": 6, "cell": "rule5|4|v3", "acc": 0.014}
+{"idx": 902, "model": "startlast", "level": 6, "cell": "rule5|4|v4", "acc": 0.021}
+{"idx": 903, "model": "startlast", "level": 6, "cell": "rule5|4|v5", "acc": 0.007, "shuf": 0.014}
+{"idx": 904, "model": "startlast", "level": 6, "cell": "rule6|4|v1", "acc": 0.011}
+{"idx": 905, "model": "startlast", "level": 6, "cell": "rule6|4|v2", "acc": 0.014}
+{"idx": 906, "model": "startlast", "level": 6, "cell": "rule6|4|v3", "acc": 0.014}
+{"idx": 907, "model": "startlast", "level": 6, "cell": "rule6|4|v4", "acc": 0.032}
+{"idx": 908, "model": "startlast", "level": 6, "cell": "rule6|4|v5", "acc": 0.028}
+{"idx": 909, "model": "startlast", "level": 6, "cell": "bot|4|v1", "acc": 0.225, "shuf": 0.011}
+{"idx": 910, "model": "startlast", "level": 6, "cell": "bot|4|v2", "acc": 0.053, "shuf": 0.014}
+{"idx": 911, "model": "startlast", "level": 6, "cell": "bot|4|v3", "acc": 0.011, "shuf": 0.018}
+{"idx": 912, "model": "startlast", "level": 6, "cell": "bot|4|v4", "acc": 0.018, "shuf": 0.021}
+{"idx": 913, "model": "startlast", "level": 6, "cell": "bot|4|v5", "acc": 0.014, "shuf": 0.021}
+{"idx": 914, "model": "startlast", "level": 6, "cell": "rule1|8|v1", "acc": 0.007, "shuf": 0.0}
+{"idx": 915, "model": "startlast", "level": 6, "cell": "rule1|8|v2", "acc": 0.018}
+{"idx": 916, "model": "startlast", "level": 6, "cell": "rule1|8|v3", "acc": 0.028}
+{"idx": 917, "model": "startlast", "level": 6, "cell": "rule1|8|v4", "acc": 0.028}
+{"idx": 918, "model": "startlast", "level": 6, "cell": "rule1|8|v5", "acc": 0.021}
+{"idx": 919, "model": "startlast", "level": 6, "cell": "rule2|8|v1", "acc": 0.004}
+{"idx": 920, "model": "startlast", "level": 6, "cell": "rule2|8|v2", "acc": 0.018, "shuf": 0.011}
+{"idx": 921, "model": "startlast", "level": 6, "cell": "rule2|8|v3", "acc": 0.028}
+{"idx": 922, "model": "startlast", "level": 6, "cell": "rule2|8|v4", "acc": 0.014}
+{"idx": 923, "model": "startlast", "level": 6, "cell": "rule2|8|v5", "acc": 0.018}
+{"idx": 924, "model": "startlast", "level": 6, "cell": "rule3|8|v1", "acc": 0.011}
+{"idx": 925, "model": "startlast", "level": 6, "cell": "rule3|8|v2", "acc": 0.025}
+{"idx": 926, "model": "startlast", "level": 6, "cell": "rule3|8|v3", "acc": 0.014, "shuf": 0.004}
+{"idx": 927, "model": "startlast", "level": 6, "cell": "rule3|8|v4", "acc": 0.021}
+{"idx": 928, "model": "startlast", "level": 6, "cell": "rule3|8|v5", "acc": 0.018}
+{"idx": 929, "model": "startlast", "level": 6, "cell": "rule4|8|v1", "acc": 0.021}
+{"idx": 930, "model": "startlast", "level": 6, "cell": "rule4|8|v2", "acc": 0.011}
+{"idx": 931, "model": "startlast", "level": 6, "cell": "rule4|8|v3", "acc": 0.018}
+{"idx": 932, "model": "startlast", "level": 6, "cell": "rule4|8|v4", "acc": 0.021, "shuf": 0.021}
+{"idx": 933, "model": "startlast", "level": 6, "cell": "rule4|8|v5", "acc": 0.025}
+{"idx": 934, "model": "startlast", "level": 6, "cell": "rule5|8|v1", "acc": 0.011}
+{"idx": 935, "model": "startlast", "level": 6, "cell": "rule5|8|v2", "acc": 0.021}
+{"idx": 936, "model": "startlast", "level": 6, "cell": "rule5|8|v3", "acc": 0.025}
+{"idx": 937, "model": "startlast", "level": 6, "cell": "rule5|8|v4", "acc": 0.014}
+{"idx": 938, "model": "startlast", "level": 6, "cell": "rule5|8|v5", "acc": 0.014, "shuf": 0.004}
+{"idx": 939, "model": "startlast", "level": 6, "cell": "rule6|8|v1", "acc": 0.004}
+{"idx": 940, "model": "startlast", "level": 6, "cell": "rule6|8|v2", "acc": 0.014}
+{"idx": 941, "model": "startlast", "level": 6, "cell": "rule6|8|v3", "acc": 0.014}
+{"idx": 942, "model": "startlast", "level": 6, "cell": "rule6|8|v4", "acc": 0.021}
+{"idx": 943, "model": "startlast", "level": 6, "cell": "rule6|8|v5", "acc": 0.028}
+{"idx": 944, "model": "startlast", "level": 6, "cell": "bot|8|v1", "acc": 0.263, "shuf": 0.011}
+{"idx": 945, "model": "startlast", "level": 6, "cell": "bot|8|v2", "acc": 0.063, "shuf": 0.0}
+{"idx": 946, "model": "startlast", "level": 6, "cell": "bot|8|v3", "acc": 0.025, "shuf": 0.011}
+{"idx": 947, "model": "startlast", "level": 6, "cell": "bot|8|v4", "acc": 0.025, "shuf": 0.039}
+{"idx": 948, "model": "startlast", "level": 6, "cell": "bot|8|v5", "acc": 0.021, "shuf": 0.025}
+{"idx": 949, "model": "startlast", "level": 6, "cell": "rule1|12|v1", "acc": 0.007, "shuf": 0.011}
+{"idx": 950, "model": "startlast", "level": 6, "cell": "rule1|12|v2", "acc": 0.021}
+{"idx": 951, "model": "startlast", "level": 6, "cell": "rule1|12|v3", "acc": 0.021}
+{"idx": 952, "model": "startlast", "level": 6, "cell": "rule1|12|v4", "acc": 0.014}
+{"idx": 953, "model": "startlast", "level": 6, "cell": "rule1|12|v5", "acc": 0.028}
+{"idx": 954, "model": "startlast", "level": 6, "cell": "rule2|12|v1", "acc": 0.004}
+{"idx": 955, "model": "startlast", "level": 6, "cell": "rule2|12|v2", "acc": 0.018, "shuf": 0.018}
+{"idx": 956, "model": "startlast", "level": 6, "cell": "rule2|12|v3", "acc": 0.028}
+{"idx": 957, "model": "startlast", "level": 6, "cell": "rule2|12|v4", "acc": 0.014}
+{"idx": 958, "model": "startlast", "level": 6, "cell": "rule2|12|v5", "acc": 0.018}
+{"idx": 959, "model": "startlast", "level": 6, "cell": "rule3|12|v1", "acc": 0.007}
+{"idx": 960, "model": "startlast", "level": 6, "cell": "rule3|12|v2", "acc": 0.025}
+{"idx": 961, "model": "startlast", "level": 6, "cell": "rule3|12|v3", "acc": 0.018, "shuf": 0.018}
+{"idx": 962, "model": "startlast", "level": 6, "cell": "rule3|12|v4", "acc": 0.011}
+{"idx": 963, "model": "startlast", "level": 6, "cell": "rule3|12|v5", "acc": 0.011}
+{"idx": 964, "model": "startlast", "level": 6, "cell": "rule4|12|v1", "acc": 0.004}
+{"idx": 965, "model": "startlast", "level": 6, "cell": "rule4|12|v2", "acc": 0.018}
+{"idx": 966, "model": "startlast", "level": 6, "cell": "rule4|12|v3", "acc": 0.021}
+{"idx": 967, "model": "startlast", "level": 6, "cell": "rule4|12|v4", "acc": 0.021, "shuf": 0.014}
+{"idx": 968, "model": "startlast", "level": 6, "cell": "rule4|12|v5", "acc": 0.025}
+{"idx": 969, "model": "startlast", "level": 6, "cell": "rule5|12|v1", "acc": 0.004}
+{"idx": 970, "model": "startlast", "level": 6, "cell": "rule5|12|v2", "acc": 0.011}
+{"idx": 971, "model": "startlast", "level": 6, "cell": "rule5|12|v3", "acc": 0.039}
+{"idx": 972, "model": "startlast", "level": 6, "cell": "rule5|12|v4", "acc": 0.032}
+{"idx": 973, "model": "startlast", "level": 6, "cell": "rule5|12|v5", "acc": 0.025, "shuf": 0.0}
+{"idx": 974, "model": "startlast", "level": 6, "cell": "rule6|12|v1", "acc": 0.011}
+{"idx": 975, "model": "startlast", "level": 6, "cell": "rule6|12|v2", "acc": 0.021}
+{"idx": 976, "model": "startlast", "level": 6, "cell": "rule6|12|v3", "acc": 0.014}
+{"idx": 977, "model": "startlast", "level": 6, "cell": "rule6|12|v4", "acc": 0.025}
+{"idx": 978, "model": "startlast", "level": 6, "cell": "rule6|12|v5", "acc": 0.018}
+{"idx": 979, "model": "startlast", "level": 6, "cell": "bot|12|v1", "acc": 0.161, "shuf": 0.011}
+{"idx": 980, "model": "startlast", "level": 6, "cell": "bot|12|v2", "acc": 0.035, "shuf": 0.025}
+{"idx": 981, "model": "startlast", "level": 6, "cell": "bot|12|v3", "acc": 0.032, "shuf": 0.018}
+{"idx": 982, "model": "startlast", "level": 6, "cell": "bot|12|v4", "acc": 0.039, "shuf": 0.025}
+{"idx": 983, "model": "startlast", "level": 6, "cell": "bot|12|v5", "acc": 0.028, "shuf": 0.011}

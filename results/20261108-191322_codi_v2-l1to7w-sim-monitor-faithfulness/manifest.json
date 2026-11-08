@@ -1,0 +1,92 @@
+{
+  "run_id": "20261108-191322_codi_v2-l1to7w-sim-monitor-faithfulness",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "SIM-CODI start-first checkpoint-17820 (20261108-130905), loaded without the step decoder",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "validation",
+    "n_examples": 270,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": null,
+    "compute_steps": 6,
+    "extra": {
+      "by_level": {
+        "3": {
+          "clean": 0.997,
+          "onroute": [
+            0,
+            1
+          ]
+        },
+        "4": {
+          "clean": 1.0,
+          "onroute": [
+            0,
+            1,
+            2
+          ]
+        },
+        "5": {
+          "clean": 0.983,
+          "onroute": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        "6": {
+          "clean": 0.975,
+          "onroute": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "7": {
+          "clean": 0.958,
+          "onroute": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      },
+      "n_train": 7200,
+      "definitions": {
+        "dec_right": "decoder = true v_ks on clean right items",
+        "mon_wrong": "monitor answer (decoded value pushed through remaining rules) = model answer on clean wrong items",
+        "swap": "swapJ_LOC_JP: t21a both_J donor; dec_donor = decoder at JP reads the donor-implied value; mon_actual = monitor answer equals the actual answer"
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "scripts/necessity/rc_monitor.py simsf mps <out> 1200",
+    "n_train_per_level": 1200,
+    "train_levels": "2-7 (train split)",
+    "decoders": "linear 100-way per site x {input z_j, entries = keys+values at layers 3/6/9/12}",
+    "test": "valid L3-L7, t21a items and donors",
+    "prereg": "t_predictions.md t21 (commit 96a04d4)"
+  },
+  "seed": null,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Monitor test (t19 design) on SIM-CODI start-first, including own errors",
+  "timestamp_utc": "2026-11-08T19:13:22.446872+00:00",
+  "git": {
+    "commit": "520bee8",
+    "dirty": true
+  }
+}

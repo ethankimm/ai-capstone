@@ -1,0 +1,379 @@
+{
+  "run_id": "20261108-190213_codi_v2-l1to7w-prefill-chain-probe",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "simsf: SIM-CODI start-first checkpoint-17820 (20261108-130905); stab: start-first CODI checkpoint-17820 (20261105-044444); sim: SIM-CODI start-last checkpoint-16335 (20261107-225603); startlast: start-last CODI checkpoint-17820 (20261106-083843)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "validation",
+    "n_examples": 984,
+    "seed": 30
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": null,
+    "compute_steps": 0,
+    "extra": {
+      "cells": "best of layers 4/8/12, exact; diagonal = v_k at the end of rule k; at_or_after = best over rule ends m >= k; bot = <bot>",
+      "by_model": {
+        "simsf": {
+          "3": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.458,
+              0.038
+            ],
+            "at_or_after": [
+              0.458,
+              0.038
+            ],
+            "bot": [
+              0.517,
+              0.108
+            ]
+          },
+          "4": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.378,
+              0.038,
+              0.031
+            ],
+            "at_or_after": [
+              0.378,
+              0.038,
+              0.031
+            ],
+            "bot": [
+              0.458,
+              0.084,
+              0.024
+            ]
+          },
+          "5": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.409,
+              0.045,
+              0.028,
+              0.021
+            ],
+            "at_or_after": [
+              0.409,
+              0.045,
+              0.035,
+              0.028
+            ],
+            "bot": [
+              0.479,
+              0.084,
+              0.031,
+              0.042
+            ]
+          },
+          "6": {
+            "n_fit": 2000,
+            "n_test": 285,
+            "diagonal": [
+              0.365,
+              0.025,
+              0.021,
+              0.032,
+              0.021
+            ],
+            "at_or_after": [
+              0.365,
+              0.035,
+              0.021,
+              0.035,
+              0.025
+            ],
+            "bot": [
+              0.442,
+              0.067,
+              0.028,
+              0.028,
+              0.014
+            ]
+          }
+        },
+        "stab": {
+          "3": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.455,
+              0.353
+            ],
+            "at_or_after": [
+              0.685,
+              0.552
+            ],
+            "bot": [
+              0.57,
+              0.357
+            ]
+          },
+          "4": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.43,
+              0.322,
+              0.252
+            ],
+            "at_or_after": [
+              0.668,
+              0.577,
+              0.287
+            ],
+            "bot": [
+              0.448,
+              0.329,
+              0.213
+            ]
+          },
+          "5": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.413,
+              0.332,
+              0.238,
+              0.122
+            ],
+            "at_or_after": [
+              0.647,
+              0.538,
+              0.301,
+              0.168
+            ],
+            "bot": [
+              0.322,
+              0.164,
+              0.189,
+              0.203
+            ]
+          },
+          "6": {
+            "n_fit": 2000,
+            "n_test": 285,
+            "diagonal": [
+              0.456,
+              0.298,
+              0.232,
+              0.13,
+              0.119
+            ],
+            "at_or_after": [
+              0.653,
+              0.523,
+              0.267,
+              0.172,
+              0.161
+            ],
+            "bot": [
+              0.27,
+              0.116,
+              0.091,
+              0.13,
+              0.154
+            ]
+          }
+        },
+        "sim": {
+          "3": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.024,
+              0.031
+            ],
+            "at_or_after": [
+              0.028,
+              0.031
+            ],
+            "bot": [
+              0.524,
+              0.101
+            ]
+          },
+          "4": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.017,
+              0.021,
+              0.038
+            ],
+            "at_or_after": [
+              0.028,
+              0.052,
+              0.038
+            ],
+            "bot": [
+              0.444,
+              0.07,
+              0.031
+            ]
+          },
+          "5": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.021,
+              0.028,
+              0.024,
+              0.028
+            ],
+            "at_or_after": [
+              0.031,
+              0.028,
+              0.024,
+              0.028
+            ],
+            "bot": [
+              0.493,
+              0.07,
+              0.028,
+              0.017
+            ]
+          },
+          "6": {
+            "n_fit": 2000,
+            "n_test": 285,
+            "diagonal": [
+              0.014,
+              0.021,
+              0.021,
+              0.025,
+              0.025
+            ],
+            "at_or_after": [
+              0.018,
+              0.025,
+              0.025,
+              0.025,
+              0.028
+            ],
+            "bot": [
+              0.453,
+              0.077,
+              0.032,
+              0.021,
+              0.0
+            ]
+          }
+        },
+        "startlast": {
+          "3": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.021,
+              0.031
+            ],
+            "at_or_after": [
+              0.028,
+              0.031
+            ],
+            "bot": [
+              0.392,
+              0.133
+            ]
+          },
+          "4": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.024,
+              0.031,
+              0.031
+            ],
+            "at_or_after": [
+              0.035,
+              0.038,
+              0.049
+            ],
+            "bot": [
+              0.308,
+              0.094,
+              0.059
+            ]
+          },
+          "5": {
+            "n_fit": 2000,
+            "n_test": 286,
+            "diagonal": [
+              0.021,
+              0.028,
+              0.031,
+              0.021
+            ],
+            "at_or_after": [
+              0.024,
+              0.028,
+              0.035,
+              0.028
+            ],
+            "bot": [
+              0.308,
+              0.042,
+              0.028,
+              0.042
+            ]
+          },
+          "6": {
+            "n_fit": 2000,
+            "n_test": 285,
+            "diagonal": [
+              0.011,
+              0.018,
+              0.021,
+              0.032,
+              0.025
+            ],
+            "at_or_after": [
+              0.021,
+              0.025,
+              0.039,
+              0.032,
+              0.028
+            ],
+            "bot": [
+              0.263,
+              0.063,
+              0.032,
+              0.039,
+              0.028
+            ]
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "scripts/necessity/prefill_probe.py",
+    "probes": "ridge to 100-way one-hot, standardised, penalty from a held-out 15%; shuffled control on the diagonal and at <bot>",
+    "n_fit_per_level": 2000,
+    "test": "all valid items of L3-L6",
+    "positions": "period ending each rule, and <bot>",
+    "prereg": "t_predictions.md t21 (commit 96a04d4)"
+  },
+  "seed": 30,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Does the question pass run the chain by itself, next to the latents?",
+  "timestamp_utc": "2026-11-08T19:02:13.973841+00:00",
+  "git": {
+    "commit": "96a04d4",
+    "dirty": true
+  }
+}

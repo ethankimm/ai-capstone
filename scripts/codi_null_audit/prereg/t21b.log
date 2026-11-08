@@ -1,0 +1,26 @@
+/Users/henninglindig/Documents/Penn/CIS5980/codi/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+/Users/henninglindig/Documents/Penn/CIS5980/codi/.venv/lib/python3.12/site-packages/peft/tuners/lora/layer.py:1768: UserWarning: fan_in_fan_out is set to False but the target module is `Conv1D`. Setting fan_in_fan_out to True.
+  warnings.warn(
+Passing a tuple of `past_key_values` is deprecated and will be removed in Transformers v4.53.0. You should pass an instance of `Cache` instead, e.g. `past_key_values=DynamicCache.from_legacy_cache(past_key_values)`.
+trainable params: 20057088 || all params: 144499200 || trainable%: 13.880414562848792
+11:04 simsf train features 7200 194s
+11:05 simsf decoders trained 218s
+11:06 simsf L3 clean 0.997 onroute [0, 1]
+  input   dec_right 0.97 0.83 0.54 0.42 0.24 0.25 | mon_wrong 0.00 0.00 0.00 0.00 0.00 0.00 | swap_j->j mon_actual 0.97 0.83 0.20 0.01 0.02 0.02
+  entries dec_right 1.00 0.99 0.80 0.65 0.78 0.80 | mon_wrong 0.00 0.00 0.00 0.00 0.00 0.00 | swap_j->j mon_actual 1.00 0.98 0.24 0.17 0.64 0.73
+11:07 simsf L4 clean 1.000 onroute [0, 1, 2]
+  input   dec_right 0.97 0.82 0.70 0.46 0.35 0.25 | mon_wrong 0.00 0.00 0.00 0.00 0.00 0.00 | swap_j->j mon_actual 0.98 0.84 0.69 0.14 0.02 0.02
+  entries dec_right 0.99 0.98 0.92 0.75 0.66 0.73 | mon_wrong 0.00 0.00 0.00 0.00 0.00 0.00 | swap_j->j mon_actual 0.99 0.97 0.95 0.22 0.24 0.58
+11:09 simsf L5 clean 0.983 onroute [0, 1, 2, 3]
+  input   dec_right 0.97 0.78 0.68 0.65 0.50 0.38 | mon_wrong 0.20 0.40 0.00 0.00 0.00 0.00 | swap_j->j mon_actual 0.97 0.74 0.66 0.67 0.13 0.01
+  entries dec_right 1.00 0.98 0.96 0.90 0.78 0.64 | mon_wrong 0.00 0.00 0.00 0.40 0.20 0.20 | swap_j->j mon_actual 0.99 0.96 0.92 0.91 0.15 0.38
+11:10 simsf L6 clean 0.975 onroute [0, 1, 2, 3, 4]
+  input   dec_right 0.97 0.77 0.63 0.60 0.57 0.52 | mon_wrong 0.14 0.14 0.14 0.29 0.29 0.29 | swap_j->j mon_actual 0.95 0.75 0.66 0.60 0.53 0.16
+  entries dec_right 0.99 0.98 0.94 0.91 0.88 0.74 | mon_wrong 0.00 0.14 0.00 0.29 0.29 0.14 | swap_j->j mon_actual 0.98 0.98 0.94 0.90 0.82 0.21
+11:12 simsf L7 clean 0.958 onroute [0, 1, 2, 3, 4]
+  input   dec_right 0.98 0.77 0.71 0.62 0.58 0.41 | mon_wrong 0.00 0.08 0.17 0.33 0.17 0.17 | swap_j->j mon_actual 0.96 0.77 0.70 0.58 0.49 0.41
+  entries dec_right 0.99 0.96 0.94 0.91 0.81 0.78 | mon_wrong 0.00 0.00 0.17 0.08 0.25 0.25 | swap_j->j mon_actual 0.97 0.94 0.91 0.84 0.71 0.72
+DONE
+rc=0

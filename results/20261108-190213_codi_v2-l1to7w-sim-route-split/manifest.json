@@ -1,0 +1,706 @@
+{
+  "run_id": "20261108-190213_codi_v2-l1to7w-sim-route-split",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "SIM-CODI start-first checkpoint-17820 (20261108-130905), loaded without the step decoder",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "validation",
+    "n_examples": 1428,
+    "seed": 20
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.982,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "clean exact on valid L3-L7 (start-first)",
+      "by_level": {
+        "3": {
+          "clean": 0.997,
+          "both_0": {
+            "n": 285,
+            "follows": 1.0,
+            "keeps": 0.0
+          },
+          "input_0": {
+            "n": 285,
+            "follows": 1.0,
+            "keeps": 0.0
+          },
+          "kv_0": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_0": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_1": {
+            "n": 285,
+            "follows": 1.0,
+            "keeps": 0.0
+          },
+          "input_1": {
+            "n": 285,
+            "follows": 0.818,
+            "keeps": 0.007
+          },
+          "kv_1": {
+            "n": 285,
+            "follows": 0.011,
+            "keeps": 0.846
+          },
+          "kv_noans_1": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 0.996
+          },
+          "both_2": {
+            "n": 285,
+            "follows": 0.242,
+            "keeps": 0.032
+          },
+          "input_2": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 0.996
+          },
+          "kv_2": {
+            "n": 285,
+            "follows": 0.221,
+            "keeps": 0.123
+          },
+          "kv_noans_2": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 0.965
+          },
+          "both_3": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 0.989
+          },
+          "input_3": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_3": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 0.993
+          },
+          "kv_noans_3": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 0.996
+          },
+          "both_4": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "input_4": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_4": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_4": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_5": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "input_5": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_5": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_5": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_all": {
+            "n": 285,
+            "follows": 0.568,
+            "keeps": 0.004
+          },
+          "kv_all": {
+            "n": 285,
+            "follows": 0.572,
+            "keeps": 0.004
+          }
+        },
+        "4": {
+          "clean": 1.0,
+          "both_0": {
+            "n": 285,
+            "follows": 0.996,
+            "keeps": 0.004
+          },
+          "input_0": {
+            "n": 285,
+            "follows": 0.996,
+            "keeps": 0.004
+          },
+          "kv_0": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_0": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_1": {
+            "n": 285,
+            "follows": 0.996,
+            "keeps": 0.0
+          },
+          "input_1": {
+            "n": 285,
+            "follows": 0.996,
+            "keeps": 0.0
+          },
+          "kv_1": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_1": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_2": {
+            "n": 285,
+            "follows": 0.993,
+            "keeps": 0.0
+          },
+          "input_2": {
+            "n": 285,
+            "follows": 0.709,
+            "keeps": 0.007
+          },
+          "kv_2": {
+            "n": 285,
+            "follows": 0.025,
+            "keeps": 0.733
+          },
+          "kv_noans_2": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 0.993
+          },
+          "both_3": {
+            "n": 285,
+            "follows": 0.225,
+            "keeps": 0.035
+          },
+          "input_3": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 0.996
+          },
+          "kv_3": {
+            "n": 285,
+            "follows": 0.2,
+            "keeps": 0.123
+          },
+          "kv_noans_3": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 0.94
+          },
+          "both_4": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 0.989
+          },
+          "input_4": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_4": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 0.989
+          },
+          "kv_noans_4": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_5": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "input_5": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_5": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_5": {
+            "n": 285,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_all": {
+            "n": 285,
+            "follows": 0.477,
+            "keeps": 0.007
+          },
+          "kv_all": {
+            "n": 285,
+            "follows": 0.47,
+            "keeps": 0.011
+          }
+        },
+        "5": {
+          "clean": 0.983,
+          "both_0": {
+            "n": 281,
+            "follows": 0.993,
+            "keeps": 0.0
+          },
+          "input_0": {
+            "n": 281,
+            "follows": 0.993,
+            "keeps": 0.0
+          },
+          "kv_0": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_0": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_1": {
+            "n": 281,
+            "follows": 0.986,
+            "keeps": 0.0
+          },
+          "input_1": {
+            "n": 281,
+            "follows": 0.986,
+            "keeps": 0.0
+          },
+          "kv_1": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_1": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_2": {
+            "n": 281,
+            "follows": 0.993,
+            "keeps": 0.0
+          },
+          "input_2": {
+            "n": 281,
+            "follows": 0.989,
+            "keeps": 0.0
+          },
+          "kv_2": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_2": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_3": {
+            "n": 281,
+            "follows": 0.993,
+            "keeps": 0.0
+          },
+          "input_3": {
+            "n": 281,
+            "follows": 0.694,
+            "keeps": 0.004
+          },
+          "kv_3": {
+            "n": 281,
+            "follows": 0.007,
+            "keeps": 0.694
+          },
+          "kv_noans_3": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 0.986
+          },
+          "both_4": {
+            "n": 281,
+            "follows": 0.164,
+            "keeps": 0.064
+          },
+          "input_4": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 0.989
+          },
+          "kv_4": {
+            "n": 281,
+            "follows": 0.164,
+            "keeps": 0.132
+          },
+          "kv_noans_4": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 0.929
+          },
+          "both_5": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 0.993
+          },
+          "input_5": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_5": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 0.989
+          },
+          "kv_noans_5": {
+            "n": 281,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_all": {
+            "n": 281,
+            "follows": 0.406,
+            "keeps": 0.011
+          },
+          "kv_all": {
+            "n": 281,
+            "follows": 0.402,
+            "keeps": 0.007
+          }
+        },
+        "6": {
+          "clean": 0.975,
+          "both_0": {
+            "n": 278,
+            "follows": 0.989,
+            "keeps": 0.0
+          },
+          "input_0": {
+            "n": 278,
+            "follows": 0.989,
+            "keeps": 0.0
+          },
+          "kv_0": {
+            "n": 278,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_0": {
+            "n": 278,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_1": {
+            "n": 278,
+            "follows": 0.982,
+            "keeps": 0.0
+          },
+          "input_1": {
+            "n": 278,
+            "follows": 0.982,
+            "keeps": 0.0
+          },
+          "kv_1": {
+            "n": 278,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_1": {
+            "n": 278,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_2": {
+            "n": 278,
+            "follows": 0.996,
+            "keeps": 0.0
+          },
+          "input_2": {
+            "n": 278,
+            "follows": 0.996,
+            "keeps": 0.0
+          },
+          "kv_2": {
+            "n": 278,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_2": {
+            "n": 278,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_3": {
+            "n": 278,
+            "follows": 0.982,
+            "keeps": 0.0
+          },
+          "input_3": {
+            "n": 278,
+            "follows": 0.975,
+            "keeps": 0.0
+          },
+          "kv_3": {
+            "n": 278,
+            "follows": 0.0,
+            "keeps": 0.996
+          },
+          "kv_noans_3": {
+            "n": 278,
+            "follows": 0.0,
+            "keeps": 0.996
+          },
+          "both_4": {
+            "n": 278,
+            "follows": 0.996,
+            "keeps": 0.0
+          },
+          "input_4": {
+            "n": 278,
+            "follows": 0.622,
+            "keeps": 0.022
+          },
+          "kv_4": {
+            "n": 278,
+            "follows": 0.014,
+            "keeps": 0.651
+          },
+          "kv_noans_4": {
+            "n": 278,
+            "follows": 0.0,
+            "keeps": 0.982
+          },
+          "both_5": {
+            "n": 278,
+            "follows": 0.198,
+            "keeps": 0.108
+          },
+          "input_5": {
+            "n": 278,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_5": {
+            "n": 278,
+            "follows": 0.191,
+            "keeps": 0.126
+          },
+          "kv_noans_5": {
+            "n": 278,
+            "follows": 0.004,
+            "keeps": 0.899
+          },
+          "both_all": {
+            "n": 278,
+            "follows": 0.496,
+            "keeps": 0.018
+          },
+          "kv_all": {
+            "n": 278,
+            "follows": 0.504,
+            "keeps": 0.018
+          }
+        },
+        "7": {
+          "clean": 0.958,
+          "both_0": {
+            "n": 273,
+            "follows": 0.967,
+            "keeps": 0.0
+          },
+          "input_0": {
+            "n": 273,
+            "follows": 0.967,
+            "keeps": 0.0
+          },
+          "kv_0": {
+            "n": 273,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_0": {
+            "n": 273,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_1": {
+            "n": 273,
+            "follows": 0.974,
+            "keeps": 0.0
+          },
+          "input_1": {
+            "n": 273,
+            "follows": 0.974,
+            "keeps": 0.0
+          },
+          "kv_1": {
+            "n": 273,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_1": {
+            "n": 273,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_2": {
+            "n": 273,
+            "follows": 0.952,
+            "keeps": 0.0
+          },
+          "input_2": {
+            "n": 273,
+            "follows": 0.952,
+            "keeps": 0.0
+          },
+          "kv_2": {
+            "n": 273,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_2": {
+            "n": 273,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_3": {
+            "n": 273,
+            "follows": 0.934,
+            "keeps": 0.004
+          },
+          "input_3": {
+            "n": 273,
+            "follows": 0.927,
+            "keeps": 0.004
+          },
+          "kv_3": {
+            "n": 273,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_noans_3": {
+            "n": 273,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "both_4": {
+            "n": 273,
+            "follows": 0.945,
+            "keeps": 0.004
+          },
+          "input_4": {
+            "n": 273,
+            "follows": 0.945,
+            "keeps": 0.004
+          },
+          "kv_4": {
+            "n": 273,
+            "follows": 0.0,
+            "keeps": 0.996
+          },
+          "kv_noans_4": {
+            "n": 273,
+            "follows": 0.0,
+            "keeps": 0.996
+          },
+          "both_5": {
+            "n": 273,
+            "follows": 0.945,
+            "keeps": 0.0
+          },
+          "input_5": {
+            "n": 273,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "kv_5": {
+            "n": 273,
+            "follows": 0.945,
+            "keeps": 0.0
+          },
+          "kv_noans_5": {
+            "n": 273,
+            "follows": 0.022,
+            "keeps": 0.007
+          },
+          "both_all": {
+            "n": 273,
+            "follows": 0.941,
+            "keeps": 0.0
+          },
+          "kv_all": {
+            "n": 273,
+            "follows": 0.945,
+            "keeps": 0.0
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/t15_rc_route_split.py (MODEL=simsf LEVELS=3,4,5,6,7), copy in scripts/codi_null_audit/prereg/",
+    "conditions": "as t15 (20261108-073431): both / input-only / entries-only / entries hidden from answer per site, and all sites; donors as t1 with equal question token length",
+    "prereg": "scripts/codi_null_audit/prereg/t_predictions.md, t21 (commit 96a04d4)",
+    "dtype": "float32"
+  },
+  "seed": 20,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "The necessity check (t15 route split) on SIM-CODI start-first, L3-L7",
+  "timestamp_utc": "2026-11-08T19:02:13.800180+00:00",
+  "git": {
+    "commit": "96a04d4",
+    "dirty": true
+  }
+}
