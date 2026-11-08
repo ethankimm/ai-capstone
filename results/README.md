@@ -295,3 +295,7 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261108-190213_codi_v2-l1to7w-prefill-chain-probe](20261108-190213_codi_v2-l1to7w-prefill-chain-probe/) | codi | gpt2 | validation (n=984) | 0 | - | 30 | full_run | Henning Lindig |
 | [20261108-190712_codi_v2-l1to7w-startlast-pause-mechanism](20261108-190712_codi_v2-l1to7w-startlast-pause-mechanism/) | codi | gpt2 | validation (n=858) | 6 | 0.280 | 61 | full_run | Henning Lindig |
 | [20261108-191322_codi_v2-l1to7w-sim-monitor-faithfulness](20261108-191322_codi_v2-l1to7w-sim-monitor-faithfulness/) | codi | gpt2 | validation (n=270) | 6 | - | None | full_run | Henning Lindig |
+| [20261108-232435_codi_gsm8k-released-sim-pass-sweep-decoder](20261108-232435_codi_gsm8k-released-sim-pass-sweep-decoder/) | codi | gpt2 | test (n=1319) | 6 | 0.393 | 11 | full_run | Henning Lindig |
+| [20261108-232436_codi_gsm8k-released-codi-pass-sweep-decoder](20261108-232436_codi_gsm8k-released-codi-pass-sweep-decoder/) | codi | gpt2 | test (n=1319) | 6 | 0.425 | 11 | full_run | Henning Lindig |
+| [20261108-232437_codi_gsm8k-released-sim-route-split-all-sites](20261108-232437_codi_gsm8k-released-sim-route-split-all-sites/) | codi | gpt2 | test (n=295) | 6 | - | 11 | full_run | Henning Lindig |
+| [20261108-232438_codi_gsm8k-released-codi-route-split-all-sites](20261108-232438_codi_gsm8k-released-codi-route-split-all-sites/) | codi | gpt2 | test (n=312) | 6 | - | 11 | full_run | Henning Lindig |

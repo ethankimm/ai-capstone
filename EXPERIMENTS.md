@@ -12350,3 +12350,76 @@ At <bot>: v_1 .44-.52 for both SIM models; v_{L-1} at <bot> .15-.36 for start-fi
 **Gotchas hit:** Own-error n is small (24); the per-level rates (.14-.40) rest on 5-12 items each.
 **Caveats:** One seed, valid only, linear decoders. Swap n = recipients answered right with a valid donor (273-285 per level).
 **Next:** None planned; see the t21 summary in the SIM-CODI start-first handoff.
+
+---
+
+## 2026-11-08 — Released SIM-CODI GPT-2 on GSM8K: test .393 (released CODI .425); answers .324 with zero latent passes (82% of full, CODI 53%); settling pass grows with chain length as in CODI (1.4 / 2.7 / 3.4 / 4.5); its step decoder reads steps 1-3 at .83 / .74 / .57 on right items and finds a wrong intermediate on 85% of wrong answers (codi, run_id: 20261108-232435_codi_gsm8k-released-sim-pass-sweep-decoder)
+
+**Goal:** t22a/c (pre-registered, `scripts/codi_null_audit/prereg/t_predictions.md` t22, commit 6a1e88b): does the per-step training that made RuleChain latents a recurrent chain (SIM-CODI, gated) do the same on natural data? First half: accuracy, pass sweep and the model's own step decoder as a monitor.
+**Mechanism / model:** `internlm/SIM_COT-GPT2-CODI` (HF, MIT, Sept 2025): CODI stack + training-only step decoder (148 `decoder.*` tensors; trainer_state shows a fourth loss term 10.5 at step 0 decaying to ~0, so the step loss was trained). Loaded with released CODI's test flags (SIM-CoT `test_gpt2_decoder-copy.sh` uses the same ones); decoder dropped from the answer path. Matched reference: released CODI GPT-2 (`20261108-232436`). SIM-CoT's `get_steps`: z_j decodes shown step j+1, the teacher drops the last step, so on an n-step item z_0..z_{n-2} have targets.
+**Data:** GSM8K test, all 1,319 (`load_gsm8k_aug(split='test', seed=None)`), binned by gold step count n.
+**Command:** `run_guarded.sh t22/sweep_sim.log scripts/necessity/sim_gsm8k.py <repo> sweep sim mps <out>` (smoke first: the sweep path and an own-keys/values write-back keep every answer); analysis `scripts/necessity/sim_gsm8k_analyze.py`; record `prereg/record22.py sweep_sim`.
+**Headline results:**
+- Test accuracy .393 (released CODI in the same harness .425).
+- Accuracy after k passes, k = 0..6: .324 .290 .276 .309 .356 .390 .393 (CODI .224 .249 .234 .372 .368 .417 .425).
+- Right items kept at k = n-2 passes: n = 3 .49, n = 4 .38, n = 5+ .32 (CODI .41 / .27 / .28). Mean settling pass n = 2/3/4/5+: 1.37 / 2.68 / 3.42 / 4.50 (CODI 1.76 / 2.98 / 3.73 / 4.32).
+- Step decoder, z_{k-1} -> gold result of step k, right / wrong items: k=1 .83 / .49, k=2 .74 / .29, k=3 .57 / .22, k=4 .21 / .11. The same decoder on CODI's latents: .15 / .02 / .03 (t22d control).
+- A decoded intermediate is wrong on 85% of wrong answers vs 29% of right ones (n >= 2). The wrong answer equals some decoded step result on .13 of wrong items vs .04 for another item's answer.
+- 2-step right items: decoder reads v_1 at z_0 .85; the untrained z_1 decodes the final answer at .36.
+**Predictions:** accuracy within +-.04 of CODI: held (-.032). CODI's logged sweep reproduced: held. "Chain reading: right items at k = n-2 at least .2 below k = 6 for n = 3-5": held (.49 / .38 / .32), but it holds for CODI too, and the pre-registered alternative "SIM's sweep looks like CODI's" also describes the data, so the sweep does not separate the readings; the route split (`20261108-232437`) does. Decoder >= .6 at k = 1-2 on right items: held (.83, .74). Errors visible in the trace (>= .5 of wrong vs <= .2 of right): wrong side held (.85), right side missed (.29). t22d decoder on CODI <= .2: held.
+**Interpretation:** The step loss made GSM8K latents readable by their own decoder, and the decoded trace carries part of the model's errors. It did not make the answer depend more on the latents: SIM answers 82% as well with zero passes (CODI 53%), and its pass sweep looks like CODI's. Whether the values travel through the recurrence is answered by the route split.
+**Gotchas hit:** None. The decoder's step-token embeddings come from the CODI model's embedding layer, as in SIM-CoT's forward.
+**Caveats:** One released checkpoint per method; decoder decoded greedily; "settling pass" uses only items right at k = 6. The SIM checkpoint's README accuracies are placeholders, so .393 is our number only.
+**Next:** route split `20261108-232437`.
+
+---
+
+## 2026-11-08 — Released CODI GPT-2 on GSM8K, matched reference for t22: test .425, zero passes .224, settling pass 1.8 / 3.0 / 3.7 / 4.3; SIM's step decoder applied to CODI's latents reads nothing (.15 / .02 / .03); the logit lens reads v_1 at the outputs of passes 1, 3 and 5 (.76-.78) on 2-step items (codi, run_id: 20261108-232436_codi_gsm8k-released-codi-pass-sweep-decoder)
+
+**Goal:** t22a/d and t23's readability side (pre-registered, t_predictions.md t22-t23, commit 6a1e88b): released CODI through the same harness as released SIM-CODI (`20261108-232435`).
+**Mechanism / model:** `zen-E/CODI-gpt2` @ fd641b3, fp32 MPS, batch 1; SIM-CoT's decoder weights applied to its latents as a control.
+**Data:** GSM8K test, 1,319.
+**Command:** `sim_gsm8k.py <repo> sweep codi mps <out>`; analysis `sim_gsm8k_analyze.py`; record `record22.py sweep_codi`.
+**Headline results:**
+- Test .425 (.419 in 20260927-004340, same checkpoint, eval-mode path). Accuracy after k = 0..6 passes: .224 .249 .234 .372 .368 .417 .425. Mean settling pass n = 2/3/4/5+: 1.76 / 2.98 / 3.73 / 4.32, as logged in 20260927-005051.
+- SIM decoder on CODI latents: .15 / .02 / .03 at steps 1-3 (right items); wrong answer equals a decoded result .05 vs .04 chance.
+- Lens (top-1 token, best of layers 4-12) reads v_1 on 2-step right items: question tail .71; outputs of passes 0-5: .05 .76 .05 .78 .04 .78.
+**Predictions:** sweep reproduced: held. Decoder control <= .2: held. t23 lens at pass 5 >= .4: held (.78).
+**Interpretation:** The decoder is specific to SIM's latent code, so its reads on SIM are not the question text leaking through. The lens pattern follows CODI's alternation: outputs of odd passes (which become z_2, z_4, z_6) read v_1; even ones read operators. The pass-5 output becomes z_6, which no computation consumes, so its readability is unused by construction (t23).
+**Caveats:** One checkpoint; lens is top-1 at single positions.
+**Next:** route split `20261108-232438`.
+
+---
+
+## 2026-11-08 — Released SIM-CODI GPT-2 on GSM8K is NOT a recurrent chain: the input-only patch moves the answer <= .04 at every site (.11 at most), entries-only matches the full swap, all-sites swap .83 as in released CODI; the step labels made the latents readable, not vertical (codi, run_id: 20261108-232437_codi_gsm8k-released-sim-route-split-all-sites)
+
+**Goal:** t22b (pre-registered, t_predictions.md t22, commit 6a1e88b): the necessity-check route split at all six sites on released SIM-CODI, the natural-data test of "a job per pass makes a chain" (RuleChain SIM-CODI: input only .62-1.00 at every trained latent, `20261108-073431`, `20261108-190213`).
+**Mechanism / model:** `internlm/SIM_COT-GPT2-CODI`, loaded as in `20261108-232435`.
+**Data:** the 1,471 twin candidates of 20260927-004340 regenerated exactly (`codi_audit_artifacts/t22/gsm8k_twin_candidates.json`; all 1,471 match on recipient, step, delta and perturbed number); qualified for SIM (recipient and twin right, equal question token length): 295 pairs (n = 2: 108, n = 3: 111, n >= 4: 76).
+**Command:** `run_guarded.sh t22/route_sim.log sim_gsm8k.py <repo> route sim mps <out>` (smoke: own keys/values and own input write-back keep the answer); record `record22.py route_sim`.
+**Headline results** (follows = answer equals the twin's answer):
+- All sites: both .831, entries .831 (released CODI .846 / .846, `20261108-232438`).
+- Per site, all pairs, both / input / kv / kv_noans: z0 .23 / .04 / .19 / .15; z1 .10 / .01 / .09 / .08; z2 .02 / .01 / .08 / .07; z3 .03 / .01 / .04 / .02; z4 .09 / .01 / .10 / .02; z5 .09 / .02 / .09 / .02. Largest input-only cell: z0 at n >= 4, .11 (both .36).
+- Decoder after a z0 swap that moved the answer: a downstream decoded step shows a twin intermediate .91 (n = 67; .36 when the answer did not move); after a z1 swap .41 (n = 29).
+**Predictions:** guess "chain at the early sites (input >= .5 x both at z0, z1)": wrong (input/both .17 at z0, .10 at z1). Decision rule: no site meets the vertical criterion; z0, z1, z4, z5 meet the slot criterion (kv >= .5 x both, input <= .2 x both). All-sites >= .8: held (.83). Swap faithfulness >= .6: held at z0 (.91), missed at z1 (.41); too few moved answers at z2-z5.
+**Interpretation:** On GSM8K the per-step decoder loss gives readable latents (decoder .83 / .74 at steps 1-2) whose values reach the answer through their attention entries, the same "slots" route as released CODI, not through the recurrent input as on RuleChain. So "a job per pass makes a recurrent chain" is RuleChain-specific: what decides the route is the task, not only the training signal. A plausible reason: RuleChain's next step needs only the previous value (passing it forward through the input is the natural route), while GSM8K steps combine several earlier results, which attention can fetch from storage slots. The necessity check (input-only) fails on SIM like on every standard model; a monitor that reads SIM's latents reads the values the answer fetches by attention.
+**Gotchas hit:** None; the smoke's write-back controls held.
+**Caveats:** One released checkpoint; single-site follow rates are low on both models (values are redundant across latents), so per-site ratios at z2-z5 rest on few moved answers. Twin pairs perturb one question number and change the first affected step onward.
+**Next:** report as the natural-data result for claim 3; RuleChain chain result stays an existence proof.
+
+---
+
+## 2026-11-08 — Released CODI GPT-2 route split at all six sites (matched reference for t22b): values at z0 / z2 / z4 travel through attention entries (input only .01), odd sites carry nothing (both and entries .01), all-sites .85; reproduces t12 on 312 pairs (codi, run_id: 20261108-232438_codi_gsm8k-released-codi-route-split-all-sites)
+
+**Goal:** t22b reference and t23 use side (pre-registered, t_predictions.md t22-t23, commit 6a1e88b). Extends t12 (`20261108-061509`, even sites only) to all six sites and to the regenerated candidate pool.
+**Mechanism / model:** `zen-E/CODI-gpt2` @ fd641b3; SIM's decoder applied after swaps as a control.
+**Data:** 1,471 regenerated twin candidates; 312 qualified for CODI (n = 2: 115, n = 3: 122, n >= 4: 75).
+**Command:** `sim_gsm8k.py <repo> route codi mps <out>`; record `record22.py route_codi`.
+**Headline results:**
+- All sites both .846, entries .846.
+- Per site, both / input / kv / kv_noans: z0 .20 / .01 / .20 / .17; z1 .01 / .01 / .01 / .01; z2 .22 / .01 / .21 / .07; z3 .01 / .01 / .01 / .01; z4 .36 / .01 / .35 / .01; z5 .01 / .01 / .01 / .01 (t12: z0 .199, z2 .215, z4 .358, input .007).
+- 2-step recipients: z4 .22, z2 .13, z5 .00 (both and entries).
+**Predictions (t23):** z5 swap <= .10 with the lens reading v_1 at pass 5 >= .4 on the same items: held (z5 .00, lens .78 in `20261108-232436`). But the state the lens reads is the pass-5 output, which becomes z_6 and is consumed by nothing, so this is readable-and-unused by construction, a weaker case than the RuleChain spare latents. z4 <= .15 at n = 2: missed (.22).
+**Interpretation:** CODI's slot regime holds at every site: even latents store values read by attention, odd latents are neither readable as values nor used. Together with SIM (`20261108-232437`), both released GPT-2 latent models on GSM8K fail the input-only check while their latents are used as a set (.83-.85).
+**Caveats:** One checkpoint; decoder-after-swap rows are a control (SIM decoder on CODI latents).
+**Next:** none.

@@ -1,0 +1,24 @@
+/Users/henninglindig/Documents/Penn/CIS5980/codi/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+/Users/henninglindig/Documents/Penn/CIS5980/codi/.venv/lib/python3.12/site-packages/peft/tuners/lora/layer.py:1768: UserWarning: fan_in_fan_out is set to False but the target module is `Conv1D`. Setting fan_in_fan_out to True.
+  warnings.warn(
+Passing a tuple of `past_key_values` is deprecated and will be removed in Transformers v4.53.0. You should pass an instance of `Cache` instead, e.g. `past_key_values=DynamicCache.from_legacy_cache(past_key_values)`.
+trainable params: 20057088 || all params: 144499200 || trainable%: 13.880414562848792
+12:25 sim item 0/1319 2s acc so far 0.000
+12:28 sim item 100/1319 191s acc so far 0.356
+12:31 sim item 200/1319 376s acc so far 0.423
+12:35 sim item 300/1319 572s acc so far 0.429
+12:38 sim item 400/1319 760s acc so far 0.419
+12:41 sim item 500/1319 947s acc so far 0.419
+12:44 sim item 600/1319 1130s acc so far 0.406
+12:47 sim item 700/1319 1318s acc so far 0.411
+12:50 sim item 800/1319 1506s acc so far 0.404
+12:53 sim item 900/1319 1694s acc so far 0.407
+12:56 sim item 1000/1319 1875s acc so far 0.404
+13:00 sim item 1100/1319 2070s acc so far 0.394
+13:03 sim item 1200/1319 2256s acc so far 0.393
+13:06 sim item 1300/1319 2443s acc so far 0.394
+sim accuracy 0.393; by k 0.324 0.290 0.276 0.309 0.356 0.390 0.393
+DONE 2474s
+rc=0
