@@ -84,3 +84,14 @@ as implied):
   an early site (input only >= half the full swap at j = 0 or 1, full swap >= .10); later sites carried by entries. Alternative
   (would count against the framing only if the need grows with step count where no-CoT is at the floor): input only ~ 0 everywhere,
   i.e. a width or attention-slot regime like GSM8K CODI.
+
+## t18 ProsQA probes (scripts/necessity/grid_probe.py), 2026-11-07 23:47 PST, before any t18 output and before any t16/t17 full output
+Probes: linear, 3000 train items, 500 test; path_k = k-th path node (argmax among the item's graph nodes, chance ~.05), front_k = BFS
+frontier at distance k (AUROC over graph nodes, chance .5); positions tail (last question token), bot (<bot> / <start-latent>),
+latent passes 0-5; layers 6 / 9 / 12; shuffled-label controls; plus the Coconut paper's LM-head readout (frontier-k mass at latent j).
+- CODI (latents ~one constant vector): latent probes no better than bot (within .05 acc / .03 AUROC) at every k; tail / bot read the
+  hop-1 node and frontier 1 well above chance (path_1 >= .3, front_1 AUROC >= .75); shuffled controls at chance.
+- Coconut (latents ignored by the answer, t17 predicted <= .03): frontier information readable at latents above chance (front_1 AUROC
+  >= .7) but not more than at <start-latent> (within .03), and no diagonal: the LM-head frontier-k mass at latent j does not peak at
+  j = k (i.e. the paper's BFS picture does not hold for this checkpoint, or holds only as decoration). If it does peak at j = k while
+  t17 shows every latent off-route, that is the "accurate but decorative decoder" case of step 7.
