@@ -106,3 +106,15 @@ decoded value pushed through the remaining rules. Tested on t15's items and both
 - start-last / relay (no on-route site): clean decode accuracy moderate to high somewhere, but swap_j -> j monitor agreement <= .3 at
   every site and own-error prediction (monitor answer = the model's wrong answer) <= .3 at every site: decorative everywhere.
 - gated / SIM own-error rows have few wrong items (clean ~1.0); reported with n, not judged.
+
+## t20 teacher-side dependence (scripts/necessity/teacher_dependence.py), 2026-11-07 23:52 PST, before any t20 output
+Teacher = the CODI model reading question + CoT (last step dropped) + "The answer is: gold"; state at ':' (distillation target).
+One shown CoT value at a time replaced positionally (same token length); k counted from the end of the shown CoT (1 = last shown).
+- RuleChain (start-last, relay, stab): flip >= .8 at k = 1, <= .1 at k >= 2 (the teacher reads the last shown value and applies the
+  last rule; earlier values are not re-read); state move at k >= 2 <= a third of k = 1's.
+- GSM8K (zen-E): dependence spread: flip at k = 1 highest, k = 2 still >= .2 (the dropped last step often combines several results);
+  k >= 3 lower but > 0.
+- ProsQA (grid CODI): preferred option flips mostly at k = 1 (last shown node), less at k >= 2; state moves at every k because the
+  node names are copied tokens.
+Reading: if RuleChain's teacher depends only on v_{L-1}, latents distilled to it need only carry v_{L-1}, which fits the relay /
+pooled-estimate regimes; GSM8K's spread dependence fits several value slots.
