@@ -259,3 +259,5 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261108-091416_coconut_gsm8k-grid-route-split](20261108-091416_coconut_gsm8k-grid-route-split/) | coconut | gpt2 | test (n=225) | 6 | 1.000 | 0 | full_run | Henning Lindig |
 | [20261108-091416_coconut_prontoqa-grid-route-split](20261108-091416_coconut_prontoqa-grid-route-split/) | coconut | gpt2 | test (n=300) | 6 | 0.997 | 0 | full_run | Henning Lindig |
 | [20261108-091416_codi_prontoqa-grid-route-split](20261108-091416_codi_prontoqa-grid-route-split/) | codi | gpt2 | test (n=300) | 6 | 0.937 | 0 | full_run | Henning Lindig |
+| [20261108-093050_coconut_prosqa-grid-route-split](20261108-093050_coconut_prosqa-grid-route-split/) | coconut | gpt2 | test (n=870) | 6 | 0.976 | 0 | full_run | Henning Lindig |
+| [20261108-093050_codi_prosqa-grid-route-split](20261108-093050_codi_prosqa-grid-route-split/) | codi | gpt2 | test (n=870) | 6 | 0.828 | 0 | full_run | Henning Lindig |
