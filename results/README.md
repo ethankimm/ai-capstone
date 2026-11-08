@@ -251,3 +251,4 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261108-061509_codi_gsm8k-released-latent-routes](20261108-061509_codi_gsm8k-released-latent-routes/) | codi | gpt2 | test (n=317) | 6 | 0.425 | 11 | full_run | Henning Lindig |
 | [20261108-061509_codi_gsm8k-released-route-split](20261108-061509_codi_gsm8k-released-route-split/) | codi | gpt2 | test (n=317) | 6 | - | 11 | full_run | Henning Lindig |
 | [20261108-061510_codi_gsm8k-released-attention-flow](20261108-061510_codi_gsm8k-released-attention-flow/) | codi | gpt2 | test (n=1319) | 6 | 0.425 | 11 | full_run | Henning Lindig |
+| [20261108-063258_codi_gsm8k-released-lookback-by-depth](20261108-063258_codi_gsm8k-released-lookback-by-depth/) | codi | gpt2 | test (n=1319) | 6 | 0.425 | 11 | full_run | Henning Lindig |
