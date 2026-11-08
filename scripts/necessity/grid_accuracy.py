@@ -16,7 +16,7 @@ import adapters  # noqa: E402
 
 task, method, dev, out = sys.argv[1:5]; n = int(sys.argv[5]) if len(sys.argv) > 5 else 0
 D = adapters.GRID_REPO / 'data'
-rows = json.load(open(D / {'prosqa': 'prosqa_test.json', 'prontoqa': 'prontoqa_test.json', 'gsm8k': 'gsm_valid-gold-reasoning-trace_test.json'}[task]))
+rows = json.load(open(D / {'prosqa': 'prosqa_test.json', 'prontoqa': 'prontoqa_test.json', 'gsm8k': 'gsm_original_test.json'}[task]))
 rows = rows[:n] if n else rows
 if task == 'gsm8k':
     sys.path.insert(0, str(adapters.REPO / 'scripts'))
@@ -26,7 +26,8 @@ if task == 'gsm8k':
 else:
     same = lambda a, g: adapters.norm_text(a) == adapters.norm_text(g)
     gold = [r['answer'] for r in rows]
-bins = [len(r['steps']) for r in rows]
+import ast
+bins = [len(ast.literal_eval(r['steps']) if isinstance(r['steps'], str) else r['steps']) for r in rows]
 if method == 'codi':
     ad = adapters.GridCODI(task, dev); conds = {6: lambda r: ad.finish(*ad_run(r))[0], 0: ad.zero_latent_answer}
 
