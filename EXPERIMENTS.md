@@ -11036,3 +11036,71 @@ L3 (at plain CODI-0's d50 = 3) and L4-L6 (past it) have the same pattern. The ta
 **Gotchas hit:** (1) The absolute mean-ablation threshold breaks on a model with clean accuracy below .5; changed before compiling, see above. (2) SIM L5 z_4 is a threshold edge. The probe reads 1.00 at every layer, and the shuffled control is 18/286 = .063 at layer 0, the first of the tied best layers, against .049-.052 at layers 2 and 4. By the fixed rule it is "used, not readable". Under section 14's readable rule (>= .30 above shuffled) it is readable + used, and no other cell in the table changes under section 14's definitions. (3) In the first wait loop a zsh glob with no match ended the loop, not the run.
 **Caveats:** One seed per model; valid only, except the b29 comparison (test). Best-of over layers is selected on the scored items, but layer 0 alone gives the same counts. Plain cells at L5-L6 rest on 35-39 recipients. The swap is a single-site intervention: "not used" means this latent alone does not carry the value to the answer, which for plain is redundancy, not absence. The probes are frozen linear ridge probes from b27 / s2 (8,000-item fit); a non-linear decoder could read more in plain, but that would only add cells to "readable", not "used".
 **Next:** Handoff step 2 (SIM all-latent donors, test L1-L7) and step 3 (dynamics figure) are running in the same session. Optional: hide passes L-1..5 in SIM to confirm that pass L-2 supplies v_{L-1} when pass L-1 is hidden (not run).
+
+---
+
+## 2026-11-08 — Content reliance in SIM-CODI matches plain CODI's split: latents ignored at L1 (all-six donors followed .000, mean ablation 1.000), relied on from L2 (follows .998-1.000, mean ablation to .01-.02), so reliance does not track need in either method (codi, run_id: 20261108-013131_codi_v2-l1to7w-startlast-sim-content-reliance)
+
+**Goal:** HANDOFF_2026-11-07 step 2 (paper F2, "reliance does not track need", across methods). Does SIM-CODI, like plain start-last CODI (`20261107-220408_codi_v2-l1to7w-startlast-content-reliance`), ignore its latents at L1 and rely on their content from L2, below reach? Start-last CODI-0 solves L2 at .98 with no latents.
+**Mechanism / model:** SIM-CODI start-last, checkpoint-16335 (`20261107-225603`), loaded without its step decoder (answer path unchanged; clean test L1-L6 1.000, L7 .998 as the pod eval).
+**Data:** canonical **test** L1-L7, 500 per level (499 recipients at L7), to match the plain record row by row. Means: 2,000 train items of the same level (seed 21).
+**Command:** On the laptop (MPS, float32, `run_guarded.sh`, `caffeinate`): `~/Documents/Penn/CIS5980/codi_audit_artifacts/t2_sim_resample.py`, a copy of `b29_ungated_resample.py` with only the checkpoint and output names changed (diff checked); record `record10.py`. Smoke (L2, 40 items): identity (patching an item's own six latents back) keeps every answer.
+**Design (b29's):** all six latent inputs replaced at once. Different-value donor: same level, differs at v_{L-1}, predicted answer = the recipient's last rule on the donor's v_{L-1}, in 0..99 and != gold. Same-value donor: same v_{L-1}, a different start value where possible (format control). Mean: each z_s set to its same-level train mean. Recipients: answered right.
+
+**Headline results** (SIM-CODI vs plain CODI from b29, same test items and donor seeds):
+
+| L | SIM clean | SIM diff donor: follows / keeps / donor's answer | SIM same-value donor keeps (different start share) | SIM mean acc | plain clean | plain follows / keeps | plain same keeps | plain mean acc |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 1.000 | .000 / 1.000 / .012 | 1.000 (0.00; at L1 v_{L-1} is the start value) | 1.000 | 1.000 | .000 / 1.000 | 1.000 | 1.000 |
+| 2 | 1.000 | **.998** / .000 / .142 | .998 (1.00) | .022 | .998 | .994 / .002 | 1.000 | .044 |
+| 3 | 1.000 | 1.000 / .000 / .118 | 1.000 (1.00) | .020 | .476 | .374 / .017 | .616 | .032 |
+| 4 | 1.000 | 1.000 / .000 / .120 | 1.000 (1.00) | .016 | .306 | .275 / .033 | .423 | .038 |
+| 5 | 1.000 | 1.000 / .000 / .108 | 1.000 (1.00) | .024 | .160 | .150 / .025 | .325 | .040 |
+| 6 | 1.000 | 1.000 / .000 / .130 | 1.000 (1.00) | .022 | .116 | .034 / .017 | .193 | .020 |
+| 7 | .998 | 1.000 / .000 / .120 | 1.000 (1.00) | .012 | .076 | .105 / .079 | .105 | .034 |
+
+- **L1: latents ignored, in both methods.** A donor's six latents (different start value) never move the answer (.000 follows, 1.000 keeps own), and all-six mean ablation leaves 1.000. The answer tokens apply the single rule to the start value in the question.
+- **L2 and up: content reliance, in both methods.** SIM follows the donor .998-1.000 at every level L2-L7. A same-value donor with a different start value keeps the answer (.998-1.000), so what the latents pass on is the value v_{L-1}, not format or the start value. Mean ablation drops to chance (.012-.024). The donor's own answer comes out only .11-.14: the answer tokens apply the recipient's last rule to the donor's value.
+- At L3+ plain CODI's clean accuracy is low, and its "follows" is bounded by it. SIM shows the same reliance at full accuracy.
+
+**Predictions (`t_predictions.md`, written before any output):** "L2+ follows near 1.0, same-value donor keeps ~1.0, mean ablation to chance from L2": right. "L1 the open cell, guess follows partly (.3-.9)": **wrong**, L1 ignores the latents completely.
+**Interpretation:** F2 now holds across two methods. Both models depend on latent content at L2, where the same backbone without latents (CODI-0) already scores .98, and both ignore the latents at L1. So reliance follows the training setup, not the depth the task needs. The boundary sits at the same place despite very different training signals (no step labels vs a step decoder on every latent). For SIM, reliance from L2 is partly imposed: the step loss trains z_0 to carry v_1 at L2. But L1 has no trained step, and there SIM, like plain, lets the answer tokens do the one rule themselves. This connects to step 1 (`20261108-012524`): at L3+ SIM's first untrained latent z_{L-1} is fully used on swap, but at L1 the same position (z_0 = z_{L-1}) is not. The answer reads a carried value only when a pass before it had a rule to apply.
+**Gotchas hit:** none. At L1 the same-value control is trivial (same v_0 = same start value, share 0.00 different), as in b29.
+**Caveats:** One seed; test split (as the plain row), so this record is not on valid like steps 1 and 3. All-six swaps cannot tell which latent carries the value (step 1 does that per latent on valid). Plain's L3+ rows rest on 38-238 recipients.
+**Next:** Handoff step 3 (dynamics) is logged with this; step 4 (formation over epochs) and step 5's second check (L7 with 7+ passes) remain.
+
+---
+
+## 2026-11-08 — Latent dynamics: plain CODI reaches a fixed point after two passes (relative step .01-.03 from t = 2, consecutive latents centred cos .98-1.00), while gated and SIM take large near-orthogonal steps through the pass the answer reads, then stop (gated at once, SIM over 2-3 passes) (codi, run_id: 20261108-013131_codi_v2-l1to7w-startlast-latent-dynamics)
+
+**Goal:** HANDOFF_2026-11-07 step 3. Show plain CODI's attractor (2607.09698 calls CODI "a stable attractor" from geometry alone) next to the gated and SIM staircases, in geometric terms, for the three models whose latent use is known from swaps (`20261108-012524`).
+**Mechanism / model:** plain start-last CODI checkpoint-17820 (`20261106-083843`), rule-gated with the gate on (`20261107-204814`), SIM-CODI checkpoint-16335 without its decoder (`20261107-225603`).
+**Data:** `synthetic_data_v2_l1to7w_startlast` **valid** L3-L6 (286/286/286/285) per model, the items of step 1. Clean accuracy here equals step 1's answers item by item (checked in the collector): plain .52 / .33 / .14 / .12, gated 1.00, SIM 1.00 / 1.00 / 1.00 / .996.
+**Command:** On the laptop (MPS, float32, `run_guarded.sh`, `caffeinate`), in `~/Documents/Penn/CIS5980/codi_audit_artifacts`: `t3_dynamics.py` (collector, CODI venv; per-item metrics in `t3_dynamics.json`), `t3_plot.py` (figure, repo env: `t3_dynamics_z.{png,pdf}`, `t3_dynamics_h.{png,pdf}`; medians in `t3_medians_{z,h}.md`), `record11.py`. Smoke: plain L4, 40 items, answers match t1.
+**Metrics:** two trajectories per item, t = 0..6: z_t = prj(h_t), the latent inputs (z_0 from `<bot>`; z_6 is computed but never read), and h_t, the last-layer states before prj. D_t = x_{t+1} - x_t, the output of pass t minus its input. Per item: step size ||D_t||; relative step ||D_t|| / ||x_t||; turning cos(D_t, D_{t-1}); centred consecutive cosine cos(x_t - mu, x_{t+1} - mu), with mu the mean over the level's items and positions 0..5; sensitivity surrogate log(||D_t|| / ||D_{t-1}||). These are the quantities the handoff lists for 2607.09698's Eqs. 1-3; I did not check them against the paper's text.
+
+**Headline results** (z trajectory, medians over items; relative step at t = 0..5):
+
+| L | plain | gated | SIM |
+|---|---|---|---|
+| 3 | .70 .11 .03 .01 .01 .01 | .82 .87 **1.07** .09 .01 .01 | 1.32 1.30 **1.01** .49 .10 .02 |
+| 4 | .63 .09 .02 .01 .01 .01 | .85 .88 .87 **1.07** .09 .01 | 1.34 1.32 1.28 **.93** .51 .14 |
+| 5 | .57 .10 .02 .01 .01 .01 | .85 .87 .85 .89 **1.06** .10 | 1.33 1.32 1.32 1.27 **.88** .49 |
+| 6 | .54 .09 .02 .01 .01 .01 | .82 .85 .88 .85 .85 **1.05** | 1.27 1.33 1.26 1.31 1.23 **.68** |
+
+(bold: t = L-1, the output of the pass whose input z_{L-1} the answer uses.)
+- **Plain: a fixed point after two passes, at every level.** The relative step falls from .54-.70 to about .10 at t = 1 and .02-.03 at t = 2, then .01. Consecutive latents have centred cos .98-.99 at t = 1 and .999-1.000 from t = 2. Turning goes to .9-1.0 as the steps shrink along one direction. Accuracy plateaus after 2 passes too (`20261106-101740`).
+- **Gated: equal large steps while rules are read, one larger step out of the used pass, then stop.** Relative step .82-.89 for t <= L-2, 1.05-1.07 at t = L-1, then .09-.10 and .01. During the rollout consecutive latents are near orthogonal (centred cos -.04 to .36) and turning sits at -.5. That is the value expected for steps between roughly independent states of equal norm. The idle latents after the used pass are near copies (centred cos .98-1.00): the probe-readable but unused cells of step 1.
+- **SIM: the same staircase with larger steps and a slower stop.** Relative step 1.23-1.34 for t <= L-2, .68-1.01 at t = L-1, then decaying over 2-3 passes (L3: .49, .10, .02). Centred cos -.10 to .17 during the rollout, rising to .56-.99 after it.
+- **h (last-layer states before prj):** the same picture. Plain's step falls over t = 0..2 (relative .84-.87, .37-.50, .08-.10), gated and SIM stay at 1.1-1.5 until t = L-1, then drop. The sensitivity surrogate dips for plain at t = 2 (log ratio -1.4 to -1.8) and stays near 0 for gated and SIM during the rollout.
+
+**Predictions (`t_predictions.md`, written before any output):**
+- *Plain contracts to near-zero step size after pass 2:* right.
+- *Gated and SIM keep large steps through the last rule-reading pass (t = L-2), then drop:* off by one. Large steps continue through t = L-1, the output of the pass the answer reads. Gated drops at once after it; SIM decays over 2-3 passes.
+- *Turning low during the rollout, high for plain after the fixed point:* right (-.5 vs .9-1.0).
+
+The figure's reference line marks t = L-1. It was moved there after seeing the data; the pre-registered reference was t = L-2. Said in the plot script's docstring.
+**Interpretation:** The geometry separates the two regimes as the swaps do. Plain CODI's latents converge after two passes to a point and stay there, which is 2607.09698's attractor description. Step 1 shows what that means causally: the six latents become near copies that no single swap moves, and only the set matters. Gated and SIM move far each pass, to nearly unrelated states, for exactly as many passes as there are rules to read plus the pass the answer reads. Each of those states is used (step 1). After that both settle into a fixed point too, but a different one: idle latents, readable and unused. So "a fixed point" in the latent geometry does not mean the latents are unused or used. Plain's fixed point is used as a set, gated's and SIM's idle fixed points are not used at all, and the geometry alone does not tell them apart.
+**Gotchas hit:** Calibration against the earlier collapse statistic (`20261106-101740`, plain, test: consecutive centred cos .58, .97, .99, .996): ours from t = 1 matches (.98, .999, 1.000). At t = 0 ours is .07-.29 against .58; the earlier centring set (levels, positions, split) is not the same as here, and I did not reconcile the two.
+**Caveats:** One seed per model; valid only. Plain's medians include its many wrong items (clean .12-.52); restricting to right items was not done. The step size depends on the norm, which differs by model (SIM's latents move about 1.5x more in relative terms), so compare the shapes across models, not the levels. Descriptive geometry; the causal claims come from step 1.
+**Next:** Optional handoff step 4 (does the staircase form before, with, or after the epoch 5-7 accuracy jump?) and step 5's second check (L7 with 7+ passes). Figures for the draft: `codi_audit_artifacts/t3_dynamics_z.pdf` (main), `t3_dynamics_h.pdf` (appendix).

@@ -1,0 +1,216 @@
+{
+  "run_id": "20261108-013131_codi_v2-l1to7w-startlast-sim-content-reliance",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "SIM-CODI start-last checkpoint-16335 (20261107-225603), decoder dropped",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 3500,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 1.0,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "clean SIM-CODI exact on canonical test L1-L7, this script",
+      "by_level": {
+        "1": {
+          "clean": 1.0,
+          "right": 500,
+          "diff_donor": {
+            "n": 500,
+            "follows_donor": 0.0,
+            "keeps_own": 1.0,
+            "donor_answer": 0.012
+          },
+          "same_value_donor": {
+            "n": 497,
+            "keeps_own": 1.0,
+            "same_start_share": 1.0
+          },
+          "same_level_mean": {
+            "acc_all": 1.0,
+            "keeps_own_right": 1.0
+          },
+          "plain_codi_b29": {
+            "clean": 1.0,
+            "diff_follows": 0.0,
+            "same_keeps": 1.0,
+            "mean_acc": 1.0
+          }
+        },
+        "2": {
+          "clean": 1.0,
+          "right": 500,
+          "diff_donor": {
+            "n": 500,
+            "follows_donor": 0.998,
+            "keeps_own": 0.0,
+            "donor_answer": 0.142
+          },
+          "same_value_donor": {
+            "n": 491,
+            "keeps_own": 0.998,
+            "same_start_share": 0.004
+          },
+          "same_level_mean": {
+            "acc_all": 0.022,
+            "keeps_own_right": 0.022
+          },
+          "plain_codi_b29": {
+            "clean": 0.998,
+            "diff_follows": 0.994,
+            "same_keeps": 1.0,
+            "mean_acc": 0.044
+          }
+        },
+        "3": {
+          "clean": 1.0,
+          "right": 500,
+          "diff_donor": {
+            "n": 500,
+            "follows_donor": 1.0,
+            "keeps_own": 0.0,
+            "donor_answer": 0.118
+          },
+          "same_value_donor": {
+            "n": 490,
+            "keeps_own": 1.0,
+            "same_start_share": 0.0
+          },
+          "same_level_mean": {
+            "acc_all": 0.02,
+            "keeps_own_right": 0.02
+          },
+          "plain_codi_b29": {
+            "clean": 0.476,
+            "diff_follows": 0.374,
+            "same_keeps": 0.616,
+            "mean_acc": 0.032
+          }
+        },
+        "4": {
+          "clean": 1.0,
+          "right": 500,
+          "diff_donor": {
+            "n": 500,
+            "follows_donor": 1.0,
+            "keeps_own": 0.0,
+            "donor_answer": 0.12
+          },
+          "same_value_donor": {
+            "n": 487,
+            "keeps_own": 1.0,
+            "same_start_share": 0.0
+          },
+          "same_level_mean": {
+            "acc_all": 0.016,
+            "keeps_own_right": 0.016
+          },
+          "plain_codi_b29": {
+            "clean": 0.306,
+            "diff_follows": 0.275,
+            "same_keeps": 0.423,
+            "mean_acc": 0.038
+          }
+        },
+        "5": {
+          "clean": 1.0,
+          "right": 500,
+          "diff_donor": {
+            "n": 500,
+            "follows_donor": 1.0,
+            "keeps_own": 0.0,
+            "donor_answer": 0.108
+          },
+          "same_value_donor": {
+            "n": 486,
+            "keeps_own": 1.0,
+            "same_start_share": 0.0
+          },
+          "same_level_mean": {
+            "acc_all": 0.024,
+            "keeps_own_right": 0.024
+          },
+          "plain_codi_b29": {
+            "clean": 0.16,
+            "diff_follows": 0.15,
+            "same_keeps": 0.325,
+            "mean_acc": 0.04
+          }
+        },
+        "6": {
+          "clean": 1.0,
+          "right": 500,
+          "diff_donor": {
+            "n": 500,
+            "follows_donor": 1.0,
+            "keeps_own": 0.0,
+            "donor_answer": 0.13
+          },
+          "same_value_donor": {
+            "n": 488,
+            "keeps_own": 1.0,
+            "same_start_share": 0.004
+          },
+          "same_level_mean": {
+            "acc_all": 0.022,
+            "keeps_own_right": 0.022
+          },
+          "plain_codi_b29": {
+            "clean": 0.116,
+            "diff_follows": 0.034,
+            "same_keeps": 0.193,
+            "mean_acc": 0.02
+          }
+        },
+        "7": {
+          "clean": 0.998,
+          "right": 499,
+          "diff_donor": {
+            "n": 499,
+            "follows_donor": 1.0,
+            "keeps_own": 0.0,
+            "donor_answer": 0.12
+          },
+          "same_value_donor": {
+            "n": 489,
+            "keeps_own": 1.0,
+            "same_start_share": 0.004
+          },
+          "same_level_mean": {
+            "acc_all": 0.012,
+            "keeps_own_right": 0.012
+          },
+          "plain_codi_b29": {
+            "clean": 0.076,
+            "diff_follows": 0.105,
+            "same_keeps": 0.105,
+            "mean_acc": 0.034
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/t2_sim_resample.py (copy of b29_ungated_resample.py, checkpoint changed)",
+    "swap": "all six latent inputs at once",
+    "means": "same level: 2,000 train items per level (seed 21)",
+    "dtype": "float32"
+  },
+  "seed": 77,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Content reliance in SIM-CODI: all-latent donors and same-value donors against same-level mean ablation, compared with plain CODI (b29).",
+  "timestamp_utc": "2026-11-08T01:31:31.114695+00:00",
+  "git": {
+    "commit": "becabc3",
+    "dirty": true
+  }
+}
