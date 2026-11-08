@@ -1,0 +1,12 @@
+{"idx": 0, "id": "startlast-L3", "model": "startlast", "level": 3, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}
+{"idx": 1, "id": "startlast-L4", "model": "startlast", "level": 4, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}
+{"idx": 2, "id": "startlast-L5", "model": "startlast", "level": 5, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}
+{"idx": 3, "id": "gated-L3", "model": "gated", "level": 3, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}
+{"idx": 4, "id": "gated-L4", "model": "gated", "level": 4, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}
+{"idx": 5, "id": "gated-L5", "model": "gated", "level": 5, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}
+{"idx": 6, "id": "sim-L3", "model": "sim", "level": 3, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}
+{"idx": 7, "id": "sim-L4", "model": "sim", "level": 4, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}
+{"idx": 8, "id": "sim-L5", "model": "sim", "level": 5, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}
+{"idx": 9, "id": "relay-L3", "model": "relay", "level": 3, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}
+{"idx": 10, "id": "relay-L4", "model": "relay", "level": 4, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}
+{"idx": 11, "id": "relay-L5", "model": "relay", "level": 5, "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 286}

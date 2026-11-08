@@ -1,0 +1,106 @@
+{
+  "run_id": "20261108-040037_codi_v2-l1to7w-startlast-latent-blend",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "start-last CODI checkpoint-17820 (20261106-083843)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 424,
+    "seed": 61
+  },
+  "metrics": {
+    "final_answer_accuracy": 1.0,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "diff pairs both answered right clean (1.0 by construction)",
+      "edits_before_last_by_a": {
+        "0.0": {
+          "follows": 0.0,
+          "keeps": 1.0,
+          "strictly_between": 0.0,
+          "preimage_in_range": 1.0
+        },
+        "0.1": {
+          "follows": 0.0,
+          "keeps": 0.944,
+          "strictly_between": 0.052,
+          "preimage_in_range": 0.992
+        },
+        "0.2": {
+          "follows": 0.0,
+          "keeps": 0.811,
+          "strictly_between": 0.169,
+          "preimage_in_range": 0.98
+        },
+        "0.3": {
+          "follows": 0.008,
+          "keeps": 0.719,
+          "strictly_between": 0.241,
+          "preimage_in_range": 0.984
+        },
+        "0.4": {
+          "follows": 0.008,
+          "keeps": 0.522,
+          "strictly_between": 0.386,
+          "preimage_in_range": 0.952
+        },
+        "0.5": {
+          "follows": 0.112,
+          "keeps": 0.209,
+          "strictly_between": 0.526,
+          "preimage_in_range": 0.876
+        },
+        "0.6": {
+          "follows": 0.418,
+          "keeps": 0.028,
+          "strictly_between": 0.43,
+          "preimage_in_range": 0.916
+        },
+        "0.7": {
+          "follows": 0.639,
+          "keeps": 0.016,
+          "strictly_between": 0.273,
+          "preimage_in_range": 0.972
+        },
+        "0.8": {
+          "follows": 0.747,
+          "keeps": 0.016,
+          "strictly_between": 0.189,
+          "preimage_in_range": 0.988
+        },
+        "0.9": {
+          "follows": 0.815,
+          "keeps": 0.016,
+          "strictly_between": 0.133,
+          "preimage_in_range": 0.98
+        },
+        "1.0": {
+          "follows": 0.888,
+          "keeps": 0.008,
+          "strictly_between": 0.068,
+          "preimage_in_range": 0.964
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/t8_blend.py (copy of t6_prefix_hide.py), t8_table.py",
+    "blend": "every latent input z_s = (1-a) z_rec + a z_don, a = 0..1 step .1, recipient question",
+    "dtype": "float32"
+  },
+  "seed": 16,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Blend two items' latents: does the answer move through in-between values (analog) or jump (discrete)?",
+  "timestamp_utc": "2026-11-08T04:00:37.241857+00:00",
+  "git": {
+    "commit": "429d14c",
+    "dirty": true
+  }
+}
