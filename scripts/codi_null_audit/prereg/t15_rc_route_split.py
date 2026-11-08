@@ -1,6 +1,7 @@
 """Route split on RuleChain CODI models (t12's design on the RuleChain harness): does a latent's value reach the answer through the recurrent
 input or through its own keys/values (attention)? Usage: t15_rc_route_split.py <codi_null_audit dir> <device> <out dir>; env MODEL =
-gated | sim | startlast | relay | stab. SMOKE=1: L4, 40 items, with own-cache and own-input write-back checks.
+gated | sim | simsf | startlast | relay | stab (simsf = SIM-CODI start-first, added 2026-11-08 for t21a). LEVELS=3,4,5 (default) sets
+the valid levels. SMOKE=1: L4, 40 items, with own-cache and own-input write-back checks.
 Full: valid L3-L5 (start-first valid for relay / stab).
 Donors: t1's rule (same level, seeded Random(1000 L + j), differs at v_ks, predicted answer in 0..99 and != gold), restricted to donors whose
 question has the same token length as the recipient's, so latent keys/values line up position by position (pad-invariant positions).
@@ -20,9 +21,10 @@ from rc import *
 from src.model import RuleGate
 from eval_codi import PadInvariant, question_position_ids
 DEV = sys.argv[2]; OUT = sys.argv[3]; SMOKE = int(os.environ.get('SMOKE', '0')); MODEL = os.environ['MODEL']; NL = 6
-LV = [4] if SMOKE else [3, 4, 5]
+LV = [4] if SMOKE else [int(x) for x in os.environ.get('LEVELS', '3,4,5').split(',')]
 SL = BASE + '/synthetic_data_v2_l1to7w_startlast/depth2/'; SF = BASE + '/synthetic_data_v2_l1to7w/depth2/'
 CKR, DL = dict(gated=('codi_runs_l1to7w_startlast_gated/codi/run/checkpoint-17820', SL), sim=('codi_runs_l1to7w_startlast_sim/codi/run/checkpoint-16335', SL),
+              simsf=('codi_runs_l1to7w_sim/codi/run/checkpoint-17820', SF),
               startlast=('codi_runs_l1to7w_startlast/codi/run/checkpoint-17820', SL), relay=(None, SF),
               stab=('codi_runs_l1to7w_stab/codi/run/checkpoint-17820', SF))[MODEL]
 GATE = MODEL == 'gated'
@@ -30,7 +32,7 @@ GATE = MODEL == 'gated'
 
 def ks_of(j, L):
     if MODEL == 'gated': return min(j, L - 1)
-    if MODEL == 'sim': return min(j + 1, L - 1)
+    if MODEL in ('sim', 'simsf'): return min(j + 1, L - 1)
     return L - 1
 
 

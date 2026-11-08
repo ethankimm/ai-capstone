@@ -62,6 +62,7 @@ class RuleChainCODI:
         from eval_codi import PadInvariant, question_position_ids
         self.h, self.RuleGate, self.PadInvariant, self.qpos = harness, RuleGate, PadInvariant, question_position_ids
         ck = dict(gated='codi_runs_l1to7w_startlast_gated/codi/run/checkpoint-17820', sim='codi_runs_l1to7w_startlast_sim/codi/run/checkpoint-16335',
+                  simsf='codi_runs_l1to7w_sim/codi/run/checkpoint-17820',
                   startlast='codi_runs_l1to7w_startlast/codi/run/checkpoint-17820', stab='codi_runs_l1to7w_stab/codi/run/checkpoint-17820')
         path = harness.CK['lr3'] if model_key == 'relay' else str(BASE / ck[model_key])
         self.m, self.tok, _ = harness.load(path, self.n_latents, device); self.m.eval()

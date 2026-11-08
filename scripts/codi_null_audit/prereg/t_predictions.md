@@ -118,3 +118,27 @@ One shown CoT value at a time replaced positionally (same token length); k count
   node names are copied tokens.
 Reading: if RuleChain's teacher depends only on v_{L-1}, latents distilled to it need only carry v_{L-1}, which fits the relay /
 pooled-estimate regimes; GSM8K's spread dependence fits several value slots.
+
+## t21 SIM-CODI start-first: route split (t21a), monitor test (t21b), prefill probe (t21c), 2026-11-08 10:40 PST, before any t21 full output
+Model simsf = SIM-CODI start-first checkpoint-17820 (20261108-130905). Seen before writing: its s1/s2/s3 battery (20261108-134158: swap
+z_1..z_{L-2} follows .974, z_0 .95-1.00, mean ablation of the latent after the last trained step only to .55-.81, probe v_k at z_{k-1} .52,
+v_k at z_k .82, 13 wrong valid items at L3-L6 of which 9 match a decoded operand value + remaining rules, post hoc); matched start-first
+CODI (20261108-135708); t15/t19 for start-last SIM; a 300-item L3 smoke of t21c (simsf v1 at rule 1 .23, start-last SIM .03; not read further).
+t21a (t15_rc_route_split.py, MODEL=simsf, LEVELS=3,4,5,6,7):
+- Passes the check like start-last SIM: input only >= .9 at every trained site j = 1..L-2 (entries only <= .05 there). z_0 input only
+  >= .8 (start-last SIM .60-.71; here the full swap is .95-1.00).
+- Site L-1 (the latent the answer reads): entries only >= .8 and entries hidden from the answer <= .1. Weaker than start-last
+  (.98) is possible because its mean ablation hurt less; if entries only < .8 there, the answer has a second source for v_{L-1}.
+- All sites: both ~1.00, entries ~1.00.
+t21b (rc_monitor.py simsf, valid L3-L7, decoders trained on L2-L7):
+- On-route sites (t21a input only >= .5): clean decode accuracy entries >= .8, input >= .6 (below start-last's .84-.99); after a swap the
+  monitor answer matches the actual answer >= .85. Spare sites: decorative (<= .1), as t19.
+- Own errors (the first forced model with errors; ~30 wrong valid items at L3-L7): at the best on-route site the monitor answer equals
+  the model's wrong answer >= .3, against <= .1 for a decoder fit to shuffled labels / random values. Reported with n.
+t21c (prefill_probe.py; simsf, stab = start-first CODI, sim = start-last SIM, startlast = start-last CODI; valid L3-L6):
+- Start-last models: v_k at the end of rule k <= .10 for every k (start value not yet seen: the floor). At <bot>, v_1 >= .5 for sim.
+- stab: the question pass runs the chain: v_1 at rule 1 >= .7, v_2 at rule 2 >= .5, falling with k; v_{L-1} at <bot> tracks its
+  answer accuracy within .2 at L3-L4.
+- simsf, two readings fixed now: (dormant copy) diagonal within .15 of stab at k = 2, 3: the question pass still runs the chain, the
+  answer ignores it (its latent ablation goes to chance), and a latent-only monitor misses a parallel computation; (moved) diagonal at
+  k >= 2 at least .2 below stab: the step loss took the chain out of the question pass. Guess: moved, with v_1 at rule 1 still >= .5.

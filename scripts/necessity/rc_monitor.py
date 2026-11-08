@@ -1,6 +1,6 @@
 """Monitor steps 2-3 on RuleChain CODI: decode at the causal location, then test whether the decoded value is faithful.
 
-  ../codi/.venv/bin/python scripts/necessity/rc_monitor.py <model gated|sim|startlast|relay> <device> <out json> [n_train_per_level=600]
+  ../codi/.venv/bin/python scripts/necessity/rc_monitor.py <model gated|sim|simsf|startlast|relay> <device> <out json> [n_train_per_level=600]
 
 Decoders (linear, 100-way, standardised features), one per site j and location:
   input   z_j, the latent's input vector (the recurrent route)
@@ -33,11 +33,12 @@ ad = adapters.RuleChainCODI(MODEL, dev)
 from rc import parse, walk  # noqa: E402  (path set by harness)
 DD = adapters.BASE / ('synthetic_data_v2_l1to7w_startlast' if MODEL in ('gated', 'sim', 'startlast') else 'synthetic_data_v2_l1to7w') / 'depth2'
 T15 = json.load(open(adapters.BASE / 'codi_audit_artifacts' / f't15_{MODEL}.json'))
+TEST_L = sorted(int(k) for k in T15); TOP_L = max(6, max(TEST_L))  # t15's levels (L3-L5 except simsf L3-L7); train up to the top test level
 NL = 6; LAY = (2, 5, 8, 11)
 
 
 def ks(j, L):
-    return min(j, L - 1) if MODEL == 'gated' else (min(j + 1, L - 1) if MODEL == 'sim' else L - 1)
+    return min(j, L - 1) if MODEL == 'gated' else (min(j + 1, L - 1) if MODEL in ('sim', 'simsf') else L - 1)
 
 
 def feats(rows, feed=None):
@@ -66,7 +67,7 @@ def fit(X, y, epochs=200, wd=1e-3):
 
 
 t0 = time.time()
-tr = [r for r in json.load(open(DD / 'train.json')) if 2 <= int(r['level']) <= 6]
+tr = [r for r in json.load(open(DD / 'train.json')) if 2 <= int(r['level']) <= TOP_L]
 by = {}
 for r in tr: by.setdefault(int(r['level']), []).append(r)
 tr = []
@@ -81,7 +82,7 @@ print(time.strftime('%H:%M'), f'{MODEL} decoders trained {time.time() - t0:.0f}s
 del Itr, Etr
 
 va = json.load(open(DD / 'valid.json')); RES = {}
-for L in (3, 4, 5):
+for L in TEST_L:
     ev = [r for r in va if int(r['level']) == L]; ref = T15[str(L)]; assert [r['id'] for r in ev] == ref['ids']
     P = [parse(r['question']) for r in ev]; V = np.array([walk(*p)[0] for p in P]); gold = V[:, -1]
     mon = lambda u, i, j: (walk(int(u), P[i][1][ks(j, L):])[0][-1] if 0 <= u <= 99 else -1)
