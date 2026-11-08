@@ -14,6 +14,7 @@ Hypothesis under test: the answer state depends on the values the answer cannot 
 the latents are trained to carry (RuleChain: the last shown value only; GSM8K: values the last step uses; ProsQA: last node).
 """
 import ast
+import gc
 import json
 import random
 import re
@@ -114,6 +115,7 @@ def replace(shown, k, v, w):
 
 t0 = time.time(); recs = []; H0 = []
 for i, r in enumerate(rows):
+    if i % 20 == 0: gc.collect()
     st = steps_of(r); shown = st[:-1]; q, cot = fmt(r, shown)
     x, pos = ids_of(q, cot, r['answer']); h0, a0 = state(x, pos, r); H0.append(h0)
     rec = dict(i=i, n_shown=len(shown), base_tok=a0, per_k={})

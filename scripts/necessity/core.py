@@ -37,8 +37,8 @@ def kv_get(past, pos):
 
 def kv_set(past, pos, src):
     for (k, v), (sk, sv) in zip(_layers(past), src):
-        k[:, :, pos] = sk
-        v[:, :, pos] = sv
+        k[:, :, pos] = sk.to(k.device)
+        v[:, :, pos] = sv.to(v.device)
 
 
 @torch.no_grad()
@@ -50,13 +50,19 @@ def run(ad, rows, feed=None, kv=None, hide=()):
     Z, KV = {}, {}
     for s in range(ad.n_latents):
         if feed and s in feed:
-            z = feed[s].to(z.dtype)
+            z = feed[s].to(device=z.device, dtype=z.dtype)
         Z[s] = z
         past, z = ad.latent(ctx, past, z, s)
         if kv and s in kv:
             kv_set(past, ad.pos(ctx, s), kv[s])
         KV[s] = kv_get(past, ad.pos(ctx, s))
     return ad.finish(ctx, past, hide), Z, KV
+
+
+def to_cpu(res):
+    """A run's (answers, Z, KV) with tensors on the CPU: tiny MPS tensors each take ~1 MB of allocator space, so stored runs go here."""
+    a, Z, KV = res
+    return a, {s: z.cpu() for s, z in Z.items()}, {s: [(k.cpu(), v.cpu()) for k, v in kv] for s, kv in KV.items()}
 
 
 def _batches(n, bs, order=None):

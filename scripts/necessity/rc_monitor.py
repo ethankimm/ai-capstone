@@ -14,6 +14,7 @@ Tested on valid L3-L5 (t15's items and donors):
 On-route flag per (L, j) from t15: input-only follow >= .5. Claim under test: monitors at on-route latents track own errors and
 swap outcomes; accurate decoders at off-route latents (clean accuracy high) do not.
 """
+import gc
 import json
 import random
 import sys
@@ -45,7 +46,7 @@ def feats(rows, feed=None):
     tl = np.array([len(ad.tok(r['question'].strip() + '\n').input_ids) for r in rows]); order = np.argsort(tl, kind='stable')
     res = [None] * len(rows)
     for ii in core._batches(len(rows), ad.batch_size, order):
-        f = feed(ii) if feed else None
+        gc.collect(); f = feed(ii) if feed else None
         a, Z, KV = core.run(ad, [rows[k] for k in ii], feed=f)
         zi = torch.stack([Z[s] for s in range(NL)], 1).float().cpu().numpy().astype(np.float16)
         ze = torch.stack([torch.cat([torch.cat([KV[s][l][0].flatten(1), KV[s][l][1].flatten(1)], 1) for l in LAY], 1) for s in range(NL)], 1)

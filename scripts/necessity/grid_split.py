@@ -9,8 +9,10 @@ Qualified pair: recipient answered right, donor answered its implied answer. Per
 conditions (core.SITE_CONDS) and both_all / kv_all; score = answer equals the donor's answer. SMOKE=1: first 6 qualified pairs plus
 the own write-back checks.
 """
+import gc
 import json
 import os
+import re
 import random
 import sys
 import time
@@ -38,9 +40,19 @@ if task == 'gsm8k':
     from latentreasoning.data.gsm8k_aug import load_gsm8k_aug  # noqa: E402
     ex = load_gsm8k_aug(split='test', n=None, seed=None)
     src = [json.loads(l) for l in open(adapters.REPO / 'results/20260927-003331_coconut_minimal-pair-patch-full/predictions.jsonl')]
-    rows = [dict(question=ex[p['recipient_idx']].question, answer=str(p['recipient_gold'])) for p in src]
-    P = [dict(i=k, hop=p['step'], n_hops=len(ex[p['recipient_idx']].intermediate_values), donor=dict(question=p['twin_question'], answer=p['twin_answer']),
-              target=str(p['twin_answer']), edit=(p['perturbed_number'], p['delta'])) for k, p in enumerate(src)]
+    # recipient_idx there does not index this test list: recover each recipient as the test question that equals the twin except
+    # for one number, with the recorded recipient gold answer
+    NUM = re.compile(r'\d+(?:\.\d+)?'); skel = {}
+    for e in ex: skel.setdefault(NUM.sub('#', e.question), []).append(e)
+    rows, P = [], []
+    for p in src:
+        tq = p['twin_question']; cand = [e for e in skel.get(NUM.sub('#', tq), []) if str(e.answer).replace(',', '') == str(p['recipient_gold'])
+                                          and sum(a != b for a, b in zip(NUM.findall(e.question), NUM.findall(tq))) == 1]
+        if len(cand) != 1: continue
+        e = cand[0]; rows.append(dict(question=e.question, answer=str(p['recipient_gold'])))
+        P.append(dict(i=len(rows) - 1, hop=p['step'], n_hops=len(e.intermediate_values), donor=dict(question=tq, answer=p['twin_answer']),
+                      target=str(p['twin_answer']), edit=(p['perturbed_number'], p['delta'])))
+    print(f'recovered recipients for {len(P)} of {len(src)} twin pairs', flush=True)
     P = [p for p in P if tlen(rows[p['i']]['question']) == tlen(p['donor']['question'])]
     same = lambda a, g: bool(a) and num_match([str(a)], str(g))
 else:
@@ -57,7 +69,7 @@ print(time.strftime('%H:%M'), f'{task} {method}: {len(P)} candidate pairs', flus
 memo = {}
 def clean(row):
     q = row['question']
-    if q not in memo: memo[q] = core.run(ad, [row])
+    if q not in memo: memo[q] = core.to_cpu(core.run(ad, [row]))
     return memo[q]
 
 
@@ -87,6 +99,7 @@ with torch.no_grad():
                 rec['verify_agree'] = sum(x == y for x, y in zip(single, A)) / len(A)
         res.append(rec)
         if len(memo) > 400: memo.clear()
+        gc.collect()  # the model's cache objects form reference cycles; MPS memory is only freed on collection
         if k % 25 == 0: print(time.strftime('%H:%M'), f'pair {k}/{len(P)} qualified {nq} {time.time() - t0:.0f}s', flush=True)
         if SMOKE and nq >= 6: break
         if dev == 'mps' and k % 25 == 0: torch.mps.empty_cache()

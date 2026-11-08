@@ -75,12 +75,12 @@ def run_multi(ad, row, edits):
         rows_f = [(b, e['feed'][s]) for b, e in enumerate(edits) if s in e.get('feed', {})]
         if rows_f:
             z = z.clone()
-            for b, v in rows_f: z[b] = v.reshape(-1).to(z.dtype)
+            for b, v in rows_f: z[b] = v.reshape(-1).to(device=z.device, dtype=z.dtype)
         past, z_next = ad.latent_multi(ctx, past, z, s)
         pos = ad.pos(ctx, s)
         for b, e in enumerate(edits):
             if s in e.get('kv', {}):
                 for (k, v), (sk, sv) in zip(_layers(past), e['kv'][s]):
-                    k[b, :, pos] = sk.reshape(k[b, :, pos].shape); v[b, :, pos] = sv.reshape(v[b, :, pos].shape)
+                    k[b, :, pos] = sk.reshape(k[b, :, pos].shape).to(k.device); v[b, :, pos] = sv.reshape(v[b, :, pos].shape).to(v.device)
         z = z_next
     return ad.finish_multi(ctx, past, [tuple(e.get('hide', ())) for e in edits])

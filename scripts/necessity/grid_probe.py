@@ -12,6 +12,7 @@ Probes: linear, standardised features, trained on n_train train items, tested on
 shuffled train labels. Also the Coconut paper's readout: LM head on each latent pass's layer-12 state, probability mass on frontier-k
 nodes' first tokens, normalised over all the item's node first tokens (lens_front_k).
 """
+import gc
 import json
 import random
 import sys
@@ -70,6 +71,7 @@ t0 = time.time()
 def collect(rows, tag):
     X, LN, G, PK, FK = [], [], [], [], []
     for i, r in enumerate(rows):
+        if i % 20 == 0: gc.collect()
         x, ln = feats(r); g, pk, fk = labels(r); X.append(x); LN.append(ln); G.append(g); PK.append(pk); FK.append(fk)
         if i % 500 == 0: print(time.strftime('%H:%M'), f'{tag} {i}/{len(rows)} {time.time() - t0:.0f}s', flush=True)
     return np.stack(X), np.stack(LN), np.stack(G), PK, FK
