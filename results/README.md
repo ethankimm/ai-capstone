@@ -261,3 +261,7 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261108-091416_codi_prontoqa-grid-route-split](20261108-091416_codi_prontoqa-grid-route-split/) | codi | gpt2 | test (n=300) | 6 | 0.937 | 0 | full_run | Henning Lindig |
 | [20261108-093050_coconut_prosqa-grid-route-split](20261108-093050_coconut_prosqa-grid-route-split/) | coconut | gpt2 | test (n=870) | 6 | 0.976 | 0 | full_run | Henning Lindig |
 | [20261108-093050_codi_prosqa-grid-route-split](20261108-093050_codi_prosqa-grid-route-split/) | codi | gpt2 | test (n=870) | 6 | 0.828 | 0 | full_run | Henning Lindig |
+| [20261108-102225_coconut_prosqa-grid-path-frontier-probes](20261108-102225_coconut_prosqa-grid-path-frontier-probes/) | coconut | gpt2 | test (n=500) | 6 | - | 0 | full_run | Henning Lindig |
+| [20261108-102225_codi_prosqa-grid-path-frontier-probes](20261108-102225_codi_prosqa-grid-path-frontier-probes/) | codi | gpt2 | test (n=500) | 6 | - | 0 | full_run | Henning Lindig |
+| [20261108-102225_codi_v2-l1to7w-rulechain-monitor-faithfulness](20261108-102225_codi_v2-l1to7w-rulechain-monitor-faithfulness/) | codi | gpt2 | validation (n=648) | 6 | - | None | full_run | Henning Lindig |
+| [20261108-102233_codi_teacher-dependence-rulechain-gsm8k-prosqa](20261108-102233_codi_teacher-dependence-rulechain-gsm8k-prosqa/) | codi | gpt2 | test (n=5973) | 6 | - | 0 | full_run | Henning Lindig |

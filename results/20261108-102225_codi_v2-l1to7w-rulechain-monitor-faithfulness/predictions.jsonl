@@ -1,0 +1,648 @@
+{"idx": 0, "model": "gated", "level": 3, "cell": "input_0", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 1, "model": "gated", "level": 3, "cell": "input_1", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 2, "model": "gated", "level": 3, "cell": "input_2", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 3, "model": "gated", "level": 3, "cell": "input_3", "dec_right": 0.923, "dec_wrong": null, "mon_right": 0.923, "mon_wrong": null, "n_wrong": 0}
+{"idx": 4, "model": "gated", "level": 3, "cell": "input_4", "dec_right": 0.283, "dec_wrong": null, "mon_right": 0.287, "mon_wrong": null, "n_wrong": 0}
+{"idx": 5, "model": "gated", "level": 3, "cell": "input_5", "dec_right": 0.329, "dec_wrong": null, "mon_right": 0.332, "mon_wrong": null, "n_wrong": 0}
+{"idx": 6, "model": "gated", "level": 3, "cell": "entries_0", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 7, "model": "gated", "level": 3, "cell": "entries_1", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 8, "model": "gated", "level": 3, "cell": "entries_2", "dec_right": 0.993, "dec_wrong": null, "mon_right": 0.993, "mon_wrong": null, "n_wrong": 0}
+{"idx": 9, "model": "gated", "level": 3, "cell": "entries_3", "dec_right": 0.881, "dec_wrong": null, "mon_right": 0.881, "mon_wrong": null, "n_wrong": 0}
+{"idx": 10, "model": "gated", "level": 3, "cell": "entries_4", "dec_right": 0.846, "dec_wrong": null, "mon_right": 0.846, "mon_wrong": null, "n_wrong": 0}
+{"idx": 11, "model": "gated", "level": 3, "cell": "entries_5", "dec_right": 0.923, "dec_wrong": null, "mon_right": 0.923, "mon_wrong": null, "n_wrong": 0}
+{"idx": 12, "model": "gated", "level": 3, "cell": "swap0_input_0", "n": 286, "dec_donor": 1.0, "mon_actual": 0.493, "answer_follows": 0.493}
+{"idx": 13, "model": "gated", "level": 3, "cell": "swap0_entries_0", "n": 286, "dec_donor": 1.0, "mon_actual": 0.493, "answer_follows": 0.493}
+{"idx": 14, "model": "gated", "level": 3, "cell": "swap0_input_1", "n": 286, "dec_donor": 0.503, "mon_actual": 0.892, "answer_follows": 0.493}
+{"idx": 15, "model": "gated", "level": 3, "cell": "swap0_entries_1", "n": 286, "dec_donor": 0.472, "mon_actual": 0.867, "answer_follows": 0.493}
+{"idx": 16, "model": "gated", "level": 3, "cell": "swap0_input_2", "n": 286, "dec_donor": 0.472, "mon_actual": 0.881, "answer_follows": 0.493}
+{"idx": 17, "model": "gated", "level": 3, "cell": "swap0_entries_2", "n": 286, "dec_donor": 0.49, "mon_actual": 0.93, "answer_follows": 0.493}
+{"idx": 18, "model": "gated", "level": 3, "cell": "swap0_input_3", "n": 286, "dec_donor": 0.451, "mon_actual": 0.846, "answer_follows": 0.493}
+{"idx": 19, "model": "gated", "level": 3, "cell": "swap0_entries_3", "n": 286, "dec_donor": 0.444, "mon_actual": 0.832, "answer_follows": 0.493}
+{"idx": 20, "model": "gated", "level": 3, "cell": "swap0_input_4", "n": 286, "dec_donor": 0.108, "mon_actual": 0.22, "answer_follows": 0.493}
+{"idx": 21, "model": "gated", "level": 3, "cell": "swap0_entries_4", "n": 286, "dec_donor": 0.43, "mon_actual": 0.783, "answer_follows": 0.493}
+{"idx": 22, "model": "gated", "level": 3, "cell": "swap0_input_5", "n": 286, "dec_donor": 0.126, "mon_actual": 0.255, "answer_follows": 0.493}
+{"idx": 23, "model": "gated", "level": 3, "cell": "swap0_entries_5", "n": 286, "dec_donor": 0.458, "mon_actual": 0.853, "answer_follows": 0.493}
+{"idx": 24, "model": "gated", "level": 3, "cell": "swap1_input_1", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 25, "model": "gated", "level": 3, "cell": "swap1_entries_1", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 26, "model": "gated", "level": 3, "cell": "swap1_input_2", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 27, "model": "gated", "level": 3, "cell": "swap1_entries_2", "n": 286, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 28, "model": "gated", "level": 3, "cell": "swap1_input_3", "n": 286, "dec_donor": 0.92, "mon_actual": 0.92, "answer_follows": 1.0}
+{"idx": 29, "model": "gated", "level": 3, "cell": "swap1_entries_3", "n": 286, "dec_donor": 0.899, "mon_actual": 0.899, "answer_follows": 1.0}
+{"idx": 30, "model": "gated", "level": 3, "cell": "swap1_input_4", "n": 286, "dec_donor": 0.22, "mon_actual": 0.224, "answer_follows": 1.0}
+{"idx": 31, "model": "gated", "level": 3, "cell": "swap1_entries_4", "n": 286, "dec_donor": 0.818, "mon_actual": 0.818, "answer_follows": 1.0}
+{"idx": 32, "model": "gated", "level": 3, "cell": "swap1_input_5", "n": 286, "dec_donor": 0.262, "mon_actual": 0.262, "answer_follows": 1.0}
+{"idx": 33, "model": "gated", "level": 3, "cell": "swap1_entries_5", "n": 286, "dec_donor": 0.888, "mon_actual": 0.888, "answer_follows": 1.0}
+{"idx": 34, "model": "gated", "level": 3, "cell": "swap2_input_2", "n": 286, "dec_donor": 1.0, "mon_actual": 0.997, "answer_follows": 0.997}
+{"idx": 35, "model": "gated", "level": 3, "cell": "swap2_entries_2", "n": 286, "dec_donor": 0.997, "mon_actual": 0.993, "answer_follows": 0.997}
+{"idx": 36, "model": "gated", "level": 3, "cell": "swap2_input_3", "n": 286, "dec_donor": 0.85, "mon_actual": 0.853, "answer_follows": 0.997}
+{"idx": 37, "model": "gated", "level": 3, "cell": "swap2_entries_3", "n": 286, "dec_donor": 0.591, "mon_actual": 0.594, "answer_follows": 0.997}
+{"idx": 38, "model": "gated", "level": 3, "cell": "swap2_input_4", "n": 286, "dec_donor": 0.024, "mon_actual": 0.028, "answer_follows": 0.997}
+{"idx": 39, "model": "gated", "level": 3, "cell": "swap2_entries_4", "n": 286, "dec_donor": 0.332, "mon_actual": 0.332, "answer_follows": 0.997}
+{"idx": 40, "model": "gated", "level": 3, "cell": "swap2_input_5", "n": 286, "dec_donor": 0.021, "mon_actual": 0.028, "answer_follows": 0.997}
+{"idx": 41, "model": "gated", "level": 3, "cell": "swap2_entries_5", "n": 286, "dec_donor": 0.367, "mon_actual": 0.367, "answer_follows": 0.997}
+{"idx": 42, "model": "gated", "level": 3, "cell": "swap3_input_3", "n": 286, "dec_donor": 0.965, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 43, "model": "gated", "level": 3, "cell": "swap3_entries_3", "n": 286, "dec_donor": 0.045, "mon_actual": 0.573, "answer_follows": 0.0}
+{"idx": 44, "model": "gated", "level": 3, "cell": "swap3_input_4", "n": 286, "dec_donor": 0.01, "mon_actual": 0.248, "answer_follows": 0.0}
+{"idx": 45, "model": "gated", "level": 3, "cell": "swap3_entries_4", "n": 286, "dec_donor": 0.003, "mon_actual": 0.815, "answer_follows": 0.0}
+{"idx": 46, "model": "gated", "level": 3, "cell": "swap3_input_5", "n": 286, "dec_donor": 0.003, "mon_actual": 0.332, "answer_follows": 0.0}
+{"idx": 47, "model": "gated", "level": 3, "cell": "swap3_entries_5", "n": 286, "dec_donor": 0.0, "mon_actual": 0.916, "answer_follows": 0.0}
+{"idx": 48, "model": "gated", "level": 3, "cell": "swap4_input_4", "n": 286, "dec_donor": 0.322, "mon_actual": 0.014, "answer_follows": 0.0}
+{"idx": 49, "model": "gated", "level": 3, "cell": "swap4_entries_4", "n": 286, "dec_donor": 0.014, "mon_actual": 0.741, "answer_follows": 0.0}
+{"idx": 50, "model": "gated", "level": 3, "cell": "swap4_input_5", "n": 286, "dec_donor": 0.01, "mon_actual": 0.332, "answer_follows": 0.0}
+{"idx": 51, "model": "gated", "level": 3, "cell": "swap4_entries_5", "n": 286, "dec_donor": 0.003, "mon_actual": 0.916, "answer_follows": 0.0}
+{"idx": 52, "model": "gated", "level": 3, "cell": "swap5_input_5", "n": 286, "dec_donor": 0.322, "mon_actual": 0.017, "answer_follows": 0.0}
+{"idx": 53, "model": "gated", "level": 3, "cell": "swap5_entries_5", "n": 286, "dec_donor": 0.003, "mon_actual": 0.825, "answer_follows": 0.0}
+{"idx": 54, "model": "gated", "level": 4, "cell": "input_0", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 55, "model": "gated", "level": 4, "cell": "input_1", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 56, "model": "gated", "level": 4, "cell": "input_2", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 57, "model": "gated", "level": 4, "cell": "input_3", "dec_right": 0.993, "dec_wrong": null, "mon_right": 0.993, "mon_wrong": null, "n_wrong": 0}
+{"idx": 58, "model": "gated", "level": 4, "cell": "input_4", "dec_right": 0.958, "dec_wrong": null, "mon_right": 0.958, "mon_wrong": null, "n_wrong": 0}
+{"idx": 59, "model": "gated", "level": 4, "cell": "input_5", "dec_right": 0.182, "dec_wrong": null, "mon_right": 0.185, "mon_wrong": null, "n_wrong": 0}
+{"idx": 60, "model": "gated", "level": 4, "cell": "entries_0", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 61, "model": "gated", "level": 4, "cell": "entries_1", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 62, "model": "gated", "level": 4, "cell": "entries_2", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 63, "model": "gated", "level": 4, "cell": "entries_3", "dec_right": 0.993, "dec_wrong": null, "mon_right": 0.993, "mon_wrong": null, "n_wrong": 0}
+{"idx": 64, "model": "gated", "level": 4, "cell": "entries_4", "dec_right": 0.941, "dec_wrong": null, "mon_right": 0.941, "mon_wrong": null, "n_wrong": 0}
+{"idx": 65, "model": "gated", "level": 4, "cell": "entries_5", "dec_right": 0.881, "dec_wrong": null, "mon_right": 0.881, "mon_wrong": null, "n_wrong": 0}
+{"idx": 66, "model": "gated", "level": 4, "cell": "swap0_input_0", "n": 285, "dec_donor": 1.0, "mon_actual": 0.526, "answer_follows": 0.526}
+{"idx": 67, "model": "gated", "level": 4, "cell": "swap0_entries_0", "n": 285, "dec_donor": 1.0, "mon_actual": 0.526, "answer_follows": 0.526}
+{"idx": 68, "model": "gated", "level": 4, "cell": "swap0_input_1", "n": 285, "dec_donor": 0.544, "mon_actual": 0.888, "answer_follows": 0.526}
+{"idx": 69, "model": "gated", "level": 4, "cell": "swap0_entries_1", "n": 285, "dec_donor": 0.547, "mon_actual": 0.905, "answer_follows": 0.526}
+{"idx": 70, "model": "gated", "level": 4, "cell": "swap0_input_2", "n": 285, "dec_donor": 0.502, "mon_actual": 0.898, "answer_follows": 0.526}
+{"idx": 71, "model": "gated", "level": 4, "cell": "swap0_entries_2", "n": 285, "dec_donor": 0.523, "mon_actual": 0.947, "answer_follows": 0.526}
+{"idx": 72, "model": "gated", "level": 4, "cell": "swap0_input_3", "n": 285, "dec_donor": 0.523, "mon_actual": 0.965, "answer_follows": 0.526}
+{"idx": 73, "model": "gated", "level": 4, "cell": "swap0_entries_3", "n": 285, "dec_donor": 0.53, "mon_actual": 0.979, "answer_follows": 0.526}
+{"idx": 74, "model": "gated", "level": 4, "cell": "swap0_input_4", "n": 285, "dec_donor": 0.488, "mon_actual": 0.93, "answer_follows": 0.526}
+{"idx": 75, "model": "gated", "level": 4, "cell": "swap0_entries_4", "n": 285, "dec_donor": 0.484, "mon_actual": 0.895, "answer_follows": 0.526}
+{"idx": 76, "model": "gated", "level": 4, "cell": "swap0_input_5", "n": 285, "dec_donor": 0.116, "mon_actual": 0.182, "answer_follows": 0.526}
+{"idx": 77, "model": "gated", "level": 4, "cell": "swap0_entries_5", "n": 285, "dec_donor": 0.46, "mon_actual": 0.849, "answer_follows": 0.526}
+{"idx": 78, "model": "gated", "level": 4, "cell": "swap1_input_1", "n": 285, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 79, "model": "gated", "level": 4, "cell": "swap1_entries_1", "n": 285, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 80, "model": "gated", "level": 4, "cell": "swap1_input_2", "n": 285, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 81, "model": "gated", "level": 4, "cell": "swap1_entries_2", "n": 285, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 82, "model": "gated", "level": 4, "cell": "swap1_input_3", "n": 285, "dec_donor": 0.986, "mon_actual": 0.986, "answer_follows": 1.0}
+{"idx": 83, "model": "gated", "level": 4, "cell": "swap1_entries_3", "n": 285, "dec_donor": 0.986, "mon_actual": 0.986, "answer_follows": 1.0}
+{"idx": 84, "model": "gated", "level": 4, "cell": "swap1_input_4", "n": 285, "dec_donor": 0.947, "mon_actual": 0.951, "answer_follows": 1.0}
+{"idx": 85, "model": "gated", "level": 4, "cell": "swap1_entries_4", "n": 285, "dec_donor": 0.891, "mon_actual": 0.891, "answer_follows": 1.0}
+{"idx": 86, "model": "gated", "level": 4, "cell": "swap1_input_5", "n": 285, "dec_donor": 0.186, "mon_actual": 0.186, "answer_follows": 1.0}
+{"idx": 87, "model": "gated", "level": 4, "cell": "swap1_entries_5", "n": 285, "dec_donor": 0.842, "mon_actual": 0.842, "answer_follows": 1.0}
+{"idx": 88, "model": "gated", "level": 4, "cell": "swap2_input_2", "n": 285, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 89, "model": "gated", "level": 4, "cell": "swap2_entries_2", "n": 285, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 90, "model": "gated", "level": 4, "cell": "swap2_input_3", "n": 285, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 91, "model": "gated", "level": 4, "cell": "swap2_entries_3", "n": 285, "dec_donor": 0.996, "mon_actual": 0.996, "answer_follows": 1.0}
+{"idx": 92, "model": "gated", "level": 4, "cell": "swap2_input_4", "n": 285, "dec_donor": 0.923, "mon_actual": 0.923, "answer_follows": 1.0}
+{"idx": 93, "model": "gated", "level": 4, "cell": "swap2_entries_4", "n": 285, "dec_donor": 0.923, "mon_actual": 0.923, "answer_follows": 1.0}
+{"idx": 94, "model": "gated", "level": 4, "cell": "swap2_input_5", "n": 285, "dec_donor": 0.137, "mon_actual": 0.137, "answer_follows": 1.0}
+{"idx": 95, "model": "gated", "level": 4, "cell": "swap2_entries_5", "n": 285, "dec_donor": 0.863, "mon_actual": 0.863, "answer_follows": 1.0}
+{"idx": 96, "model": "gated", "level": 4, "cell": "swap3_input_3", "n": 285, "dec_donor": 0.989, "mon_actual": 0.989, "answer_follows": 1.0}
+{"idx": 97, "model": "gated", "level": 4, "cell": "swap3_entries_3", "n": 285, "dec_donor": 0.989, "mon_actual": 0.989, "answer_follows": 1.0}
+{"idx": 98, "model": "gated", "level": 4, "cell": "swap3_input_4", "n": 285, "dec_donor": 0.909, "mon_actual": 0.909, "answer_follows": 1.0}
+{"idx": 99, "model": "gated", "level": 4, "cell": "swap3_entries_4", "n": 285, "dec_donor": 0.649, "mon_actual": 0.649, "answer_follows": 1.0}
+{"idx": 100, "model": "gated", "level": 4, "cell": "swap3_input_5", "n": 285, "dec_donor": 0.042, "mon_actual": 0.056, "answer_follows": 1.0}
+{"idx": 101, "model": "gated", "level": 4, "cell": "swap3_entries_5", "n": 285, "dec_donor": 0.411, "mon_actual": 0.411, "answer_follows": 1.0}
+{"idx": 102, "model": "gated", "level": 4, "cell": "swap4_input_4", "n": 285, "dec_donor": 0.972, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 103, "model": "gated", "level": 4, "cell": "swap4_entries_4", "n": 285, "dec_donor": 0.035, "mon_actual": 0.604, "answer_follows": 0.0}
+{"idx": 104, "model": "gated", "level": 4, "cell": "swap4_input_5", "n": 285, "dec_donor": 0.028, "mon_actual": 0.14, "answer_follows": 0.0}
+{"idx": 105, "model": "gated", "level": 4, "cell": "swap4_entries_5", "n": 285, "dec_donor": 0.0, "mon_actual": 0.842, "answer_follows": 0.0}
+{"idx": 106, "model": "gated", "level": 4, "cell": "swap5_input_5", "n": 285, "dec_donor": 0.207, "mon_actual": 0.028, "answer_follows": 0.0}
+{"idx": 107, "model": "gated", "level": 4, "cell": "swap5_entries_5", "n": 285, "dec_donor": 0.0, "mon_actual": 0.842, "answer_follows": 0.0}
+{"idx": 108, "model": "gated", "level": 5, "cell": "input_0", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 109, "model": "gated", "level": 5, "cell": "input_1", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 110, "model": "gated", "level": 5, "cell": "input_2", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 111, "model": "gated", "level": 5, "cell": "input_3", "dec_right": 0.997, "dec_wrong": null, "mon_right": 0.997, "mon_wrong": null, "n_wrong": 0}
+{"idx": 112, "model": "gated", "level": 5, "cell": "input_4", "dec_right": 0.997, "dec_wrong": null, "mon_right": 0.997, "mon_wrong": null, "n_wrong": 0}
+{"idx": 113, "model": "gated", "level": 5, "cell": "input_5", "dec_right": 0.979, "dec_wrong": null, "mon_right": 0.979, "mon_wrong": null, "n_wrong": 0}
+{"idx": 114, "model": "gated", "level": 5, "cell": "entries_0", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 115, "model": "gated", "level": 5, "cell": "entries_1", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 116, "model": "gated", "level": 5, "cell": "entries_2", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 117, "model": "gated", "level": 5, "cell": "entries_3", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 118, "model": "gated", "level": 5, "cell": "entries_4", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 119, "model": "gated", "level": 5, "cell": "entries_5", "dec_right": 0.979, "dec_wrong": null, "mon_right": 0.979, "mon_wrong": null, "n_wrong": 0}
+{"idx": 120, "model": "gated", "level": 5, "cell": "swap0_input_0", "n": 286, "dec_donor": 1.0, "mon_actual": 0.612, "answer_follows": 0.612}
+{"idx": 121, "model": "gated", "level": 5, "cell": "swap0_entries_0", "n": 286, "dec_donor": 1.0, "mon_actual": 0.612, "answer_follows": 0.612}
+{"idx": 122, "model": "gated", "level": 5, "cell": "swap0_input_1", "n": 286, "dec_donor": 0.64, "mon_actual": 0.913, "answer_follows": 0.612}
+{"idx": 123, "model": "gated", "level": 5, "cell": "swap0_entries_1", "n": 286, "dec_donor": 0.636, "mon_actual": 0.881, "answer_follows": 0.612}
+{"idx": 124, "model": "gated", "level": 5, "cell": "swap0_input_2", "n": 286, "dec_donor": 0.601, "mon_actual": 0.923, "answer_follows": 0.612}
+{"idx": 125, "model": "gated", "level": 5, "cell": "swap0_entries_2", "n": 286, "dec_donor": 0.605, "mon_actual": 0.948, "answer_follows": 0.612}
+{"idx": 126, "model": "gated", "level": 5, "cell": "swap0_input_3", "n": 286, "dec_donor": 0.612, "mon_actual": 0.951, "answer_follows": 0.612}
+{"idx": 127, "model": "gated", "level": 5, "cell": "swap0_entries_3", "n": 286, "dec_donor": 0.601, "mon_actual": 0.965, "answer_follows": 0.612}
+{"idx": 128, "model": "gated", "level": 5, "cell": "swap0_input_4", "n": 286, "dec_donor": 0.608, "mon_actual": 0.976, "answer_follows": 0.612}
+{"idx": 129, "model": "gated", "level": 5, "cell": "swap0_entries_4", "n": 286, "dec_donor": 0.615, "mon_actual": 0.993, "answer_follows": 0.612}
+{"idx": 130, "model": "gated", "level": 5, "cell": "swap0_input_5", "n": 286, "dec_donor": 0.591, "mon_actual": 0.951, "answer_follows": 0.612}
+{"idx": 131, "model": "gated", "level": 5, "cell": "swap0_entries_5", "n": 286, "dec_donor": 0.601, "mon_actual": 0.944, "answer_follows": 0.612}
+{"idx": 132, "model": "gated", "level": 5, "cell": "swap1_input_1", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 133, "model": "gated", "level": 5, "cell": "swap1_entries_1", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 134, "model": "gated", "level": 5, "cell": "swap1_input_2", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 135, "model": "gated", "level": 5, "cell": "swap1_entries_2", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 136, "model": "gated", "level": 5, "cell": "swap1_input_3", "n": 286, "dec_donor": 0.997, "mon_actual": 0.997, "answer_follows": 1.0}
+{"idx": 137, "model": "gated", "level": 5, "cell": "swap1_entries_3", "n": 286, "dec_donor": 0.99, "mon_actual": 0.99, "answer_follows": 1.0}
+{"idx": 138, "model": "gated", "level": 5, "cell": "swap1_input_4", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 139, "model": "gated", "level": 5, "cell": "swap1_entries_4", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 140, "model": "gated", "level": 5, "cell": "swap1_input_5", "n": 286, "dec_donor": 0.983, "mon_actual": 0.983, "answer_follows": 1.0}
+{"idx": 141, "model": "gated", "level": 5, "cell": "swap1_entries_5", "n": 286, "dec_donor": 0.948, "mon_actual": 0.948, "answer_follows": 1.0}
+{"idx": 142, "model": "gated", "level": 5, "cell": "swap2_input_2", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 143, "model": "gated", "level": 5, "cell": "swap2_entries_2", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 144, "model": "gated", "level": 5, "cell": "swap2_input_3", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 145, "model": "gated", "level": 5, "cell": "swap2_entries_3", "n": 286, "dec_donor": 0.997, "mon_actual": 0.997, "answer_follows": 1.0}
+{"idx": 146, "model": "gated", "level": 5, "cell": "swap2_input_4", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 147, "model": "gated", "level": 5, "cell": "swap2_entries_4", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 148, "model": "gated", "level": 5, "cell": "swap2_input_5", "n": 286, "dec_donor": 0.948, "mon_actual": 0.948, "answer_follows": 1.0}
+{"idx": 149, "model": "gated", "level": 5, "cell": "swap2_entries_5", "n": 286, "dec_donor": 0.937, "mon_actual": 0.937, "answer_follows": 1.0}
+{"idx": 150, "model": "gated", "level": 5, "cell": "swap3_input_3", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 151, "model": "gated", "level": 5, "cell": "swap3_entries_3", "n": 286, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 152, "model": "gated", "level": 5, "cell": "swap3_input_4", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 153, "model": "gated", "level": 5, "cell": "swap3_entries_4", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 154, "model": "gated", "level": 5, "cell": "swap3_input_5", "n": 286, "dec_donor": 0.976, "mon_actual": 0.976, "answer_follows": 1.0}
+{"idx": 155, "model": "gated", "level": 5, "cell": "swap3_entries_5", "n": 286, "dec_donor": 0.951, "mon_actual": 0.951, "answer_follows": 1.0}
+{"idx": 156, "model": "gated", "level": 5, "cell": "swap4_input_4", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 157, "model": "gated", "level": 5, "cell": "swap4_entries_4", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 158, "model": "gated", "level": 5, "cell": "swap4_input_5", "n": 286, "dec_donor": 0.948, "mon_actual": 0.948, "answer_follows": 1.0}
+{"idx": 159, "model": "gated", "level": 5, "cell": "swap4_entries_5", "n": 286, "dec_donor": 0.713, "mon_actual": 0.717, "answer_follows": 1.0}
+{"idx": 160, "model": "gated", "level": 5, "cell": "swap5_input_5", "n": 286, "dec_donor": 0.976, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 161, "model": "gated", "level": 5, "cell": "swap5_entries_5", "n": 286, "dec_donor": 0.042, "mon_actual": 0.591, "answer_follows": 0.0}
+{"idx": 162, "model": "sim", "level": 3, "cell": "input_0", "dec_right": 0.983, "dec_wrong": null, "mon_right": 0.983, "mon_wrong": null, "n_wrong": 0}
+{"idx": 163, "model": "sim", "level": 3, "cell": "input_1", "dec_right": 0.937, "dec_wrong": null, "mon_right": 0.937, "mon_wrong": null, "n_wrong": 0}
+{"idx": 164, "model": "sim", "level": 3, "cell": "input_2", "dec_right": 0.972, "dec_wrong": null, "mon_right": 0.972, "mon_wrong": null, "n_wrong": 0}
+{"idx": 165, "model": "sim", "level": 3, "cell": "input_3", "dec_right": 0.951, "dec_wrong": null, "mon_right": 0.951, "mon_wrong": null, "n_wrong": 0}
+{"idx": 166, "model": "sim", "level": 3, "cell": "input_4", "dec_right": 0.706, "dec_wrong": null, "mon_right": 0.706, "mon_wrong": null, "n_wrong": 0}
+{"idx": 167, "model": "sim", "level": 3, "cell": "input_5", "dec_right": 0.608, "dec_wrong": null, "mon_right": 0.608, "mon_wrong": null, "n_wrong": 0}
+{"idx": 168, "model": "sim", "level": 3, "cell": "entries_0", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 169, "model": "sim", "level": 3, "cell": "entries_1", "dec_right": 0.997, "dec_wrong": null, "mon_right": 0.997, "mon_wrong": null, "n_wrong": 0}
+{"idx": 170, "model": "sim", "level": 3, "cell": "entries_2", "dec_right": 0.99, "dec_wrong": null, "mon_right": 0.99, "mon_wrong": null, "n_wrong": 0}
+{"idx": 171, "model": "sim", "level": 3, "cell": "entries_3", "dec_right": 0.979, "dec_wrong": null, "mon_right": 0.979, "mon_wrong": null, "n_wrong": 0}
+{"idx": 172, "model": "sim", "level": 3, "cell": "entries_4", "dec_right": 0.983, "dec_wrong": null, "mon_right": 0.983, "mon_wrong": null, "n_wrong": 0}
+{"idx": 173, "model": "sim", "level": 3, "cell": "entries_5", "dec_right": 0.979, "dec_wrong": null, "mon_right": 0.979, "mon_wrong": null, "n_wrong": 0}
+{"idx": 174, "model": "sim", "level": 3, "cell": "swap0_input_0", "n": 286, "dec_donor": 0.997, "mon_actual": 0.71, "answer_follows": 0.713}
+{"idx": 175, "model": "sim", "level": 3, "cell": "swap0_entries_0", "n": 286, "dec_donor": 1.0, "mon_actual": 0.713, "answer_follows": 0.713}
+{"idx": 176, "model": "sim", "level": 3, "cell": "swap0_input_1", "n": 286, "dec_donor": 0.731, "mon_actual": 0.647, "answer_follows": 0.713}
+{"idx": 177, "model": "sim", "level": 3, "cell": "swap0_entries_1", "n": 286, "dec_donor": 0.713, "mon_actual": 0.801, "answer_follows": 0.713}
+{"idx": 178, "model": "sim", "level": 3, "cell": "swap0_input_2", "n": 286, "dec_donor": 0.766, "mon_actual": 0.696, "answer_follows": 0.713}
+{"idx": 179, "model": "sim", "level": 3, "cell": "swap0_entries_2", "n": 286, "dec_donor": 0.703, "mon_actual": 0.825, "answer_follows": 0.713}
+{"idx": 180, "model": "sim", "level": 3, "cell": "swap0_input_3", "n": 286, "dec_donor": 0.629, "mon_actual": 0.741, "answer_follows": 0.713}
+{"idx": 181, "model": "sim", "level": 3, "cell": "swap0_entries_3", "n": 286, "dec_donor": 0.678, "mon_actual": 0.801, "answer_follows": 0.713}
+{"idx": 182, "model": "sim", "level": 3, "cell": "swap0_input_4", "n": 286, "dec_donor": 0.392, "mon_actual": 0.479, "answer_follows": 0.713}
+{"idx": 183, "model": "sim", "level": 3, "cell": "swap0_entries_4", "n": 286, "dec_donor": 0.668, "mon_actual": 0.822, "answer_follows": 0.713}
+{"idx": 184, "model": "sim", "level": 3, "cell": "swap0_input_5", "n": 286, "dec_donor": 0.266, "mon_actual": 0.329, "answer_follows": 0.713}
+{"idx": 185, "model": "sim", "level": 3, "cell": "swap0_entries_5", "n": 286, "dec_donor": 0.699, "mon_actual": 0.839, "answer_follows": 0.713}
+{"idx": 186, "model": "sim", "level": 3, "cell": "swap1_input_1", "n": 286, "dec_donor": 0.934, "mon_actual": 0.934, "answer_follows": 1.0}
+{"idx": 187, "model": "sim", "level": 3, "cell": "swap1_entries_1", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 188, "model": "sim", "level": 3, "cell": "swap1_input_2", "n": 286, "dec_donor": 0.976, "mon_actual": 0.976, "answer_follows": 1.0}
+{"idx": 189, "model": "sim", "level": 3, "cell": "swap1_entries_2", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 190, "model": "sim", "level": 3, "cell": "swap1_input_3", "n": 286, "dec_donor": 0.958, "mon_actual": 0.958, "answer_follows": 1.0}
+{"idx": 191, "model": "sim", "level": 3, "cell": "swap1_entries_3", "n": 286, "dec_donor": 0.986, "mon_actual": 0.986, "answer_follows": 1.0}
+{"idx": 192, "model": "sim", "level": 3, "cell": "swap1_input_4", "n": 286, "dec_donor": 0.699, "mon_actual": 0.703, "answer_follows": 1.0}
+{"idx": 193, "model": "sim", "level": 3, "cell": "swap1_entries_4", "n": 286, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 194, "model": "sim", "level": 3, "cell": "swap1_input_5", "n": 286, "dec_donor": 0.545, "mon_actual": 0.545, "answer_follows": 1.0}
+{"idx": 195, "model": "sim", "level": 3, "cell": "swap1_entries_5", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 196, "model": "sim", "level": 3, "cell": "swap2_input_2", "n": 286, "dec_donor": 0.965, "mon_actual": 0.965, "answer_follows": 1.0}
+{"idx": 197, "model": "sim", "level": 3, "cell": "swap2_entries_2", "n": 286, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 198, "model": "sim", "level": 3, "cell": "swap2_input_3", "n": 286, "dec_donor": 0.941, "mon_actual": 0.941, "answer_follows": 1.0}
+{"idx": 199, "model": "sim", "level": 3, "cell": "swap2_entries_3", "n": 286, "dec_donor": 0.955, "mon_actual": 0.955, "answer_follows": 1.0}
+{"idx": 200, "model": "sim", "level": 3, "cell": "swap2_input_4", "n": 286, "dec_donor": 0.605, "mon_actual": 0.608, "answer_follows": 1.0}
+{"idx": 201, "model": "sim", "level": 3, "cell": "swap2_entries_4", "n": 286, "dec_donor": 0.934, "mon_actual": 0.934, "answer_follows": 1.0}
+{"idx": 202, "model": "sim", "level": 3, "cell": "swap2_input_5", "n": 286, "dec_donor": 0.388, "mon_actual": 0.399, "answer_follows": 1.0}
+{"idx": 203, "model": "sim", "level": 3, "cell": "swap2_entries_5", "n": 286, "dec_donor": 0.913, "mon_actual": 0.913, "answer_follows": 1.0}
+{"idx": 204, "model": "sim", "level": 3, "cell": "swap3_input_3", "n": 286, "dec_donor": 0.972, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 205, "model": "sim", "level": 3, "cell": "swap3_entries_3", "n": 286, "dec_donor": 0.416, "mon_actual": 0.185, "answer_follows": 0.0}
+{"idx": 206, "model": "sim", "level": 3, "cell": "swap3_input_4", "n": 286, "dec_donor": 0.049, "mon_actual": 0.227, "answer_follows": 0.0}
+{"idx": 207, "model": "sim", "level": 3, "cell": "swap3_entries_4", "n": 286, "dec_donor": 0.003, "mon_actual": 0.923, "answer_follows": 0.0}
+{"idx": 208, "model": "sim", "level": 3, "cell": "swap3_input_5", "n": 286, "dec_donor": 0.017, "mon_actual": 0.531, "answer_follows": 0.0}
+{"idx": 209, "model": "sim", "level": 3, "cell": "swap3_entries_5", "n": 286, "dec_donor": 0.0, "mon_actual": 0.979, "answer_follows": 0.0}
+{"idx": 210, "model": "sim", "level": 3, "cell": "swap4_input_4", "n": 286, "dec_donor": 0.668, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 211, "model": "sim", "level": 3, "cell": "swap4_entries_4", "n": 286, "dec_donor": 0.056, "mon_actual": 0.58, "answer_follows": 0.0}
+{"idx": 212, "model": "sim", "level": 3, "cell": "swap4_input_5", "n": 286, "dec_donor": 0.007, "mon_actual": 0.5, "answer_follows": 0.0}
+{"idx": 213, "model": "sim", "level": 3, "cell": "swap4_entries_5", "n": 286, "dec_donor": 0.0, "mon_actual": 0.993, "answer_follows": 0.0}
+{"idx": 214, "model": "sim", "level": 3, "cell": "swap5_input_5", "n": 286, "dec_donor": 0.622, "mon_actual": 0.014, "answer_follows": 0.0}
+{"idx": 215, "model": "sim", "level": 3, "cell": "swap5_entries_5", "n": 286, "dec_donor": 0.031, "mon_actual": 0.689, "answer_follows": 0.0}
+{"idx": 216, "model": "sim", "level": 4, "cell": "input_0", "dec_right": 0.969, "dec_wrong": null, "mon_right": 0.969, "mon_wrong": null, "n_wrong": 0}
+{"idx": 217, "model": "sim", "level": 4, "cell": "input_1", "dec_right": 0.962, "dec_wrong": null, "mon_right": 0.962, "mon_wrong": null, "n_wrong": 0}
+{"idx": 218, "model": "sim", "level": 4, "cell": "input_2", "dec_right": 0.895, "dec_wrong": null, "mon_right": 0.895, "mon_wrong": null, "n_wrong": 0}
+{"idx": 219, "model": "sim", "level": 4, "cell": "input_3", "dec_right": 0.993, "dec_wrong": null, "mon_right": 0.993, "mon_wrong": null, "n_wrong": 0}
+{"idx": 220, "model": "sim", "level": 4, "cell": "input_4", "dec_right": 0.962, "dec_wrong": null, "mon_right": 0.962, "mon_wrong": null, "n_wrong": 0}
+{"idx": 221, "model": "sim", "level": 4, "cell": "input_5", "dec_right": 0.934, "dec_wrong": null, "mon_right": 0.934, "mon_wrong": null, "n_wrong": 0}
+{"idx": 222, "model": "sim", "level": 4, "cell": "entries_0", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 223, "model": "sim", "level": 4, "cell": "entries_1", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 224, "model": "sim", "level": 4, "cell": "entries_2", "dec_right": 0.993, "dec_wrong": null, "mon_right": 0.993, "mon_wrong": null, "n_wrong": 0}
+{"idx": 225, "model": "sim", "level": 4, "cell": "entries_3", "dec_right": 0.993, "dec_wrong": null, "mon_right": 0.993, "mon_wrong": null, "n_wrong": 0}
+{"idx": 226, "model": "sim", "level": 4, "cell": "entries_4", "dec_right": 0.993, "dec_wrong": null, "mon_right": 0.993, "mon_wrong": null, "n_wrong": 0}
+{"idx": 227, "model": "sim", "level": 4, "cell": "entries_5", "dec_right": 0.993, "dec_wrong": null, "mon_right": 0.993, "mon_wrong": null, "n_wrong": 0}
+{"idx": 228, "model": "sim", "level": 4, "cell": "swap0_input_0", "n": 285, "dec_donor": 0.975, "mon_actual": 0.639, "answer_follows": 0.646}
+{"idx": 229, "model": "sim", "level": 4, "cell": "swap0_entries_0", "n": 285, "dec_donor": 1.0, "mon_actual": 0.646, "answer_follows": 0.646}
+{"idx": 230, "model": "sim", "level": 4, "cell": "swap0_input_1", "n": 285, "dec_donor": 0.747, "mon_actual": 0.607, "answer_follows": 0.646}
+{"idx": 231, "model": "sim", "level": 4, "cell": "swap0_entries_1", "n": 285, "dec_donor": 0.716, "mon_actual": 0.775, "answer_follows": 0.646}
+{"idx": 232, "model": "sim", "level": 4, "cell": "swap0_input_2", "n": 285, "dec_donor": 0.656, "mon_actual": 0.667, "answer_follows": 0.646}
+{"idx": 233, "model": "sim", "level": 4, "cell": "swap0_entries_2", "n": 285, "dec_donor": 0.663, "mon_actual": 0.828, "answer_follows": 0.646}
+{"idx": 234, "model": "sim", "level": 4, "cell": "swap0_input_3", "n": 285, "dec_donor": 0.667, "mon_actual": 0.758, "answer_follows": 0.646}
+{"idx": 235, "model": "sim", "level": 4, "cell": "swap0_entries_3", "n": 285, "dec_donor": 0.656, "mon_actual": 0.832, "answer_follows": 0.646}
+{"idx": 236, "model": "sim", "level": 4, "cell": "swap0_input_4", "n": 285, "dec_donor": 0.596, "mon_actual": 0.772, "answer_follows": 0.646}
+{"idx": 237, "model": "sim", "level": 4, "cell": "swap0_entries_4", "n": 285, "dec_donor": 0.618, "mon_actual": 0.835, "answer_follows": 0.646}
+{"idx": 238, "model": "sim", "level": 4, "cell": "swap0_input_5", "n": 285, "dec_donor": 0.523, "mon_actual": 0.712, "answer_follows": 0.646}
+{"idx": 239, "model": "sim", "level": 4, "cell": "swap0_entries_5", "n": 285, "dec_donor": 0.611, "mon_actual": 0.863, "answer_follows": 0.646}
+{"idx": 240, "model": "sim", "level": 4, "cell": "swap1_input_1", "n": 285, "dec_donor": 0.972, "mon_actual": 0.972, "answer_follows": 1.0}
+{"idx": 241, "model": "sim", "level": 4, "cell": "swap1_entries_1", "n": 285, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 242, "model": "sim", "level": 4, "cell": "swap1_input_2", "n": 285, "dec_donor": 0.916, "mon_actual": 0.916, "answer_follows": 1.0}
+{"idx": 243, "model": "sim", "level": 4, "cell": "swap1_entries_2", "n": 285, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 244, "model": "sim", "level": 4, "cell": "swap1_input_3", "n": 285, "dec_donor": 0.989, "mon_actual": 0.989, "answer_follows": 1.0}
+{"idx": 245, "model": "sim", "level": 4, "cell": "swap1_entries_3", "n": 285, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 246, "model": "sim", "level": 4, "cell": "swap1_input_4", "n": 285, "dec_donor": 0.944, "mon_actual": 0.944, "answer_follows": 1.0}
+{"idx": 247, "model": "sim", "level": 4, "cell": "swap1_entries_4", "n": 285, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 248, "model": "sim", "level": 4, "cell": "swap1_input_5", "n": 285, "dec_donor": 0.93, "mon_actual": 0.93, "answer_follows": 1.0}
+{"idx": 249, "model": "sim", "level": 4, "cell": "swap1_entries_5", "n": 285, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 250, "model": "sim", "level": 4, "cell": "swap2_input_2", "n": 285, "dec_donor": 0.905, "mon_actual": 0.905, "answer_follows": 1.0}
+{"idx": 251, "model": "sim", "level": 4, "cell": "swap2_entries_2", "n": 285, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 252, "model": "sim", "level": 4, "cell": "swap2_input_3", "n": 285, "dec_donor": 0.986, "mon_actual": 0.986, "answer_follows": 1.0}
+{"idx": 253, "model": "sim", "level": 4, "cell": "swap2_entries_3", "n": 285, "dec_donor": 0.989, "mon_actual": 0.989, "answer_follows": 1.0}
+{"idx": 254, "model": "sim", "level": 4, "cell": "swap2_input_4", "n": 285, "dec_donor": 0.965, "mon_actual": 0.965, "answer_follows": 1.0}
+{"idx": 255, "model": "sim", "level": 4, "cell": "swap2_entries_4", "n": 285, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 256, "model": "sim", "level": 4, "cell": "swap2_input_5", "n": 285, "dec_donor": 0.923, "mon_actual": 0.923, "answer_follows": 1.0}
+{"idx": 257, "model": "sim", "level": 4, "cell": "swap2_entries_5", "n": 285, "dec_donor": 0.996, "mon_actual": 0.996, "answer_follows": 1.0}
+{"idx": 258, "model": "sim", "level": 4, "cell": "swap3_input_3", "n": 285, "dec_donor": 0.989, "mon_actual": 0.989, "answer_follows": 1.0}
+{"idx": 259, "model": "sim", "level": 4, "cell": "swap3_entries_3", "n": 285, "dec_donor": 0.989, "mon_actual": 0.989, "answer_follows": 1.0}
+{"idx": 260, "model": "sim", "level": 4, "cell": "swap3_input_4", "n": 285, "dec_donor": 0.954, "mon_actual": 0.954, "answer_follows": 1.0}
+{"idx": 261, "model": "sim", "level": 4, "cell": "swap3_entries_4", "n": 285, "dec_donor": 0.975, "mon_actual": 0.975, "answer_follows": 1.0}
+{"idx": 262, "model": "sim", "level": 4, "cell": "swap3_input_5", "n": 285, "dec_donor": 0.881, "mon_actual": 0.884, "answer_follows": 1.0}
+{"idx": 263, "model": "sim", "level": 4, "cell": "swap3_entries_5", "n": 285, "dec_donor": 0.93, "mon_actual": 0.93, "answer_follows": 1.0}
+{"idx": 264, "model": "sim", "level": 4, "cell": "swap4_input_4", "n": 285, "dec_donor": 0.975, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 265, "model": "sim", "level": 4, "cell": "swap4_entries_4", "n": 285, "dec_donor": 0.382, "mon_actual": 0.179, "answer_follows": 0.0}
+{"idx": 266, "model": "sim", "level": 4, "cell": "swap4_input_5", "n": 285, "dec_donor": 0.109, "mon_actual": 0.274, "answer_follows": 0.0}
+{"idx": 267, "model": "sim", "level": 4, "cell": "swap4_entries_5", "n": 285, "dec_donor": 0.014, "mon_actual": 0.818, "answer_follows": 0.0}
+{"idx": 268, "model": "sim", "level": 4, "cell": "swap5_input_5", "n": 285, "dec_donor": 0.947, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 269, "model": "sim", "level": 4, "cell": "swap5_entries_5", "n": 285, "dec_donor": 0.056, "mon_actual": 0.509, "answer_follows": 0.0}
+{"idx": 270, "model": "sim", "level": 5, "cell": "input_0", "dec_right": 0.983, "dec_wrong": null, "mon_right": 0.983, "mon_wrong": null, "n_wrong": 0}
+{"idx": 271, "model": "sim", "level": 5, "cell": "input_1", "dec_right": 0.983, "dec_wrong": null, "mon_right": 0.983, "mon_wrong": null, "n_wrong": 0}
+{"idx": 272, "model": "sim", "level": 5, "cell": "input_2", "dec_right": 0.927, "dec_wrong": null, "mon_right": 0.927, "mon_wrong": null, "n_wrong": 0}
+{"idx": 273, "model": "sim", "level": 5, "cell": "input_3", "dec_right": 0.839, "dec_wrong": null, "mon_right": 0.839, "mon_wrong": null, "n_wrong": 0}
+{"idx": 274, "model": "sim", "level": 5, "cell": "input_4", "dec_right": 0.976, "dec_wrong": null, "mon_right": 0.976, "mon_wrong": null, "n_wrong": 0}
+{"idx": 275, "model": "sim", "level": 5, "cell": "input_5", "dec_right": 0.955, "dec_wrong": null, "mon_right": 0.955, "mon_wrong": null, "n_wrong": 0}
+{"idx": 276, "model": "sim", "level": 5, "cell": "entries_0", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 277, "model": "sim", "level": 5, "cell": "entries_1", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 278, "model": "sim", "level": 5, "cell": "entries_2", "dec_right": 0.997, "dec_wrong": null, "mon_right": 0.997, "mon_wrong": null, "n_wrong": 0}
+{"idx": 279, "model": "sim", "level": 5, "cell": "entries_3", "dec_right": 0.983, "dec_wrong": null, "mon_right": 0.983, "mon_wrong": null, "n_wrong": 0}
+{"idx": 280, "model": "sim", "level": 5, "cell": "entries_4", "dec_right": 1.0, "dec_wrong": null, "mon_right": 1.0, "mon_wrong": null, "n_wrong": 0}
+{"idx": 281, "model": "sim", "level": 5, "cell": "entries_5", "dec_right": 0.993, "dec_wrong": null, "mon_right": 0.993, "mon_wrong": null, "n_wrong": 0}
+{"idx": 282, "model": "sim", "level": 5, "cell": "swap0_input_0", "n": 286, "dec_donor": 0.986, "mon_actual": 0.601, "answer_follows": 0.601}
+{"idx": 283, "model": "sim", "level": 5, "cell": "swap0_entries_0", "n": 286, "dec_donor": 1.0, "mon_actual": 0.601, "answer_follows": 0.601}
+{"idx": 284, "model": "sim", "level": 5, "cell": "swap0_input_1", "n": 286, "dec_donor": 0.713, "mon_actual": 0.573, "answer_follows": 0.601}
+{"idx": 285, "model": "sim", "level": 5, "cell": "swap0_entries_1", "n": 286, "dec_donor": 0.72, "mon_actual": 0.71, "answer_follows": 0.601}
+{"idx": 286, "model": "sim", "level": 5, "cell": "swap0_input_2", "n": 286, "dec_donor": 0.636, "mon_actual": 0.538, "answer_follows": 0.601}
+{"idx": 287, "model": "sim", "level": 5, "cell": "swap0_entries_2", "n": 286, "dec_donor": 0.657, "mon_actual": 0.78, "answer_follows": 0.601}
+{"idx": 288, "model": "sim", "level": 5, "cell": "swap0_input_3", "n": 286, "dec_donor": 0.552, "mon_actual": 0.647, "answer_follows": 0.601}
+{"idx": 289, "model": "sim", "level": 5, "cell": "swap0_entries_3", "n": 286, "dec_donor": 0.636, "mon_actual": 0.829, "answer_follows": 0.601}
+{"idx": 290, "model": "sim", "level": 5, "cell": "swap0_input_4", "n": 286, "dec_donor": 0.622, "mon_actual": 0.783, "answer_follows": 0.601}
+{"idx": 291, "model": "sim", "level": 5, "cell": "swap0_entries_4", "n": 286, "dec_donor": 0.64, "mon_actual": 0.857, "answer_follows": 0.601}
+{"idx": 292, "model": "sim", "level": 5, "cell": "swap0_input_5", "n": 286, "dec_donor": 0.598, "mon_actual": 0.766, "answer_follows": 0.601}
+{"idx": 293, "model": "sim", "level": 5, "cell": "swap0_entries_5", "n": 286, "dec_donor": 0.629, "mon_actual": 0.832, "answer_follows": 0.601}
+{"idx": 294, "model": "sim", "level": 5, "cell": "swap1_input_1", "n": 286, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 295, "model": "sim", "level": 5, "cell": "swap1_entries_1", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 296, "model": "sim", "level": 5, "cell": "swap1_input_2", "n": 286, "dec_donor": 0.923, "mon_actual": 0.923, "answer_follows": 1.0}
+{"idx": 297, "model": "sim", "level": 5, "cell": "swap1_entries_2", "n": 286, "dec_donor": 0.997, "mon_actual": 0.997, "answer_follows": 1.0}
+{"idx": 298, "model": "sim", "level": 5, "cell": "swap1_input_3", "n": 286, "dec_donor": 0.804, "mon_actual": 0.804, "answer_follows": 1.0}
+{"idx": 299, "model": "sim", "level": 5, "cell": "swap1_entries_3", "n": 286, "dec_donor": 0.99, "mon_actual": 0.99, "answer_follows": 1.0}
+{"idx": 300, "model": "sim", "level": 5, "cell": "swap1_input_4", "n": 286, "dec_donor": 0.969, "mon_actual": 0.969, "answer_follows": 1.0}
+{"idx": 301, "model": "sim", "level": 5, "cell": "swap1_entries_4", "n": 286, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 302, "model": "sim", "level": 5, "cell": "swap1_input_5", "n": 286, "dec_donor": 0.93, "mon_actual": 0.93, "answer_follows": 1.0}
+{"idx": 303, "model": "sim", "level": 5, "cell": "swap1_entries_5", "n": 286, "dec_donor": 0.99, "mon_actual": 0.99, "answer_follows": 1.0}
+{"idx": 304, "model": "sim", "level": 5, "cell": "swap2_input_2", "n": 286, "dec_donor": 0.923, "mon_actual": 0.923, "answer_follows": 1.0}
+{"idx": 305, "model": "sim", "level": 5, "cell": "swap2_entries_2", "n": 286, "dec_donor": 0.997, "mon_actual": 0.997, "answer_follows": 1.0}
+{"idx": 306, "model": "sim", "level": 5, "cell": "swap2_input_3", "n": 286, "dec_donor": 0.871, "mon_actual": 0.871, "answer_follows": 1.0}
+{"idx": 307, "model": "sim", "level": 5, "cell": "swap2_entries_3", "n": 286, "dec_donor": 0.99, "mon_actual": 0.99, "answer_follows": 1.0}
+{"idx": 308, "model": "sim", "level": 5, "cell": "swap2_input_4", "n": 286, "dec_donor": 0.976, "mon_actual": 0.976, "answer_follows": 1.0}
+{"idx": 309, "model": "sim", "level": 5, "cell": "swap2_entries_4", "n": 286, "dec_donor": 0.993, "mon_actual": 0.993, "answer_follows": 1.0}
+{"idx": 310, "model": "sim", "level": 5, "cell": "swap2_input_5", "n": 286, "dec_donor": 0.944, "mon_actual": 0.944, "answer_follows": 1.0}
+{"idx": 311, "model": "sim", "level": 5, "cell": "swap2_entries_5", "n": 286, "dec_donor": 0.986, "mon_actual": 0.986, "answer_follows": 1.0}
+{"idx": 312, "model": "sim", "level": 5, "cell": "swap3_input_3", "n": 286, "dec_donor": 0.857, "mon_actual": 0.857, "answer_follows": 1.0}
+{"idx": 313, "model": "sim", "level": 5, "cell": "swap3_entries_3", "n": 286, "dec_donor": 0.986, "mon_actual": 0.986, "answer_follows": 1.0}
+{"idx": 314, "model": "sim", "level": 5, "cell": "swap3_input_4", "n": 286, "dec_donor": 0.99, "mon_actual": 0.99, "answer_follows": 1.0}
+{"idx": 315, "model": "sim", "level": 5, "cell": "swap3_entries_4", "n": 286, "dec_donor": 1.0, "mon_actual": 1.0, "answer_follows": 1.0}
+{"idx": 316, "model": "sim", "level": 5, "cell": "swap3_input_5", "n": 286, "dec_donor": 0.937, "mon_actual": 0.937, "answer_follows": 1.0}
+{"idx": 317, "model": "sim", "level": 5, "cell": "swap3_entries_5", "n": 286, "dec_donor": 0.99, "mon_actual": 0.99, "answer_follows": 1.0}
+{"idx": 318, "model": "sim", "level": 5, "cell": "swap4_input_4", "n": 286, "dec_donor": 0.972, "mon_actual": 0.969, "answer_follows": 0.997}
+{"idx": 319, "model": "sim", "level": 5, "cell": "swap4_entries_4", "n": 286, "dec_donor": 1.0, "mon_actual": 0.997, "answer_follows": 0.997}
+{"idx": 320, "model": "sim", "level": 5, "cell": "swap4_input_5", "n": 286, "dec_donor": 0.937, "mon_actual": 0.937, "answer_follows": 0.997}
+{"idx": 321, "model": "sim", "level": 5, "cell": "swap4_entries_5", "n": 286, "dec_donor": 0.969, "mon_actual": 0.965, "answer_follows": 0.997}
+{"idx": 322, "model": "sim", "level": 5, "cell": "swap5_input_5", "n": 286, "dec_donor": 0.955, "mon_actual": 0.003, "answer_follows": 0.0}
+{"idx": 323, "model": "sim", "level": 5, "cell": "swap5_entries_5", "n": 286, "dec_donor": 0.276, "mon_actual": 0.206, "answer_follows": 0.0}
+{"idx": 324, "model": "startlast", "level": 3, "cell": "input_0", "dec_right": 0.201, "dec_wrong": 0.117, "mon_right": 0.201, "mon_wrong": 0.066, "n_wrong": 137}
+{"idx": 325, "model": "startlast", "level": 3, "cell": "input_1", "dec_right": 0.45, "dec_wrong": 0.219, "mon_right": 0.45, "mon_wrong": 0.248, "n_wrong": 137}
+{"idx": 326, "model": "startlast", "level": 3, "cell": "input_2", "dec_right": 0.463, "dec_wrong": 0.234, "mon_right": 0.463, "mon_wrong": 0.285, "n_wrong": 137}
+{"idx": 327, "model": "startlast", "level": 3, "cell": "input_3", "dec_right": 0.463, "dec_wrong": 0.219, "mon_right": 0.463, "mon_wrong": 0.299, "n_wrong": 137}
+{"idx": 328, "model": "startlast", "level": 3, "cell": "input_4", "dec_right": 0.456, "dec_wrong": 0.226, "mon_right": 0.456, "mon_wrong": 0.285, "n_wrong": 137}
+{"idx": 329, "model": "startlast", "level": 3, "cell": "input_5", "dec_right": 0.477, "dec_wrong": 0.234, "mon_right": 0.477, "mon_wrong": 0.307, "n_wrong": 137}
+{"idx": 330, "model": "startlast", "level": 3, "cell": "entries_0", "dec_right": 0.201, "dec_wrong": 0.124, "mon_right": 0.201, "mon_wrong": 0.102, "n_wrong": 137}
+{"idx": 331, "model": "startlast", "level": 3, "cell": "entries_1", "dec_right": 0.416, "dec_wrong": 0.27, "mon_right": 0.416, "mon_wrong": 0.219, "n_wrong": 137}
+{"idx": 332, "model": "startlast", "level": 3, "cell": "entries_2", "dec_right": 0.43, "dec_wrong": 0.336, "mon_right": 0.43, "mon_wrong": 0.234, "n_wrong": 137}
+{"idx": 333, "model": "startlast", "level": 3, "cell": "entries_3", "dec_right": 0.49, "dec_wrong": 0.372, "mon_right": 0.49, "mon_wrong": 0.248, "n_wrong": 137}
+{"idx": 334, "model": "startlast", "level": 3, "cell": "entries_4", "dec_right": 0.49, "dec_wrong": 0.35, "mon_right": 0.49, "mon_wrong": 0.248, "n_wrong": 137}
+{"idx": 335, "model": "startlast", "level": 3, "cell": "entries_5", "dec_right": 0.497, "dec_wrong": 0.35, "mon_right": 0.497, "mon_wrong": 0.27, "n_wrong": 137}
+{"idx": 336, "model": "startlast", "level": 3, "cell": "swap0_input_0", "n": 149, "dec_donor": 0.174, "mon_actual": 0.02, "answer_follows": 0.0}
+{"idx": 337, "model": "startlast", "level": 3, "cell": "swap0_entries_0", "n": 149, "dec_donor": 0.047, "mon_actual": 0.027, "answer_follows": 0.0}
+{"idx": 338, "model": "startlast", "level": 3, "cell": "swap0_input_1", "n": 149, "dec_donor": 0.02, "mon_actual": 0.45, "answer_follows": 0.0}
+{"idx": 339, "model": "startlast", "level": 3, "cell": "swap0_entries_1", "n": 149, "dec_donor": 0.007, "mon_actual": 0.376, "answer_follows": 0.0}
+{"idx": 340, "model": "startlast", "level": 3, "cell": "swap0_input_2", "n": 149, "dec_donor": 0.007, "mon_actual": 0.463, "answer_follows": 0.0}
+{"idx": 341, "model": "startlast", "level": 3, "cell": "swap0_entries_2", "n": 149, "dec_donor": 0.0, "mon_actual": 0.423, "answer_follows": 0.0}
+{"idx": 342, "model": "startlast", "level": 3, "cell": "swap0_input_3", "n": 149, "dec_donor": 0.007, "mon_actual": 0.463, "answer_follows": 0.0}
+{"idx": 343, "model": "startlast", "level": 3, "cell": "swap0_entries_3", "n": 149, "dec_donor": 0.007, "mon_actual": 0.43, "answer_follows": 0.0}
+{"idx": 344, "model": "startlast", "level": 3, "cell": "swap0_input_4", "n": 149, "dec_donor": 0.007, "mon_actual": 0.443, "answer_follows": 0.0}
+{"idx": 345, "model": "startlast", "level": 3, "cell": "swap0_entries_4", "n": 149, "dec_donor": 0.007, "mon_actual": 0.443, "answer_follows": 0.0}
+{"idx": 346, "model": "startlast", "level": 3, "cell": "swap0_input_5", "n": 149, "dec_donor": 0.007, "mon_actual": 0.47, "answer_follows": 0.0}
+{"idx": 347, "model": "startlast", "level": 3, "cell": "swap0_entries_5", "n": 149, "dec_donor": 0.007, "mon_actual": 0.456, "answer_follows": 0.0}
+{"idx": 348, "model": "startlast", "level": 3, "cell": "swap1_input_1", "n": 149, "dec_donor": 0.289, "mon_actual": 0.007, "answer_follows": 0.0}
+{"idx": 349, "model": "startlast", "level": 3, "cell": "swap1_entries_1", "n": 149, "dec_donor": 0.289, "mon_actual": 0.007, "answer_follows": 0.0}
+{"idx": 350, "model": "startlast", "level": 3, "cell": "swap1_input_2", "n": 149, "dec_donor": 0.0, "mon_actual": 0.188, "answer_follows": 0.0}
+{"idx": 351, "model": "startlast", "level": 3, "cell": "swap1_entries_2", "n": 149, "dec_donor": 0.007, "mon_actual": 0.168, "answer_follows": 0.0}
+{"idx": 352, "model": "startlast", "level": 3, "cell": "swap1_input_3", "n": 149, "dec_donor": 0.007, "mon_actual": 0.329, "answer_follows": 0.0}
+{"idx": 353, "model": "startlast", "level": 3, "cell": "swap1_entries_3", "n": 149, "dec_donor": 0.0, "mon_actual": 0.282, "answer_follows": 0.0}
+{"idx": 354, "model": "startlast", "level": 3, "cell": "swap1_input_4", "n": 149, "dec_donor": 0.007, "mon_actual": 0.336, "answer_follows": 0.0}
+{"idx": 355, "model": "startlast", "level": 3, "cell": "swap1_entries_4", "n": 149, "dec_donor": 0.007, "mon_actual": 0.336, "answer_follows": 0.0}
+{"idx": 356, "model": "startlast", "level": 3, "cell": "swap1_input_5", "n": 149, "dec_donor": 0.007, "mon_actual": 0.342, "answer_follows": 0.0}
+{"idx": 357, "model": "startlast", "level": 3, "cell": "swap1_entries_5", "n": 149, "dec_donor": 0.007, "mon_actual": 0.342, "answer_follows": 0.0}
+{"idx": 358, "model": "startlast", "level": 3, "cell": "swap2_input_2", "n": 149, "dec_donor": 0.423, "mon_actual": 0.034, "answer_follows": 0.013}
+{"idx": 359, "model": "startlast", "level": 3, "cell": "swap2_entries_2", "n": 149, "dec_donor": 0.302, "mon_actual": 0.04, "answer_follows": 0.013}
+{"idx": 360, "model": "startlast", "level": 3, "cell": "swap2_input_3", "n": 149, "dec_donor": 0.007, "mon_actual": 0.289, "answer_follows": 0.013}
+{"idx": 361, "model": "startlast", "level": 3, "cell": "swap2_entries_3", "n": 149, "dec_donor": 0.0, "mon_actual": 0.215, "answer_follows": 0.013}
+{"idx": 362, "model": "startlast", "level": 3, "cell": "swap2_input_4", "n": 149, "dec_donor": 0.0, "mon_actual": 0.329, "answer_follows": 0.013}
+{"idx": 363, "model": "startlast", "level": 3, "cell": "swap2_entries_4", "n": 149, "dec_donor": 0.0, "mon_actual": 0.329, "answer_follows": 0.013}
+{"idx": 364, "model": "startlast", "level": 3, "cell": "swap2_input_5", "n": 149, "dec_donor": 0.013, "mon_actual": 0.349, "answer_follows": 0.013}
+{"idx": 365, "model": "startlast", "level": 3, "cell": "swap2_entries_5", "n": 149, "dec_donor": 0.0, "mon_actual": 0.349, "answer_follows": 0.013}
+{"idx": 366, "model": "startlast", "level": 3, "cell": "swap3_input_3", "n": 149, "dec_donor": 0.436, "mon_actual": 0.034, "answer_follows": 0.007}
+{"idx": 367, "model": "startlast", "level": 3, "cell": "swap3_entries_3", "n": 149, "dec_donor": 0.409, "mon_actual": 0.013, "answer_follows": 0.007}
+{"idx": 368, "model": "startlast", "level": 3, "cell": "swap3_input_4", "n": 149, "dec_donor": 0.02, "mon_actual": 0.228, "answer_follows": 0.007}
+{"idx": 369, "model": "startlast", "level": 3, "cell": "swap3_entries_4", "n": 149, "dec_donor": 0.007, "mon_actual": 0.228, "answer_follows": 0.007}
+{"idx": 370, "model": "startlast", "level": 3, "cell": "swap3_input_5", "n": 149, "dec_donor": 0.02, "mon_actual": 0.315, "answer_follows": 0.007}
+{"idx": 371, "model": "startlast", "level": 3, "cell": "swap3_entries_5", "n": 149, "dec_donor": 0.007, "mon_actual": 0.295, "answer_follows": 0.007}
+{"idx": 372, "model": "startlast", "level": 3, "cell": "swap4_input_4", "n": 149, "dec_donor": 0.409, "mon_actual": 0.02, "answer_follows": 0.007}
+{"idx": 373, "model": "startlast", "level": 3, "cell": "swap4_entries_4", "n": 149, "dec_donor": 0.302, "mon_actual": 0.013, "answer_follows": 0.007}
+{"idx": 374, "model": "startlast", "level": 3, "cell": "swap4_input_5", "n": 149, "dec_donor": 0.007, "mon_actual": 0.235, "answer_follows": 0.007}
+{"idx": 375, "model": "startlast", "level": 3, "cell": "swap4_entries_5", "n": 149, "dec_donor": 0.007, "mon_actual": 0.235, "answer_follows": 0.007}
+{"idx": 376, "model": "startlast", "level": 3, "cell": "swap5_input_5", "n": 149, "dec_donor": 0.342, "mon_actual": 0.034, "answer_follows": 0.007}
+{"idx": 377, "model": "startlast", "level": 3, "cell": "swap5_entries_5", "n": 149, "dec_donor": 0.336, "mon_actual": 0.02, "answer_follows": 0.007}
+{"idx": 378, "model": "startlast", "level": 4, "cell": "input_0", "dec_right": 0.085, "dec_wrong": 0.068, "mon_right": 0.085, "mon_wrong": 0.047, "n_wrong": 192}
+{"idx": 379, "model": "startlast", "level": 4, "cell": "input_1", "dec_right": 0.266, "dec_wrong": 0.188, "mon_right": 0.266, "mon_wrong": 0.188, "n_wrong": 192}
+{"idx": 380, "model": "startlast", "level": 4, "cell": "input_2", "dec_right": 0.298, "dec_wrong": 0.193, "mon_right": 0.298, "mon_wrong": 0.141, "n_wrong": 192}
+{"idx": 381, "model": "startlast", "level": 4, "cell": "input_3", "dec_right": 0.34, "dec_wrong": 0.219, "mon_right": 0.34, "mon_wrong": 0.146, "n_wrong": 192}
+{"idx": 382, "model": "startlast", "level": 4, "cell": "input_4", "dec_right": 0.34, "dec_wrong": 0.208, "mon_right": 0.34, "mon_wrong": 0.172, "n_wrong": 192}
+{"idx": 383, "model": "startlast", "level": 4, "cell": "input_5", "dec_right": 0.33, "dec_wrong": 0.214, "mon_right": 0.33, "mon_wrong": 0.172, "n_wrong": 192}
+{"idx": 384, "model": "startlast", "level": 4, "cell": "entries_0", "dec_right": 0.106, "dec_wrong": 0.089, "mon_right": 0.106, "mon_wrong": 0.073, "n_wrong": 192}
+{"idx": 385, "model": "startlast", "level": 4, "cell": "entries_1", "dec_right": 0.266, "dec_wrong": 0.177, "mon_right": 0.266, "mon_wrong": 0.172, "n_wrong": 192}
+{"idx": 386, "model": "startlast", "level": 4, "cell": "entries_2", "dec_right": 0.362, "dec_wrong": 0.214, "mon_right": 0.362, "mon_wrong": 0.182, "n_wrong": 192}
+{"idx": 387, "model": "startlast", "level": 4, "cell": "entries_3", "dec_right": 0.415, "dec_wrong": 0.198, "mon_right": 0.415, "mon_wrong": 0.182, "n_wrong": 192}
+{"idx": 388, "model": "startlast", "level": 4, "cell": "entries_4", "dec_right": 0.372, "dec_wrong": 0.203, "mon_right": 0.372, "mon_wrong": 0.188, "n_wrong": 192}
+{"idx": 389, "model": "startlast", "level": 4, "cell": "entries_5", "dec_right": 0.394, "dec_wrong": 0.208, "mon_right": 0.394, "mon_wrong": 0.214, "n_wrong": 192}
+{"idx": 390, "model": "startlast", "level": 4, "cell": "swap0_input_0", "n": 94, "dec_donor": 0.096, "mon_actual": 0.053, "answer_follows": 0.0}
+{"idx": 391, "model": "startlast", "level": 4, "cell": "swap0_entries_0", "n": 94, "dec_donor": 0.074, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 392, "model": "startlast", "level": 4, "cell": "swap0_input_1", "n": 94, "dec_donor": 0.0, "mon_actual": 0.223, "answer_follows": 0.0}
+{"idx": 393, "model": "startlast", "level": 4, "cell": "swap0_entries_1", "n": 94, "dec_donor": 0.021, "mon_actual": 0.213, "answer_follows": 0.0}
+{"idx": 394, "model": "startlast", "level": 4, "cell": "swap0_input_2", "n": 94, "dec_donor": 0.0, "mon_actual": 0.298, "answer_follows": 0.0}
+{"idx": 395, "model": "startlast", "level": 4, "cell": "swap0_entries_2", "n": 94, "dec_donor": 0.021, "mon_actual": 0.34, "answer_follows": 0.0}
+{"idx": 396, "model": "startlast", "level": 4, "cell": "swap0_input_3", "n": 94, "dec_donor": 0.0, "mon_actual": 0.309, "answer_follows": 0.0}
+{"idx": 397, "model": "startlast", "level": 4, "cell": "swap0_entries_3", "n": 94, "dec_donor": 0.011, "mon_actual": 0.351, "answer_follows": 0.0}
+{"idx": 398, "model": "startlast", "level": 4, "cell": "swap0_input_4", "n": 94, "dec_donor": 0.0, "mon_actual": 0.298, "answer_follows": 0.0}
+{"idx": 399, "model": "startlast", "level": 4, "cell": "swap0_entries_4", "n": 94, "dec_donor": 0.011, "mon_actual": 0.372, "answer_follows": 0.0}
+{"idx": 400, "model": "startlast", "level": 4, "cell": "swap0_input_5", "n": 94, "dec_donor": 0.0, "mon_actual": 0.287, "answer_follows": 0.0}
+{"idx": 401, "model": "startlast", "level": 4, "cell": "swap0_entries_5", "n": 94, "dec_donor": 0.011, "mon_actual": 0.33, "answer_follows": 0.0}
+{"idx": 402, "model": "startlast", "level": 4, "cell": "swap1_input_1", "n": 94, "dec_donor": 0.17, "mon_actual": 0.032, "answer_follows": 0.011}
+{"idx": 403, "model": "startlast", "level": 4, "cell": "swap1_entries_1", "n": 94, "dec_donor": 0.191, "mon_actual": 0.021, "answer_follows": 0.011}
+{"idx": 404, "model": "startlast", "level": 4, "cell": "swap1_input_2", "n": 94, "dec_donor": 0.021, "mon_actual": 0.223, "answer_follows": 0.011}
+{"idx": 405, "model": "startlast", "level": 4, "cell": "swap1_entries_2", "n": 94, "dec_donor": 0.021, "mon_actual": 0.191, "answer_follows": 0.011}
+{"idx": 406, "model": "startlast", "level": 4, "cell": "swap1_input_3", "n": 94, "dec_donor": 0.021, "mon_actual": 0.245, "answer_follows": 0.011}
+{"idx": 407, "model": "startlast", "level": 4, "cell": "swap1_entries_3", "n": 94, "dec_donor": 0.021, "mon_actual": 0.245, "answer_follows": 0.011}
+{"idx": 408, "model": "startlast", "level": 4, "cell": "swap1_input_4", "n": 94, "dec_donor": 0.011, "mon_actual": 0.255, "answer_follows": 0.011}
+{"idx": 409, "model": "startlast", "level": 4, "cell": "swap1_entries_4", "n": 94, "dec_donor": 0.011, "mon_actual": 0.245, "answer_follows": 0.011}
+{"idx": 410, "model": "startlast", "level": 4, "cell": "swap1_input_5", "n": 94, "dec_donor": 0.011, "mon_actual": 0.287, "answer_follows": 0.011}
+{"idx": 411, "model": "startlast", "level": 4, "cell": "swap1_entries_5", "n": 94, "dec_donor": 0.011, "mon_actual": 0.234, "answer_follows": 0.011}
+{"idx": 412, "model": "startlast", "level": 4, "cell": "swap2_input_2", "n": 94, "dec_donor": 0.17, "mon_actual": 0.0, "answer_follows": 0.032}
+{"idx": 413, "model": "startlast", "level": 4, "cell": "swap2_entries_2", "n": 94, "dec_donor": 0.234, "mon_actual": 0.011, "answer_follows": 0.032}
+{"idx": 414, "model": "startlast", "level": 4, "cell": "swap2_input_3", "n": 94, "dec_donor": 0.0, "mon_actual": 0.213, "answer_follows": 0.032}
+{"idx": 415, "model": "startlast", "level": 4, "cell": "swap2_entries_3", "n": 94, "dec_donor": 0.011, "mon_actual": 0.117, "answer_follows": 0.032}
+{"idx": 416, "model": "startlast", "level": 4, "cell": "swap2_input_4", "n": 94, "dec_donor": 0.011, "mon_actual": 0.298, "answer_follows": 0.032}
+{"idx": 417, "model": "startlast", "level": 4, "cell": "swap2_entries_4", "n": 94, "dec_donor": 0.032, "mon_actual": 0.245, "answer_follows": 0.032}
+{"idx": 418, "model": "startlast", "level": 4, "cell": "swap2_input_5", "n": 94, "dec_donor": 0.011, "mon_actual": 0.266, "answer_follows": 0.032}
+{"idx": 419, "model": "startlast", "level": 4, "cell": "swap2_entries_5", "n": 94, "dec_donor": 0.032, "mon_actual": 0.255, "answer_follows": 0.032}
+{"idx": 420, "model": "startlast", "level": 4, "cell": "swap3_input_3", "n": 94, "dec_donor": 0.362, "mon_actual": 0.011, "answer_follows": 0.0}
+{"idx": 421, "model": "startlast", "level": 4, "cell": "swap3_entries_3", "n": 94, "dec_donor": 0.223, "mon_actual": 0.021, "answer_follows": 0.0}
+{"idx": 422, "model": "startlast", "level": 4, "cell": "swap3_input_4", "n": 94, "dec_donor": 0.011, "mon_actual": 0.223, "answer_follows": 0.0}
+{"idx": 423, "model": "startlast", "level": 4, "cell": "swap3_entries_4", "n": 94, "dec_donor": 0.011, "mon_actual": 0.213, "answer_follows": 0.0}
+{"idx": 424, "model": "startlast", "level": 4, "cell": "swap3_input_5", "n": 94, "dec_donor": 0.0, "mon_actual": 0.277, "answer_follows": 0.0}
+{"idx": 425, "model": "startlast", "level": 4, "cell": "swap3_entries_5", "n": 94, "dec_donor": 0.011, "mon_actual": 0.309, "answer_follows": 0.0}
+{"idx": 426, "model": "startlast", "level": 4, "cell": "swap4_input_4", "n": 94, "dec_donor": 0.266, "mon_actual": 0.032, "answer_follows": 0.011}
+{"idx": 427, "model": "startlast", "level": 4, "cell": "swap4_entries_4", "n": 94, "dec_donor": 0.33, "mon_actual": 0.053, "answer_follows": 0.011}
+{"idx": 428, "model": "startlast", "level": 4, "cell": "swap4_input_5", "n": 94, "dec_donor": 0.021, "mon_actual": 0.181, "answer_follows": 0.011}
+{"idx": 429, "model": "startlast", "level": 4, "cell": "swap4_entries_5", "n": 94, "dec_donor": 0.011, "mon_actual": 0.138, "answer_follows": 0.011}
+{"idx": 430, "model": "startlast", "level": 4, "cell": "swap5_input_5", "n": 94, "dec_donor": 0.234, "mon_actual": 0.043, "answer_follows": 0.011}
+{"idx": 431, "model": "startlast", "level": 4, "cell": "swap5_entries_5", "n": 94, "dec_donor": 0.191, "mon_actual": 0.021, "answer_follows": 0.011}
+{"idx": 432, "model": "startlast", "level": 5, "cell": "input_0", "dec_right": 0.051, "dec_wrong": 0.069, "mon_right": 0.051, "mon_wrong": 0.045, "n_wrong": 247}
+{"idx": 433, "model": "startlast", "level": 5, "cell": "input_1", "dec_right": 0.256, "dec_wrong": 0.089, "mon_right": 0.256, "mon_wrong": 0.15, "n_wrong": 247}
+{"idx": 434, "model": "startlast", "level": 5, "cell": "input_2", "dec_right": 0.231, "dec_wrong": 0.117, "mon_right": 0.231, "mon_wrong": 0.138, "n_wrong": 247}
+{"idx": 435, "model": "startlast", "level": 5, "cell": "input_3", "dec_right": 0.231, "dec_wrong": 0.126, "mon_right": 0.231, "mon_wrong": 0.138, "n_wrong": 247}
+{"idx": 436, "model": "startlast", "level": 5, "cell": "input_4", "dec_right": 0.205, "dec_wrong": 0.113, "mon_right": 0.205, "mon_wrong": 0.162, "n_wrong": 247}
+{"idx": 437, "model": "startlast", "level": 5, "cell": "input_5", "dec_right": 0.256, "dec_wrong": 0.117, "mon_right": 0.256, "mon_wrong": 0.15, "n_wrong": 247}
+{"idx": 438, "model": "startlast", "level": 5, "cell": "entries_0", "dec_right": 0.077, "dec_wrong": 0.053, "mon_right": 0.077, "mon_wrong": 0.036, "n_wrong": 247}
+{"idx": 439, "model": "startlast", "level": 5, "cell": "entries_1", "dec_right": 0.205, "dec_wrong": 0.121, "mon_right": 0.205, "mon_wrong": 0.158, "n_wrong": 247}
+{"idx": 440, "model": "startlast", "level": 5, "cell": "entries_2", "dec_right": 0.256, "dec_wrong": 0.126, "mon_right": 0.256, "mon_wrong": 0.202, "n_wrong": 247}
+{"idx": 441, "model": "startlast", "level": 5, "cell": "entries_3", "dec_right": 0.282, "dec_wrong": 0.126, "mon_right": 0.282, "mon_wrong": 0.202, "n_wrong": 247}
+{"idx": 442, "model": "startlast", "level": 5, "cell": "entries_4", "dec_right": 0.282, "dec_wrong": 0.126, "mon_right": 0.282, "mon_wrong": 0.231, "n_wrong": 247}
+{"idx": 443, "model": "startlast", "level": 5, "cell": "entries_5", "dec_right": 0.308, "dec_wrong": 0.113, "mon_right": 0.308, "mon_wrong": 0.231, "n_wrong": 247}
+{"idx": 444, "model": "startlast", "level": 5, "cell": "swap0_input_0", "n": 39, "dec_donor": 0.077, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 445, "model": "startlast", "level": 5, "cell": "swap0_entries_0", "n": 39, "dec_donor": 0.026, "mon_actual": 0.051, "answer_follows": 0.0}
+{"idx": 446, "model": "startlast", "level": 5, "cell": "swap0_input_1", "n": 39, "dec_donor": 0.0, "mon_actual": 0.154, "answer_follows": 0.0}
+{"idx": 447, "model": "startlast", "level": 5, "cell": "swap0_entries_1", "n": 39, "dec_donor": 0.0, "mon_actual": 0.128, "answer_follows": 0.0}
+{"idx": 448, "model": "startlast", "level": 5, "cell": "swap0_input_2", "n": 39, "dec_donor": 0.0, "mon_actual": 0.256, "answer_follows": 0.0}
+{"idx": 449, "model": "startlast", "level": 5, "cell": "swap0_entries_2", "n": 39, "dec_donor": 0.0, "mon_actual": 0.256, "answer_follows": 0.0}
+{"idx": 450, "model": "startlast", "level": 5, "cell": "swap0_input_3", "n": 39, "dec_donor": 0.0, "mon_actual": 0.205, "answer_follows": 0.0}
+{"idx": 451, "model": "startlast", "level": 5, "cell": "swap0_entries_3", "n": 39, "dec_donor": 0.0, "mon_actual": 0.282, "answer_follows": 0.0}
+{"idx": 452, "model": "startlast", "level": 5, "cell": "swap0_input_4", "n": 39, "dec_donor": 0.0, "mon_actual": 0.231, "answer_follows": 0.0}
+{"idx": 453, "model": "startlast", "level": 5, "cell": "swap0_entries_4", "n": 39, "dec_donor": 0.0, "mon_actual": 0.256, "answer_follows": 0.0}
+{"idx": 454, "model": "startlast", "level": 5, "cell": "swap0_input_5", "n": 39, "dec_donor": 0.0, "mon_actual": 0.231, "answer_follows": 0.0}
+{"idx": 455, "model": "startlast", "level": 5, "cell": "swap0_entries_5", "n": 39, "dec_donor": 0.0, "mon_actual": 0.282, "answer_follows": 0.0}
+{"idx": 456, "model": "startlast", "level": 5, "cell": "swap1_input_1", "n": 39, "dec_donor": 0.128, "mon_actual": 0.026, "answer_follows": 0.026}
+{"idx": 457, "model": "startlast", "level": 5, "cell": "swap1_entries_1", "n": 39, "dec_donor": 0.077, "mon_actual": 0.051, "answer_follows": 0.026}
+{"idx": 458, "model": "startlast", "level": 5, "cell": "swap1_input_2", "n": 39, "dec_donor": 0.026, "mon_actual": 0.103, "answer_follows": 0.026}
+{"idx": 459, "model": "startlast", "level": 5, "cell": "swap1_entries_2", "n": 39, "dec_donor": 0.0, "mon_actual": 0.205, "answer_follows": 0.026}
+{"idx": 460, "model": "startlast", "level": 5, "cell": "swap1_input_3", "n": 39, "dec_donor": 0.026, "mon_actual": 0.205, "answer_follows": 0.026}
+{"idx": 461, "model": "startlast", "level": 5, "cell": "swap1_entries_3", "n": 39, "dec_donor": 0.0, "mon_actual": 0.154, "answer_follows": 0.026}
+{"idx": 462, "model": "startlast", "level": 5, "cell": "swap1_input_4", "n": 39, "dec_donor": 0.026, "mon_actual": 0.103, "answer_follows": 0.026}
+{"idx": 463, "model": "startlast", "level": 5, "cell": "swap1_entries_4", "n": 39, "dec_donor": 0.0, "mon_actual": 0.179, "answer_follows": 0.026}
+{"idx": 464, "model": "startlast", "level": 5, "cell": "swap1_input_5", "n": 39, "dec_donor": 0.026, "mon_actual": 0.179, "answer_follows": 0.026}
+{"idx": 465, "model": "startlast", "level": 5, "cell": "swap1_entries_5", "n": 39, "dec_donor": 0.0, "mon_actual": 0.205, "answer_follows": 0.026}
+{"idx": 466, "model": "startlast", "level": 5, "cell": "swap2_input_2", "n": 39, "dec_donor": 0.128, "mon_actual": 0.103, "answer_follows": 0.051}
+{"idx": 467, "model": "startlast", "level": 5, "cell": "swap2_entries_2", "n": 39, "dec_donor": 0.154, "mon_actual": 0.051, "answer_follows": 0.051}
+{"idx": 468, "model": "startlast", "level": 5, "cell": "swap2_input_3", "n": 39, "dec_donor": 0.0, "mon_actual": 0.128, "answer_follows": 0.051}
+{"idx": 469, "model": "startlast", "level": 5, "cell": "swap2_entries_3", "n": 39, "dec_donor": 0.0, "mon_actual": 0.103, "answer_follows": 0.051}
+{"idx": 470, "model": "startlast", "level": 5, "cell": "swap2_input_4", "n": 39, "dec_donor": 0.026, "mon_actual": 0.205, "answer_follows": 0.051}
+{"idx": 471, "model": "startlast", "level": 5, "cell": "swap2_entries_4", "n": 39, "dec_donor": 0.0, "mon_actual": 0.231, "answer_follows": 0.051}
+{"idx": 472, "model": "startlast", "level": 5, "cell": "swap2_input_5", "n": 39, "dec_donor": 0.026, "mon_actual": 0.128, "answer_follows": 0.051}
+{"idx": 473, "model": "startlast", "level": 5, "cell": "swap2_entries_5", "n": 39, "dec_donor": 0.0, "mon_actual": 0.154, "answer_follows": 0.051}
+{"idx": 474, "model": "startlast", "level": 5, "cell": "swap3_input_3", "n": 39, "dec_donor": 0.179, "mon_actual": 0.051, "answer_follows": 0.026}
+{"idx": 475, "model": "startlast", "level": 5, "cell": "swap3_entries_3", "n": 39, "dec_donor": 0.026, "mon_actual": 0.0, "answer_follows": 0.026}
+{"idx": 476, "model": "startlast", "level": 5, "cell": "swap3_input_4", "n": 39, "dec_donor": 0.0, "mon_actual": 0.205, "answer_follows": 0.026}
+{"idx": 477, "model": "startlast", "level": 5, "cell": "swap3_entries_4", "n": 39, "dec_donor": 0.0, "mon_actual": 0.282, "answer_follows": 0.026}
+{"idx": 478, "model": "startlast", "level": 5, "cell": "swap3_input_5", "n": 39, "dec_donor": 0.026, "mon_actual": 0.308, "answer_follows": 0.026}
+{"idx": 479, "model": "startlast", "level": 5, "cell": "swap3_entries_5", "n": 39, "dec_donor": 0.0, "mon_actual": 0.282, "answer_follows": 0.026}
+{"idx": 480, "model": "startlast", "level": 5, "cell": "swap4_input_4", "n": 39, "dec_donor": 0.154, "mon_actual": 0.026, "answer_follows": 0.026}
+{"idx": 481, "model": "startlast", "level": 5, "cell": "swap4_entries_4", "n": 39, "dec_donor": 0.026, "mon_actual": 0.0, "answer_follows": 0.026}
+{"idx": 482, "model": "startlast", "level": 5, "cell": "swap4_input_5", "n": 39, "dec_donor": 0.0, "mon_actual": 0.103, "answer_follows": 0.026}
+{"idx": 483, "model": "startlast", "level": 5, "cell": "swap4_entries_5", "n": 39, "dec_donor": 0.0, "mon_actual": 0.128, "answer_follows": 0.026}
+{"idx": 484, "model": "startlast", "level": 5, "cell": "swap5_input_5", "n": 39, "dec_donor": 0.103, "mon_actual": 0.051, "answer_follows": 0.026}
+{"idx": 485, "model": "startlast", "level": 5, "cell": "swap5_entries_5", "n": 39, "dec_donor": 0.077, "mon_actual": 0.0, "answer_follows": 0.026}
+{"idx": 486, "model": "relay", "level": 3, "cell": "input_0", "dec_right": 0.888, "dec_wrong": 0.0, "mon_right": 0.888, "mon_wrong": 1.0, "n_wrong": 1}
+{"idx": 487, "model": "relay", "level": 3, "cell": "input_1", "dec_right": 0.996, "dec_wrong": 0.0, "mon_right": 0.996, "mon_wrong": 1.0, "n_wrong": 1}
+{"idx": 488, "model": "relay", "level": 3, "cell": "input_2", "dec_right": 0.996, "dec_wrong": 0.0, "mon_right": 0.996, "mon_wrong": 1.0, "n_wrong": 1}
+{"idx": 489, "model": "relay", "level": 3, "cell": "input_3", "dec_right": 1.0, "dec_wrong": 0.0, "mon_right": 1.0, "mon_wrong": 1.0, "n_wrong": 1}
+{"idx": 490, "model": "relay", "level": 3, "cell": "input_4", "dec_right": 1.0, "dec_wrong": 0.0, "mon_right": 1.0, "mon_wrong": 1.0, "n_wrong": 1}
+{"idx": 491, "model": "relay", "level": 3, "cell": "input_5", "dec_right": 1.0, "dec_wrong": 0.0, "mon_right": 1.0, "mon_wrong": 1.0, "n_wrong": 1}
+{"idx": 492, "model": "relay", "level": 3, "cell": "entries_0", "dec_right": 0.905, "dec_wrong": 0.0, "mon_right": 0.905, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 493, "model": "relay", "level": 3, "cell": "entries_1", "dec_right": 0.993, "dec_wrong": 0.0, "mon_right": 0.993, "mon_wrong": 0.0, "n_wrong": 1}
+{"idx": 494, "model": "relay", "level": 3, "cell": "entries_2", "dec_right": 0.993, "dec_wrong": 0.0, "mon_right": 0.993, "mon_wrong": 1.0, "n_wrong": 1}
+{"idx": 495, "model": "relay", "level": 3, "cell": "entries_3", "dec_right": 0.993, "dec_wrong": 0.0, "mon_right": 0.993, "mon_wrong": 1.0, "n_wrong": 1}
+{"idx": 496, "model": "relay", "level": 3, "cell": "entries_4", "dec_right": 0.993, "dec_wrong": 0.0, "mon_right": 0.993, "mon_wrong": 1.0, "n_wrong": 1}
+{"idx": 497, "model": "relay", "level": 3, "cell": "entries_5", "dec_right": 0.993, "dec_wrong": 0.0, "mon_right": 0.993, "mon_wrong": 1.0, "n_wrong": 1}
+{"idx": 498, "model": "relay", "level": 3, "cell": "swap0_input_0", "n": 285, "dec_donor": 0.884, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 499, "model": "relay", "level": 3, "cell": "swap0_entries_0", "n": 285, "dec_donor": 0.137, "mon_actual": 0.189, "answer_follows": 0.0}
+{"idx": 500, "model": "relay", "level": 3, "cell": "swap0_input_1", "n": 285, "dec_donor": 0.0, "mon_actual": 0.996, "answer_follows": 0.0}
+{"idx": 501, "model": "relay", "level": 3, "cell": "swap0_entries_1", "n": 285, "dec_donor": 0.0, "mon_actual": 0.993, "answer_follows": 0.0}
+{"idx": 502, "model": "relay", "level": 3, "cell": "swap0_input_2", "n": 285, "dec_donor": 0.0, "mon_actual": 1.0, "answer_follows": 0.0}
+{"idx": 503, "model": "relay", "level": 3, "cell": "swap0_entries_2", "n": 285, "dec_donor": 0.0, "mon_actual": 0.993, "answer_follows": 0.0}
+{"idx": 504, "model": "relay", "level": 3, "cell": "swap0_input_3", "n": 285, "dec_donor": 0.0, "mon_actual": 1.0, "answer_follows": 0.0}
+{"idx": 505, "model": "relay", "level": 3, "cell": "swap0_entries_3", "n": 285, "dec_donor": 0.0, "mon_actual": 0.993, "answer_follows": 0.0}
+{"idx": 506, "model": "relay", "level": 3, "cell": "swap0_input_4", "n": 285, "dec_donor": 0.0, "mon_actual": 1.0, "answer_follows": 0.0}
+{"idx": 507, "model": "relay", "level": 3, "cell": "swap0_entries_4", "n": 285, "dec_donor": 0.0, "mon_actual": 0.993, "answer_follows": 0.0}
+{"idx": 508, "model": "relay", "level": 3, "cell": "swap0_input_5", "n": 285, "dec_donor": 0.0, "mon_actual": 1.0, "answer_follows": 0.0}
+{"idx": 509, "model": "relay", "level": 3, "cell": "swap0_entries_5", "n": 285, "dec_donor": 0.0, "mon_actual": 0.993, "answer_follows": 0.0}
+{"idx": 510, "model": "relay", "level": 3, "cell": "swap1_input_1", "n": 285, "dec_donor": 1.0, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 511, "model": "relay", "level": 3, "cell": "swap1_entries_1", "n": 285, "dec_donor": 0.996, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 512, "model": "relay", "level": 3, "cell": "swap1_input_2", "n": 285, "dec_donor": 0.0, "mon_actual": 0.965, "answer_follows": 0.0}
+{"idx": 513, "model": "relay", "level": 3, "cell": "swap1_entries_2", "n": 285, "dec_donor": 0.0, "mon_actual": 0.916, "answer_follows": 0.0}
+{"idx": 514, "model": "relay", "level": 3, "cell": "swap1_input_3", "n": 285, "dec_donor": 0.0, "mon_actual": 1.0, "answer_follows": 0.0}
+{"idx": 515, "model": "relay", "level": 3, "cell": "swap1_entries_3", "n": 285, "dec_donor": 0.0, "mon_actual": 0.993, "answer_follows": 0.0}
+{"idx": 516, "model": "relay", "level": 3, "cell": "swap1_input_4", "n": 285, "dec_donor": 0.0, "mon_actual": 1.0, "answer_follows": 0.0}
+{"idx": 517, "model": "relay", "level": 3, "cell": "swap1_entries_4", "n": 285, "dec_donor": 0.0, "mon_actual": 0.989, "answer_follows": 0.0}
+{"idx": 518, "model": "relay", "level": 3, "cell": "swap1_input_5", "n": 285, "dec_donor": 0.0, "mon_actual": 1.0, "answer_follows": 0.0}
+{"idx": 519, "model": "relay", "level": 3, "cell": "swap1_entries_5", "n": 285, "dec_donor": 0.0, "mon_actual": 0.993, "answer_follows": 0.0}
+{"idx": 520, "model": "relay", "level": 3, "cell": "swap2_input_2", "n": 285, "dec_donor": 1.0, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 521, "model": "relay", "level": 3, "cell": "swap2_entries_2", "n": 285, "dec_donor": 0.972, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 522, "model": "relay", "level": 3, "cell": "swap2_input_3", "n": 285, "dec_donor": 0.0, "mon_actual": 0.989, "answer_follows": 0.0}
+{"idx": 523, "model": "relay", "level": 3, "cell": "swap2_entries_3", "n": 285, "dec_donor": 0.0, "mon_actual": 0.951, "answer_follows": 0.0}
+{"idx": 524, "model": "relay", "level": 3, "cell": "swap2_input_4", "n": 285, "dec_donor": 0.0, "mon_actual": 1.0, "answer_follows": 0.0}
+{"idx": 525, "model": "relay", "level": 3, "cell": "swap2_entries_4", "n": 285, "dec_donor": 0.0, "mon_actual": 0.993, "answer_follows": 0.0}
+{"idx": 526, "model": "relay", "level": 3, "cell": "swap2_input_5", "n": 285, "dec_donor": 0.0, "mon_actual": 1.0, "answer_follows": 0.0}
+{"idx": 527, "model": "relay", "level": 3, "cell": "swap2_entries_5", "n": 285, "dec_donor": 0.0, "mon_actual": 0.993, "answer_follows": 0.0}
+{"idx": 528, "model": "relay", "level": 3, "cell": "swap3_input_3", "n": 285, "dec_donor": 1.0, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 529, "model": "relay", "level": 3, "cell": "swap3_entries_3", "n": 285, "dec_donor": 0.979, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 530, "model": "relay", "level": 3, "cell": "swap3_input_4", "n": 285, "dec_donor": 0.0, "mon_actual": 0.968, "answer_follows": 0.0}
+{"idx": 531, "model": "relay", "level": 3, "cell": "swap3_entries_4", "n": 285, "dec_donor": 0.0, "mon_actual": 0.954, "answer_follows": 0.0}
+{"idx": 532, "model": "relay", "level": 3, "cell": "swap3_input_5", "n": 285, "dec_donor": 0.0, "mon_actual": 0.996, "answer_follows": 0.0}
+{"idx": 533, "model": "relay", "level": 3, "cell": "swap3_entries_5", "n": 285, "dec_donor": 0.0, "mon_actual": 0.986, "answer_follows": 0.0}
+{"idx": 534, "model": "relay", "level": 3, "cell": "swap4_input_4", "n": 285, "dec_donor": 0.993, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 535, "model": "relay", "level": 3, "cell": "swap4_entries_4", "n": 285, "dec_donor": 0.975, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 536, "model": "relay", "level": 3, "cell": "swap4_input_5", "n": 285, "dec_donor": 0.0, "mon_actual": 0.954, "answer_follows": 0.0}
+{"idx": 537, "model": "relay", "level": 3, "cell": "swap4_entries_5", "n": 285, "dec_donor": 0.0, "mon_actual": 0.926, "answer_follows": 0.0}
+{"idx": 538, "model": "relay", "level": 3, "cell": "swap5_input_5", "n": 285, "dec_donor": 0.996, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 539, "model": "relay", "level": 3, "cell": "swap5_entries_5", "n": 285, "dec_donor": 0.975, "mon_actual": 0.0, "answer_follows": 0.0}
+{"idx": 540, "model": "relay", "level": 4, "cell": "input_0", "dec_right": 0.441, "dec_wrong": 0.094, "mon_right": 0.441, "mon_wrong": 0.156, "n_wrong": 32}
+{"idx": 541, "model": "relay", "level": 4, "cell": "input_1", "dec_right": 0.886, "dec_wrong": 0.281, "mon_right": 0.886, "mon_wrong": 0.406, "n_wrong": 32}
+{"idx": 542, "model": "relay", "level": 4, "cell": "input_2", "dec_right": 0.913, "dec_wrong": 0.344, "mon_right": 0.913, "mon_wrong": 0.5, "n_wrong": 32}
+{"idx": 543, "model": "relay", "level": 4, "cell": "input_3", "dec_right": 0.909, "dec_wrong": 0.312, "mon_right": 0.909, "mon_wrong": 0.469, "n_wrong": 32}
+{"idx": 544, "model": "relay", "level": 4, "cell": "input_4", "dec_right": 0.917, "dec_wrong": 0.344, "mon_right": 0.917, "mon_wrong": 0.438, "n_wrong": 32}
+{"idx": 545, "model": "relay", "level": 4, "cell": "input_5", "dec_right": 0.909, "dec_wrong": 0.344, "mon_right": 0.909, "mon_wrong": 0.438, "n_wrong": 32}
+{"idx": 546, "model": "relay", "level": 4, "cell": "entries_0", "dec_right": 0.449, "dec_wrong": 0.125, "mon_right": 0.449, "mon_wrong": 0.25, "n_wrong": 32}
+{"idx": 547, "model": "relay", "level": 4, "cell": "entries_1", "dec_right": 0.874, "dec_wrong": 0.312, "mon_right": 0.874, "mon_wrong": 0.5, "n_wrong": 32}
+{"idx": 548, "model": "relay", "level": 4, "cell": "entries_2", "dec_right": 0.898, "dec_wrong": 0.344, "mon_right": 0.898, "mon_wrong": 0.375, "n_wrong": 32}
+{"idx": 549, "model": "relay", "level": 4, "cell": "entries_3", "dec_right": 0.906, "dec_wrong": 0.406, "mon_right": 0.906, "mon_wrong": 0.406, "n_wrong": 32}
+{"idx": 550, "model": "relay", "level": 4, "cell": "entries_4", "dec_right": 0.917, "dec_wrong": 0.375, "mon_right": 0.917, "mon_wrong": 0.406, "n_wrong": 32}
+{"idx": 551, "model": "relay", "level": 4, "cell": "entries_5", "dec_right": 0.917, "dec_wrong": 0.406, "mon_right": 0.917, "mon_wrong": 0.375, "n_wrong": 32}
+{"idx": 552, "model": "relay", "level": 4, "cell": "swap0_input_0", "n": 254, "dec_donor": 0.409, "mon_actual": 0.02, "answer_follows": 0.0}
+{"idx": 553, "model": "relay", "level": 4, "cell": "swap0_entries_0", "n": 254, "dec_donor": 0.083, "mon_actual": 0.122, "answer_follows": 0.0}
+{"idx": 554, "model": "relay", "level": 4, "cell": "swap0_input_1", "n": 254, "dec_donor": 0.004, "mon_actual": 0.862, "answer_follows": 0.0}
+{"idx": 555, "model": "relay", "level": 4, "cell": "swap0_entries_1", "n": 254, "dec_donor": 0.008, "mon_actual": 0.854, "answer_follows": 0.0}
+{"idx": 556, "model": "relay", "level": 4, "cell": "swap0_input_2", "n": 254, "dec_donor": 0.004, "mon_actual": 0.917, "answer_follows": 0.0}
+{"idx": 557, "model": "relay", "level": 4, "cell": "swap0_entries_2", "n": 254, "dec_donor": 0.004, "mon_actual": 0.89, "answer_follows": 0.0}
+{"idx": 558, "model": "relay", "level": 4, "cell": "swap0_input_3", "n": 254, "dec_donor": 0.004, "mon_actual": 0.909, "answer_follows": 0.0}
+{"idx": 559, "model": "relay", "level": 4, "cell": "swap0_entries_3", "n": 254, "dec_donor": 0.004, "mon_actual": 0.906, "answer_follows": 0.0}
+{"idx": 560, "model": "relay", "level": 4, "cell": "swap0_input_4", "n": 254, "dec_donor": 0.004, "mon_actual": 0.921, "answer_follows": 0.0}
+{"idx": 561, "model": "relay", "level": 4, "cell": "swap0_entries_4", "n": 254, "dec_donor": 0.004, "mon_actual": 0.909, "answer_follows": 0.0}
+{"idx": 562, "model": "relay", "level": 4, "cell": "swap0_input_5", "n": 254, "dec_donor": 0.004, "mon_actual": 0.909, "answer_follows": 0.0}
+{"idx": 563, "model": "relay", "level": 4, "cell": "swap0_entries_5", "n": 254, "dec_donor": 0.004, "mon_actual": 0.917, "answer_follows": 0.0}
+{"idx": 564, "model": "relay", "level": 4, "cell": "swap1_input_1", "n": 254, "dec_donor": 0.756, "mon_actual": 0.012, "answer_follows": 0.004}
+{"idx": 565, "model": "relay", "level": 4, "cell": "swap1_entries_1", "n": 254, "dec_donor": 0.748, "mon_actual": 0.012, "answer_follows": 0.004}
+{"idx": 566, "model": "relay", "level": 4, "cell": "swap1_input_2", "n": 254, "dec_donor": 0.0, "mon_actual": 0.772, "answer_follows": 0.004}
+{"idx": 567, "model": "relay", "level": 4, "cell": "swap1_entries_2", "n": 254, "dec_donor": 0.0, "mon_actual": 0.744, "answer_follows": 0.004}
+{"idx": 568, "model": "relay", "level": 4, "cell": "swap1_input_3", "n": 254, "dec_donor": 0.004, "mon_actual": 0.878, "answer_follows": 0.004}
+{"idx": 569, "model": "relay", "level": 4, "cell": "swap1_entries_3", "n": 254, "dec_donor": 0.004, "mon_actual": 0.874, "answer_follows": 0.004}
+{"idx": 570, "model": "relay", "level": 4, "cell": "swap1_input_4", "n": 254, "dec_donor": 0.0, "mon_actual": 0.886, "answer_follows": 0.004}
+{"idx": 571, "model": "relay", "level": 4, "cell": "swap1_entries_4", "n": 254, "dec_donor": 0.0, "mon_actual": 0.882, "answer_follows": 0.004}
+{"idx": 572, "model": "relay", "level": 4, "cell": "swap1_input_5", "n": 254, "dec_donor": 0.004, "mon_actual": 0.894, "answer_follows": 0.004}
+{"idx": 573, "model": "relay", "level": 4, "cell": "swap1_entries_5", "n": 254, "dec_donor": 0.004, "mon_actual": 0.894, "answer_follows": 0.004}
+{"idx": 574, "model": "relay", "level": 4, "cell": "swap2_input_2", "n": 254, "dec_donor": 0.882, "mon_actual": 0.008, "answer_follows": 0.008}
+{"idx": 575, "model": "relay", "level": 4, "cell": "swap2_entries_2", "n": 254, "dec_donor": 0.835, "mon_actual": 0.012, "answer_follows": 0.008}
+{"idx": 576, "model": "relay", "level": 4, "cell": "swap2_input_3", "n": 254, "dec_donor": 0.004, "mon_actual": 0.803, "answer_follows": 0.008}
+{"idx": 577, "model": "relay", "level": 4, "cell": "swap2_entries_3", "n": 254, "dec_donor": 0.0, "mon_actual": 0.744, "answer_follows": 0.008}
+{"idx": 578, "model": "relay", "level": 4, "cell": "swap2_input_4", "n": 254, "dec_donor": 0.008, "mon_actual": 0.87, "answer_follows": 0.008}
+{"idx": 579, "model": "relay", "level": 4, "cell": "swap2_entries_4", "n": 254, "dec_donor": 0.004, "mon_actual": 0.854, "answer_follows": 0.008}
+{"idx": 580, "model": "relay", "level": 4, "cell": "swap2_input_5", "n": 254, "dec_donor": 0.008, "mon_actual": 0.886, "answer_follows": 0.008}
+{"idx": 581, "model": "relay", "level": 4, "cell": "swap2_entries_5", "n": 254, "dec_donor": 0.004, "mon_actual": 0.874, "answer_follows": 0.008}
+{"idx": 582, "model": "relay", "level": 4, "cell": "swap3_input_3", "n": 254, "dec_donor": 0.831, "mon_actual": 0.008, "answer_follows": 0.008}
+{"idx": 583, "model": "relay", "level": 4, "cell": "swap3_entries_3", "n": 254, "dec_donor": 0.791, "mon_actual": 0.008, "answer_follows": 0.008}
+{"idx": 584, "model": "relay", "level": 4, "cell": "swap3_input_4", "n": 254, "dec_donor": 0.004, "mon_actual": 0.76, "answer_follows": 0.008}
+{"idx": 585, "model": "relay", "level": 4, "cell": "swap3_entries_4", "n": 254, "dec_donor": 0.004, "mon_actual": 0.736, "answer_follows": 0.008}
+{"idx": 586, "model": "relay", "level": 4, "cell": "swap3_input_5", "n": 254, "dec_donor": 0.004, "mon_actual": 0.846, "answer_follows": 0.008}
+{"idx": 587, "model": "relay", "level": 4, "cell": "swap3_entries_5", "n": 254, "dec_donor": 0.0, "mon_actual": 0.846, "answer_follows": 0.008}
+{"idx": 588, "model": "relay", "level": 4, "cell": "swap4_input_4", "n": 254, "dec_donor": 0.854, "mon_actual": 0.008, "answer_follows": 0.004}
+{"idx": 589, "model": "relay", "level": 4, "cell": "swap4_entries_4", "n": 254, "dec_donor": 0.815, "mon_actual": 0.008, "answer_follows": 0.004}
+{"idx": 590, "model": "relay", "level": 4, "cell": "swap4_input_5", "n": 254, "dec_donor": 0.0, "mon_actual": 0.772, "answer_follows": 0.004}
+{"idx": 591, "model": "relay", "level": 4, "cell": "swap4_entries_5", "n": 254, "dec_donor": 0.0, "mon_actual": 0.756, "answer_follows": 0.004}
+{"idx": 592, "model": "relay", "level": 4, "cell": "swap5_input_5", "n": 254, "dec_donor": 0.858, "mon_actual": 0.004, "answer_follows": 0.008}
+{"idx": 593, "model": "relay", "level": 4, "cell": "swap5_entries_5", "n": 254, "dec_donor": 0.811, "mon_actual": 0.004, "answer_follows": 0.008}
+{"idx": 594, "model": "relay", "level": 5, "cell": "input_0", "dec_right": 0.176, "dec_wrong": 0.071, "mon_right": 0.176, "mon_wrong": 0.041, "n_wrong": 98}
+{"idx": 595, "model": "relay", "level": 5, "cell": "input_1", "dec_right": 0.729, "dec_wrong": 0.214, "mon_right": 0.729, "mon_wrong": 0.357, "n_wrong": 98}
+{"idx": 596, "model": "relay", "level": 5, "cell": "input_2", "dec_right": 0.739, "dec_wrong": 0.163, "mon_right": 0.739, "mon_wrong": 0.48, "n_wrong": 98}
+{"idx": 597, "model": "relay", "level": 5, "cell": "input_3", "dec_right": 0.745, "dec_wrong": 0.204, "mon_right": 0.745, "mon_wrong": 0.449, "n_wrong": 98}
+{"idx": 598, "model": "relay", "level": 5, "cell": "input_4", "dec_right": 0.75, "dec_wrong": 0.214, "mon_right": 0.75, "mon_wrong": 0.459, "n_wrong": 98}
+{"idx": 599, "model": "relay", "level": 5, "cell": "input_5", "dec_right": 0.745, "dec_wrong": 0.214, "mon_right": 0.745, "mon_wrong": 0.449, "n_wrong": 98}
+{"idx": 600, "model": "relay", "level": 5, "cell": "entries_0", "dec_right": 0.266, "dec_wrong": 0.122, "mon_right": 0.266, "mon_wrong": 0.092, "n_wrong": 98}
+{"idx": 601, "model": "relay", "level": 5, "cell": "entries_1", "dec_right": 0.654, "dec_wrong": 0.235, "mon_right": 0.654, "mon_wrong": 0.357, "n_wrong": 98}
+{"idx": 602, "model": "relay", "level": 5, "cell": "entries_2", "dec_right": 0.713, "dec_wrong": 0.235, "mon_right": 0.713, "mon_wrong": 0.357, "n_wrong": 98}
+{"idx": 603, "model": "relay", "level": 5, "cell": "entries_3", "dec_right": 0.713, "dec_wrong": 0.235, "mon_right": 0.713, "mon_wrong": 0.367, "n_wrong": 98}
+{"idx": 604, "model": "relay", "level": 5, "cell": "entries_4", "dec_right": 0.718, "dec_wrong": 0.235, "mon_right": 0.718, "mon_wrong": 0.378, "n_wrong": 98}
+{"idx": 605, "model": "relay", "level": 5, "cell": "entries_5", "dec_right": 0.718, "dec_wrong": 0.235, "mon_right": 0.718, "mon_wrong": 0.378, "n_wrong": 98}
+{"idx": 606, "model": "relay", "level": 5, "cell": "swap0_input_0", "n": 188, "dec_donor": 0.117, "mon_actual": 0.021, "answer_follows": 0.0}
+{"idx": 607, "model": "relay", "level": 5, "cell": "swap0_entries_0", "n": 188, "dec_donor": 0.037, "mon_actual": 0.101, "answer_follows": 0.0}
+{"idx": 608, "model": "relay", "level": 5, "cell": "swap0_input_1", "n": 188, "dec_donor": 0.005, "mon_actual": 0.723, "answer_follows": 0.0}
+{"idx": 609, "model": "relay", "level": 5, "cell": "swap0_entries_1", "n": 188, "dec_donor": 0.0, "mon_actual": 0.665, "answer_follows": 0.0}
+{"idx": 610, "model": "relay", "level": 5, "cell": "swap0_input_2", "n": 188, "dec_donor": 0.005, "mon_actual": 0.734, "answer_follows": 0.0}
+{"idx": 611, "model": "relay", "level": 5, "cell": "swap0_entries_2", "n": 188, "dec_donor": 0.011, "mon_actual": 0.702, "answer_follows": 0.0}
+{"idx": 612, "model": "relay", "level": 5, "cell": "swap0_input_3", "n": 188, "dec_donor": 0.005, "mon_actual": 0.755, "answer_follows": 0.0}
+{"idx": 613, "model": "relay", "level": 5, "cell": "swap0_entries_3", "n": 188, "dec_donor": 0.005, "mon_actual": 0.707, "answer_follows": 0.0}
+{"idx": 614, "model": "relay", "level": 5, "cell": "swap0_input_4", "n": 188, "dec_donor": 0.005, "mon_actual": 0.755, "answer_follows": 0.0}
+{"idx": 615, "model": "relay", "level": 5, "cell": "swap0_entries_4", "n": 188, "dec_donor": 0.005, "mon_actual": 0.729, "answer_follows": 0.0}
+{"idx": 616, "model": "relay", "level": 5, "cell": "swap0_input_5", "n": 188, "dec_donor": 0.005, "mon_actual": 0.745, "answer_follows": 0.0}
+{"idx": 617, "model": "relay", "level": 5, "cell": "swap0_entries_5", "n": 188, "dec_donor": 0.005, "mon_actual": 0.723, "answer_follows": 0.0}
+{"idx": 618, "model": "relay", "level": 5, "cell": "swap1_input_1", "n": 188, "dec_donor": 0.521, "mon_actual": 0.011, "answer_follows": 0.0}
+{"idx": 619, "model": "relay", "level": 5, "cell": "swap1_entries_1", "n": 188, "dec_donor": 0.452, "mon_actual": 0.011, "answer_follows": 0.0}
+{"idx": 620, "model": "relay", "level": 5, "cell": "swap1_input_2", "n": 188, "dec_donor": 0.0, "mon_actual": 0.521, "answer_follows": 0.0}
+{"idx": 621, "model": "relay", "level": 5, "cell": "swap1_entries_2", "n": 188, "dec_donor": 0.0, "mon_actual": 0.489, "answer_follows": 0.0}
+{"idx": 622, "model": "relay", "level": 5, "cell": "swap1_input_3", "n": 188, "dec_donor": 0.0, "mon_actual": 0.707, "answer_follows": 0.0}
+{"idx": 623, "model": "relay", "level": 5, "cell": "swap1_entries_3", "n": 188, "dec_donor": 0.0, "mon_actual": 0.665, "answer_follows": 0.0}
+{"idx": 624, "model": "relay", "level": 5, "cell": "swap1_input_4", "n": 188, "dec_donor": 0.0, "mon_actual": 0.697, "answer_follows": 0.0}
+{"idx": 625, "model": "relay", "level": 5, "cell": "swap1_entries_4", "n": 188, "dec_donor": 0.0, "mon_actual": 0.638, "answer_follows": 0.0}
+{"idx": 626, "model": "relay", "level": 5, "cell": "swap1_input_5", "n": 188, "dec_donor": 0.0, "mon_actual": 0.713, "answer_follows": 0.0}
+{"idx": 627, "model": "relay", "level": 5, "cell": "swap1_entries_5", "n": 188, "dec_donor": 0.0, "mon_actual": 0.654, "answer_follows": 0.0}
+{"idx": 628, "model": "relay", "level": 5, "cell": "swap2_input_2", "n": 188, "dec_donor": 0.548, "mon_actual": 0.037, "answer_follows": 0.027}
+{"idx": 629, "model": "relay", "level": 5, "cell": "swap2_entries_2", "n": 188, "dec_donor": 0.548, "mon_actual": 0.037, "answer_follows": 0.027}
+{"idx": 630, "model": "relay", "level": 5, "cell": "swap2_input_3", "n": 188, "dec_donor": 0.011, "mon_actual": 0.559, "answer_follows": 0.027}
+{"idx": 631, "model": "relay", "level": 5, "cell": "swap2_entries_3", "n": 188, "dec_donor": 0.0, "mon_actual": 0.553, "answer_follows": 0.027}
+{"idx": 632, "model": "relay", "level": 5, "cell": "swap2_input_4", "n": 188, "dec_donor": 0.021, "mon_actual": 0.713, "answer_follows": 0.027}
+{"idx": 633, "model": "relay", "level": 5, "cell": "swap2_entries_4", "n": 188, "dec_donor": 0.016, "mon_actual": 0.676, "answer_follows": 0.027}
+{"idx": 634, "model": "relay", "level": 5, "cell": "swap2_input_5", "n": 188, "dec_donor": 0.016, "mon_actual": 0.739, "answer_follows": 0.027}
+{"idx": 635, "model": "relay", "level": 5, "cell": "swap2_entries_5", "n": 188, "dec_donor": 0.005, "mon_actual": 0.66, "answer_follows": 0.027}
+{"idx": 636, "model": "relay", "level": 5, "cell": "swap3_input_3", "n": 188, "dec_donor": 0.58, "mon_actual": 0.011, "answer_follows": 0.005}
+{"idx": 637, "model": "relay", "level": 5, "cell": "swap3_entries_3", "n": 188, "dec_donor": 0.553, "mon_actual": 0.011, "answer_follows": 0.005}
+{"idx": 638, "model": "relay", "level": 5, "cell": "swap3_input_4", "n": 188, "dec_donor": 0.0, "mon_actual": 0.543, "answer_follows": 0.005}
+{"idx": 639, "model": "relay", "level": 5, "cell": "swap3_entries_4", "n": 188, "dec_donor": 0.0, "mon_actual": 0.58, "answer_follows": 0.005}
+{"idx": 640, "model": "relay", "level": 5, "cell": "swap3_input_5", "n": 188, "dec_donor": 0.005, "mon_actual": 0.713, "answer_follows": 0.005}
+{"idx": 641, "model": "relay", "level": 5, "cell": "swap3_entries_5", "n": 188, "dec_donor": 0.005, "mon_actual": 0.691, "answer_follows": 0.005}
+{"idx": 642, "model": "relay", "level": 5, "cell": "swap4_input_4", "n": 188, "dec_donor": 0.516, "mon_actual": 0.011, "answer_follows": 0.005}
+{"idx": 643, "model": "relay", "level": 5, "cell": "swap4_entries_4", "n": 188, "dec_donor": 0.527, "mon_actual": 0.005, "answer_follows": 0.005}
+{"idx": 644, "model": "relay", "level": 5, "cell": "swap4_input_5", "n": 188, "dec_donor": 0.0, "mon_actual": 0.553, "answer_follows": 0.005}
+{"idx": 645, "model": "relay", "level": 5, "cell": "swap4_entries_5", "n": 188, "dec_donor": 0.0, "mon_actual": 0.537, "answer_follows": 0.005}
+{"idx": 646, "model": "relay", "level": 5, "cell": "swap5_input_5", "n": 188, "dec_donor": 0.606, "mon_actual": 0.027, "answer_follows": 0.016}
+{"idx": 647, "model": "relay", "level": 5, "cell": "swap5_entries_5", "n": 188, "dec_donor": 0.537, "mon_actual": 0.016, "answer_follows": 0.016}

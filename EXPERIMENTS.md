@@ -11705,3 +11705,80 @@ By edited step: step 1 (n = 143) z1 .72, z4 .20; step 2 (n = 65) z1 .26, z4 .68;
 **Interpretation:** Fails the check, latents ignored, as predicted (with t16: 0 latents = 6 latents). The edit-sensitivity number is new and large: the model's ProsQA accuracy does not come from following the stated relations along the path; a one-relation rewiring that a path-follower must notice leaves its answer unchanged nearly always. Coconut's .98 is therefore not evidence of path search in this checkpoint, latent or not.
 **Caveats:** edited graphs come from our rewiring, not the ProsQA generator, so they may break regularities the model learned (e.g. which subgraph the distractor option sits in); the result says the answer does not track the rewired relation, not which cue it uses. Only 18 qualified pairs, so the route-split rates have wide intervals (all zero).
 **Next:** t18 probes (path nodes, BFS frontiers) on both models; a cue analysis (which surface features predict the kept answer) if the paper needs it.
+
+---
+
+## 2026-11-08 — ProsQA Coconut probes: no BFS diagonal; all six latents read the same (frontier-1 AUROC .68-.70 at every latent, below <start-latent> .73), and the LM-head readout puts the same frontier-3/4 mass on every latent (.30-.32 / .43-.45 vs base .15 / .06); deep-path information readable at the latents but the answer ignores them (coconut, run_id: 20261108-102225_coconut_prosqa-grid-path-frontier-probes)
+
+**Goal:** Step 4d: test the Coconut paper's BFS claim directly (latent k ~ frontier k) on the grid checkpoint, and step 3's "path node at the question tail vs latents". Pre-registered (t18, committed 0e3d7cc): latent probes not above <start-latent>; no diagonal; if a diagonal appeared with t17 off-route latents, it is the decorative-decoder case.
+**Mechanism / model:** `connordilgren/gpt2-prosqa-coconut` (checkpoint_40), 6 latents.
+**Data:** probes trained on 3000 ProsQA train items, tested on all 500 test items. Targets: path_k = k-th node on the gold path (k = 1..3), front_k = BFS frontier at distance k from the person (k = 1..4). ProsQA has 55 concept names in total.
+**Hyperparams / command:** `grid_probe.py coconut mps <out> 3000`; linear probes, standardised features, shuffled-label controls; raw `codi_audit_artifacts/t18_coconut.json`.
+**Results (layer 12; shuffled controls .03-.08 acc, .49-.56 AUROC):**
+
+| position | path_1 | path_2 | path_3 | front_1 | front_2 | front_3 | front_4 |
+|---|---|---|---|---|---|---|---|
+| question tail | .23 | .22 | .37 | .74 | .72 | .71 | .77 |
+| <start-latent> | .25 | .22 | .40 | .73 | .72 | .73 | .79 |
+| latents 0-5 (range) | .16-.19 | .16-.18 | .44-.45 | .68-.69 | .67 | .68-.70 | .77 |
+
+Layer 6: question tail reads frontier 1 best (AUROC .89, path_1 .32); the latents read deeper nodes better than <start-latent> (path_3 .27-.34 vs .07; front_3 .66-.71 vs .55; front_4 .74-.76 vs .63). LM-head readout (the paper's method) at latent j: frontier-k mass .03 / .06-.07 / .30-.32 / .43-.45 for k = 1..4 (base .13 / .19 / .15 / .06), identical for j = 0..5.
+**Interpretation:** No BFS picture: the latents are near copies of each other (same probe scores, same lens mass at every j), no latent k is specific to frontier k. The lens mass sits on frontier 3-4, where the answer options usually are, so it reads answer candidates, not a search frontier. Prediction: no diagonal (held); latents not above <start-latent> (held at layer 12, NOT at layer 6, where latents read path_3 / deep frontiers better than <start-latent>). Combined with t17 (route split .00) and t16 (0 = 6 passes), whatever the latents encode is decorative.
+**Caveats:** linear probes; first-token lens match (concept names are multi-token); path_k pooled over path lengths.
+**Next:** none planned for this checkpoint; Coconut-paper-style BFS analysis needs a checkpoint whose latents are used.
+
+---
+
+## 2026-11-08 — ProsQA CODI probes: latents read path nodes no better than the question tail / <bot> (path_1 .18-.21 vs .16 / .19; front_1 AUROC .77 vs .74) and the LM-head readout is at base everywhere; the tail reads the first hop only weakly (codi, run_id: 20261108-102225_codi_prosqa-grid-path-frontier-probes)
+
+**Goal:** Step 3: probes for the path's intermediate node at the question tail vs the latents. Pre-registered (t18, 0e3d7cc): latent probes within .05 / .03 of <bot>; tail / bot read path_1 >= .3 and front_1 AUROC >= .75.
+**Mechanism / model:** `connordilgren/gpt2-prosqa-codi`, 6 latents (one near-constant vector, 20261103-021023).
+**Data / command:** as the Coconut record; `grid_probe.py codi mps <out> 3000`; raw `codi_audit_artifacts/t18_codi.json`.
+**Results (layer 12; shuffled controls .03-.08, .49-.57):** path_1 tail .16, <bot> .19, latents .18-.21; path_2 .09 / .11 / .15-.17; path_3 .16 / .15 / .13-.15; front_1 AUROC .65 / .74 / .77; front_4 .64 / .66 / .60. LM-head frontier mass at every latent = base (.13 / .21 / .15 / .08 vs .13 / .19 / .15 / .06).
+**Interpretation:** Latents add nothing over <bot> beyond small gains (path_2 +.04-.06, front_1 +.03), consistent with near-constant latents; the item information they hold is the small residual (1.2% of energy). Prediction partly missed: the question tail reads the first hop more weakly than predicted (path_1 .16-.19 < .3; front_1 .65-.74 at the tail), matching t17's finding that this model barely follows the path (edits followed .025).
+**Caveats:** as the Coconut record.
+**Next:** none.
+
+---
+
+## 2026-11-08 — RuleChain monitor test: decoders at on-route latents are faithful (gated / SIM: after a swap the decoded value predicts the actual answer .86-1.00), equally accurate decoders at off-route spare latents are decorative (.00-.03); start-last and relay decoders never track a swap (<= .10) (codi, run_id: 20261108-102225_codi_v2-l1to7w-rulechain-monitor-faithfulness)
+
+**Goal:** Monitor steps 2-3 (doc "A Necessity Check for Latent Reasoning Monitors"): decode at the causal location and test the decoded value against own errors and swap outcomes. Main claim: on-route decoders faithful, off-route accurate decoders decorative. Pre-registered (t19, 4ec85a8).
+**Mechanism / model:** gated (20261107-204814), SIM (20261107-225603), start-last (20261106-083843), relay = lr-3e-3 CODI (20261103-193425).
+**Data:** decoders trained on 1200 train questions per level (L2-L6); tested on valid L3-L5 with t15's items and both_j donors (20261108-073431). On-route (t15 input-only follow >= .5): gated L3 {1}, L4 {0,1,2}, L5 {0..3}; SIM L3 {0,1}, L4 {0,1,2}, L5 {0..3}; start-last, relay none.
+**Hyperparams / command:** `rc_monitor.py <model> mps <out> 1200`; linear 100-way decoders per site from the input z_j or the entries (keys + values, layers 3/6/9/12); monitor answer = decoded value pushed through the remaining rules; raw `codi_audit_artifacts/t19_<model>.json`.
+**Results (swap at site j, decoder at the same site; "monitor = actual" = monitor answer equals the model's actual answer after the swap):**
+
+| model | clean decode, rule sites | monitor = actual, on-route + answer-read site | spare sites (j >= L): clean decode / monitor = actual (input decoder) |
+|---|---|---|---|
+| gated | .92-1.00 | .99-1.00 (start value z0 .49-.61) | .18-.98 / .00-.03 |
+| SIM | .84-.99 | .86-.99 (z0 .60-.71) | .61-.96 / .00-.01 |
+| start-last | .05-.49 | — (no on-route site): <= .10 at every site | — |
+| relay | .18-1.00 (L3 .89-1.00) | — : <= .04 (input), <= .19 (entries, z0) | — |
+
+Own errors (monitor answer = the model's wrong answer): gated / SIM have no wrong items (clean 1.000); start-last .04-.31; relay .04-.50 (L4-L5 .36-.50 at sites 1-5).
+**Interpretation:** The main claim holds on RuleChain. Gated / SIM latents on the route give faithful monitors; their spare latents read the value just as well (up to .98) but a monitor there predicts the donor's answer while the model keeps its own: an accurate but decorative decoder. Entries decoders at spare sites track the actual answer better (.57-.84) because the swapped input barely changes those entries. Start-last and relay: no single latent's decoder tracks a swap. Prediction miss: relay decoders predict a sizeable share of the relay's own errors (.36-.50 > .3): its pooled copies all hold the value the answer uses, so a decoder correlates with errors without any single latent being causal. Correlation with own errors is therefore not enough to certify a monitor; the swap test separates them.
+**Caveats:** one seed per model; decoders linear; gated / SIM own-error test empty.
+**Next:** decode GSM8K CODI / Coconut value slots (z1 / z4 inputs and entries) once the check definition is settled.
+
+---
+
+## 2026-11-08 — Teacher-side dependence: the CODI teacher's answer state depends only on the last shown CoT value on RuleChain (flip 1.00 vs .00 for every earlier value), on several values on GSM8K (.81 / .37 / .29 / .25 from the end), and on ProsQA barely at all (flip .33 at the last node, state change .02 of the between-item distance) (codi, run_id: 20261108-102233_codi_teacher-dependence-rulechain-gsm8k-prosqa)
+
+**Goal:** Step 8 / lever 3: does the distillation target carry the intermediate values the answer cannot recompute from the question? Corrupt one CoT value given to the teacher at a time and see which ones its answer state depends on. Pre-registered (t20, 2e21ff1).
+**Mechanism / model:** RuleChain start-last, relay, stabilised, SIM; GSM8K zen-E/CODI-gpt2; ProsQA grid CODI.
+**Data:** 300 items each: RuleChain valid L3-L6; GSM8K-Aug test items with >= 3 steps; ProsQA test with >= 4 steps. Teacher input as in training: question + CoT without its last step + "The answer is: gold".
+**Hyperparams / command:** `teacher_dependence.py <task> <model> mps <out> 300`. Corruption: value + d (d = 1..3, then -1..-3; ProsQA: another concept of the question), positional (the step's result and its next mention), same token length. flip = teacher's first answer token changes (ProsQA: preferred option, teacher-forced); move = median change of the layer-12 state at ":" / median distance between two items. Raw `codi_audit_artifacts/t20_*.json`.
+**Results (k = position from the end of the shown CoT):**
+
+| teacher | k = 1 | k = 2 | k = 3 | k = 4 | k = 5 |
+|---|---|---|---|---|---|
+| RuleChain start-last / relay / stab / SIM, flip | 1.00 (all four) | .00 | .00 | .00 | .00 |
+| same, move | .80 / .86 / .80 / .91 | .02-.03 | .01-.02 | .01 | .01-.02 |
+| GSM8K zen-E, flip (move) | .81 (.59) | .37 (.19) | .29 (.10) | .25 (.07) | .12 (.07) |
+| ProsQA grid CODI, flip (move) | .33 (.02) | .00 (.02) | .00 (.02) | .00 (.02) | .00 (.01) |
+
+Between-item scale of the answer state: RuleChain 75-78, GSM8K 71, ProsQA 13.
+**Interpretation:** Predictions held for RuleChain (last value only) and GSM8K (spread over several values); ProsQA missed the predicted state movement (.02 at every k). Reading: (1) on RuleChain the distillation target holds only v_{L-1}, so CODI is trained to put one value in its latents; that fits the relay / pooled regimes and explains why only per-pass supervision (gated, SIM) yields chains. (2) On GSM8K the target depends on several step results, matching the several value slots found in the route split. (3) On ProsQA the answer state barely differs between items (scale 13 vs 71-78): at ":" the next token is the person's name, so the target carries almost no path information, which explains the constant ProsQA CODI latents.
+**Caveats:** the teacher is the final CODI checkpoint (shared weights), not the teacher during training; GSM8K drops values that repeat; ProsQA flips measured on the option choice.
+**Next:** same test on ProntoQA and on Kevin's GSM8K CODI teacher.

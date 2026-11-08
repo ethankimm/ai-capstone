@@ -1,0 +1,233 @@
+{
+  "run_id": "20261108-102233_codi_teacher-dependence-rulechain-gsm8k-prosqa",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "RuleChain: start-last CODI (20261106-083843), lr-3e-3 L1-7w CODI (20261103-193425), stabilised L1-7w CODI (20261105-044444), SIM-CODI start-last (20261107-225603); GSM8K: zen-E/CODI-gpt2; ProsQA: hf:connordilgren/gpt2-prosqa-codi",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2 (valid L3-L6) + gsm8k-aug test (>= 3 steps) + prosqa test (>= 4 steps); split field = test, RuleChain items are from valid",
+    "split": "test",
+    "n_examples": 5973,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "compute_steps": 6,
+    "extra": {
+      "by_run": {
+        "rulechain_startlast": {
+          "scale": 77.874,
+          "by_k": {
+            "1": {
+              "n": 300,
+              "flip": 1.0,
+              "move": 0.797
+            },
+            "2": {
+              "n": 300,
+              "flip": 0.0,
+              "move": 0.032
+            },
+            "3": {
+              "n": 226,
+              "flip": 0.0,
+              "move": 0.014
+            },
+            "4": {
+              "n": 149,
+              "flip": 0.0,
+              "move": 0.014
+            },
+            "5": {
+              "n": 78,
+              "flip": 0.0,
+              "move": 0.016
+            }
+          }
+        },
+        "rulechain_relay": {
+          "scale": 75.601,
+          "by_k": {
+            "1": {
+              "n": 300,
+              "flip": 1.0,
+              "move": 0.861
+            },
+            "2": {
+              "n": 300,
+              "flip": 0.0,
+              "move": 0.032
+            },
+            "3": {
+              "n": 226,
+              "flip": 0.0,
+              "move": 0.016
+            },
+            "4": {
+              "n": 149,
+              "flip": 0.0,
+              "move": 0.011
+            },
+            "5": {
+              "n": 78,
+              "flip": 0.0,
+              "move": 0.007
+            }
+          }
+        },
+        "rulechain_stab": {
+          "scale": 75.307,
+          "by_k": {
+            "1": {
+              "n": 300,
+              "flip": 0.997,
+              "move": 0.802
+            },
+            "2": {
+              "n": 300,
+              "flip": 0.0,
+              "move": 0.034
+            },
+            "3": {
+              "n": 226,
+              "flip": 0.0,
+              "move": 0.017
+            },
+            "4": {
+              "n": 149,
+              "flip": 0.0,
+              "move": 0.013
+            },
+            "5": {
+              "n": 78,
+              "flip": 0.0,
+              "move": 0.012
+            }
+          }
+        },
+        "rulechain_sim": {
+          "scale": 77.0,
+          "by_k": {
+            "1": {
+              "n": 300,
+              "flip": 1.0,
+              "move": 0.91
+            },
+            "2": {
+              "n": 300,
+              "flip": 0.0,
+              "move": 0.024
+            },
+            "3": {
+              "n": 226,
+              "flip": 0.0,
+              "move": 0.008
+            },
+            "4": {
+              "n": 149,
+              "flip": 0.0,
+              "move": 0.007
+            },
+            "5": {
+              "n": 78,
+              "flip": 0.0,
+              "move": 0.007
+            }
+          }
+        },
+        "gsm8k_zen": {
+          "scale": 71.154,
+          "by_k": {
+            "1": {
+              "n": 276,
+              "flip": 0.808,
+              "move": 0.585
+            },
+            "2": {
+              "n": 270,
+              "flip": 0.37,
+              "move": 0.186
+            },
+            "3": {
+              "n": 152,
+              "flip": 0.289,
+              "move": 0.099
+            },
+            "4": {
+              "n": 63,
+              "flip": 0.254,
+              "move": 0.074
+            },
+            "5": {
+              "n": 26,
+              "flip": 0.115,
+              "move": 0.068
+            },
+            "6": {
+              "n": 9,
+              "flip": 0.111,
+              "move": 0.066
+            },
+            "7": {
+              "n": 1,
+              "flip": 0.0,
+              "move": 0.021
+            }
+          }
+        },
+        "prosqa_grid": {
+          "scale": 13.31,
+          "by_k": {
+            "1": {
+              "n": 289,
+              "flip": 0.329,
+              "move": 0.022
+            },
+            "2": {
+              "n": 292,
+              "flip": 0.0,
+              "move": 0.024
+            },
+            "3": {
+              "n": 293,
+              "flip": 0.0,
+              "move": 0.017
+            },
+            "4": {
+              "n": 78,
+              "flip": 0.0,
+              "move": 0.015
+            },
+            "5": {
+              "n": 12,
+              "flip": 0.0,
+              "move": 0.014
+            }
+          }
+        }
+      },
+      "definitions": {
+        "flip": "P(teacher's first answer token changes; ProsQA: preferred option, teacher-forced)",
+        "move": "median ||h12 change|| at the \":\" of \"The answer is:\" / median distance between two items",
+        "k": "counted from the end of the shown CoT, 1 = last shown value"
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "scripts/necessity/teacher_dependence.py",
+    "n": 300,
+    "corruption": "one shown CoT value replaced positionally (its result and next mention), same token length"
+  },
+  "seed": 0,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Which CoT values does the CODI teacher's answer state (the distillation target) depend on?",
+  "timestamp_utc": "2026-11-08T10:22:33.159998+00:00",
+  "git": {
+    "commit": "83f76b2",
+    "dirty": true
+  }
+}

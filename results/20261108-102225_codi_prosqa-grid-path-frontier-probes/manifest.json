@@ -1,0 +1,1510 @@
+{
+  "run_id": "20261108-102225_codi_prosqa-grid-path-frontier-probes",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:connordilgren/gpt2-prosqa-codi",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "prosqa",
+    "split": "test",
+    "n_examples": 500,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "compute_steps": 6,
+    "decoding_accuracy": 0.182,
+    "extra": {
+      "decoding_accuracy_definition": "path_1 probe accuracy at latent 0, layer 12 (argmax among the item graph nodes)",
+      "probes": {
+        "tail|L6|path_1": {
+          "acc": 0.162,
+          "n": 500
+        },
+        "tail|L6|path_1|shuf": {
+          "acc": 0.062,
+          "n": 500
+        },
+        "tail|L6|path_2": {
+          "acc": 0.074,
+          "n": 500
+        },
+        "tail|L6|path_2|shuf": {
+          "acc": 0.036,
+          "n": 500
+        },
+        "tail|L6|path_3": {
+          "acc": 0.07,
+          "n": 298
+        },
+        "tail|L6|path_3|shuf": {
+          "acc": 0.06,
+          "n": 298
+        },
+        "tail|L6|front_1": {
+          "auroc": 0.696,
+          "n": 500
+        },
+        "tail|L6|front_1|shuf": {
+          "auroc": 0.54,
+          "n": 500
+        },
+        "tail|L6|front_2": {
+          "auroc": 0.609,
+          "n": 500
+        },
+        "tail|L6|front_2|shuf": {
+          "auroc": 0.55,
+          "n": 500
+        },
+        "tail|L6|front_3": {
+          "auroc": 0.564,
+          "n": 500
+        },
+        "tail|L6|front_3|shuf": {
+          "auroc": 0.555,
+          "n": 500
+        },
+        "tail|L6|front_4": {
+          "auroc": 0.69,
+          "n": 345
+        },
+        "tail|L6|front_4|shuf": {
+          "auroc": 0.523,
+          "n": 345
+        },
+        "tail|L9|path_1": {
+          "acc": 0.162,
+          "n": 500
+        },
+        "tail|L9|path_1|shuf": {
+          "acc": 0.06,
+          "n": 500
+        },
+        "tail|L9|path_2": {
+          "acc": 0.1,
+          "n": 500
+        },
+        "tail|L9|path_2|shuf": {
+          "acc": 0.042,
+          "n": 500
+        },
+        "tail|L9|path_3": {
+          "acc": 0.154,
+          "n": 298
+        },
+        "tail|L9|path_3|shuf": {
+          "acc": 0.034,
+          "n": 298
+        },
+        "tail|L9|front_1": {
+          "auroc": 0.709,
+          "n": 500
+        },
+        "tail|L9|front_1|shuf": {
+          "auroc": 0.54,
+          "n": 500
+        },
+        "tail|L9|front_2": {
+          "auroc": 0.612,
+          "n": 500
+        },
+        "tail|L9|front_2|shuf": {
+          "auroc": 0.551,
+          "n": 500
+        },
+        "tail|L9|front_3": {
+          "auroc": 0.585,
+          "n": 500
+        },
+        "tail|L9|front_3|shuf": {
+          "auroc": 0.569,
+          "n": 500
+        },
+        "tail|L9|front_4": {
+          "auroc": 0.69,
+          "n": 345
+        },
+        "tail|L9|front_4|shuf": {
+          "auroc": 0.519,
+          "n": 345
+        },
+        "tail|L12|path_1": {
+          "acc": 0.16,
+          "n": 500
+        },
+        "tail|L12|path_1|shuf": {
+          "acc": 0.06,
+          "n": 500
+        },
+        "tail|L12|path_2": {
+          "acc": 0.094,
+          "n": 500
+        },
+        "tail|L12|path_2|shuf": {
+          "acc": 0.062,
+          "n": 500
+        },
+        "tail|L12|path_3": {
+          "acc": 0.158,
+          "n": 298
+        },
+        "tail|L12|path_3|shuf": {
+          "acc": 0.037,
+          "n": 298
+        },
+        "tail|L12|front_1": {
+          "auroc": 0.654,
+          "n": 500
+        },
+        "tail|L12|front_1|shuf": {
+          "auroc": 0.554,
+          "n": 500
+        },
+        "tail|L12|front_2": {
+          "auroc": 0.59,
+          "n": 500
+        },
+        "tail|L12|front_2|shuf": {
+          "auroc": 0.569,
+          "n": 500
+        },
+        "tail|L12|front_3": {
+          "auroc": 0.567,
+          "n": 500
+        },
+        "tail|L12|front_3|shuf": {
+          "auroc": 0.543,
+          "n": 500
+        },
+        "tail|L12|front_4": {
+          "auroc": 0.637,
+          "n": 345
+        },
+        "tail|L12|front_4|shuf": {
+          "auroc": 0.511,
+          "n": 345
+        },
+        "bot|L6|path_1": {
+          "acc": 0.144,
+          "n": 500
+        },
+        "bot|L6|path_1|shuf": {
+          "acc": 0.058,
+          "n": 500
+        },
+        "bot|L6|path_2": {
+          "acc": 0.088,
+          "n": 500
+        },
+        "bot|L6|path_2|shuf": {
+          "acc": 0.056,
+          "n": 500
+        },
+        "bot|L6|path_3": {
+          "acc": 0.06,
+          "n": 298
+        },
+        "bot|L6|path_3|shuf": {
+          "acc": 0.04,
+          "n": 298
+        },
+        "bot|L6|front_1": {
+          "auroc": 0.717,
+          "n": 500
+        },
+        "bot|L6|front_1|shuf": {
+          "auroc": 0.538,
+          "n": 500
+        },
+        "bot|L6|front_2": {
+          "auroc": 0.602,
+          "n": 500
+        },
+        "bot|L6|front_2|shuf": {
+          "auroc": 0.565,
+          "n": 500
+        },
+        "bot|L6|front_3": {
+          "auroc": 0.552,
+          "n": 500
+        },
+        "bot|L6|front_3|shuf": {
+          "auroc": 0.526,
+          "n": 500
+        },
+        "bot|L6|front_4": {
+          "auroc": 0.685,
+          "n": 345
+        },
+        "bot|L6|front_4|shuf": {
+          "auroc": 0.491,
+          "n": 345
+        },
+        "bot|L9|path_1": {
+          "acc": 0.182,
+          "n": 500
+        },
+        "bot|L9|path_1|shuf": {
+          "acc": 0.05,
+          "n": 500
+        },
+        "bot|L9|path_2": {
+          "acc": 0.094,
+          "n": 500
+        },
+        "bot|L9|path_2|shuf": {
+          "acc": 0.034,
+          "n": 500
+        },
+        "bot|L9|path_3": {
+          "acc": 0.131,
+          "n": 298
+        },
+        "bot|L9|path_3|shuf": {
+          "acc": 0.06,
+          "n": 298
+        },
+        "bot|L9|front_1": {
+          "auroc": 0.747,
+          "n": 500
+        },
+        "bot|L9|front_1|shuf": {
+          "auroc": 0.538,
+          "n": 500
+        },
+        "bot|L9|front_2": {
+          "auroc": 0.604,
+          "n": 500
+        },
+        "bot|L9|front_2|shuf": {
+          "auroc": 0.557,
+          "n": 500
+        },
+        "bot|L9|front_3": {
+          "auroc": 0.566,
+          "n": 500
+        },
+        "bot|L9|front_3|shuf": {
+          "auroc": 0.528,
+          "n": 500
+        },
+        "bot|L9|front_4": {
+          "auroc": 0.685,
+          "n": 345
+        },
+        "bot|L9|front_4|shuf": {
+          "auroc": 0.539,
+          "n": 345
+        },
+        "bot|L12|path_1": {
+          "acc": 0.192,
+          "n": 500
+        },
+        "bot|L12|path_1|shuf": {
+          "acc": 0.042,
+          "n": 500
+        },
+        "bot|L12|path_2": {
+          "acc": 0.11,
+          "n": 500
+        },
+        "bot|L12|path_2|shuf": {
+          "acc": 0.054,
+          "n": 500
+        },
+        "bot|L12|path_3": {
+          "acc": 0.151,
+          "n": 298
+        },
+        "bot|L12|path_3|shuf": {
+          "acc": 0.05,
+          "n": 298
+        },
+        "bot|L12|front_1": {
+          "auroc": 0.737,
+          "n": 500
+        },
+        "bot|L12|front_1|shuf": {
+          "auroc": 0.534,
+          "n": 500
+        },
+        "bot|L12|front_2": {
+          "auroc": 0.588,
+          "n": 500
+        },
+        "bot|L12|front_2|shuf": {
+          "auroc": 0.541,
+          "n": 500
+        },
+        "bot|L12|front_3": {
+          "auroc": 0.562,
+          "n": 500
+        },
+        "bot|L12|front_3|shuf": {
+          "auroc": 0.533,
+          "n": 500
+        },
+        "bot|L12|front_4": {
+          "auroc": 0.657,
+          "n": 345
+        },
+        "bot|L12|front_4|shuf": {
+          "auroc": 0.523,
+          "n": 345
+        },
+        "lat0|L6|path_1": {
+          "acc": 0.176,
+          "n": 500
+        },
+        "lat0|L6|path_1|shuf": {
+          "acc": 0.068,
+          "n": 500
+        },
+        "lat0|L6|path_2": {
+          "acc": 0.122,
+          "n": 500
+        },
+        "lat0|L6|path_2|shuf": {
+          "acc": 0.046,
+          "n": 500
+        },
+        "lat0|L6|path_3": {
+          "acc": 0.074,
+          "n": 298
+        },
+        "lat0|L6|path_3|shuf": {
+          "acc": 0.04,
+          "n": 298
+        },
+        "lat0|L6|front_1": {
+          "auroc": 0.724,
+          "n": 500
+        },
+        "lat0|L6|front_1|shuf": {
+          "auroc": 0.553,
+          "n": 500
+        },
+        "lat0|L6|front_2": {
+          "auroc": 0.599,
+          "n": 500
+        },
+        "lat0|L6|front_2|shuf": {
+          "auroc": 0.558,
+          "n": 500
+        },
+        "lat0|L6|front_3": {
+          "auroc": 0.511,
+          "n": 500
+        },
+        "lat0|L6|front_3|shuf": {
+          "auroc": 0.523,
+          "n": 500
+        },
+        "lat0|L6|front_4": {
+          "auroc": 0.583,
+          "n": 345
+        },
+        "lat0|L6|front_4|shuf": {
+          "auroc": 0.541,
+          "n": 345
+        },
+        "lat0|L9|path_1": {
+          "acc": 0.202,
+          "n": 500
+        },
+        "lat0|L9|path_1|shuf": {
+          "acc": 0.042,
+          "n": 500
+        },
+        "lat0|L9|path_2": {
+          "acc": 0.11,
+          "n": 500
+        },
+        "lat0|L9|path_2|shuf": {
+          "acc": 0.042,
+          "n": 500
+        },
+        "lat0|L9|path_3": {
+          "acc": 0.081,
+          "n": 298
+        },
+        "lat0|L9|path_3|shuf": {
+          "acc": 0.06,
+          "n": 298
+        },
+        "lat0|L9|front_1": {
+          "auroc": 0.751,
+          "n": 500
+        },
+        "lat0|L9|front_1|shuf": {
+          "auroc": 0.536,
+          "n": 500
+        },
+        "lat0|L9|front_2": {
+          "auroc": 0.615,
+          "n": 500
+        },
+        "lat0|L9|front_2|shuf": {
+          "auroc": 0.554,
+          "n": 500
+        },
+        "lat0|L9|front_3": {
+          "auroc": 0.54,
+          "n": 500
+        },
+        "lat0|L9|front_3|shuf": {
+          "auroc": 0.539,
+          "n": 500
+        },
+        "lat0|L9|front_4": {
+          "auroc": 0.591,
+          "n": 345
+        },
+        "lat0|L9|front_4|shuf": {
+          "auroc": 0.519,
+          "n": 345
+        },
+        "lat0|L12|path_1": {
+          "acc": 0.182,
+          "n": 500
+        },
+        "lat0|L12|path_1|shuf": {
+          "acc": 0.052,
+          "n": 500
+        },
+        "lat0|L12|path_2": {
+          "acc": 0.15,
+          "n": 500
+        },
+        "lat0|L12|path_2|shuf": {
+          "acc": 0.064,
+          "n": 500
+        },
+        "lat0|L12|path_3": {
+          "acc": 0.134,
+          "n": 298
+        },
+        "lat0|L12|path_3|shuf": {
+          "acc": 0.05,
+          "n": 298
+        },
+        "lat0|L12|front_1": {
+          "auroc": 0.772,
+          "n": 500
+        },
+        "lat0|L12|front_1|shuf": {
+          "auroc": 0.53,
+          "n": 500
+        },
+        "lat0|L12|front_2": {
+          "auroc": 0.645,
+          "n": 500
+        },
+        "lat0|L12|front_2|shuf": {
+          "auroc": 0.556,
+          "n": 500
+        },
+        "lat0|L12|front_3": {
+          "auroc": 0.596,
+          "n": 500
+        },
+        "lat0|L12|front_3|shuf": {
+          "auroc": 0.535,
+          "n": 500
+        },
+        "lat0|L12|front_4": {
+          "auroc": 0.6,
+          "n": 345
+        },
+        "lat0|L12|front_4|shuf": {
+          "auroc": 0.512,
+          "n": 345
+        },
+        "lat1|L6|path_1": {
+          "acc": 0.164,
+          "n": 500
+        },
+        "lat1|L6|path_1|shuf": {
+          "acc": 0.04,
+          "n": 500
+        },
+        "lat1|L6|path_2": {
+          "acc": 0.118,
+          "n": 500
+        },
+        "lat1|L6|path_2|shuf": {
+          "acc": 0.034,
+          "n": 500
+        },
+        "lat1|L6|path_3": {
+          "acc": 0.07,
+          "n": 298
+        },
+        "lat1|L6|path_3|shuf": {
+          "acc": 0.05,
+          "n": 298
+        },
+        "lat1|L6|front_1": {
+          "auroc": 0.724,
+          "n": 500
+        },
+        "lat1|L6|front_1|shuf": {
+          "auroc": 0.532,
+          "n": 500
+        },
+        "lat1|L6|front_2": {
+          "auroc": 0.598,
+          "n": 500
+        },
+        "lat1|L6|front_2|shuf": {
+          "auroc": 0.573,
+          "n": 500
+        },
+        "lat1|L6|front_3": {
+          "auroc": 0.511,
+          "n": 500
+        },
+        "lat1|L6|front_3|shuf": {
+          "auroc": 0.543,
+          "n": 500
+        },
+        "lat1|L6|front_4": {
+          "auroc": 0.582,
+          "n": 345
+        },
+        "lat1|L6|front_4|shuf": {
+          "auroc": 0.516,
+          "n": 345
+        },
+        "lat1|L9|path_1": {
+          "acc": 0.2,
+          "n": 500
+        },
+        "lat1|L9|path_1|shuf": {
+          "acc": 0.04,
+          "n": 500
+        },
+        "lat1|L9|path_2": {
+          "acc": 0.112,
+          "n": 500
+        },
+        "lat1|L9|path_2|shuf": {
+          "acc": 0.048,
+          "n": 500
+        },
+        "lat1|L9|path_3": {
+          "acc": 0.081,
+          "n": 298
+        },
+        "lat1|L9|path_3|shuf": {
+          "acc": 0.047,
+          "n": 298
+        },
+        "lat1|L9|front_1": {
+          "auroc": 0.75,
+          "n": 500
+        },
+        "lat1|L9|front_1|shuf": {
+          "auroc": 0.55,
+          "n": 500
+        },
+        "lat1|L9|front_2": {
+          "auroc": 0.616,
+          "n": 500
+        },
+        "lat1|L9|front_2|shuf": {
+          "auroc": 0.542,
+          "n": 500
+        },
+        "lat1|L9|front_3": {
+          "auroc": 0.542,
+          "n": 500
+        },
+        "lat1|L9|front_3|shuf": {
+          "auroc": 0.545,
+          "n": 500
+        },
+        "lat1|L9|front_4": {
+          "auroc": 0.591,
+          "n": 345
+        },
+        "lat1|L9|front_4|shuf": {
+          "auroc": 0.517,
+          "n": 345
+        },
+        "lat1|L12|path_1": {
+          "acc": 0.192,
+          "n": 500
+        },
+        "lat1|L12|path_1|shuf": {
+          "acc": 0.048,
+          "n": 500
+        },
+        "lat1|L12|path_2": {
+          "acc": 0.152,
+          "n": 500
+        },
+        "lat1|L12|path_2|shuf": {
+          "acc": 0.054,
+          "n": 500
+        },
+        "lat1|L12|path_3": {
+          "acc": 0.134,
+          "n": 298
+        },
+        "lat1|L12|path_3|shuf": {
+          "acc": 0.06,
+          "n": 298
+        },
+        "lat1|L12|front_1": {
+          "auroc": 0.772,
+          "n": 500
+        },
+        "lat1|L12|front_1|shuf": {
+          "auroc": 0.524,
+          "n": 500
+        },
+        "lat1|L12|front_2": {
+          "auroc": 0.644,
+          "n": 500
+        },
+        "lat1|L12|front_2|shuf": {
+          "auroc": 0.55,
+          "n": 500
+        },
+        "lat1|L12|front_3": {
+          "auroc": 0.595,
+          "n": 500
+        },
+        "lat1|L12|front_3|shuf": {
+          "auroc": 0.535,
+          "n": 500
+        },
+        "lat1|L12|front_4": {
+          "auroc": 0.601,
+          "n": 345
+        },
+        "lat1|L12|front_4|shuf": {
+          "auroc": 0.548,
+          "n": 345
+        },
+        "lat2|L6|path_1": {
+          "acc": 0.164,
+          "n": 500
+        },
+        "lat2|L6|path_1|shuf": {
+          "acc": 0.048,
+          "n": 500
+        },
+        "lat2|L6|path_2": {
+          "acc": 0.116,
+          "n": 500
+        },
+        "lat2|L6|path_2|shuf": {
+          "acc": 0.066,
+          "n": 500
+        },
+        "lat2|L6|path_3": {
+          "acc": 0.07,
+          "n": 298
+        },
+        "lat2|L6|path_3|shuf": {
+          "acc": 0.05,
+          "n": 298
+        },
+        "lat2|L6|front_1": {
+          "auroc": 0.724,
+          "n": 500
+        },
+        "lat2|L6|front_1|shuf": {
+          "auroc": 0.537,
+          "n": 500
+        },
+        "lat2|L6|front_2": {
+          "auroc": 0.599,
+          "n": 500
+        },
+        "lat2|L6|front_2|shuf": {
+          "auroc": 0.553,
+          "n": 500
+        },
+        "lat2|L6|front_3": {
+          "auroc": 0.511,
+          "n": 500
+        },
+        "lat2|L6|front_3|shuf": {
+          "auroc": 0.541,
+          "n": 500
+        },
+        "lat2|L6|front_4": {
+          "auroc": 0.583,
+          "n": 345
+        },
+        "lat2|L6|front_4|shuf": {
+          "auroc": 0.498,
+          "n": 345
+        },
+        "lat2|L9|path_1": {
+          "acc": 0.2,
+          "n": 500
+        },
+        "lat2|L9|path_1|shuf": {
+          "acc": 0.056,
+          "n": 500
+        },
+        "lat2|L9|path_2": {
+          "acc": 0.114,
+          "n": 500
+        },
+        "lat2|L9|path_2|shuf": {
+          "acc": 0.036,
+          "n": 500
+        },
+        "lat2|L9|path_3": {
+          "acc": 0.081,
+          "n": 298
+        },
+        "lat2|L9|path_3|shuf": {
+          "acc": 0.05,
+          "n": 298
+        },
+        "lat2|L9|front_1": {
+          "auroc": 0.75,
+          "n": 500
+        },
+        "lat2|L9|front_1|shuf": {
+          "auroc": 0.529,
+          "n": 500
+        },
+        "lat2|L9|front_2": {
+          "auroc": 0.617,
+          "n": 500
+        },
+        "lat2|L9|front_2|shuf": {
+          "auroc": 0.559,
+          "n": 500
+        },
+        "lat2|L9|front_3": {
+          "auroc": 0.542,
+          "n": 500
+        },
+        "lat2|L9|front_3|shuf": {
+          "auroc": 0.538,
+          "n": 500
+        },
+        "lat2|L9|front_4": {
+          "auroc": 0.59,
+          "n": 345
+        },
+        "lat2|L9|front_4|shuf": {
+          "auroc": 0.531,
+          "n": 345
+        },
+        "lat2|L12|path_1": {
+          "acc": 0.198,
+          "n": 500
+        },
+        "lat2|L12|path_1|shuf": {
+          "acc": 0.06,
+          "n": 500
+        },
+        "lat2|L12|path_2": {
+          "acc": 0.16,
+          "n": 500
+        },
+        "lat2|L12|path_2|shuf": {
+          "acc": 0.048,
+          "n": 500
+        },
+        "lat2|L12|path_3": {
+          "acc": 0.148,
+          "n": 298
+        },
+        "lat2|L12|path_3|shuf": {
+          "acc": 0.05,
+          "n": 298
+        },
+        "lat2|L12|front_1": {
+          "auroc": 0.772,
+          "n": 500
+        },
+        "lat2|L12|front_1|shuf": {
+          "auroc": 0.536,
+          "n": 500
+        },
+        "lat2|L12|front_2": {
+          "auroc": 0.643,
+          "n": 500
+        },
+        "lat2|L12|front_2|shuf": {
+          "auroc": 0.543,
+          "n": 500
+        },
+        "lat2|L12|front_3": {
+          "auroc": 0.594,
+          "n": 500
+        },
+        "lat2|L12|front_3|shuf": {
+          "auroc": 0.545,
+          "n": 500
+        },
+        "lat2|L12|front_4": {
+          "auroc": 0.599,
+          "n": 345
+        },
+        "lat2|L12|front_4|shuf": {
+          "auroc": 0.531,
+          "n": 345
+        },
+        "lat3|L6|path_1": {
+          "acc": 0.162,
+          "n": 500
+        },
+        "lat3|L6|path_1|shuf": {
+          "acc": 0.048,
+          "n": 500
+        },
+        "lat3|L6|path_2": {
+          "acc": 0.114,
+          "n": 500
+        },
+        "lat3|L6|path_2|shuf": {
+          "acc": 0.062,
+          "n": 500
+        },
+        "lat3|L6|path_3": {
+          "acc": 0.067,
+          "n": 298
+        },
+        "lat3|L6|path_3|shuf": {
+          "acc": 0.06,
+          "n": 298
+        },
+        "lat3|L6|front_1": {
+          "auroc": 0.723,
+          "n": 500
+        },
+        "lat3|L6|front_1|shuf": {
+          "auroc": 0.53,
+          "n": 500
+        },
+        "lat3|L6|front_2": {
+          "auroc": 0.599,
+          "n": 500
+        },
+        "lat3|L6|front_2|shuf": {
+          "auroc": 0.551,
+          "n": 500
+        },
+        "lat3|L6|front_3": {
+          "auroc": 0.51,
+          "n": 500
+        },
+        "lat3|L6|front_3|shuf": {
+          "auroc": 0.535,
+          "n": 500
+        },
+        "lat3|L6|front_4": {
+          "auroc": 0.583,
+          "n": 345
+        },
+        "lat3|L6|front_4|shuf": {
+          "auroc": 0.499,
+          "n": 345
+        },
+        "lat3|L9|path_1": {
+          "acc": 0.2,
+          "n": 500
+        },
+        "lat3|L9|path_1|shuf": {
+          "acc": 0.054,
+          "n": 500
+        },
+        "lat3|L9|path_2": {
+          "acc": 0.112,
+          "n": 500
+        },
+        "lat3|L9|path_2|shuf": {
+          "acc": 0.034,
+          "n": 500
+        },
+        "lat3|L9|path_3": {
+          "acc": 0.081,
+          "n": 298
+        },
+        "lat3|L9|path_3|shuf": {
+          "acc": 0.047,
+          "n": 298
+        },
+        "lat3|L9|front_1": {
+          "auroc": 0.75,
+          "n": 500
+        },
+        "lat3|L9|front_1|shuf": {
+          "auroc": 0.508,
+          "n": 500
+        },
+        "lat3|L9|front_2": {
+          "auroc": 0.616,
+          "n": 500
+        },
+        "lat3|L9|front_2|shuf": {
+          "auroc": 0.535,
+          "n": 500
+        },
+        "lat3|L9|front_3": {
+          "auroc": 0.542,
+          "n": 500
+        },
+        "lat3|L9|front_3|shuf": {
+          "auroc": 0.556,
+          "n": 500
+        },
+        "lat3|L9|front_4": {
+          "auroc": 0.589,
+          "n": 345
+        },
+        "lat3|L9|front_4|shuf": {
+          "auroc": 0.517,
+          "n": 345
+        },
+        "lat3|L12|path_1": {
+          "acc": 0.208,
+          "n": 500
+        },
+        "lat3|L12|path_1|shuf": {
+          "acc": 0.06,
+          "n": 500
+        },
+        "lat3|L12|path_2": {
+          "acc": 0.158,
+          "n": 500
+        },
+        "lat3|L12|path_2|shuf": {
+          "acc": 0.048,
+          "n": 500
+        },
+        "lat3|L12|path_3": {
+          "acc": 0.144,
+          "n": 298
+        },
+        "lat3|L12|path_3|shuf": {
+          "acc": 0.057,
+          "n": 298
+        },
+        "lat3|L12|front_1": {
+          "auroc": 0.771,
+          "n": 500
+        },
+        "lat3|L12|front_1|shuf": {
+          "auroc": 0.519,
+          "n": 500
+        },
+        "lat3|L12|front_2": {
+          "auroc": 0.643,
+          "n": 500
+        },
+        "lat3|L12|front_2|shuf": {
+          "auroc": 0.534,
+          "n": 500
+        },
+        "lat3|L12|front_3": {
+          "auroc": 0.594,
+          "n": 500
+        },
+        "lat3|L12|front_3|shuf": {
+          "auroc": 0.54,
+          "n": 500
+        },
+        "lat3|L12|front_4": {
+          "auroc": 0.599,
+          "n": 345
+        },
+        "lat3|L12|front_4|shuf": {
+          "auroc": 0.518,
+          "n": 345
+        },
+        "lat4|L6|path_1": {
+          "acc": 0.16,
+          "n": 500
+        },
+        "lat4|L6|path_1|shuf": {
+          "acc": 0.074,
+          "n": 500
+        },
+        "lat4|L6|path_2": {
+          "acc": 0.108,
+          "n": 500
+        },
+        "lat4|L6|path_2|shuf": {
+          "acc": 0.044,
+          "n": 500
+        },
+        "lat4|L6|path_3": {
+          "acc": 0.057,
+          "n": 298
+        },
+        "lat4|L6|path_3|shuf": {
+          "acc": 0.06,
+          "n": 298
+        },
+        "lat4|L6|front_1": {
+          "auroc": 0.723,
+          "n": 500
+        },
+        "lat4|L6|front_1|shuf": {
+          "auroc": 0.52,
+          "n": 500
+        },
+        "lat4|L6|front_2": {
+          "auroc": 0.599,
+          "n": 500
+        },
+        "lat4|L6|front_2|shuf": {
+          "auroc": 0.568,
+          "n": 500
+        },
+        "lat4|L6|front_3": {
+          "auroc": 0.51,
+          "n": 500
+        },
+        "lat4|L6|front_3|shuf": {
+          "auroc": 0.527,
+          "n": 500
+        },
+        "lat4|L6|front_4": {
+          "auroc": 0.584,
+          "n": 345
+        },
+        "lat4|L6|front_4|shuf": {
+          "auroc": 0.531,
+          "n": 345
+        },
+        "lat4|L9|path_1": {
+          "acc": 0.198,
+          "n": 500
+        },
+        "lat4|L9|path_1|shuf": {
+          "acc": 0.042,
+          "n": 500
+        },
+        "lat4|L9|path_2": {
+          "acc": 0.12,
+          "n": 500
+        },
+        "lat4|L9|path_2|shuf": {
+          "acc": 0.028,
+          "n": 500
+        },
+        "lat4|L9|path_3": {
+          "acc": 0.081,
+          "n": 298
+        },
+        "lat4|L9|path_3|shuf": {
+          "acc": 0.04,
+          "n": 298
+        },
+        "lat4|L9|front_1": {
+          "auroc": 0.749,
+          "n": 500
+        },
+        "lat4|L9|front_1|shuf": {
+          "auroc": 0.539,
+          "n": 500
+        },
+        "lat4|L9|front_2": {
+          "auroc": 0.616,
+          "n": 500
+        },
+        "lat4|L9|front_2|shuf": {
+          "auroc": 0.562,
+          "n": 500
+        },
+        "lat4|L9|front_3": {
+          "auroc": 0.542,
+          "n": 500
+        },
+        "lat4|L9|front_3|shuf": {
+          "auroc": 0.558,
+          "n": 500
+        },
+        "lat4|L9|front_4": {
+          "auroc": 0.591,
+          "n": 345
+        },
+        "lat4|L9|front_4|shuf": {
+          "auroc": 0.519,
+          "n": 345
+        },
+        "lat4|L12|path_1": {
+          "acc": 0.208,
+          "n": 500
+        },
+        "lat4|L12|path_1|shuf": {
+          "acc": 0.04,
+          "n": 500
+        },
+        "lat4|L12|path_2": {
+          "acc": 0.158,
+          "n": 500
+        },
+        "lat4|L12|path_2|shuf": {
+          "acc": 0.042,
+          "n": 500
+        },
+        "lat4|L12|path_3": {
+          "acc": 0.148,
+          "n": 298
+        },
+        "lat4|L12|path_3|shuf": {
+          "acc": 0.054,
+          "n": 298
+        },
+        "lat4|L12|front_1": {
+          "auroc": 0.772,
+          "n": 500
+        },
+        "lat4|L12|front_1|shuf": {
+          "auroc": 0.539,
+          "n": 500
+        },
+        "lat4|L12|front_2": {
+          "auroc": 0.641,
+          "n": 500
+        },
+        "lat4|L12|front_2|shuf": {
+          "auroc": 0.539,
+          "n": 500
+        },
+        "lat4|L12|front_3": {
+          "auroc": 0.594,
+          "n": 500
+        },
+        "lat4|L12|front_3|shuf": {
+          "auroc": 0.536,
+          "n": 500
+        },
+        "lat4|L12|front_4": {
+          "auroc": 0.598,
+          "n": 345
+        },
+        "lat4|L12|front_4|shuf": {
+          "auroc": 0.549,
+          "n": 345
+        },
+        "lat5|L6|path_1": {
+          "acc": 0.16,
+          "n": 500
+        },
+        "lat5|L6|path_1|shuf": {
+          "acc": 0.054,
+          "n": 500
+        },
+        "lat5|L6|path_2": {
+          "acc": 0.116,
+          "n": 500
+        },
+        "lat5|L6|path_2|shuf": {
+          "acc": 0.044,
+          "n": 500
+        },
+        "lat5|L6|path_3": {
+          "acc": 0.067,
+          "n": 298
+        },
+        "lat5|L6|path_3|shuf": {
+          "acc": 0.057,
+          "n": 298
+        },
+        "lat5|L6|front_1": {
+          "auroc": 0.723,
+          "n": 500
+        },
+        "lat5|L6|front_1|shuf": {
+          "auroc": 0.533,
+          "n": 500
+        },
+        "lat5|L6|front_2": {
+          "auroc": 0.599,
+          "n": 500
+        },
+        "lat5|L6|front_2|shuf": {
+          "auroc": 0.558,
+          "n": 500
+        },
+        "lat5|L6|front_3": {
+          "auroc": 0.511,
+          "n": 500
+        },
+        "lat5|L6|front_3|shuf": {
+          "auroc": 0.542,
+          "n": 500
+        },
+        "lat5|L6|front_4": {
+          "auroc": 0.583,
+          "n": 345
+        },
+        "lat5|L6|front_4|shuf": {
+          "auroc": 0.544,
+          "n": 345
+        },
+        "lat5|L9|path_1": {
+          "acc": 0.196,
+          "n": 500
+        },
+        "lat5|L9|path_1|shuf": {
+          "acc": 0.058,
+          "n": 500
+        },
+        "lat5|L9|path_2": {
+          "acc": 0.116,
+          "n": 500
+        },
+        "lat5|L9|path_2|shuf": {
+          "acc": 0.046,
+          "n": 500
+        },
+        "lat5|L9|path_3": {
+          "acc": 0.074,
+          "n": 298
+        },
+        "lat5|L9|path_3|shuf": {
+          "acc": 0.07,
+          "n": 298
+        },
+        "lat5|L9|front_1": {
+          "auroc": 0.75,
+          "n": 500
+        },
+        "lat5|L9|front_1|shuf": {
+          "auroc": 0.554,
+          "n": 500
+        },
+        "lat5|L9|front_2": {
+          "auroc": 0.615,
+          "n": 500
+        },
+        "lat5|L9|front_2|shuf": {
+          "auroc": 0.556,
+          "n": 500
+        },
+        "lat5|L9|front_3": {
+          "auroc": 0.542,
+          "n": 500
+        },
+        "lat5|L9|front_3|shuf": {
+          "auroc": 0.532,
+          "n": 500
+        },
+        "lat5|L9|front_4": {
+          "auroc": 0.592,
+          "n": 345
+        },
+        "lat5|L9|front_4|shuf": {
+          "auroc": 0.523,
+          "n": 345
+        },
+        "lat5|L12|path_1": {
+          "acc": 0.198,
+          "n": 500
+        },
+        "lat5|L12|path_1|shuf": {
+          "acc": 0.068,
+          "n": 500
+        },
+        "lat5|L12|path_2": {
+          "acc": 0.166,
+          "n": 500
+        },
+        "lat5|L12|path_2|shuf": {
+          "acc": 0.078,
+          "n": 500
+        },
+        "lat5|L12|path_3": {
+          "acc": 0.134,
+          "n": 298
+        },
+        "lat5|L12|path_3|shuf": {
+          "acc": 0.034,
+          "n": 298
+        },
+        "lat5|L12|front_1": {
+          "auroc": 0.772,
+          "n": 500
+        },
+        "lat5|L12|front_1|shuf": {
+          "auroc": 0.518,
+          "n": 500
+        },
+        "lat5|L12|front_2": {
+          "auroc": 0.641,
+          "n": 500
+        },
+        "lat5|L12|front_2|shuf": {
+          "auroc": 0.547,
+          "n": 500
+        },
+        "lat5|L12|front_3": {
+          "auroc": 0.593,
+          "n": 500
+        },
+        "lat5|L12|front_3|shuf": {
+          "auroc": 0.543,
+          "n": 500
+        },
+        "lat5|L12|front_4": {
+          "auroc": 0.597,
+          "n": 345
+        },
+        "lat5|L12|front_4|shuf": {
+          "auroc": 0.517,
+          "n": 345
+        },
+        "lens|lat0|front_1": {
+          "mass": 0.127,
+          "n": 500,
+          "base": 0.13
+        },
+        "lens|lat0|front_2": {
+          "mass": 0.21,
+          "n": 500,
+          "base": 0.193
+        },
+        "lens|lat0|front_3": {
+          "mass": 0.15,
+          "n": 500,
+          "base": 0.147
+        },
+        "lens|lat0|front_4": {
+          "mass": 0.083,
+          "n": 345,
+          "base": 0.057
+        },
+        "lens|lat1|front_1": {
+          "mass": 0.126,
+          "n": 500,
+          "base": 0.13
+        },
+        "lens|lat1|front_2": {
+          "mass": 0.209,
+          "n": 500,
+          "base": 0.193
+        },
+        "lens|lat1|front_3": {
+          "mass": 0.149,
+          "n": 500,
+          "base": 0.147
+        },
+        "lens|lat1|front_4": {
+          "mass": 0.082,
+          "n": 345,
+          "base": 0.057
+        },
+        "lens|lat2|front_1": {
+          "mass": 0.127,
+          "n": 500,
+          "base": 0.13
+        },
+        "lens|lat2|front_2": {
+          "mass": 0.209,
+          "n": 500,
+          "base": 0.193
+        },
+        "lens|lat2|front_3": {
+          "mass": 0.15,
+          "n": 500,
+          "base": 0.147
+        },
+        "lens|lat2|front_4": {
+          "mass": 0.082,
+          "n": 345,
+          "base": 0.057
+        },
+        "lens|lat3|front_1": {
+          "mass": 0.127,
+          "n": 500,
+          "base": 0.13
+        },
+        "lens|lat3|front_2": {
+          "mass": 0.208,
+          "n": 500,
+          "base": 0.193
+        },
+        "lens|lat3|front_3": {
+          "mass": 0.15,
+          "n": 500,
+          "base": 0.147
+        },
+        "lens|lat3|front_4": {
+          "mass": 0.083,
+          "n": 345,
+          "base": 0.057
+        },
+        "lens|lat4|front_1": {
+          "mass": 0.127,
+          "n": 500,
+          "base": 0.13
+        },
+        "lens|lat4|front_2": {
+          "mass": 0.208,
+          "n": 500,
+          "base": 0.193
+        },
+        "lens|lat4|front_3": {
+          "mass": 0.15,
+          "n": 500,
+          "base": 0.147
+        },
+        "lens|lat4|front_4": {
+          "mass": 0.083,
+          "n": 345,
+          "base": 0.057
+        },
+        "lens|lat5|front_1": {
+          "mass": 0.127,
+          "n": 500,
+          "base": 0.13
+        },
+        "lens|lat5|front_2": {
+          "mass": 0.208,
+          "n": 500,
+          "base": 0.193
+        },
+        "lens|lat5|front_3": {
+          "mass": 0.15,
+          "n": 500,
+          "base": 0.147
+        },
+        "lens|lat5|front_4": {
+          "mass": 0.083,
+          "n": 345,
+          "base": 0.057
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "scripts/necessity/grid_probe.py",
+    "n_train": 3000,
+    "train_split": "prosqa train (seed 0 shuffle)",
+    "layers": [
+      6,
+      9,
+      12
+    ],
+    "probe": "linear, standardised, Adam lr 1e-2, wd 1e-3, 300 full-batch epochs; shuffled-label control per probe"
+  },
+  "seed": 0,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "ProsQA codi: are path nodes / BFS frontiers readable at the question tail vs the latents (and the paper LM-head readout)?",
+  "timestamp_utc": "2026-11-08T10:22:25.627712+00:00",
+  "git": {
+    "commit": "83f76b2",
+    "dirty": true
+  }
+}

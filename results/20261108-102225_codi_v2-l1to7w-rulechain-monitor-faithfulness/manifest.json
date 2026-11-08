@@ -1,0 +1,4184 @@
+{
+  "run_id": "20261108-102225_codi_v2-l1to7w-rulechain-monitor-faithfulness",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "gated: rule-gated start-last CODI (20261107-204814); sim: SIM-CODI start-last (20261107-225603); startlast: start-last CODI (20261106-083843); relay: lr-3e-3 L1-7w CODI (20261103-193425)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "validation",
+    "n_examples": 648,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "compute_steps": 6,
+    "extra": {
+      "by_model": {
+        "gated": {
+          "3": {
+            "clean": 1.0,
+            "onroute": [
+              1
+            ],
+            "sites": {
+              "input_0": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_1": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_2": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_3": {
+                "dec_right": 0.923,
+                "dec_wrong": null,
+                "mon_right": 0.923,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_4": {
+                "dec_right": 0.283,
+                "dec_wrong": null,
+                "mon_right": 0.287,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_5": {
+                "dec_right": 0.329,
+                "dec_wrong": null,
+                "mon_right": 0.332,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_0": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_1": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_2": {
+                "dec_right": 0.993,
+                "dec_wrong": null,
+                "mon_right": 0.993,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_3": {
+                "dec_right": 0.881,
+                "dec_wrong": null,
+                "mon_right": 0.881,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_4": {
+                "dec_right": 0.846,
+                "dec_wrong": null,
+                "mon_right": 0.846,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_5": {
+                "dec_right": 0.923,
+                "dec_wrong": null,
+                "mon_right": 0.923,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "swap0_input_0": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 0.493,
+                "answer_follows": 0.493
+              },
+              "swap0_entries_0": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 0.493,
+                "answer_follows": 0.493
+              },
+              "swap0_input_1": {
+                "n": 286,
+                "dec_donor": 0.503,
+                "mon_actual": 0.892,
+                "answer_follows": 0.493
+              },
+              "swap0_entries_1": {
+                "n": 286,
+                "dec_donor": 0.472,
+                "mon_actual": 0.867,
+                "answer_follows": 0.493
+              },
+              "swap0_input_2": {
+                "n": 286,
+                "dec_donor": 0.472,
+                "mon_actual": 0.881,
+                "answer_follows": 0.493
+              },
+              "swap0_entries_2": {
+                "n": 286,
+                "dec_donor": 0.49,
+                "mon_actual": 0.93,
+                "answer_follows": 0.493
+              },
+              "swap0_input_3": {
+                "n": 286,
+                "dec_donor": 0.451,
+                "mon_actual": 0.846,
+                "answer_follows": 0.493
+              },
+              "swap0_entries_3": {
+                "n": 286,
+                "dec_donor": 0.444,
+                "mon_actual": 0.832,
+                "answer_follows": 0.493
+              },
+              "swap0_input_4": {
+                "n": 286,
+                "dec_donor": 0.108,
+                "mon_actual": 0.22,
+                "answer_follows": 0.493
+              },
+              "swap0_entries_4": {
+                "n": 286,
+                "dec_donor": 0.43,
+                "mon_actual": 0.783,
+                "answer_follows": 0.493
+              },
+              "swap0_input_5": {
+                "n": 286,
+                "dec_donor": 0.126,
+                "mon_actual": 0.255,
+                "answer_follows": 0.493
+              },
+              "swap0_entries_5": {
+                "n": 286,
+                "dec_donor": 0.458,
+                "mon_actual": 0.853,
+                "answer_follows": 0.493
+              },
+              "swap1_input_1": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_1": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_input_2": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_2": {
+                "n": 286,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap1_input_3": {
+                "n": 286,
+                "dec_donor": 0.92,
+                "mon_actual": 0.92,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_3": {
+                "n": 286,
+                "dec_donor": 0.899,
+                "mon_actual": 0.899,
+                "answer_follows": 1.0
+              },
+              "swap1_input_4": {
+                "n": 286,
+                "dec_donor": 0.22,
+                "mon_actual": 0.224,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_4": {
+                "n": 286,
+                "dec_donor": 0.818,
+                "mon_actual": 0.818,
+                "answer_follows": 1.0
+              },
+              "swap1_input_5": {
+                "n": 286,
+                "dec_donor": 0.262,
+                "mon_actual": 0.262,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_5": {
+                "n": 286,
+                "dec_donor": 0.888,
+                "mon_actual": 0.888,
+                "answer_follows": 1.0
+              },
+              "swap2_input_2": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 0.997,
+                "answer_follows": 0.997
+              },
+              "swap2_entries_2": {
+                "n": 286,
+                "dec_donor": 0.997,
+                "mon_actual": 0.993,
+                "answer_follows": 0.997
+              },
+              "swap2_input_3": {
+                "n": 286,
+                "dec_donor": 0.85,
+                "mon_actual": 0.853,
+                "answer_follows": 0.997
+              },
+              "swap2_entries_3": {
+                "n": 286,
+                "dec_donor": 0.591,
+                "mon_actual": 0.594,
+                "answer_follows": 0.997
+              },
+              "swap2_input_4": {
+                "n": 286,
+                "dec_donor": 0.024,
+                "mon_actual": 0.028,
+                "answer_follows": 0.997
+              },
+              "swap2_entries_4": {
+                "n": 286,
+                "dec_donor": 0.332,
+                "mon_actual": 0.332,
+                "answer_follows": 0.997
+              },
+              "swap2_input_5": {
+                "n": 286,
+                "dec_donor": 0.021,
+                "mon_actual": 0.028,
+                "answer_follows": 0.997
+              },
+              "swap2_entries_5": {
+                "n": 286,
+                "dec_donor": 0.367,
+                "mon_actual": 0.367,
+                "answer_follows": 0.997
+              },
+              "swap3_input_3": {
+                "n": 286,
+                "dec_donor": 0.965,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_3": {
+                "n": 286,
+                "dec_donor": 0.045,
+                "mon_actual": 0.573,
+                "answer_follows": 0.0
+              },
+              "swap3_input_4": {
+                "n": 286,
+                "dec_donor": 0.01,
+                "mon_actual": 0.248,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_4": {
+                "n": 286,
+                "dec_donor": 0.003,
+                "mon_actual": 0.815,
+                "answer_follows": 0.0
+              },
+              "swap3_input_5": {
+                "n": 286,
+                "dec_donor": 0.003,
+                "mon_actual": 0.332,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_5": {
+                "n": 286,
+                "dec_donor": 0.0,
+                "mon_actual": 0.916,
+                "answer_follows": 0.0
+              },
+              "swap4_input_4": {
+                "n": 286,
+                "dec_donor": 0.322,
+                "mon_actual": 0.014,
+                "answer_follows": 0.0
+              },
+              "swap4_entries_4": {
+                "n": 286,
+                "dec_donor": 0.014,
+                "mon_actual": 0.741,
+                "answer_follows": 0.0
+              },
+              "swap4_input_5": {
+                "n": 286,
+                "dec_donor": 0.01,
+                "mon_actual": 0.332,
+                "answer_follows": 0.0
+              },
+              "swap4_entries_5": {
+                "n": 286,
+                "dec_donor": 0.003,
+                "mon_actual": 0.916,
+                "answer_follows": 0.0
+              },
+              "swap5_input_5": {
+                "n": 286,
+                "dec_donor": 0.322,
+                "mon_actual": 0.017,
+                "answer_follows": 0.0
+              },
+              "swap5_entries_5": {
+                "n": 286,
+                "dec_donor": 0.003,
+                "mon_actual": 0.825,
+                "answer_follows": 0.0
+              }
+            }
+          },
+          "4": {
+            "clean": 1.0,
+            "onroute": [
+              0,
+              1,
+              2
+            ],
+            "sites": {
+              "input_0": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_1": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_2": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_3": {
+                "dec_right": 0.993,
+                "dec_wrong": null,
+                "mon_right": 0.993,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_4": {
+                "dec_right": 0.958,
+                "dec_wrong": null,
+                "mon_right": 0.958,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_5": {
+                "dec_right": 0.182,
+                "dec_wrong": null,
+                "mon_right": 0.185,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_0": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_1": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_2": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_3": {
+                "dec_right": 0.993,
+                "dec_wrong": null,
+                "mon_right": 0.993,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_4": {
+                "dec_right": 0.941,
+                "dec_wrong": null,
+                "mon_right": 0.941,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_5": {
+                "dec_right": 0.881,
+                "dec_wrong": null,
+                "mon_right": 0.881,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "swap0_input_0": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 0.526,
+                "answer_follows": 0.526
+              },
+              "swap0_entries_0": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 0.526,
+                "answer_follows": 0.526
+              },
+              "swap0_input_1": {
+                "n": 285,
+                "dec_donor": 0.544,
+                "mon_actual": 0.888,
+                "answer_follows": 0.526
+              },
+              "swap0_entries_1": {
+                "n": 285,
+                "dec_donor": 0.547,
+                "mon_actual": 0.905,
+                "answer_follows": 0.526
+              },
+              "swap0_input_2": {
+                "n": 285,
+                "dec_donor": 0.502,
+                "mon_actual": 0.898,
+                "answer_follows": 0.526
+              },
+              "swap0_entries_2": {
+                "n": 285,
+                "dec_donor": 0.523,
+                "mon_actual": 0.947,
+                "answer_follows": 0.526
+              },
+              "swap0_input_3": {
+                "n": 285,
+                "dec_donor": 0.523,
+                "mon_actual": 0.965,
+                "answer_follows": 0.526
+              },
+              "swap0_entries_3": {
+                "n": 285,
+                "dec_donor": 0.53,
+                "mon_actual": 0.979,
+                "answer_follows": 0.526
+              },
+              "swap0_input_4": {
+                "n": 285,
+                "dec_donor": 0.488,
+                "mon_actual": 0.93,
+                "answer_follows": 0.526
+              },
+              "swap0_entries_4": {
+                "n": 285,
+                "dec_donor": 0.484,
+                "mon_actual": 0.895,
+                "answer_follows": 0.526
+              },
+              "swap0_input_5": {
+                "n": 285,
+                "dec_donor": 0.116,
+                "mon_actual": 0.182,
+                "answer_follows": 0.526
+              },
+              "swap0_entries_5": {
+                "n": 285,
+                "dec_donor": 0.46,
+                "mon_actual": 0.849,
+                "answer_follows": 0.526
+              },
+              "swap1_input_1": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_1": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_input_2": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_2": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_input_3": {
+                "n": 285,
+                "dec_donor": 0.986,
+                "mon_actual": 0.986,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_3": {
+                "n": 285,
+                "dec_donor": 0.986,
+                "mon_actual": 0.986,
+                "answer_follows": 1.0
+              },
+              "swap1_input_4": {
+                "n": 285,
+                "dec_donor": 0.947,
+                "mon_actual": 0.951,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_4": {
+                "n": 285,
+                "dec_donor": 0.891,
+                "mon_actual": 0.891,
+                "answer_follows": 1.0
+              },
+              "swap1_input_5": {
+                "n": 285,
+                "dec_donor": 0.186,
+                "mon_actual": 0.186,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_5": {
+                "n": 285,
+                "dec_donor": 0.842,
+                "mon_actual": 0.842,
+                "answer_follows": 1.0
+              },
+              "swap2_input_2": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_2": {
+                "n": 285,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap2_input_3": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_3": {
+                "n": 285,
+                "dec_donor": 0.996,
+                "mon_actual": 0.996,
+                "answer_follows": 1.0
+              },
+              "swap2_input_4": {
+                "n": 285,
+                "dec_donor": 0.923,
+                "mon_actual": 0.923,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_4": {
+                "n": 285,
+                "dec_donor": 0.923,
+                "mon_actual": 0.923,
+                "answer_follows": 1.0
+              },
+              "swap2_input_5": {
+                "n": 285,
+                "dec_donor": 0.137,
+                "mon_actual": 0.137,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_5": {
+                "n": 285,
+                "dec_donor": 0.863,
+                "mon_actual": 0.863,
+                "answer_follows": 1.0
+              },
+              "swap3_input_3": {
+                "n": 285,
+                "dec_donor": 0.989,
+                "mon_actual": 0.989,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_3": {
+                "n": 285,
+                "dec_donor": 0.989,
+                "mon_actual": 0.989,
+                "answer_follows": 1.0
+              },
+              "swap3_input_4": {
+                "n": 285,
+                "dec_donor": 0.909,
+                "mon_actual": 0.909,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_4": {
+                "n": 285,
+                "dec_donor": 0.649,
+                "mon_actual": 0.649,
+                "answer_follows": 1.0
+              },
+              "swap3_input_5": {
+                "n": 285,
+                "dec_donor": 0.042,
+                "mon_actual": 0.056,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_5": {
+                "n": 285,
+                "dec_donor": 0.411,
+                "mon_actual": 0.411,
+                "answer_follows": 1.0
+              },
+              "swap4_input_4": {
+                "n": 285,
+                "dec_donor": 0.972,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap4_entries_4": {
+                "n": 285,
+                "dec_donor": 0.035,
+                "mon_actual": 0.604,
+                "answer_follows": 0.0
+              },
+              "swap4_input_5": {
+                "n": 285,
+                "dec_donor": 0.028,
+                "mon_actual": 0.14,
+                "answer_follows": 0.0
+              },
+              "swap4_entries_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.842,
+                "answer_follows": 0.0
+              },
+              "swap5_input_5": {
+                "n": 285,
+                "dec_donor": 0.207,
+                "mon_actual": 0.028,
+                "answer_follows": 0.0
+              },
+              "swap5_entries_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.842,
+                "answer_follows": 0.0
+              }
+            }
+          },
+          "5": {
+            "clean": 1.0,
+            "onroute": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "sites": {
+              "input_0": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_1": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_2": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_3": {
+                "dec_right": 0.997,
+                "dec_wrong": null,
+                "mon_right": 0.997,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_4": {
+                "dec_right": 0.997,
+                "dec_wrong": null,
+                "mon_right": 0.997,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_5": {
+                "dec_right": 0.979,
+                "dec_wrong": null,
+                "mon_right": 0.979,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_0": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_1": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_2": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_3": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_4": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_5": {
+                "dec_right": 0.979,
+                "dec_wrong": null,
+                "mon_right": 0.979,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "swap0_input_0": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 0.612,
+                "answer_follows": 0.612
+              },
+              "swap0_entries_0": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 0.612,
+                "answer_follows": 0.612
+              },
+              "swap0_input_1": {
+                "n": 286,
+                "dec_donor": 0.64,
+                "mon_actual": 0.913,
+                "answer_follows": 0.612
+              },
+              "swap0_entries_1": {
+                "n": 286,
+                "dec_donor": 0.636,
+                "mon_actual": 0.881,
+                "answer_follows": 0.612
+              },
+              "swap0_input_2": {
+                "n": 286,
+                "dec_donor": 0.601,
+                "mon_actual": 0.923,
+                "answer_follows": 0.612
+              },
+              "swap0_entries_2": {
+                "n": 286,
+                "dec_donor": 0.605,
+                "mon_actual": 0.948,
+                "answer_follows": 0.612
+              },
+              "swap0_input_3": {
+                "n": 286,
+                "dec_donor": 0.612,
+                "mon_actual": 0.951,
+                "answer_follows": 0.612
+              },
+              "swap0_entries_3": {
+                "n": 286,
+                "dec_donor": 0.601,
+                "mon_actual": 0.965,
+                "answer_follows": 0.612
+              },
+              "swap0_input_4": {
+                "n": 286,
+                "dec_donor": 0.608,
+                "mon_actual": 0.976,
+                "answer_follows": 0.612
+              },
+              "swap0_entries_4": {
+                "n": 286,
+                "dec_donor": 0.615,
+                "mon_actual": 0.993,
+                "answer_follows": 0.612
+              },
+              "swap0_input_5": {
+                "n": 286,
+                "dec_donor": 0.591,
+                "mon_actual": 0.951,
+                "answer_follows": 0.612
+              },
+              "swap0_entries_5": {
+                "n": 286,
+                "dec_donor": 0.601,
+                "mon_actual": 0.944,
+                "answer_follows": 0.612
+              },
+              "swap1_input_1": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_1": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_input_2": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_2": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_input_3": {
+                "n": 286,
+                "dec_donor": 0.997,
+                "mon_actual": 0.997,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_3": {
+                "n": 286,
+                "dec_donor": 0.99,
+                "mon_actual": 0.99,
+                "answer_follows": 1.0
+              },
+              "swap1_input_4": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_4": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_input_5": {
+                "n": 286,
+                "dec_donor": 0.983,
+                "mon_actual": 0.983,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_5": {
+                "n": 286,
+                "dec_donor": 0.948,
+                "mon_actual": 0.948,
+                "answer_follows": 1.0
+              },
+              "swap2_input_2": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_2": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap2_input_3": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_3": {
+                "n": 286,
+                "dec_donor": 0.997,
+                "mon_actual": 0.997,
+                "answer_follows": 1.0
+              },
+              "swap2_input_4": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_4": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap2_input_5": {
+                "n": 286,
+                "dec_donor": 0.948,
+                "mon_actual": 0.948,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_5": {
+                "n": 286,
+                "dec_donor": 0.937,
+                "mon_actual": 0.937,
+                "answer_follows": 1.0
+              },
+              "swap3_input_3": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_3": {
+                "n": 286,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap3_input_4": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_4": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap3_input_5": {
+                "n": 286,
+                "dec_donor": 0.976,
+                "mon_actual": 0.976,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_5": {
+                "n": 286,
+                "dec_donor": 0.951,
+                "mon_actual": 0.951,
+                "answer_follows": 1.0
+              },
+              "swap4_input_4": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap4_entries_4": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap4_input_5": {
+                "n": 286,
+                "dec_donor": 0.948,
+                "mon_actual": 0.948,
+                "answer_follows": 1.0
+              },
+              "swap4_entries_5": {
+                "n": 286,
+                "dec_donor": 0.713,
+                "mon_actual": 0.717,
+                "answer_follows": 1.0
+              },
+              "swap5_input_5": {
+                "n": 286,
+                "dec_donor": 0.976,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap5_entries_5": {
+                "n": 286,
+                "dec_donor": 0.042,
+                "mon_actual": 0.591,
+                "answer_follows": 0.0
+              }
+            }
+          }
+        },
+        "sim": {
+          "3": {
+            "clean": 1.0,
+            "onroute": [
+              0,
+              1
+            ],
+            "sites": {
+              "input_0": {
+                "dec_right": 0.983,
+                "dec_wrong": null,
+                "mon_right": 0.983,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_1": {
+                "dec_right": 0.937,
+                "dec_wrong": null,
+                "mon_right": 0.937,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_2": {
+                "dec_right": 0.972,
+                "dec_wrong": null,
+                "mon_right": 0.972,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_3": {
+                "dec_right": 0.951,
+                "dec_wrong": null,
+                "mon_right": 0.951,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_4": {
+                "dec_right": 0.706,
+                "dec_wrong": null,
+                "mon_right": 0.706,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_5": {
+                "dec_right": 0.608,
+                "dec_wrong": null,
+                "mon_right": 0.608,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_0": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_1": {
+                "dec_right": 0.997,
+                "dec_wrong": null,
+                "mon_right": 0.997,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_2": {
+                "dec_right": 0.99,
+                "dec_wrong": null,
+                "mon_right": 0.99,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_3": {
+                "dec_right": 0.979,
+                "dec_wrong": null,
+                "mon_right": 0.979,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_4": {
+                "dec_right": 0.983,
+                "dec_wrong": null,
+                "mon_right": 0.983,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_5": {
+                "dec_right": 0.979,
+                "dec_wrong": null,
+                "mon_right": 0.979,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "swap0_input_0": {
+                "n": 286,
+                "dec_donor": 0.997,
+                "mon_actual": 0.71,
+                "answer_follows": 0.713
+              },
+              "swap0_entries_0": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 0.713,
+                "answer_follows": 0.713
+              },
+              "swap0_input_1": {
+                "n": 286,
+                "dec_donor": 0.731,
+                "mon_actual": 0.647,
+                "answer_follows": 0.713
+              },
+              "swap0_entries_1": {
+                "n": 286,
+                "dec_donor": 0.713,
+                "mon_actual": 0.801,
+                "answer_follows": 0.713
+              },
+              "swap0_input_2": {
+                "n": 286,
+                "dec_donor": 0.766,
+                "mon_actual": 0.696,
+                "answer_follows": 0.713
+              },
+              "swap0_entries_2": {
+                "n": 286,
+                "dec_donor": 0.703,
+                "mon_actual": 0.825,
+                "answer_follows": 0.713
+              },
+              "swap0_input_3": {
+                "n": 286,
+                "dec_donor": 0.629,
+                "mon_actual": 0.741,
+                "answer_follows": 0.713
+              },
+              "swap0_entries_3": {
+                "n": 286,
+                "dec_donor": 0.678,
+                "mon_actual": 0.801,
+                "answer_follows": 0.713
+              },
+              "swap0_input_4": {
+                "n": 286,
+                "dec_donor": 0.392,
+                "mon_actual": 0.479,
+                "answer_follows": 0.713
+              },
+              "swap0_entries_4": {
+                "n": 286,
+                "dec_donor": 0.668,
+                "mon_actual": 0.822,
+                "answer_follows": 0.713
+              },
+              "swap0_input_5": {
+                "n": 286,
+                "dec_donor": 0.266,
+                "mon_actual": 0.329,
+                "answer_follows": 0.713
+              },
+              "swap0_entries_5": {
+                "n": 286,
+                "dec_donor": 0.699,
+                "mon_actual": 0.839,
+                "answer_follows": 0.713
+              },
+              "swap1_input_1": {
+                "n": 286,
+                "dec_donor": 0.934,
+                "mon_actual": 0.934,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_1": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_input_2": {
+                "n": 286,
+                "dec_donor": 0.976,
+                "mon_actual": 0.976,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_2": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_input_3": {
+                "n": 286,
+                "dec_donor": 0.958,
+                "mon_actual": 0.958,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_3": {
+                "n": 286,
+                "dec_donor": 0.986,
+                "mon_actual": 0.986,
+                "answer_follows": 1.0
+              },
+              "swap1_input_4": {
+                "n": 286,
+                "dec_donor": 0.699,
+                "mon_actual": 0.703,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_4": {
+                "n": 286,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap1_input_5": {
+                "n": 286,
+                "dec_donor": 0.545,
+                "mon_actual": 0.545,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_5": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap2_input_2": {
+                "n": 286,
+                "dec_donor": 0.965,
+                "mon_actual": 0.965,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_2": {
+                "n": 286,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap2_input_3": {
+                "n": 286,
+                "dec_donor": 0.941,
+                "mon_actual": 0.941,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_3": {
+                "n": 286,
+                "dec_donor": 0.955,
+                "mon_actual": 0.955,
+                "answer_follows": 1.0
+              },
+              "swap2_input_4": {
+                "n": 286,
+                "dec_donor": 0.605,
+                "mon_actual": 0.608,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_4": {
+                "n": 286,
+                "dec_donor": 0.934,
+                "mon_actual": 0.934,
+                "answer_follows": 1.0
+              },
+              "swap2_input_5": {
+                "n": 286,
+                "dec_donor": 0.388,
+                "mon_actual": 0.399,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_5": {
+                "n": 286,
+                "dec_donor": 0.913,
+                "mon_actual": 0.913,
+                "answer_follows": 1.0
+              },
+              "swap3_input_3": {
+                "n": 286,
+                "dec_donor": 0.972,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_3": {
+                "n": 286,
+                "dec_donor": 0.416,
+                "mon_actual": 0.185,
+                "answer_follows": 0.0
+              },
+              "swap3_input_4": {
+                "n": 286,
+                "dec_donor": 0.049,
+                "mon_actual": 0.227,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_4": {
+                "n": 286,
+                "dec_donor": 0.003,
+                "mon_actual": 0.923,
+                "answer_follows": 0.0
+              },
+              "swap3_input_5": {
+                "n": 286,
+                "dec_donor": 0.017,
+                "mon_actual": 0.531,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_5": {
+                "n": 286,
+                "dec_donor": 0.0,
+                "mon_actual": 0.979,
+                "answer_follows": 0.0
+              },
+              "swap4_input_4": {
+                "n": 286,
+                "dec_donor": 0.668,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap4_entries_4": {
+                "n": 286,
+                "dec_donor": 0.056,
+                "mon_actual": 0.58,
+                "answer_follows": 0.0
+              },
+              "swap4_input_5": {
+                "n": 286,
+                "dec_donor": 0.007,
+                "mon_actual": 0.5,
+                "answer_follows": 0.0
+              },
+              "swap4_entries_5": {
+                "n": 286,
+                "dec_donor": 0.0,
+                "mon_actual": 0.993,
+                "answer_follows": 0.0
+              },
+              "swap5_input_5": {
+                "n": 286,
+                "dec_donor": 0.622,
+                "mon_actual": 0.014,
+                "answer_follows": 0.0
+              },
+              "swap5_entries_5": {
+                "n": 286,
+                "dec_donor": 0.031,
+                "mon_actual": 0.689,
+                "answer_follows": 0.0
+              }
+            }
+          },
+          "4": {
+            "clean": 1.0,
+            "onroute": [
+              0,
+              1,
+              2
+            ],
+            "sites": {
+              "input_0": {
+                "dec_right": 0.969,
+                "dec_wrong": null,
+                "mon_right": 0.969,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_1": {
+                "dec_right": 0.962,
+                "dec_wrong": null,
+                "mon_right": 0.962,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_2": {
+                "dec_right": 0.895,
+                "dec_wrong": null,
+                "mon_right": 0.895,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_3": {
+                "dec_right": 0.993,
+                "dec_wrong": null,
+                "mon_right": 0.993,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_4": {
+                "dec_right": 0.962,
+                "dec_wrong": null,
+                "mon_right": 0.962,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_5": {
+                "dec_right": 0.934,
+                "dec_wrong": null,
+                "mon_right": 0.934,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_0": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_1": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_2": {
+                "dec_right": 0.993,
+                "dec_wrong": null,
+                "mon_right": 0.993,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_3": {
+                "dec_right": 0.993,
+                "dec_wrong": null,
+                "mon_right": 0.993,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_4": {
+                "dec_right": 0.993,
+                "dec_wrong": null,
+                "mon_right": 0.993,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_5": {
+                "dec_right": 0.993,
+                "dec_wrong": null,
+                "mon_right": 0.993,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "swap0_input_0": {
+                "n": 285,
+                "dec_donor": 0.975,
+                "mon_actual": 0.639,
+                "answer_follows": 0.646
+              },
+              "swap0_entries_0": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 0.646,
+                "answer_follows": 0.646
+              },
+              "swap0_input_1": {
+                "n": 285,
+                "dec_donor": 0.747,
+                "mon_actual": 0.607,
+                "answer_follows": 0.646
+              },
+              "swap0_entries_1": {
+                "n": 285,
+                "dec_donor": 0.716,
+                "mon_actual": 0.775,
+                "answer_follows": 0.646
+              },
+              "swap0_input_2": {
+                "n": 285,
+                "dec_donor": 0.656,
+                "mon_actual": 0.667,
+                "answer_follows": 0.646
+              },
+              "swap0_entries_2": {
+                "n": 285,
+                "dec_donor": 0.663,
+                "mon_actual": 0.828,
+                "answer_follows": 0.646
+              },
+              "swap0_input_3": {
+                "n": 285,
+                "dec_donor": 0.667,
+                "mon_actual": 0.758,
+                "answer_follows": 0.646
+              },
+              "swap0_entries_3": {
+                "n": 285,
+                "dec_donor": 0.656,
+                "mon_actual": 0.832,
+                "answer_follows": 0.646
+              },
+              "swap0_input_4": {
+                "n": 285,
+                "dec_donor": 0.596,
+                "mon_actual": 0.772,
+                "answer_follows": 0.646
+              },
+              "swap0_entries_4": {
+                "n": 285,
+                "dec_donor": 0.618,
+                "mon_actual": 0.835,
+                "answer_follows": 0.646
+              },
+              "swap0_input_5": {
+                "n": 285,
+                "dec_donor": 0.523,
+                "mon_actual": 0.712,
+                "answer_follows": 0.646
+              },
+              "swap0_entries_5": {
+                "n": 285,
+                "dec_donor": 0.611,
+                "mon_actual": 0.863,
+                "answer_follows": 0.646
+              },
+              "swap1_input_1": {
+                "n": 285,
+                "dec_donor": 0.972,
+                "mon_actual": 0.972,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_1": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_input_2": {
+                "n": 285,
+                "dec_donor": 0.916,
+                "mon_actual": 0.916,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_2": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_input_3": {
+                "n": 285,
+                "dec_donor": 0.989,
+                "mon_actual": 0.989,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_3": {
+                "n": 285,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap1_input_4": {
+                "n": 285,
+                "dec_donor": 0.944,
+                "mon_actual": 0.944,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_4": {
+                "n": 285,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap1_input_5": {
+                "n": 285,
+                "dec_donor": 0.93,
+                "mon_actual": 0.93,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_5": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap2_input_2": {
+                "n": 285,
+                "dec_donor": 0.905,
+                "mon_actual": 0.905,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_2": {
+                "n": 285,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap2_input_3": {
+                "n": 285,
+                "dec_donor": 0.986,
+                "mon_actual": 0.986,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_3": {
+                "n": 285,
+                "dec_donor": 0.989,
+                "mon_actual": 0.989,
+                "answer_follows": 1.0
+              },
+              "swap2_input_4": {
+                "n": 285,
+                "dec_donor": 0.965,
+                "mon_actual": 0.965,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_4": {
+                "n": 285,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap2_input_5": {
+                "n": 285,
+                "dec_donor": 0.923,
+                "mon_actual": 0.923,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_5": {
+                "n": 285,
+                "dec_donor": 0.996,
+                "mon_actual": 0.996,
+                "answer_follows": 1.0
+              },
+              "swap3_input_3": {
+                "n": 285,
+                "dec_donor": 0.989,
+                "mon_actual": 0.989,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_3": {
+                "n": 285,
+                "dec_donor": 0.989,
+                "mon_actual": 0.989,
+                "answer_follows": 1.0
+              },
+              "swap3_input_4": {
+                "n": 285,
+                "dec_donor": 0.954,
+                "mon_actual": 0.954,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_4": {
+                "n": 285,
+                "dec_donor": 0.975,
+                "mon_actual": 0.975,
+                "answer_follows": 1.0
+              },
+              "swap3_input_5": {
+                "n": 285,
+                "dec_donor": 0.881,
+                "mon_actual": 0.884,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_5": {
+                "n": 285,
+                "dec_donor": 0.93,
+                "mon_actual": 0.93,
+                "answer_follows": 1.0
+              },
+              "swap4_input_4": {
+                "n": 285,
+                "dec_donor": 0.975,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap4_entries_4": {
+                "n": 285,
+                "dec_donor": 0.382,
+                "mon_actual": 0.179,
+                "answer_follows": 0.0
+              },
+              "swap4_input_5": {
+                "n": 285,
+                "dec_donor": 0.109,
+                "mon_actual": 0.274,
+                "answer_follows": 0.0
+              },
+              "swap4_entries_5": {
+                "n": 285,
+                "dec_donor": 0.014,
+                "mon_actual": 0.818,
+                "answer_follows": 0.0
+              },
+              "swap5_input_5": {
+                "n": 285,
+                "dec_donor": 0.947,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap5_entries_5": {
+                "n": 285,
+                "dec_donor": 0.056,
+                "mon_actual": 0.509,
+                "answer_follows": 0.0
+              }
+            }
+          },
+          "5": {
+            "clean": 1.0,
+            "onroute": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "sites": {
+              "input_0": {
+                "dec_right": 0.983,
+                "dec_wrong": null,
+                "mon_right": 0.983,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_1": {
+                "dec_right": 0.983,
+                "dec_wrong": null,
+                "mon_right": 0.983,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_2": {
+                "dec_right": 0.927,
+                "dec_wrong": null,
+                "mon_right": 0.927,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_3": {
+                "dec_right": 0.839,
+                "dec_wrong": null,
+                "mon_right": 0.839,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_4": {
+                "dec_right": 0.976,
+                "dec_wrong": null,
+                "mon_right": 0.976,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "input_5": {
+                "dec_right": 0.955,
+                "dec_wrong": null,
+                "mon_right": 0.955,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_0": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_1": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_2": {
+                "dec_right": 0.997,
+                "dec_wrong": null,
+                "mon_right": 0.997,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_3": {
+                "dec_right": 0.983,
+                "dec_wrong": null,
+                "mon_right": 0.983,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_4": {
+                "dec_right": 1.0,
+                "dec_wrong": null,
+                "mon_right": 1.0,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "entries_5": {
+                "dec_right": 0.993,
+                "dec_wrong": null,
+                "mon_right": 0.993,
+                "mon_wrong": null,
+                "n_wrong": 0
+              },
+              "swap0_input_0": {
+                "n": 286,
+                "dec_donor": 0.986,
+                "mon_actual": 0.601,
+                "answer_follows": 0.601
+              },
+              "swap0_entries_0": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 0.601,
+                "answer_follows": 0.601
+              },
+              "swap0_input_1": {
+                "n": 286,
+                "dec_donor": 0.713,
+                "mon_actual": 0.573,
+                "answer_follows": 0.601
+              },
+              "swap0_entries_1": {
+                "n": 286,
+                "dec_donor": 0.72,
+                "mon_actual": 0.71,
+                "answer_follows": 0.601
+              },
+              "swap0_input_2": {
+                "n": 286,
+                "dec_donor": 0.636,
+                "mon_actual": 0.538,
+                "answer_follows": 0.601
+              },
+              "swap0_entries_2": {
+                "n": 286,
+                "dec_donor": 0.657,
+                "mon_actual": 0.78,
+                "answer_follows": 0.601
+              },
+              "swap0_input_3": {
+                "n": 286,
+                "dec_donor": 0.552,
+                "mon_actual": 0.647,
+                "answer_follows": 0.601
+              },
+              "swap0_entries_3": {
+                "n": 286,
+                "dec_donor": 0.636,
+                "mon_actual": 0.829,
+                "answer_follows": 0.601
+              },
+              "swap0_input_4": {
+                "n": 286,
+                "dec_donor": 0.622,
+                "mon_actual": 0.783,
+                "answer_follows": 0.601
+              },
+              "swap0_entries_4": {
+                "n": 286,
+                "dec_donor": 0.64,
+                "mon_actual": 0.857,
+                "answer_follows": 0.601
+              },
+              "swap0_input_5": {
+                "n": 286,
+                "dec_donor": 0.598,
+                "mon_actual": 0.766,
+                "answer_follows": 0.601
+              },
+              "swap0_entries_5": {
+                "n": 286,
+                "dec_donor": 0.629,
+                "mon_actual": 0.832,
+                "answer_follows": 0.601
+              },
+              "swap1_input_1": {
+                "n": 286,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_1": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap1_input_2": {
+                "n": 286,
+                "dec_donor": 0.923,
+                "mon_actual": 0.923,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_2": {
+                "n": 286,
+                "dec_donor": 0.997,
+                "mon_actual": 0.997,
+                "answer_follows": 1.0
+              },
+              "swap1_input_3": {
+                "n": 286,
+                "dec_donor": 0.804,
+                "mon_actual": 0.804,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_3": {
+                "n": 286,
+                "dec_donor": 0.99,
+                "mon_actual": 0.99,
+                "answer_follows": 1.0
+              },
+              "swap1_input_4": {
+                "n": 286,
+                "dec_donor": 0.969,
+                "mon_actual": 0.969,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_4": {
+                "n": 286,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap1_input_5": {
+                "n": 286,
+                "dec_donor": 0.93,
+                "mon_actual": 0.93,
+                "answer_follows": 1.0
+              },
+              "swap1_entries_5": {
+                "n": 286,
+                "dec_donor": 0.99,
+                "mon_actual": 0.99,
+                "answer_follows": 1.0
+              },
+              "swap2_input_2": {
+                "n": 286,
+                "dec_donor": 0.923,
+                "mon_actual": 0.923,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_2": {
+                "n": 286,
+                "dec_donor": 0.997,
+                "mon_actual": 0.997,
+                "answer_follows": 1.0
+              },
+              "swap2_input_3": {
+                "n": 286,
+                "dec_donor": 0.871,
+                "mon_actual": 0.871,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_3": {
+                "n": 286,
+                "dec_donor": 0.99,
+                "mon_actual": 0.99,
+                "answer_follows": 1.0
+              },
+              "swap2_input_4": {
+                "n": 286,
+                "dec_donor": 0.976,
+                "mon_actual": 0.976,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_4": {
+                "n": 286,
+                "dec_donor": 0.993,
+                "mon_actual": 0.993,
+                "answer_follows": 1.0
+              },
+              "swap2_input_5": {
+                "n": 286,
+                "dec_donor": 0.944,
+                "mon_actual": 0.944,
+                "answer_follows": 1.0
+              },
+              "swap2_entries_5": {
+                "n": 286,
+                "dec_donor": 0.986,
+                "mon_actual": 0.986,
+                "answer_follows": 1.0
+              },
+              "swap3_input_3": {
+                "n": 286,
+                "dec_donor": 0.857,
+                "mon_actual": 0.857,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_3": {
+                "n": 286,
+                "dec_donor": 0.986,
+                "mon_actual": 0.986,
+                "answer_follows": 1.0
+              },
+              "swap3_input_4": {
+                "n": 286,
+                "dec_donor": 0.99,
+                "mon_actual": 0.99,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_4": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 1.0,
+                "answer_follows": 1.0
+              },
+              "swap3_input_5": {
+                "n": 286,
+                "dec_donor": 0.937,
+                "mon_actual": 0.937,
+                "answer_follows": 1.0
+              },
+              "swap3_entries_5": {
+                "n": 286,
+                "dec_donor": 0.99,
+                "mon_actual": 0.99,
+                "answer_follows": 1.0
+              },
+              "swap4_input_4": {
+                "n": 286,
+                "dec_donor": 0.972,
+                "mon_actual": 0.969,
+                "answer_follows": 0.997
+              },
+              "swap4_entries_4": {
+                "n": 286,
+                "dec_donor": 1.0,
+                "mon_actual": 0.997,
+                "answer_follows": 0.997
+              },
+              "swap4_input_5": {
+                "n": 286,
+                "dec_donor": 0.937,
+                "mon_actual": 0.937,
+                "answer_follows": 0.997
+              },
+              "swap4_entries_5": {
+                "n": 286,
+                "dec_donor": 0.969,
+                "mon_actual": 0.965,
+                "answer_follows": 0.997
+              },
+              "swap5_input_5": {
+                "n": 286,
+                "dec_donor": 0.955,
+                "mon_actual": 0.003,
+                "answer_follows": 0.0
+              },
+              "swap5_entries_5": {
+                "n": 286,
+                "dec_donor": 0.276,
+                "mon_actual": 0.206,
+                "answer_follows": 0.0
+              }
+            }
+          }
+        },
+        "startlast": {
+          "3": {
+            "clean": 0.521,
+            "onroute": [],
+            "sites": {
+              "input_0": {
+                "dec_right": 0.201,
+                "dec_wrong": 0.117,
+                "mon_right": 0.201,
+                "mon_wrong": 0.066,
+                "n_wrong": 137
+              },
+              "input_1": {
+                "dec_right": 0.45,
+                "dec_wrong": 0.219,
+                "mon_right": 0.45,
+                "mon_wrong": 0.248,
+                "n_wrong": 137
+              },
+              "input_2": {
+                "dec_right": 0.463,
+                "dec_wrong": 0.234,
+                "mon_right": 0.463,
+                "mon_wrong": 0.285,
+                "n_wrong": 137
+              },
+              "input_3": {
+                "dec_right": 0.463,
+                "dec_wrong": 0.219,
+                "mon_right": 0.463,
+                "mon_wrong": 0.299,
+                "n_wrong": 137
+              },
+              "input_4": {
+                "dec_right": 0.456,
+                "dec_wrong": 0.226,
+                "mon_right": 0.456,
+                "mon_wrong": 0.285,
+                "n_wrong": 137
+              },
+              "input_5": {
+                "dec_right": 0.477,
+                "dec_wrong": 0.234,
+                "mon_right": 0.477,
+                "mon_wrong": 0.307,
+                "n_wrong": 137
+              },
+              "entries_0": {
+                "dec_right": 0.201,
+                "dec_wrong": 0.124,
+                "mon_right": 0.201,
+                "mon_wrong": 0.102,
+                "n_wrong": 137
+              },
+              "entries_1": {
+                "dec_right": 0.416,
+                "dec_wrong": 0.27,
+                "mon_right": 0.416,
+                "mon_wrong": 0.219,
+                "n_wrong": 137
+              },
+              "entries_2": {
+                "dec_right": 0.43,
+                "dec_wrong": 0.336,
+                "mon_right": 0.43,
+                "mon_wrong": 0.234,
+                "n_wrong": 137
+              },
+              "entries_3": {
+                "dec_right": 0.49,
+                "dec_wrong": 0.372,
+                "mon_right": 0.49,
+                "mon_wrong": 0.248,
+                "n_wrong": 137
+              },
+              "entries_4": {
+                "dec_right": 0.49,
+                "dec_wrong": 0.35,
+                "mon_right": 0.49,
+                "mon_wrong": 0.248,
+                "n_wrong": 137
+              },
+              "entries_5": {
+                "dec_right": 0.497,
+                "dec_wrong": 0.35,
+                "mon_right": 0.497,
+                "mon_wrong": 0.27,
+                "n_wrong": 137
+              },
+              "swap0_input_0": {
+                "n": 149,
+                "dec_donor": 0.174,
+                "mon_actual": 0.02,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_0": {
+                "n": 149,
+                "dec_donor": 0.047,
+                "mon_actual": 0.027,
+                "answer_follows": 0.0
+              },
+              "swap0_input_1": {
+                "n": 149,
+                "dec_donor": 0.02,
+                "mon_actual": 0.45,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_1": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.376,
+                "answer_follows": 0.0
+              },
+              "swap0_input_2": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.463,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_2": {
+                "n": 149,
+                "dec_donor": 0.0,
+                "mon_actual": 0.423,
+                "answer_follows": 0.0
+              },
+              "swap0_input_3": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.463,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_3": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.43,
+                "answer_follows": 0.0
+              },
+              "swap0_input_4": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.443,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_4": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.443,
+                "answer_follows": 0.0
+              },
+              "swap0_input_5": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.47,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_5": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.456,
+                "answer_follows": 0.0
+              },
+              "swap1_input_1": {
+                "n": 149,
+                "dec_donor": 0.289,
+                "mon_actual": 0.007,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_1": {
+                "n": 149,
+                "dec_donor": 0.289,
+                "mon_actual": 0.007,
+                "answer_follows": 0.0
+              },
+              "swap1_input_2": {
+                "n": 149,
+                "dec_donor": 0.0,
+                "mon_actual": 0.188,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_2": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.168,
+                "answer_follows": 0.0
+              },
+              "swap1_input_3": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.329,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_3": {
+                "n": 149,
+                "dec_donor": 0.0,
+                "mon_actual": 0.282,
+                "answer_follows": 0.0
+              },
+              "swap1_input_4": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.336,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_4": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.336,
+                "answer_follows": 0.0
+              },
+              "swap1_input_5": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.342,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_5": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.342,
+                "answer_follows": 0.0
+              },
+              "swap2_input_2": {
+                "n": 149,
+                "dec_donor": 0.423,
+                "mon_actual": 0.034,
+                "answer_follows": 0.013
+              },
+              "swap2_entries_2": {
+                "n": 149,
+                "dec_donor": 0.302,
+                "mon_actual": 0.04,
+                "answer_follows": 0.013
+              },
+              "swap2_input_3": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.289,
+                "answer_follows": 0.013
+              },
+              "swap2_entries_3": {
+                "n": 149,
+                "dec_donor": 0.0,
+                "mon_actual": 0.215,
+                "answer_follows": 0.013
+              },
+              "swap2_input_4": {
+                "n": 149,
+                "dec_donor": 0.0,
+                "mon_actual": 0.329,
+                "answer_follows": 0.013
+              },
+              "swap2_entries_4": {
+                "n": 149,
+                "dec_donor": 0.0,
+                "mon_actual": 0.329,
+                "answer_follows": 0.013
+              },
+              "swap2_input_5": {
+                "n": 149,
+                "dec_donor": 0.013,
+                "mon_actual": 0.349,
+                "answer_follows": 0.013
+              },
+              "swap2_entries_5": {
+                "n": 149,
+                "dec_donor": 0.0,
+                "mon_actual": 0.349,
+                "answer_follows": 0.013
+              },
+              "swap3_input_3": {
+                "n": 149,
+                "dec_donor": 0.436,
+                "mon_actual": 0.034,
+                "answer_follows": 0.007
+              },
+              "swap3_entries_3": {
+                "n": 149,
+                "dec_donor": 0.409,
+                "mon_actual": 0.013,
+                "answer_follows": 0.007
+              },
+              "swap3_input_4": {
+                "n": 149,
+                "dec_donor": 0.02,
+                "mon_actual": 0.228,
+                "answer_follows": 0.007
+              },
+              "swap3_entries_4": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.228,
+                "answer_follows": 0.007
+              },
+              "swap3_input_5": {
+                "n": 149,
+                "dec_donor": 0.02,
+                "mon_actual": 0.315,
+                "answer_follows": 0.007
+              },
+              "swap3_entries_5": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.295,
+                "answer_follows": 0.007
+              },
+              "swap4_input_4": {
+                "n": 149,
+                "dec_donor": 0.409,
+                "mon_actual": 0.02,
+                "answer_follows": 0.007
+              },
+              "swap4_entries_4": {
+                "n": 149,
+                "dec_donor": 0.302,
+                "mon_actual": 0.013,
+                "answer_follows": 0.007
+              },
+              "swap4_input_5": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.235,
+                "answer_follows": 0.007
+              },
+              "swap4_entries_5": {
+                "n": 149,
+                "dec_donor": 0.007,
+                "mon_actual": 0.235,
+                "answer_follows": 0.007
+              },
+              "swap5_input_5": {
+                "n": 149,
+                "dec_donor": 0.342,
+                "mon_actual": 0.034,
+                "answer_follows": 0.007
+              },
+              "swap5_entries_5": {
+                "n": 149,
+                "dec_donor": 0.336,
+                "mon_actual": 0.02,
+                "answer_follows": 0.007
+              }
+            }
+          },
+          "4": {
+            "clean": 0.329,
+            "onroute": [],
+            "sites": {
+              "input_0": {
+                "dec_right": 0.085,
+                "dec_wrong": 0.068,
+                "mon_right": 0.085,
+                "mon_wrong": 0.047,
+                "n_wrong": 192
+              },
+              "input_1": {
+                "dec_right": 0.266,
+                "dec_wrong": 0.188,
+                "mon_right": 0.266,
+                "mon_wrong": 0.188,
+                "n_wrong": 192
+              },
+              "input_2": {
+                "dec_right": 0.298,
+                "dec_wrong": 0.193,
+                "mon_right": 0.298,
+                "mon_wrong": 0.141,
+                "n_wrong": 192
+              },
+              "input_3": {
+                "dec_right": 0.34,
+                "dec_wrong": 0.219,
+                "mon_right": 0.34,
+                "mon_wrong": 0.146,
+                "n_wrong": 192
+              },
+              "input_4": {
+                "dec_right": 0.34,
+                "dec_wrong": 0.208,
+                "mon_right": 0.34,
+                "mon_wrong": 0.172,
+                "n_wrong": 192
+              },
+              "input_5": {
+                "dec_right": 0.33,
+                "dec_wrong": 0.214,
+                "mon_right": 0.33,
+                "mon_wrong": 0.172,
+                "n_wrong": 192
+              },
+              "entries_0": {
+                "dec_right": 0.106,
+                "dec_wrong": 0.089,
+                "mon_right": 0.106,
+                "mon_wrong": 0.073,
+                "n_wrong": 192
+              },
+              "entries_1": {
+                "dec_right": 0.266,
+                "dec_wrong": 0.177,
+                "mon_right": 0.266,
+                "mon_wrong": 0.172,
+                "n_wrong": 192
+              },
+              "entries_2": {
+                "dec_right": 0.362,
+                "dec_wrong": 0.214,
+                "mon_right": 0.362,
+                "mon_wrong": 0.182,
+                "n_wrong": 192
+              },
+              "entries_3": {
+                "dec_right": 0.415,
+                "dec_wrong": 0.198,
+                "mon_right": 0.415,
+                "mon_wrong": 0.182,
+                "n_wrong": 192
+              },
+              "entries_4": {
+                "dec_right": 0.372,
+                "dec_wrong": 0.203,
+                "mon_right": 0.372,
+                "mon_wrong": 0.188,
+                "n_wrong": 192
+              },
+              "entries_5": {
+                "dec_right": 0.394,
+                "dec_wrong": 0.208,
+                "mon_right": 0.394,
+                "mon_wrong": 0.214,
+                "n_wrong": 192
+              },
+              "swap0_input_0": {
+                "n": 94,
+                "dec_donor": 0.096,
+                "mon_actual": 0.053,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_0": {
+                "n": 94,
+                "dec_donor": 0.074,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap0_input_1": {
+                "n": 94,
+                "dec_donor": 0.0,
+                "mon_actual": 0.223,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_1": {
+                "n": 94,
+                "dec_donor": 0.021,
+                "mon_actual": 0.213,
+                "answer_follows": 0.0
+              },
+              "swap0_input_2": {
+                "n": 94,
+                "dec_donor": 0.0,
+                "mon_actual": 0.298,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_2": {
+                "n": 94,
+                "dec_donor": 0.021,
+                "mon_actual": 0.34,
+                "answer_follows": 0.0
+              },
+              "swap0_input_3": {
+                "n": 94,
+                "dec_donor": 0.0,
+                "mon_actual": 0.309,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_3": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.351,
+                "answer_follows": 0.0
+              },
+              "swap0_input_4": {
+                "n": 94,
+                "dec_donor": 0.0,
+                "mon_actual": 0.298,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_4": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.372,
+                "answer_follows": 0.0
+              },
+              "swap0_input_5": {
+                "n": 94,
+                "dec_donor": 0.0,
+                "mon_actual": 0.287,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_5": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.33,
+                "answer_follows": 0.0
+              },
+              "swap1_input_1": {
+                "n": 94,
+                "dec_donor": 0.17,
+                "mon_actual": 0.032,
+                "answer_follows": 0.011
+              },
+              "swap1_entries_1": {
+                "n": 94,
+                "dec_donor": 0.191,
+                "mon_actual": 0.021,
+                "answer_follows": 0.011
+              },
+              "swap1_input_2": {
+                "n": 94,
+                "dec_donor": 0.021,
+                "mon_actual": 0.223,
+                "answer_follows": 0.011
+              },
+              "swap1_entries_2": {
+                "n": 94,
+                "dec_donor": 0.021,
+                "mon_actual": 0.191,
+                "answer_follows": 0.011
+              },
+              "swap1_input_3": {
+                "n": 94,
+                "dec_donor": 0.021,
+                "mon_actual": 0.245,
+                "answer_follows": 0.011
+              },
+              "swap1_entries_3": {
+                "n": 94,
+                "dec_donor": 0.021,
+                "mon_actual": 0.245,
+                "answer_follows": 0.011
+              },
+              "swap1_input_4": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.255,
+                "answer_follows": 0.011
+              },
+              "swap1_entries_4": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.245,
+                "answer_follows": 0.011
+              },
+              "swap1_input_5": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.287,
+                "answer_follows": 0.011
+              },
+              "swap1_entries_5": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.234,
+                "answer_follows": 0.011
+              },
+              "swap2_input_2": {
+                "n": 94,
+                "dec_donor": 0.17,
+                "mon_actual": 0.0,
+                "answer_follows": 0.032
+              },
+              "swap2_entries_2": {
+                "n": 94,
+                "dec_donor": 0.234,
+                "mon_actual": 0.011,
+                "answer_follows": 0.032
+              },
+              "swap2_input_3": {
+                "n": 94,
+                "dec_donor": 0.0,
+                "mon_actual": 0.213,
+                "answer_follows": 0.032
+              },
+              "swap2_entries_3": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.117,
+                "answer_follows": 0.032
+              },
+              "swap2_input_4": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.298,
+                "answer_follows": 0.032
+              },
+              "swap2_entries_4": {
+                "n": 94,
+                "dec_donor": 0.032,
+                "mon_actual": 0.245,
+                "answer_follows": 0.032
+              },
+              "swap2_input_5": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.266,
+                "answer_follows": 0.032
+              },
+              "swap2_entries_5": {
+                "n": 94,
+                "dec_donor": 0.032,
+                "mon_actual": 0.255,
+                "answer_follows": 0.032
+              },
+              "swap3_input_3": {
+                "n": 94,
+                "dec_donor": 0.362,
+                "mon_actual": 0.011,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_3": {
+                "n": 94,
+                "dec_donor": 0.223,
+                "mon_actual": 0.021,
+                "answer_follows": 0.0
+              },
+              "swap3_input_4": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.223,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_4": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.213,
+                "answer_follows": 0.0
+              },
+              "swap3_input_5": {
+                "n": 94,
+                "dec_donor": 0.0,
+                "mon_actual": 0.277,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_5": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.309,
+                "answer_follows": 0.0
+              },
+              "swap4_input_4": {
+                "n": 94,
+                "dec_donor": 0.266,
+                "mon_actual": 0.032,
+                "answer_follows": 0.011
+              },
+              "swap4_entries_4": {
+                "n": 94,
+                "dec_donor": 0.33,
+                "mon_actual": 0.053,
+                "answer_follows": 0.011
+              },
+              "swap4_input_5": {
+                "n": 94,
+                "dec_donor": 0.021,
+                "mon_actual": 0.181,
+                "answer_follows": 0.011
+              },
+              "swap4_entries_5": {
+                "n": 94,
+                "dec_donor": 0.011,
+                "mon_actual": 0.138,
+                "answer_follows": 0.011
+              },
+              "swap5_input_5": {
+                "n": 94,
+                "dec_donor": 0.234,
+                "mon_actual": 0.043,
+                "answer_follows": 0.011
+              },
+              "swap5_entries_5": {
+                "n": 94,
+                "dec_donor": 0.191,
+                "mon_actual": 0.021,
+                "answer_follows": 0.011
+              }
+            }
+          },
+          "5": {
+            "clean": 0.136,
+            "onroute": [],
+            "sites": {
+              "input_0": {
+                "dec_right": 0.051,
+                "dec_wrong": 0.069,
+                "mon_right": 0.051,
+                "mon_wrong": 0.045,
+                "n_wrong": 247
+              },
+              "input_1": {
+                "dec_right": 0.256,
+                "dec_wrong": 0.089,
+                "mon_right": 0.256,
+                "mon_wrong": 0.15,
+                "n_wrong": 247
+              },
+              "input_2": {
+                "dec_right": 0.231,
+                "dec_wrong": 0.117,
+                "mon_right": 0.231,
+                "mon_wrong": 0.138,
+                "n_wrong": 247
+              },
+              "input_3": {
+                "dec_right": 0.231,
+                "dec_wrong": 0.126,
+                "mon_right": 0.231,
+                "mon_wrong": 0.138,
+                "n_wrong": 247
+              },
+              "input_4": {
+                "dec_right": 0.205,
+                "dec_wrong": 0.113,
+                "mon_right": 0.205,
+                "mon_wrong": 0.162,
+                "n_wrong": 247
+              },
+              "input_5": {
+                "dec_right": 0.256,
+                "dec_wrong": 0.117,
+                "mon_right": 0.256,
+                "mon_wrong": 0.15,
+                "n_wrong": 247
+              },
+              "entries_0": {
+                "dec_right": 0.077,
+                "dec_wrong": 0.053,
+                "mon_right": 0.077,
+                "mon_wrong": 0.036,
+                "n_wrong": 247
+              },
+              "entries_1": {
+                "dec_right": 0.205,
+                "dec_wrong": 0.121,
+                "mon_right": 0.205,
+                "mon_wrong": 0.158,
+                "n_wrong": 247
+              },
+              "entries_2": {
+                "dec_right": 0.256,
+                "dec_wrong": 0.126,
+                "mon_right": 0.256,
+                "mon_wrong": 0.202,
+                "n_wrong": 247
+              },
+              "entries_3": {
+                "dec_right": 0.282,
+                "dec_wrong": 0.126,
+                "mon_right": 0.282,
+                "mon_wrong": 0.202,
+                "n_wrong": 247
+              },
+              "entries_4": {
+                "dec_right": 0.282,
+                "dec_wrong": 0.126,
+                "mon_right": 0.282,
+                "mon_wrong": 0.231,
+                "n_wrong": 247
+              },
+              "entries_5": {
+                "dec_right": 0.308,
+                "dec_wrong": 0.113,
+                "mon_right": 0.308,
+                "mon_wrong": 0.231,
+                "n_wrong": 247
+              },
+              "swap0_input_0": {
+                "n": 39,
+                "dec_donor": 0.077,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_0": {
+                "n": 39,
+                "dec_donor": 0.026,
+                "mon_actual": 0.051,
+                "answer_follows": 0.0
+              },
+              "swap0_input_1": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.154,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_1": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.128,
+                "answer_follows": 0.0
+              },
+              "swap0_input_2": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.256,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_2": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.256,
+                "answer_follows": 0.0
+              },
+              "swap0_input_3": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.205,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_3": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.282,
+                "answer_follows": 0.0
+              },
+              "swap0_input_4": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.231,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_4": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.256,
+                "answer_follows": 0.0
+              },
+              "swap0_input_5": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.231,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_5": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.282,
+                "answer_follows": 0.0
+              },
+              "swap1_input_1": {
+                "n": 39,
+                "dec_donor": 0.128,
+                "mon_actual": 0.026,
+                "answer_follows": 0.026
+              },
+              "swap1_entries_1": {
+                "n": 39,
+                "dec_donor": 0.077,
+                "mon_actual": 0.051,
+                "answer_follows": 0.026
+              },
+              "swap1_input_2": {
+                "n": 39,
+                "dec_donor": 0.026,
+                "mon_actual": 0.103,
+                "answer_follows": 0.026
+              },
+              "swap1_entries_2": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.205,
+                "answer_follows": 0.026
+              },
+              "swap1_input_3": {
+                "n": 39,
+                "dec_donor": 0.026,
+                "mon_actual": 0.205,
+                "answer_follows": 0.026
+              },
+              "swap1_entries_3": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.154,
+                "answer_follows": 0.026
+              },
+              "swap1_input_4": {
+                "n": 39,
+                "dec_donor": 0.026,
+                "mon_actual": 0.103,
+                "answer_follows": 0.026
+              },
+              "swap1_entries_4": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.179,
+                "answer_follows": 0.026
+              },
+              "swap1_input_5": {
+                "n": 39,
+                "dec_donor": 0.026,
+                "mon_actual": 0.179,
+                "answer_follows": 0.026
+              },
+              "swap1_entries_5": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.205,
+                "answer_follows": 0.026
+              },
+              "swap2_input_2": {
+                "n": 39,
+                "dec_donor": 0.128,
+                "mon_actual": 0.103,
+                "answer_follows": 0.051
+              },
+              "swap2_entries_2": {
+                "n": 39,
+                "dec_donor": 0.154,
+                "mon_actual": 0.051,
+                "answer_follows": 0.051
+              },
+              "swap2_input_3": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.128,
+                "answer_follows": 0.051
+              },
+              "swap2_entries_3": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.103,
+                "answer_follows": 0.051
+              },
+              "swap2_input_4": {
+                "n": 39,
+                "dec_donor": 0.026,
+                "mon_actual": 0.205,
+                "answer_follows": 0.051
+              },
+              "swap2_entries_4": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.231,
+                "answer_follows": 0.051
+              },
+              "swap2_input_5": {
+                "n": 39,
+                "dec_donor": 0.026,
+                "mon_actual": 0.128,
+                "answer_follows": 0.051
+              },
+              "swap2_entries_5": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.154,
+                "answer_follows": 0.051
+              },
+              "swap3_input_3": {
+                "n": 39,
+                "dec_donor": 0.179,
+                "mon_actual": 0.051,
+                "answer_follows": 0.026
+              },
+              "swap3_entries_3": {
+                "n": 39,
+                "dec_donor": 0.026,
+                "mon_actual": 0.0,
+                "answer_follows": 0.026
+              },
+              "swap3_input_4": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.205,
+                "answer_follows": 0.026
+              },
+              "swap3_entries_4": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.282,
+                "answer_follows": 0.026
+              },
+              "swap3_input_5": {
+                "n": 39,
+                "dec_donor": 0.026,
+                "mon_actual": 0.308,
+                "answer_follows": 0.026
+              },
+              "swap3_entries_5": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.282,
+                "answer_follows": 0.026
+              },
+              "swap4_input_4": {
+                "n": 39,
+                "dec_donor": 0.154,
+                "mon_actual": 0.026,
+                "answer_follows": 0.026
+              },
+              "swap4_entries_4": {
+                "n": 39,
+                "dec_donor": 0.026,
+                "mon_actual": 0.0,
+                "answer_follows": 0.026
+              },
+              "swap4_input_5": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.103,
+                "answer_follows": 0.026
+              },
+              "swap4_entries_5": {
+                "n": 39,
+                "dec_donor": 0.0,
+                "mon_actual": 0.128,
+                "answer_follows": 0.026
+              },
+              "swap5_input_5": {
+                "n": 39,
+                "dec_donor": 0.103,
+                "mon_actual": 0.051,
+                "answer_follows": 0.026
+              },
+              "swap5_entries_5": {
+                "n": 39,
+                "dec_donor": 0.077,
+                "mon_actual": 0.0,
+                "answer_follows": 0.026
+              }
+            }
+          }
+        },
+        "relay": {
+          "3": {
+            "clean": 0.997,
+            "onroute": [],
+            "sites": {
+              "input_0": {
+                "dec_right": 0.888,
+                "dec_wrong": 0.0,
+                "mon_right": 0.888,
+                "mon_wrong": 1.0,
+                "n_wrong": 1
+              },
+              "input_1": {
+                "dec_right": 0.996,
+                "dec_wrong": 0.0,
+                "mon_right": 0.996,
+                "mon_wrong": 1.0,
+                "n_wrong": 1
+              },
+              "input_2": {
+                "dec_right": 0.996,
+                "dec_wrong": 0.0,
+                "mon_right": 0.996,
+                "mon_wrong": 1.0,
+                "n_wrong": 1
+              },
+              "input_3": {
+                "dec_right": 1.0,
+                "dec_wrong": 0.0,
+                "mon_right": 1.0,
+                "mon_wrong": 1.0,
+                "n_wrong": 1
+              },
+              "input_4": {
+                "dec_right": 1.0,
+                "dec_wrong": 0.0,
+                "mon_right": 1.0,
+                "mon_wrong": 1.0,
+                "n_wrong": 1
+              },
+              "input_5": {
+                "dec_right": 1.0,
+                "dec_wrong": 0.0,
+                "mon_right": 1.0,
+                "mon_wrong": 1.0,
+                "n_wrong": 1
+              },
+              "entries_0": {
+                "dec_right": 0.905,
+                "dec_wrong": 0.0,
+                "mon_right": 0.905,
+                "mon_wrong": 0.0,
+                "n_wrong": 1
+              },
+              "entries_1": {
+                "dec_right": 0.993,
+                "dec_wrong": 0.0,
+                "mon_right": 0.993,
+                "mon_wrong": 0.0,
+                "n_wrong": 1
+              },
+              "entries_2": {
+                "dec_right": 0.993,
+                "dec_wrong": 0.0,
+                "mon_right": 0.993,
+                "mon_wrong": 1.0,
+                "n_wrong": 1
+              },
+              "entries_3": {
+                "dec_right": 0.993,
+                "dec_wrong": 0.0,
+                "mon_right": 0.993,
+                "mon_wrong": 1.0,
+                "n_wrong": 1
+              },
+              "entries_4": {
+                "dec_right": 0.993,
+                "dec_wrong": 0.0,
+                "mon_right": 0.993,
+                "mon_wrong": 1.0,
+                "n_wrong": 1
+              },
+              "entries_5": {
+                "dec_right": 0.993,
+                "dec_wrong": 0.0,
+                "mon_right": 0.993,
+                "mon_wrong": 1.0,
+                "n_wrong": 1
+              },
+              "swap0_input_0": {
+                "n": 285,
+                "dec_donor": 0.884,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_0": {
+                "n": 285,
+                "dec_donor": 0.137,
+                "mon_actual": 0.189,
+                "answer_follows": 0.0
+              },
+              "swap0_input_1": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.996,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_1": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.993,
+                "answer_follows": 0.0
+              },
+              "swap0_input_2": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 1.0,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_2": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.993,
+                "answer_follows": 0.0
+              },
+              "swap0_input_3": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 1.0,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_3": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.993,
+                "answer_follows": 0.0
+              },
+              "swap0_input_4": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 1.0,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_4": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.993,
+                "answer_follows": 0.0
+              },
+              "swap0_input_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 1.0,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.993,
+                "answer_follows": 0.0
+              },
+              "swap1_input_1": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_1": {
+                "n": 285,
+                "dec_donor": 0.996,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap1_input_2": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.965,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_2": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.916,
+                "answer_follows": 0.0
+              },
+              "swap1_input_3": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 1.0,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_3": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.993,
+                "answer_follows": 0.0
+              },
+              "swap1_input_4": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 1.0,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_4": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.989,
+                "answer_follows": 0.0
+              },
+              "swap1_input_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 1.0,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.993,
+                "answer_follows": 0.0
+              },
+              "swap2_input_2": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap2_entries_2": {
+                "n": 285,
+                "dec_donor": 0.972,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap2_input_3": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.989,
+                "answer_follows": 0.0
+              },
+              "swap2_entries_3": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.951,
+                "answer_follows": 0.0
+              },
+              "swap2_input_4": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 1.0,
+                "answer_follows": 0.0
+              },
+              "swap2_entries_4": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.993,
+                "answer_follows": 0.0
+              },
+              "swap2_input_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 1.0,
+                "answer_follows": 0.0
+              },
+              "swap2_entries_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.993,
+                "answer_follows": 0.0
+              },
+              "swap3_input_3": {
+                "n": 285,
+                "dec_donor": 1.0,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_3": {
+                "n": 285,
+                "dec_donor": 0.979,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap3_input_4": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.968,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_4": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.954,
+                "answer_follows": 0.0
+              },
+              "swap3_input_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.996,
+                "answer_follows": 0.0
+              },
+              "swap3_entries_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.986,
+                "answer_follows": 0.0
+              },
+              "swap4_input_4": {
+                "n": 285,
+                "dec_donor": 0.993,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap4_entries_4": {
+                "n": 285,
+                "dec_donor": 0.975,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap4_input_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.954,
+                "answer_follows": 0.0
+              },
+              "swap4_entries_5": {
+                "n": 285,
+                "dec_donor": 0.0,
+                "mon_actual": 0.926,
+                "answer_follows": 0.0
+              },
+              "swap5_input_5": {
+                "n": 285,
+                "dec_donor": 0.996,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              },
+              "swap5_entries_5": {
+                "n": 285,
+                "dec_donor": 0.975,
+                "mon_actual": 0.0,
+                "answer_follows": 0.0
+              }
+            }
+          },
+          "4": {
+            "clean": 0.888,
+            "onroute": [],
+            "sites": {
+              "input_0": {
+                "dec_right": 0.441,
+                "dec_wrong": 0.094,
+                "mon_right": 0.441,
+                "mon_wrong": 0.156,
+                "n_wrong": 32
+              },
+              "input_1": {
+                "dec_right": 0.886,
+                "dec_wrong": 0.281,
+                "mon_right": 0.886,
+                "mon_wrong": 0.406,
+                "n_wrong": 32
+              },
+              "input_2": {
+                "dec_right": 0.913,
+                "dec_wrong": 0.344,
+                "mon_right": 0.913,
+                "mon_wrong": 0.5,
+                "n_wrong": 32
+              },
+              "input_3": {
+                "dec_right": 0.909,
+                "dec_wrong": 0.312,
+                "mon_right": 0.909,
+                "mon_wrong": 0.469,
+                "n_wrong": 32
+              },
+              "input_4": {
+                "dec_right": 0.917,
+                "dec_wrong": 0.344,
+                "mon_right": 0.917,
+                "mon_wrong": 0.438,
+                "n_wrong": 32
+              },
+              "input_5": {
+                "dec_right": 0.909,
+                "dec_wrong": 0.344,
+                "mon_right": 0.909,
+                "mon_wrong": 0.438,
+                "n_wrong": 32
+              },
+              "entries_0": {
+                "dec_right": 0.449,
+                "dec_wrong": 0.125,
+                "mon_right": 0.449,
+                "mon_wrong": 0.25,
+                "n_wrong": 32
+              },
+              "entries_1": {
+                "dec_right": 0.874,
+                "dec_wrong": 0.312,
+                "mon_right": 0.874,
+                "mon_wrong": 0.5,
+                "n_wrong": 32
+              },
+              "entries_2": {
+                "dec_right": 0.898,
+                "dec_wrong": 0.344,
+                "mon_right": 0.898,
+                "mon_wrong": 0.375,
+                "n_wrong": 32
+              },
+              "entries_3": {
+                "dec_right": 0.906,
+                "dec_wrong": 0.406,
+                "mon_right": 0.906,
+                "mon_wrong": 0.406,
+                "n_wrong": 32
+              },
+              "entries_4": {
+                "dec_right": 0.917,
+                "dec_wrong": 0.375,
+                "mon_right": 0.917,
+                "mon_wrong": 0.406,
+                "n_wrong": 32
+              },
+              "entries_5": {
+                "dec_right": 0.917,
+                "dec_wrong": 0.406,
+                "mon_right": 0.917,
+                "mon_wrong": 0.375,
+                "n_wrong": 32
+              },
+              "swap0_input_0": {
+                "n": 254,
+                "dec_donor": 0.409,
+                "mon_actual": 0.02,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_0": {
+                "n": 254,
+                "dec_donor": 0.083,
+                "mon_actual": 0.122,
+                "answer_follows": 0.0
+              },
+              "swap0_input_1": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.862,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_1": {
+                "n": 254,
+                "dec_donor": 0.008,
+                "mon_actual": 0.854,
+                "answer_follows": 0.0
+              },
+              "swap0_input_2": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.917,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_2": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.89,
+                "answer_follows": 0.0
+              },
+              "swap0_input_3": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.909,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_3": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.906,
+                "answer_follows": 0.0
+              },
+              "swap0_input_4": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.921,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_4": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.909,
+                "answer_follows": 0.0
+              },
+              "swap0_input_5": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.909,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_5": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.917,
+                "answer_follows": 0.0
+              },
+              "swap1_input_1": {
+                "n": 254,
+                "dec_donor": 0.756,
+                "mon_actual": 0.012,
+                "answer_follows": 0.004
+              },
+              "swap1_entries_1": {
+                "n": 254,
+                "dec_donor": 0.748,
+                "mon_actual": 0.012,
+                "answer_follows": 0.004
+              },
+              "swap1_input_2": {
+                "n": 254,
+                "dec_donor": 0.0,
+                "mon_actual": 0.772,
+                "answer_follows": 0.004
+              },
+              "swap1_entries_2": {
+                "n": 254,
+                "dec_donor": 0.0,
+                "mon_actual": 0.744,
+                "answer_follows": 0.004
+              },
+              "swap1_input_3": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.878,
+                "answer_follows": 0.004
+              },
+              "swap1_entries_3": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.874,
+                "answer_follows": 0.004
+              },
+              "swap1_input_4": {
+                "n": 254,
+                "dec_donor": 0.0,
+                "mon_actual": 0.886,
+                "answer_follows": 0.004
+              },
+              "swap1_entries_4": {
+                "n": 254,
+                "dec_donor": 0.0,
+                "mon_actual": 0.882,
+                "answer_follows": 0.004
+              },
+              "swap1_input_5": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.894,
+                "answer_follows": 0.004
+              },
+              "swap1_entries_5": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.894,
+                "answer_follows": 0.004
+              },
+              "swap2_input_2": {
+                "n": 254,
+                "dec_donor": 0.882,
+                "mon_actual": 0.008,
+                "answer_follows": 0.008
+              },
+              "swap2_entries_2": {
+                "n": 254,
+                "dec_donor": 0.835,
+                "mon_actual": 0.012,
+                "answer_follows": 0.008
+              },
+              "swap2_input_3": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.803,
+                "answer_follows": 0.008
+              },
+              "swap2_entries_3": {
+                "n": 254,
+                "dec_donor": 0.0,
+                "mon_actual": 0.744,
+                "answer_follows": 0.008
+              },
+              "swap2_input_4": {
+                "n": 254,
+                "dec_donor": 0.008,
+                "mon_actual": 0.87,
+                "answer_follows": 0.008
+              },
+              "swap2_entries_4": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.854,
+                "answer_follows": 0.008
+              },
+              "swap2_input_5": {
+                "n": 254,
+                "dec_donor": 0.008,
+                "mon_actual": 0.886,
+                "answer_follows": 0.008
+              },
+              "swap2_entries_5": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.874,
+                "answer_follows": 0.008
+              },
+              "swap3_input_3": {
+                "n": 254,
+                "dec_donor": 0.831,
+                "mon_actual": 0.008,
+                "answer_follows": 0.008
+              },
+              "swap3_entries_3": {
+                "n": 254,
+                "dec_donor": 0.791,
+                "mon_actual": 0.008,
+                "answer_follows": 0.008
+              },
+              "swap3_input_4": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.76,
+                "answer_follows": 0.008
+              },
+              "swap3_entries_4": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.736,
+                "answer_follows": 0.008
+              },
+              "swap3_input_5": {
+                "n": 254,
+                "dec_donor": 0.004,
+                "mon_actual": 0.846,
+                "answer_follows": 0.008
+              },
+              "swap3_entries_5": {
+                "n": 254,
+                "dec_donor": 0.0,
+                "mon_actual": 0.846,
+                "answer_follows": 0.008
+              },
+              "swap4_input_4": {
+                "n": 254,
+                "dec_donor": 0.854,
+                "mon_actual": 0.008,
+                "answer_follows": 0.004
+              },
+              "swap4_entries_4": {
+                "n": 254,
+                "dec_donor": 0.815,
+                "mon_actual": 0.008,
+                "answer_follows": 0.004
+              },
+              "swap4_input_5": {
+                "n": 254,
+                "dec_donor": 0.0,
+                "mon_actual": 0.772,
+                "answer_follows": 0.004
+              },
+              "swap4_entries_5": {
+                "n": 254,
+                "dec_donor": 0.0,
+                "mon_actual": 0.756,
+                "answer_follows": 0.004
+              },
+              "swap5_input_5": {
+                "n": 254,
+                "dec_donor": 0.858,
+                "mon_actual": 0.004,
+                "answer_follows": 0.008
+              },
+              "swap5_entries_5": {
+                "n": 254,
+                "dec_donor": 0.811,
+                "mon_actual": 0.004,
+                "answer_follows": 0.008
+              }
+            }
+          },
+          "5": {
+            "clean": 0.657,
+            "onroute": [],
+            "sites": {
+              "input_0": {
+                "dec_right": 0.176,
+                "dec_wrong": 0.071,
+                "mon_right": 0.176,
+                "mon_wrong": 0.041,
+                "n_wrong": 98
+              },
+              "input_1": {
+                "dec_right": 0.729,
+                "dec_wrong": 0.214,
+                "mon_right": 0.729,
+                "mon_wrong": 0.357,
+                "n_wrong": 98
+              },
+              "input_2": {
+                "dec_right": 0.739,
+                "dec_wrong": 0.163,
+                "mon_right": 0.739,
+                "mon_wrong": 0.48,
+                "n_wrong": 98
+              },
+              "input_3": {
+                "dec_right": 0.745,
+                "dec_wrong": 0.204,
+                "mon_right": 0.745,
+                "mon_wrong": 0.449,
+                "n_wrong": 98
+              },
+              "input_4": {
+                "dec_right": 0.75,
+                "dec_wrong": 0.214,
+                "mon_right": 0.75,
+                "mon_wrong": 0.459,
+                "n_wrong": 98
+              },
+              "input_5": {
+                "dec_right": 0.745,
+                "dec_wrong": 0.214,
+                "mon_right": 0.745,
+                "mon_wrong": 0.449,
+                "n_wrong": 98
+              },
+              "entries_0": {
+                "dec_right": 0.266,
+                "dec_wrong": 0.122,
+                "mon_right": 0.266,
+                "mon_wrong": 0.092,
+                "n_wrong": 98
+              },
+              "entries_1": {
+                "dec_right": 0.654,
+                "dec_wrong": 0.235,
+                "mon_right": 0.654,
+                "mon_wrong": 0.357,
+                "n_wrong": 98
+              },
+              "entries_2": {
+                "dec_right": 0.713,
+                "dec_wrong": 0.235,
+                "mon_right": 0.713,
+                "mon_wrong": 0.357,
+                "n_wrong": 98
+              },
+              "entries_3": {
+                "dec_right": 0.713,
+                "dec_wrong": 0.235,
+                "mon_right": 0.713,
+                "mon_wrong": 0.367,
+                "n_wrong": 98
+              },
+              "entries_4": {
+                "dec_right": 0.718,
+                "dec_wrong": 0.235,
+                "mon_right": 0.718,
+                "mon_wrong": 0.378,
+                "n_wrong": 98
+              },
+              "entries_5": {
+                "dec_right": 0.718,
+                "dec_wrong": 0.235,
+                "mon_right": 0.718,
+                "mon_wrong": 0.378,
+                "n_wrong": 98
+              },
+              "swap0_input_0": {
+                "n": 188,
+                "dec_donor": 0.117,
+                "mon_actual": 0.021,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_0": {
+                "n": 188,
+                "dec_donor": 0.037,
+                "mon_actual": 0.101,
+                "answer_follows": 0.0
+              },
+              "swap0_input_1": {
+                "n": 188,
+                "dec_donor": 0.005,
+                "mon_actual": 0.723,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_1": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.665,
+                "answer_follows": 0.0
+              },
+              "swap0_input_2": {
+                "n": 188,
+                "dec_donor": 0.005,
+                "mon_actual": 0.734,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_2": {
+                "n": 188,
+                "dec_donor": 0.011,
+                "mon_actual": 0.702,
+                "answer_follows": 0.0
+              },
+              "swap0_input_3": {
+                "n": 188,
+                "dec_donor": 0.005,
+                "mon_actual": 0.755,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_3": {
+                "n": 188,
+                "dec_donor": 0.005,
+                "mon_actual": 0.707,
+                "answer_follows": 0.0
+              },
+              "swap0_input_4": {
+                "n": 188,
+                "dec_donor": 0.005,
+                "mon_actual": 0.755,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_4": {
+                "n": 188,
+                "dec_donor": 0.005,
+                "mon_actual": 0.729,
+                "answer_follows": 0.0
+              },
+              "swap0_input_5": {
+                "n": 188,
+                "dec_donor": 0.005,
+                "mon_actual": 0.745,
+                "answer_follows": 0.0
+              },
+              "swap0_entries_5": {
+                "n": 188,
+                "dec_donor": 0.005,
+                "mon_actual": 0.723,
+                "answer_follows": 0.0
+              },
+              "swap1_input_1": {
+                "n": 188,
+                "dec_donor": 0.521,
+                "mon_actual": 0.011,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_1": {
+                "n": 188,
+                "dec_donor": 0.452,
+                "mon_actual": 0.011,
+                "answer_follows": 0.0
+              },
+              "swap1_input_2": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.521,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_2": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.489,
+                "answer_follows": 0.0
+              },
+              "swap1_input_3": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.707,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_3": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.665,
+                "answer_follows": 0.0
+              },
+              "swap1_input_4": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.697,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_4": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.638,
+                "answer_follows": 0.0
+              },
+              "swap1_input_5": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.713,
+                "answer_follows": 0.0
+              },
+              "swap1_entries_5": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.654,
+                "answer_follows": 0.0
+              },
+              "swap2_input_2": {
+                "n": 188,
+                "dec_donor": 0.548,
+                "mon_actual": 0.037,
+                "answer_follows": 0.027
+              },
+              "swap2_entries_2": {
+                "n": 188,
+                "dec_donor": 0.548,
+                "mon_actual": 0.037,
+                "answer_follows": 0.027
+              },
+              "swap2_input_3": {
+                "n": 188,
+                "dec_donor": 0.011,
+                "mon_actual": 0.559,
+                "answer_follows": 0.027
+              },
+              "swap2_entries_3": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.553,
+                "answer_follows": 0.027
+              },
+              "swap2_input_4": {
+                "n": 188,
+                "dec_donor": 0.021,
+                "mon_actual": 0.713,
+                "answer_follows": 0.027
+              },
+              "swap2_entries_4": {
+                "n": 188,
+                "dec_donor": 0.016,
+                "mon_actual": 0.676,
+                "answer_follows": 0.027
+              },
+              "swap2_input_5": {
+                "n": 188,
+                "dec_donor": 0.016,
+                "mon_actual": 0.739,
+                "answer_follows": 0.027
+              },
+              "swap2_entries_5": {
+                "n": 188,
+                "dec_donor": 0.005,
+                "mon_actual": 0.66,
+                "answer_follows": 0.027
+              },
+              "swap3_input_3": {
+                "n": 188,
+                "dec_donor": 0.58,
+                "mon_actual": 0.011,
+                "answer_follows": 0.005
+              },
+              "swap3_entries_3": {
+                "n": 188,
+                "dec_donor": 0.553,
+                "mon_actual": 0.011,
+                "answer_follows": 0.005
+              },
+              "swap3_input_4": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.543,
+                "answer_follows": 0.005
+              },
+              "swap3_entries_4": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.58,
+                "answer_follows": 0.005
+              },
+              "swap3_input_5": {
+                "n": 188,
+                "dec_donor": 0.005,
+                "mon_actual": 0.713,
+                "answer_follows": 0.005
+              },
+              "swap3_entries_5": {
+                "n": 188,
+                "dec_donor": 0.005,
+                "mon_actual": 0.691,
+                "answer_follows": 0.005
+              },
+              "swap4_input_4": {
+                "n": 188,
+                "dec_donor": 0.516,
+                "mon_actual": 0.011,
+                "answer_follows": 0.005
+              },
+              "swap4_entries_4": {
+                "n": 188,
+                "dec_donor": 0.527,
+                "mon_actual": 0.005,
+                "answer_follows": 0.005
+              },
+              "swap4_input_5": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.553,
+                "answer_follows": 0.005
+              },
+              "swap4_entries_5": {
+                "n": 188,
+                "dec_donor": 0.0,
+                "mon_actual": 0.537,
+                "answer_follows": 0.005
+              },
+              "swap5_input_5": {
+                "n": 188,
+                "dec_donor": 0.606,
+                "mon_actual": 0.027,
+                "answer_follows": 0.016
+              },
+              "swap5_entries_5": {
+                "n": 188,
+                "dec_donor": 0.537,
+                "mon_actual": 0.016,
+                "answer_follows": 0.016
+              }
+            }
+          }
+        }
+      },
+      "definitions": {
+        "dec_right": "decoder = true v_ks on clean right items",
+        "mon_wrong": "monitor answer (decoded value pushed through remaining rules) = model answer on clean wrong items",
+        "swap": "swapJ_LOC_JP: t15 both_J donor; dec_donor = decoder at JP reads the donor-implied value; mon_actual = monitor answer equals the actual answer",
+        "onroute": "t15 input-only follow >= .5"
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "scripts/necessity/rc_monitor.py",
+    "n_train_per_level": 1200,
+    "train_levels": "2-6 (train split)",
+    "decoders": "linear 100-way per site x {input z_j, entries = keys+values at layers 3/6/9/12}",
+    "epochs": 200,
+    "lr": 0.003,
+    "wd": 0.001,
+    "test": "valid L3-L5, t15 items and donors"
+  },
+  "seed": null,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Monitor steps 2-3 on RuleChain: are decoders at on-route latents faithful and accurate decoders at off-route latents decorative?",
+  "timestamp_utc": "2026-11-08T10:22:25.715003+00:00",
+  "git": {
+    "commit": "83f76b2",
+    "dirty": true
+  }
+}
