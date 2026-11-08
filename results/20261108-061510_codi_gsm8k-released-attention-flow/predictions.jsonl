@@ -1,0 +1,2 @@
+{"idx": 0, "id": "gsm8k-test-right", "group": "right", "gold_answer": "", "predicted_answer": "", "correct": true, "n_items": 560}
+{"idx": 1, "id": "gsm8k-test-wrong", "group": "wrong", "gold_answer": "", "predicted_answer": "", "correct": false, "n_items": 759}

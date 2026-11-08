@@ -1,0 +1,110 @@
+{
+  "run_id": "20261108-061510_codi_gsm8k-released-attention-flow",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3 (released GSM8K CODI, local HF cache), fp32 MPS batch 1",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.425,
+    "unparseable_rate": null,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "share of test items answered right (grouping only); rows are aggregates",
+      "norm_share_nonsink": {
+        "right": {
+          "n": 560,
+          "earlier_latents": [
+            0.0,
+            0.083,
+            0.26,
+            0.197,
+            0.363,
+            0.264
+          ],
+          "even_prev": [
+            0.0,
+            0.083,
+            0.054,
+            0.125,
+            0.097,
+            0.146
+          ],
+          "odd_prev": [
+            0.0,
+            0.0,
+            0.206,
+            0.072,
+            0.266,
+            0.118
+          ],
+          "question": [
+            0.899,
+            0.812,
+            0.647,
+            0.722,
+            0.56,
+            0.676
+          ]
+        },
+        "wrong": {
+          "n": 759,
+          "earlier_latents": [
+            0.0,
+            0.065,
+            0.237,
+            0.178,
+            0.33,
+            0.238
+          ],
+          "even_prev": [
+            0.0,
+            0.065,
+            0.043,
+            0.122,
+            0.073,
+            0.141
+          ],
+          "odd_prev": [
+            0.0,
+            0.0,
+            0.194,
+            0.055,
+            0.256,
+            0.097
+          ],
+          "question": [
+            0.915,
+            0.848,
+            0.682,
+            0.747,
+            0.598,
+            0.71
+          ]
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/t13_gsm8k_attn_flow.py",
+    "measures": "as t9: raw attention and Kobayashi norm, sets question / earlier even / earlier odd / self / sink",
+    "dtype": "float32"
+  },
+  "seed": 11,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Released GSM8K CODI: where each latent iteration reads from (t9 measures, the GSM8K row).",
+  "timestamp_utc": "2026-11-08T06:15:10.024878+00:00",
+  "git": {
+    "commit": "ce91b1c",
+    "dirty": true
+  }
+}

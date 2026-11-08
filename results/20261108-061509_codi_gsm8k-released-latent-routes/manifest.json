@@ -1,0 +1,74 @@
+{
+  "run_id": "20261108-061509_codi_gsm8k-released-latent-routes",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3 (released GSM8K CODI, local HF cache), fp32 MPS batch 1",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 317,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.425,
+    "unparseable_rate": null,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "full test (1319) clean, this collector",
+      "n_qualified": 314,
+      "full_test": {
+        "clean": 0.4245640636846095,
+        "nb": 0.30022744503411675
+      },
+      "follows_twin": {
+        "all": 0.847,
+        "single_0": 0.201,
+        "single_2": 0.21,
+        "single_4": 0.363,
+        "even_02": 0.545,
+        "even_04": 0.65,
+        "even_24": 0.736,
+        "even_all": 0.847,
+        "prefix_2": 0.541
+      },
+      "follows_twin_noback": {
+        "all": 0.615,
+        "single_0": 0.041,
+        "single_2": 0.121,
+        "single_4": 0.153,
+        "even_02": 0.354,
+        "even_04": 0.357,
+        "even_24": 0.427,
+        "even_all": 0.573,
+        "prefix_2": 0.35
+      },
+      "recipient_right_noback": 0.567,
+      "record_20260927": {
+        "all": 0.839,
+        "single_0": 0.199,
+        "single_2": 0.202,
+        "single_4": 0.36,
+        "prefix_2": 0.539
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/t11_gsm8k_routes.py",
+    "pairs": "317 aligned minimal pairs of 20260927-004340",
+    "noback": "latent iteration masked from earlier latent iterations; answer sees all",
+    "dtype": "float32"
+  },
+  "seed": 11,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Released GSM8K CODI: site swaps (singles, even pairs, prefix) and the look-back cut, against the RuleChain route results.",
+  "timestamp_utc": "2026-11-08T06:15:09.928267+00:00",
+  "git": {
+    "commit": "ce91b1c",
+    "dirty": true
+  }
+}

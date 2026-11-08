@@ -11365,3 +11365,124 @@ So start-last's extra passes act as repeated estimates, which is width, plus abo
 - noback removes attention to latent positions at every layer of a pass, a coarse cut.
 - The swap targets are model-specific (t1's ks), so "follows" means each model's own trained carrier.
 **Next:** The decisive comparison for "unforced latents = width" is a matched no-recurrence control: the start-last CODI recipe with 6 pause positions whose inputs do not depend on the previous pass (learned constant embeddings). If it matches start-last CODI, the latents' gain is positions, not recurrence. Not run; it needs a training run.
+
+---
+
+## 2026-11-08 — Released GSM8K CODI: single latents move the answer (z4 .36), even sites add up (pairs .55-.74, all three .85 = all six), and cutting attention back to earlier latents costs 12.5 points (.425 to .300), concentrated on longer chains; swaps still partly carry under the cut (codi, run_id: 20261108-061509_codi_gsm8k-released-latent-routes)
+
+**Goal:** Does the RuleChain distinction (start-last CODI pools interchangeable estimates; gated and SIM chain through the recurrent input, `20261108-042557`) hold on a natural task? Released GSM8K CODI, with the swap and look-back tests used on RuleChain.
+**Mechanism / model:** `zen-E/CODI-gpt2` @ fd641b3 (local HF cache), 6 latents, upstream masking. Loaded with the flags of `20260927-004340`, fp32 on MPS, batch 1 (no padding). Generation path of `scripts/decode_patch_codi.py`.
+**Data:** GSM8K-Aug test. The 317 aligned minimal pairs of `20260927-004340`: recipient = test item, twin = the recipient with one number perturbed and the chain re-executed. 314 qualify here (both answered right). Also all 1,319 test items for accuracy.
+**Command:** On the laptop (`run_guarded.sh`, `caffeinate`): `~/Documents/Penn/CIS5980/codi_audit_artifacts/t11_gsm8k_routes.py <ai-capstone> mps <out>` (run from the CODI checkout), record `record18.py`. A 20-pair smoke reproduced the record.
+**Conditions** (sites as the record: z_s feeds iteration s+1; values sit on even sites):
+- swaps on the recipient question: all six latents, single z0 / z2 / z4, pairs of even sites, all even sites, prefix z0..z2 (later latents recomputed);
+- the same with the look-back cut: every latent iteration masked from earlier latent iterations, answer tokens see all;
+- clean and cut accuracy on the full test.
+
+**Headline results:**
+- **Reproduces the September record in fp32.** All .847 (record .839), single z0 / z2 / z4 .201 / .210 / .363 (.199 / .202 / .360), prefix z0..z2 .541 (.539). Full-test accuracy .425 (record .419).
+- **Odd sites carry nothing.** Even sites alone give exactly the all-six result (.847).
+- **Even sites add up, z4 heaviest.** Pairs z0+z2 .545, z0+z4 .650, z2+z4 .736.
+- **Prefix = its even sites.** The prefix z0..z2 (.541) matches z0+z2 alone (.545): recomputed later latents add no twin value. This corrects the earlier reading that "early latents partly carry forward".
+- **Look-back cut: accuracy .425 to .300** on all 1,319 items; recipients stay right .567. Swaps under the cut: all .615, even pairs .35-.43, singles .04-.15.
+- **The cost grows with chain length** (added after the run, on the 242 unique right recipients): kept right .93 / .52 / .22 / .33 at 2 / 3 / 4 / 5 gold steps (n = 120 / 84 / 32 / 6). Start-last CODI's kept-right under the same cut is flat with depth (.70-.77 at L2-L5). Full-test version: t14.
+
+**Predictions (`t_predictions.md`):**
+- *Reproduce within ~.05:* right.
+- *The look-back cut costs little (chain-like):* **wrong**, it costs 12.5 points.
+- *Swaps still propagate under the cut:* partly.
+
+**Interpretation:** GSM8K CODI is not start-last CODI. Its latents are specialised (odd sites empty; even sites carry different weight; single sites move the answer) where start-last's are interchangeable votes. It leans on attention back to earlier latents, increasingly with chain length. But "prefix = its even sites" shows that later latents do not recompute a twin's value from swapped early latents through the recurrence. So the value reaches the answer by being read where it was written. The route-split test (`20261108-061509_..._route-split`) tests that directly.
+**Gotchas hit:** None. The record's bf16/CUDA and this fp32/MPS run differ by at most .01 on every overlapping condition.
+**Caveats:**
+- One released checkpoint, trained differently from our RuleChain models.
+- The look-back cut is an attention mask the model never saw, so off-distribution damage is possible. The odd/even control is in the route-split record.
+- The chain-length split uses a selected subset; t14 redoes it on the full test.
+**Next:** route split and odd/even control (t12), attention shares (t13), full-test depth split (t14).
+
+---
+
+## 2026-11-08 — Released GSM8K CODI stores latent values in attention, not in the recurrence: a twin's value placed only in a latent's keys/values moves the answer as much as a full swap (z4 .35 vs .36), placed only in the recurrent input it does nothing (.007). The first value (z0) reaches the answer mostly through later latents (.17 of .20 with the answer blind to z0); z4 is read directly. Cutting look-back to odd or even sites costs about the same (codi, run_id: 20261108-061509_codi_gsm8k-released-route-split)
+
+**Goal:** Which route carries a GSM8K CODI latent's value: the recurrent input (z_s feeds the next iteration, the vertical route used by gated and SIM on RuleChain, `20261108-042557`) or the latent's own keys and values, read by attention? And is t11's look-back cost about values?
+**Mechanism / model:** `zen-E/CODI-gpt2` @ fd641b3, fp32 MPS, batch 1, as t11.
+**Data:** the 317 aligned pairs of `20260927-004340`. 314 qualify; 307 have twin and recipient questions of equal token length (needed so keys/values line up by position) and are used for the route split. Look-back controls also on all 1,319 test items.
+**Command:** `~/Documents/Penn/CIS5980/codi_audit_artifacts/t12_gsm8k_route_split.py` (CODI venv, `run_guarded.sh`, `caffeinate`), record `record18.py`. Smoke (20 pairs): writing a run's own keys/values back changed no answer.
+**Conditions**, site s = the iteration whose input is z_s; its keys/values sit at position Q + s:
+- both_s: twin's z_s fed in (t11 single_s).
+- input_s: twin's z_s fed in, then that iteration's keys/values reset to the recipient's own. Only the next input z_{s+1} carries the twin's value.
+- kv_s: clean input, that iteration's keys/values set to the twin's. Only attention carries the twin's value.
+- kv_noans_s: kv_s with the answer tokens masked from position Q + s. The twin's value reaches the answer only through later latents.
+- noans_s: clean, answer tokens masked from site s (control).
+- Look-back controls: nb_even (each iteration masked from earlier even sites), nb_odd (earlier odd sites), nb_all (t11's cut).
+
+**Headline results** (n = 307; follows twin):
+
+| Site | both | input only | keys/values only | keys/values, answer blind to the site | answer blind to the site, clean: keeps own |
+|---|---|---|---|---|---|
+| z0 | .199 | .007 | .202 | .169 | .860 |
+| z2 | .215 | .007 | .205 | .068 | .951 |
+| z4 | .358 | .007 | .349 | .010 | .795 |
+
+- **The recurrent input carries nothing.** In every site the full effect of a swap sits in the latent's keys/values; the input it hands to the next iteration carries none of the twin's value. This is the opposite of gated and SIM, where the input carries everything and look-back is unnecessary.
+- **The first value is relayed by later latents, the last is read directly.** With the answer blind to z0, its value still reaches the answer .169 of .202: later latents read it by attention and pass it on. For z2 the share passed on is about a third (.068 of .205); for z4 it is nil (.010), so the answer reads z4 itself.
+- **Look-back controls (all 1,319 test items):** clean .425; nb_even .329, nb_odd .321, nb_all .300. Recipients right: .637 / .672 / .567. Cutting look-back to the punctuation sites costs as much as cutting it to the value sites.
+
+**Predictions (`t_predictions.md`):**
+- *nb_even costs far more than nb_odd:* **wrong**, they cost the same.
+- *kv_noans well above 0 for z0 and z2 (horizontal chain), input_s weaker than in the RuleChain chains:* right for z0, partly for z2. input_s is not weaker but nil.
+- *Vertical-chain alternative (input carries it):* ruled out.
+
+**Interpretation:** GSM8K CODI uses its latents as memory slots. Each even latent writes a value into its keys/values, and later latents and the answer fetch it by attention. The recurrent input does not carry values forward at all. The earliest value is read by later latents and relayed to the answer, a horizontal chain for the first step. The latest value is read by the answer directly. This is a third regime, distinct from start-last's interchangeable estimates (width) and from gated / SIM's recurrence (vertical depth): specialised slots linked by attention.
+
+The odd/even result qualifies t11's look-back cost. Odd sites, which hold no value (t11), still matter to later latents. So the look-back cost is not only about values: either the odd sites' keys/values serve as structure or scratch space, or masks the model never saw do part of the damage. The route split does not depend on that cut: it moves one site's keys/values and keeps every mask intact, so it is the clean evidence.
+**Gotchas hit:** None. Equal-length pairs only for the keys/values patches (307 of 314).
+**Caveats:**
+- One released checkpoint.
+- Patching keys/values at one position replaces all 12 layers' entries for that position.
+- Twin and recipient differ in one number, so their keys/values elsewhere match closely; the patch is minimal.
+- "Relayed by later latents" is measured with the answer blind to the site. Later latents might also read the twin's value from the question rather than from z0, but the question is the recipient's, so the value can only come from the patched site.
+**Next:** attention shares (t13) and the full-test depth split (t14). Then place GSM8K in the regime table: specialised slots read by attention.
+
+---
+
+## 2026-11-08 — Attention shares do not separate GSM8K CODI from start-last CODI: GSM8K latents put .08-.36 of their attention output on earlier latents (start-last .09-.27), with value sites reading mostly the punctuation sites before them. The regimes differ in what the attended entries carry (route split), not in how much attention flows (codi, run_id: 20261108-061510_codi_gsm8k-released-attention-flow)
+
+**Goal:** The missing GSM8K row of the attention-flow comparison (`20261108-040037_..._latent-attention-flow`). Is GSM8K CODI's look-back visibly different from start-last CODI's, enough to tell a horizontal chain from width by attention alone?
+**Mechanism / model:** `zen-E/CODI-gpt2` @ fd641b3, fp32 MPS, batch 1, as t11 / t12.
+**Data:** all 1,319 GSM8K-Aug test items (560 answered right, 759 wrong).
+**Command:** `~/Documents/Penn/CIS5980/codi_audit_artifacts/t13_gsm8k_attn_flow.py` (CODI venv, `run_guarded.sh`, `caffeinate`), record `record18.py`; 20-item smoke first.
+**Measures:** t9's measures for the query of latent iteration s (input z_s), every layer:
+- raw attention;
+- norm share ||sum_h a v W_O|| (W_O from c_proj, LoRA included).
+
+Key sets: question (sink excluded), earlier even sites, earlier odd sites, self, sink. Shares non-sink, mean over layers. The sink takes .45-.49 of raw attention.
+
+**Headline results** (items answered right; wrong items within .04):
+
+| Site | 0 | 1 | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|---|---|
+| question | .90 | .81 | .65 | .72 | .56 | .68 |
+| earlier latents | .00 | .08 | .26 | .20 | .36 | .26 |
+| of which even (value) sites | .00 | .08 | .05 | .12 | .10 | .15 |
+| of which odd (punctuation) sites | .00 | .00 | .21 | .07 | .27 | .12 |
+
+- **About as much look-back as start-last.** Earlier latents get .08-.36 here and .09-.27 in start-last CODI (L3-L5), with the same rise across passes. Raw attention agrees (GSM8K .09-.41).
+- **Alternating, not uniform.** Value sites z2 and z4 look back more (.26, .36) than the punctuation sites after them (.20, .26), and they read mostly the punctuation site just before them: z4's look-back is .48 at distance 1 (z3).
+- **Right and wrong items look the same** (within .04).
+
+**Predictions (`t_predictions.md`):**
+- *More look-back than start-last:* only slightly, and only at z4.
+- *Concentrated on even (value) sites:* **wrong**. Most of it goes to odd sites.
+
+**Interpretation:** On attention shares alone, GSM8K CODI and start-last CODI cannot be told apart: both spend a quarter to a third of a late latent's attention on earlier latents. What separates them is what those entries carry, and that comes from interventions:
+- In GSM8K CODI a single site's keys/values move the answer, and the first value is relayed by later latents (`20261108-061509_..._route-split`).
+- In start-last CODI single sites never move the answer and the passes act as interchangeable votes (`20261108-032531`).
+
+The heavy attention to odd sites fits the odd/even look-back control (cutting odd sites costs as much as cutting even ones). Odd sites hold no answer-relevant value, but later latents use them, perhaps as structure. This is not tested further here.
+**Gotchas hit:** None.
+**Caveats:**
+- Descriptive. Shares mix every layer and head.
+- One released checkpoint.
+- The norm measure ignores MLPs and later layers.
+**Next:** full-test depth split (t14). Then the regime table across both tasks.

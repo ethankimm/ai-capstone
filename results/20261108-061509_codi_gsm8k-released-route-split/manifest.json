@@ -1,0 +1,76 @@
+{
+  "run_id": "20261108-061509_codi_gsm8k-released-route-split",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:zen-E/CODI-gpt2@fd641b3 (released GSM8K CODI, local HF cache), fp32 MPS batch 1",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 317,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": null,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "pairs; full-test accuracy under partial look-back cuts in full_test_acc",
+      "n_qualified": 314,
+      "n_same_length": 307,
+      "full_test_acc": {
+        "nb_even": 0.3290371493555724,
+        "nb_odd": 0.3206974981046247
+      },
+      "recipients_right": {
+        "nb_all": 0.567,
+        "nb_even": 0.637,
+        "nb_odd": 0.672
+      },
+      "route_split": {
+        "0": {
+          "both": 0.199,
+          "input": 0.007,
+          "kv": 0.202,
+          "kv_noans": 0.169
+        },
+        "2": {
+          "both": 0.215,
+          "input": 0.007,
+          "kv": 0.205,
+          "kv_noans": 0.068
+        },
+        "4": {
+          "both": 0.358,
+          "input": 0.007,
+          "kv": 0.349,
+          "kv_noans": 0.01
+        }
+      },
+      "noans_keeps_recipient": {
+        "0": 0.86,
+        "2": 0.951,
+        "4": 0.795
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/t12_gsm8k_route_split.py",
+    "input_s": "twin z_s fed, that iteration keys/values reset to the recipient own",
+    "kv_s": "recipient z_s fed, keys/values from the twin",
+    "kv_noans_s": "kv_s plus answer tokens masked from site s",
+    "dtype": "float32"
+  },
+  "seed": 11,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Released GSM8K CODI: does a latent value travel through the recurrent input or through its keys/values (attention)?",
+  "timestamp_utc": "2026-11-08T06:15:09.979055+00:00",
+  "git": {
+    "commit": "ce91b1c",
+    "dirty": true
+  }
+}
