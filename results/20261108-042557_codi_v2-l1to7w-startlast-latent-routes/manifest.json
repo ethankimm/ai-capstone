@@ -1,0 +1,419 @@
+{
+  "run_id": "20261108-042557_codi_v2-l1to7w-startlast-latent-routes",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "start-last CODI (20261106-083843); gated (20261107-204814), gate on; SIM-CODI (20261107-225603)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "validation",
+    "n_examples": 3432,
+    "seed": 20
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.832,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "clean exact pooled over three models x valid L2-L5 (not comparable to single-model records)",
+      "by_model": {
+        "startlast": {
+          "2": {
+            "clean": 0.997,
+            "noback_acc": 0.699,
+            "noback_kept_right": 0.698,
+            "swaps": {
+              "swap_1": {
+                "ks": 1,
+                "n": 285,
+                "follows": 0.0,
+                "keeps": 1.0
+              },
+              "noback_swap_1": {
+                "ks": 1,
+                "n": 285,
+                "follows": 0.025,
+                "keeps": 0.491
+              },
+              "swap_2": {
+                "ks": 1,
+                "n": 285,
+                "follows": 0.0,
+                "keeps": 1.0
+              },
+              "noback_swap_2": {
+                "ks": 1,
+                "n": 285,
+                "follows": 0.014,
+                "keeps": 0.604
+              }
+            }
+          },
+          "3": {
+            "clean": 0.521,
+            "noback_acc": 0.455,
+            "noback_kept_right": 0.738,
+            "swaps": {
+              "swap_1": {
+                "ks": 2,
+                "n": 149,
+                "follows": 0.007,
+                "keeps": 0.711
+              },
+              "noback_swap_1": {
+                "ks": 2,
+                "n": 149,
+                "follows": 0.0,
+                "keeps": 0.503
+              },
+              "swap_2": {
+                "ks": 2,
+                "n": 149,
+                "follows": 0.007,
+                "keeps": 0.584
+              },
+              "noback_swap_2": {
+                "ks": 2,
+                "n": 149,
+                "follows": 0.034,
+                "keeps": 0.456
+              }
+            }
+          },
+          "4": {
+            "clean": 0.329,
+            "noback_acc": 0.297,
+            "noback_kept_right": 0.766,
+            "swaps": {
+              "swap_1": {
+                "ks": 3,
+                "n": 94,
+                "follows": 0.032,
+                "keeps": 0.649
+              },
+              "noback_swap_1": {
+                "ks": 3,
+                "n": 94,
+                "follows": 0.011,
+                "keeps": 0.574
+              },
+              "swap_2": {
+                "ks": 3,
+                "n": 94,
+                "follows": 0.043,
+                "keeps": 0.564
+              },
+              "noback_swap_2": {
+                "ks": 3,
+                "n": 94,
+                "follows": 0.032,
+                "keeps": 0.511
+              }
+            }
+          },
+          "5": {
+            "clean": 0.136,
+            "noback_acc": 0.126,
+            "noback_kept_right": 0.769,
+            "swaps": {
+              "swap_1": {
+                "ks": 4,
+                "n": 39,
+                "follows": 0.077,
+                "keeps": 0.59
+              },
+              "noback_swap_1": {
+                "ks": 4,
+                "n": 39,
+                "follows": 0.026,
+                "keeps": 0.59
+              },
+              "swap_2": {
+                "ks": 4,
+                "n": 39,
+                "follows": 0.026,
+                "keeps": 0.744
+              },
+              "noback_swap_2": {
+                "ks": 4,
+                "n": 39,
+                "follows": 0.026,
+                "keeps": 0.59
+              }
+            }
+          }
+        },
+        "gated": {
+          "2": {
+            "clean": 0.997,
+            "noback_acc": 0.997,
+            "noback_kept_right": 1.0,
+            "swaps": {
+              "swap_1": {
+                "ks": 1,
+                "n": 285,
+                "follows": 0.996,
+                "keeps": 0.004
+              },
+              "noback_swap_1": {
+                "ks": 1,
+                "n": 285,
+                "follows": 0.996,
+                "keeps": 0.004
+              },
+              "swap_2": {
+                "ks": 1,
+                "n": 285,
+                "follows": 0.0,
+                "keeps": 1.0
+              },
+              "noback_swap_2": {
+                "ks": 1,
+                "n": 285,
+                "follows": 0.0,
+                "keeps": 1.0
+              }
+            }
+          },
+          "3": {
+            "clean": 1.0,
+            "noback_acc": 1.0,
+            "noback_kept_right": 1.0,
+            "swaps": {
+              "swap_1": {
+                "ks": 1,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_1": {
+                "ks": 1,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "swap_2": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_2": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              }
+            }
+          },
+          "4": {
+            "clean": 1.0,
+            "noback_acc": 1.0,
+            "noback_kept_right": 1.0,
+            "swaps": {
+              "swap_1": {
+                "ks": 1,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_1": {
+                "ks": 1,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "swap_2": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_2": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              }
+            }
+          },
+          "5": {
+            "clean": 1.0,
+            "noback_acc": 0.997,
+            "noback_kept_right": 0.997,
+            "swaps": {
+              "swap_1": {
+                "ks": 1,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_1": {
+                "ks": 1,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "swap_2": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_2": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              }
+            }
+          }
+        },
+        "sim": {
+          "2": {
+            "clean": 1.0,
+            "noback_acc": 1.0,
+            "noback_kept_right": 1.0,
+            "swaps": {
+              "swap_1": {
+                "ks": 1,
+                "n": 286,
+                "follows": 0.993,
+                "keeps": 0.0
+              },
+              "noback_swap_1": {
+                "ks": 1,
+                "n": 286,
+                "follows": 0.993,
+                "keeps": 0.0
+              },
+              "swap_2": {
+                "ks": 1,
+                "n": 286,
+                "follows": 0.0,
+                "keeps": 1.0
+              },
+              "noback_swap_2": {
+                "ks": 1,
+                "n": 286,
+                "follows": 0.0,
+                "keeps": 1.0
+              }
+            }
+          },
+          "3": {
+            "clean": 1.0,
+            "noback_acc": 1.0,
+            "noback_kept_right": 1.0,
+            "swaps": {
+              "swap_1": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_1": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "swap_2": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_2": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              }
+            }
+          },
+          "4": {
+            "clean": 1.0,
+            "noback_acc": 1.0,
+            "noback_kept_right": 1.0,
+            "swaps": {
+              "swap_1": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_1": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "swap_2": {
+                "ks": 3,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_2": {
+                "ks": 3,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              }
+            }
+          },
+          "5": {
+            "clean": 1.0,
+            "noback_acc": 1.0,
+            "noback_kept_right": 1.0,
+            "swaps": {
+              "swap_1": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_1": {
+                "ks": 2,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "swap_2": {
+                "ks": 3,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              },
+              "noback_swap_2": {
+                "ks": 3,
+                "n": 286,
+                "follows": 1.0,
+                "keeps": 0.0
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/t10_routes.py (copy of t1_single_use.py; MODEL=startlast|gated|sim)",
+    "noback": "latent pass s >= 1 masked from earlier latent passes, that pass only; answer sees all",
+    "donors": "t1: same level, seeded Random(1000 L + j), differs at v_ks, predicted answer in 0..99 and != gold; recipients right",
+    "dtype": "float32"
+  },
+  "seed": 20,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Which route carries the value between latent passes: recurrent input or look-back attention?",
+  "timestamp_utc": "2026-11-08T04:25:57.335579+00:00",
+  "git": {
+    "commit": "159dff4",
+    "dirty": true
+  }
+}
