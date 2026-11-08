@@ -530,3 +530,56 @@ Selection and test as section 10.3. "Ignores latents" means mean-ablated accurac
 | Trace used, steps, gain over start-last CODI | Forced rollout adds real depth | Start-first, then a step-supervision control with no latents, since the step loss could also improve the ordinary pass |
 
 One seed, as section 10.4: a gain under about 0.05 is not interpretable without a second.
+
+## 14. Amendment (2026-11-07): SIM-CODI with the start value first
+
+**Question.** Section 13 showed that with the start value last, SIM-CODI's trace is readable and used one step per pass. With the start value first, prefill can
+run the chain, and stabilised CODI ignores its latents there (all six mean-ablated .689 to .671, `20261105-052233`). Does the step loss pull the computation into
+the latents, or is the trace readable but ignored: a legible latent trace the answer does not depend on? `PAPER_DIRECTION_2026-11-07.md` has the reasoning.
+
+### 14.1 Change
+
+- **Same as section 13.1 except the data:** `synthetic_data_v2_l1to7w`, the start value first, as in the section 10 pair, so start-first CODI (`20261105-044444`)
+  and CODI-0 (`20261105-024111`) are the references and no new reference is trained.
+- **Same patch and settings:** step decoder patch, fp32 decoder, decoder lr 1e-4, step-loss weight 1.0, 12 epochs, seed 11, smoke gate, watchdog `GRAD_MAX` 500.
+- **Not bit-matched,** as in 13.3: LoRA, `prj` and the new token rows are built before `set_seed`, and the dropout stream diverges; data order matches.
+- Launch: `ARM_NAME=gpt2_l1to7w_sim ARM_SLUG=v2-l1to7w-sim-depth2 ARM_EXTRA="--step_decoder True" ARM_SMOKE=1`, codi arm only, launcher defaults for the data and
+  hash registry. Estimate: about 12.4 pod-hours, $7.20 at $0.59/h.
+
+### 14.2 Checks at launch
+
+As 13.2, plus `scripts/check_step_decoder.py` on `synthetic_data_v2_l1to7w/depth2/train.json`. At this commit: parser equals `steps[:-1]` on all 190,000
+items (at most 6 steps); step loss finite (8.42), one entry per latent; step-loss gradients reach the decoder, `prj` and LoRA; one step touches z_0 only, two
+steps z_0 and z_1. The answer-path check (logits identical with the decoder on and off) is code-only and was still running on CPU; its result is appended
+below when it finishes, and a failure stops the run.
+
+### 14.3 Analysis, fixed before training
+
+Selection and test as section 10.3.
+
+- **Primary:** pooled **L5-L7** paired gain, SIM-CODI minus start-first CODI (`20261105-044444`), exact McNemar, n = 1500. **Gain:** at least .05 and p < .05.
+  **Null:** 95% CI inside +-.05. These are the levels past CODI-0's reach (d50 4.86), the same primary as section 10. L2-L4 sit inside the single-pass reach,
+  where prefill already solves .72-.99.
+- **Definitions,** on valid, pooled over the trained latents z_1..z_{L-2}; swaps on L3-L7, probes on L3-L6:
+  - *Readable:* the frozen linear probe for v_k at z_{k-1} (the `s2` headline cell) is at least .50 and at least .30 above the shuffled-label probe. Start-last
+    scored .78-.86.
+  - *Used:* a single-latent swap makes the answer follow the donor at least .50 of the time. *Ignored:* at most .05, with all-six mean ablation within .05 of
+    clean. In between: partly used.
+  - *Steps:* at L4-L6, accuracy with L-2 passes is at least .20 below accuracy with L-1 passes (`s3`). On start-last it dropped from .97 to chance.
+- **Secondaries:** pooled L2-L7 gain (the section 13 primary, for a parallel with start-last); per level L1-L7, Holm; the same gains against CODI-0; every
+  measure split by depth relative to reach (L1-L4 and L5-L7); own errors (the probe's decoded value plus the remaining rules against the model's wrong answers,
+  compared with the gold-path rate); the z_0 swap; out-of-range rule subsets on canonical L8.
+- **Matched comparison:** `s1` and `s2` are also run on start-first CODI (`codi_runs_l1to7w_stab/codi/run/checkpoint-17820`); `20261105-052233` and
+  `20261105-053042` used other scripts and are context only.
+
+| Outcome | Reading | Next |
+|---|---|---|
+| Does not train: crash, or explain loss above 1.0 after epoch 1 | Port or format problem; start-last stands alone | Report |
+| Readable, ignored | A legible trace the answer does not depend on; prefill does the work. The latent analogue of unfaithful CoT, aimed at SIM-CoT's per-step diagnosis | Report as the central contrast; own-errors test |
+| Readable, used only at L5-L7 | The bypass decides by depth: latents are used only where prefill cannot reach | Report by level |
+| Readable, used, no steps | Relay: latents carry values prefill computed; faithful as carriers, not as the computation | Position tests (`b13_resolution`, `a25_position`) to locate where values are computed |
+| Readable, used, steps, gain | The step loss overrides the bypass and adds depth, as on start-last | Step-supervision control with no latents |
+| Readable, used, steps, no gain | Latents do the serial work but add nothing over CODI's prefill | Report |
+| Not readable | Unexpected for a model trained to decode its latents | Check the decoder loss by latent; report |
+
+One seed, as section 10.4: a gain under about .05 cannot be read without a second.
