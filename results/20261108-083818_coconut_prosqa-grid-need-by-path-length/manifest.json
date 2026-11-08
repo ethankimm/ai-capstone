@@ -1,0 +1,296 @@
+{
+  "run_id": "20261108-083818_coconut_prosqa-grid-need-by-path-length",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "codi: hf:connordilgren/gpt2-prosqa-codi; coconut: hf:connordilgren/gpt2-prosqa-coconut; no_cot: hf:connordilgren/gpt2-prosqa-no-cot; cot: hf:connordilgren/gpt2-prosqa-cot",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "prosqa",
+    "split": "test",
+    "n_examples": 500,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.98,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "early_termination_necessity": 0.0,
+    "extra": {
+      "by_method": {
+        "codi": {
+          "6": {
+            "acc": 0.816,
+            "unparseable": 0.0,
+            "by_steps": {
+              "3": {
+                "n": 202,
+                "acc": 0.772
+              },
+              "4": {
+                "n": 217,
+                "acc": 0.853
+              },
+              "5": {
+                "n": 69,
+                "acc": 0.841
+              },
+              "6": {
+                "n": 12,
+                "acc": 0.75
+              }
+            }
+          },
+          "0": {
+            "acc": 0.82,
+            "unparseable": 0.0,
+            "by_steps": {
+              "3": {
+                "n": 202,
+                "acc": 0.772
+              },
+              "4": {
+                "n": 217,
+                "acc": 0.862
+              },
+              "5": {
+                "n": 69,
+                "acc": 0.826
+              },
+              "6": {
+                "n": 12,
+                "acc": 0.833
+              }
+            }
+          }
+        },
+        "coconut": {
+          "0": {
+            "acc": 0.98,
+            "unparseable": 0.0,
+            "by_steps": {
+              "3": {
+                "n": 202,
+                "acc": 0.97
+              },
+              "4": {
+                "n": 217,
+                "acc": 0.991
+              },
+              "5": {
+                "n": 69,
+                "acc": 0.971
+              },
+              "6": {
+                "n": 12,
+                "acc": 1.0
+              }
+            }
+          },
+          "1": {
+            "acc": 0.98,
+            "unparseable": 0.0,
+            "by_steps": {
+              "3": {
+                "n": 202,
+                "acc": 0.97
+              },
+              "4": {
+                "n": 217,
+                "acc": 0.991
+              },
+              "5": {
+                "n": 69,
+                "acc": 0.971
+              },
+              "6": {
+                "n": 12,
+                "acc": 1.0
+              }
+            }
+          },
+          "2": {
+            "acc": 0.98,
+            "unparseable": 0.0,
+            "by_steps": {
+              "3": {
+                "n": 202,
+                "acc": 0.97
+              },
+              "4": {
+                "n": 217,
+                "acc": 0.991
+              },
+              "5": {
+                "n": 69,
+                "acc": 0.971
+              },
+              "6": {
+                "n": 12,
+                "acc": 1.0
+              }
+            }
+          },
+          "3": {
+            "acc": 0.98,
+            "unparseable": 0.0,
+            "by_steps": {
+              "3": {
+                "n": 202,
+                "acc": 0.97
+              },
+              "4": {
+                "n": 217,
+                "acc": 0.991
+              },
+              "5": {
+                "n": 69,
+                "acc": 0.971
+              },
+              "6": {
+                "n": 12,
+                "acc": 1.0
+              }
+            }
+          },
+          "4": {
+            "acc": 0.98,
+            "unparseable": 0.0,
+            "by_steps": {
+              "3": {
+                "n": 202,
+                "acc": 0.97
+              },
+              "4": {
+                "n": 217,
+                "acc": 0.991
+              },
+              "5": {
+                "n": 69,
+                "acc": 0.971
+              },
+              "6": {
+                "n": 12,
+                "acc": 1.0
+              }
+            }
+          },
+          "5": {
+            "acc": 0.98,
+            "unparseable": 0.0,
+            "by_steps": {
+              "3": {
+                "n": 202,
+                "acc": 0.97
+              },
+              "4": {
+                "n": 217,
+                "acc": 0.991
+              },
+              "5": {
+                "n": 69,
+                "acc": 0.971
+              },
+              "6": {
+                "n": 12,
+                "acc": 1.0
+              }
+            }
+          },
+          "6": {
+            "acc": 0.98,
+            "unparseable": 0.0,
+            "by_steps": {
+              "3": {
+                "n": 202,
+                "acc": 0.97
+              },
+              "4": {
+                "n": 217,
+                "acc": 0.991
+              },
+              "5": {
+                "n": 69,
+                "acc": 0.971
+              },
+              "6": {
+                "n": 12,
+                "acc": 1.0
+              }
+            }
+          }
+        },
+        "no_cot": {
+          "plain": {
+            "acc": 0.76,
+            "unparseable": 0.0,
+            "by_steps": {
+              "3": {
+                "n": 202,
+                "acc": 0.752
+              },
+              "4": {
+                "n": 217,
+                "acc": 0.774
+              },
+              "5": {
+                "n": 69,
+                "acc": 0.71
+              },
+              "6": {
+                "n": 12,
+                "acc": 0.917
+              }
+            }
+          }
+        },
+        "cot": {
+          "plain": {
+            "acc": 0.742,
+            "unparseable": 0.002,
+            "by_steps": {
+              "3": {
+                "n": 202,
+                "acc": 0.812
+              },
+              "4": {
+                "n": 217,
+                "acc": 0.728
+              },
+              "5": {
+                "n": 69,
+                "acc": 0.58
+              },
+              "6": {
+                "n": 12,
+                "acc": 0.75
+              }
+            }
+          }
+        }
+      },
+      "need_definition": "6-latent accuracy minus the same model at 0 latents, per gold step count",
+      "accuracy_kind": "coconut at 6 latents; other methods under extra.by_method"
+    }
+  },
+  "hyperparams": {
+    "script": "scripts/necessity/grid_accuracy.py",
+    "batch_size": 1,
+    "dtype": "float32",
+    "greedy": true,
+    "device": "mps",
+    "zero_latents": "CODI: question + <bot> + <eot>; Coconut: question, <start-latent>, k passes, <end-latent> (k = 0..6)",
+    "answer": "CODI: text after \"The answer is:\"; Coconut / CoT / no-CoT: text after \"###\"; exact match after lower-casing"
+  },
+  "seed": null,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Need test on prosqa: do latent passes add accuracy, and does the gain grow with path length?",
+  "timestamp_utc": "2026-11-08T08:38:18.272574+00:00",
+  "git": {
+    "commit": "2e21ff1",
+    "dirty": true
+  }
+}

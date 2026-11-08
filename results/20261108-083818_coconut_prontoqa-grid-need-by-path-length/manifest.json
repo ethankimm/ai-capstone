@@ -1,0 +1,164 @@
+{
+  "run_id": "20261108-083818_coconut_prontoqa-grid-need-by-path-length",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "codi: hf:connordilgren/gpt2-prontoqa-codi; coconut: hf:connordilgren/gpt2-prontoqa-coconut; no_cot: hf:connordilgren/gpt2-prontoqa-no-cot; cot: hf:connordilgren/gpt2-prontoqa-cot",
+    "n_params": 124442112
+  },
+  "dataset": {
+    "name": "prontoqa",
+    "split": "test",
+    "n_examples": 800,
+    "seed": null
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.99,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "early_termination_necessity": -0.001,
+    "extra": {
+      "by_method": {
+        "codi": {
+          "6": {
+            "acc": 0.953,
+            "unparseable": 0.0,
+            "by_steps": {
+              "6": {
+                "n": 800,
+                "acc": 0.953
+              }
+            }
+          },
+          "0": {
+            "acc": 0.946,
+            "unparseable": 0.0,
+            "by_steps": {
+              "6": {
+                "n": 800,
+                "acc": 0.946
+              }
+            }
+          }
+        },
+        "coconut": {
+          "0": {
+            "acc": 0.991,
+            "unparseable": 0.0,
+            "by_steps": {
+              "6": {
+                "n": 800,
+                "acc": 0.991
+              }
+            }
+          },
+          "1": {
+            "acc": 0.991,
+            "unparseable": 0.0,
+            "by_steps": {
+              "6": {
+                "n": 800,
+                "acc": 0.991
+              }
+            }
+          },
+          "2": {
+            "acc": 0.991,
+            "unparseable": 0.0,
+            "by_steps": {
+              "6": {
+                "n": 800,
+                "acc": 0.991
+              }
+            }
+          },
+          "3": {
+            "acc": 0.991,
+            "unparseable": 0.0,
+            "by_steps": {
+              "6": {
+                "n": 800,
+                "acc": 0.991
+              }
+            }
+          },
+          "4": {
+            "acc": 0.991,
+            "unparseable": 0.0,
+            "by_steps": {
+              "6": {
+                "n": 800,
+                "acc": 0.991
+              }
+            }
+          },
+          "5": {
+            "acc": 0.99,
+            "unparseable": 0.0,
+            "by_steps": {
+              "6": {
+                "n": 800,
+                "acc": 0.99
+              }
+            }
+          },
+          "6": {
+            "acc": 0.99,
+            "unparseable": 0.0,
+            "by_steps": {
+              "6": {
+                "n": 800,
+                "acc": 0.99
+              }
+            }
+          }
+        },
+        "no_cot": {
+          "plain": {
+            "acc": 0.879,
+            "unparseable": 0.0,
+            "by_steps": {
+              "6": {
+                "n": 800,
+                "acc": 0.879
+              }
+            }
+          }
+        },
+        "cot": {
+          "plain": {
+            "acc": 0.993,
+            "unparseable": 0.0,
+            "by_steps": {
+              "6": {
+                "n": 800,
+                "acc": 0.993
+              }
+            }
+          }
+        }
+      },
+      "need_definition": "6-latent accuracy minus the same model at 0 latents, per gold step count",
+      "accuracy_kind": "coconut at 6 latents; other methods under extra.by_method"
+    }
+  },
+  "hyperparams": {
+    "script": "scripts/necessity/grid_accuracy.py",
+    "batch_size": 1,
+    "dtype": "float32",
+    "greedy": true,
+    "device": "mps",
+    "zero_latents": "CODI: question + <bot> + <eot>; Coconut: question, <start-latent>, k passes, <end-latent> (k = 0..6)",
+    "answer": "CODI: text after \"The answer is:\"; Coconut / CoT / no-CoT: text after \"###\"; exact match after lower-casing"
+  },
+  "seed": null,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Need test on prontoqa: do latent passes add accuracy, and does the gain grow with path length?",
+  "timestamp_utc": "2026-11-08T08:38:18.365122+00:00",
+  "git": {
+    "commit": "2e21ff1",
+    "dirty": true
+  }
+}

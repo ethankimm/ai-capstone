@@ -253,3 +253,6 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261108-061510_codi_gsm8k-released-attention-flow](20261108-061510_codi_gsm8k-released-attention-flow/) | codi | gpt2 | test (n=1319) | 6 | 0.425 | 11 | full_run | Henning Lindig |
 | [20261108-063258_codi_gsm8k-released-lookback-by-depth](20261108-063258_codi_gsm8k-released-lookback-by-depth/) | codi | gpt2 | test (n=1319) | 6 | 0.425 | 11 | full_run | Henning Lindig |
 | [20261108-073431_codi_v2-l1to7w-route-split-five-models](20261108-073431_codi_v2-l1to7w-route-split-five-models/) | codi | gpt2 | validation (n=4290) | 6 | 0.787 | 20 | full_run | Henning Lindig |
+| [20261108-083818_coconut_prosqa-grid-need-by-path-length](20261108-083818_coconut_prosqa-grid-need-by-path-length/) | coconut | gpt2 | test (n=500) | 6 | 0.980 | None | full_run | Henning Lindig |
+| [20261108-083818_coconut_prontoqa-grid-need-by-path-length](20261108-083818_coconut_prontoqa-grid-need-by-path-length/) | coconut | gpt2 | test (n=800) | 6 | 0.990 | None | full_run | Henning Lindig |
+| [20261108-083818_coconut_gsm8k-grid-need-by-path-length](20261108-083818_coconut_gsm8k-grid-need-by-path-length/) | coconut | gpt2 | test (n=1319) | 6 | 0.331 | None | full_run | Henning Lindig |
