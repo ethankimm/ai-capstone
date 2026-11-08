@@ -63,7 +63,7 @@ gated / sim: input_j ~ both_j ~ 1 for used sites j < L-1; kv_j ~ 0 except the si
 kv ~ both and kv_noans ~ 0 (answer reads it directly). startlast: single sites ~0 on every route; both_all ~ .9, kv_all ~ .9 (the answer reads
 the pooled keys/values). relay: single ~0; both_all high; kv_all high. stab: everything ~0 (ignores latents).
 
-## t16 grid need test and t17 grid route split, 2026-11-08 00:05 PST, before any t16/t17 full output (scripts/necessity/)
+## t16 grid need test and t17 grid route split, 2026-11-07 23:43 PST (commit 3574431 first said 00:05 in error), before any t16/t17 full output (scripts/necessity/)
 Seen before writing: 8-item ProsQA smoke of each loader (CODI 6 lat 5/8, 0 lat 6/8; Coconut 8/8 at every k = 0..6; no-CoT 6/8; CoT 8/8).
 Known: ProsQA CODI .816, 0 latents .820, latents one constant vector (20261103-021023); Oct whole-chain random swaps change 0% of
 answers for grid Coconut and CODI on ProsQA / ProntoQA; GSM8K Coconut latents load-bearing (random swap), twin swap reads content.
