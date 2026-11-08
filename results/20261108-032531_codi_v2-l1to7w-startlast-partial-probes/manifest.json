@@ -1,0 +1,516 @@
+{
+  "run_id": "20261108-032531_codi_v2-l1to7w-startlast-partial-probes",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "start-last CODI checkpoint-17820 (20261106-083843) and start-last CODI-0 checkpoint-17820 (20261106-052644)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "validation",
+    "n_examples": 858,
+    "seed": 20
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.329,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "start-last CODI exact on valid L3-L5 (this collector)",
+      "best_over_sites_and_layers": {
+        "codi": {
+          "3": {
+            "right": 149,
+            "n": 286,
+            "v_before_last": {
+              "latents": {
+                "exact": {
+                  "all": 0.497,
+                  "right": 0.651,
+                  "shuf": 0.031
+                },
+                "tens": {
+                  "all": 0.916,
+                  "right": 0.98,
+                  "shuf": 0.217
+                },
+                "ones": {
+                  "all": 0.517,
+                  "right": 0.658,
+                  "shuf": 0.133
+                },
+                "par": {
+                  "all": 0.885,
+                  "right": 0.933,
+                  "shuf": 0.531
+                },
+                "val": {
+                  "all": 0.853,
+                  "right": 0.953,
+                  "shuf": 0.108
+                }
+              },
+              "tail": {
+                "exact": {
+                  "all": 0.189,
+                  "right": 0.255,
+                  "shuf": 0.028
+                },
+                "tens": {
+                  "all": 0.72,
+                  "right": 0.752,
+                  "shuf": 0.241
+                },
+                "ones": {
+                  "all": 0.252,
+                  "right": 0.275,
+                  "shuf": 0.133
+                },
+                "par": {
+                  "all": 0.871,
+                  "right": 0.919,
+                  "shuf": 0.531
+                },
+                "val": {
+                  "all": 0.521,
+                  "right": 0.617,
+                  "shuf": 0.108
+                }
+              },
+              "colon": {
+                "exact": {
+                  "all": 0.329,
+                  "right": 0.436,
+                  "shuf": 0.031
+                },
+                "tens": {
+                  "all": 0.902,
+                  "right": 0.953,
+                  "shuf": 0.21
+                },
+                "ones": {
+                  "all": 0.346,
+                  "right": 0.456,
+                  "shuf": 0.136
+                },
+                "par": {
+                  "all": 0.885,
+                  "right": 0.919,
+                  "shuf": 0.531
+                },
+                "val": {
+                  "all": 0.759,
+                  "right": 0.859,
+                  "shuf": 0.108
+                }
+              }
+            },
+            "majority": {
+              "v2_tens": 0.213,
+              "v2_ones": 0.136,
+              "v2_par": 0.531
+            }
+          },
+          "4": {
+            "right": 94,
+            "n": 286,
+            "v_before_last": {
+              "latents": {
+                "exact": {
+                  "all": 0.266,
+                  "right": 0.351,
+                  "shuf": 0.038
+                },
+                "tens": {
+                  "all": 0.773,
+                  "right": 0.947,
+                  "shuf": 0.234
+                },
+                "ones": {
+                  "all": 0.297,
+                  "right": 0.383,
+                  "shuf": 0.147
+                },
+                "par": {
+                  "all": 0.801,
+                  "right": 0.915,
+                  "shuf": 0.587
+                },
+                "val": {
+                  "all": 0.559,
+                  "right": 0.691,
+                  "shuf": 0.105
+                }
+              },
+              "tail": {
+                "exact": {
+                  "all": 0.08,
+                  "right": 0.085,
+                  "shuf": 0.035
+                },
+                "tens": {
+                  "all": 0.444,
+                  "right": 0.468,
+                  "shuf": 0.241
+                },
+                "ones": {
+                  "all": 0.175,
+                  "right": 0.181,
+                  "shuf": 0.129
+                },
+                "par": {
+                  "all": 0.762,
+                  "right": 0.894,
+                  "shuf": 0.591
+                },
+                "val": {
+                  "all": 0.255,
+                  "right": 0.34,
+                  "shuf": 0.08
+                }
+              },
+              "colon": {
+                "exact": {
+                  "all": 0.185,
+                  "right": 0.266,
+                  "shuf": 0.021
+                },
+                "tens": {
+                  "all": 0.752,
+                  "right": 0.926,
+                  "shuf": 0.224
+                },
+                "ones": {
+                  "all": 0.217,
+                  "right": 0.277,
+                  "shuf": 0.122
+                },
+                "par": {
+                  "all": 0.794,
+                  "right": 0.904,
+                  "shuf": 0.587
+                },
+                "val": {
+                  "all": 0.434,
+                  "right": 0.553,
+                  "shuf": 0.091
+                }
+              }
+            },
+            "majority": {
+              "v3_tens": 0.217,
+              "v3_ones": 0.129,
+              "v3_par": 0.587
+            }
+          },
+          "5": {
+            "right": 39,
+            "n": 286,
+            "v_before_last": {
+              "latents": {
+                "exact": {
+                  "all": 0.129,
+                  "right": 0.333,
+                  "shuf": 0.038
+                },
+                "tens": {
+                  "all": 0.598,
+                  "right": 0.872,
+                  "shuf": 0.185
+                },
+                "ones": {
+                  "all": 0.206,
+                  "right": 0.359,
+                  "shuf": 0.143
+                },
+                "par": {
+                  "all": 0.797,
+                  "right": 0.923,
+                  "shuf": 0.587
+                },
+                "val": {
+                  "all": 0.364,
+                  "right": 0.59,
+                  "shuf": 0.087
+                }
+              },
+              "tail": {
+                "exact": {
+                  "all": 0.049,
+                  "right": 0.077,
+                  "shuf": 0.038
+                },
+                "tens": {
+                  "all": 0.343,
+                  "right": 0.462,
+                  "shuf": 0.21
+                },
+                "ones": {
+                  "all": 0.157,
+                  "right": 0.231,
+                  "shuf": 0.119
+                },
+                "par": {
+                  "all": 0.703,
+                  "right": 0.846,
+                  "shuf": 0.587
+                },
+                "val": {
+                  "all": 0.136,
+                  "right": 0.179,
+                  "shuf": 0.094
+                }
+              },
+              "colon": {
+                "exact": {
+                  "all": 0.098,
+                  "right": 0.205,
+                  "shuf": 0.028
+                },
+                "tens": {
+                  "all": 0.601,
+                  "right": 0.795,
+                  "shuf": 0.21
+                },
+                "ones": {
+                  "all": 0.178,
+                  "right": 0.231,
+                  "shuf": 0.122
+                },
+                "par": {
+                  "all": 0.783,
+                  "right": 0.974,
+                  "shuf": 0.587
+                },
+                "val": {
+                  "all": 0.294,
+                  "right": 0.487,
+                  "shuf": 0.08
+                }
+              }
+            },
+            "majority": {
+              "v4_tens": 0.206,
+              "v4_ones": 0.154,
+              "v4_par": 0.587
+            }
+          }
+        },
+        "codi0": {
+          "3": {
+            "right": 89,
+            "n": 286,
+            "v_before_last": {
+              "tail": {
+                "exact": {
+                  "all": 0.297,
+                  "right": 0.393,
+                  "shuf": 0.028
+                },
+                "tens": {
+                  "all": 0.759,
+                  "right": 0.854,
+                  "shuf": 0.241
+                },
+                "ones": {
+                  "all": 0.367,
+                  "right": 0.416,
+                  "shuf": 0.122
+                },
+                "par": {
+                  "all": 0.853,
+                  "right": 0.843,
+                  "shuf": 0.535
+                },
+                "val": {
+                  "all": 0.367,
+                  "right": 0.371,
+                  "shuf": 0.115
+                }
+              },
+              "colon": {
+                "exact": {
+                  "all": 0.164,
+                  "right": 0.281,
+                  "shuf": 0.021
+                },
+                "tens": {
+                  "all": 0.734,
+                  "right": 0.865,
+                  "shuf": 0.199
+                },
+                "ones": {
+                  "all": 0.213,
+                  "right": 0.326,
+                  "shuf": 0.108
+                },
+                "par": {
+                  "all": 0.832,
+                  "right": 0.888,
+                  "shuf": 0.531
+                },
+                "val": {
+                  "all": 0.395,
+                  "right": 0.461,
+                  "shuf": 0.108
+                }
+              }
+            },
+            "majority": {
+              "v2_tens": 0.213,
+              "v2_ones": 0.136,
+              "v2_par": 0.531
+            }
+          },
+          "4": {
+            "right": 44,
+            "n": 286,
+            "v_before_last": {
+              "tail": {
+                "exact": {
+                  "all": 0.08,
+                  "right": 0.091,
+                  "shuf": 0.038
+                },
+                "tens": {
+                  "all": 0.476,
+                  "right": 0.523,
+                  "shuf": 0.234
+                },
+                "ones": {
+                  "all": 0.171,
+                  "right": 0.182,
+                  "shuf": 0.133
+                },
+                "par": {
+                  "all": 0.727,
+                  "right": 0.818,
+                  "shuf": 0.587
+                },
+                "val": {
+                  "all": 0.21,
+                  "right": 0.25,
+                  "shuf": 0.084
+                }
+              },
+              "colon": {
+                "exact": {
+                  "all": 0.063,
+                  "right": 0.091,
+                  "shuf": 0.028
+                },
+                "tens": {
+                  "all": 0.49,
+                  "right": 0.614,
+                  "shuf": 0.227
+                },
+                "ones": {
+                  "all": 0.136,
+                  "right": 0.159,
+                  "shuf": 0.129
+                },
+                "par": {
+                  "all": 0.71,
+                  "right": 0.932,
+                  "shuf": 0.594
+                },
+                "val": {
+                  "all": 0.21,
+                  "right": 0.364,
+                  "shuf": 0.07
+                }
+              }
+            },
+            "majority": {
+              "v3_tens": 0.217,
+              "v3_ones": 0.129,
+              "v3_par": 0.587
+            }
+          },
+          "5": {
+            "right": 15,
+            "n": 286,
+            "v_before_last": {
+              "tail": {
+                "exact": {
+                  "all": 0.052,
+                  "right": 0.133,
+                  "shuf": 0.042
+                },
+                "tens": {
+                  "all": 0.325,
+                  "right": 0.333,
+                  "shuf": 0.21
+                },
+                "ones": {
+                  "all": 0.175,
+                  "right": 0.267,
+                  "shuf": 0.133
+                },
+                "par": {
+                  "all": 0.727,
+                  "right": 0.8,
+                  "shuf": 0.587
+                },
+                "val": {
+                  "all": 0.133,
+                  "right": 0.2,
+                  "shuf": 0.087
+                }
+              },
+              "colon": {
+                "exact": {
+                  "all": 0.052,
+                  "right": 0.067,
+                  "shuf": 0.021
+                },
+                "tens": {
+                  "all": 0.357,
+                  "right": 0.467,
+                  "shuf": 0.21
+                },
+                "ones": {
+                  "all": 0.164,
+                  "right": 0.333,
+                  "shuf": 0.147
+                },
+                "par": {
+                  "all": 0.724,
+                  "right": 0.933,
+                  "shuf": 0.587
+                },
+                "val": {
+                  "all": 0.15,
+                  "right": 0.2,
+                  "shuf": 0.077
+                }
+              }
+            },
+            "majority": {
+              "v4_tens": 0.206,
+              "v4_ones": 0.154,
+              "v4_par": 0.587
+            }
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/t7_partial_probe.py (collector of b23_right_wrong.py), t7_table.py",
+    "fit": "8,000 train items per level, seed 20; ridge, penalty per target on held-out 15%; shuffled-label floor",
+    "targets": "per step: tens, ones, parity, exact, scalar within 2; per rule: branch",
+    "dtype": "float32"
+  },
+  "seed": 20,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "What do start-last latents hold if not the exact value: magnitude, digits, parity, branches?",
+  "timestamp_utc": "2026-11-08T03:25:31.605814+00:00",
+  "git": {
+    "commit": "3035530",
+    "dirty": true
+  }
+}

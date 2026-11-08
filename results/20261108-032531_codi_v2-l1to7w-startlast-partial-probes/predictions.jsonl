@@ -1,0 +1,858 @@
+{"idx": 0, "id": "depth2-valid-L03-00000", "level": 3, "gold_answer": "41", "predicted_answer": "41", "correct": true, "codi0_answer": 43, "values": [19, 38, 19, 41]}
+{"idx": 1, "id": "depth2-valid-L03-00001", "level": 3, "gold_answer": "39", "predicted_answer": "37", "correct": false, "codi0_answer": 37, "values": [50, 39, 78, 39]}
+{"idx": 2, "id": "depth2-valid-L03-00002", "level": 3, "gold_answer": "5", "predicted_answer": "3", "correct": false, "codi0_answer": 6, "values": [2, 1, 10, 5]}
+{"idx": 3, "id": "depth2-valid-L03-00003", "level": 3, "gold_answer": "34", "predicted_answer": "33", "correct": false, "codi0_answer": 34, "values": [77, 80, 40, 34]}
+{"idx": 4, "id": "depth2-valid-L03-00004", "level": 3, "gold_answer": "37", "predicted_answer": "37", "correct": true, "codi0_answer": 37, "values": [5, 30, 15, 37]}
+{"idx": 5, "id": "depth2-valid-L03-00005", "level": 3, "gold_answer": "19", "predicted_answer": "19", "correct": true, "codi0_answer": 18, "values": [67, 86, 43, 19]}
+{"idx": 6, "id": "depth2-valid-L03-00006", "level": 3, "gold_answer": "56", "predicted_answer": "62", "correct": false, "codi0_answer": 77, "values": [33, 53, 66, 56]}
+{"idx": 7, "id": "depth2-valid-L03-00007", "level": 3, "gold_answer": "34", "predicted_answer": "33", "correct": false, "codi0_answer": 34, "values": [71, 74, 68, 34]}
+{"idx": 8, "id": "depth2-valid-L03-00008", "level": 3, "gold_answer": "19", "predicted_answer": "47", "correct": false, "codi0_answer": 47, "values": [81, 76, 38, 19]}
+{"idx": 9, "id": "depth2-valid-L03-00009", "level": 3, "gold_answer": "42", "predicted_answer": "42", "correct": true, "codi0_answer": 50, "values": [52, 39, 29, 42]}
+{"idx": 10, "id": "depth2-valid-L03-00010", "level": 3, "gold_answer": "61", "predicted_answer": "61", "correct": true, "codi0_answer": 71, "values": [57, 37, 74, 61]}
+{"idx": 11, "id": "depth2-valid-L03-00011", "level": 3, "gold_answer": "16", "predicted_answer": "16", "correct": true, "codi0_answer": 18, "values": [50, 25, 34, 16]}
+{"idx": 12, "id": "depth2-valid-L03-00012", "level": 3, "gold_answer": "35", "predicted_answer": "34", "correct": false, "codi0_answer": 34, "values": [60, 52, 26, 35]}
+{"idx": 13, "id": "depth2-valid-L03-00013", "level": 3, "gold_answer": "26", "predicted_answer": "28", "correct": false, "codi0_answer": 27, "values": [2, 15, 35, 26]}
+{"idx": 14, "id": "depth2-valid-L03-00014", "level": 3, "gold_answer": "47", "predicted_answer": "47", "correct": true, "codi0_answer": 47, "values": [55, 50, 25, 47]}
+{"idx": 15, "id": "depth2-valid-L03-00015", "level": 3, "gold_answer": "92", "predicted_answer": "92", "correct": true, "codi0_answer": 88, "values": [87, 75, 97, 92]}
+{"idx": 16, "id": "depth2-valid-L03-00016", "level": 3, "gold_answer": "11", "predicted_answer": "15", "correct": false, "codi0_answer": 47, "values": [27, 32, 22, 11]}
+{"idx": 17, "id": "depth2-valid-L03-00017", "level": 3, "gold_answer": "20", "predicted_answer": "32", "correct": false, "codi0_answer": 24, "values": [32, 16, 10, 20]}
+{"idx": 18, "id": "depth2-valid-L03-00018", "level": 3, "gold_answer": "53", "predicted_answer": "53", "correct": true, "codi0_answer": 51, "values": [60, 30, 60, 53]}
+{"idx": 19, "id": "depth2-valid-L03-00019", "level": 3, "gold_answer": "57", "predicted_answer": "57", "correct": true, "codi0_answer": 59, "values": [55, 74, 37, 57]}
+{"idx": 20, "id": "depth2-valid-L03-00020", "level": 3, "gold_answer": "5", "predicted_answer": "3", "correct": false, "codi0_answer": 4, "values": [40, 20, 10, 5]}
+{"idx": 21, "id": "depth2-valid-L03-00021", "level": 3, "gold_answer": "12", "predicted_answer": "12", "correct": true, "codi0_answer": 16, "values": [21, 38, 6, 12]}
+{"idx": 22, "id": "depth2-valid-L03-00022", "level": 3, "gold_answer": "24", "predicted_answer": "24", "correct": true, "codi0_answer": 25, "values": [76, 38, 19, 24]}
+{"idx": 23, "id": "depth2-valid-L03-00023", "level": 3, "gold_answer": "35", "predicted_answer": "36", "correct": false, "codi0_answer": 34, "values": [81, 88, 44, 35]}
+{"idx": 24, "id": "depth2-valid-L03-00024", "level": 3, "gold_answer": "30", "predicted_answer": "30", "correct": true, "codi0_answer": 31, "values": [24, 48, 60, 30]}
+{"idx": 25, "id": "depth2-valid-L03-00025", "level": 3, "gold_answer": "26", "predicted_answer": "26", "correct": true, "codi0_answer": 25, "values": [17, 30, 15, 26]}
+{"idx": 26, "id": "depth2-valid-L03-00026", "level": 3, "gold_answer": "18", "predicted_answer": "16", "correct": false, "codi0_answer": 18, "values": [40, 20, 30, 18]}
+{"idx": 27, "id": "depth2-valid-L03-00027", "level": 3, "gold_answer": "49", "predicted_answer": "49", "correct": true, "codi0_answer": 49, "values": [87, 72, 36, 49]}
+{"idx": 28, "id": "depth2-valid-L03-00028", "level": 3, "gold_answer": "43", "predicted_answer": "43", "correct": true, "codi0_answer": 45, "values": [84, 82, 41, 43]}
+{"idx": 29, "id": "depth2-valid-L03-00029", "level": 3, "gold_answer": "57", "predicted_answer": "57", "correct": true, "codi0_answer": 51, "values": [39, 53, 66, 57]}
+{"idx": 30, "id": "depth2-valid-L03-00030", "level": 3, "gold_answer": "17", "predicted_answer": "17", "correct": true, "codi0_answer": 17, "values": [13, 30, 15, 17]}
+{"idx": 31, "id": "depth2-valid-L03-00031", "level": 3, "gold_answer": "28", "predicted_answer": "35", "correct": false, "codi0_answer": 57, "values": [39, 57, 15, 28]}
+{"idx": 32, "id": "depth2-valid-L03-00032", "level": 3, "gold_answer": "23", "predicted_answer": "23", "correct": true, "codi0_answer": 25, "values": [24, 30, 15, 23]}
+{"idx": 33, "id": "depth2-valid-L03-00033", "level": 3, "gold_answer": "10", "predicted_answer": "11", "correct": false, "codi0_answer": 8, "values": [13, 32, 16, 10]}
+{"idx": 34, "id": "depth2-valid-L03-00034", "level": 3, "gold_answer": "2", "predicted_answer": "3", "correct": false, "codi0_answer": 4, "values": [97, 92, 46, 2]}
+{"idx": 35, "id": "depth2-valid-L03-00035", "level": 3, "gold_answer": "45", "predicted_answer": "45", "correct": true, "codi0_answer": 45, "values": [82, 77, 90, 45]}
+{"idx": 36, "id": "depth2-valid-L03-00036", "level": 3, "gold_answer": "23", "predicted_answer": "24", "correct": false, "codi0_answer": 23, "values": [66, 64, 46, 23]}
+{"idx": 37, "id": "depth2-valid-L03-00037", "level": 3, "gold_answer": "16", "predicted_answer": "16", "correct": true, "codi0_answer": 17, "values": [35, 46, 32, 16]}
+{"idx": 38, "id": "depth2-valid-L03-00038", "level": 3, "gold_answer": "31", "predicted_answer": "31", "correct": true, "codi0_answer": 32, "values": [34, 41, 62, 31]}
+{"idx": 39, "id": "depth2-valid-L03-00039", "level": 3, "gold_answer": "80", "predicted_answer": "82", "correct": false, "codi0_answer": 86, "values": [87, 73, 93, 80]}
+{"idx": 40, "id": "depth2-valid-L03-00040", "level": 3, "gold_answer": "76", "predicted_answer": "76", "correct": true, "codi0_answer": 72, "values": [58, 29, 53, 76]}
+{"idx": 41, "id": "depth2-valid-L03-00041", "level": 3, "gold_answer": "29", "predicted_answer": "31", "correct": false, "codi0_answer": 29, "values": [42, 21, 36, 29]}
+{"idx": 42, "id": "depth2-valid-L03-00042", "level": 3, "gold_answer": "27", "predicted_answer": "26", "correct": false, "codi0_answer": 27, "values": [48, 32, 16, 27]}
+{"idx": 43, "id": "depth2-valid-L03-00043", "level": 3, "gold_answer": "36", "predicted_answer": "38", "correct": false, "codi0_answer": 38, "values": [7, 15, 17, 36]}
+{"idx": 44, "id": "depth2-valid-L03-00044", "level": 3, "gold_answer": "7", "predicted_answer": "9", "correct": false, "codi0_answer": 25, "values": [56, 28, 56, 7]}
+{"idx": 45, "id": "depth2-valid-L03-00045", "level": 3, "gold_answer": "44", "predicted_answer": "40", "correct": false, "codi0_answer": 16, "values": [22, 11, 22, 44]}
+{"idx": 46, "id": "depth2-valid-L03-00046", "level": 3, "gold_answer": "50", "predicted_answer": "50", "correct": true, "codi0_answer": 54, "values": [82, 50, 25, 50]}
+{"idx": 47, "id": "depth2-valid-L03-00047", "level": 3, "gold_answer": "49", "predicted_answer": "47", "correct": false, "codi0_answer": 47, "values": [46, 36, 39, 49]}
+{"idx": 48, "id": "depth2-valid-L03-00048", "level": 3, "gold_answer": "21", "predicted_answer": "21", "correct": true, "codi0_answer": 22, "values": [56, 55, 42, 21]}
+{"idx": 49, "id": "depth2-valid-L03-00049", "level": 3, "gold_answer": "32", "predicted_answer": "24", "correct": false, "codi0_answer": 36, "values": [28, 14, 16, 32]}
+{"idx": 50, "id": "depth2-valid-L03-00050", "level": 3, "gold_answer": "20", "predicted_answer": "21", "correct": false, "codi0_answer": 21, "values": [12, 23, 40, 20]}
+{"idx": 51, "id": "depth2-valid-L03-00051", "level": 3, "gold_answer": "42", "predicted_answer": "43", "correct": false, "codi0_answer": 43, "values": [86, 73, 84, 42]}
+{"idx": 52, "id": "depth2-valid-L03-00052", "level": 3, "gold_answer": "20", "predicted_answer": "20", "correct": true, "codi0_answer": 21, "values": [52, 39, 40, 20]}
+{"idx": 53, "id": "depth2-valid-L03-00053", "level": 3, "gold_answer": "43", "predicted_answer": "43", "correct": true, "codi0_answer": 43, "values": [48, 54, 27, 43]}
+{"idx": 54, "id": "depth2-valid-L03-00054", "level": 3, "gold_answer": "22", "predicted_answer": "18", "correct": false, "codi0_answer": 22, "values": [6, 3, 11, 22]}
+{"idx": 55, "id": "depth2-valid-L03-00055", "level": 3, "gold_answer": "52", "predicted_answer": "50", "correct": false, "codi0_answer": 58, "values": [10, 25, 50, 52]}
+{"idx": 56, "id": "depth2-valid-L03-00056", "level": 3, "gold_answer": "23", "predicted_answer": "23", "correct": true, "codi0_answer": 22, "values": [17, 39, 46, 23]}
+{"idx": 57, "id": "depth2-valid-L03-00057", "level": 3, "gold_answer": "21", "predicted_answer": "21", "correct": true, "codi0_answer": 17, "values": [17, 34, 17, 21]}
+{"idx": 58, "id": "depth2-valid-L03-00058", "level": 3, "gold_answer": "25", "predicted_answer": "25", "correct": true, "codi0_answer": 27, "values": [24, 48, 29, 25]}
+{"idx": 59, "id": "depth2-valid-L03-00059", "level": 3, "gold_answer": "26", "predicted_answer": "27", "correct": false, "codi0_answer": 27, "values": [29, 58, 52, 26]}
+{"idx": 60, "id": "depth2-valid-L03-00060", "level": 3, "gold_answer": "45", "predicted_answer": "45", "correct": true, "codi0_answer": 45, "values": [70, 35, 41, 45]}
+{"idx": 61, "id": "depth2-valid-L03-00061", "level": 3, "gold_answer": "34", "predicted_answer": "34", "correct": true, "codi0_answer": 34, "values": [5, 6, 17, 34]}
+{"idx": 62, "id": "depth2-valid-L03-00062", "level": 3, "gold_answer": "28", "predicted_answer": "32", "correct": false, "codi0_answer": 36, "values": [19, 25, 14, 28]}
+{"idx": 63, "id": "depth2-valid-L03-00063", "level": 3, "gold_answer": "24", "predicted_answer": "25", "correct": false, "codi0_answer": 27, "values": [51, 74, 37, 24]}
+{"idx": 64, "id": "depth2-valid-L03-00064", "level": 3, "gold_answer": "70", "predicted_answer": "70", "correct": true, "codi0_answer": 74, "values": [82, 53, 63, 70]}
+{"idx": 65, "id": "depth2-valid-L03-00065", "level": 3, "gold_answer": "30", "predicted_answer": "30", "correct": true, "codi0_answer": 30, "values": [19, 38, 19, 30]}
+{"idx": 66, "id": "depth2-valid-L03-00066", "level": 3, "gold_answer": "15", "predicted_answer": "15", "correct": true, "codi0_answer": 17, "values": [74, 70, 35, 15]}
+{"idx": 67, "id": "depth2-valid-L03-00067", "level": 3, "gold_answer": "16", "predicted_answer": "16", "correct": true, "codi0_answer": 16, "values": [39, 53, 32, 16]}
+{"idx": 68, "id": "depth2-valid-L03-00068", "level": 3, "gold_answer": "33", "predicted_answer": "34", "correct": false, "codi0_answer": 33, "values": [47, 61, 66, 33]}
+{"idx": 69, "id": "depth2-valid-L03-00069", "level": 3, "gold_answer": "39", "predicted_answer": "39", "correct": true, "codi0_answer": 39, "values": [7, 14, 29, 39]}
+{"idx": 70, "id": "depth2-valid-L03-00070", "level": 3, "gold_answer": "86", "predicted_answer": "90", "correct": false, "codi0_answer": 82, "values": [58, 29, 43, 86]}
+{"idx": 71, "id": "depth2-valid-L03-00071", "level": 3, "gold_answer": "16", "predicted_answer": "12", "correct": false, "codi0_answer": 12, "values": [14, 4, 8, 16]}
+{"idx": 72, "id": "depth2-valid-L03-00072", "level": 3, "gold_answer": "23", "predicted_answer": "23", "correct": true, "codi0_answer": 27, "values": [15, 17, 34, 23]}
+{"idx": 73, "id": "depth2-valid-L03-00073", "level": 3, "gold_answer": "34", "predicted_answer": "34", "correct": true, "codi0_answer": 34, "values": [87, 77, 68, 34]}
+{"idx": 74, "id": "depth2-valid-L03-00074", "level": 3, "gold_answer": "27", "predicted_answer": "28", "correct": false, "codi0_answer": 28, "values": [96, 80, 40, 27]}
+{"idx": 75, "id": "depth2-valid-L03-00075", "level": 3, "gold_answer": "18", "predicted_answer": "18", "correct": true, "codi0_answer": 18, "values": [27, 47, 36, 18]}
+{"idx": 76, "id": "depth2-valid-L03-00076", "level": 3, "gold_answer": "12", "predicted_answer": "12", "correct": true, "codi0_answer": 11, "values": [20, 40, 24, 12]}
+{"idx": 77, "id": "depth2-valid-L03-00077", "level": 3, "gold_answer": "22", "predicted_answer": "22", "correct": true, "codi0_answer": 22, "values": [65, 58, 44, 22]}
+{"idx": 78, "id": "depth2-valid-L03-00078", "level": 3, "gold_answer": "52", "predicted_answer": "50", "correct": false, "codi0_answer": 54, "values": [32, 15, 33, 52]}
+{"idx": 79, "id": "depth2-valid-L03-00079", "level": 3, "gold_answer": "6", "predicted_answer": "16", "correct": false, "codi0_answer": 2, "values": [51, 48, 3, 6]}
+{"idx": 80, "id": "depth2-valid-L03-00080", "level": 3, "gold_answer": "82", "predicted_answer": "82", "correct": true, "codi0_answer": 82, "values": [5, 30, 41, 82]}
+{"idx": 81, "id": "depth2-valid-L03-00081", "level": 3, "gold_answer": "28", "predicted_answer": "24", "correct": false, "codi0_answer": 30, "values": [44, 22, 13, 28]}
+{"idx": 82, "id": "depth2-valid-L03-00082", "level": 3, "gold_answer": "13", "predicted_answer": "42", "correct": false, "codi0_answer": 40, "values": [27, 52, 26, 13]}
+{"idx": 83, "id": "depth2-valid-L03-00083", "level": 3, "gold_answer": "82", "predicted_answer": "82", "correct": true, "codi0_answer": 74, "values": [29, 46, 41, 82]}
+{"idx": 84, "id": "depth2-valid-L03-00084", "level": 3, "gold_answer": "48", "predicted_answer": "44", "correct": false, "codi0_answer": 42, "values": [49, 18, 36, 48]}
+{"idx": 85, "id": "depth2-valid-L03-00085", "level": 3, "gold_answer": "35", "predicted_answer": "35", "correct": true, "codi0_answer": 37, "values": [47, 58, 29, 35]}
+{"idx": 86, "id": "depth2-valid-L03-00086", "level": 3, "gold_answer": "74", "predicted_answer": "76", "correct": false, "codi0_answer": 82, "values": [82, 41, 82, 74]}
+{"idx": 87, "id": "depth2-valid-L03-00087", "level": 3, "gold_answer": "43", "predicted_answer": "43", "correct": true, "codi0_answer": 44, "values": [55, 66, 33, 43]}
+{"idx": 88, "id": "depth2-valid-L03-00088", "level": 3, "gold_answer": "58", "predicted_answer": "58", "correct": true, "codi0_answer": 66, "values": [37, 32, 64, 58]}
+{"idx": 89, "id": "depth2-valid-L03-00089", "level": 3, "gold_answer": "39", "predicted_answer": "39", "correct": true, "codi0_answer": 47, "values": [10, 20, 40, 39]}
+{"idx": 90, "id": "depth2-valid-L03-00090", "level": 3, "gold_answer": "65", "predicted_answer": "65", "correct": true, "codi0_answer": 65, "values": [80, 40, 45, 65]}
+{"idx": 91, "id": "depth2-valid-L03-00091", "level": 3, "gold_answer": "12", "predicted_answer": "12", "correct": true, "codi0_answer": 9, "values": [18, 9, 29, 12]}
+{"idx": 92, "id": "depth2-valid-L03-00092", "level": 3, "gold_answer": "40", "predicted_answer": "57", "correct": false, "codi0_answer": 47, "values": [7, 27, 20, 40]}
+{"idx": 93, "id": "depth2-valid-L03-00093", "level": 3, "gold_answer": "8", "predicted_answer": "12", "correct": false, "codi0_answer": 20, "values": [11, 31, 4, 8]}
+{"idx": 94, "id": "depth2-valid-L03-00094", "level": 3, "gold_answer": "23", "predicted_answer": "24", "correct": false, "codi0_answer": 20, "values": [68, 65, 46, 23]}
+{"idx": 95, "id": "depth2-valid-L03-00095", "level": 3, "gold_answer": "66", "predicted_answer": "66", "correct": true, "codi0_answer": 66, "values": [82, 66, 33, 66]}
+{"idx": 96, "id": "depth2-valid-L03-00096", "level": 3, "gold_answer": "60", "predicted_answer": "64", "correct": false, "codi0_answer": 64, "values": [2, 21, 30, 60]}
+{"idx": 97, "id": "depth2-valid-L03-00097", "level": 3, "gold_answer": "59", "predicted_answer": "59", "correct": true, "codi0_answer": 55, "values": [18, 36, 55, 59]}
+{"idx": 98, "id": "depth2-valid-L03-00098", "level": 3, "gold_answer": "64", "predicted_answer": "66", "correct": false, "codi0_answer": 62, "values": [39, 64, 32, 64]}
+{"idx": 99, "id": "depth2-valid-L03-00099", "level": 3, "gold_answer": "37", "predicted_answer": "37", "correct": true, "codi0_answer": 37, "values": [25, 37, 74, 37]}
+{"idx": 100, "id": "depth2-valid-L03-00100", "level": 3, "gold_answer": "56", "predicted_answer": "56", "correct": true, "codi0_answer": 57, "values": [71, 68, 57, 56]}
+{"idx": 101, "id": "depth2-valid-L03-00101", "level": 3, "gold_answer": "38", "predicted_answer": "38", "correct": true, "codi0_answer": 36, "values": [29, 15, 19, 38]}
+{"idx": 102, "id": "depth2-valid-L03-00102", "level": 3, "gold_answer": "12", "predicted_answer": "12", "correct": true, "codi0_answer": 14, "values": [4, 2, 19, 12]}
+{"idx": 103, "id": "depth2-valid-L03-00103", "level": 3, "gold_answer": "26", "predicted_answer": "26", "correct": true, "codi0_answer": 26, "values": [34, 12, 6, 26]}
+{"idx": 104, "id": "depth2-valid-L03-00104", "level": 3, "gold_answer": "18", "predicted_answer": "22", "correct": false, "codi0_answer": 16, "values": [42, 21, 9, 18]}
+{"idx": 105, "id": "depth2-valid-L03-00105", "level": 3, "gold_answer": "49", "predicted_answer": "50", "correct": false, "codi0_answer": 52, "values": [98, 76, 38, 49]}
+{"idx": 106, "id": "depth2-valid-L03-00106", "level": 3, "gold_answer": "24", "predicted_answer": "24", "correct": true, "codi0_answer": 24, "values": [44, 42, 21, 24]}
+{"idx": 107, "id": "depth2-valid-L03-00107", "level": 3, "gold_answer": "23", "predicted_answer": "24", "correct": false, "codi0_answer": 24, "values": [37, 59, 46, 23]}
+{"idx": 108, "id": "depth2-valid-L03-00108", "level": 3, "gold_answer": "31", "predicted_answer": "31", "correct": true, "codi0_answer": 27, "values": [12, 22, 44, 31]}
+{"idx": 109, "id": "depth2-valid-L03-00109", "level": 3, "gold_answer": "92", "predicted_answer": "94", "correct": false, "codi0_answer": 96, "values": [27, 54, 71, 92]}
+{"idx": 110, "id": "depth2-valid-L03-00110", "level": 3, "gold_answer": "44", "predicted_answer": "44", "correct": true, "codi0_answer": 44, "values": [31, 54, 27, 44]}
+{"idx": 111, "id": "depth2-valid-L03-00111", "level": 3, "gold_answer": "74", "predicted_answer": "74", "correct": true, "codi0_answer": 74, "values": [20, 40, 37, 74]}
+{"idx": 112, "id": "depth2-valid-L03-00112", "level": 3, "gold_answer": "21", "predicted_answer": "21", "correct": true, "codi0_answer": 21, "values": [32, 30, 15, 21]}
+{"idx": 113, "id": "depth2-valid-L03-00113", "level": 3, "gold_answer": "31", "predicted_answer": "31", "correct": true, "codi0_answer": 31, "values": [18, 9, 25, 31]}
+{"idx": 114, "id": "depth2-valid-L03-00114", "level": 3, "gold_answer": "25", "predicted_answer": "25", "correct": true, "codi0_answer": 27, "values": [52, 34, 50, 25]}
+{"idx": 115, "id": "depth2-valid-L03-00115", "level": 3, "gold_answer": "70", "predicted_answer": "70", "correct": true, "codi0_answer": 66, "values": [50, 56, 67, 70]}
+{"idx": 116, "id": "depth2-valid-L03-00116", "level": 3, "gold_answer": "27", "predicted_answer": "28", "correct": false, "codi0_answer": 27, "values": [45, 51, 54, 27]}
+{"idx": 117, "id": "depth2-valid-L03-00117", "level": 3, "gold_answer": "40", "predicted_answer": "42", "correct": false, "codi0_answer": 42, "values": [15, 27, 54, 40]}
+{"idx": 118, "id": "depth2-valid-L03-00118", "level": 3, "gold_answer": "38", "predicted_answer": "38", "correct": true, "codi0_answer": 40, "values": [5, 10, 30, 38]}
+{"idx": 119, "id": "depth2-valid-L03-00119", "level": 3, "gold_answer": "54", "predicted_answer": "54", "correct": true, "codi0_answer": 54, "values": [22, 11, 27, 54]}
+{"idx": 120, "id": "depth2-valid-L03-00120", "level": 3, "gold_answer": "47", "predicted_answer": "47", "correct": true, "codi0_answer": 51, "values": [8, 20, 40, 47]}
+{"idx": 121, "id": "depth2-valid-L03-00121", "level": 3, "gold_answer": "76", "predicted_answer": "80", "correct": false, "codi0_answer": 80, "values": [54, 27, 38, 76]}
+{"idx": 122, "id": "depth2-valid-L03-00122", "level": 3, "gold_answer": "47", "predicted_answer": "47", "correct": true, "codi0_answer": 51, "values": [86, 43, 39, 47]}
+{"idx": 123, "id": "depth2-valid-L03-00123", "level": 3, "gold_answer": "20", "predicted_answer": "20", "correct": true, "codi0_answer": 24, "values": [21, 6, 10, 20]}
+{"idx": 124, "id": "depth2-valid-L03-00124", "level": 3, "gold_answer": "13", "predicted_answer": "15", "correct": false, "codi0_answer": 10, "values": [30, 60, 55, 13]}
+{"idx": 125, "id": "depth2-valid-L03-00125", "level": 3, "gold_answer": "32", "predicted_answer": "32", "correct": true, "codi0_answer": 34, "values": [90, 45, 57, 32]}
+{"idx": 126, "id": "depth2-valid-L03-00126", "level": 3, "gold_answer": "52", "predicted_answer": "76", "correct": false, "codi0_answer": 72, "values": [61, 73, 72, 52]}
+{"idx": 127, "id": "depth2-valid-L03-00127", "level": 3, "gold_answer": "38", "predicted_answer": "40", "correct": false, "codi0_answer": 40, "values": [11, 14, 28, 38]}
+{"idx": 128, "id": "depth2-valid-L03-00128", "level": 3, "gold_answer": "70", "predicted_answer": "72", "correct": false, "codi0_answer": 64, "values": [28, 37, 74, 70]}
+{"idx": 129, "id": "depth2-valid-L03-00129", "level": 3, "gold_answer": "19", "predicted_answer": "19", "correct": true, "codi0_answer": 18, "values": [11, 16, 8, 19]}
+{"idx": 130, "id": "depth2-valid-L03-00130", "level": 3, "gold_answer": "45", "predicted_answer": "45", "correct": true, "codi0_answer": 45, "values": [73, 54, 27, 45]}
+{"idx": 131, "id": "depth2-valid-L03-00131", "level": 3, "gold_answer": "5", "predicted_answer": "4", "correct": false, "codi0_answer": 4, "values": [37, 8, 10, 5]}
+{"idx": 132, "id": "depth2-valid-L03-00132", "level": 3, "gold_answer": "52", "predicted_answer": "52", "correct": true, "codi0_answer": 52, "values": [26, 35, 45, 52]}
+{"idx": 133, "id": "depth2-valid-L03-00133", "level": 3, "gold_answer": "14", "predicted_answer": "14", "correct": true, "codi0_answer": 11, "values": [22, 44, 28, 14]}
+{"idx": 134, "id": "depth2-valid-L03-00134", "level": 3, "gold_answer": "53", "predicted_answer": "53", "correct": true, "codi0_answer": 55, "values": [88, 86, 43, 53]}
+{"idx": 135, "id": "depth2-valid-L03-00135", "level": 3, "gold_answer": "6", "predicted_answer": "10", "correct": false, "codi0_answer": 20, "values": [45, 46, 3, 6]}
+{"idx": 136, "id": "depth2-valid-L03-00136", "level": 3, "gold_answer": "35", "predicted_answer": "35", "correct": true, "codi0_answer": 37, "values": [71, 66, 55, 35]}
+{"idx": 137, "id": "depth2-valid-L03-00137", "level": 3, "gold_answer": "24", "predicted_answer": "24", "correct": true, "codi0_answer": 24, "values": [52, 26, 45, 24]}
+{"idx": 138, "id": "depth2-valid-L03-00138", "level": 3, "gold_answer": "20", "predicted_answer": "19", "correct": false, "codi0_answer": 22, "values": [22, 32, 16, 20]}
+{"idx": 139, "id": "depth2-valid-L03-00139", "level": 3, "gold_answer": "27", "predicted_answer": "28", "correct": false, "codi0_answer": 28, "values": [73, 71, 54, 27]}
+{"idx": 140, "id": "depth2-valid-L03-00140", "level": 3, "gold_answer": "38", "predicted_answer": "36", "correct": false, "codi0_answer": 38, "values": [24, 12, 25, 38]}
+{"idx": 141, "id": "depth2-valid-L03-00141", "level": 3, "gold_answer": "17", "predicted_answer": "18", "correct": false, "codi0_answer": 17, "values": [54, 49, 34, 17]}
+{"idx": 142, "id": "depth2-valid-L03-00142", "level": 3, "gold_answer": "22", "predicted_answer": "22", "correct": true, "codi0_answer": 20, "values": [19, 22, 11, 22]}
+{"idx": 143, "id": "depth2-valid-L03-00143", "level": 3, "gold_answer": "32", "predicted_answer": "32", "correct": true, "codi0_answer": 34, "values": [22, 11, 15, 32]}
+{"idx": 144, "id": "depth2-valid-L03-00144", "level": 3, "gold_answer": "36", "predicted_answer": "36", "correct": true, "codi0_answer": 32, "values": [11, 30, 18, 36]}
+{"idx": 145, "id": "depth2-valid-L03-00145", "level": 3, "gold_answer": "10", "predicted_answer": "12", "correct": false, "codi0_answer": 8, "values": [7, 14, 28, 10]}
+{"idx": 146, "id": "depth2-valid-L03-00146", "level": 3, "gold_answer": "62", "predicted_answer": "62", "correct": true, "codi0_answer": 58, "values": [68, 62, 31, 62]}
+{"idx": 147, "id": "depth2-valid-L03-00147", "level": 3, "gold_answer": "47", "predicted_answer": "48", "correct": false, "codi0_answer": 47, "values": [79, 97, 94, 47]}
+{"idx": 148, "id": "depth2-valid-L03-00148", "level": 3, "gold_answer": "29", "predicted_answer": "29", "correct": true, "codi0_answer": 28, "values": [53, 46, 23, 29]}
+{"idx": 149, "id": "depth2-valid-L03-00149", "level": 3, "gold_answer": "58", "predicted_answer": "60", "correct": false, "codi0_answer": 58, "values": [44, 34, 53, 58]}
+{"idx": 150, "id": "depth2-valid-L03-00150", "level": 3, "gold_answer": "30", "predicted_answer": "31", "correct": false, "codi0_answer": 29, "values": [87, 64, 32, 30]}
+{"idx": 151, "id": "depth2-valid-L03-00151", "level": 3, "gold_answer": "65", "predicted_answer": "63", "correct": false, "codi0_answer": 65, "values": [31, 43, 86, 65]}
+{"idx": 152, "id": "depth2-valid-L03-00152", "level": 3, "gold_answer": "45", "predicted_answer": "45", "correct": true, "codi0_answer": 45, "values": [41, 82, 41, 45]}
+{"idx": 153, "id": "depth2-valid-L03-00153", "level": 3, "gold_answer": "20", "predicted_answer": "21", "correct": false, "codi0_answer": 24, "values": [44, 22, 19, 20]}
+{"idx": 154, "id": "depth2-valid-L03-00154", "level": 3, "gold_answer": "26", "predicted_answer": "27", "correct": false, "codi0_answer": 26, "values": [84, 42, 52, 26]}
+{"idx": 155, "id": "depth2-valid-L03-00155", "level": 3, "gold_answer": "54", "predicted_answer": "54", "correct": true, "codi0_answer": 52, "values": [57, 41, 44, 54]}
+{"idx": 156, "id": "depth2-valid-L03-00156", "level": 3, "gold_answer": "60", "predicted_answer": "64", "correct": false, "codi0_answer": 60, "values": [40, 23, 37, 60]}
+{"idx": 157, "id": "depth2-valid-L03-00157", "level": 3, "gold_answer": "27", "predicted_answer": "27", "correct": true, "codi0_answer": 33, "values": [67, 35, 54, 27]}
+{"idx": 158, "id": "depth2-valid-L03-00158", "level": 3, "gold_answer": "64", "predicted_answer": "64", "correct": true, "codi0_answer": 64, "values": [70, 35, 57, 64]}
+{"idx": 159, "id": "depth2-valid-L03-00159", "level": 3, "gold_answer": "19", "predicted_answer": "17", "correct": false, "codi0_answer": 34, "values": [38, 19, 38, 19]}
+{"idx": 160, "id": "depth2-valid-L03-00160", "level": 3, "gold_answer": "8", "predicted_answer": "8", "correct": true, "codi0_answer": 8, "values": [13, 28, 16, 8]}
+{"idx": 161, "id": "depth2-valid-L03-00161", "level": 3, "gold_answer": "6", "predicted_answer": "16", "correct": false, "codi0_answer": 4, "values": [82, 41, 3, 6]}
+{"idx": 162, "id": "depth2-valid-L03-00162", "level": 3, "gold_answer": "40", "predicted_answer": "40", "correct": true, "codi0_answer": 40, "values": [14, 28, 39, 40]}
+{"idx": 163, "id": "depth2-valid-L03-00163", "level": 3, "gold_answer": "20", "predicted_answer": "16", "correct": false, "codi0_answer": 12, "values": [36, 29, 10, 20]}
+{"idx": 164, "id": "depth2-valid-L03-00164", "level": 3, "gold_answer": "18", "predicted_answer": "17", "correct": false, "codi0_answer": 13, "values": [9, 18, 36, 18]}
+{"idx": 165, "id": "depth2-valid-L03-00165", "level": 3, "gold_answer": "97", "predicted_answer": "99", "correct": false, "codi0_answer": 95, "values": [96, 84, 79, 97]}
+{"idx": 166, "id": "depth2-valid-L03-00166", "level": 3, "gold_answer": "44", "predicted_answer": "44", "correct": true, "codi0_answer": 54, "values": [36, 72, 53, 44]}
+{"idx": 167, "id": "depth2-valid-L03-00167", "level": 3, "gold_answer": "42", "predicted_answer": "42", "correct": true, "codi0_answer": 36, "values": [84, 42, 21, 42]}
+{"idx": 168, "id": "depth2-valid-L03-00168", "level": 3, "gold_answer": "37", "predicted_answer": "38", "correct": false, "codi0_answer": 39, "values": [87, 76, 38, 37]}
+{"idx": 169, "id": "depth2-valid-L03-00169", "level": 3, "gold_answer": "19", "predicted_answer": "17", "correct": false, "codi0_answer": 19, "values": [86, 43, 36, 19]}
+{"idx": 170, "id": "depth2-valid-L03-00170", "level": 3, "gold_answer": "41", "predicted_answer": "41", "correct": true, "codi0_answer": 41, "values": [32, 16, 33, 41]}
+{"idx": 171, "id": "depth2-valid-L03-00171", "level": 3, "gold_answer": "82", "predicted_answer": "39", "correct": false, "codi0_answer": 82, "values": [47, 44, 88, 82]}
+{"idx": 172, "id": "depth2-valid-L03-00172", "level": 3, "gold_answer": "59", "predicted_answer": "58", "correct": false, "codi0_answer": 60, "values": [39, 78, 39, 59]}
+{"idx": 173, "id": "depth2-valid-L03-00173", "level": 3, "gold_answer": "13", "predicted_answer": "13", "correct": true, "codi0_answer": 56, "values": [36, 18, 32, 13]}
+{"idx": 174, "id": "depth2-valid-L03-00174", "level": 3, "gold_answer": "28", "predicted_answer": "29", "correct": false, "codi0_answer": 22, "values": [61, 42, 25, 28]}
+{"idx": 175, "id": "depth2-valid-L03-00175", "level": 3, "gold_answer": "22", "predicted_answer": "21", "correct": false, "codi0_answer": 20, "values": [25, 50, 44, 22]}
+{"idx": 176, "id": "depth2-valid-L03-00176", "level": 3, "gold_answer": "77", "predicted_answer": "79", "correct": false, "codi0_answer": 79, "values": [76, 48, 59, 77]}
+{"idx": 177, "id": "depth2-valid-L03-00177", "level": 3, "gold_answer": "24", "predicted_answer": "25", "correct": false, "codi0_answer": 25, "values": [63, 62, 31, 24]}
+{"idx": 178, "id": "depth2-valid-L03-00178", "level": 3, "gold_answer": "67", "predicted_answer": "69", "correct": false, "codi0_answer": 63, "values": [91, 90, 45, 67]}
+{"idx": 179, "id": "depth2-valid-L03-00179", "level": 3, "gold_answer": "56", "predicted_answer": "56", "correct": true, "codi0_answer": 52, "values": [31, 19, 38, 56]}
+{"idx": 180, "id": "depth2-valid-L03-00180", "level": 3, "gold_answer": "6", "predicted_answer": "6", "correct": true, "codi0_answer": 6, "values": [21, 25, 40, 6]}
+{"idx": 181, "id": "depth2-valid-L03-00181", "level": 3, "gold_answer": "65", "predicted_answer": "65", "correct": true, "codi0_answer": 65, "values": [77, 73, 61, 65]}
+{"idx": 182, "id": "depth2-valid-L03-00182", "level": 3, "gold_answer": "50", "predicted_answer": "50", "correct": true, "codi0_answer": 60, "values": [35, 41, 52, 50]}
+{"idx": 183, "id": "depth2-valid-L03-00183", "level": 3, "gold_answer": "44", "predicted_answer": "43", "correct": false, "codi0_answer": 44, "values": [45, 52, 26, 44]}
+{"idx": 184, "id": "depth2-valid-L03-00184", "level": 3, "gold_answer": "11", "predicted_answer": "11", "correct": true, "codi0_answer": 11, "values": [5, 19, 22, 11]}
+{"idx": 185, "id": "depth2-valid-L03-00185", "level": 3, "gold_answer": "24", "predicted_answer": "26", "correct": false, "codi0_answer": 24, "values": [1, 6, 3, 24]}
+{"idx": 186, "id": "depth2-valid-L03-00186", "level": 3, "gold_answer": "23", "predicted_answer": "25", "correct": false, "codi0_answer": 23, "values": [42, 21, 39, 23]}
+{"idx": 187, "id": "depth2-valid-L03-00187", "level": 3, "gold_answer": "34", "predicted_answer": "34", "correct": true, "codi0_answer": 23, "values": [19, 38, 19, 34]}
+{"idx": 188, "id": "depth2-valid-L03-00188", "level": 3, "gold_answer": "39", "predicted_answer": "40", "correct": false, "codi0_answer": 39, "values": [99, 82, 78, 39]}
+{"idx": 189, "id": "depth2-valid-L03-00189", "level": 3, "gold_answer": "46", "predicted_answer": "46", "correct": true, "codi0_answer": 46, "values": [38, 17, 23, 46]}
+{"idx": 190, "id": "depth2-valid-L03-00190", "level": 3, "gold_answer": "22", "predicted_answer": "26", "correct": false, "codi0_answer": 16, "values": [33, 34, 11, 22]}
+{"idx": 191, "id": "depth2-valid-L03-00191", "level": 3, "gold_answer": "24", "predicted_answer": "24", "correct": true, "codi0_answer": 86, "values": [55, 37, 47, 24]}
+{"idx": 192, "id": "depth2-valid-L03-00192", "level": 3, "gold_answer": "0", "predicted_answer": "4", "correct": false, "codi0_answer": 8, "values": [24, 31, 46, 0]}
+{"idx": 193, "id": "depth2-valid-L03-00193", "level": 3, "gold_answer": "34", "predicted_answer": "34", "correct": true, "codi0_answer": 32, "values": [62, 31, 17, 34]}
+{"idx": 194, "id": "depth2-valid-L03-00194", "level": 3, "gold_answer": "63", "predicted_answer": "63", "correct": true, "codi0_answer": 75, "values": [57, 37, 74, 63]}
+{"idx": 195, "id": "depth2-valid-L03-00195", "level": 3, "gold_answer": "23", "predicted_answer": "25", "correct": false, "codi0_answer": 17, "values": [3, 21, 42, 23]}
+{"idx": 196, "id": "depth2-valid-L03-00196", "level": 3, "gold_answer": "62", "predicted_answer": "62", "correct": true, "codi0_answer": 60, "values": [94, 47, 55, 62]}
+{"idx": 197, "id": "depth2-valid-L03-00197", "level": 3, "gold_answer": "17", "predicted_answer": "17", "correct": true, "codi0_answer": 22, "values": [27, 36, 18, 17]}
+{"idx": 198, "id": "depth2-valid-L03-00198", "level": 3, "gold_answer": "43", "predicted_answer": "37", "correct": false, "codi0_answer": 45, "values": [86, 43, 86, 43]}
+{"idx": 199, "id": "depth2-valid-L03-00199", "level": 3, "gold_answer": "49", "predicted_answer": "49", "correct": true, "codi0_answer": 49, "values": [45, 60, 30, 49]}
+{"idx": 200, "id": "depth2-valid-L03-00200", "level": 3, "gold_answer": "60", "predicted_answer": "60", "correct": true, "codi0_answer": 60, "values": [52, 26, 30, 60]}
+{"idx": 201, "id": "depth2-valid-L03-00201", "level": 3, "gold_answer": "54", "predicted_answer": "54", "correct": true, "codi0_answer": 54, "values": [80, 40, 39, 54]}
+{"idx": 202, "id": "depth2-valid-L03-00202", "level": 3, "gold_answer": "18", "predicted_answer": "17", "correct": false, "codi0_answer": 18, "values": [53, 67, 36, 18]}
+{"idx": 203, "id": "depth2-valid-L03-00203", "level": 3, "gold_answer": "29", "predicted_answer": "28", "correct": false, "codi0_answer": 30, "values": [64, 61, 58, 29]}
+{"idx": 204, "id": "depth2-valid-L03-00204", "level": 3, "gold_answer": "57", "predicted_answer": "57", "correct": true, "codi0_answer": 59, "values": [7, 29, 58, 57]}
+{"idx": 205, "id": "depth2-valid-L03-00205", "level": 3, "gold_answer": "20", "predicted_answer": "19", "correct": false, "codi0_answer": 20, "values": [69, 50, 25, 20]}
+{"idx": 206, "id": "depth2-valid-L03-00206", "level": 3, "gold_answer": "45", "predicted_answer": "45", "correct": true, "codi0_answer": 49, "values": [86, 43, 41, 45]}
+{"idx": 207, "id": "depth2-valid-L03-00207", "level": 3, "gold_answer": "49", "predicted_answer": "51", "correct": false, "codi0_answer": 51, "values": [81, 70, 35, 49]}
+{"idx": 208, "id": "depth2-valid-L03-00208", "level": 3, "gold_answer": "36", "predicted_answer": "36", "correct": true, "codi0_answer": 36, "values": [61, 36, 18, 36]}
+{"idx": 209, "id": "depth2-valid-L03-00209", "level": 3, "gold_answer": "25", "predicted_answer": "25", "correct": true, "codi0_answer": 18, "values": [83, 85, 50, 25]}
+{"idx": 210, "id": "depth2-valid-L03-00210", "level": 3, "gold_answer": "61", "predicted_answer": "61", "correct": true, "codi0_answer": 66, "values": [63, 80, 65, 61]}
+{"idx": 211, "id": "depth2-valid-L03-00211", "level": 3, "gold_answer": "36", "predicted_answer": "35", "correct": false, "codi0_answer": 35, "values": [22, 36, 18, 36]}
+{"idx": 212, "id": "depth2-valid-L03-00212", "level": 3, "gold_answer": "10", "predicted_answer": "9", "correct": false, "codi0_answer": 11, "values": [78, 39, 20, 10]}
+{"idx": 213, "id": "depth2-valid-L03-00213", "level": 3, "gold_answer": "18", "predicted_answer": "18", "correct": true, "codi0_answer": 20, "values": [93, 86, 43, 18]}
+{"idx": 214, "id": "depth2-valid-L03-00214", "level": 3, "gold_answer": "28", "predicted_answer": "28", "correct": true, "codi0_answer": 29, "values": [57, 54, 27, 28]}
+{"idx": 215, "id": "depth2-valid-L03-00215", "level": 3, "gold_answer": "44", "predicted_answer": "46", "correct": false, "codi0_answer": 40, "values": [41, 44, 22, 44]}
+{"idx": 216, "id": "depth2-valid-L03-00216", "level": 3, "gold_answer": "55", "predicted_answer": "56", "correct": false, "codi0_answer": 56, "values": [79, 78, 39, 55]}
+{"idx": 217, "id": "depth2-valid-L03-00217", "level": 3, "gold_answer": "21", "predicted_answer": "19", "correct": false, "codi0_answer": 21, "values": [35, 29, 58, 21]}
+{"idx": 218, "id": "depth2-valid-L03-00218", "level": 3, "gold_answer": "43", "predicted_answer": "45", "correct": false, "codi0_answer": 41, "values": [16, 32, 35, 43]}
+{"idx": 219, "id": "depth2-valid-L03-00219", "level": 3, "gold_answer": "43", "predicted_answer": "41", "correct": false, "codi0_answer": 57, "values": [54, 35, 70, 43]}
+{"idx": 220, "id": "depth2-valid-L03-00220", "level": 3, "gold_answer": "17", "predicted_answer": "17", "correct": true, "codi0_answer": 17, "values": [7, 22, 11, 17]}
+{"idx": 221, "id": "depth2-valid-L03-00221", "level": 3, "gold_answer": "82", "predicted_answer": "78", "correct": false, "codi0_answer": 90, "values": [59, 51, 41, 82]}
+{"idx": 222, "id": "depth2-valid-L03-00222", "level": 3, "gold_answer": "46", "predicted_answer": "46", "correct": true, "codi0_answer": 46, "values": [28, 14, 23, 46]}
+{"idx": 223, "id": "depth2-valid-L03-00223", "level": 3, "gold_answer": "43", "predicted_answer": "44", "correct": false, "codi0_answer": 45, "values": [74, 73, 86, 43]}
+{"idx": 224, "id": "depth2-valid-L03-00224", "level": 3, "gold_answer": "51", "predicted_answer": "53", "correct": false, "codi0_answer": 58, "values": [45, 25, 33, 51]}
+{"idx": 225, "id": "depth2-valid-L03-00225", "level": 3, "gold_answer": "21", "predicted_answer": "23", "correct": false, "codi0_answer": 29, "values": [15, 21, 42, 21]}
+{"idx": 226, "id": "depth2-valid-L03-00226", "level": 3, "gold_answer": "21", "predicted_answer": "21", "correct": true, "codi0_answer": 20, "values": [60, 24, 12, 21]}
+{"idx": 227, "id": "depth2-valid-L03-00227", "level": 3, "gold_answer": "7", "predicted_answer": "9", "correct": false, "codi0_answer": 66, "values": [21, 41, 21, 7]}
+{"idx": 228, "id": "depth2-valid-L03-00228", "level": 3, "gold_answer": "10", "predicted_answer": "9", "correct": false, "codi0_answer": 11, "values": [56, 42, 21, 10]}
+{"idx": 229, "id": "depth2-valid-L03-00229", "level": 3, "gold_answer": "39", "predicted_answer": "39", "correct": true, "codi0_answer": 39, "values": [55, 58, 29, 39]}
+{"idx": 230, "id": "depth2-valid-L03-00230", "level": 3, "gold_answer": "9", "predicted_answer": "12", "correct": false, "codi0_answer": 13, "values": [74, 37, 28, 9]}
+{"idx": 231, "id": "depth2-valid-L03-00231", "level": 3, "gold_answer": "29", "predicted_answer": "29", "correct": true, "codi0_answer": 29, "values": [22, 11, 36, 29]}
+{"idx": 232, "id": "depth2-valid-L03-00232", "level": 3, "gold_answer": "92", "predicted_answer": "94", "correct": false, "codi0_answer": 34, "values": [61, 83, 69, 92]}
+{"idx": 233, "id": "depth2-valid-L03-00233", "level": 3, "gold_answer": "84", "predicted_answer": "84", "correct": true, "codi0_answer": 74, "values": [59, 57, 42, 84]}
+{"idx": 234, "id": "depth2-valid-L03-00234", "level": 3, "gold_answer": "43", "predicted_answer": "43", "correct": true, "codi0_answer": 39, "values": [33, 16, 32, 43]}
+{"idx": 235, "id": "depth2-valid-L03-00235", "level": 3, "gold_answer": "13", "predicted_answer": "13", "correct": true, "codi0_answer": 15, "values": [22, 11, 26, 13]}
+{"idx": 236, "id": "depth2-valid-L03-00236", "level": 3, "gold_answer": "53", "predicted_answer": "55", "correct": false, "codi0_answer": 65, "values": [90, 45, 64, 53]}
+{"idx": 237, "id": "depth2-valid-L03-00237", "level": 3, "gold_answer": "60", "predicted_answer": "64", "correct": false, "codi0_answer": 68, "values": [1, 15, 30, 60]}
+{"idx": 238, "id": "depth2-valid-L03-00238", "level": 3, "gold_answer": "52", "predicted_answer": "48", "correct": false, "codi0_answer": 3, "values": [49, 45, 26, 52]}
+{"idx": 239, "id": "depth2-valid-L03-00239", "level": 3, "gold_answer": "27", "predicted_answer": "29", "correct": false, "codi0_answer": 27, "values": [12, 17, 34, 27]}
+{"idx": 240, "id": "depth2-valid-L03-00240", "level": 3, "gold_answer": "40", "predicted_answer": "42", "correct": false, "codi0_answer": 40, "values": [47, 40, 20, 40]}
+{"idx": 241, "id": "depth2-valid-L03-00241", "level": 3, "gold_answer": "48", "predicted_answer": "48", "correct": true, "codi0_answer": 52, "values": [90, 45, 65, 48]}
+{"idx": 242, "id": "depth2-valid-L03-00242", "level": 3, "gold_answer": "33", "predicted_answer": "31", "correct": false, "codi0_answer": 27, "values": [3, 14, 28, 33]}
+{"idx": 243, "id": "depth2-valid-L03-00243", "level": 3, "gold_answer": "11", "predicted_answer": "11", "correct": true, "codi0_answer": 11, "values": [14, 32, 22, 11]}
+{"idx": 244, "id": "depth2-valid-L03-00244", "level": 3, "gold_answer": "30", "predicted_answer": "34", "correct": false, "codi0_answer": 32, "values": [13, 17, 15, 30]}
+{"idx": 245, "id": "depth2-valid-L03-00245", "level": 3, "gold_answer": "40", "predicted_answer": "31", "correct": false, "codi0_answer": 34, "values": [64, 32, 41, 40]}
+{"idx": 246, "id": "depth2-valid-L03-00246", "level": 3, "gold_answer": "33", "predicted_answer": "33", "correct": true, "codi0_answer": 33, "values": [52, 26, 13, 33]}
+{"idx": 247, "id": "depth2-valid-L03-00247", "level": 3, "gold_answer": "45", "predicted_answer": "45", "correct": true, "codi0_answer": 43, "values": [78, 39, 48, 45]}
+{"idx": 248, "id": "depth2-valid-L03-00248", "level": 3, "gold_answer": "54", "predicted_answer": "54", "correct": true, "codi0_answer": 54, "values": [32, 23, 31, 54]}
+{"idx": 249, "id": "depth2-valid-L03-00249", "level": 3, "gold_answer": "78", "predicted_answer": "76", "correct": false, "codi0_answer": 76, "values": [89, 77, 99, 78]}
+{"idx": 250, "id": "depth2-valid-L03-00250", "level": 3, "gold_answer": "12", "predicted_answer": "14", "correct": false, "codi0_answer": 14, "values": [15, 40, 24, 12]}
+{"idx": 251, "id": "depth2-valid-L03-00251", "level": 3, "gold_answer": "23", "predicted_answer": "23", "correct": true, "codi0_answer": 23, "values": [54, 66, 33, 23]}
+{"idx": 252, "id": "depth2-valid-L03-00252", "level": 3, "gold_answer": "15", "predicted_answer": "15", "correct": true, "codi0_answer": 15, "values": [26, 25, 30, 15]}
+{"idx": 253, "id": "depth2-valid-L03-00253", "level": 3, "gold_answer": "34", "predicted_answer": "35", "correct": false, "codi0_answer": 37, "values": [66, 58, 68, 34]}
+{"idx": 254, "id": "depth2-valid-L03-00254", "level": 3, "gold_answer": "17", "predicted_answer": "17", "correct": true, "codi0_answer": 17, "values": [77, 66, 33, 17]}
+{"idx": 255, "id": "depth2-valid-L03-00255", "level": 3, "gold_answer": "59", "predicted_answer": "59", "correct": true, "codi0_answer": 64, "values": [82, 41, 63, 59]}
+{"idx": 256, "id": "depth2-valid-L03-00256", "level": 3, "gold_answer": "64", "predicted_answer": "62", "correct": false, "codi0_answer": 62, "values": [88, 77, 63, 64]}
+{"idx": 257, "id": "depth2-valid-L03-00257", "level": 3, "gold_answer": "50", "predicted_answer": "48", "correct": false, "codi0_answer": 43, "values": [28, 56, 39, 50]}
+{"idx": 258, "id": "depth2-valid-L03-00258", "level": 3, "gold_answer": "65", "predicted_answer": "67", "correct": false, "codi0_answer": 67, "values": [25, 33, 66, 65]}
+{"idx": 259, "id": "depth2-valid-L03-00259", "level": 3, "gold_answer": "44", "predicted_answer": "44", "correct": true, "codi0_answer": 42, "values": [30, 15, 22, 44]}
+{"idx": 260, "id": "depth2-valid-L03-00260", "level": 3, "gold_answer": "23", "predicted_answer": "24", "correct": false, "codi0_answer": 23, "values": [65, 61, 46, 23]}
+{"idx": 261, "id": "depth2-valid-L03-00261", "level": 3, "gold_answer": "3", "predicted_answer": "3", "correct": true, "codi0_answer": 5, "values": [5, 10, 6, 3]}
+{"idx": 262, "id": "depth2-valid-L03-00262", "level": 3, "gold_answer": "24", "predicted_answer": "50", "correct": false, "codi0_answer": 23, "values": [64, 32, 35, 24]}
+{"idx": 263, "id": "depth2-valid-L03-00263", "level": 3, "gold_answer": "46", "predicted_answer": "44", "correct": false, "codi0_answer": 52, "values": [32, 64, 45, 46]}
+{"idx": 264, "id": "depth2-valid-L03-00264", "level": 3, "gold_answer": "20", "predicted_answer": "20", "correct": true, "codi0_answer": 23, "values": [84, 72, 36, 20]}
+{"idx": 265, "id": "depth2-valid-L03-00265", "level": 3, "gold_answer": "10", "predicted_answer": "10", "correct": true, "codi0_answer": 10, "values": [15, 30, 20, 10]}
+{"idx": 266, "id": "depth2-valid-L03-00266", "level": 3, "gold_answer": "38", "predicted_answer": "42", "correct": false, "codi0_answer": 36, "values": [40, 20, 19, 38]}
+{"idx": 267, "id": "depth2-valid-L03-00267", "level": 3, "gold_answer": "25", "predicted_answer": "90", "correct": false, "codi0_answer": 84, "values": [41, 62, 47, 25]}
+{"idx": 268, "id": "depth2-valid-L03-00268", "level": 3, "gold_answer": "46", "predicted_answer": "46", "correct": true, "codi0_answer": 42, "values": [22, 11, 23, 46]}
+{"idx": 269, "id": "depth2-valid-L03-00269", "level": 3, "gold_answer": "58", "predicted_answer": "60", "correct": false, "codi0_answer": 55, "values": [76, 38, 76, 58]}
+{"idx": 270, "id": "depth2-valid-L03-00270", "level": 3, "gold_answer": "16", "predicted_answer": "32", "correct": false, "codi0_answer": 16, "values": [34, 17, 8, 16]}
+{"idx": 271, "id": "depth2-valid-L03-00271", "level": 3, "gold_answer": "19", "predicted_answer": "19", "correct": true, "codi0_answer": 19, "values": [7, 28, 14, 19]}
+{"idx": 272, "id": "depth2-valid-L03-00272", "level": 3, "gold_answer": "31", "predicted_answer": "31", "correct": true, "codi0_answer": 28, "values": [73, 38, 19, 31]}
+{"idx": 273, "id": "depth2-valid-L03-00273", "level": 3, "gold_answer": "28", "predicted_answer": "28", "correct": true, "codi0_answer": 26, "values": [5, 18, 9, 28]}
+{"idx": 274, "id": "depth2-valid-L03-00274", "level": 3, "gold_answer": "27", "predicted_answer": "26", "correct": false, "codi0_answer": 28, "values": [7, 28, 14, 27]}
+{"idx": 275, "id": "depth2-valid-L03-00275", "level": 3, "gold_answer": "39", "predicted_answer": "41", "correct": false, "codi0_answer": 37, "values": [7, 19, 38, 39]}
+{"idx": 276, "id": "depth2-valid-L03-00276", "level": 3, "gold_answer": "67", "predicted_answer": "67", "correct": true, "codi0_answer": 73, "values": [39, 51, 76, 67]}
+{"idx": 277, "id": "depth2-valid-L03-00277", "level": 3, "gold_answer": "39", "predicted_answer": "39", "correct": true, "codi0_answer": 39, "values": [42, 38, 19, 39]}
+{"idx": 278, "id": "depth2-valid-L03-00278", "level": 3, "gold_answer": "22", "predicted_answer": "22", "correct": true, "codi0_answer": 22, "values": [60, 30, 15, 22]}
+{"idx": 279, "id": "depth2-valid-L03-00279", "level": 3, "gold_answer": "28", "predicted_answer": "28", "correct": true, "codi0_answer": 28, "values": [15, 26, 13, 28]}
+{"idx": 280, "id": "depth2-valid-L03-00280", "level": 3, "gold_answer": "58", "predicted_answer": "58", "correct": true, "codi0_answer": 62, "values": [17, 28, 29, 58]}
+{"idx": 281, "id": "depth2-valid-L03-00281", "level": 3, "gold_answer": "50", "predicted_answer": "48", "correct": false, "codi0_answer": 50, "values": [62, 60, 30, 50]}
+{"idx": 282, "id": "depth2-valid-L03-00282", "level": 3, "gold_answer": "47", "predicted_answer": "47", "correct": true, "codi0_answer": 47, "values": [63, 88, 44, 47]}
+{"idx": 283, "id": "depth2-valid-L03-00283", "level": 3, "gold_answer": "35", "predicted_answer": "35", "correct": true, "codi0_answer": 33, "values": [67, 54, 27, 35]}
+{"idx": 284, "id": "depth2-valid-L03-00284", "level": 3, "gold_answer": "55", "predicted_answer": "55", "correct": true, "codi0_answer": 55, "values": [61, 82, 41, 55]}
+{"idx": 285, "id": "depth2-valid-L03-00285", "level": 3, "gold_answer": "33", "predicted_answer": "33", "correct": true, "codi0_answer": 33, "values": [80, 40, 20, 33]}
+{"idx": 286, "id": "depth2-valid-L04-00000", "level": 4, "gold_answer": "8", "predicted_answer": "7", "correct": false, "codi0_answer": 5, "values": [55, 16, 8, 16, 8]}
+{"idx": 287, "id": "depth2-valid-L04-00001", "level": 4, "gold_answer": "78", "predicted_answer": "94", "correct": false, "codi0_answer": 90, "values": [16, 25, 50, 39, 78]}
+{"idx": 288, "id": "depth2-valid-L04-00002", "level": 4, "gold_answer": "16", "predicted_answer": "16", "correct": true, "codi0_answer": 16, "values": [54, 72, 52, 32, 16]}
+{"idx": 289, "id": "depth2-valid-L04-00003", "level": 4, "gold_answer": "26", "predicted_answer": "29", "correct": false, "codi0_answer": 29, "values": [28, 22, 14, 7, 26]}
+{"idx": 290, "id": "depth2-valid-L04-00004", "level": 4, "gold_answer": "5", "predicted_answer": "13", "correct": false, "codi0_answer": 9, "values": [16, 8, 4, 2, 5]}
+{"idx": 291, "id": "depth2-valid-L04-00005", "level": 4, "gold_answer": "74", "predicted_answer": "74", "correct": true, "codi0_answer": 90, "values": [23, 27, 54, 37, 74]}
+{"idx": 292, "id": "depth2-valid-L04-00006", "level": 4, "gold_answer": "31", "predicted_answer": "33", "correct": false, "codi0_answer": 31, "values": [98, 78, 39, 44, 31]}
+{"idx": 293, "id": "depth2-valid-L04-00007", "level": 4, "gold_answer": "2", "predicted_answer": "4", "correct": false, "codi0_answer": 4, "values": [17, 32, 16, 4, 2]}
+{"idx": 294, "id": "depth2-valid-L04-00008", "level": 4, "gold_answer": "37", "predicted_answer": "74", "correct": false, "codi0_answer": 40, "values": [55, 36, 13, 17, 37]}
+{"idx": 295, "id": "depth2-valid-L04-00009", "level": 4, "gold_answer": "37", "predicted_answer": "29", "correct": false, "codi0_answer": 22, "values": [44, 46, 53, 27, 37]}
+{"idx": 296, "id": "depth2-valid-L04-00010", "level": 4, "gold_answer": "34", "predicted_answer": "36", "correct": false, "codi0_answer": 38, "values": [29, 3, 6, 22, 34]}
+{"idx": 297, "id": "depth2-valid-L04-00011", "level": 4, "gold_answer": "45", "predicted_answer": "46", "correct": false, "codi0_answer": 45, "values": [67, 81, 94, 90, 45]}
+{"idx": 298, "id": "depth2-valid-L04-00012", "level": 4, "gold_answer": "12", "predicted_answer": "13", "correct": false, "codi0_answer": 11, "values": [31, 56, 46, 24, 12]}
+{"idx": 299, "id": "depth2-valid-L04-00013", "level": 4, "gold_answer": "20", "predicted_answer": "22", "correct": false, "codi0_answer": 88, "values": [4, 16, 32, 48, 20]}
+{"idx": 300, "id": "depth2-valid-L04-00014", "level": 4, "gold_answer": "3", "predicted_answer": "84", "correct": false, "codi0_answer": 86, "values": [30, 43, 42, 52, 3]}
+{"idx": 301, "id": "depth2-valid-L04-00015", "level": 4, "gold_answer": "28", "predicted_answer": "39", "correct": false, "codi0_answer": 38, "values": [65, 35, 70, 56, 28]}
+{"idx": 302, "id": "depth2-valid-L04-00016", "level": 4, "gold_answer": "60", "predicted_answer": "52", "correct": false, "codi0_answer": 64, "values": [68, 47, 34, 30, 60]}
+{"idx": 303, "id": "depth2-valid-L04-00017", "level": 4, "gold_answer": "56", "predicted_answer": "56", "correct": true, "codi0_answer": 56, "values": [54, 27, 37, 28, 56]}
+{"idx": 304, "id": "depth2-valid-L04-00018", "level": 4, "gold_answer": "30", "predicted_answer": "28", "correct": false, "codi0_answer": 28, "values": [42, 21, 28, 56, 30]}
+{"idx": 305, "id": "depth2-valid-L04-00019", "level": 4, "gold_answer": "44", "predicted_answer": "39", "correct": false, "codi0_answer": 43, "values": [84, 69, 89, 88, 44]}
+{"idx": 306, "id": "depth2-valid-L04-00020", "level": 4, "gold_answer": "46", "predicted_answer": "47", "correct": false, "codi0_answer": 42, "values": [37, 44, 22, 26, 46]}
+{"idx": 307, "id": "depth2-valid-L04-00021", "level": 4, "gold_answer": "45", "predicted_answer": "35", "correct": false, "codi0_answer": 47, "values": [27, 39, 23, 46, 45]}
+{"idx": 308, "id": "depth2-valid-L04-00022", "level": 4, "gold_answer": "25", "predicted_answer": "37", "correct": false, "codi0_answer": 33, "values": [14, 20, 40, 35, 25]}
+{"idx": 309, "id": "depth2-valid-L04-00023", "level": 4, "gold_answer": "23", "predicted_answer": "21", "correct": false, "codi0_answer": 21, "values": [62, 32, 33, 34, 23]}
+{"idx": 310, "id": "depth2-valid-L04-00024", "level": 4, "gold_answer": "4", "predicted_answer": "3", "correct": false, "codi0_answer": 42, "values": [54, 34, 17, 34, 4]}
+{"idx": 311, "id": "depth2-valid-L04-00025", "level": 4, "gold_answer": "47", "predicted_answer": "47", "correct": true, "codi0_answer": 67, "values": [84, 42, 84, 53, 47]}
+{"idx": 312, "id": "depth2-valid-L04-00026", "level": 4, "gold_answer": "80", "predicted_answer": "82", "correct": false, "codi0_answer": 76, "values": [97, 93, 80, 40, 80]}
+{"idx": 313, "id": "depth2-valid-L04-00027", "level": 4, "gold_answer": "39", "predicted_answer": "39", "correct": true, "codi0_answer": 39, "values": [7, 25, 44, 34, 39]}
+{"idx": 314, "id": "depth2-valid-L04-00028", "level": 4, "gold_answer": "23", "predicted_answer": "23", "correct": true, "codi0_answer": 24, "values": [37, 33, 47, 46, 23]}
+{"idx": 315, "id": "depth2-valid-L04-00029", "level": 4, "gold_answer": "11", "predicted_answer": "11", "correct": true, "codi0_answer": 30, "values": [7, 9, 15, 18, 11]}
+{"idx": 316, "id": "depth2-valid-L04-00030", "level": 4, "gold_answer": "33", "predicted_answer": "37", "correct": false, "codi0_answer": 33, "values": [24, 48, 39, 46, 33]}
+{"idx": 317, "id": "depth2-valid-L04-00031", "level": 4, "gold_answer": "18", "predicted_answer": "22", "correct": false, "codi0_answer": 22, "values": [9, 11, 18, 9, 18]}
+{"idx": 318, "id": "depth2-valid-L04-00032", "level": 4, "gold_answer": "48", "predicted_answer": "48", "correct": true, "codi0_answer": 48, "values": [30, 9, 31, 42, 48]}
+{"idx": 319, "id": "depth2-valid-L04-00033", "level": 4, "gold_answer": "28", "predicted_answer": "29", "correct": false, "codi0_answer": 27, "values": [14, 28, 39, 56, 28]}
+{"idx": 320, "id": "depth2-valid-L04-00034", "level": 4, "gold_answer": "70", "predicted_answer": "70", "correct": true, "codi0_answer": 57, "values": [98, 49, 65, 84, 70]}
+{"idx": 321, "id": "depth2-valid-L04-00035", "level": 4, "gold_answer": "33", "predicted_answer": "63", "correct": false, "codi0_answer": 57, "values": [95, 80, 40, 20, 33]}
+{"idx": 322, "id": "depth2-valid-L04-00036", "level": 4, "gold_answer": "49", "predicted_answer": "48", "correct": false, "codi0_answer": 47, "values": [72, 60, 58, 29, 49]}
+{"idx": 323, "id": "depth2-valid-L04-00037", "level": 4, "gold_answer": "10", "predicted_answer": "10", "correct": true, "codi0_answer": 13, "values": [86, 72, 36, 34, 10]}
+{"idx": 324, "id": "depth2-valid-L04-00038", "level": 4, "gold_answer": "17", "predicted_answer": "19", "correct": false, "codi0_answer": 18, "values": [11, 15, 38, 34, 17]}
+{"idx": 325, "id": "depth2-valid-L04-00039", "level": 4, "gold_answer": "28", "predicted_answer": "28", "correct": true, "codi0_answer": 30, "values": [98, 49, 55, 56, 28]}
+{"idx": 326, "id": "depth2-valid-L04-00040", "level": 4, "gold_answer": "32", "predicted_answer": "32", "correct": true, "codi0_answer": 26, "values": [56, 20, 10, 16, 32]}
+{"idx": 327, "id": "depth2-valid-L04-00041", "level": 4, "gold_answer": "70", "predicted_answer": "72", "correct": false, "codi0_answer": 76, "values": [55, 68, 66, 53, 70]}
+{"idx": 328, "id": "depth2-valid-L04-00042", "level": 4, "gold_answer": "19", "predicted_answer": "20", "correct": false, "codi0_answer": 8, "values": [35, 28, 14, 17, 19]}
+{"idx": 329, "id": "depth2-valid-L04-00043", "level": 4, "gold_answer": "70", "predicted_answer": "70", "correct": true, "codi0_answer": 74, "values": [65, 82, 41, 45, 70]}
+{"idx": 330, "id": "depth2-valid-L04-00044", "level": 4, "gold_answer": "60", "predicted_answer": "60", "correct": true, "codi0_answer": 72, "values": [42, 41, 61, 30, 60]}
+{"idx": 331, "id": "depth2-valid-L04-00045", "level": 4, "gold_answer": "64", "predicted_answer": "68", "correct": false, "codi0_answer": 66, "values": [56, 43, 52, 32, 64]}
+{"idx": 332, "id": "depth2-valid-L04-00046", "level": 4, "gold_answer": "50", "predicted_answer": "52", "correct": false, "codi0_answer": 50, "values": [88, 78, 60, 30, 50]}
+{"idx": 333, "id": "depth2-valid-L04-00047", "level": 4, "gold_answer": "35", "predicted_answer": "35", "correct": true, "codi0_answer": 35, "values": [13, 26, 42, 21, 35]}
+{"idx": 334, "id": "depth2-valid-L04-00048", "level": 4, "gold_answer": "22", "predicted_answer": "20", "correct": false, "codi0_answer": 38, "values": [30, 15, 20, 40, 22]}
+{"idx": 335, "id": "depth2-valid-L04-00049", "level": 4, "gold_answer": "22", "predicted_answer": "22", "correct": true, "codi0_answer": 22, "values": [19, 16, 22, 11, 22]}
+{"idx": 336, "id": "depth2-valid-L04-00050", "level": 4, "gold_answer": "23", "predicted_answer": "20", "correct": false, "codi0_answer": 18, "values": [16, 20, 30, 15, 23]}
+{"idx": 337, "id": "depth2-valid-L04-00051", "level": 4, "gold_answer": "38", "predicted_answer": "38", "correct": true, "codi0_answer": 40, "values": [74, 73, 60, 30, 38]}
+{"idx": 338, "id": "depth2-valid-L04-00052", "level": 4, "gold_answer": "55", "predicted_answer": "59", "correct": false, "codi0_answer": 55, "values": [2, 17, 41, 62, 55]}
+{"idx": 339, "id": "depth2-valid-L04-00053", "level": 4, "gold_answer": "54", "predicted_answer": "58", "correct": false, "codi0_answer": 54, "values": [5, 7, 11, 27, 54]}
+{"idx": 340, "id": "depth2-valid-L04-00054", "level": 4, "gold_answer": "38", "predicted_answer": "24", "correct": false, "codi0_answer": 22, "values": [48, 39, 57, 19, 38]}
+{"idx": 341, "id": "depth2-valid-L04-00055", "level": 4, "gold_answer": "56", "predicted_answer": "56", "correct": true, "codi0_answer": 60, "values": [19, 38, 48, 63, 56]}
+{"idx": 342, "id": "depth2-valid-L04-00056", "level": 4, "gold_answer": "44", "predicted_answer": "44", "correct": true, "codi0_answer": 28, "values": [64, 28, 14, 28, 44]}
+{"idx": 343, "id": "depth2-valid-L04-00057", "level": 4, "gold_answer": "49", "predicted_answer": "49", "correct": true, "codi0_answer": 61, "values": [54, 27, 33, 66, 49]}
+{"idx": 344, "id": "depth2-valid-L04-00058", "level": 4, "gold_answer": "31", "predicted_answer": "31", "correct": true, "codi0_answer": 30, "values": [93, 73, 68, 34, 31]}
+{"idx": 345, "id": "depth2-valid-L04-00059", "level": 4, "gold_answer": "23", "predicted_answer": "23", "correct": true, "codi0_answer": 23, "values": [17, 19, 39, 46, 23]}
+{"idx": 346, "id": "depth2-valid-L04-00060", "level": 4, "gold_answer": "36", "predicted_answer": "38", "correct": false, "codi0_answer": 38, "values": [19, 38, 19, 31, 36]}
+{"idx": 347, "id": "depth2-valid-L04-00061", "level": 4, "gold_answer": "24", "predicted_answer": "28", "correct": false, "codi0_answer": 40, "values": [9, 28, 15, 30, 24]}
+{"idx": 348, "id": "depth2-valid-L04-00062", "level": 4, "gold_answer": "80", "predicted_answer": "25", "correct": false, "codi0_answer": 28, "values": [59, 61, 80, 40, 80]}
+{"idx": 349, "id": "depth2-valid-L04-00063", "level": 4, "gold_answer": "41", "predicted_answer": "45", "correct": false, "codi0_answer": 77, "values": [62, 43, 68, 22, 41]}
+{"idx": 350, "id": "depth2-valid-L04-00064", "level": 4, "gold_answer": "41", "predicted_answer": "51", "correct": false, "codi0_answer": 51, "values": [84, 55, 28, 56, 41]}
+{"idx": 351, "id": "depth2-valid-L04-00065", "level": 4, "gold_answer": "33", "predicted_answer": "44", "correct": false, "codi0_answer": 34, "values": [9, 13, 26, 13, 33]}
+{"idx": 352, "id": "depth2-valid-L04-00066", "level": 4, "gold_answer": "44", "predicted_answer": "44", "correct": true, "codi0_answer": 50, "values": [31, 42, 28, 56, 44]}
+{"idx": 353, "id": "depth2-valid-L04-00067", "level": 4, "gold_answer": "12", "predicted_answer": "31", "correct": false, "codi0_answer": 33, "values": [39, 35, 48, 24, 12]}
+{"idx": 354, "id": "depth2-valid-L04-00068", "level": 4, "gold_answer": "42", "predicted_answer": "44", "correct": false, "codi0_answer": 40, "values": [99, 84, 42, 21, 42]}
+{"idx": 355, "id": "depth2-valid-L04-00069", "level": 4, "gold_answer": "23", "predicted_answer": "23", "correct": true, "codi0_answer": 24, "values": [70, 54, 27, 40, 23]}
+{"idx": 356, "id": "depth2-valid-L04-00070", "level": 4, "gold_answer": "6", "predicted_answer": "35", "correct": false, "codi0_answer": 9, "values": [72, 64, 32, 12, 6]}
+{"idx": 357, "id": "depth2-valid-L04-00071", "level": 4, "gold_answer": "13", "predicted_answer": "52", "correct": false, "codi0_answer": 50, "values": [89, 66, 52, 26, 13]}
+{"idx": 358, "id": "depth2-valid-L04-00072", "level": 4, "gold_answer": "31", "predicted_answer": "31", "correct": true, "codi0_answer": 30, "values": [59, 68, 34, 51, 31]}
+{"idx": 359, "id": "depth2-valid-L04-00073", "level": 4, "gold_answer": "46", "predicted_answer": "54", "correct": false, "codi0_answer": 66, "values": [13, 30, 60, 21, 46]}
+{"idx": 360, "id": "depth2-valid-L04-00074", "level": 4, "gold_answer": "14", "predicted_answer": "13", "correct": false, "codi0_answer": 16, "values": [44, 22, 34, 28, 14]}
+{"idx": 361, "id": "depth2-valid-L04-00075", "level": 4, "gold_answer": "35", "predicted_answer": "35", "correct": true, "codi0_answer": 35, "values": [10, 5, 16, 32, 35]}
+{"idx": 362, "id": "depth2-valid-L04-00076", "level": 4, "gold_answer": "30", "predicted_answer": "30", "correct": true, "codi0_answer": 20, "values": [18, 12, 14, 28, 30]}
+{"idx": 363, "id": "depth2-valid-L04-00077", "level": 4, "gold_answer": "40", "predicted_answer": "40", "correct": true, "codi0_answer": 44, "values": [8, 16, 35, 43, 40]}
+{"idx": 364, "id": "depth2-valid-L04-00078", "level": 4, "gold_answer": "40", "predicted_answer": "20", "correct": false, "codi0_answer": 29, "values": [78, 58, 29, 30, 40]}
+{"idx": 365, "id": "depth2-valid-L04-00079", "level": 4, "gold_answer": "28", "predicted_answer": "28", "correct": true, "codi0_answer": 28, "values": [7, 31, 41, 14, 28]}
+{"idx": 366, "id": "depth2-valid-L04-00080", "level": 4, "gold_answer": "22", "predicted_answer": "22", "correct": true, "codi0_answer": 22, "values": [86, 43, 38, 44, 22]}
+{"idx": 367, "id": "depth2-valid-L04-00081", "level": 4, "gold_answer": "13", "predicted_answer": "38", "correct": false, "codi0_answer": 15, "values": [48, 43, 52, 26, 13]}
+{"idx": 368, "id": "depth2-valid-L04-00082", "level": 4, "gold_answer": "13", "predicted_answer": "17", "correct": false, "codi0_answer": 19, "values": [12, 2, 6, 12, 13]}
+{"idx": 369, "id": "depth2-valid-L04-00083", "level": 4, "gold_answer": "48", "predicted_answer": "52", "correct": false, "codi0_answer": 64, "values": [94, 47, 28, 56, 48]}
+{"idx": 370, "id": "depth2-valid-L04-00084", "level": 4, "gold_answer": "68", "predicted_answer": "55", "correct": false, "codi0_answer": 57, "values": [92, 71, 90, 85, 68]}
+{"idx": 371, "id": "depth2-valid-L04-00085", "level": 4, "gold_answer": "90", "predicted_answer": "90", "correct": true, "codi0_answer": 82, "values": [49, 28, 56, 45, 90]}
+{"idx": 372, "id": "depth2-valid-L04-00086", "level": 4, "gold_answer": "9", "predicted_answer": "23", "correct": false, "codi0_answer": 20, "values": [51, 69, 53, 19, 9]}
+{"idx": 373, "id": "depth2-valid-L04-00087", "level": 4, "gold_answer": "19", "predicted_answer": "3", "correct": false, "codi0_answer": 5, "values": [30, 15, 30, 15, 19]}
+{"idx": 374, "id": "depth2-valid-L04-00088", "level": 4, "gold_answer": "19", "predicted_answer": "17", "correct": false, "codi0_answer": 19, "values": [6, 3, 14, 7, 19]}
+{"idx": 375, "id": "depth2-valid-L04-00089", "level": 4, "gold_answer": "13", "predicted_answer": "12", "correct": false, "codi0_answer": 13, "values": [74, 37, 44, 22, 13]}
+{"idx": 376, "id": "depth2-valid-L04-00090", "level": 4, "gold_answer": "66", "predicted_answer": "62", "correct": false, "codi0_answer": 13, "values": [6, 3, 9, 33, 66]}
+{"idx": 377, "id": "depth2-valid-L04-00091", "level": 4, "gold_answer": "33", "predicted_answer": "35", "correct": false, "codi0_answer": 33, "values": [36, 18, 38, 45, 33]}
+{"idx": 378, "id": "depth2-valid-L04-00092", "level": 4, "gold_answer": "56", "predicted_answer": "60", "correct": false, "codi0_answer": 60, "values": [13, 26, 14, 28, 56]}
+{"idx": 379, "id": "depth2-valid-L04-00093", "level": 4, "gold_answer": "53", "predicted_answer": "55", "correct": false, "codi0_answer": 52, "values": [98, 92, 67, 44, 53]}
+{"idx": 380, "id": "depth2-valid-L04-00094", "level": 4, "gold_answer": "25", "predicted_answer": "21", "correct": false, "codi0_answer": 21, "values": [54, 41, 48, 37, 25]}
+{"idx": 381, "id": "depth2-valid-L04-00095", "level": 4, "gold_answer": "23", "predicted_answer": "19", "correct": false, "codi0_answer": 25, "values": [61, 78, 75, 49, 23]}
+{"idx": 382, "id": "depth2-valid-L04-00096", "level": 4, "gold_answer": "67", "predicted_answer": "53", "correct": false, "codi0_answer": 63, "values": [40, 20, 27, 54, 67]}
+{"idx": 383, "id": "depth2-valid-L04-00097", "level": 4, "gold_answer": "20", "predicted_answer": "4", "correct": false, "codi0_answer": 6, "values": [52, 8, 20, 10, 20]}
+{"idx": 384, "id": "depth2-valid-L04-00098", "level": 4, "gold_answer": "22", "predicted_answer": "21", "correct": false, "codi0_answer": 20, "values": [76, 57, 69, 44, 22]}
+{"idx": 385, "id": "depth2-valid-L04-00099", "level": 4, "gold_answer": "33", "predicted_answer": "32", "correct": false, "codi0_answer": 33, "values": [60, 30, 15, 21, 33]}
+{"idx": 386, "id": "depth2-valid-L04-00100", "level": 4, "gold_answer": "13", "predicted_answer": "18", "correct": false, "codi0_answer": 18, "values": [10, 4, 2, 1, 13]}
+{"idx": 387, "id": "depth2-valid-L04-00101", "level": 4, "gold_answer": "37", "predicted_answer": "37", "correct": true, "codi0_answer": 38, "values": [98, 49, 43, 55, 37]}
+{"idx": 388, "id": "depth2-valid-L04-00102", "level": 4, "gold_answer": "37", "predicted_answer": "36", "correct": false, "codi0_answer": 42, "values": [71, 64, 32, 23, 37]}
+{"idx": 389, "id": "depth2-valid-L04-00103", "level": 4, "gold_answer": "38", "predicted_answer": "37", "correct": false, "codi0_answer": 41, "values": [46, 23, 46, 23, 38]}
+{"idx": 390, "id": "depth2-valid-L04-00104", "level": 4, "gold_answer": "59", "predicted_answer": "59", "correct": true, "codi0_answer": 70, "values": [84, 42, 51, 72, 59]}
+{"idx": 391, "id": "depth2-valid-L04-00105", "level": 4, "gold_answer": "46", "predicted_answer": "54", "correct": false, "codi0_answer": 54, "values": [84, 42, 31, 23, 46]}
+{"idx": 392, "id": "depth2-valid-L04-00106", "level": 4, "gold_answer": "23", "predicted_answer": "21", "correct": false, "codi0_answer": 20, "values": [17, 41, 25, 20, 23]}
+{"idx": 393, "id": "depth2-valid-L04-00107", "level": 4, "gold_answer": "67", "predicted_answer": "67", "correct": true, "codi0_answer": 64, "values": [45, 59, 61, 72, 67]}
+{"idx": 394, "id": "depth2-valid-L04-00108", "level": 4, "gold_answer": "63", "predicted_answer": "65", "correct": false, "codi0_answer": 63, "values": [44, 35, 33, 66, 63]}
+{"idx": 395, "id": "depth2-valid-L04-00109", "level": 4, "gold_answer": "56", "predicted_answer": "44", "correct": false, "codi0_answer": 48, "values": [38, 19, 21, 42, 56]}
+{"idx": 396, "id": "depth2-valid-L04-00110", "level": 4, "gold_answer": "33", "predicted_answer": "33", "correct": true, "codi0_answer": 33, "values": [65, 55, 67, 66, 33]}
+{"idx": 397, "id": "depth2-valid-L04-00111", "level": 4, "gold_answer": "32", "predicted_answer": "32", "correct": true, "codi0_answer": 32, "values": [68, 50, 25, 43, 32]}
+{"idx": 398, "id": "depth2-valid-L04-00112", "level": 4, "gold_answer": "36", "predicted_answer": "40", "correct": false, "codi0_answer": 48, "values": [9, 18, 9, 18, 36]}
+{"idx": 399, "id": "depth2-valid-L04-00113", "level": 4, "gold_answer": "26", "predicted_answer": "55", "correct": false, "codi0_answer": 59, "values": [74, 72, 36, 52, 26]}
+{"idx": 400, "id": "depth2-valid-L04-00114", "level": 4, "gold_answer": "65", "predicted_answer": "57", "correct": false, "codi0_answer": 51, "values": [40, 20, 33, 66, 65]}
+{"idx": 401, "id": "depth2-valid-L04-00115", "level": 4, "gold_answer": "48", "predicted_answer": "50", "correct": false, "codi0_answer": 59, "values": [72, 36, 33, 52, 48]}
+{"idx": 402, "id": "depth2-valid-L04-00116", "level": 4, "gold_answer": "22", "predicted_answer": "22", "correct": true, "codi0_answer": 23, "values": [2, 1, 14, 31, 22]}
+{"idx": 403, "id": "depth2-valid-L04-00117", "level": 4, "gold_answer": "78", "predicted_answer": "82", "correct": false, "codi0_answer": 82, "values": [86, 43, 86, 84, 78]}
+{"idx": 404, "id": "depth2-valid-L04-00118", "level": 4, "gold_answer": "41", "predicted_answer": "41", "correct": true, "codi0_answer": 33, "values": [21, 38, 19, 35, 41]}
+{"idx": 405, "id": "depth2-valid-L04-00119", "level": 4, "gold_answer": "15", "predicted_answer": "17", "correct": false, "codi0_answer": 53, "values": [36, 27, 14, 28, 15]}
+{"idx": 406, "id": "depth2-valid-L04-00120", "level": 4, "gold_answer": "31", "predicted_answer": "32", "correct": false, "codi0_answer": 32, "values": [17, 33, 41, 62, 31]}
+{"idx": 407, "id": "depth2-valid-L04-00121", "level": 4, "gold_answer": "27", "predicted_answer": "28", "correct": false, "codi0_answer": 29, "values": [40, 35, 50, 25, 27]}
+{"idx": 408, "id": "depth2-valid-L04-00122", "level": 4, "gold_answer": "33", "predicted_answer": "33", "correct": true, "codi0_answer": 33, "values": [9, 18, 36, 49, 33]}
+{"idx": 409, "id": "depth2-valid-L04-00123", "level": 4, "gold_answer": "14", "predicted_answer": "42", "correct": false, "codi0_answer": 46, "values": [58, 44, 22, 11, 14]}
+{"idx": 410, "id": "depth2-valid-L04-00124", "level": 4, "gold_answer": "52", "predicted_answer": "54", "correct": false, "codi0_answer": 54, "values": [93, 74, 54, 27, 52]}
+{"idx": 411, "id": "depth2-valid-L04-00125", "level": 4, "gold_answer": "63", "predicted_answer": "61", "correct": false, "codi0_answer": 59, "values": [16, 8, 28, 45, 63]}
+{"idx": 412, "id": "depth2-valid-L04-00126", "level": 4, "gold_answer": "56", "predicted_answer": "54", "correct": false, "codi0_answer": 18, "values": [50, 25, 17, 28, 56]}
+{"idx": 413, "id": "depth2-valid-L04-00127", "level": 4, "gold_answer": "44", "predicted_answer": "42", "correct": false, "codi0_answer": 40, "values": [21, 27, 54, 27, 44]}
+{"idx": 414, "id": "depth2-valid-L04-00128", "level": 4, "gold_answer": "16", "predicted_answer": "16", "correct": true, "codi0_answer": 16, "values": [54, 27, 35, 8, 16]}
+{"idx": 415, "id": "depth2-valid-L04-00129", "level": 4, "gold_answer": "36", "predicted_answer": "40", "correct": false, "codi0_answer": 38, "values": [3, 15, 36, 18, 36]}
+{"idx": 416, "id": "depth2-valid-L04-00130", "level": 4, "gold_answer": "63", "predicted_answer": "61", "correct": false, "codi0_answer": 62, "values": [85, 58, 29, 58, 63]}
+{"idx": 417, "id": "depth2-valid-L04-00131", "level": 4, "gold_answer": "57", "predicted_answer": "50", "correct": false, "codi0_answer": 55, "values": [46, 29, 36, 47, 57]}
+{"idx": 418, "id": "depth2-valid-L04-00132", "level": 4, "gold_answer": "51", "predicted_answer": "53", "correct": false, "codi0_answer": 55, "values": [42, 21, 36, 33, 51]}
+{"idx": 419, "id": "depth2-valid-L04-00133", "level": 4, "gold_answer": "66", "predicted_answer": "64", "correct": false, "codi0_answer": 72, "values": [55, 73, 87, 74, 66]}
+{"idx": 420, "id": "depth2-valid-L04-00134", "level": 4, "gold_answer": "46", "predicted_answer": "48", "correct": false, "codi0_answer": 14, "values": [7, 14, 16, 25, 46]}
+{"idx": 421, "id": "depth2-valid-L04-00135", "level": 4, "gold_answer": "95", "predicted_answer": "88", "correct": false, "codi0_answer": 84, "values": [67, 61, 64, 75, 95]}
+{"idx": 422, "id": "depth2-valid-L04-00136", "level": 4, "gold_answer": "27", "predicted_answer": "29", "correct": false, "codi0_answer": 29, "values": [48, 38, 19, 22, 27]}
+{"idx": 423, "id": "depth2-valid-L04-00137", "level": 4, "gold_answer": "87", "predicted_answer": "87", "correct": true, "codi0_answer": 93, "values": [70, 60, 55, 65, 87]}
+{"idx": 424, "id": "depth2-valid-L04-00138", "level": 4, "gold_answer": "66", "predicted_answer": "66", "correct": true, "codi0_answer": 74, "values": [19, 34, 17, 33, 66]}
+{"idx": 425, "id": "depth2-valid-L04-00139", "level": 4, "gold_answer": "32", "predicted_answer": "32", "correct": true, "codi0_answer": 32, "values": [6, 18, 9, 33, 32]}
+{"idx": 426, "id": "depth2-valid-L04-00140", "level": 4, "gold_answer": "30", "predicted_answer": "36", "correct": false, "codi0_answer": 75, "values": [42, 39, 63, 60, 30]}
+{"idx": 427, "id": "depth2-valid-L04-00141", "level": 4, "gold_answer": "26", "predicted_answer": "25", "correct": false, "codi0_answer": 29, "values": [5, 28, 14, 7, 26]}
+{"idx": 428, "id": "depth2-valid-L04-00142", "level": 4, "gold_answer": "90", "predicted_answer": "94", "correct": false, "codi0_answer": 90, "values": [79, 45, 90, 45, 90]}
+{"idx": 429, "id": "depth2-valid-L04-00143", "level": 4, "gold_answer": "26", "predicted_answer": "26", "correct": true, "codi0_answer": 6, "values": [90, 45, 14, 7, 26]}
+{"idx": 430, "id": "depth2-valid-L04-00144", "level": 4, "gold_answer": "65", "predicted_answer": "65", "correct": true, "codi0_answer": 55, "values": [55, 70, 61, 76, 65]}
+{"idx": 431, "id": "depth2-valid-L04-00145", "level": 4, "gold_answer": "26", "predicted_answer": "29", "correct": false, "codi0_answer": 23, "values": [67, 78, 39, 52, 26]}
+{"idx": 432, "id": "depth2-valid-L04-00146", "level": 4, "gold_answer": "78", "predicted_answer": "83", "correct": false, "codi0_answer": 68, "values": [93, 78, 39, 58, 78]}
+{"idx": 433, "id": "depth2-valid-L04-00147", "level": 4, "gold_answer": "39", "predicted_answer": "41", "correct": false, "codi0_answer": 37, "values": [98, 49, 47, 53, 39]}
+{"idx": 434, "id": "depth2-valid-L04-00148", "level": 4, "gold_answer": "66", "predicted_answer": "60", "correct": false, "codi0_answer": 36, "values": [37, 45, 90, 85, 66]}
+{"idx": 435, "id": "depth2-valid-L04-00149", "level": 4, "gold_answer": "46", "predicted_answer": "44", "correct": false, "codi0_answer": 42, "values": [32, 23, 46, 56, 46]}
+{"idx": 436, "id": "depth2-valid-L04-00150", "level": 4, "gold_answer": "31", "predicted_answer": "33", "correct": false, "codi0_answer": 33, "values": [95, 58, 29, 34, 31]}
+{"idx": 437, "id": "depth2-valid-L04-00151", "level": 4, "gold_answer": "36", "predicted_answer": "38", "correct": false, "codi0_answer": 76, "values": [39, 78, 75, 50, 36]}
+{"idx": 438, "id": "depth2-valid-L04-00152", "level": 4, "gold_answer": "60", "predicted_answer": "56", "correct": false, "codi0_answer": 64, "values": [1, 20, 10, 30, 60]}
+{"idx": 439, "id": "depth2-valid-L04-00153", "level": 4, "gold_answer": "36", "predicted_answer": "37", "correct": false, "codi0_answer": 35, "values": [82, 49, 51, 72, 36]}
+{"idx": 440, "id": "depth2-valid-L04-00154", "level": 4, "gold_answer": "56", "predicted_answer": "56", "correct": true, "codi0_answer": 54, "values": [52, 26, 13, 33, 56]}
+{"idx": 441, "id": "depth2-valid-L04-00155", "level": 4, "gold_answer": "42", "predicted_answer": "46", "correct": false, "codi0_answer": 51, "values": [34, 45, 90, 60, 42]}
+{"idx": 442, "id": "depth2-valid-L04-00156", "level": 4, "gold_answer": "56", "predicted_answer": "56", "correct": true, "codi0_answer": 54, "values": [44, 22, 35, 47, 56]}
+{"idx": 443, "id": "depth2-valid-L04-00157", "level": 4, "gold_answer": "82", "predicted_answer": "78", "correct": false, "codi0_answer": 76, "values": [38, 76, 62, 67, 82]}
+{"idx": 444, "id": "depth2-valid-L04-00158", "level": 4, "gold_answer": "36", "predicted_answer": "36", "correct": true, "codi0_answer": 36, "values": [78, 66, 33, 50, 36]}
+{"idx": 445, "id": "depth2-valid-L04-00159", "level": 4, "gold_answer": "36", "predicted_answer": "60", "correct": false, "codi0_answer": 52, "values": [5, 13, 25, 18, 36]}
+{"idx": 446, "id": "depth2-valid-L04-00160", "level": 4, "gold_answer": "64", "predicted_answer": "62", "correct": false, "codi0_answer": 62, "values": [20, 26, 35, 70, 64]}
+{"idx": 447, "id": "depth2-valid-L04-00161", "level": 4, "gold_answer": "23", "predicted_answer": "17", "correct": false, "codi0_answer": 27, "values": [26, 13, 26, 52, 23]}
+{"idx": 448, "id": "depth2-valid-L04-00162", "level": 4, "gold_answer": "30", "predicted_answer": "61", "correct": false, "codi0_answer": 67, "values": [52, 44, 22, 11, 30]}
+{"idx": 449, "id": "depth2-valid-L04-00163", "level": 4, "gold_answer": "3", "predicted_answer": "3", "correct": true, "codi0_answer": 7, "values": [9, 15, 21, 42, 3]}
+{"idx": 450, "id": "depth2-valid-L04-00164", "level": 4, "gold_answer": "78", "predicted_answer": "16", "correct": false, "codi0_answer": 22, "values": [48, 28, 20, 39, 78]}
+{"idx": 451, "id": "depth2-valid-L04-00165", "level": 4, "gold_answer": "50", "predicted_answer": "66", "correct": false, "codi0_answer": 60, "values": [14, 20, 40, 31, 50]}
+{"idx": 452, "id": "depth2-valid-L04-00166", "level": 4, "gold_answer": "15", "predicted_answer": "33", "correct": false, "codi0_answer": 33, "values": [58, 52, 26, 30, 15]}
+{"idx": 453, "id": "depth2-valid-L04-00167", "level": 4, "gold_answer": "56", "predicted_answer": "56", "correct": true, "codi0_answer": 52, "values": [42, 21, 42, 48, 56]}
+{"idx": 454, "id": "depth2-valid-L04-00168", "level": 4, "gold_answer": "35", "predicted_answer": "37", "correct": false, "codi0_answer": 33, "values": [8, 26, 13, 23, 35]}
+{"idx": 455, "id": "depth2-valid-L04-00169", "level": 4, "gold_answer": "30", "predicted_answer": "28", "correct": false, "codi0_answer": 26, "values": [47, 35, 52, 60, 30]}
+{"idx": 456, "id": "depth2-valid-L04-00170", "level": 4, "gold_answer": "43", "predicted_answer": "41", "correct": false, "codi0_answer": 49, "values": [13, 21, 42, 37, 43]}
+{"idx": 457, "id": "depth2-valid-L04-00171", "level": 4, "gold_answer": "59", "predicted_answer": "63", "correct": false, "codi0_answer": 61, "values": [93, 78, 39, 41, 59]}
+{"idx": 458, "id": "depth2-valid-L04-00172", "level": 4, "gold_answer": "74", "predicted_answer": "76", "correct": false, "codi0_answer": 76, "values": [19, 38, 76, 61, 74]}
+{"idx": 459, "id": "depth2-valid-L04-00173", "level": 4, "gold_answer": "22", "predicted_answer": "19", "correct": false, "codi0_answer": 15, "values": [43, 18, 29, 44, 22]}
+{"idx": 460, "id": "depth2-valid-L04-00174", "level": 4, "gold_answer": "58", "predicted_answer": "60", "correct": false, "codi0_answer": 59, "values": [43, 23, 27, 41, 58]}
+{"idx": 461, "id": "depth2-valid-L04-00175", "level": 4, "gold_answer": "34", "predicted_answer": "36", "correct": false, "codi0_answer": 36, "values": [66, 33, 50, 25, 34]}
+{"idx": 462, "id": "depth2-valid-L04-00176", "level": 4, "gold_answer": "57", "predicted_answer": "61", "correct": false, "codi0_answer": 61, "values": [21, 27, 54, 45, 57]}
+{"idx": 463, "id": "depth2-valid-L04-00177", "level": 4, "gold_answer": "30", "predicted_answer": "30", "correct": true, "codi0_answer": 31, "values": [53, 45, 61, 60, 30]}
+{"idx": 464, "id": "depth2-valid-L04-00178", "level": 4, "gold_answer": "47", "predicted_answer": "47", "correct": true, "codi0_answer": 45, "values": [80, 40, 20, 39, 47]}
+{"idx": 465, "id": "depth2-valid-L04-00179", "level": 4, "gold_answer": "32", "predicted_answer": "31", "correct": false, "codi0_answer": 36, "values": [68, 62, 31, 46, 32]}
+{"idx": 466, "id": "depth2-valid-L04-00180", "level": 4, "gold_answer": "43", "predicted_answer": "43", "correct": true, "codi0_answer": 45, "values": [46, 42, 21, 30, 43]}
+{"idx": 467, "id": "depth2-valid-L04-00181", "level": 4, "gold_answer": "20", "predicted_answer": "20", "correct": true, "codi0_answer": 18, "values": [33, 46, 28, 14, 20]}
+{"idx": 468, "id": "depth2-valid-L04-00182", "level": 4, "gold_answer": "49", "predicted_answer": "51", "correct": false, "codi0_answer": 51, "values": [9, 17, 34, 39, 49]}
+{"idx": 469, "id": "depth2-valid-L04-00183", "level": 4, "gold_answer": "46", "predicted_answer": "52", "correct": false, "codi0_answer": 22, "values": [92, 46, 34, 68, 46]}
+{"idx": 470, "id": "depth2-valid-L04-00184", "level": 4, "gold_answer": "64", "predicted_answer": "63", "correct": false, "codi0_answer": 63, "values": [79, 89, 94, 47, 64]}
+{"idx": 471, "id": "depth2-valid-L04-00185", "level": 4, "gold_answer": "16", "predicted_answer": "54", "correct": false, "codi0_answer": 52, "values": [76, 60, 64, 32, 16]}
+{"idx": 472, "id": "depth2-valid-L04-00186", "level": 4, "gold_answer": "26", "predicted_answer": "26", "correct": true, "codi0_answer": 24, "values": [77, 38, 51, 52, 26]}
+{"idx": 473, "id": "depth2-valid-L04-00187", "level": 4, "gold_answer": "22", "predicted_answer": "24", "correct": false, "codi0_answer": 26, "values": [16, 32, 22, 11, 22]}
+{"idx": 474, "id": "depth2-valid-L04-00188", "level": 4, "gold_answer": "40", "predicted_answer": "40", "correct": true, "codi0_answer": 37, "values": [19, 38, 50, 37, 40]}
+{"idx": 475, "id": "depth2-valid-L04-00189", "level": 4, "gold_answer": "74", "predicted_answer": "74", "correct": true, "codi0_answer": 74, "values": [94, 78, 39, 63, 74]}
+{"idx": 476, "id": "depth2-valid-L04-00190", "level": 4, "gold_answer": "19", "predicted_answer": "19", "correct": true, "codi0_answer": 27, "values": [37, 38, 19, 38, 19]}
+{"idx": 477, "id": "depth2-valid-L04-00191", "level": 4, "gold_answer": "50", "predicted_answer": "17", "correct": false, "codi0_answer": 17, "values": [80, 69, 80, 43, 50]}
+{"idx": 478, "id": "depth2-valid-L04-00192", "level": 4, "gold_answer": "17", "predicted_answer": "16", "correct": false, "codi0_answer": 33, "values": [16, 34, 41, 34, 17]}
+{"idx": 479, "id": "depth2-valid-L04-00193", "level": 4, "gold_answer": "95", "predicted_answer": "93", "correct": false, "codi0_answer": 99, "values": [98, 83, 88, 73, 95]}
+{"idx": 480, "id": "depth2-valid-L04-00194", "level": 4, "gold_answer": "49", "predicted_answer": "47", "correct": false, "codi0_answer": 49, "values": [16, 32, 39, 63, 49]}
+{"idx": 481, "id": "depth2-valid-L04-00195", "level": 4, "gold_answer": "11", "predicted_answer": "21", "correct": false, "codi0_answer": 19, "values": [18, 36, 18, 9, 11]}
+{"idx": 482, "id": "depth2-valid-L04-00196", "level": 4, "gold_answer": "15", "predicted_answer": "15", "correct": true, "codi0_answer": 53, "values": [93, 74, 37, 30, 15]}
+{"idx": 483, "id": "depth2-valid-L04-00197", "level": 4, "gold_answer": "25", "predicted_answer": "23", "correct": false, "codi0_answer": 19, "values": [9, 26, 13, 15, 25]}
+{"idx": 484, "id": "depth2-valid-L04-00198", "level": 4, "gold_answer": "27", "predicted_answer": "27", "correct": true, "codi0_answer": 27, "values": [19, 30, 60, 54, 27]}
+{"idx": 485, "id": "depth2-valid-L04-00199", "level": 4, "gold_answer": "45", "predicted_answer": "45", "correct": true, "codi0_answer": 43, "values": [55, 43, 54, 27, 45]}
+{"idx": 486, "id": "depth2-valid-L04-00200", "level": 4, "gold_answer": "14", "predicted_answer": "13", "correct": false, "codi0_answer": 17, "values": [3, 17, 34, 28, 14]}
+{"idx": 487, "id": "depth2-valid-L04-00201", "level": 4, "gold_answer": "70", "predicted_answer": "72", "correct": false, "codi0_answer": 76, "values": [42, 84, 77, 79, 70]}
+{"idx": 488, "id": "depth2-valid-L04-00202", "level": 4, "gold_answer": "53", "predicted_answer": "53", "correct": true, "codi0_answer": 55, "values": [46, 23, 25, 49, 53]}
+{"idx": 489, "id": "depth2-valid-L04-00203", "level": 4, "gold_answer": "47", "predicted_answer": "47", "correct": true, "codi0_answer": 45, "values": [50, 67, 74, 37, 47]}
+{"idx": 490, "id": "depth2-valid-L04-00204", "level": 4, "gold_answer": "26", "predicted_answer": "23", "correct": false, "codi0_answer": 25, "values": [67, 82, 62, 31, 26]}
+{"idx": 491, "id": "depth2-valid-L04-00205", "level": 4, "gold_answer": "55", "predicted_answer": "68", "correct": false, "codi0_answer": 68, "values": [86, 43, 24, 36, 55]}
+{"idx": 492, "id": "depth2-valid-L04-00206", "level": 4, "gold_answer": "36", "predicted_answer": "38", "correct": false, "codi0_answer": 28, "values": [26, 22, 32, 64, 36]}
+{"idx": 493, "id": "depth2-valid-L04-00207", "level": 4, "gold_answer": "13", "predicted_answer": "11", "correct": false, "codi0_answer": 5, "values": [2, 21, 13, 26, 13]}
+{"idx": 494, "id": "depth2-valid-L04-00208", "level": 4, "gold_answer": "77", "predicted_answer": "77", "correct": true, "codi0_answer": 77, "values": [95, 75, 55, 63, 77]}
+{"idx": 495, "id": "depth2-valid-L04-00209", "level": 4, "gold_answer": "85", "predicted_answer": "87", "correct": false, "codi0_answer": 79, "values": [64, 32, 49, 69, 85]}
+{"idx": 496, "id": "depth2-valid-L04-00210", "level": 4, "gold_answer": "21", "predicted_answer": "22", "correct": false, "codi0_answer": 21, "values": [53, 57, 48, 24, 21]}
+{"idx": 497, "id": "depth2-valid-L04-00211", "level": 4, "gold_answer": "24", "predicted_answer": "25", "correct": false, "codi0_answer": 23, "values": [75, 64, 60, 48, 24]}
+{"idx": 498, "id": "depth2-valid-L04-00212", "level": 4, "gold_answer": "32", "predicted_answer": "30", "correct": false, "codi0_answer": 30, "values": [48, 30, 15, 16, 32]}
+{"idx": 499, "id": "depth2-valid-L04-00213", "level": 4, "gold_answer": "88", "predicted_answer": "92", "correct": false, "codi0_answer": 82, "values": [76, 75, 77, 89, 88]}
+{"idx": 500, "id": "depth2-valid-L04-00214", "level": 4, "gold_answer": "24", "predicted_answer": "24", "correct": true, "codi0_answer": 20, "values": [53, 68, 57, 48, 24]}
+{"idx": 501, "id": "depth2-valid-L04-00215", "level": 4, "gold_answer": "41", "predicted_answer": "43", "correct": false, "codi0_answer": 45, "values": [24, 48, 43, 64, 41]}
+{"idx": 502, "id": "depth2-valid-L04-00216", "level": 4, "gold_answer": "28", "predicted_answer": "28", "correct": true, "codi0_answer": 24, "values": [53, 34, 17, 21, 28]}
+{"idx": 503, "id": "depth2-valid-L04-00217", "level": 4, "gold_answer": "38", "predicted_answer": "42", "correct": false, "codi0_answer": 62, "values": [46, 23, 37, 19, 38]}
+{"idx": 504, "id": "depth2-valid-L04-00218", "level": 4, "gold_answer": "29", "predicted_answer": "30", "correct": false, "codi0_answer": 28, "values": [87, 75, 54, 58, 29]}
+{"idx": 505, "id": "depth2-valid-L04-00219", "level": 4, "gold_answer": "62", "predicted_answer": "66", "correct": false, "codi0_answer": 62, "values": [22, 44, 22, 31, 62]}
+{"idx": 506, "id": "depth2-valid-L04-00220", "level": 4, "gold_answer": "18", "predicted_answer": "50", "correct": false, "codi0_answer": 46, "values": [76, 38, 18, 36, 18]}
+{"idx": 507, "id": "depth2-valid-L04-00221", "level": 4, "gold_answer": "64", "predicted_answer": "64", "correct": true, "codi0_answer": 60, "values": [15, 30, 15, 32, 64]}
+{"idx": 508, "id": "depth2-valid-L04-00222", "level": 4, "gold_answer": "19", "predicted_answer": "18", "correct": false, "codi0_answer": 19, "values": [25, 50, 36, 18, 19]}
+{"idx": 509, "id": "depth2-valid-L04-00223", "level": 4, "gold_answer": "20", "predicted_answer": "17", "correct": false, "codi0_answer": 22, "values": [52, 40, 20, 10, 20]}
+{"idx": 510, "id": "depth2-valid-L04-00224", "level": 4, "gold_answer": "20", "predicted_answer": "20", "correct": true, "codi0_answer": 19, "values": [8, 16, 32, 40, 20]}
+{"idx": 511, "id": "depth2-valid-L04-00225", "level": 4, "gold_answer": "53", "predicted_answer": "51", "correct": false, "codi0_answer": 51, "values": [52, 26, 25, 31, 53]}
+{"idx": 512, "id": "depth2-valid-L04-00226", "level": 4, "gold_answer": "66", "predicted_answer": "66", "correct": true, "codi0_answer": 64, "values": [28, 13, 35, 70, 66]}
+{"idx": 513, "id": "depth2-valid-L04-00227", "level": 4, "gold_answer": "38", "predicted_answer": "39", "correct": false, "codi0_answer": 39, "values": [77, 71, 70, 35, 38]}
+{"idx": 514, "id": "depth2-valid-L04-00228", "level": 4, "gold_answer": "30", "predicted_answer": "31", "correct": false, "codi0_answer": 33, "values": [63, 78, 39, 34, 30]}
+{"idx": 515, "id": "depth2-valid-L04-00229", "level": 4, "gold_answer": "58", "predicted_answer": "58", "correct": true, "codi0_answer": 58, "values": [52, 26, 13, 33, 58]}
+{"idx": 516, "id": "depth2-valid-L04-00230", "level": 4, "gold_answer": "22", "predicted_answer": "20", "correct": false, "codi0_answer": 17, "values": [69, 50, 25, 45, 22]}
+{"idx": 517, "id": "depth2-valid-L04-00231", "level": 4, "gold_answer": "32", "predicted_answer": "35", "correct": false, "codi0_answer": 28, "values": [29, 45, 3, 14, 32]}
+{"idx": 518, "id": "depth2-valid-L04-00232", "level": 4, "gold_answer": "61", "predicted_answer": "77", "correct": false, "codi0_answer": 67, "values": [50, 45, 90, 70, 61]}
+{"idx": 519, "id": "depth2-valid-L04-00233", "level": 4, "gold_answer": "42", "predicted_answer": "42", "correct": true, "codi0_answer": 38, "values": [14, 28, 29, 30, 42]}
+{"idx": 520, "id": "depth2-valid-L04-00234", "level": 4, "gold_answer": "13", "predicted_answer": "47", "correct": false, "codi0_answer": 43, "values": [91, 63, 52, 26, 13]}
+{"idx": 521, "id": "depth2-valid-L04-00235", "level": 4, "gold_answer": "24", "predicted_answer": "31", "correct": false, "codi0_answer": 33, "values": [40, 29, 24, 48, 24]}
+{"idx": 522, "id": "depth2-valid-L04-00236", "level": 4, "gold_answer": "24", "predicted_answer": "24", "correct": true, "codi0_answer": 26, "values": [22, 11, 18, 9, 24]}
+{"idx": 523, "id": "depth2-valid-L04-00237", "level": 4, "gold_answer": "23", "predicted_answer": "23", "correct": true, "codi0_answer": 26, "values": [50, 35, 36, 18, 23]}
+{"idx": 524, "id": "depth2-valid-L04-00238", "level": 4, "gold_answer": "49", "predicted_answer": "51", "correct": false, "codi0_answer": 47, "values": [76, 38, 19, 34, 49]}
+{"idx": 525, "id": "depth2-valid-L04-00239", "level": 4, "gold_answer": "20", "predicted_answer": "20", "correct": true, "codi0_answer": 14, "values": [19, 33, 42, 10, 20]}
+{"idx": 526, "id": "depth2-valid-L04-00240", "level": 4, "gold_answer": "61", "predicted_answer": "58", "correct": false, "codi0_answer": 46, "values": [69, 88, 86, 57, 61]}
+{"idx": 527, "id": "depth2-valid-L04-00241", "level": 4, "gold_answer": "31", "predicted_answer": "31", "correct": true, "codi0_answer": 31, "values": [82, 41, 26, 13, 31]}
+{"idx": 528, "id": "depth2-valid-L04-00242", "level": 4, "gold_answer": "42", "predicted_answer": "40", "correct": false, "codi0_answer": 43, "values": [30, 47, 67, 61, 42]}
+{"idx": 529, "id": "depth2-valid-L04-00243", "level": 4, "gold_answer": "29", "predicted_answer": "31", "correct": false, "codi0_answer": 27, "values": [7, 11, 14, 28, 29]}
+{"idx": 530, "id": "depth2-valid-L04-00244", "level": 4, "gold_answer": "94", "predicted_answer": "94", "correct": true, "codi0_answer": 92, "values": [30, 60, 75, 87, 94]}
+{"idx": 531, "id": "depth2-valid-L04-00245", "level": 4, "gold_answer": "29", "predicted_answer": "28", "correct": false, "codi0_answer": 29, "values": [9, 20, 26, 13, 29]}
+{"idx": 532, "id": "depth2-valid-L04-00246", "level": 4, "gold_answer": "30", "predicted_answer": "30", "correct": true, "codi0_answer": 26, "values": [23, 26, 13, 26, 30]}
+{"idx": 533, "id": "depth2-valid-L04-00247", "level": 4, "gold_answer": "33", "predicted_answer": "33", "correct": true, "codi0_answer": 33, "values": [11, 27, 54, 66, 33]}
+{"idx": 534, "id": "depth2-valid-L04-00248", "level": 4, "gold_answer": "28", "predicted_answer": "27", "correct": false, "codi0_answer": 29, "values": [57, 49, 67, 56, 28]}
+{"idx": 535, "id": "depth2-valid-L04-00249", "level": 4, "gold_answer": "32", "predicted_answer": "32", "correct": true, "codi0_answer": 31, "values": [52, 26, 45, 64, 32]}
+{"idx": 536, "id": "depth2-valid-L04-00250", "level": 4, "gold_answer": "34", "predicted_answer": "34", "correct": true, "codi0_answer": 32, "values": [80, 40, 20, 27, 34]}
+{"idx": 537, "id": "depth2-valid-L04-00251", "level": 4, "gold_answer": "71", "predicted_answer": "73", "correct": false, "codi0_answer": 79, "values": [85, 73, 96, 81, 71]}
+{"idx": 538, "id": "depth2-valid-L04-00252", "level": 4, "gold_answer": "27", "predicted_answer": "28", "correct": false, "codi0_answer": 28, "values": [74, 62, 31, 42, 27]}
+{"idx": 539, "id": "depth2-valid-L04-00253", "level": 4, "gold_answer": "29", "predicted_answer": "28", "correct": false, "codi0_answer": 28, "values": [93, 90, 45, 58, 29]}
+{"idx": 540, "id": "depth2-valid-L04-00254", "level": 4, "gold_answer": "16", "predicted_answer": "16", "correct": true, "codi0_answer": 28, "values": [73, 58, 29, 8, 16]}
+{"idx": 541, "id": "depth2-valid-L04-00255", "level": 4, "gold_answer": "42", "predicted_answer": "42", "correct": true, "codi0_answer": 41, "values": [11, 31, 48, 24, 42]}
+{"idx": 542, "id": "depth2-valid-L04-00256", "level": 4, "gold_answer": "54", "predicted_answer": "40", "correct": false, "codi0_answer": 12, "values": [3, 21, 42, 84, 54]}
+{"idx": 543, "id": "depth2-valid-L04-00257", "level": 4, "gold_answer": "19", "predicted_answer": "20", "correct": false, "codi0_answer": 55, "values": [70, 52, 26, 38, 19]}
+{"idx": 544, "id": "depth2-valid-L04-00258", "level": 4, "gold_answer": "7", "predicted_answer": "8", "correct": false, "codi0_answer": 4, "values": [60, 39, 50, 14, 7]}
+{"idx": 545, "id": "depth2-valid-L04-00259", "level": 4, "gold_answer": "10", "predicted_answer": "16", "correct": false, "codi0_answer": 20, "values": [54, 36, 28, 5, 10]}
+{"idx": 546, "id": "depth2-valid-L04-00260", "level": 4, "gold_answer": "54", "predicted_answer": "54", "correct": true, "codi0_answer": 60, "values": [57, 72, 36, 31, 54]}
+{"idx": 547, "id": "depth2-valid-L04-00261", "level": 4, "gold_answer": "23", "predicted_answer": "58", "correct": false, "codi0_answer": 22, "values": [29, 32, 16, 31, 23]}
+{"idx": 548, "id": "depth2-valid-L04-00262", "level": 4, "gold_answer": "46", "predicted_answer": "46", "correct": true, "codi0_answer": 46, "values": [77, 73, 58, 29, 46]}
+{"idx": 549, "id": "depth2-valid-L04-00263", "level": 4, "gold_answer": "38", "predicted_answer": "37", "correct": false, "codi0_answer": 35, "values": [39, 29, 52, 26, 38]}
+{"idx": 550, "id": "depth2-valid-L04-00264", "level": 4, "gold_answer": "30", "predicted_answer": "82", "correct": false, "codi0_answer": 28, "values": [96, 90, 45, 60, 30]}
+{"idx": 551, "id": "depth2-valid-L04-00265", "level": 4, "gold_answer": "42", "predicted_answer": "42", "correct": true, "codi0_answer": 38, "values": [72, 53, 42, 21, 42]}
+{"idx": 552, "id": "depth2-valid-L04-00266", "level": 4, "gold_answer": "28", "predicted_answer": "27", "correct": false, "codi0_answer": 29, "values": [75, 55, 66, 33, 28]}
+{"idx": 553, "id": "depth2-valid-L04-00267", "level": 4, "gold_answer": "29", "predicted_answer": "29", "correct": true, "codi0_answer": 29, "values": [12, 6, 3, 20, 29]}
+{"idx": 554, "id": "depth2-valid-L04-00268", "level": 4, "gold_answer": "44", "predicted_answer": "44", "correct": true, "codi0_answer": 41, "values": [31, 62, 57, 50, 44]}
+{"idx": 555, "id": "depth2-valid-L04-00269", "level": 4, "gold_answer": "34", "predicted_answer": "36", "correct": false, "codi0_answer": 34, "values": [30, 15, 37, 55, 34]}
+{"idx": 556, "id": "depth2-valid-L04-00270", "level": 4, "gold_answer": "52", "predicted_answer": "52", "correct": true, "codi0_answer": 50, "values": [14, 28, 14, 26, 52]}
+{"idx": 557, "id": "depth2-valid-L04-00271", "level": 4, "gold_answer": "41", "predicted_answer": "42", "correct": false, "codi0_answer": 41, "values": [97, 78, 76, 38, 41]}
+{"idx": 558, "id": "depth2-valid-L04-00272", "level": 4, "gold_answer": "41", "predicted_answer": "41", "correct": true, "codi0_answer": 41, "values": [46, 38, 24, 25, 41]}
+{"idx": 559, "id": "depth2-valid-L04-00273", "level": 4, "gold_answer": "36", "predicted_answer": "28", "correct": false, "codi0_answer": 38, "values": [84, 42, 23, 46, 36]}
+{"idx": 560, "id": "depth2-valid-L04-00274", "level": 4, "gold_answer": "30", "predicted_answer": "30", "correct": true, "codi0_answer": 28, "values": [57, 67, 51, 60, 30]}
+{"idx": 561, "id": "depth2-valid-L04-00275", "level": 4, "gold_answer": "21", "predicted_answer": "23", "correct": false, "codi0_answer": 23, "values": [34, 68, 49, 42, 21]}
+{"idx": 562, "id": "depth2-valid-L04-00276", "level": 4, "gold_answer": "49", "predicted_answer": "47", "correct": false, "codi0_answer": 51, "values": [74, 32, 25, 30, 49]}
+{"idx": 563, "id": "depth2-valid-L04-00277", "level": 4, "gold_answer": "40", "predicted_answer": "40", "correct": true, "codi0_answer": 52, "values": [20, 40, 44, 20, 40]}
+{"idx": 564, "id": "depth2-valid-L04-00278", "level": 4, "gold_answer": "74", "predicted_answer": "38", "correct": false, "codi0_answer": 42, "values": [44, 22, 44, 37, 74]}
+{"idx": 565, "id": "depth2-valid-L04-00279", "level": 4, "gold_answer": "46", "predicted_answer": "48", "correct": false, "codi0_answer": 50, "values": [22, 21, 42, 43, 46]}
+{"idx": 566, "id": "depth2-valid-L04-00280", "level": 4, "gold_answer": "27", "predicted_answer": "24", "correct": false, "codi0_answer": 25, "values": [40, 20, 10, 28, 27]}
+{"idx": 567, "id": "depth2-valid-L04-00281", "level": 4, "gold_answer": "39", "predicted_answer": "39", "correct": true, "codi0_answer": 29, "values": [42, 21, 42, 21, 39]}
+{"idx": 568, "id": "depth2-valid-L04-00282", "level": 4, "gold_answer": "41", "predicted_answer": "42", "correct": false, "codi0_answer": 39, "values": [75, 63, 68, 34, 41]}
+{"idx": 569, "id": "depth2-valid-L04-00283", "level": 4, "gold_answer": "15", "predicted_answer": "15", "correct": true, "codi0_answer": 14, "values": [93, 58, 29, 38, 15]}
+{"idx": 570, "id": "depth2-valid-L04-00284", "level": 4, "gold_answer": "47", "predicted_answer": "27", "correct": false, "codi0_answer": 27, "values": [8, 16, 32, 64, 47]}
+{"idx": 571, "id": "depth2-valid-L04-00285", "level": 4, "gold_answer": "31", "predicted_answer": "31", "correct": true, "codi0_answer": 33, "values": [15, 28, 56, 62, 31]}
+{"idx": 572, "id": "depth2-valid-L05-00000", "level": 5, "gold_answer": "70", "predicted_answer": "76", "correct": false, "codi0_answer": 78, "values": [41, 54, 24, 36, 72, 70]}
+{"idx": 573, "id": "depth2-valid-L05-00001", "level": 5, "gold_answer": "33", "predicted_answer": "53", "correct": false, "codi0_answer": 54, "values": [2, 8, 16, 32, 19, 33]}
+{"idx": 574, "id": "depth2-valid-L05-00002", "level": 5, "gold_answer": "33", "predicted_answer": "33", "correct": true, "codi0_answer": 39, "values": [37, 74, 67, 71, 66, 33]}
+{"idx": 575, "id": "depth2-valid-L05-00003", "level": 5, "gold_answer": "54", "predicted_answer": "54", "correct": true, "codi0_answer": 56, "values": [13, 31, 62, 58, 29, 54]}
+{"idx": 576, "id": "depth2-valid-L05-00004", "level": 5, "gold_answer": "54", "predicted_answer": "54", "correct": true, "codi0_answer": 24, "values": [93, 82, 41, 31, 50, 54]}
+{"idx": 577, "id": "depth2-valid-L05-00005", "level": 5, "gold_answer": "7", "predicted_answer": "38", "correct": false, "codi0_answer": 38, "values": [5, 10, 5, 9, 14, 7]}
+{"idx": 578, "id": "depth2-valid-L05-00006", "level": 5, "gold_answer": "4", "predicted_answer": "18", "correct": false, "codi0_answer": 18, "values": [63, 27, 31, 16, 8, 4]}
+{"idx": 579, "id": "depth2-valid-L05-00007", "level": 5, "gold_answer": "57", "predicted_answer": "57", "correct": true, "codi0_answer": 51, "values": [61, 18, 9, 17, 37, 57]}
+{"idx": 580, "id": "depth2-valid-L05-00008", "level": 5, "gold_answer": "19", "predicted_answer": "19", "correct": true, "codi0_answer": 22, "values": [33, 37, 30, 15, 33, 19]}
+{"idx": 581, "id": "depth2-valid-L05-00009", "level": 5, "gold_answer": "70", "predicted_answer": "32", "correct": false, "codi0_answer": 33, "values": [72, 36, 41, 37, 53, 70]}
+{"idx": 582, "id": "depth2-valid-L05-00010", "level": 5, "gold_answer": "20", "predicted_answer": "21", "correct": false, "codi0_answer": 48, "values": [24, 12, 19, 27, 10, 20]}
+{"idx": 583, "id": "depth2-valid-L05-00011", "level": 5, "gold_answer": "51", "predicted_answer": "55", "correct": false, "codi0_answer": 65, "values": [47, 60, 45, 51, 68, 51]}
+{"idx": 584, "id": "depth2-valid-L05-00012", "level": 5, "gold_answer": "7", "predicted_answer": "9", "correct": false, "codi0_answer": 27, "values": [4, 2, 4, 13, 26, 7]}
+{"idx": 585, "id": "depth2-valid-L05-00013", "level": 5, "gold_answer": "44", "predicted_answer": "43", "correct": false, "codi0_answer": 43, "values": [69, 56, 28, 39, 45, 44]}
+{"idx": 586, "id": "depth2-valid-L05-00014", "level": 5, "gold_answer": "38", "predicted_answer": "78", "correct": false, "codi0_answer": 78, "values": [59, 52, 26, 13, 31, 38]}
+{"idx": 587, "id": "depth2-valid-L05-00015", "level": 5, "gold_answer": "72", "predicted_answer": "68", "correct": false, "codi0_answer": 58, "values": [31, 52, 26, 40, 80, 72]}
+{"idx": 588, "id": "depth2-valid-L05-00016", "level": 5, "gold_answer": "51", "predicted_answer": "41", "correct": false, "codi0_answer": 55, "values": [13, 26, 13, 23, 47, 51]}
+{"idx": 589, "id": "depth2-valid-L05-00017", "level": 5, "gold_answer": "48", "predicted_answer": "5", "correct": false, "codi0_answer": 3, "values": [70, 45, 15, 30, 24, 48]}
+{"idx": 590, "id": "depth2-valid-L05-00018", "level": 5, "gold_answer": "36", "predicted_answer": "36", "correct": true, "codi0_answer": 37, "values": [65, 63, 56, 28, 26, 36]}
+{"idx": 591, "id": "depth2-valid-L05-00019", "level": 5, "gold_answer": "42", "predicted_answer": "40", "correct": false, "codi0_answer": 38, "values": [62, 31, 48, 60, 53, 42]}
+{"idx": 592, "id": "depth2-valid-L05-00020", "level": 5, "gold_answer": "20", "predicted_answer": "16", "correct": false, "codi0_answer": 25, "values": [63, 86, 81, 61, 49, 20]}
+{"idx": 593, "id": "depth2-valid-L05-00021", "level": 5, "gold_answer": "31", "predicted_answer": "31", "correct": true, "codi0_answer": 37, "values": [27, 25, 50, 31, 11, 31]}
+{"idx": 594, "id": "depth2-valid-L05-00022", "level": 5, "gold_answer": "30", "predicted_answer": "33", "correct": false, "codi0_answer": 25, "values": [6, 12, 23, 46, 23, 30]}
+{"idx": 595, "id": "depth2-valid-L05-00023", "level": 5, "gold_answer": "51", "predicted_answer": "43", "correct": false, "codi0_answer": 48, "values": [53, 76, 65, 45, 61, 51]}
+{"idx": 596, "id": "depth2-valid-L05-00024", "level": 5, "gold_answer": "67", "predicted_answer": "62", "correct": false, "codi0_answer": 61, "values": [13, 14, 28, 29, 58, 67]}
+{"idx": 597, "id": "depth2-valid-L05-00025", "level": 5, "gold_answer": "16", "predicted_answer": "20", "correct": false, "codi0_answer": 21, "values": [34, 68, 52, 40, 32, 16]}
+{"idx": 598, "id": "depth2-valid-L05-00026", "level": 5, "gold_answer": "23", "predicted_answer": "25", "correct": false, "codi0_answer": 24, "values": [84, 42, 21, 24, 42, 23]}
+{"idx": 599, "id": "depth2-valid-L05-00027", "level": 5, "gold_answer": "10", "predicted_answer": "11", "correct": false, "codi0_answer": 11, "values": [2, 18, 31, 42, 21, 10]}
+{"idx": 600, "id": "depth2-valid-L05-00028", "level": 5, "gold_answer": "58", "predicted_answer": "60", "correct": false, "codi0_answer": 46, "values": [95, 91, 48, 24, 29, 58]}
+{"idx": 601, "id": "depth2-valid-L05-00029", "level": 5, "gold_answer": "50", "predicted_answer": "58", "correct": false, "codi0_answer": 58, "values": [48, 24, 48, 46, 25, 50]}
+{"idx": 602, "id": "depth2-valid-L05-00030", "level": 5, "gold_answer": "18", "predicted_answer": "51", "correct": false, "codi0_answer": 51, "values": [69, 49, 58, 29, 36, 18]}
+{"idx": 603, "id": "depth2-valid-L05-00031", "level": 5, "gold_answer": "12", "predicted_answer": "6", "correct": false, "codi0_answer": 12, "values": [52, 51, 39, 58, 26, 12]}
+{"idx": 604, "id": "depth2-valid-L05-00032", "level": 5, "gold_answer": "47", "predicted_answer": "41", "correct": false, "codi0_answer": 52, "values": [51, 37, 74, 69, 49, 47]}
+{"idx": 605, "id": "depth2-valid-L05-00033", "level": 5, "gold_answer": "51", "predicted_answer": "25", "correct": false, "codi0_answer": 53, "values": [36, 18, 35, 34, 68, 51]}
+{"idx": 606, "id": "depth2-valid-L05-00034", "level": 5, "gold_answer": "28", "predicted_answer": "20", "correct": false, "codi0_answer": 60, "values": [1, 8, 4, 8, 16, 28]}
+{"idx": 607, "id": "depth2-valid-L05-00035", "level": 5, "gold_answer": "17", "predicted_answer": "42", "correct": false, "codi0_answer": 22, "values": [31, 33, 52, 26, 12, 17]}
+{"idx": 608, "id": "depth2-valid-L05-00036", "level": 5, "gold_answer": "43", "predicted_answer": "44", "correct": false, "codi0_answer": 48, "values": [97, 65, 80, 73, 86, 43]}
+{"idx": 609, "id": "depth2-valid-L05-00037", "level": 5, "gold_answer": "13", "predicted_answer": "62", "correct": false, "codi0_answer": 58, "values": [77, 55, 37, 13, 26, 13]}
+{"idx": 610, "id": "depth2-valid-L05-00038", "level": 5, "gold_answer": "35", "predicted_answer": "52", "correct": false, "codi0_answer": 74, "values": [29, 40, 20, 40, 15, 35]}
+{"idx": 611, "id": "depth2-valid-L05-00039", "level": 5, "gold_answer": "30", "predicted_answer": "29", "correct": false, "codi0_answer": 29, "values": [67, 91, 90, 45, 43, 30]}
+{"idx": 612, "id": "depth2-valid-L05-00040", "level": 5, "gold_answer": "28", "predicted_answer": "29", "correct": false, "codi0_answer": 29, "values": [84, 74, 56, 28, 56, 28]}
+{"idx": 613, "id": "depth2-valid-L05-00041", "level": 5, "gold_answer": "25", "predicted_answer": "29", "correct": false, "codi0_answer": 28, "values": [38, 43, 53, 52, 40, 25]}
+{"idx": 614, "id": "depth2-valid-L05-00042", "level": 5, "gold_answer": "51", "predicted_answer": "51", "correct": true, "codi0_answer": 61, "values": [75, 88, 44, 22, 41, 51]}
+{"idx": 615, "id": "depth2-valid-L05-00043", "level": 5, "gold_answer": "35", "predicted_answer": "31", "correct": false, "codi0_answer": 31, "values": [47, 27, 37, 50, 25, 35]}
+{"idx": 616, "id": "depth2-valid-L05-00044", "level": 5, "gold_answer": "49", "predicted_answer": "49", "correct": true, "codi0_answer": 51, "values": [50, 25, 37, 41, 33, 49]}
+{"idx": 617, "id": "depth2-valid-L05-00045", "level": 5, "gold_answer": "76", "predicted_answer": "78", "correct": false, "codi0_answer": 92, "values": [25, 27, 22, 44, 55, 76]}
+{"idx": 618, "id": "depth2-valid-L05-00046", "level": 5, "gold_answer": "19", "predicted_answer": "18", "correct": false, "codi0_answer": 21, "values": [57, 44, 22, 18, 38, 19]}
+{"idx": 619, "id": "depth2-valid-L05-00047", "level": 5, "gold_answer": "78", "predicted_answer": "76", "correct": false, "codi0_answer": 74, "values": [88, 70, 61, 71, 96, 78]}
+{"idx": 620, "id": "depth2-valid-L05-00048", "level": 5, "gold_answer": "43", "predicted_answer": "43", "correct": true, "codi0_answer": 35, "values": [25, 31, 40, 80, 60, 43]}
+{"idx": 621, "id": "depth2-valid-L05-00049", "level": 5, "gold_answer": "9", "predicted_answer": "62", "correct": false, "codi0_answer": 58, "values": [46, 58, 78, 70, 35, 9]}
+{"idx": 622, "id": "depth2-valid-L05-00050", "level": 5, "gold_answer": "62", "predicted_answer": "64", "correct": false, "codi0_answer": 64, "values": [90, 45, 55, 62, 31, 62]}
+{"idx": 623, "id": "depth2-valid-L05-00051", "level": 5, "gold_answer": "84", "predicted_answer": "12", "correct": false, "codi0_answer": 64, "values": [73, 82, 41, 21, 42, 84]}
+{"idx": 624, "id": "depth2-valid-L05-00052", "level": 5, "gold_answer": "37", "predicted_answer": "27", "correct": false, "codi0_answer": 33, "values": [52, 26, 40, 29, 46, 37]}
+{"idx": 625, "id": "depth2-valid-L05-00053", "level": 5, "gold_answer": "80", "predicted_answer": "86", "correct": false, "codi0_answer": 92, "values": [33, 42, 60, 63, 83, 80]}
+{"idx": 626, "id": "depth2-valid-L05-00054", "level": 5, "gold_answer": "23", "predicted_answer": "25", "correct": false, "codi0_answer": 21, "values": [58, 53, 50, 25, 41, 23]}
+{"idx": 627, "id": "depth2-valid-L05-00055", "level": 5, "gold_answer": "3", "predicted_answer": "4", "correct": false, "codi0_answer": 8, "values": [69, 57, 50, 20, 6, 3]}
+{"idx": 628, "id": "depth2-valid-L05-00056", "level": 5, "gold_answer": "20", "predicted_answer": "19", "correct": false, "codi0_answer": 13, "values": [68, 34, 43, 42, 39, 20]}
+{"idx": 629, "id": "depth2-valid-L05-00057", "level": 5, "gold_answer": "24", "predicted_answer": "27", "correct": false, "codi0_answer": 31, "values": [74, 72, 36, 18, 36, 24]}
+{"idx": 630, "id": "depth2-valid-L05-00058", "level": 5, "gold_answer": "36", "predicted_answer": "40", "correct": false, "codi0_answer": 51, "values": [26, 52, 61, 67, 51, 36]}
+{"idx": 631, "id": "depth2-valid-L05-00059", "level": 5, "gold_answer": "54", "predicted_answer": "54", "correct": true, "codi0_answer": 56, "values": [62, 31, 13, 30, 47, 54]}
+{"idx": 632, "id": "depth2-valid-L05-00060", "level": 5, "gold_answer": "38", "predicted_answer": "42", "correct": false, "codi0_answer": 32, "values": [44, 22, 11, 12, 24, 38]}
+{"idx": 633, "id": "depth2-valid-L05-00061", "level": 5, "gold_answer": "67", "predicted_answer": "69", "correct": false, "codi0_answer": 63, "values": [34, 33, 57, 68, 58, 67]}
+{"idx": 634, "id": "depth2-valid-L05-00062", "level": 5, "gold_answer": "25", "predicted_answer": "24", "correct": false, "codi0_answer": 26, "values": [33, 66, 33, 25, 50, 25]}
+{"idx": 635, "id": "depth2-valid-L05-00063", "level": 5, "gold_answer": "43", "predicted_answer": "45", "correct": false, "codi0_answer": 49, "values": [45, 50, 34, 17, 34, 43]}
+{"idx": 636, "id": "depth2-valid-L05-00064", "level": 5, "gold_answer": "31", "predicted_answer": "32", "correct": false, "codi0_answer": 31, "values": [20, 19, 40, 55, 62, 31]}
+{"idx": 637, "id": "depth2-valid-L05-00065", "level": 5, "gold_answer": "70", "predicted_answer": "64", "correct": false, "codi0_answer": 60, "values": [40, 34, 68, 62, 69, 70]}
+{"idx": 638, "id": "depth2-valid-L05-00066", "level": 5, "gold_answer": "15", "predicted_answer": "42", "correct": false, "codi0_answer": 62, "values": [49, 68, 34, 17, 39, 15]}
+{"idx": 639, "id": "depth2-valid-L05-00067", "level": 5, "gold_answer": "76", "predicted_answer": "60", "correct": false, "codi0_answer": 76, "values": [96, 84, 42, 21, 38, 76]}
+{"idx": 640, "id": "depth2-valid-L05-00068", "level": 5, "gold_answer": "30", "predicted_answer": "35", "correct": false, "codi0_answer": 40, "values": [91, 74, 55, 75, 60, 30]}
+{"idx": 641, "id": "depth2-valid-L05-00069", "level": 5, "gold_answer": "20", "predicted_answer": "22", "correct": false, "codi0_answer": 18, "values": [30, 60, 30, 15, 29, 20]}
+{"idx": 642, "id": "depth2-valid-L05-00070", "level": 5, "gold_answer": "10", "predicted_answer": "38", "correct": false, "codi0_answer": 44, "values": [3, 14, 32, 16, 8, 10]}
+{"idx": 643, "id": "depth2-valid-L05-00071", "level": 5, "gold_answer": "15", "predicted_answer": "10", "correct": false, "codi0_answer": 16, "values": [17, 34, 31, 62, 30, 15]}
+{"idx": 644, "id": "depth2-valid-L05-00072", "level": 5, "gold_answer": "21", "predicted_answer": "17", "correct": false, "codi0_answer": 20, "values": [72, 36, 43, 65, 35, 21]}
+{"idx": 645, "id": "depth2-valid-L05-00073", "level": 5, "gold_answer": "70", "predicted_answer": "40", "correct": false, "codi0_answer": 40, "values": [81, 70, 35, 53, 71, 70]}
+{"idx": 646, "id": "depth2-valid-L05-00074", "level": 5, "gold_answer": "46", "predicted_answer": "48", "correct": false, "codi0_answer": 66, "values": [22, 44, 41, 46, 23, 46]}
+{"idx": 647, "id": "depth2-valid-L05-00075", "level": 5, "gold_answer": "66", "predicted_answer": "23", "correct": false, "codi0_answer": 21, "values": [87, 96, 48, 63, 43, 66]}
+{"idx": 648, "id": "depth2-valid-L05-00076", "level": 5, "gold_answer": "17", "predicted_answer": "28", "correct": false, "codi0_answer": 28, "values": [50, 44, 22, 11, 34, 17]}
+{"idx": 649, "id": "depth2-valid-L05-00077", "level": 5, "gold_answer": "45", "predicted_answer": "35", "correct": false, "codi0_answer": 40, "values": [90, 68, 32, 64, 54, 45]}
+{"idx": 650, "id": "depth2-valid-L05-00078", "level": 5, "gold_answer": "15", "predicted_answer": "17", "correct": false, "codi0_answer": 19, "values": [51, 28, 14, 13, 30, 15]}
+{"idx": 651, "id": "depth2-valid-L05-00079", "level": 5, "gold_answer": "35", "predicted_answer": "84", "correct": false, "codi0_answer": 88, "values": [43, 61, 86, 85, 70, 35]}
+{"idx": 652, "id": "depth2-valid-L05-00080", "level": 5, "gold_answer": "14", "predicted_answer": "54", "correct": false, "codi0_answer": 50, "values": [22, 44, 40, 20, 28, 14]}
+{"idx": 653, "id": "depth2-valid-L05-00081", "level": 5, "gold_answer": "52", "predicted_answer": "44", "correct": false, "codi0_answer": 36, "values": [53, 42, 15, 25, 26, 52]}
+{"idx": 654, "id": "depth2-valid-L05-00082", "level": 5, "gold_answer": "50", "predicted_answer": "58", "correct": false, "codi0_answer": 54, "values": [67, 78, 39, 23, 46, 50]}
+{"idx": 655, "id": "depth2-valid-L05-00083", "level": 5, "gold_answer": "46", "predicted_answer": "48", "correct": false, "codi0_answer": 46, "values": [7, 14, 28, 47, 66, 46]}
+{"idx": 656, "id": "depth2-valid-L05-00084", "level": 5, "gold_answer": "23", "predicted_answer": "22", "correct": false, "codi0_answer": 22, "values": [13, 14, 19, 38, 19, 23]}
+{"idx": 657, "id": "depth2-valid-L05-00085", "level": 5, "gold_answer": "26", "predicted_answer": "27", "correct": false, "codi0_answer": 26, "values": [51, 25, 50, 46, 23, 26]}
+{"idx": 658, "id": "depth2-valid-L05-00086", "level": 5, "gold_answer": "47", "predicted_answer": "45", "correct": false, "codi0_answer": 49, "values": [60, 49, 51, 37, 46, 47]}
+{"idx": 659, "id": "depth2-valid-L05-00087", "level": 5, "gold_answer": "31", "predicted_answer": "30", "correct": false, "codi0_answer": 38, "values": [93, 86, 43, 28, 14, 31]}
+{"idx": 660, "id": "depth2-valid-L05-00088", "level": 5, "gold_answer": "31", "predicted_answer": "55", "correct": false, "codi0_answer": 47, "values": [50, 25, 36, 13, 26, 31]}
+{"idx": 661, "id": "depth2-valid-L05-00089", "level": 5, "gold_answer": "13", "predicted_answer": "13", "correct": true, "codi0_answer": 13, "values": [22, 9, 30, 20, 10, 13]}
+{"idx": 662, "id": "depth2-valid-L05-00090", "level": 5, "gold_answer": "28", "predicted_answer": "28", "correct": true, "codi0_answer": 28, "values": [44, 61, 45, 33, 56, 28]}
+{"idx": 663, "id": "depth2-valid-L05-00091", "level": 5, "gold_answer": "56", "predicted_answer": "76", "correct": false, "codi0_answer": 60, "values": [31, 43, 59, 72, 60, 56]}
+{"idx": 664, "id": "depth2-valid-L05-00092", "level": 5, "gold_answer": "57", "predicted_answer": "59", "correct": false, "codi0_answer": 61, "values": [62, 31, 36, 30, 49, 57]}
+{"idx": 665, "id": "depth2-valid-L05-00093", "level": 5, "gold_answer": "56", "predicted_answer": "54", "correct": false, "codi0_answer": 58, "values": [64, 51, 62, 31, 54, 56]}
+{"idx": 666, "id": "depth2-valid-L05-00094", "level": 5, "gold_answer": "52", "predicted_answer": "26", "correct": false, "codi0_answer": 50, "values": [58, 38, 6, 20, 26, 52]}
+{"idx": 667, "id": "depth2-valid-L05-00095", "level": 5, "gold_answer": "50", "predicted_answer": "50", "correct": true, "codi0_answer": 46, "values": [84, 42, 58, 50, 25, 50]}
+{"idx": 668, "id": "depth2-valid-L05-00096", "level": 5, "gold_answer": "8", "predicted_answer": "52", "correct": false, "codi0_answer": 54, "values": [33, 42, 21, 32, 16, 8]}
+{"idx": 669, "id": "depth2-valid-L05-00097", "level": 5, "gold_answer": "26", "predicted_answer": "28", "correct": false, "codi0_answer": 36, "values": [10, 15, 32, 16, 13, 26]}
+{"idx": 670, "id": "depth2-valid-L05-00098", "level": 5, "gold_answer": "17", "predicted_answer": "46", "correct": false, "codi0_answer": 38, "values": [36, 72, 36, 25, 34, 17]}
+{"idx": 671, "id": "depth2-valid-L05-00099", "level": 5, "gold_answer": "25", "predicted_answer": "56", "correct": false, "codi0_answer": 78, "values": [46, 23, 16, 32, 50, 25]}
+{"idx": 672, "id": "depth2-valid-L05-00100", "level": 5, "gold_answer": "20", "predicted_answer": "26", "correct": false, "codi0_answer": 18, "values": [6, 16, 8, 16, 8, 20]}
+{"idx": 673, "id": "depth2-valid-L05-00101", "level": 5, "gold_answer": "17", "predicted_answer": "41", "correct": false, "codi0_answer": 45, "values": [74, 73, 98, 49, 34, 17]}
+{"idx": 674, "id": "depth2-valid-L05-00102", "level": 5, "gold_answer": "50", "predicted_answer": "13", "correct": false, "codi0_answer": 19, "values": [34, 30, 15, 36, 25, 50]}
+{"idx": 675, "id": "depth2-valid-L05-00103", "level": 5, "gold_answer": "20", "predicted_answer": "17", "correct": false, "codi0_answer": 16, "values": [88, 74, 65, 66, 33, 20]}
+{"idx": 676, "id": "depth2-valid-L05-00104", "level": 5, "gold_answer": "61", "predicted_answer": "61", "correct": true, "codi0_answer": 49, "values": [19, 20, 32, 21, 42, 61]}
+{"idx": 677, "id": "depth2-valid-L05-00105", "level": 5, "gold_answer": "43", "predicted_answer": "39", "correct": false, "codi0_answer": 49, "values": [21, 24, 48, 41, 26, 43]}
+{"idx": 678, "id": "depth2-valid-L05-00106", "level": 5, "gold_answer": "55", "predicted_answer": "59", "correct": false, "codi0_answer": 55, "values": [37, 27, 28, 56, 51, 55]}
+{"idx": 679, "id": "depth2-valid-L05-00107", "level": 5, "gold_answer": "35", "predicted_answer": "29", "correct": false, "codi0_answer": 39, "values": [56, 45, 15, 30, 60, 35]}
+{"idx": 680, "id": "depth2-valid-L05-00108", "level": 5, "gold_answer": "49", "predicted_answer": "50", "correct": false, "codi0_answer": 48, "values": [87, 75, 88, 44, 58, 49]}
+{"idx": 681, "id": "depth2-valid-L05-00109", "level": 5, "gold_answer": "31", "predicted_answer": "29", "correct": false, "codi0_answer": 43, "values": [78, 39, 78, 73, 49, 31]}
+{"idx": 682, "id": "depth2-valid-L05-00110", "level": 5, "gold_answer": "47", "predicted_answer": "54", "correct": false, "codi0_answer": 62, "values": [10, 5, 25, 27, 54, 47]}
+{"idx": 683, "id": "depth2-valid-L05-00111", "level": 5, "gold_answer": "62", "predicted_answer": "60", "correct": false, "codi0_answer": 63, "values": [97, 94, 47, 33, 44, 62]}
+{"idx": 684, "id": "depth2-valid-L05-00112", "level": 5, "gold_answer": "72", "predicted_answer": "82", "correct": false, "codi0_answer": 82, "values": [67, 62, 53, 37, 74, 72]}
+{"idx": 685, "id": "depth2-valid-L05-00113", "level": 5, "gold_answer": "84", "predicted_answer": "88", "correct": false, "codi0_answer": 90, "values": [34, 51, 72, 67, 90, 84]}
+{"idx": 686, "id": "depth2-valid-L05-00114", "level": 5, "gold_answer": "30", "predicted_answer": "58", "correct": false, "codi0_answer": 66, "values": [55, 67, 54, 34, 15, 30]}
+{"idx": 687, "id": "depth2-valid-L05-00115", "level": 5, "gold_answer": "16", "predicted_answer": "51", "correct": false, "codi0_answer": 43, "values": [39, 64, 32, 64, 32, 16]}
+{"idx": 688, "id": "depth2-valid-L05-00116", "level": 5, "gold_answer": "27", "predicted_answer": "27", "correct": true, "codi0_answer": 31, "values": [7, 25, 19, 27, 54, 27]}
+{"idx": 689, "id": "depth2-valid-L05-00117", "level": 5, "gold_answer": "43", "predicted_answer": "45", "correct": false, "codi0_answer": 37, "values": [5, 10, 20, 36, 48, 43]}
+{"idx": 690, "id": "depth2-valid-L05-00118", "level": 5, "gold_answer": "16", "predicted_answer": "16", "correct": true, "codi0_answer": 20, "values": [59, 36, 18, 9, 26, 16]}
+{"idx": 691, "id": "depth2-valid-L05-00119", "level": 5, "gold_answer": "45", "predicted_answer": "45", "correct": true, "codi0_answer": 49, "values": [32, 33, 40, 20, 33, 45]}
+{"idx": 692, "id": "depth2-valid-L05-00120", "level": 5, "gold_answer": "62", "predicted_answer": "33", "correct": false, "codi0_answer": 44, "values": [54, 27, 39, 23, 42, 62]}
+{"idx": 693, "id": "depth2-valid-L05-00121", "level": 5, "gold_answer": "14", "predicted_answer": "49", "correct": false, "codi0_answer": 49, "values": [64, 51, 40, 20, 28, 14]}
+{"idx": 694, "id": "depth2-valid-L05-00122", "level": 5, "gold_answer": "58", "predicted_answer": "58", "correct": true, "codi0_answer": 56, "values": [37, 41, 57, 78, 39, 58]}
+{"idx": 695, "id": "depth2-valid-L05-00123", "level": 5, "gold_answer": "28", "predicted_answer": "37", "correct": false, "codi0_answer": 35, "values": [50, 23, 42, 21, 18, 28]}
+{"idx": 696, "id": "depth2-valid-L05-00124", "level": 5, "gold_answer": "54", "predicted_answer": "39", "correct": false, "codi0_answer": 50, "values": [64, 60, 21, 42, 46, 54]}
+{"idx": 697, "id": "depth2-valid-L05-00125", "level": 5, "gold_answer": "6", "predicted_answer": "8", "correct": false, "codi0_answer": 8, "values": [4, 8, 22, 36, 12, 6]}
+{"idx": 698, "id": "depth2-valid-L05-00126", "level": 5, "gold_answer": "26", "predicted_answer": "30", "correct": false, "codi0_answer": 30, "values": [52, 40, 25, 37, 52, 26]}
+{"idx": 699, "id": "depth2-valid-L05-00127", "level": 5, "gold_answer": "50", "predicted_answer": "54", "correct": false, "codi0_answer": 54, "values": [79, 73, 70, 35, 49, 50]}
+{"idx": 700, "id": "depth2-valid-L05-00128", "level": 5, "gold_answer": "38", "predicted_answer": "36", "correct": false, "codi0_answer": 50, "values": [61, 40, 23, 46, 33, 38]}
+{"idx": 701, "id": "depth2-valid-L05-00129", "level": 5, "gold_answer": "7", "predicted_answer": "31", "correct": false, "codi0_answer": 37, "values": [76, 38, 19, 34, 14, 7]}
+{"idx": 702, "id": "depth2-valid-L05-00130", "level": 5, "gold_answer": "31", "predicted_answer": "32", "correct": false, "codi0_answer": 29, "values": [16, 36, 31, 43, 62, 31]}
+{"idx": 703, "id": "depth2-valid-L05-00131", "level": 5, "gold_answer": "29", "predicted_answer": "27", "correct": false, "codi0_answer": 64, "values": [65, 83, 63, 64, 63, 29]}
+{"idx": 704, "id": "depth2-valid-L05-00132", "level": 5, "gold_answer": "31", "predicted_answer": "30", "correct": false, "codi0_answer": 37, "values": [7, 30, 41, 58, 29, 31]}
+{"idx": 705, "id": "depth2-valid-L05-00133", "level": 5, "gold_answer": "2", "predicted_answer": "13", "correct": false, "codi0_answer": 19, "values": [11, 12, 16, 8, 4, 2]}
+{"idx": 706, "id": "depth2-valid-L05-00134", "level": 5, "gold_answer": "19", "predicted_answer": "21", "correct": false, "codi0_answer": 19, "values": [56, 42, 39, 26, 13, 19]}
+{"idx": 707, "id": "depth2-valid-L05-00135", "level": 5, "gold_answer": "9", "predicted_answer": "8", "correct": false, "codi0_answer": 25, "values": [56, 52, 72, 36, 18, 9]}
+{"idx": 708, "id": "depth2-valid-L05-00136", "level": 5, "gold_answer": "14", "predicted_answer": "22", "correct": false, "codi0_answer": 65, "values": [19, 36, 51, 54, 27, 14]}
+{"idx": 709, "id": "depth2-valid-L05-00137", "level": 5, "gold_answer": "30", "predicted_answer": "30", "correct": true, "codi0_answer": 26, "values": [46, 45, 55, 32, 16, 30]}
+{"idx": 710, "id": "depth2-valid-L05-00138", "level": 5, "gold_answer": "8", "predicted_answer": "31", "correct": false, "codi0_answer": 31, "values": [76, 38, 46, 32, 16, 8]}
+{"idx": 711, "id": "depth2-valid-L05-00139", "level": 5, "gold_answer": "61", "predicted_answer": "59", "correct": false, "codi0_answer": 60, "values": [65, 77, 46, 53, 68, 61]}
+{"idx": 712, "id": "depth2-valid-L05-00140", "level": 5, "gold_answer": "36", "predicted_answer": "36", "correct": true, "codi0_answer": 23, "values": [44, 22, 11, 14, 33, 36]}
+{"idx": 713, "id": "depth2-valid-L05-00141", "level": 5, "gold_answer": "58", "predicted_answer": "50", "correct": false, "codi0_answer": 52, "values": [96, 48, 29, 58, 75, 58]}
+{"idx": 714, "id": "depth2-valid-L05-00142", "level": 5, "gold_answer": "40", "predicted_answer": "38", "correct": false, "codi0_answer": 38, "values": [54, 42, 22, 11, 20, 40]}
+{"idx": 715, "id": "depth2-valid-L05-00143", "level": 5, "gold_answer": "59", "predicted_answer": "55", "correct": false, "codi0_answer": 53, "values": [29, 51, 35, 22, 44, 59]}
+{"idx": 716, "id": "depth2-valid-L05-00144", "level": 5, "gold_answer": "23", "predicted_answer": "28", "correct": false, "codi0_answer": 24, "values": [45, 67, 66, 52, 46, 23]}
+{"idx": 717, "id": "depth2-valid-L05-00145", "level": 5, "gold_answer": "25", "predicted_answer": "19", "correct": false, "codi0_answer": 19, "values": [40, 56, 66, 33, 48, 25]}
+{"idx": 718, "id": "depth2-valid-L05-00146", "level": 5, "gold_answer": "13", "predicted_answer": "12", "correct": false, "codi0_answer": 36, "values": [57, 45, 54, 24, 26, 13]}
+{"idx": 719, "id": "depth2-valid-L05-00147", "level": 5, "gold_answer": "31", "predicted_answer": "33", "correct": false, "codi0_answer": 35, "values": [59, 55, 77, 58, 29, 31]}
+{"idx": 720, "id": "depth2-valid-L05-00148", "level": 5, "gold_answer": "36", "predicted_answer": "44", "correct": false, "codi0_answer": 27, "values": [4, 22, 15, 30, 18, 36]}
+{"idx": 721, "id": "depth2-valid-L05-00149", "level": 5, "gold_answer": "6", "predicted_answer": "8", "correct": false, "codi0_answer": 7, "values": [48, 42, 48, 30, 12, 6]}
+{"idx": 722, "id": "depth2-valid-L05-00150", "level": 5, "gold_answer": "21", "predicted_answer": "18", "correct": false, "codi0_answer": 19, "values": [35, 70, 64, 28, 42, 21]}
+{"idx": 723, "id": "depth2-valid-L05-00151", "level": 5, "gold_answer": "40", "predicted_answer": "46", "correct": false, "codi0_answer": 32, "values": [12, 24, 5, 10, 20, 40]}
+{"idx": 724, "id": "depth2-valid-L05-00152", "level": 5, "gold_answer": "35", "predicted_answer": "35", "correct": true, "codi0_answer": 17, "values": [31, 42, 27, 50, 25, 35]}
+{"idx": 725, "id": "depth2-valid-L05-00153", "level": 5, "gold_answer": "71", "predicted_answer": "57", "correct": false, "codi0_answer": 38, "values": [52, 26, 13, 36, 72, 71]}
+{"idx": 726, "id": "depth2-valid-L05-00154", "level": 5, "gold_answer": "49", "predicted_answer": "52", "correct": false, "codi0_answer": 69, "values": [68, 52, 68, 65, 60, 49]}
+{"idx": 727, "id": "depth2-valid-L05-00155", "level": 5, "gold_answer": "34", "predicted_answer": "36", "correct": false, "codi0_answer": 35, "values": [33, 57, 59, 52, 26, 34]}
+{"idx": 728, "id": "depth2-valid-L05-00156", "level": 5, "gold_answer": "39", "predicted_answer": "41", "correct": false, "codi0_answer": 39, "values": [23, 25, 26, 52, 47, 39]}
+{"idx": 729, "id": "depth2-valid-L05-00157", "level": 5, "gold_answer": "44", "predicted_answer": "42", "correct": false, "codi0_answer": 42, "values": [78, 71, 70, 35, 59, 44]}
+{"idx": 730, "id": "depth2-valid-L05-00158", "level": 5, "gold_answer": "79", "predicted_answer": "77", "correct": false, "codi0_answer": 73, "values": [62, 31, 22, 44, 55, 79]}
+{"idx": 731, "id": "depth2-valid-L05-00159", "level": 5, "gold_answer": "52", "predicted_answer": "64", "correct": false, "codi0_answer": 28, "values": [57, 46, 26, 13, 26, 52]}
+{"idx": 732, "id": "depth2-valid-L05-00160", "level": 5, "gold_answer": "32", "predicted_answer": "28", "correct": false, "codi0_answer": 50, "values": [27, 37, 18, 36, 17, 32]}
+{"idx": 733, "id": "depth2-valid-L05-00161", "level": 5, "gold_answer": "48", "predicted_answer": "31", "correct": false, "codi0_answer": 31, "values": [54, 27, 40, 51, 60, 48]}
+{"idx": 734, "id": "depth2-valid-L05-00162", "level": 5, "gold_answer": "40", "predicted_answer": "44", "correct": false, "codi0_answer": 60, "values": [69, 84, 72, 36, 20, 40]}
+{"idx": 735, "id": "depth2-valid-L05-00163", "level": 5, "gold_answer": "25", "predicted_answer": "37", "correct": false, "codi0_answer": 37, "values": [22, 12, 6, 3, 24, 25]}
+{"idx": 736, "id": "depth2-valid-L05-00164", "level": 5, "gold_answer": "47", "predicted_answer": "39", "correct": false, "codi0_answer": 35, "values": [72, 36, 55, 14, 30, 47]}
+{"idx": 737, "id": "depth2-valid-L05-00165", "level": 5, "gold_answer": "41", "predicted_answer": "39", "correct": false, "codi0_answer": 37, "values": [30, 15, 22, 44, 22, 41]}
+{"idx": 738, "id": "depth2-valid-L05-00166", "level": 5, "gold_answer": "58", "predicted_answer": "56", "correct": false, "codi0_answer": 64, "values": [68, 34, 49, 69, 77, 58]}
+{"idx": 739, "id": "depth2-valid-L05-00167", "level": 5, "gold_answer": "36", "predicted_answer": "12", "correct": false, "codi0_answer": 4, "values": [1, 16, 32, 16, 32, 36]}
+{"idx": 740, "id": "depth2-valid-L05-00168", "level": 5, "gold_answer": "28", "predicted_answer": "29", "correct": false, "codi0_answer": 33, "values": [27, 37, 48, 32, 16, 28]}
+{"idx": 741, "id": "depth2-valid-L05-00169", "level": 5, "gold_answer": "89", "predicted_answer": "87", "correct": false, "codi0_answer": 83, "values": [66, 33, 50, 59, 69, 89]}
+{"idx": 742, "id": "depth2-valid-L05-00170", "level": 5, "gold_answer": "31", "predicted_answer": "64", "correct": false, "codi0_answer": 64, "values": [32, 64, 48, 52, 62, 31]}
+{"idx": 743, "id": "depth2-valid-L05-00171", "level": 5, "gold_answer": "76", "predicted_answer": "74", "correct": false, "codi0_answer": 74, "values": [20, 37, 52, 26, 38, 76]}
+{"idx": 744, "id": "depth2-valid-L05-00172", "level": 5, "gold_answer": "73", "predicted_answer": "77", "correct": false, "codi0_answer": 67, "values": [21, 40, 59, 68, 53, 73]}
+{"idx": 745, "id": "depth2-valid-L05-00173", "level": 5, "gold_answer": "38", "predicted_answer": "31", "correct": false, "codi0_answer": 31, "values": [35, 24, 48, 47, 32, 38]}
+{"idx": 746, "id": "depth2-valid-L05-00174", "level": 5, "gold_answer": "46", "predicted_answer": "50", "correct": false, "codi0_answer": 50, "values": [9, 18, 31, 17, 29, 46]}
+{"idx": 747, "id": "depth2-valid-L05-00175", "level": 5, "gold_answer": "37", "predicted_answer": "23", "correct": false, "codi0_answer": 16, "values": [57, 45, 57, 37, 74, 37]}
+{"idx": 748, "id": "depth2-valid-L05-00176", "level": 5, "gold_answer": "28", "predicted_answer": "28", "correct": true, "codi0_answer": 6, "values": [72, 36, 37, 26, 13, 28]}
+{"idx": 749, "id": "depth2-valid-L05-00177", "level": 5, "gold_answer": "45", "predicted_answer": "47", "correct": false, "codi0_answer": 23, "values": [34, 46, 54, 27, 38, 45]}
+{"idx": 750, "id": "depth2-valid-L05-00178", "level": 5, "gold_answer": "61", "predicted_answer": "61", "correct": true, "codi0_answer": 58, "values": [72, 31, 39, 78, 62, 61]}
+{"idx": 751, "id": "depth2-valid-L05-00179", "level": 5, "gold_answer": "2", "predicted_answer": "23", "correct": false, "codi0_answer": 21, "values": [6, 8, 16, 8, 4, 2]}
+{"idx": 752, "id": "depth2-valid-L05-00180", "level": 5, "gold_answer": "20", "predicted_answer": "22", "correct": false, "codi0_answer": 59, "values": [73, 62, 31, 44, 10, 20]}
+{"idx": 753, "id": "depth2-valid-L05-00181", "level": 5, "gold_answer": "67", "predicted_answer": "67", "correct": true, "codi0_answer": 65, "values": [71, 64, 33, 34, 68, 67]}
+{"idx": 754, "id": "depth2-valid-L05-00182", "level": 5, "gold_answer": "44", "predicted_answer": "46", "correct": false, "codi0_answer": 47, "values": [41, 47, 41, 82, 63, 44]}
+{"idx": 755, "id": "depth2-valid-L05-00183", "level": 5, "gold_answer": "34", "predicted_answer": "36", "correct": false, "codi0_answer": 32, "values": [80, 70, 35, 34, 17, 34]}
+{"idx": 756, "id": "depth2-valid-L05-00184", "level": 5, "gold_answer": "40", "predicted_answer": "42", "correct": false, "codi0_answer": 42, "values": [7, 14, 33, 41, 47, 40]}
+{"idx": 757, "id": "depth2-valid-L05-00185", "level": 5, "gold_answer": "38", "predicted_answer": "30", "correct": false, "codi0_answer": 4, "values": [97, 81, 74, 37, 19, 38]}
+{"idx": 758, "id": "depth2-valid-L05-00186", "level": 5, "gold_answer": "52", "predicted_answer": "48", "correct": false, "codi0_answer": 44, "values": [62, 37, 32, 52, 26, 52]}
+{"idx": 759, "id": "depth2-valid-L05-00187", "level": 5, "gold_answer": "32", "predicted_answer": "36", "correct": false, "codi0_answer": 46, "values": [62, 31, 62, 54, 29, 32]}
+{"idx": 760, "id": "depth2-valid-L05-00188", "level": 5, "gold_answer": "13", "predicted_answer": "37", "correct": false, "codi0_answer": 53, "values": [26, 13, 26, 52, 26, 13]}
+{"idx": 761, "id": "depth2-valid-L05-00189", "level": 5, "gold_answer": "34", "predicted_answer": "34", "correct": true, "codi0_answer": 44, "values": [46, 23, 37, 36, 25, 34]}
+{"idx": 762, "id": "depth2-valid-L05-00190", "level": 5, "gold_answer": "39", "predicted_answer": "39", "correct": true, "codi0_answer": 13, "values": [4, 8, 23, 46, 23, 39]}
+{"idx": 763, "id": "depth2-valid-L05-00191", "level": 5, "gold_answer": "48", "predicted_answer": "2", "correct": false, "codi0_answer": 4, "values": [30, 15, 25, 50, 25, 48]}
+{"idx": 764, "id": "depth2-valid-L05-00192", "level": 5, "gold_answer": "22", "predicted_answer": "26", "correct": false, "codi0_answer": 26, "values": [31, 14, 7, 30, 11, 22]}
+{"idx": 765, "id": "depth2-valid-L05-00193", "level": 5, "gold_answer": "44", "predicted_answer": "42", "correct": false, "codi0_answer": 38, "values": [88, 49, 66, 44, 22, 44]}
+{"idx": 766, "id": "depth2-valid-L05-00194", "level": 5, "gold_answer": "36", "predicted_answer": "16", "correct": false, "codi0_answer": 14, "values": [74, 73, 83, 36, 72, 36]}
+{"idx": 767, "id": "depth2-valid-L05-00195", "level": 5, "gold_answer": "5", "predicted_answer": "76", "correct": false, "codi0_answer": 29, "values": [80, 77, 67, 71, 44, 5]}
+{"idx": 768, "id": "depth2-valid-L05-00196", "level": 5, "gold_answer": "70", "predicted_answer": "66", "correct": false, "codi0_answer": 62, "values": [23, 33, 66, 70, 35, 70]}
+{"idx": 769, "id": "depth2-valid-L05-00197", "level": 5, "gold_answer": "14", "predicted_answer": "51", "correct": false, "codi0_answer": 45, "values": [83, 78, 39, 54, 27, 14]}
+{"idx": 770, "id": "depth2-valid-L05-00198", "level": 5, "gold_answer": "7", "predicted_answer": "38", "correct": false, "codi0_answer": 9, "values": [13, 19, 38, 28, 14, 7]}
+{"idx": 771, "id": "depth2-valid-L05-00199", "level": 5, "gold_answer": "40", "predicted_answer": "42", "correct": false, "codi0_answer": 42, "values": [6, 16, 8, 9, 20, 40]}
+{"idx": 772, "id": "depth2-valid-L05-00200", "level": 5, "gold_answer": "34", "predicted_answer": "40", "correct": false, "codi0_answer": 48, "values": [55, 21, 36, 18, 36, 34]}
+{"idx": 773, "id": "depth2-valid-L05-00201", "level": 5, "gold_answer": "46", "predicted_answer": "32", "correct": false, "codi0_answer": 28, "values": [48, 24, 12, 24, 48, 46]}
+{"idx": 774, "id": "depth2-valid-L05-00202", "level": 5, "gold_answer": "59", "predicted_answer": "45", "correct": false, "codi0_answer": 37, "values": [24, 43, 34, 68, 41, 59]}
+{"idx": 775, "id": "depth2-valid-L05-00203", "level": 5, "gold_answer": "34", "predicted_answer": "34", "correct": true, "codi0_answer": 36, "values": [62, 31, 50, 25, 50, 34]}
+{"idx": 776, "id": "depth2-valid-L05-00204", "level": 5, "gold_answer": "14", "predicted_answer": "9", "correct": false, "codi0_answer": 11, "values": [44, 26, 13, 18, 28, 14]}
+{"idx": 777, "id": "depth2-valid-L05-00205", "level": 5, "gold_answer": "80", "predicted_answer": "49", "correct": false, "codi0_answer": 60, "values": [69, 61, 83, 63, 40, 80]}
+{"idx": 778, "id": "depth2-valid-L05-00206", "level": 5, "gold_answer": "66", "predicted_answer": "64", "correct": false, "codi0_answer": 54, "values": [25, 50, 25, 38, 76, 66]}
+{"idx": 779, "id": "depth2-valid-L05-00207", "level": 5, "gold_answer": "54", "predicted_answer": "54", "correct": true, "codi0_answer": 20, "values": [57, 76, 82, 41, 49, 54]}
+{"idx": 780, "id": "depth2-valid-L05-00208", "level": 5, "gold_answer": "40", "predicted_answer": "40", "correct": true, "codi0_answer": 40, "values": [27, 38, 19, 25, 50, 40]}
+{"idx": 781, "id": "depth2-valid-L05-00209", "level": 5, "gold_answer": "5", "predicted_answer": "11", "correct": false, "codi0_answer": 11, "values": [12, 6, 21, 5, 10, 5]}
+{"idx": 782, "id": "depth2-valid-L05-00210", "level": 5, "gold_answer": "52", "predicted_answer": "17", "correct": false, "codi0_answer": 19, "values": [25, 50, 46, 23, 35, 52]}
+{"idx": 783, "id": "depth2-valid-L05-00211", "level": 5, "gold_answer": "47", "predicted_answer": "53", "correct": false, "codi0_answer": 53, "values": [88, 78, 39, 44, 28, 47]}
+{"idx": 784, "id": "depth2-valid-L05-00212", "level": 5, "gold_answer": "50", "predicted_answer": "56", "correct": false, "codi0_answer": 28, "values": [90, 84, 42, 21, 42, 50]}
+{"idx": 785, "id": "depth2-valid-L05-00213", "level": 5, "gold_answer": "46", "predicted_answer": "30", "correct": false, "codi0_answer": 50, "values": [68, 56, 23, 7, 23, 46]}
+{"idx": 786, "id": "depth2-valid-L05-00214", "level": 5, "gold_answer": "46", "predicted_answer": "59", "correct": false, "codi0_answer": 20, "values": [93, 78, 39, 46, 23, 46]}
+{"idx": 787, "id": "depth2-valid-L05-00215", "level": 5, "gold_answer": "43", "predicted_answer": "39", "correct": false, "codi0_answer": 39, "values": [25, 9, 14, 19, 38, 43]}
+{"idx": 788, "id": "depth2-valid-L05-00216", "level": 5, "gold_answer": "41", "predicted_answer": "23", "correct": false, "codi0_answer": 24, "values": [5, 23, 42, 21, 29, 41]}
+{"idx": 789, "id": "depth2-valid-L05-00217", "level": 5, "gold_answer": "61", "predicted_answer": "57", "correct": false, "codi0_answer": 55, "values": [51, 41, 25, 39, 45, 61]}
+{"idx": 790, "id": "depth2-valid-L05-00218", "level": 5, "gold_answer": "42", "predicted_answer": "42", "correct": true, "codi0_answer": 52, "values": [14, 25, 29, 47, 40, 42]}
+{"idx": 791, "id": "depth2-valid-L05-00219", "level": 5, "gold_answer": "7", "predicted_answer": "8", "correct": false, "codi0_answer": 22, "values": [73, 50, 25, 17, 14, 7]}
+{"idx": 792, "id": "depth2-valid-L05-00220", "level": 5, "gold_answer": "61", "predicted_answer": "88", "correct": false, "codi0_answer": 82, "values": [21, 42, 84, 65, 81, 61]}
+{"idx": 793, "id": "depth2-valid-L05-00221", "level": 5, "gold_answer": "55", "predicted_answer": "51", "correct": false, "codi0_answer": 50, "values": [12, 16, 31, 54, 40, 55]}
+{"idx": 794, "id": "depth2-valid-L05-00222", "level": 5, "gold_answer": "24", "predicted_answer": "20", "correct": false, "codi0_answer": 20, "values": [5, 22, 11, 20, 12, 24]}
+{"idx": 795, "id": "depth2-valid-L05-00223", "level": 5, "gold_answer": "84", "predicted_answer": "9", "correct": false, "codi0_answer": 60, "values": [19, 37, 42, 21, 42, 84]}
+{"idx": 796, "id": "depth2-valid-L05-00224", "level": 5, "gold_answer": "16", "predicted_answer": "23", "correct": false, "codi0_answer": 19, "values": [20, 10, 5, 14, 7, 16]}
+{"idx": 797, "id": "depth2-valid-L05-00225", "level": 5, "gold_answer": "21", "predicted_answer": "50", "correct": false, "codi0_answer": 26, "values": [8, 17, 16, 8, 4, 21]}
+{"idx": 798, "id": "depth2-valid-L05-00226", "level": 5, "gold_answer": "50", "predicted_answer": "52", "correct": false, "codi0_answer": 52, "values": [34, 17, 38, 34, 33, 50]}
+{"idx": 799, "id": "depth2-valid-L05-00227", "level": 5, "gold_answer": "57", "predicted_answer": "57", "correct": true, "codi0_answer": 53, "values": [38, 58, 62, 31, 43, 57]}
+{"idx": 800, "id": "depth2-valid-L05-00228", "level": 5, "gold_answer": "46", "predicted_answer": "46", "correct": true, "codi0_answer": 48, "values": [21, 27, 35, 37, 45, 46]}
+{"idx": 801, "id": "depth2-valid-L05-00229", "level": 5, "gold_answer": "57", "predicted_answer": "51", "correct": false, "codi0_answer": 41, "values": [8, 28, 14, 28, 43, 57]}
+{"idx": 802, "id": "depth2-valid-L05-00230", "level": 5, "gold_answer": "14", "predicted_answer": "22", "correct": false, "codi0_answer": 26, "values": [87, 90, 45, 46, 23, 14]}
+{"idx": 803, "id": "depth2-valid-L05-00231", "level": 5, "gold_answer": "41", "predicted_answer": "49", "correct": false, "codi0_answer": 5, "values": [54, 27, 34, 27, 54, 41]}
+{"idx": 804, "id": "depth2-valid-L05-00232", "level": 5, "gold_answer": "17", "predicted_answer": "16", "correct": false, "codi0_answer": 20, "values": [59, 75, 38, 30, 15, 17]}
+{"idx": 805, "id": "depth2-valid-L05-00233", "level": 5, "gold_answer": "44", "predicted_answer": "43", "correct": false, "codi0_answer": 45, "values": [93, 96, 94, 87, 88, 44]}
+{"idx": 806, "id": "depth2-valid-L05-00234", "level": 5, "gold_answer": "22", "predicted_answer": "30", "correct": false, "codi0_answer": 26, "values": [56, 74, 37, 46, 40, 22]}
+{"idx": 807, "id": "depth2-valid-L05-00235", "level": 5, "gold_answer": "27", "predicted_answer": "31", "correct": false, "codi0_answer": 53, "values": [24, 12, 24, 42, 14, 27]}
+{"idx": 808, "id": "depth2-valid-L05-00236", "level": 5, "gold_answer": "76", "predicted_answer": "82", "correct": false, "codi0_answer": 84, "values": [32, 46, 22, 39, 38, 76]}
+{"idx": 809, "id": "depth2-valid-L05-00237", "level": 5, "gold_answer": "31", "predicted_answer": "75", "correct": false, "codi0_answer": 47, "values": [94, 47, 54, 16, 32, 31]}
+{"idx": 810, "id": "depth2-valid-L05-00238", "level": 5, "gold_answer": "39", "predicted_answer": "37", "correct": false, "codi0_answer": 53, "values": [31, 62, 35, 51, 48, 39]}
+{"idx": 811, "id": "depth2-valid-L05-00239", "level": 5, "gold_answer": "29", "predicted_answer": "76", "correct": false, "codi0_answer": 78, "values": [72, 36, 72, 33, 31, 29]}
+{"idx": 812, "id": "depth2-valid-L05-00240", "level": 5, "gold_answer": "25", "predicted_answer": "26", "correct": false, "codi0_answer": 19, "values": [34, 48, 24, 34, 15, 25]}
+{"idx": 813, "id": "depth2-valid-L05-00241", "level": 5, "gold_answer": "33", "predicted_answer": "32", "correct": false, "codi0_answer": 33, "values": [22, 35, 48, 64, 49, 33]}
+{"idx": 814, "id": "depth2-valid-L05-00242", "level": 5, "gold_answer": "43", "predicted_answer": "23", "correct": false, "codi0_answer": 30, "values": [15, 30, 46, 23, 29, 43]}
+{"idx": 815, "id": "depth2-valid-L05-00243", "level": 5, "gold_answer": "10", "predicted_answer": "11", "correct": false, "codi0_answer": 36, "values": [54, 35, 50, 25, 20, 10]}
+{"idx": 816, "id": "depth2-valid-L05-00244", "level": 5, "gold_answer": "42", "predicted_answer": "44", "correct": false, "codi0_answer": 45, "values": [23, 46, 23, 38, 51, 42]}
+{"idx": 817, "id": "depth2-valid-L05-00245", "level": 5, "gold_answer": "4", "predicted_answer": "5", "correct": false, "codi0_answer": 7, "values": [44, 22, 36, 18, 19, 4]}
+{"idx": 818, "id": "depth2-valid-L05-00246", "level": 5, "gold_answer": "45", "predicted_answer": "45", "correct": true, "codi0_answer": 49, "values": [37, 20, 10, 23, 46, 45]}
+{"idx": 819, "id": "depth2-valid-L05-00247", "level": 5, "gold_answer": "32", "predicted_answer": "52", "correct": false, "codi0_answer": 12, "values": [1, 8, 16, 8, 16, 32]}
+{"idx": 820, "id": "depth2-valid-L05-00248", "level": 5, "gold_answer": "56", "predicted_answer": "56", "correct": true, "codi0_answer": 58, "values": [24, 12, 24, 32, 47, 56]}
+{"idx": 821, "id": "depth2-valid-L05-00249", "level": 5, "gold_answer": "81", "predicted_answer": "43", "correct": false, "codi0_answer": 83, "values": [78, 76, 38, 49, 59, 81]}
+{"idx": 822, "id": "depth2-valid-L05-00250", "level": 5, "gold_answer": "33", "predicted_answer": "34", "correct": false, "codi0_answer": 35, "values": [95, 92, 77, 81, 66, 33]}
+{"idx": 823, "id": "depth2-valid-L05-00251", "level": 5, "gold_answer": "44", "predicted_answer": "58", "correct": false, "codi0_answer": 50, "values": [27, 25, 13, 20, 40, 44]}
+{"idx": 824, "id": "depth2-valid-L05-00252", "level": 5, "gold_answer": "69", "predicted_answer": "51", "correct": false, "codi0_answer": 51, "values": [54, 42, 84, 76, 53, 69]}
+{"idx": 825, "id": "depth2-valid-L05-00253", "level": 5, "gold_answer": "55", "predicted_answer": "55", "correct": true, "codi0_answer": 49, "values": [8, 4, 8, 27, 49, 55]}
+{"idx": 826, "id": "depth2-valid-L05-00254", "level": 5, "gold_answer": "24", "predicted_answer": "25", "correct": false, "codi0_answer": 25, "values": [59, 74, 58, 29, 42, 24]}
+{"idx": 827, "id": "depth2-valid-L05-00255", "level": 5, "gold_answer": "42", "predicted_answer": "76", "correct": false, "codi0_answer": 76, "values": [62, 31, 15, 23, 46, 42]}
+{"idx": 828, "id": "depth2-valid-L05-00256", "level": 5, "gold_answer": "3", "predicted_answer": "23", "correct": false, "codi0_answer": 25, "values": [10, 25, 46, 23, 6, 3]}
+{"idx": 829, "id": "depth2-valid-L05-00257", "level": 5, "gold_answer": "46", "predicted_answer": "42", "correct": false, "codi0_answer": 52, "values": [64, 54, 10, 5, 23, 46]}
+{"idx": 830, "id": "depth2-valid-L05-00258", "level": 5, "gold_answer": "23", "predicted_answer": "19", "correct": false, "codi0_answer": 49, "values": [9, 29, 43, 36, 16, 23]}
+{"idx": 831, "id": "depth2-valid-L05-00259", "level": 5, "gold_answer": "44", "predicted_answer": "39", "correct": false, "codi0_answer": 42, "values": [30, 15, 38, 21, 42, 44]}
+{"idx": 832, "id": "depth2-valid-L05-00260", "level": 5, "gold_answer": "41", "predicted_answer": "42", "correct": false, "codi0_answer": 52, "values": [61, 40, 20, 33, 21, 41]}
+{"idx": 833, "id": "depth2-valid-L05-00261", "level": 5, "gold_answer": "56", "predicted_answer": "54", "correct": false, "codi0_answer": 54, "values": [52, 26, 13, 26, 39, 56]}
+{"idx": 834, "id": "depth2-valid-L05-00262", "level": 5, "gold_answer": "28", "predicted_answer": "30", "correct": false, "codi0_answer": 14, "values": [2, 4, 22, 37, 23, 28]}
+{"idx": 835, "id": "depth2-valid-L05-00263", "level": 5, "gold_answer": "42", "predicted_answer": "44", "correct": false, "codi0_answer": 53, "values": [37, 74, 71, 73, 53, 42]}
+{"idx": 836, "id": "depth2-valid-L05-00264", "level": 5, "gold_answer": "66", "predicted_answer": "68", "correct": false, "codi0_answer": 66, "values": [53, 60, 58, 29, 47, 66]}
+{"idx": 837, "id": "depth2-valid-L05-00265", "level": 5, "gold_answer": "9", "predicted_answer": "5", "correct": false, "codi0_answer": 4, "values": [84, 42, 56, 9, 18, 9]}
+{"idx": 838, "id": "depth2-valid-L05-00266", "level": 5, "gold_answer": "45", "predicted_answer": "47", "correct": false, "codi0_answer": 47, "values": [31, 46, 21, 23, 46, 45]}
+{"idx": 839, "id": "depth2-valid-L05-00267", "level": 5, "gold_answer": "15", "predicted_answer": "9", "correct": false, "codi0_answer": 76, "values": [11, 27, 54, 66, 58, 15]}
+{"idx": 840, "id": "depth2-valid-L05-00268", "level": 5, "gold_answer": "33", "predicted_answer": "35", "correct": false, "codi0_answer": 37, "values": [8, 13, 26, 34, 17, 33]}
+{"idx": 841, "id": "depth2-valid-L05-00269", "level": 5, "gold_answer": "43", "predicted_answer": "38", "correct": false, "codi0_answer": 44, "values": [94, 47, 30, 60, 30, 43]}
+{"idx": 842, "id": "depth2-valid-L05-00270", "level": 5, "gold_answer": "44", "predicted_answer": "42", "correct": false, "codi0_answer": 48, "values": [41, 61, 77, 69, 59, 44]}
+{"idx": 843, "id": "depth2-valid-L05-00271", "level": 5, "gold_answer": "69", "predicted_answer": "61", "correct": false, "codi0_answer": 59, "values": [15, 29, 58, 29, 49, 69]}
+{"idx": 844, "id": "depth2-valid-L05-00272", "level": 5, "gold_answer": "18", "predicted_answer": "16", "correct": false, "codi0_answer": 15, "values": [33, 19, 23, 24, 36, 18]}
+{"idx": 845, "id": "depth2-valid-L05-00273", "level": 5, "gold_answer": "49", "predicted_answer": "61", "correct": false, "codi0_answer": 59, "values": [23, 24, 7, 14, 29, 49]}
+{"idx": 846, "id": "depth2-valid-L05-00274", "level": 5, "gold_answer": "67", "predicted_answer": "65", "correct": false, "codi0_answer": 69, "values": [51, 69, 84, 42, 84, 67]}
+{"idx": 847, "id": "depth2-valid-L05-00275", "level": 5, "gold_answer": "35", "predicted_answer": "8", "correct": false, "codi0_answer": 5, "values": [47, 38, 19, 26, 13, 35]}
+{"idx": 848, "id": "depth2-valid-L05-00276", "level": 5, "gold_answer": "28", "predicted_answer": "26", "correct": false, "codi0_answer": 23, "values": [98, 49, 37, 35, 44, 28]}
+{"idx": 849, "id": "depth2-valid-L05-00277", "level": 5, "gold_answer": "24", "predicted_answer": "24", "correct": true, "codi0_answer": 29, "values": [97, 87, 78, 39, 19, 24]}
+{"idx": 850, "id": "depth2-valid-L05-00278", "level": 5, "gold_answer": "40", "predicted_answer": "40", "correct": true, "codi0_answer": 40, "values": [38, 46, 42, 21, 46, 40]}
+{"idx": 851, "id": "depth2-valid-L05-00279", "level": 5, "gold_answer": "49", "predicted_answer": "59", "correct": false, "codi0_answer": 57, "values": [12, 24, 48, 62, 50, 49]}
+{"idx": 852, "id": "depth2-valid-L05-00280", "level": 5, "gold_answer": "16", "predicted_answer": "16", "correct": true, "codi0_answer": 54, "values": [4, 2, 19, 38, 32, 16]}
+{"idx": 853, "id": "depth2-valid-L05-00281", "level": 5, "gold_answer": "60", "predicted_answer": "39", "correct": false, "codi0_answer": 60, "values": [63, 52, 49, 48, 43, 60]}
+{"idx": 854, "id": "depth2-valid-L05-00282", "level": 5, "gold_answer": "52", "predicted_answer": "54", "correct": false, "codi0_answer": 59, "values": [17, 34, 45, 68, 49, 52]}
+{"idx": 855, "id": "depth2-valid-L05-00283", "level": 5, "gold_answer": "37", "predicted_answer": "41", "correct": false, "codi0_answer": 39, "values": [17, 28, 56, 48, 24, 37]}
+{"idx": 856, "id": "depth2-valid-L05-00284", "level": 5, "gold_answer": "14", "predicted_answer": "13", "correct": false, "codi0_answer": 37, "values": [56, 40, 51, 50, 30, 14]}
+{"idx": 857, "id": "depth2-valid-L05-00285", "level": 5, "gold_answer": "37", "predicted_answer": "38", "correct": false, "codi0_answer": 38, "values": [72, 36, 32, 15, 30, 37]}

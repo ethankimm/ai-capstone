@@ -11133,3 +11133,102 @@ The figure's reference line marks t = L-1. It was moved there after seeing the d
 **Gotchas hit:** The smoke floor of .98 failed on 39/40 (a known single error); relaxed to .95 after checking the error equals s1's.
 **Caveats:** One seed; valid only. The k = 8 and 9 test is post hoc. Candidates can coincide on an item, which is why unique shares are given. Only rule 6's repetition was tested, not what an extra pass does at L <= 5 (idle there by step 1).
 **Next:** Handoff step 4 (rollout formation over epochs) is the only one left, optional.
+
+---
+
+## 2026-11-08 — Start-last CODI's latent passes are parallel noisy copies that the answer averages: donor swaps follow the number of donor passes, not their position (1 / 2 / 3 / 4 / 5 of passes 1-5: follows .01 / .05 / .45 / .75 / .88), mixed swaps give in-between answers (.78-.86, chance .2), later passes overwrite a donor's early latents, and any single pass alone gives .61-.76 exact but .84-.95 within 2 (codi, run_id: 20261108-032531_codi_v2-l1to7w-startlast-prefix-suffix-pooling)
+
+**Goal:** Understand how start-last CODI (`20261106-083843`, the one unforced model with a matched gain past reach) uses its latents. Earlier records established two working passes, then a fixed point (`20261106-101740`), a look-back to earlier passes that a relay lacks, and that single latents never move the answer. Open: do later passes build on earlier latents (a chain), and how does the answer combine six near-copies?
+**Mechanism / model:** start-last CODI checkpoint-17820, 6 latents, ungated.
+**Data:** the b16 pairs on canonical **test** (`FORMAT=startlast`, seeds 61/16, 200 items per level L2-L7). A diff pair is an item plus a copy with one taken constant changed (gold moves >= 6). Kept: both answered right, 424 diff pairs (249 with the edit 1+ rules before the last).
+**Command:** On the laptop (MPS, float32, `run_guarded.sh`, `caffeinate`): `~/Documents/Penn/CIS5980/codi_audit_artifacts/t6_prefix_hide.py`, a copy of `scripts/codi_null_audit/b16_donor.py` with new conditions; tables `t6_table.py` (`t6_table.md`); record `record13.py`. The own-latent control left every answer unchanged. The `all` and `suffix_s` rows reproduce `b16_raw_startlast.json` (`20261106-105634`): .97 / .88 / .56 / .03 for suffix from z_1..z_4, one rule left.
+**Conditions:** prefix_s puts the donor's z_0..z_{s-1} in and recomputes the later latents from them (a chaining test). suffix_s puts the donor's z_s..z_5 in. hide_ge_s / only_s cut the answer tokens' attention to latent passes >= s, or to all but pass s, with clean latents (which passes the answer reads). Pass t is the pass whose input is z_t.
+
+**Headline results:**
+- **Later passes overwrite a donor's early latents.** One rule left (n = 178): prefix_1, _2, _3 follow .00 / .00 / .02 and keep the recipient's answer .99 / .92 / .63. Only with four or five donor latents does the donor win (.46, .85). A chain would carry an early change forward; here each pass's output is re-derived mostly from the question.
+- **The answer follows the number of donor passes, not their position.** Edits 1+ rules before the last (n = 249), donor-input passes among passes 1-5:
+
+| Donor passes | Condition | Follows donor | Keeps own | Other |
+|---|---|---|---|---|
+| 1 (pass 1) | prefix_2 | .01 | .83 | .16 |
+| 2 (passes 4-5) / (1-2) | suffix_4 / prefix_3 | .06 / .04 | .44 / .53 | .51 / .43 |
+| 3 (3-5) / (1-3) | suffix_3 / prefix_4 | .49 / .41 | .04 / .08 | .47 / .51 |
+| 4 (2-5) / (1-4) | suffix_2 / prefix_5 | .76 / .73 | .02 / .02 | .21 / .24 |
+| 5 (1-5) | suffix_1 | .88 | .01 | .11 |
+
+  Early and late passes count the same: prefix and suffix swaps with the same count agree within .08.
+- **Mixed swaps give in-between answers.** When the answer is neither the donor's nor the recipient's, it lies strictly between the two .78-.86 of the time, against .18-.22 for a uniform guess. The answer averages the values the passes hold.
+- **Pass 0 (input z_0 from `<bot>`) is not read; any one later pass carries most of it.** With only pass 0 visible, accuracy is .05-.11 (chance). With one pass s = 1..5 alone, recipients stay right .61-.76 at L3-L5, and within 2 .84-.95. Seeing passes 0-4 gives .95-1.00 (hide_ge_5). Each pass holds a noisy copy, and pooling makes it exact.
+- **No-model re-analysis of saved runs (same session, before t6):**
+  - b29's all-six donors (test, `20261107-220408`): the answer follows the donor's v_{L-1} exactly .37 / .27 / .15 at L3-L5, but within 2 .82 / .59 / .44. With donors the model gets right: exact .47 / .43, within 2 .91 / .86 at L3-L4.
+  - b21's look-back block (`20261106-101740`) by level: answers changed .30 / .31 / .23 / .21 / .20 at L2-L6, accuracy .997 to .699 at L2, then net -.07, -.03, -.01, .00. Blocking only the previous latent changes .00-.11 with no accuracy cost.
+
+**Predictions (`t_predictions.md`, written before t6 output):**
+- *Prefix follows near the 'all' rate by s = 2-3:* **wrong**. Prefixes are overwritten until four or five passes are swapped.
+- *hide_ge_3 near clean:* right at L2 (1.00), partly at L3-L5 (.74-.84).
+- *One pass alone keeps much of the accuracy:* right (.61-.76).
+- *only_0 worse:* right (chance).
+
+**Interpretation:** Start-last CODI does not chain. Its passes 1-5 each compute a noisy estimate of the value before the last rule, mostly from the question; the look-back to earlier passes feeds into that estimate. The answer pools the passes, close to an average: swapped-in donor passes pull the answer by their number, and a split gives a value in between. This explains:
+- why single swaps never move the answer (one vote in five);
+- why mean-ablating all six is fatal while ablating one is not;
+- why the model stops improving after two or three passes (more copies only reduce noise);
+- why its errors are mostly near-misses (`20261105-074801`).
+
+The latents add precision by averaging, on top of the one or two hops the look-back carries. For monitoring, the value is in no single latent; it is a population code across passes.
+**Gotchas hit:** None in the script. hide rows count recipients once per item (diff pairs share recipients).
+**Caveats:**
+- One seed. Test split (the b16 pairs).
+- Edits 2+ rules before the last rest on 44 and 16 pairs.
+- "Averages" is a description of in-between answers and count dependence, not a fitted model of the readout.
+- In prefix swaps the donor passes still attend to the clean question, so "overwritten" means the question dominates a pass's output, not that the input is ignored.
+**Next:** Partial-information probes in the same session (`20261108-032531_..._partial-probes`): is the value held as a magnitude with a noisy ones digit?
+
+---
+
+## 2026-11-08 — Start-last CODI's latents hold the value before the last rule as a magnitude: tens digit .97 / .95 / .87 on right answers at L3-L5, ones digit only .65 / .38 / .36; within 2 .95 / .69 / .59, against at most .40 anywhere in CODI-0. The latents add coarse magnitude the single pass lacks; parity and branch bits are computed in the question pass by both models (codi, run_id: 20261108-032531_codi_v2-l1to7w-startlast-partial-probes)
+
+**Goal:** Exact-value probes read start-last CODI's latents weakly (.49 / .21 / .12 at L3-L5, `20261107-084635`), yet the latents are used. Swapped-in latents carry the donor's value approximately (b29 re-analysis: exact .47, within 2 .91 at L3, right donors). Does a latent hold the value as a magnitude with a noisy last digit, and does it hold anything CODI-0's single pass does not?
+**Mechanism / model:** start-last CODI checkpoint-17820 (6 latents) and start-last CODI-0 checkpoint-17820 (no latents; same data, recipe, seed), `20261106-083843` / `20261106-052644`.
+**Data:** `synthetic_data_v2_l1to7w_startlast` **valid** L3-L5 (286 per level); probes fit on 8,000 train items per level (seed 20), as b23.
+**Command:** On the laptop (MPS, float32, `run_guarded.sh`, `caffeinate`): `~/Documents/Penn/CIS5980/codi_audit_artifacts/t7_partial_probe.py` (b23's collector, new targets), tables `t7_table.py` (`t7_table_all.md`, `t7_table_right.md`), record `record14.py`. Smoke: the start value sits at token t10 (asserted). The collector reproduces b23's right counts (CODI 149 / 94 / 39).
+**Probes:** ridge on standardised features, one-hot targets, penalty chosen per target on a held-out 15% of fit items. A shuffled-label fit gives each target's floor.
+- Sites: start-value token (t10), the "." after it (t9), `<bot>` (t1), latent passes h1..h6, answer colon. Layers 0, 1, 2, 3, 4, 8, 12.
+- Targets per step v_j: tens digit, ones digit, parity, exact (both digits), scalar within 2. Per rule: branch taken.
+- Cells below are the best over layers and sites (selected on scored items, slightly high).
+
+**Headline results** (value before the last rule, v_{L-1}; best latent site vs best site anywhere in CODI-0):
+
+| | L3 | L4 | L5 |
+|---|---|---|---|
+| CODI latents, all items: exact / tens / ones / within 2 | .50 / .92 / .52 / .85 | .27 / .77 / .30 / .56 | .13 / .60 / .21 / .36 |
+| CODI latents, right answers: exact / tens / ones / within 2 | .65 / .98 / .66 / .95 | .35 / .95 / .38 / .69 | .33 / .87 / .36 / .59 |
+| CODI-0, any site, all items: exact / tens / ones / within 2 | .30 / .76 / .37 / .40 | .08 / .49 / .17 / .21 | .05 / .36 / .17 / .15 |
+| CODI's own question tail (t10 / t9 / t1): tens / within 2 | .72 / .52 | .44 / .26 | .34 / .14 |
+| Shuffled floor (tens / ones / within 2), majority (tens / ones) | ~.2 / ~.1 / ~.08; .21 / .14 | same | same |
+
+- **Magnitude is held, the last digit is not.** On items the model answers right, a latent gives the tens digit of v_{L-1} at .87-.98, the ones digit at .36-.66. The latents carry a coarse value.
+- **The latents add magnitude the single pass lacks.** v_{L-1} within 2: CODI latents .85 / .56 / .36, CODI-0 at most .40 / .21 / .15 anywhere, CODI's own question tail .52 / .26 / .14. The value is mostly there from the second latent pass on (h2), as in `20261106-101740`.
+- **The first step is computed in the question tail, more precisely by CODI-0.** v_1 ones digit at the tail: CODI-0 .80 / .60 / .55, CODI .55 / .45 / .48 at L3-L5. CODI defers work to its latents, as noted before.
+- **Parity and branches come from the single pass.** Parity of v_{L-1} reads .84-.88 at L3 at every CODI site, the start-value token included, and up to .85 in CODI-0 (majority .53). Branch bits read .69-1.00 at every site in both models (majority .50-.59). Late rules' branches read better at latents and colon than at the tail (L4 rule 4: latents .93, tail .73, CODI-0 colon .80).
+
+**Predictions (`t_predictions.md`, written before t7 output):**
+- *Tens and within 2 well above exact and above the ones digit and parity:* right for tens and within 2 vs ones and exact. Parity is high, but not latent-specific.
+- *CODI-0 reads coarse v_{L-1} lower than CODI's latents:* right.
+- *Early branch bits readable at the tail in both:* right.
+
+**Interpretation:** Together with `20261108-032531_..._prefix-suffix-pooling`, start-last CODI has a coherent mechanism:
+- The question pass computes the first step, parity and branch decisions.
+- Each latent pass from the second on computes a magnitude estimate of the value before the last rule, the part the single pass cannot reach.
+- The answer averages the passes and applies the last rule.
+
+Exact-value probes underrate what the latents hold. The right readout for this model is magnitude, which a monitor reads at .87-.98 on right answers. The exactness bottleneck is the ones digit: it is noisy in any one latent, and pooling over passes recovers it often but not always. That matches the near-miss error profile. This gives the paper's unforced case a mechanism: latents add real but analog depth, coarse magnitude carried past the single pass's reach. Forced models (gated, SIM) instead hold exact values, one per latent.
+**Gotchas hit:** None.
+**Caveats:**
+- One seed; valid only. L5 right answers are 39 items.
+- Linear probes: a ones digit held in a non-linear (for example circular) code would read low here. The earlier MLP check matched linear probes for exact values only.
+- Best over sites and layers is selected on the scored items.
+- Parity's high floor reflects that it is computed early, not that probes are weak.
+**Next:**
+- Report start-last CODI as the analog, pooled case in the readable x used story: readable as magnitude by a linear probe, used as a population, no single latent decisive.
+- A direct test of the averaging account: interpolate latents between two items and check whether the answer moves monotonically. Not run.

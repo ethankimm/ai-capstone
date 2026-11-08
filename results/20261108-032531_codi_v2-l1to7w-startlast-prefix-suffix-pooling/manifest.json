@@ -1,0 +1,163 @@
+{
+  "run_id": "20261108-032531_codi_v2-l1to7w-startlast-prefix-suffix-pooling",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "start-last CODI checkpoint-17820 (20261106-083843)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 424,
+    "seed": 61
+  },
+  "metrics": {
+    "final_answer_accuracy": 1.0,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "rows are diff pairs both answered right clean (accuracy 1.0 by construction)",
+      "follows_by_left": {
+        "0": {
+          "all": 0.0,
+          "prefix_1": 0.0,
+          "prefix_2": 0.0,
+          "prefix_3": 0.0,
+          "prefix_4": 0.0,
+          "prefix_5": 0.0,
+          "suffix_1": 0.0,
+          "suffix_2": 0.0,
+          "suffix_3": 0.0,
+          "suffix_4": 0.0,
+          "suffix_5": 0.0
+        },
+        "1": {
+          "all": 0.966,
+          "prefix_1": 0.0,
+          "prefix_2": 0.0,
+          "prefix_3": 0.022,
+          "prefix_4": 0.461,
+          "prefix_5": 0.854,
+          "suffix_1": 0.966,
+          "suffix_2": 0.876,
+          "suffix_3": 0.556,
+          "suffix_4": 0.034,
+          "suffix_5": 0.0
+        },
+        "2": {
+          "all": 0.682,
+          "prefix_1": 0.0,
+          "prefix_2": 0.0,
+          "prefix_3": 0.045,
+          "prefix_4": 0.295,
+          "prefix_5": 0.5,
+          "suffix_1": 0.682,
+          "suffix_2": 0.523,
+          "suffix_3": 0.364,
+          "suffix_4": 0.091,
+          "suffix_5": 0.023
+        },
+        "3": {
+          "all": 0.875,
+          "prefix_1": 0.0,
+          "prefix_2": 0.125,
+          "prefix_3": 0.125,
+          "prefix_4": 0.25,
+          "prefix_5": 0.438,
+          "suffix_1": 0.875,
+          "suffix_2": 0.438,
+          "suffix_3": 0.25,
+          "suffix_4": 0.188,
+          "suffix_5": 0.062
+        }
+      },
+      "follows_edits_before_last": {
+        "all": 0.888,
+        "prefix_1": 0.0,
+        "prefix_2": 0.008,
+        "prefix_3": 0.036,
+        "prefix_4": 0.406,
+        "prefix_5": 0.735,
+        "suffix_1": 0.884,
+        "suffix_2": 0.763,
+        "suffix_3": 0.49,
+        "suffix_4": 0.056,
+        "suffix_5": 0.008
+      },
+      "hide_acc_by_level": {
+        "2": {
+          "hide_ge_1": 0.046,
+          "hide_ge_2": 0.974,
+          "hide_ge_3": 1.0,
+          "hide_ge_4": 1.0,
+          "hide_ge_5": 1.0,
+          "only_0": 0.046,
+          "only_1": 0.99,
+          "only_2": 0.99,
+          "only_3": 0.995,
+          "only_4": 0.995,
+          "only_5": 0.995,
+          "hide_all": 0.051
+        },
+        "3": {
+          "hide_ge_1": 0.062,
+          "hide_ge_2": 0.609,
+          "hide_ge_3": 0.812,
+          "hide_ge_4": 0.844,
+          "hide_ge_5": 0.953,
+          "only_0": 0.062,
+          "only_1": 0.609,
+          "only_2": 0.688,
+          "only_3": 0.703,
+          "only_4": 0.641,
+          "only_5": 0.609,
+          "hide_all": 0.062
+        },
+        "4": {
+          "hide_ge_1": 0.053,
+          "hide_ge_2": 0.553,
+          "hide_ge_3": 0.842,
+          "hide_ge_4": 0.895,
+          "hide_ge_5": 0.947,
+          "only_0": 0.053,
+          "only_1": 0.605,
+          "only_2": 0.658,
+          "only_3": 0.684,
+          "only_4": 0.763,
+          "only_5": 0.763,
+          "hide_all": 0.026
+        },
+        "5": {
+          "hide_ge_1": 0.105,
+          "hide_ge_2": 0.684,
+          "hide_ge_3": 0.737,
+          "hide_ge_4": 0.947,
+          "hide_ge_5": 1.0,
+          "only_0": 0.105,
+          "only_1": 0.632,
+          "only_2": 0.737,
+          "only_3": 0.737,
+          "only_4": 0.632,
+          "only_5": 0.632,
+          "hide_all": 0.158
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/t6_prefix_hide.py (copy of scripts/codi_null_audit/b16_donor.py, same pairs), t6_table.py; offline b29 re-analysis in notes",
+    "conditions": "prefix_s: donor z_0..z_{s-1}, later recomputed; suffix_s: donor z_s..z_5; hide_ge_s / only_s: answer-token attention mask over latent passes",
+    "dtype": "float32"
+  },
+  "seed": 16,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Do later passes build on a donor's early latents, and how does the answer combine the passes?",
+  "timestamp_utc": "2026-11-08T03:25:31.482048+00:00",
+  "git": {
+    "commit": "3035530",
+    "dirty": true
+  }
+}
