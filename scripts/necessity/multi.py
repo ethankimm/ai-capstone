@@ -67,9 +67,16 @@ class GridCoconutMulti(adapters.GridCoconut, _Multi):
     def _extract(self, raw): return self.extract(raw)
 
 
+def run_multi(ad, row, edits, chunk=None):
+    """Row repeated len(edits) times, row b gets edits[b]; in batches of at most `chunk` rows (rows are independent). Returns answers."""
+    chunk = chunk or len(edits); out = []
+    for i in range(0, len(edits), chunk):
+        out += _run_multi(ad, row, edits[i:i + chunk])
+    return out
+
+
 @torch.no_grad()
-def run_multi(ad, row, edits):
-    """One batch: row repeated len(edits) times, row b gets edits[b]. Returns answers list."""
+def _run_multi(ad, row, edits):
     B = len(edits); ctx, past, z = ad.begin_multi(row, B)
     for s in range(ad.n_latents):
         rows_f = [(b, e['feed'][s]) for b, e in enumerate(edits) if s in e.get('feed', {})]

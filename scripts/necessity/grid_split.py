@@ -28,7 +28,7 @@ import core  # noqa: E402
 import pairs as PR  # noqa: E402
 import multi  # noqa: E402
 
-task, method, dev, out = sys.argv[1:5]; cap = int(sys.argv[5]) if len(sys.argv) > 5 else 300; SMOKE = int(os.environ.get('SMOKE', '0'))
+task, method, dev, out = sys.argv[1:5]; cap = int(sys.argv[5]) if len(sys.argv) > 5 else 300; CHUNK = int(os.environ.get('CHUNK', '0')) or None; SMOKE = int(os.environ.get('SMOKE', '0'))
 ad = multi.GridCODIMulti(task, dev) if method == 'codi' else multi.GridCoconutMulti(task, dev, 'coconut'); VERIFY = 10
 D = adapters.GRID_REPO / 'data'; rng = random.Random(0)
 if method == 'codi':
@@ -91,7 +91,7 @@ with torch.no_grad():
                 edits += [dict(feed={j: Zd[j]}), dict(feed={j: Zd[j]}, kv={j: KVr[j]}), dict(kv={j: KVd[j]}), dict(kv={j: KVd[j]}, hide=(j,))]
             names += ['both_all', 'kv_all', 'input_all']
             edits += [dict(feed={s: Zd[s] for s in S}), dict(kv={s: KVd[s] for s in S}), dict(feed={s: Zd[s] for s in S}, kv={s: KVr[s] for s in S})]
-            A = multi.run_multi(ad, r, edits)
+            A = multi.run_multi(ad, r, edits, chunk=CHUNK)
             for c, a in zip(names, A): rec[c] = a
             rec['own_matches_clean'] = A[0] == a0[0]
             if nq <= VERIFY:  # batched vs one-condition-at-a-time
