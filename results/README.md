@@ -271,3 +271,6 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261108-135708_codi_v2-l1to7w-stab-codi-latent-use-matched](20261108-135708_codi_v2-l1to7w-stab-codi-latent-use-matched/) | codi | gpt2 | validation (n=1714) | 6 | 0.646 | 21 | full_run | Henning Lindig |
 | [20261108-182654_codi_v2-l1to7w-startlast-pause-depth2-codi](20261108-182654_codi_v2-l1to7w-startlast-pause-depth2-codi/) | codi | gpt2 | test (n=3500) | 6 | 0.408 | 11 | full_run |  |
 | [20261108-182830_codi_v2-l1to7w-startlast-pause-depth2-codi-canonical](20261108-182830_codi_v2-l1to7w-startlast-pause-depth2-codi-canonical/) | codi | gpt2 | test (n=6000) | 6 | 0.254 | 11 | full_run |  |
+| [20261108-190213_codi_v2-l1to7w-sim-route-split](20261108-190213_codi_v2-l1to7w-sim-route-split/) | codi | gpt2 | validation (n=1428) | 6 | 0.982 | 20 | full_run | Henning Lindig |
+| [20261108-190213_codi_v2-l1to7w-prefill-chain-probe](20261108-190213_codi_v2-l1to7w-prefill-chain-probe/) | codi | gpt2 | validation (n=984) | 0 | - | 30 | full_run | Henning Lindig |
+| [20261108-190712_codi_v2-l1to7w-startlast-pause-mechanism](20261108-190712_codi_v2-l1to7w-startlast-pause-mechanism/) | codi | gpt2 | validation (n=858) | 6 | 0.280 | 61 | full_run | Henning Lindig |
