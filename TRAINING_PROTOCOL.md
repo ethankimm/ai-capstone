@@ -553,6 +553,9 @@ items (at most 6 steps); step loss finite (8.42), one entry per latent; step-los
 steps z_0 and z_1. The answer-path check (logits identical with the decoder on and off) is code-only and was still running on CPU; its result is appended
 below when it finishes, and a failure stops the run.
 
+**Answer-path result (appended 2026-11-07, during the pod smoke, before training):** answer logits identical with the decoder on and off; total loss differs
+from the decoder-off loss by the step loss only (residual -9.5e-07). All checks pass (`ALL OK`).
+
 ### 14.3 Analysis, fixed before training
 
 Selection and test as section 10.3.
