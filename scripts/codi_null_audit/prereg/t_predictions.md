@@ -142,3 +142,42 @@ t21c (prefill_probe.py; simsf, stab = start-first CODI, sim = start-last SIM, st
 - simsf, two readings fixed now: (dormant copy) diagonal within .15 of stab at k = 2, 3: the question pass still runs the chain, the
   answer ignores it (its latent ablation goes to chance), and a latent-only monitor misses a parallel computation; (moved) diagonal at
   k >= 2 at least .2 below stab: the step loss took the chain out of the question pass. Guess: moved, with v_1 at rule 1 still >= .5.
+
+## t22 released SIM-CODI GPT-2 on GSM8K (scripts/necessity/sim_gsm8k.py), 2026-11-08, before any SIM-CODI model output
+Model: internlm/SIM_COT-GPT2-CODI (HF, MIT; CODI stack + training-only step decoder, 148 decoder tensors; trainer_state shows a fourth
+loss term 10.5 at step 0 decaying to ~0, so the step loss was trained). SIM-CoT's get_steps: z_j (j = 0..6) decodes shown step j+1; the
+teacher drops the last step (include_last_cot False), so on an n-step item z_0..z_{n-2} have step targets and z_{n-1}.. none (as our
+SIM-CODI). Test flags = released CODI's (zen-E fd641b3), which is the matched reference (same stack, data, 40 epochs). GSM8K test, 1319.
+Nothing from this checkpoint has been run or decoded before writing this; its README accuracies are placeholders.
+t22a accuracy and pass sweep (answer after k = 0..6 latent passes), both models, by gold step count n:
+- Full accuracy: SIM within +-.04 of released CODI (.419 in 20260927-004340).
+- CODI reproduces its logged sweep (settling pass ~1.8 / 2.9 / 3.7 / 4.3 at n = 2-5).
+- SIM chain reading: on right items, accuracy at k = n-2 passes is at least .2 below k = 6 for n = 3-5 (each step needs its pass).
+  Width/slot reading: SIM's sweep looks like CODI's.
+t22b route split (t12 design, ALL sites 0-5 for SIM; pairs = 20260927-004340 candidates where SIM answers recipient and twin right,
+same question token length): conditions both / input / kv / kv_noans per site, plus all sites.
+- Decision rule fixed now: a site is on the vertical route if input >= .5 x both and both >= .2; slots if kv >= .5 x both and input <= .2 x both.
+- Guess: SIM is a chain at the early sites (z_0, z_1: input >= .5 x both), unlike released CODI (input .007 everywhere). Confidence low:
+  GSM8K steps combine earlier results, so slots (attention reads of earlier latents) are also plausible.
+- All-sites swap follows the twin >= .8 (released CODI .839).
+t22c monitor with SIM's own decoder (greedy decode of each z_j into '<<a op b=c>>'):
+- Clean, right items: decoded step k from z_{k-1} has the gold result c_k for k <= n-1: >= .6 at k = 1-2.
+- Own consistency: on right items the answer equals the last decoded step's result pushed through... (not computable: the last step is
+  not decoded). Instead: on wrong items, the decoded intermediate results differ from gold at some step on >= .5 of items (errors
+  visible in the trace), against <= .2 on right items.
+- Swap faithfulness: after a both_j swap that moves the answer to the twin's, the decoded result at later sites matches the twin's
+  gold intermediate >= .6.
+t22d the step decoder as an external monitor on released CODI (decoder weights applied to CODI's latents): reads <= .2 (different
+latent code; a control that the decoder is not just reading the question).
+
+## t23 GSM8K spare latents, readable but unused? (offline on 20260927-004340 single_slot + lens from sim_gsm8k.py), 2026-11-08, before output
+Released CODI, recipients with n = 2 gold steps among the 317 aligned pairs: lens at pass 5 reads v_1 ~.59 (audit, n = 2). Prediction:
+single-site swap at z_5 follows the twin <= .10 and at z_4 <= .15, while the lens reads the recipient's v_1 at pass 5 >= .4 on the same
+items: readable, not used (natural-data analogue of the RuleChain spare latents). For n >= 3 recipients z_4 follows more (overall .358).
+SIM: the same split for n = 2 with SIM-qualified pairs: z_2..z_5 (no step target) follow <= .10.
+
+## t24 same-level mean ablation, round-1 and lr-3e-3 CODI (RuleChain), 2026-11-08, before output
+Replaces the level-pooled means behind "round-1 .99 -> .17 at L3". All six latents set to their same-level train mean (2,000 items/level,
+seed 21), test, L1-L5 (round 1: depth2 test; lr-3e-3: l1to7w test). Prediction: L1 stays >= .95 (as start-last, where pooling caused the
+L1 drop); L2 falls to <= .7; L3 <= .3; L4-L5 <= .15 for both models, i.e. the direction of the pooled result holds from L2, and the
+matched CODI-0 (.988 / .960 at L2 / L3, round 1) stays far above: reliance beyond need.
