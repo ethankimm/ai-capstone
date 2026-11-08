@@ -1,0 +1,536 @@
+{
+  "run_id": "20261108-135708_codi_v2-l1to7w-stab-codi-latent-use-matched",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "start-first CODI checkpoint-17820 (20261105-044444), codi_runs_l1to7w_stab/codi/run/checkpoint-17820; matched comparison for 20261108-134158",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "validation",
+    "n_examples": 1714,
+    "seed": 21
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.646,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "SIM-CODI exact on valid L2-L7, clean run of s1, not test",
+      "swap": {
+        "2": {
+          "n": 286,
+          "clean": 0.993,
+          "all_six_mean_ablated_acc": 0.993,
+          "by_latent": {
+            "z0": {
+              "trained_target": "v_1",
+              "mean_ablated_acc": 0.993,
+              "n_pairs": 284,
+              "follows_donor": 0.0,
+              "keeps_own": 1.0,
+              "donor_answer": 0.007
+            },
+            "z1": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.993
+            },
+            "z2": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.993
+            },
+            "z3": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.993
+            },
+            "z4": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.993
+            },
+            "z5": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.993
+            }
+          }
+        },
+        "3": {
+          "n": 286,
+          "clean": 0.906,
+          "all_six_mean_ablated_acc": 0.888,
+          "by_latent": {
+            "z0": {
+              "trained_target": "v_1",
+              "mean_ablated_acc": 0.906,
+              "n_pairs": 259,
+              "follows_donor": 0.0,
+              "keeps_own": 0.996,
+              "donor_answer": 0.019
+            },
+            "z1": {
+              "trained_target": "v_2",
+              "mean_ablated_acc": 0.892,
+              "n_pairs": 259,
+              "follows_donor": 0.0,
+              "keeps_own": 0.981,
+              "donor_answer": 0.008
+            },
+            "z2": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.888
+            },
+            "z3": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.885
+            },
+            "z4": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.888
+            },
+            "z5": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.892
+            }
+          }
+        },
+        "4": {
+          "n": 286,
+          "clean": 0.773,
+          "all_six_mean_ablated_acc": 0.741,
+          "by_latent": {
+            "z0": {
+              "trained_target": "v_1",
+              "mean_ablated_acc": 0.776,
+              "n_pairs": 221,
+              "follows_donor": 0.0,
+              "keeps_own": 1.0,
+              "donor_answer": 0.005
+            },
+            "z1": {
+              "trained_target": "v_2",
+              "mean_ablated_acc": 0.773,
+              "n_pairs": 221,
+              "follows_donor": 0.0,
+              "keeps_own": 0.977,
+              "donor_answer": 0.009
+            },
+            "z2": {
+              "trained_target": "v_3",
+              "mean_ablated_acc": 0.773,
+              "n_pairs": 221,
+              "follows_donor": 0.0,
+              "keeps_own": 0.977,
+              "donor_answer": 0.018
+            },
+            "z3": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.766
+            },
+            "z4": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.773
+            },
+            "z5": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.769
+            }
+          }
+        },
+        "5": {
+          "n": 286,
+          "clean": 0.601,
+          "all_six_mean_ablated_acc": 0.563,
+          "by_latent": {
+            "z0": {
+              "trained_target": "v_1",
+              "mean_ablated_acc": 0.601,
+              "n_pairs": 172,
+              "follows_donor": 0.0,
+              "keeps_own": 0.988,
+              "donor_answer": 0.012
+            },
+            "z1": {
+              "trained_target": "v_2",
+              "mean_ablated_acc": 0.608,
+              "n_pairs": 172,
+              "follows_donor": 0.0,
+              "keeps_own": 0.965,
+              "donor_answer": 0.0
+            },
+            "z2": {
+              "trained_target": "v_3",
+              "mean_ablated_acc": 0.619,
+              "n_pairs": 172,
+              "follows_donor": 0.0,
+              "keeps_own": 0.953,
+              "donor_answer": 0.017
+            },
+            "z3": {
+              "trained_target": "v_4",
+              "mean_ablated_acc": 0.615,
+              "n_pairs": 172,
+              "follows_donor": 0.0,
+              "keeps_own": 0.948,
+              "donor_answer": 0.0
+            },
+            "z4": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.619
+            },
+            "z5": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.615
+            }
+          }
+        },
+        "6": {
+          "n": 285,
+          "clean": 0.414,
+          "all_six_mean_ablated_acc": 0.407,
+          "by_latent": {
+            "z0": {
+              "trained_target": "v_1",
+              "mean_ablated_acc": 0.411,
+              "n_pairs": 118,
+              "follows_donor": 0.0,
+              "keeps_own": 1.0,
+              "donor_answer": 0.025
+            },
+            "z1": {
+              "trained_target": "v_2",
+              "mean_ablated_acc": 0.407,
+              "n_pairs": 118,
+              "follows_donor": 0.0,
+              "keeps_own": 0.949,
+              "donor_answer": 0.008
+            },
+            "z2": {
+              "trained_target": "v_3",
+              "mean_ablated_acc": 0.407,
+              "n_pairs": 118,
+              "follows_donor": 0.0,
+              "keeps_own": 0.932,
+              "donor_answer": 0.008
+            },
+            "z3": {
+              "trained_target": "v_4",
+              "mean_ablated_acc": 0.407,
+              "n_pairs": 118,
+              "follows_donor": 0.008,
+              "keeps_own": 0.932,
+              "donor_answer": 0.017
+            },
+            "z4": {
+              "trained_target": "v_5",
+              "mean_ablated_acc": 0.411,
+              "n_pairs": 118,
+              "follows_donor": 0.0,
+              "keeps_own": 0.949,
+              "donor_answer": 0.008
+            },
+            "z5": {
+              "trained_target": null,
+              "mean_ablated_acc": 0.404
+            }
+          }
+        },
+        "7": {
+          "n": 285,
+          "clean": 0.186,
+          "all_six_mean_ablated_acc": 0.193,
+          "by_latent": {
+            "z0": {
+              "trained_target": "v_1",
+              "mean_ablated_acc": 0.189,
+              "n_pairs": 53,
+              "follows_donor": 0.0,
+              "keeps_own": 1.0,
+              "donor_answer": 0.057
+            },
+            "z1": {
+              "trained_target": "v_2",
+              "mean_ablated_acc": 0.189,
+              "n_pairs": 53,
+              "follows_donor": 0.0,
+              "keeps_own": 0.981,
+              "donor_answer": 0.038
+            },
+            "z2": {
+              "trained_target": "v_3",
+              "mean_ablated_acc": 0.193,
+              "n_pairs": 53,
+              "follows_donor": 0.0,
+              "keeps_own": 0.962,
+              "donor_answer": 0.0
+            },
+            "z3": {
+              "trained_target": "v_4",
+              "mean_ablated_acc": 0.2,
+              "n_pairs": 53,
+              "follows_donor": 0.019,
+              "keeps_own": 0.962,
+              "donor_answer": 0.019
+            },
+            "z4": {
+              "trained_target": "v_5",
+              "mean_ablated_acc": 0.204,
+              "n_pairs": 53,
+              "follows_donor": 0.019,
+              "keeps_own": 0.962,
+              "donor_answer": 0.0
+            },
+            "z5": {
+              "trained_target": "v_6",
+              "mean_ablated_acc": 0.204,
+              "n_pairs": 53,
+              "follows_donor": 0.0,
+              "keeps_own": 0.962,
+              "donor_answer": 0.0
+            }
+          }
+        }
+      },
+      "probe": {
+        "3": {
+          "v1": {
+            "z0 (trained, h1|0)": 0.147,
+            "z0 shuffled": 0.028,
+            "z1 (next latent, h2|0)": 0.157,
+            "source state (t1|12)": 0.713,
+            "logit lens at z0": 0.007
+          },
+          "v2": {
+            "z1 (trained, h2|0)": 0.336,
+            "z1 shuffled": 0.017,
+            "z2 (next latent, h3|0)": 0.287,
+            "source state (h1|12)": 0.762,
+            "logit lens at z1": 0.024
+          }
+        },
+        "4": {
+          "v1": {
+            "z0 (trained, h1|0)": 0.112,
+            "z0 shuffled": 0.028,
+            "z1 (next latent, h2|0)": 0.052,
+            "source state (t1|12)": 0.608,
+            "logit lens at z0": 0.0
+          },
+          "v2": {
+            "z1 (trained, h2|0)": 0.115,
+            "z1 shuffled": 0.024,
+            "z2 (next latent, h3|0)": 0.122,
+            "source state (h1|12)": 0.469,
+            "logit lens at z1": 0.01
+          },
+          "v3": {
+            "z2 (trained, h3|0)": 0.252,
+            "z2 shuffled": 0.031,
+            "z3 (next latent, h4|0)": 0.294,
+            "source state (h2|12)": 0.434,
+            "logit lens at z2": 0.024
+          }
+        },
+        "5": {
+          "v1": {
+            "z0 (trained, h1|0)": 0.08,
+            "z0 shuffled": 0.01,
+            "z1 (next latent, h2|0)": 0.014,
+            "source state (t1|12)": 0.451,
+            "logit lens at z0": 0.0
+          },
+          "v2": {
+            "z1 (trained, h2|0)": 0.017,
+            "z1 shuffled": 0.028,
+            "z2 (next latent, h3|0)": 0.042,
+            "source state (h1|12)": 0.199,
+            "logit lens at z1": 0.021
+          },
+          "v3": {
+            "z2 (trained, h3|0)": 0.087,
+            "z2 shuffled": 0.042,
+            "z3 (next latent, h4|0)": 0.08,
+            "source state (h2|12)": 0.245,
+            "logit lens at z2": 0.007
+          },
+          "v4": {
+            "z3 (trained, h4|0)": 0.157,
+            "z3 shuffled": 0.028,
+            "z4 (next latent, h5|0)": 0.136,
+            "source state (h3|12)": 0.234,
+            "logit lens at z3": 0.028
+          }
+        },
+        "6": {
+          "v1": {
+            "z0 (trained, h1|0)": 0.032,
+            "z0 shuffled": 0.021,
+            "z1 (next latent, h2|0)": 0.004,
+            "source state (t1|12)": 0.302,
+            "logit lens at z0": 0.004
+          },
+          "v2": {
+            "z1 (trained, h2|0)": 0.018,
+            "z1 shuffled": 0.014,
+            "z2 (next latent, h3|0)": 0.025,
+            "source state (h1|12)": 0.109,
+            "logit lens at z1": 0.018
+          },
+          "v3": {
+            "z2 (trained, h3|0)": 0.028,
+            "z2 shuffled": 0.014,
+            "z3 (next latent, h4|0)": 0.025,
+            "source state (h2|12)": 0.084,
+            "logit lens at z2": 0.011
+          },
+          "v4": {
+            "z3 (trained, h4|0)": 0.081,
+            "z3 shuffled": 0.021,
+            "z4 (next latent, h5|0)": 0.07,
+            "source state (h3|12)": 0.144,
+            "logit lens at z3": 0.025
+          },
+          "v5": {
+            "z4 (trained, h5|0)": 0.098,
+            "z4 shuffled": 0.018,
+            "z5 (next latent, h6|0)": 0.095,
+            "source state (h4|12)": 0.161,
+            "logit lens at z4": 0.035
+          }
+        }
+      },
+      "passes_exact_by_level": {
+        "1": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "2": [
+          0.997,
+          0.997,
+          0.997,
+          0.997,
+          0.997,
+          0.993,
+          0.993,
+          0.993,
+          0.993,
+          0.993,
+          0.993,
+          0.993
+        ],
+        "3": [
+          0.888,
+          0.895,
+          0.895,
+          0.895,
+          0.888,
+          0.906,
+          0.906,
+          0.902,
+          0.899,
+          0.899,
+          0.885,
+          0.881
+        ],
+        "4": [
+          0.759,
+          0.755,
+          0.762,
+          0.766,
+          0.766,
+          0.773,
+          0.787,
+          0.773,
+          0.769,
+          0.762,
+          0.762,
+          0.769
+        ],
+        "5": [
+          0.573,
+          0.573,
+          0.591,
+          0.591,
+          0.598,
+          0.601,
+          0.594,
+          0.584,
+          0.591,
+          0.594,
+          0.58,
+          0.57
+        ],
+        "6": [
+          0.407,
+          0.428,
+          0.414,
+          0.414,
+          0.411,
+          0.414,
+          0.411,
+          0.4,
+          0.404,
+          0.4,
+          0.396,
+          0.389
+        ],
+        "7": [
+          0.211,
+          0.204,
+          0.204,
+          0.207,
+          0.193,
+          0.186,
+          0.189,
+          0.189,
+          0.204,
+          0.2,
+          0.193,
+          0.186
+        ]
+      },
+      "passes_k": "answer after k = 1..12 latent passes, trained with 6",
+      "passes_move": [
+        0.236,
+        0.068,
+        0.052,
+        0.037,
+        0.032,
+        0.023,
+        0.021,
+        0.017,
+        0.016,
+        0.015,
+        0.014,
+        0.013
+      ]
+    }
+  },
+  "hyperparams": {
+    "scripts": "codi_audit_artifacts/s1_sim_swap.py, s2_sim_probe.py (copy of b27), s3_sim_passes.py (copy of b22), s2_read.py",
+    "indexing": "z_j is the input of latent pass j (z_0 = prj of <bot>); the step decoder trained z_j to write step j+1, so z_j targets v_{j+1}, j = 0..L-2",
+    "donors": "same level, seeded shuffle, v_{j+1} differs, predicted answer (recipient rules j+2..L on donor v_{j+1}) in 0..99 and != gold; recipients answered right",
+    "mean_ablation": "z_j replaced by its mean over 2,000 train items of the same level (seed 21)",
+    "probes": "as b27: ridge to digit one-hots, 8,000 train fit items per level (seed 20), penalty on a held-out 15%, shuffled-label control; valid L3-L6",
+    "dtype": "float32"
+  },
+  "seed": 21,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Section 13.3 secondaries on SIM-CODI: are the latents used, one step each, and what do they hold?",
+  "timestamp_utc": "2026-11-08T13:57:08.623730+00:00",
+  "git": {
+    "commit": "42b688e",
+    "dirty": true
+  }
+}
