@@ -299,3 +299,5 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261108-232436_codi_gsm8k-released-codi-pass-sweep-decoder](20261108-232436_codi_gsm8k-released-codi-pass-sweep-decoder/) | codi | gpt2 | test (n=1319) | 6 | 0.425 | 11 | full_run | Henning Lindig |
 | [20261108-232437_codi_gsm8k-released-sim-route-split-all-sites](20261108-232437_codi_gsm8k-released-sim-route-split-all-sites/) | codi | gpt2 | test (n=295) | 6 | - | 11 | full_run | Henning Lindig |
 | [20261108-232438_codi_gsm8k-released-codi-route-split-all-sites](20261108-232438_codi_gsm8k-released-codi-route-split-all-sites/) | codi | gpt2 | test (n=312) | 6 | - | 11 | full_run | Henning Lindig |
+| [20261108-233038_codi_v2-r1-samelevel-mean-ablation](20261108-233038_codi_v2-r1-samelevel-mean-ablation/) | codi | gpt2 | test (n=2500) | 6 | 0.838 | 21 | full_run | Henning Lindig |
+| [20261108-233039_codi_v2-lr3-samelevel-mean-ablation](20261108-233039_codi_v2-lr3-samelevel-mean-ablation/) | codi | gpt2 | test (n=2500) | 6 | 0.902 | 21 | full_run | Henning Lindig |

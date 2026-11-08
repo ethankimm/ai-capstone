@@ -1,0 +1,117 @@
+{
+  "run_id": "20261108-233039_codi_v2-lr3-samelevel-mean-ablation",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "lr-3e-3 L1-7w CODI codi_runs_l1to7w_codi/checkpoint-17820 (20261103-193425)",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 2500,
+    "seed": 21
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.902,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "by_level": {
+        "1": {
+          "n": 500,
+          "clean": 1.0,
+          "mean_acc": 1.0,
+          "mean_keeps_right": 1.0,
+          "diff_donor": {
+            "n": 500,
+            "follows": 0.0,
+            "keeps": 1.0
+          },
+          "same_donor": {
+            "n": 497,
+            "keeps": 1.0
+          }
+        },
+        "2": {
+          "n": 500,
+          "clean": 0.998,
+          "mean_acc": 0.704,
+          "mean_keeps_right": 0.705,
+          "diff_donor": {
+            "n": 499,
+            "follows": 0.768,
+            "keeps": 0.006
+          },
+          "same_donor": {
+            "n": 491,
+            "keeps": 1.0
+          }
+        },
+        "3": {
+          "n": 500,
+          "clean": 0.992,
+          "mean_acc": 0.138,
+          "mean_keeps_right": 0.139,
+          "diff_donor": {
+            "n": 496,
+            "follows": 0.984,
+            "keeps": 0.0
+          },
+          "same_donor": {
+            "n": 486,
+            "keeps": 0.996
+          }
+        },
+        "4": {
+          "n": 500,
+          "clean": 0.858,
+          "mean_acc": 0.07,
+          "mean_keeps_right": 0.079,
+          "diff_donor": {
+            "n": 429,
+            "follows": 0.818,
+            "keeps": 0.005
+          },
+          "same_donor": {
+            "n": 418,
+            "keeps": 0.866
+          }
+        },
+        "5": {
+          "n": 500,
+          "clean": 0.66,
+          "mean_acc": 0.032,
+          "mean_keeps_right": 0.039,
+          "diff_donor": {
+            "n": 330,
+            "follows": 0.585,
+            "keeps": 0.006
+          },
+          "same_donor": {
+            "n": 322,
+            "keeps": 0.683
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/t24_samelevel_mean.py (b29_ungated_resample.py with MODEL switch), copy in scripts/codi_null_audit/prereg/",
+    "mean": "each z_s set to its mean over 2000 train items of the same level (seed 21)",
+    "donors": "as b29: all six latents from a same-level donor with a different v_{L-1}",
+    "levels": "test L1-L5",
+    "prereg": "scripts/codi_null_audit/prereg/t_predictions.md t22-t24 (commit 6a1e88b)",
+    "dtype": "float32"
+  },
+  "seed": 21,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "t24: same-level mean ablation of all six latents, lr3, replacing the level-pooled means",
+  "timestamp_utc": "2026-11-08T23:30:39.671147+00:00",
+  "git": {
+    "commit": "969fae2",
+    "dirty": true
+  }
+}
