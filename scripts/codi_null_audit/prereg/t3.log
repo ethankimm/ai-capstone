@@ -1,0 +1,35 @@
+/Users/henninglindig/Documents/Penn/CIS5980/codi/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+/Users/henninglindig/Documents/Penn/CIS5980/codi/.venv/lib/python3.12/site-packages/peft/tuners/lora/layer.py:1768: UserWarning: fan_in_fan_out is set to False but the target module is `Conv1D`. Setting fan_in_fan_out to True.
+  warnings.warn(
+Passing a tuple of `past_key_values` is deprecated and will be removed in Transformers v4.53.0. You should pass an instance of `Cache` instead, e.g. `past_key_values=DynamicCache.from_legacy_cache(past_key_values)`.
+trainable params: 20057088 || all params: 144499200 || trainable%: 13.880414562848792
+  answers match t1
+17:29 plain L3 acc 0.521 | z step [24.625, 4.354, 1.38, 0.63, 0.47, 0.396] | dir cos [-0.119, -0.355, -0.003, 0.482, 0.764] | centred cos [0.087, 0.968, 0.994, 0.999, 0.999, 0.999]
+  answers match t1
+17:29 plain L4 acc 0.329 | z step [22.495, 3.906, 1.208, 0.691, 0.538, 0.467] | dir cos [0.024, -0.139, 0.141, 0.617, 0.785] | centred cos [0.202, 0.969, 0.994, 0.998, 0.998, 0.999]
+  answers match t1
+17:29 plain L5 acc 0.136 | z step [21.062, 4.378, 1.731, 1.087, 0.901, 0.801] | dir cos [-0.017, -0.135, 0.159, 0.519, 0.686] | centred cos [0.242, 0.957, 0.987, 0.993, 0.994, 0.994]
+  answers match t1
+17:29 plain L6 acc 0.123 | z step [20.247, 4.2, 1.719, 1.172, 0.99, 0.889] | dir cos [-0.059, -0.232, 0.159, 0.538, 0.695] | centred cos [0.263, 0.952, 0.984, 0.988, 0.989, 0.99]
+trainable params: 20057088 || all params: 144499200 || trainable%: 13.880414562848792
+  answers match t1
+17:29 gated L3 acc 1.000 | z step [30.777, 31.828, 40.056, 3.302, 0.53, 0.4] | dir cos [-0.487, -0.389, 0.061, 0.261, 0.863] | centred cos [0.364, 0.373, -0.525, 0.98, 0.999, 1.0]
+  answers match t1
+17:29 gated L4 acc 1.000 | z step [31.346, 31.418, 31.385, 39.957, 3.461, 0.475] | dir cos [-0.495, -0.506, -0.386, 0.11, 0.265] | centred cos [0.184, 0.228, 0.23, -0.408, 0.987, 1.0]
+  answers match t1
+17:30 gated L5 acc 1.000 | z step [30.896, 31.564, 31.177, 32.467, 39.67, 3.623] | dir cos [-0.493, -0.496, -0.52, -0.399, 0.119] | centred cos [0.083, 0.077, 0.09, 0.019, -0.219, 0.991]
+  answers match t1
+17:30 gated L6 acc 1.000 | z step [30.396, 30.611, 31.558, 30.859, 31.287, 39.298] | dir cos [-0.482, -0.496, -0.512, -0.507, -0.39] | centred cos [0.086, 0.078, 0.007, 0.037, 0.01, 0.004]
+trainable params: 20057088 || all params: 144499200 || trainable%: 13.880414562848792
+  answers match t1
+17:30 sim L3 acc 1.000 | z step [50.091, 48.764, 41.701, 19.18, 3.81, 0.718] | dir cos [-0.47, -0.407, 0.476, 0.646, 0.306] | centred cos [0.165, 0.171, -0.064, 0.555, 0.988, 1.0]
+  answers match t1
+17:30 sim L4 acc 1.000 | z step [49.426, 48.751, 48.884, 38.433, 20.005, 5.493] | dir cos [-0.503, -0.493, -0.364, 0.441, 0.709] | centred cos [0.082, 0.114, -0.003, 0.06, 0.7, 0.983]
+  answers match t1
+17:30 sim L5 acc 1.000 | z step [49.599, 48.57, 49.147, 48.797, 36.772, 19.666] | dir cos [-0.497, -0.481, -0.48, -0.367, 0.381] | centred cos [0.022, 0.041, 0.006, -0.108, 0.23, 0.802]
+  answers match t1
+17:30 sim L6 acc 0.996 | z step [47.807, 48.852, 47.46, 49.217, 46.913, 28.87] | dir cos [-0.477, -0.485, -0.468, -0.466, -0.291] | centred cos [0.046, -0.019, 0.033, -0.055, 0.016, 0.623]
+DONE
+rc=0

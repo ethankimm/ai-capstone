@@ -1,0 +1,29 @@
+/Users/henninglindig/Documents/Penn/CIS5980/codi/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+/Users/henninglindig/Documents/Penn/CIS5980/codi/.venv/lib/python3.12/site-packages/peft/tuners/lora/layer.py:1768: UserWarning: fan_in_fan_out is set to False but the target module is `Conv1D`. Setting fan_in_fan_out to True.
+  warnings.warn(
+Passing a tuple of `past_key_values` is deprecated and will be removed in Transformers v4.53.0. You should pass an instance of `Cache` instead, e.g. `past_key_values=DynamicCache.from_legacy_cache(past_key_values)`.
+trainable params: 20057088 || all params: 144499200 || trainable%: 13.880414562848792
+21:05 pair 0/317 4s
+21:08 pair 50/317 205s
+21:12 pair 100/317 404s
+21:15 pair 150/317 597s
+21:18 pair 200/317 790s
+21:21 pair 250/317 987s
+21:25 pair 300/317 1185s
+21:30 full test clean acc 0.425
+21:35 full test nb acc 0.300
+qualified here 314/317 | record all 0.839
+  all       follows twin 0.847 | nb 0.615
+  single_0  follows twin 0.201 | nb 0.041
+  single_2  follows twin 0.210 | nb 0.121
+  single_4  follows twin 0.363 | nb 0.153
+  even_02   follows twin 0.545 | nb 0.354
+  even_04   follows twin 0.650 | nb 0.357
+  even_24   follows twin 0.736 | nb 0.427
+  even_all  follows twin 0.847 | nb 0.573
+  prefix_2  follows twin 0.541 | nb 0.350
+  recipient right under nb: 0.567
+DONE
+rc=0

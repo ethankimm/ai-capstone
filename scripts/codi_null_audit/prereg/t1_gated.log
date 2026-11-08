@@ -1,0 +1,40 @@
+/Users/henninglindig/Documents/Penn/CIS5980/codi/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+/Users/henninglindig/Documents/Penn/CIS5980/codi/.venv/lib/python3.12/site-packages/peft/tuners/lora/layer.py:1768: UserWarning: fan_in_fan_out is set to False but the target module is `Conv1D`. Setting fan_in_fan_out to True.
+  warnings.warn(
+Passing a tuple of `past_key_values` is deprecated and will be removed in Transformers v4.53.0. You should pass an instance of `Cache` instead, e.g. `past_key_values=DynamicCache.from_legacy_cache(past_key_values)`.
+trainable params: 20057088 || all params: 144499200 || trainable%: 13.880414562848792
+17:13 gated L3 clean acc 1.000
+17:14 gated L3 z_0 (swap moves v_0): n=286 follows donor 0.486 keeps own 0.231 donor answer 0.021 | mean-ablated acc 1.000
+17:14 gated L3 z_1 (swap moves v_1): n=286 follows donor 1.000 keeps own 0.000 donor answer 0.014 | mean-ablated acc 0.024
+17:14 gated L3 z_2 (swap moves v_2): n=286 follows donor 1.000 keeps own 0.000 donor answer 0.115 | mean-ablated acc 0.049
+17:14 gated L3 z_3 (swap moves v_2): n=286 follows donor 0.000 keeps own 1.000 donor answer 0.014 | mean-ablated acc 1.000
+17:14 gated L3 z_4 (swap moves v_2): n=286 follows donor 0.000 keeps own 1.000 donor answer 0.010 | mean-ablated acc 1.000
+17:14 gated L3 z_5 (swap moves v_2): n=286 follows donor 0.000 keeps own 1.000 donor answer 0.000 | mean-ablated acc 1.000
+17:14 gated L3 hide: block_used [2] 0.206 | block_upto [0, 1, 2] 0.038 | block_idle [3, 4, 5] 1.000 | block_all [0, 1, 2, 3, 4, 5] 0.028
+17:14 gated L4 clean acc 1.000
+17:15 gated L4 z_0 (swap moves v_0): n=286 follows donor 0.573 keeps own 0.217 donor answer 0.010 | mean-ablated acc 0.990
+17:15 gated L4 z_1 (swap moves v_1): n=286 follows donor 1.000 keeps own 0.000 donor answer 0.010 | mean-ablated acc 0.028
+17:15 gated L4 z_2 (swap moves v_2): n=286 follows donor 1.000 keeps own 0.000 donor answer 0.010 | mean-ablated acc 0.035
+17:15 gated L4 z_3 (swap moves v_3): n=286 follows donor 1.000 keeps own 0.000 donor answer 0.087 | mean-ablated acc 0.059
+17:15 gated L4 z_4 (swap moves v_3): n=286 follows donor 0.000 keeps own 1.000 donor answer 0.014 | mean-ablated acc 1.000
+17:15 gated L4 z_5 (swap moves v_3): n=286 follows donor 0.000 keeps own 1.000 donor answer 0.003 | mean-ablated acc 1.000
+17:16 gated L4 hide: block_used [3] 0.108 | block_upto [0, 1, 2, 3] 0.042 | block_idle [4, 5] 1.000 | block_all [0, 1, 2, 3, 4, 5] 0.021
+17:16 gated L5 clean acc 1.000
+17:16 gated L5 z_0 (swap moves v_0): n=286 follows donor 0.636 keeps own 0.150 donor answer 0.024 | mean-ablated acc 0.997
+17:16 gated L5 z_1 (swap moves v_1): n=286 follows donor 1.000 keeps own 0.000 donor answer 0.007 | mean-ablated acc 0.049
+17:16 gated L5 z_2 (swap moves v_2): n=286 follows donor 1.000 keeps own 0.000 donor answer 0.014 | mean-ablated acc 0.049
+17:16 gated L5 z_3 (swap moves v_3): n=286 follows donor 1.000 keeps own 0.000 donor answer 0.031 | mean-ablated acc 0.042
+17:17 gated L5 z_4 (swap moves v_4): n=286 follows donor 1.000 keeps own 0.000 donor answer 0.126 | mean-ablated acc 0.038
+17:17 gated L5 z_5 (swap moves v_4): n=286 follows donor 0.000 keeps own 1.000 donor answer 0.003 | mean-ablated acc 1.000
+17:17 gated L5 hide: block_used [4] 0.084 | block_upto [0, 1, 2, 3, 4] 0.028 | block_idle [5] 1.000 | block_all [0, 1, 2, 3, 4, 5] 0.010
+17:17 gated L6 clean acc 1.000
+17:18 gated L6 z_0 (swap moves v_0): n=285 follows donor 0.600 keeps own 0.189 donor answer 0.032 | mean-ablated acc 0.993
+17:18 gated L6 z_1 (swap moves v_1): n=285 follows donor 1.000 keeps own 0.000 donor answer 0.011 | mean-ablated acc 0.028
+17:18 gated L6 z_2 (swap moves v_2): n=285 follows donor 1.000 keeps own 0.000 donor answer 0.014 | mean-ablated acc 0.042
+17:18 gated L6 z_3 (swap moves v_3): n=285 follows donor 1.000 keeps own 0.000 donor answer 0.018 | mean-ablated acc 0.046
+17:18 gated L6 z_4 (swap moves v_4): n=285 follows donor 1.000 keeps own 0.000 donor answer 0.032 | mean-ablated acc 0.039
+17:18 gated L6 z_5 (swap moves v_5): n=285 follows donor 1.000 keeps own 0.000 donor answer 0.151 | mean-ablated acc 0.035
+DONE
+rc=0
