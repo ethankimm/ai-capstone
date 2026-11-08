@@ -62,3 +62,25 @@ t13: GSM8K latents put more attention on earlier latents than start-last's .09-.
 gated / sim: input_j ~ both_j ~ 1 for used sites j < L-1; kv_j ~ 0 except the site the answer reads (gated j = L-1, sim j = L-1), where
 kv ~ both and kv_noans ~ 0 (answer reads it directly). startlast: single sites ~0 on every route; both_all ~ .9, kv_all ~ .9 (the answer reads
 the pooled keys/values). relay: single ~0; both_all high; kv_all high. stab: everything ~0 (ignores latents).
+
+## t16 grid need test and t17 grid route split, 2026-11-08 00:05 PST, before any t16/t17 full output (scripts/necessity/)
+Seen before writing: 8-item ProsQA smoke of each loader (CODI 6 lat 5/8, 0 lat 6/8; Coconut 8/8 at every k = 0..6; no-CoT 6/8; CoT 8/8).
+Known: ProsQA CODI .816, 0 latents .820, latents one constant vector (20261103-021023); Oct whole-chain random swaps change 0% of
+answers for grid Coconut and CODI on ProsQA / ProntoQA; GSM8K Coconut latents load-bearing (random swap), twin swap reads content.
+Coconut paper (GPT-2): ProsQA no-CoT 76.7, CoT 77.5, Coconut 97.0, iCoT 98.2 (verify); GSM8K no-CoT 16.5, Coconut 34.1.
+Definition used: need = Coconut/CODI(6 latents) - same model at 0 latents, per path-length bin (the latents' contribution);
+gain over the grid no-CoT is reported beside it but credits training, not latent passes. "Beyond reach" = bins where no-CoT and the
+0-latent model are clearly below the 6-latent model.
+t16 (need):
+- ProsQA CODI: 6 vs 0 latents within .03 overall and in bins 3, 4, 5 (bin 6 has n = 12, report only). ProntoQA CODI: within .03.
+- ProsQA Coconut: every k = 0..6 within .03 of k = 6 (~.97-.98) in bins 3-5; grid no-CoT ~.75-.82, so the Coconut-vs-no-CoT gap is
+  real but comes from training, not from latent passes (need ~ 0). ProntoQA Coconut: same (k = 0 ~ k = 6).
+- GSM8K Coconut (needs a run with gold-step bins): 6 latents - 0 latents >= .10, growing with gold step count; no-CoT < Coconut.
+t17 (route split, minimal pairs = one path relation rewired so the answer flips, equal token length; recipients right, donor answered
+as implied):
+- ProsQA / ProntoQA, CODI and Coconut: every site, every route (both, input only, entries only, hidden) follows <= .03; all-sites
+  both / entries <= .03. All four FAIL the check (ignored regime, consistent with need ~ 0).
+- GSM8K Coconut (separate run): framing predicts it must pass at >= 1 site if its need is beyond single-pass reach. Guess: passes at
+  an early site (input only >= half the full swap at j = 0 or 1, full swap >= .10); later sites carried by entries. Alternative
+  (would count against the framing only if the need grows with step count where no-CoT is at the floor): input only ~ 0 everywhere,
+  i.e. a width or attention-slot regime like GSM8K CODI.
