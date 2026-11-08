@@ -269,3 +269,5 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261108-131008_codi_v2-l1to7w-sim-depth2-codi-canonical](20261108-131008_codi_v2-l1to7w-sim-depth2-codi-canonical/) | codi | gpt2 | test (n=6000) | 6 | 0.586 | 11 | full_run |  |
 | [20261108-134158_codi_v2-l1to7w-sim-latent-use](20261108-134158_codi_v2-l1to7w-sim-latent-use/) | codi | gpt2 | validation (n=1714) | 6 | 0.984 | 21 | full_run | Henning Lindig |
 | [20261108-135708_codi_v2-l1to7w-stab-codi-latent-use-matched](20261108-135708_codi_v2-l1to7w-stab-codi-latent-use-matched/) | codi | gpt2 | validation (n=1714) | 6 | 0.646 | 21 | full_run | Henning Lindig |
+| [20261108-182654_codi_v2-l1to7w-startlast-pause-depth2-codi](20261108-182654_codi_v2-l1to7w-startlast-pause-depth2-codi/) | codi | gpt2 | test (n=3500) | 6 | 0.408 | 11 | full_run |  |
+| [20261108-182830_codi_v2-l1to7w-startlast-pause-depth2-codi-canonical](20261108-182830_codi_v2-l1to7w-startlast-pause-depth2-codi-canonical/) | codi | gpt2 | test (n=6000) | 6 | 0.254 | 11 | full_run |  |
