@@ -1,0 +1,260 @@
+{
+  "run_id": "20261108-013539_codi_v2-l1to7w-startlast-sim-extra-passes",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "SIM-CODI start-last checkpoint-16335 (20261107-225603), decoder dropped",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "validation",
+    "n_examples": 570,
+    "seed": 20
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.996,
+    "unparseable_rate": 0.0,
+    "compute_steps": 6,
+    "extra": {
+      "accuracy_kind": "SIM-CODI exact with the trained 6 passes, valid L7 + L6",
+      "by_level": {
+        "7": {
+          "6": {
+            "share": {
+              "gold": 0.996,
+              "last_twice": 0.0,
+              "last_thrice": 0.014,
+              "v_{L-1}": 0.0,
+              "r7(r1(v_6))": 0.004,
+              "r7(r2(v_6))": 0.004,
+              "r7(r3(v_6))": 0.0,
+              "r7(r4(v_6))": 0.004,
+              "r7(r5(v_6))": 0.0,
+              "r7(r6(v_6))": 0.004
+            },
+            "unique": {
+              "gold": 0.968,
+              "last_twice": 0.0,
+              "last_thrice": 0.0,
+              "v_{L-1}": 0.0,
+              "r7(r1(v_6))": 0.0,
+              "r7(r2(v_6))": 0.0,
+              "r7(r3(v_6))": 0.0,
+              "r7(r4(v_6))": 0.0,
+              "r7(r5(v_6))": 0.0,
+              "r7(r6(v_6))": 0.0
+            },
+            "none": 0.004,
+            "post_hoc_rule_Lminus1_repeated": null
+          },
+          "7": {
+            "share": {
+              "gold": 0.021,
+              "last_twice": 0.091,
+              "last_thrice": 0.021,
+              "v_{L-1}": 0.088,
+              "r7(r1(v_6))": 0.074,
+              "r7(r2(v_6))": 0.091,
+              "r7(r3(v_6))": 0.074,
+              "r7(r4(v_6))": 0.077,
+              "r7(r5(v_6))": 0.084,
+              "r7(r6(v_6))": 0.877
+            },
+            "unique": {
+              "gold": 0.018,
+              "last_twice": 0.0,
+              "last_thrice": 0.0,
+              "v_{L-1}": 0.004,
+              "r7(r1(v_6))": 0.0,
+              "r7(r2(v_6))": 0.0,
+              "r7(r3(v_6))": 0.0,
+              "r7(r4(v_6))": 0.004,
+              "r7(r5(v_6))": 0.007,
+              "r7(r6(v_6))": 0.565
+            },
+            "none": 0.084,
+            "post_hoc_rule_Lminus1_repeated": 0.877
+          },
+          "8": {
+            "share": {
+              "gold": 0.056,
+              "last_twice": 0.032,
+              "last_thrice": 0.042,
+              "v_{L-1}": 0.014,
+              "r7(r1(v_6))": 0.021,
+              "r7(r2(v_6))": 0.021,
+              "r7(r3(v_6))": 0.014,
+              "r7(r4(v_6))": 0.018,
+              "r7(r5(v_6))": 0.018,
+              "r7(r6(v_6))": 0.133
+            },
+            "unique": {
+              "gold": 0.056,
+              "last_twice": 0.021,
+              "last_thrice": 0.039,
+              "v_{L-1}": 0.007,
+              "r7(r1(v_6))": 0.011,
+              "r7(r2(v_6))": 0.014,
+              "r7(r3(v_6))": 0.014,
+              "r7(r4(v_6))": 0.004,
+              "r7(r5(v_6))": 0.004,
+              "r7(r6(v_6))": 0.102
+            },
+            "none": 0.698,
+            "post_hoc_rule_Lminus1_repeated": 0.495
+          },
+          "9": {
+            "share": {
+              "gold": 0.025,
+              "last_twice": 0.025,
+              "last_thrice": 0.042,
+              "v_{L-1}": 0.032,
+              "r7(r1(v_6))": 0.028,
+              "r7(r2(v_6))": 0.021,
+              "r7(r3(v_6))": 0.025,
+              "r7(r4(v_6))": 0.035,
+              "r7(r5(v_6))": 0.046,
+              "r7(r6(v_6))": 0.109
+            },
+            "unique": {
+              "gold": 0.025,
+              "last_twice": 0.014,
+              "last_thrice": 0.028,
+              "v_{L-1}": 0.011,
+              "r7(r1(v_6))": 0.011,
+              "r7(r2(v_6))": 0.007,
+              "r7(r3(v_6))": 0.018,
+              "r7(r4(v_6))": 0.018,
+              "r7(r5(v_6))": 0.021,
+              "r7(r6(v_6))": 0.053
+            },
+            "none": 0.733,
+            "post_hoc_rule_Lminus1_repeated": 0.305
+          }
+        },
+        "6": {
+          "6": {
+            "share": {
+              "gold": 0.996,
+              "last_twice": 0.0,
+              "last_thrice": 0.028,
+              "v_{L-1}": 0.0,
+              "r6(r1(v_5))": 0.0,
+              "r6(r2(v_5))": 0.0,
+              "r6(r3(v_5))": 0.004,
+              "r6(r4(v_5))": 0.004,
+              "r6(r5(v_5))": 0.004
+            },
+            "unique": {
+              "gold": 0.961,
+              "last_twice": 0.0,
+              "last_thrice": 0.0,
+              "v_{L-1}": 0.0,
+              "r6(r1(v_5))": 0.0,
+              "r6(r2(v_5))": 0.0,
+              "r6(r3(v_5))": 0.0,
+              "r6(r4(v_5))": 0.0,
+              "r6(r5(v_5))": 0.0
+            },
+            "none": 0.004,
+            "post_hoc_rule_Lminus1_repeated": null
+          },
+          "7": {
+            "share": {
+              "gold": 0.996,
+              "last_twice": 0.0,
+              "last_thrice": 0.028,
+              "v_{L-1}": 0.0,
+              "r6(r1(v_5))": 0.0,
+              "r6(r2(v_5))": 0.0,
+              "r6(r3(v_5))": 0.004,
+              "r6(r4(v_5))": 0.004,
+              "r6(r5(v_5))": 0.004
+            },
+            "unique": {
+              "gold": 0.961,
+              "last_twice": 0.0,
+              "last_thrice": 0.0,
+              "v_{L-1}": 0.0,
+              "r6(r1(v_5))": 0.0,
+              "r6(r2(v_5))": 0.0,
+              "r6(r3(v_5))": 0.0,
+              "r6(r4(v_5))": 0.0,
+              "r6(r5(v_5))": 0.0
+            },
+            "none": 0.004,
+            "post_hoc_rule_Lminus1_repeated": 0.004
+          },
+          "8": {
+            "share": {
+              "gold": 0.996,
+              "last_twice": 0.0,
+              "last_thrice": 0.028,
+              "v_{L-1}": 0.0,
+              "r6(r1(v_5))": 0.0,
+              "r6(r2(v_5))": 0.0,
+              "r6(r3(v_5))": 0.004,
+              "r6(r4(v_5))": 0.004,
+              "r6(r5(v_5))": 0.004
+            },
+            "unique": {
+              "gold": 0.961,
+              "last_twice": 0.0,
+              "last_thrice": 0.0,
+              "v_{L-1}": 0.0,
+              "r6(r1(v_5))": 0.0,
+              "r6(r2(v_5))": 0.0,
+              "r6(r3(v_5))": 0.0,
+              "r6(r4(v_5))": 0.0,
+              "r6(r5(v_5))": 0.0
+            },
+            "none": 0.004,
+            "post_hoc_rule_Lminus1_repeated": 0.025
+          },
+          "9": {
+            "share": {
+              "gold": 0.996,
+              "last_twice": 0.0,
+              "last_thrice": 0.028,
+              "v_{L-1}": 0.0,
+              "r6(r1(v_5))": 0.0,
+              "r6(r2(v_5))": 0.0,
+              "r6(r3(v_5))": 0.004,
+              "r6(r4(v_5))": 0.004,
+              "r6(r5(v_5))": 0.004
+            },
+            "unique": {
+              "gold": 0.961,
+              "last_twice": 0.0,
+              "last_thrice": 0.0,
+              "v_{L-1}": 0.0,
+              "r6(r1(v_5))": 0.0,
+              "r6(r2(v_5))": 0.0,
+              "r6(r3(v_5))": 0.0,
+              "r6(r4(v_5))": 0.0,
+              "r6(r5(v_5))": 0.0
+            },
+            "none": 0.004,
+            "post_hoc_rule_Lminus1_repeated": 0.018
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "codi_audit_artifacts/t5_l7_passes.py",
+    "passes": "k = 6..9 latent passes actually run (k > 6 outside training)",
+    "dtype": "float32"
+  },
+  "seed": 20,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "Why does SIM-CODI fail at L7 with 7+ passes? Which rule does the extra pass apply?",
+  "timestamp_utc": "2026-11-08T01:35:39.832952+00:00",
+  "git": {
+    "commit": "1aa873d",
+    "dirty": true
+  }
+}
