@@ -1,0 +1,214 @@
+{
+  "run_id": "20261109-004543_codi_gsm8k-released-latent-monitor-wrong-answers",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:internlm/SIM_COT-GPT2-CODI and hf:zen-E/CODI-gpt2@fd641b3, fp32 MPS batch 1",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "unparseable_rate": null,
+    "compute_steps": 6,
+    "extra": {
+      "preregistered_decoded_features": {
+        "sim": {
+          "n": 1319,
+          "wrong": 800,
+          "auc": {
+            "L": 0.713,
+            "C": 0.921,
+            "Q": 0.705,
+            "C+Q": 0.915,
+            "L+C+Q": 0.915
+          },
+          "ci": {
+            "L": [
+              0.683,
+              0.74
+            ],
+            "C": [
+              0.905,
+              0.935
+            ],
+            "Q": [
+              0.677,
+              0.733
+            ],
+            "C+Q": [
+              0.898,
+              0.93
+            ],
+            "L+C+Q": [
+              0.898,
+              0.93
+            ]
+          },
+          "diff_LCQ_minus_CQ": [
+            0.0,
+            [
+              -0.006,
+              0.006
+            ]
+          ],
+          "diff_L_minus_Q": [
+            0.007,
+            [
+              -0.03,
+              0.047
+            ]
+          ],
+          "gold_trace_ceiling": 0.76
+        },
+        "codi": {
+          "n": 1319,
+          "wrong": 759,
+          "auc": {
+            "L": 0.723,
+            "C": 0.912,
+            "Q": 0.685,
+            "C+Q": 0.913,
+            "L+C+Q": 0.903
+          },
+          "ci": {
+            "L": [
+              0.694,
+              0.751
+            ],
+            "C": [
+              0.896,
+              0.927
+            ],
+            "Q": [
+              0.655,
+              0.713
+            ],
+            "C+Q": [
+              0.897,
+              0.927
+            ],
+            "L+C+Q": [
+              0.886,
+              0.919
+            ]
+          },
+          "diff_LCQ_minus_CQ": [
+            -0.009,
+            [
+              -0.017,
+              -0.002
+            ]
+          ],
+          "diff_L_minus_Q": [
+            0.038,
+            [
+              0.005,
+              0.074
+            ]
+          ],
+          "gold_trace_ceiling": 0.517
+        }
+      },
+      "posthoc_raw_probe": {
+        "sim": {
+          "auc": {
+            "H (question state, no latents)": 0.826,
+            "Z (all latents)": 0.859,
+            "C (confidence)": 0.921,
+            "H+C": 0.884,
+            "Z+H+C": 0.865
+          },
+          "Z_minus_H": [
+            0.03227593551259481,
+            [
+              0.014618627765261747,
+              0.04928358449663179
+            ]
+          ],
+          "ZHC_minus_HC": [
+            -0.018911284066453767,
+            [
+              -0.03325479847758125,
+              -0.004188395375539185
+            ]
+          ]
+        },
+        "codi": {
+          "auc": {
+            "H (question state, no latents)": 0.769,
+            "Z (all latents)": 0.857,
+            "C (confidence)": 0.911,
+            "H+C": 0.872,
+            "Z+H+C": 0.862
+          },
+          "Z_minus_H": [
+            0.08758503386615515,
+            [
+              0.06502540170300165,
+              0.11170037655114314
+            ]
+          ],
+          "ZHC_minus_HC": [
+            -0.010869703429337754,
+            [
+              -0.02658689457614182,
+              0.005220348065994218
+            ]
+          ]
+        }
+      },
+      "posthoc_stacked": {
+        "sim": {
+          "auc": {
+            "C": 0.921,
+            "C + H-probe": 0.917,
+            "C + H-probe + Z-probe": 0.918
+          },
+          "latents_add": [
+            0.0008083168794786961,
+            [
+              -0.0019183205346047256,
+              0.0035573744881197827
+            ]
+          ]
+        },
+        "codi": {
+          "auc": {
+            "C": 0.911,
+            "C + H-probe": 0.909,
+            "C + H-probe + Z-probe": 0.91
+          },
+          "latents_add": [
+            0.0012393495540664328,
+            [
+              -0.004419571958214863,
+              0.006878675487628026
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "scripts": "scripts/necessity/sim_gsm8k.py (conf, zdump), sim_monitor.py (pre-registered), sim_monitor_probe.py (post hoc)",
+    "cv": "5-fold stratified, seed 0; logistic regression; probes standardise -> PCA 128 -> C 0.1",
+    "target": "answer is wrong",
+    "prereg": "t_predictions.md t25 (commit 01d6d70); raw-latent probe and stacking added after seeing the pre-registered result"
+  },
+  "seed": 0,
+  "hardware": "MacBook M4 Pro 24 GB, MPS",
+  "author": "Henning Lindig",
+  "notes": "t25: can a monitor flag wrong answers from released SIM-CODI / CODI latents, against answer confidence?",
+  "timestamp_utc": "2026-11-09T00:45:43.089405+00:00",
+  "git": {
+    "commit": "01d6d70",
+    "dirty": true
+  }
+}

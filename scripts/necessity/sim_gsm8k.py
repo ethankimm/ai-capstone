@@ -136,6 +136,50 @@ if MODE == 'sweep':
     json.dump(dict(model=MODEL, ckpt=CK, layers=LAYERS, items=res), open(f'{OUT}/t22_sweep_{MODEL}{tag}.json', 'w'))
     print(f'{MODEL} accuracy {sum(x["correct"] for x in res) / len(res):.3f}; by k ' +
           ' '.join(f'{sum(x["sweep_correct"][k] for x in res) / len(res):.3f}' for k in range(NL + 1)))
+elif MODE == 'zdump':
+    # t25 post hoc: raw latent vectors z_0..z_6 and the question's last hidden state (the no-latent comparison), fp16
+    import numpy as np
+    ex = load_gsm8k_aug(split='test', n=None, seed=None)
+    if SMOKE: ex = ex[:12]
+    Zs, Hs, ids = [], [], []
+    for i, e in enumerate(ex):
+        with torch.no_grad():
+            qids, attn = encode_question(model, tok, e.question.strip().replace('  ', ' '), DEV)
+            o = model.codi(input_ids=qids, use_cache=True, output_hidden_states=True, attention_mask=attn)
+            Hs.append(o.hidden_states[-1][0, -1].float().cpu().numpy())
+        r = run(e.question)
+        Zs.append(torch.cat([z[0] for z in r['Z']], 0).float().cpu().numpy()); ids.append(e.idx)
+        if i % 300 == 0: print(time.strftime('%H:%M'), f'{MODEL} zdump {i}/{len(ex)}', flush=True)
+    np.savez_compressed(f'{OUT}/t25_z_{MODEL}{tag}.npz', Z=np.stack(Zs).astype(np.float16), H=np.stack(Hs).astype(np.float16), idx=np.array(ids))
+    print('saved', np.stack(Zs).shape)
+elif MODE == 'conf':
+    # t25 baseline: answer confidence at k = 6 (same greedy path; log-probs of the generated tokens)
+    ex = load_gsm8k_aug(split='test', n=None, seed=None)
+    if SMOKE: ex = ex[:12]
+    res = []
+    for i, e in enumerate(ex):
+        with torch.no_grad():
+            ids, attn = encode_question(model, tok, e.question.strip().replace('  ', ' '), DEV); Q = ids.size(1)
+            o = model.codi(input_ids=ids, use_cache=True, output_hidden_states=True, attention_mask=attn)
+            pkv = o.past_key_values; lat = model.prj(o.hidden_states[-1][:, -1, :].unsqueeze(1))
+            for s in range(NL):
+                o = model.codi(inputs_embeds=lat, use_cache=True, output_hidden_states=True, past_key_values=pkv,
+                               attention_mask=torch.ones((1, Q + s + 1), dtype=torch.long, device=DEV))
+                pkv = o.past_key_values; lat = model.prj(o.hidden_states[-1][:, -1, :].unsqueeze(1))
+            out = emb(torch.tensor([model.eot_id], device=DEV)).unsqueeze(0); toks = []; lps = []
+            for t in range(64):
+                o = model.codi(inputs_embeds=out, use_cache=True, past_key_values=pkv)
+                pkv = o.past_key_values; lp = torch.log_softmax(o.logits[0, -1, :VOC].float(), -1); nid = int(lp.argmax())
+                lps.append(float(lp[nid]))
+                if nid == tok.eos_token_id: break
+                toks.append(nid); out = emb(torch.tensor([nid], device=DEV)).unsqueeze(1)
+        text = tok.decode(toks, skip_special_tokens=True); a = extract_final_number(text)
+        # log-probs of the number tokens only (the answer value), plus all tokens
+        num_lp = [lp for tkn, lp in zip(toks, lps) if any(ch.isdigit() for ch in tok.decode([tkn]))]
+        res.append(dict(idx=e.idx, ans=a, correct=is_correct(a, e.answer), text=text, lp=lps, num_lp=num_lp))
+        if i % 200 == 0: print(time.strftime('%H:%M'), f'{MODEL} conf item {i}/{len(ex)} {time.time() - t0:.0f}s', flush=True)
+    json.dump(dict(model=MODEL, items=res), open(f'{OUT}/t25_conf_{MODEL}{tag}.json', 'w'))
+    print(f'{MODEL} accuracy {sum(x["correct"] for x in res) / len(res):.3f}')
 elif MODE == 'route':
     pairs = json.load(open(BASE + '/codi_audit_artifacts/t22/gsm8k_twin_candidates.json'))
     if SMOKE: pairs = pairs[:40]
