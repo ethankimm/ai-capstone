@@ -181,3 +181,17 @@ Replaces the level-pooled means behind "round-1 .99 -> .17 at L3". All six laten
 seed 21), test, L1-L5 (round 1: depth2 test; lr-3e-3: l1to7w test). Prediction: L1 stays >= .95 (as start-last, where pooling caused the
 L1 drop); L2 falls to <= .7; L3 <= .3; L4-L5 <= .15 for both models, i.e. the direction of the pooled result holds from L2, and the
 matched CODI-0 (.988 / .960 at L2 / L3, round 1) stays far above: reliance beyond need.
+
+## t25 latent monitor for wrong answers, released SIM-CODI GPT-2 on GSM8K (scripts/necessity/sim_monitor.py), 2026-11-08, before computing any t25 number
+Task: flag the model's wrong answers on GSM8K test (1319; SIM wrong on 800). Monitors use only what a deployed monitor sees (question,
+answer, latents), never gold. 5-fold cross-validated logistic regression, AUROC for "answer is wrong".
+- Latent monitor (L): features from SIM's own decoder on z_0..z_6: share of decoded steps whose arithmetic is self-consistent
+  (a op b = c holds), share of decoded operands found in the question or in earlier decoded results, share of z_j that reuse z_{j-1}'s
+  result, number of distinct decoded steps, repeats, whether the answer equals a decoded result.
+- Baselines: (C) answer confidence (mean and min token log-probability of the generated answer, first-token probability);
+  (Q) question only (length, count of numbers); (C+Q).
+- Combined (L+C+Q).
+- Not a monitor, reported as a ceiling: the gold-based "trace has a wrong intermediate" check (t22: .85 of wrong vs .29 of right).
+Predictions: L >= .65; C ~ .70 (the strongest single baseline); L+C+Q above C+Q by >= .03 (the latents add information a monitor
+could use). Control: the same latent features from SIM's decoder applied to released CODI's latents predict CODI's errors no better
+than its Q baseline (within .03). If L+C+Q - C+Q < .03, the readable trace adds nothing a confidence monitor lacks.
