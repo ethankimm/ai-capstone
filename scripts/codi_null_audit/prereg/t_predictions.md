@@ -195,3 +195,133 @@ answer, latents), never gold. 5-fold cross-validated logistic regression, AUROC 
 Predictions: L >= .65; C ~ .70 (the strongest single baseline); L+C+Q above C+Q by >= .03 (the latents add information a monitor
 could use). Control: the same latent features from SIM's decoder applied to released CODI's latents predict CODI's errors no better
 than its Q baseline (within .03). If L+C+Q - C+Q < .03, the readable trace adds nothing a confidence monitor lacks.
+
+## t26 hop count (hop-limited recomputation), scripts/necessity/hops.py, 2026-11-09 21:00 PST, before any t26 output
+Question: how many recurrent edges (final layer of a pass -> input of the next pass, incl. question -> z_0) does the information that
+changes the answer cross? Attention moves information between positions at the same layer and adds no layers, so serial depth beyond
+one pass = recurrent hops. The registered input-only check (t15/t17/t22) misses hops linked through attention; this counts them.
+Method. Minimal pair: recipient R, donor D = R with one number edited (RuleChain: the start value or one number of rule i, same digit
+count, chosen so v_i changes, all values in 0..99 and the answer changes; GSM8K: the 1471 twin candidates of t22, one question number
+changed). Only z vectors move between runs, never keys/values, so equal token length is not needed.
+  M_0 = D's question with every latent input z_s set to R's natural z_s (donor info can reach the answer only with 0 recurrent hops).
+  M_n = D's question with z_s set to the natural z_s produced inside M_{n-1} (<= n hops). M_6 = D's own run (checked exactly).
+  F_n = share of qualified pairs (R right, D right) whose M_n answer = D's answer; also share = R's answer, and neither.
+  hops*(pair) = smallest n with the answer = D's from n on. Grouped by s = rule steps from the edit to the answer (start: L; rule i:
+  L - i + 1; GSM8K: chain_len - step).
+Models: RuleChain valid L2-L6: gated, sim (start-last), startlast, relay (lr-3e-3, start-first), stab, simsf (SIM start-first);
+GSM8K test twins: released CODI (zen-E), released SIM-CODI, grid Coconut (connordilgren). Cap 80 recipients per (level, edit) cell.
+Predictions (thresholds: "uses n hops" = F_n >= .9 and F_{n-1} < .9):
+- gated: hops* rises with s: start edit L-1 hops, rule i edit L-1-i (rule L: 0), on >= .8 of qualified pairs within +-1. F_0 <= .1 for
+  s >= 3.
+- sim (start-last): hops* rises with s, within +-1 of L-i for rule i (start and rule 1: L-1); F_0 <= .1 for s >= 3.
+- simsf: rises with s for start / early-rule edits (t21: one step per pass), but less than sim because prefill can run part of the chain.
+- startlast: no rise with s. F_1 >= .9 in every s bin with n >= 20; F_2 - F_1 <= .05. F_0 >= .4 at L2-L3 (pause control: most of the gain
+  needs no recurrence). Mean hops* <= 1.2 at every level.
+- relay: hops* <= 1 on >= .9 of pairs (one value computed in the question pass, copied); no rise with s.
+- stab: F_0 >= .9 in every bin (latents ignored).
+- GSM8K CODI and Coconut: F_1 >= .9 overall; F_2 - F_1 <= .05; no rise of hops* with s (slots filled from the question, not read by later
+  slots). Low confidence: Dilgren's forward-chaining reading predicts F_2 - F_1 > .05 at s >= 3. If so, report attention-linked depth.
+- GSM8K SIM: same as GSM8K CODI (t22: not a recurrent chain), low confidence.
+Necessity rule, fixed now: single-pass reach r = largest level with matched no-latent accuracy >= .5 (start-last CODI-0: r = 2;
+start-first stabilised CODI-0: r = 5). A violation = a model with hops* = 0 on >= .2 of qualified pairs with s > r (correct answers that
+track an edit needing more steps than one pass, without crossing a recurrent edge). Predicted: no violation in any model.
+Checks: M_6 answers = D's clean answers on every pair; feeding a run its own natural z changes no answer (smoke).
+t26 amendment, 2026-11-09 21:00 PST, after the gated smoke only (L3, n = 14): the gated formula above ignores protocol 12.1's correction
+(the pass reading rule L-1 needs one more pass before the answer sees it). The derivation then gives L-i hops for rule i (i <= L-1),
+L-1 for the start value, 0 for rule L. The registered prediction (L-1-i) is kept and scored as written; this line only records the error.
+
+## t27 follow-ups to t26 (post hoc: designed after reading t26), 2026-11-09 22:05 PST, before any t27 output
+t27a longer GSM8K edits (scripts/necessity/gsm8k_long_twins.py, 1305 new twins with s >= 4, disjoint from t22's; hops.py with CANDS).
+  Question: does the GSM8K staircase (t26: mean hops 1.3 / 2.0 / 2.2-2.5 at s = 2 / 3 / 4) keep rising or level off?
+  Prediction: it levels off: mean hops at s = 5-6 within .5 of s = 4, and below s - 1.5, for CODI, SIM and Coconut. Low confidence.
+t27b item-level necessity (scripts/necessity/hops_ref.py): matched CODI-0 (start-last CODI-0 for gated / sim / startlast; stabilised
+  CODI-0 for relay / stab / simsf) answers each qualified t26 donor question. Corrected rule (replaces t26's population threshold, which
+  flagged stab at s = 6): violation = hops* = 0 on >= .2 of qualified pairs whose donor CODI-0 answers wrong (the edited item is beyond
+  one no-latent pass for this recipe), in cells with n >= 20. Prediction: no violation in any model; stab's s = 6 flag disappears
+  because its zero-hop pairs are ones CODI-0 also solves. The t26 rule's result is still reported as registered.
+t27c memorisation (hops_ref.py, 500 train items per level vs valid): stabilised CODI and CODI-0, start-last CODI and CODI-0.
+  Prediction: train - valid gap <= .10 at every level for all four (12 epochs over 190k items, unlike round 1's 40 over 100k).
+
+## t28 SIM-CODI on GSM8K: steps in parallel or chained? (scripts/necessity/sim_parallel.py), 2026-11-09 23:05 PST, before any t28 output
+Released SIM-CODI, SIM's qualified t26 + t27a GSM8K pairs (A recipient, B donor). B's changed steps split into direct (uses the
+edited number, no earlier changed step) and dependent (uses an earlier changed step's result). SIM's own decoder on every latent input
+z_0..z_5; a step is read if ANY latent decodes to B's value (no assumption about which latent holds which step). Conditions: refresh 0
+(A's latents: floor), refresh 1 (<= 1 loop crossing), refresh 2 (<= 2), B's own run (ceiling).
+Hypothesis (from t22 / t26): SIM's step labels yield readable side outputs computed from the question, not a chain.
+Prediction: dependent steps read at refresh 1 >= .7 x their rate in B's own run (parallel). Refuted (chain) if refresh 1 <= .4 x own
+and refresh 2 >= .7 x own. Direct steps: refresh 1 >= .8 x own under both readings. Floor: refresh 0 <= .1 for both kinds.
+Low confidence: t26 shows SIM's ANSWER needs ~2 hops at depth 3-4, which a parallel trace would not explain on its own.
+
+## t28b SIM-CODI readability by crossings needed (sim_parallel.py, all refreshes 0-6, exact dependency depth), 2026-11-09 23:40 PST, after t28, before any t28b output
+Post hoc extension of t28 for a figure. Each changed step of B gets depth d = 1 (uses only the edited number) or 1 + the largest depth of
+the changed steps it uses: the loop crossings a chain needs before its value can sit in a latent input. Readable at refresh n = any latent
+decodes to B's value. Prediction, among steps readable in B's own run: for d = 1-3 (cells with n >= 20), readable share at refresh d-1
+<= .3 and at refresh d >= .8 (a switch exactly when the crossing becomes available); refresh 6 latents equal B's own exactly.
+Readable in own run falls with d (t28: .85 / .63 / .34 by chain position).
+t28b negative controls, added 2026-11-09 23:50 PST, before any t28b output (computed offline from the t28b decodes):
+- Chance: the same decoded latents scored against B's values of a different pair (same depth, pair order shifted by one). Prediction:
+  chance-readable <= .10 at every refresh and depth, and below the real rate at refresh >= d by >= .5.
+- Stale value: at refresh d-1, among steps readable in B's own run, the share where some latent decodes A's value for that step.
+  Prediction: >= .5 (the latent holds the chain's outdated value), falling to <= .15 at refresh d.
+
+## t28c negative-model control: released CODI's latents through SIM's decoder (sim_parallel.py, LATENT=codi), 2026-11-09 23:55 PST, before any t28c output
+Same design as t28b on CODI's qualified t26 + t27a pairs. CODI also uses ~2 hops (t26), but t22d found SIM's decoder reads CODI's
+latents at <= .2. Prediction: readable in CODI's own run <= .25 for depth 1 and <= .15 for depth >= 2 (same depth, not legible to a
+decoder trained on another model); refresh 6 latents equal CODI's own exactly.
+
+## t29 RuleChain readability by loop crossings (scripts/necessity/rc_readability.py), 2026-11-10 00:20 PST, before any t29 output
+Probe version of t28b on the qualified t26 RuleChain pairs, six models. Linear probes per (level, latent site, value index) on 800 train
+items, validated on 200; a site is legible if its probe validates >= .5; a value is read if ANY legible site predicts it. d = crossings
+a chain needs (edit at rule i, value after rule k: k - max(i,1) + 1). Controls: stale A value, chance (another pair's value).
+Predictions (among values read in B's own run, d cells with >= 20 such values):
+- gated, sim, simsf: switch at refresh d or d+1, never early: read at refresh d-1 <= .3, at refresh d+1 >= .8; stale A >= .5 at d-1.
+- startlast, relay: no staircase: read at refresh 2 >= .8 for every d (one value handed over, recomputed rather than chained).
+- stab: legible sites rare; any readable values are read at refresh <= 1 (computed in the question pass).
+- chance <= .10 everywhere.
+
+## t30 GSM8K readability by vocabulary projection (scripts/necessity/gsm8k_lens.py), released CODI, Coconut, SIM-CODI, 2026-11-10 00:20 PST, before any t30 output
+t28b's design with the readout replaced by top-10 tokens of each latent under the output head (single-token values only).
+Predictions: read in own run at depth 1 >= .3 for all three (Dilgren & Wiegreffe find traces by vocabulary projection), lower at depth
+>= 2. Among values read in the own run: switch at refresh d for d <= 2 (read at refresh d-1 <= .3, at refresh d >= .8), with stale A
+>= .4 at refresh d-1, for CODI and Coconut as for SIM's decoder in t28b. Low confidence: the lens may read values that sit in a latent's
+input but are not chained. chance <= .10.
+
+## Scoring t26-t30, 2026-11-11 (after all outputs; numbers from codi_audit_artifacts/t26, run records of 2026-11-11)
+t26 hop count (thresholds as registered):
+- gated: held. hops* within +-1 of the registered L-1-i on 1.00 of 1704 pairs (the amended L-i fits exactly); F_0 = 0 at s >= 3.
+- sim: held. Within +-1 of L-i on 1.00 of 1655; F_0 = 0 at s >= 3.
+- simsf: rise with s held (mean .62 / 1.99 / 3.00 / 4.00 / 5.01 / 5.98 at s = 1-6); "less than sim" missed (equal to sim at s >= 2).
+- startlast: missed. F_1 .97 / .91 / .60 / .79 at s = 1-4 (not >= .9 everywhere); F_0 at L2-L3 .29 (not >= .4); mean hops by level
+  .68 / 1.19 / 1.03 / 1.07 / 1.27 (L6 above 1.2). No rise with s held (1.14 / 1.52 / 1.26 / 1.56 at s = 2-5).
+- relay: missed narrowly. hops* <= 1 on .86 (not >= .9); mean hops rises mildly with level (.68 -> 1.35).
+- stab: missed. F_0 .95 / .94 / .89 / .85 / .83 / .76 at s = 1-6 (not >= .9 from s = 3); F_1 >= .98 everywhere (a small one-hop share).
+- GSM8K CODI / SIM / Coconut: missed. F_1 = .61 / .55 / .56 (not >= .9), F_2 = .95 / .89 / .97, mean hops rises with s (CODI 1.26 / 1.98 /
+  2.22 at s = 2-4). The low-confidence alternative (forward chaining across slots, F_2 - F_1 > .05) held.
+- Necessity rule (population threshold): missed. stab has hops* = 0 on .76 of s = 6 pairs (s > r = 5). Replaced in t27b.
+- Checks: M_6 = donor run on every pair run, all models; own write-back changes no answer (smokes).
+t27a: held for CODI (s = 4 / 5: 1.87 / 1.75) and SIM (2.05 / 1.89), both below s - 1.5. Coconut 1.56 / .75 (s = 5 n = 8): drop of .81
+  misses "within .5". Dependency-depth rebinning (post hoc): depth 4 means CODI 2.18 (n = 61), SIM 2.30 (57), Coconut 1.68 (19).
+t27b: held for start-last models (zero-hop share 0 / 0 / .012 for gated / sim / startlast on pairs with s >= 2 whose donor CODI-0 gets
+  wrong); missed for start-first stab (.76 zero-hop on CODI-0-hard donors, s >= 2; .80 with the trivial s = 1 rows). Single-pass reach is model-specific in start-first data, so the item-level rule is not identifiable
+  there. s = 1 rows are trivial and excluded.
+t27c: held except stabilised CODI at L7 (train - valid .13).
+t28: chain, parallel refuted as registered. Dependent steps: refresh 1 .12 = .25 x own (.49), refresh 2 .43 = .89 x own. Direct steps:
+  refresh 1 .83 = .97 x own (held). Floor <= .1: dependent .07 held, direct .11 missed narrowly.
+t28b: switch at refresh d held for d = 1, 2 (refresh d-1 .12 / .20, refresh d .96 / .96); missed for d = 3 (refresh 2 already .66;
+  refresh 3 .99). Own-readable falls with d (.85 / .62 / .32) held; refresh 6 = own on 392 / 392 held. Chance <= .10 held (pooled over
+  depths, on the own-readable items, max .07). Stale A at d-1 >= .5: held for d = 1, 2 (.95 / .76), missed for d = 3 (.24, the early
+  switch); <= .15 at refresh d held.
+t28c: held. CODI's own-run readable share through SIM's decoder .24 (d = 1), .10 / .08 / .07 (d = 2-4); refresh 6 = own on 417 / 417.
+t29 (among values read in B's own run, cells n >= 20):
+- gated, sim, simsf: held. Read at refresh d-1 <= .07, at d+1 1.00; stale A at d-1 .98-.99 / .78-.97 / .74-.89; chance <= .03.
+  Post hoc split by edit type (offline, 2026-11-11): gated reads 1.00 at refresh d on rule edits and .20 on start edits (one more
+  crossing than d assumes); sim / simsf read ~.70 at d for every edit type (their chain runs one crossing later, as in their hop counts).
+- relay: held. Read at refresh 1 .93-.99 for d = 1-4 (one value, one crossing).
+- startlast: not testable beyond d = 1. Only v_1 at L2 is linearly legible (read at refresh 1, 1.00); no legible site for d >= 2.
+- stab: held. No legible site at any level.
+t30 (vocabulary projection, top 10):
+- Own-run readable at depth 1 >= .3: CODI .37 held, SIM .25 missed, Coconut .95 but see chance.
+- Switch at refresh d for d <= 2: CODI d = 1 held (.11 -> .99), d = 2 missed narrowly at d-1 (.37 > .3; .94 at d); SIM held (.07 -> .87,
+  .16 -> .85). Stale A >= .4 at d-1: CODI .68 / .46, SIM .48 / .49 held.
+- Chance <= .10: CODI .03, SIM .03 held; Coconut .27-.34 missed, so Coconut's vocabulary-projection results are not interpretable
+  (its top tokens are dominated by small numbers).

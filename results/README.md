@@ -302,3 +302,10 @@ seed, and run seed all match. Convention: `.claude/skills/record-run/SKILL.md`.
 | [20261108-233038_codi_v2-r1-samelevel-mean-ablation](20261108-233038_codi_v2-r1-samelevel-mean-ablation/) | codi | gpt2 | test (n=2500) | 6 | 0.838 | 21 | full_run | Henning Lindig |
 | [20261108-233039_codi_v2-lr3-samelevel-mean-ablation](20261108-233039_codi_v2-lr3-samelevel-mean-ablation/) | codi | gpt2 | test (n=2500) | 6 | 0.902 | 21 | full_run | Henning Lindig |
 | [20261109-004543_codi_gsm8k-released-latent-monitor-wrong-answers](20261109-004543_codi_gsm8k-released-latent-monitor-wrong-answers/) | codi | gpt2 | test (n=1319) | 6 | - | 0 | full_run | Henning Lindig |
+| [20261112-060438_codi_v2-l1to7w-hop-count-six-models](20261112-060438_codi_v2-l1to7w-hop-count-six-models/) | codi | gpt2 | validation (n=7949) | 6 | - | 0 | full_run | Henning Lindig |
+| [20261112-060438_codi_gsm8k-released-hop-count](20261112-060438_codi_gsm8k-released-hop-count/) | codi | gpt2 | test (n=809) | 6 | - | 0 | full_run | Henning Lindig |
+| [20261112-060438_coconut_gsm8k-grid-hop-count](20261112-060438_coconut_gsm8k-grid-hop-count/) | coconut | gpt2 | test (n=262) | 6 | - | 0 | full_run | Henning Lindig |
+| [20261112-060438_codi_gsm8k-released-sim-readability-by-refresh](20261112-060438_codi_gsm8k-released-sim-readability-by-refresh/) | codi | gpt2 | test (n=2314) | 6 | - | 0 | full_run | Henning Lindig |
+| [20261112-060438_codi_v2-l1to7w-probe-readability-by-refresh](20261112-060438_codi_v2-l1to7w-probe-readability-by-refresh/) | codi | gpt2 | validation (n=13699) | 6 | - | 0 | full_run | Henning Lindig |
+| [20261112-060438_codi_gsm8k-released-lens-readability-by-refresh](20261112-060438_codi_gsm8k-released-lens-readability-by-refresh/) | codi | gpt2 | test (n=2263) | 6 | - | 0 | full_run | Henning Lindig |
+| [20261112-060438_coconut_gsm8k-grid-lens-readability-by-refresh](20261112-060438_coconut_gsm8k-grid-lens-readability-by-refresh/) | coconut | gpt2 | test (n=690) | 6 | - | 0 | full_run | Henning Lindig |

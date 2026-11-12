@@ -1,0 +1,192 @@
+{
+  "run_id": "20261112-060438_codi_gsm8k-released-sim-readability-by-refresh",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "hf:internlm/SIM_COT-GPT2-CODI (grid_checkpoints/simcot_gpt2_codi) (latents + its training-only step decoder); t28c latents from hf:zen-E/CODI-gpt2@fd641b3",
+    "n_params": 144499200
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 2314,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "extra": {
+      "unit": "changed steps of B in qualified t26 + t27a pairs; 'correct' = readable in B's own run",
+      "t28b_sim": {
+        "refreshK_equals_own": "392 / 392",
+        "by_depth": {
+          "1": {
+            "n": 413,
+            "own_rate": 0.85,
+            "given_own": [
+              0.12,
+              0.96,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "2": {
+            "n": 392,
+            "own_rate": 0.625,
+            "given_own": [
+              0.069,
+              0.2,
+              0.959,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "3": {
+            "n": 221,
+            "own_rate": 0.321,
+            "given_own": [
+              0.127,
+              0.254,
+              0.662,
+              0.986,
+              0.986,
+              1.0,
+              1.0
+            ]
+          },
+          "4": {
+            "n": 80,
+            "own_rate": 0.275,
+            "given_own": [
+              0.091,
+              0.091,
+              0.545,
+              0.955,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "5": {
+            "n": 15,
+            "own_rate": 0.467,
+            "given_own": [
+              0.0,
+              0.143,
+              0.429,
+              1.0,
+              0.857,
+              1.0,
+              1.0
+            ]
+          }
+        }
+      },
+      "t28c_codi_latents": {
+        "refreshK_equals_own": "417 / 417",
+        "by_depth": {
+          "1": {
+            "n": 441,
+            "own_rate": 0.238,
+            "given_own": [
+              0.238,
+              0.886,
+              0.952,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "2": {
+            "n": 428,
+            "own_rate": 0.098,
+            "given_own": [
+              0.286,
+              0.429,
+              0.857,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "3": {
+            "n": 221,
+            "own_rate": 0.077,
+            "given_own": [
+              0.471,
+              0.765,
+              0.882,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "4": {
+            "n": 88,
+            "own_rate": 0.068,
+            "given_own": [
+              0.5,
+              0.5,
+              0.833,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "5": {
+            "n": 15,
+            "own_rate": 0.067,
+            "given_own": [
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          }
+        }
+      },
+      "t28": {
+        "direct": {
+          "n": 413,
+          "refresh0": 0.114,
+          "refresh1": 0.828,
+          "refresh2": 0.852,
+          "own": 0.85
+        },
+        "dependent": {
+          "n": 708,
+          "refresh0": 0.066,
+          "refresh1": 0.121,
+          "refresh2": 0.434,
+          "own": 0.487
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "scripts": "scripts/necessity/sim_parallel.py (t28 / t28b; LATENT=codi for t28c)",
+    "readout": "SIM's decoder, greedy, any latent z_0..z_5",
+    "prereg": "t_predictions.md t28, t28b (+ controls), t28c (+ scoring 2026-11-11)"
+  },
+  "seed": 0,
+  "hardware": "MacBook M4 Pro 24 GB, MPS (fp32, batch 1 for GSM8K)",
+  "author": "Henning Lindig",
+  "notes": "t28 SIM-CODI decoder readability",
+  "timestamp_utc": "2026-11-12T06:04:38.459229+00:00",
+  "git": {
+    "commit": "89b8b53",
+    "dirty": true
+  }
+}

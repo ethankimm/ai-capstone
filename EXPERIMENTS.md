@@ -12480,3 +12480,132 @@ At <bot>: v_1 .44-.52 for both SIM models; v_{L-1} at <bot> .15-.36 for start-fi
 **Gotchas hit:** A first post hoc combination concatenated raw features (768+ dims under PCA, C = 0.1) and scored below confidence alone (.884 < .921) because the 5 confidence features were swamped; replaced by stacking out-of-fold probe logits with the confidence features. Both versions are in the outputs (`prereg/t25/`).
 **Caveats:** Raw-latent probe and stacking were added after the pre-registered result. One checkpoint per method; error detection only.
 **Next:** report as the monitor result in the paper.
+
+---
+
+## 2026-11-11 — Hop count on six RuleChain CODI models: rule-gated and SIM-CODI cross one loop per rule (gated rule edits exactly L - i hops), plain CODI and the relay model about one hop at every chain length, stabilised CODI about zero; M_6 reproduces the donor run on every pair (codi, run_id: 20261112-060438_codi_v2-l1to7w-hop-count-six-models)
+
+**Goal:** t26 (pre-registered, t_predictions.md t26): count the loop crossings (final layer of a pass -> next latent input, including question -> z_0) that the information changing the answer actually needs. Attention adds no layers, so serial depth beyond one pass equals these crossings. Unlike the input-only check (t15), the count also covers values linked through attention.
+**Mechanism / model:** six RuleChain CODI models (GPT-2 small, one seed each): gated (codi_runs_l1to7w_startlast_gated/codi/run/checkpoint-17820 (record 20261107-204814)), sim (codi_runs_l1to7w_startlast_sim/codi/run/checkpoint-16335 (record 20261107-225603)), simsf (codi_runs_l1to7w_sim/codi/run/checkpoint-17820 (SIM-CODI start first)), startlast (codi_runs_l1to7w_startlast/codi/run/checkpoint-17820 (record 20261106-083843)), relay (lr-3e-3 L1-7w CODI, start first (record 20261103-193425)), stab (codi_runs_l1to7w_stab/codi/run/checkpoint-17820 (record 20261105-044444)).
+**Data:** valid L2-L6. Minimal pairs: recipient A, donor B = A with one number edited (start value or one constant of rule i), same digit count, answer changes. Qualified = both answered right. n = gated 1704, sim 1655, simsf 1636, startlast 511, relay 1291, stab 1152.
+**Command:** `scripts/necessity/hops.py <model> mps <out>` (queue `codi_audit_artifacts/t26/queue.sh`); t27b / t27c `hops_ref.py <startlast0|stab0|startlast|stab>`.
+**Method:** M_0 = B's question with every latent input set to A's natural latents; M_n = B's question with latent inputs taken from M_(n-1). After n refreshes the first n inputs equal B's own. hops = first n from which the answer stays B's. Grouped by s = rules from the edit to the answer.
+**Headline results** (mean hops at s = 1-6):
+- gated 0.0, 1.144, 2.177, 3.224, 4.318, 5.445; sim 0.003, 1.968, 2.977, 3.954, 4.955, 5.932; simsf 0.619, 1.988, 3.003, 4.004, 5.009, 5.979.
+- startlast 0.088, 1.14, 1.522, 1.256, 1.556, 3.0; relay 0.02, 1.135, 1.182, 1.273, 1.405, 1.697; stab 0.057, 0.07, 0.122, 0.203, 0.172, 0.259.
+- M_6 = donor run on every pair in every model.
+- t27b (post hoc, item-level necessity): on donors the matched CODI-0 gets wrong, zero-hop share gated 0.0, sim 0.0, simsf 0.0, startlast 0.012, relay 0.0, stab 0.763.
+- t27c train - valid gap <= .10 everywhere except stabilised CODI at L7 (.13).
+**Predictions:** scored in t_predictions.md (2026-11-11). Held: gated (within +-1 of the registered formula on 1.00; amended formula L - i exact), sim, simsf rise. Missed: startlast (F_1 .60 at s = 3, F_0 .29 at L2-L3), relay narrowly (hops <= 1 on .86), stab (F_0 falls to .76 at s = 6), the population necessity rule (flags stab), and the t27b rule in start-first data (stab .76 at s >= 2).
+**Interpretation:** Only models whose training gives each pass a job use one crossing per step. Plain CODI hands over about one value regardless of chain length, and the stabilised model barely uses its latents. The item-level necessity rule works in start-last data (no model answers CODI-0-hard items without crossings) but not in start-first data, where single-pass reach differs between the latent model and its CODI-0, so it is not identifiable there.
+**Gotchas hit:** the registered gated formula was off by one (amendment before outputs). s = 1 rows are trivial (the edit is the last rule).
+**Caveats:** one seed per model; valid split; hops is an upper bound on serial computation steps (copies count; see the t29 record for readout timing).
+**Next:** paper figures (scripts/necessity/paper_figures.py, Fig 2-3).
+
+---
+
+## 2026-11-11 — GSM8K hop count, released CODI and released SIM-CODI: hop counts rise with dependency depth but by less than one per step (depth 2 / 3 / 4: codi 1.256 (n=250), 1.957 (n=93), 2.18 (n=61); sim 1.311 (n=225), 2.02 (n=99), 2.298 (n=57)); M_6 = donor run on every pair (run_id: 20261112-060438_codi_gsm8k-released-hop-count)
+
+**Goal:** t26 / t27a (pre-registered): how many loop crossings does an answer change on GSM8K need, and does the count keep rising for longer edits?
+**Mechanism / model:** gsm8k_codi: hf:zen-E/CODI-gpt2@fd641b3; gsm8k_sim: hf:internlm/SIM_COT-GPT2-CODI (grid_checkpoints/simcot_gpt2_codi). GPT-2 small, fp32 MPS, batch 1.
+**Data:** GSM8K-Aug test. A = test question; B = A with one number shifted, gold recomputed by re-executing A's gold solution (t22 candidates, 1,471; t27a long twins with >= 4 steps, 1,305). A pair is used for a model only if that model answers both right: gsm8k_codi 319 + 98, gsm8k_sim 303 + 89.
+**Command:** `scripts/necessity/hops.py <model> mps <out>`; t27a with `CANDS=t26/gsm8k_long_twins.json`.
+**Headline results:**
+- t26 F_0 / F_1 / F_2: codi 0.041 / 0.605 / 0.947; sim 0.059 / 0.548 / 0.894.
+- Mean hops by dependency depth (bins n >= 15): codi 1.256 (n=250), 1.957 (n=93), 2.18 (n=61); sim 1.311 (n=225), 2.02 (n=99), 2.298 (n=57). Depth equals listed steps on 86-90% of pairs.
+- Hop distribution at depth 4: 2 and 3+ hops roughly split for CODI / SIM (Fig 4); Coconut's depth-4 bin is small.
+**Predictions:** missed: F_1 >= .9 and no rise with s (registered "slots filled from the question"). The low-confidence alternative, forward chaining across slots, held. t27a "levels off": held for CODI and SIM, Coconut missed on n = 8.
+**Interpretation:** Released GSM8K latent models chain about two crossings: values are computed, stored in a slot and read back by later passes through attention, so a check patching only the recurrent input (t22: input-only <= .04) misses them. From depth 3 on, steps are merged into fewer crossings.
+**Gotchas hit:** twin pairs need s >= 2, so depth 1 is empty. The neither-A-nor-B rate at M_0 is 8-12%.
+**Caveats:** released checkpoints only, one each; small n at depth >= 4; hops is an upper bound on serial computation steps.
+**Next:** paper figures (Fig 3b, Fig 4).
+
+---
+
+## 2026-11-11 — GSM8K hop count, grid Coconut: hop counts rise with dependency depth but by less than one per step (depth 2 / 3 / 4: coconut 1.376 (n=178), 1.722 (n=54), 1.684 (n=19)); M_6 = donor run on every pair (run_id: 20261112-060438_coconut_gsm8k-grid-hop-count)
+
+**Goal:** t26 / t27a (pre-registered): how many loop crossings does an answer change on GSM8K need, and does the count keep rising for longer edits?
+**Mechanism / model:** gsm8k_coconut: connordilgren grid Coconut GPT-2 GSM8K (grid_checkpoints). GPT-2 small, fp32 MPS, batch 1.
+**Data:** GSM8K-Aug test. A = test question; B = A with one number shifted, gold recomputed by re-executing A's gold solution (t22 candidates, 1,471; t27a long twins with >= 4 steps, 1,305). A pair is used for a model only if that model answers both right: gsm8k_coconut 220 + 42.
+**Command:** `scripts/necessity/hops.py <model> mps <out>`; t27a with `CANDS=t26/gsm8k_long_twins.json`.
+**Headline results:**
+- t26 F_0 / F_1 / F_2: coconut 0.018 / 0.564 / 0.968.
+- Mean hops by dependency depth (bins n >= 15): coconut 1.376 (n=178), 1.722 (n=54), 1.684 (n=19). Depth equals listed steps on 86-90% of pairs.
+- Hop distribution at depth 4: 2 and 3+ hops roughly split for CODI / SIM (Fig 4); Coconut's depth-4 bin is small.
+**Predictions:** missed: F_1 >= .9 and no rise with s (registered "slots filled from the question"). The low-confidence alternative, forward chaining across slots, held. t27a "levels off": held for CODI and SIM, Coconut missed on n = 8.
+**Interpretation:** Released GSM8K latent models chain about two crossings: values are computed, stored in a slot and read back by later passes through attention, so a check patching only the recurrent input (t22: input-only <= .04) misses them. From depth 3 on, steps are merged into fewer crossings.
+**Gotchas hit:** twin pairs need s >= 2, so depth 1 is empty. The neither-A-nor-B rate at M_0 is 8-12%.
+**Caveats:** released checkpoints only, one each; small n at depth >= 4; hops is an upper bound on serial computation steps.
+**Next:** paper figures (Fig 3b, Fig 4).
+
+---
+
+## 2026-11-11 — SIM-CODI on GSM8K chains its steps: a step's value becomes decodable exactly at the refresh where its loop crossings exist (depth 1 / 2: .12 -> .96, .20 -> .96), depth 3 arrives one refresh early (.66), and the stale value sits in the latents until then; CODI's latents are not legible to SIM's decoder (codi, run_id: 20261112-060438_codi_gsm8k-released-sim-readability-by-refresh)
+
+**Goal:** t28 (pre-registered): are SIM-CODI's readable GSM8K steps computed in parallel from the question, or chained through the loop? t28b / t28c (pre-registered, post hoc design): readability at every refresh by crossings needed, with chance, stale-value and negative-model controls.
+**Mechanism / model:** released SIM-CODI GPT-2 and its training-only step decoder; t28c decodes released CODI's latents with SIM's decoder.
+**Data:** SIM's (t28c: CODI's) qualified t26 + t27a GSM8K pairs. Each changed step of B gets depth d = crossings a chain needs before its value can sit in a latent.
+**Command:** `scripts/necessity/sim_parallel.py mps <out>`; `LATENT=codi` for t28c.
+**Headline results:**
+- t28: dependent steps read at refresh 1 / 2 / own 0.121 / 0.434 / 0.487; direct 0.828 / 0.852 / 0.85. Chain, not parallel.
+- t28b, readable in own run by depth: 0.85, 0.625, 0.321, 0.275, 0.467. Given own-readable, B by refresh 0-6: d1 0.12 0.96 1.0 1.0 1.0 1.0 1.0; d2 0.069 0.2 0.959 1.0 1.0 1.0 1.0; d3 0.127 0.254 0.662 0.986 0.986 1.0 1.0; d4 0.091 0.091 0.545 0.955 1.0 1.0 1.0.
+- Stale A at refresh d-1: .95 / .76 (d = 1, 2), then <= .14. Chance (another pair's value, same depth, own-readable items) <= .07.
+- t28c, CODI's own-run readable share: 0.238, 0.098, 0.077, 0.068, 0.067. Refresh 6 = own: SIM 392 / 392, CODI 417 / 417.
+**Predictions:** t28 parallel hypothesis refuted as registered; direct steps held; direct floor .11 missed narrowly. t28b held for d = 1, 2, missed for d = 3 (early switch). t28c held.
+**Interpretation:** SIM-CODI's readable GSM8K trace is the output of the loop, not a side readout of the question: values appear when their crossings appear, matching its hop count (about 2). Beyond two dependent steps, steps merge (early arrival) and legibility drops (.32 at depth 3). Legibility is model-specific: CODI uses the same depth but its latents are not readable with SIM's decoder.
+**Gotchas hit:** the first version of t28 used chain position, not dependency depth; t28b fixed depth exactly.
+**Caveats:** one checkpoint; rates conditioned on own-run readability; depth 4 has few readable items.
+**Next:** Fig 5 (paper_figures.py).
+
+---
+
+## 2026-11-11 — RuleChain readability by refresh (linear probes): in rule-gated and SIM-CODI every intermediate value becomes readable when its loop crossings exist, never before (<= .07 at refresh d-1, 1.00 at d+1), with the stale value held until then; relay hands over one value at refresh 1; start-last and stabilised latents are not linearly legible (codi, run_id: 20261112-060438_codi_v2-l1to7w-probe-readability-by-refresh)
+
+**Goal:** t29 (pre-registered): the probe version of t28b on RuleChain, six models. Does a value appear in the latents exactly when the crossings it needs become available?
+**Mechanism / model:** the six t26 RuleChain models.
+**Data:** qualified t26 pairs, valid L2-L6, <= 60 per (level, edit); every intermediate value of B that differs from A's. d = crossings a chain needs (edit at rule i, value after rule k: k - max(i, 1) + 1).
+**Command:** `scripts/necessity/rc_readability.py <model> mps <out>` (queue `t26/queue_night.sh`).
+**Headline results** (among values read in B's own run; B by refresh 0-6):
+- gated: d1 0.001 0.794 1.0 1.0 1.0 1.0 1.0; d3 0.0 0.0 0.0 0.731 1.0 1.0 1.0; stale A .98-.99 before the crossing.
+- sim: d1 0.02 0.662 1.0 1.0 1.0 1.0 1.0; d3 0.008 0.008 0.024 0.747 1.0 1.0 1.0. simsf the same pattern.
+- relay: one value legible per level, read at refresh 1 for every d (.93-.99).
+- startlast: only v_1 at L2 legible; stab: no legible site. Chance <= .03 everywhere.
+- Edit-type split (post hoc): gated at refresh d: rule edits 1.00, start edits .20 (one more crossing than d assumes); sim / simsf ~.70 at d for every edit type, 1.00 at d+1.
+**Predictions:** held for gated, sim, simsf, relay, stab; startlast not testable beyond d = 1 (scored in t_predictions.md).
+**Interpretation:** In the chain models each crossing carries the next rule's value, at the time the crossing exists, so their hop counts reflect computation, not copies. The relay model's value arrives after one crossing whatever its depth, which shows the readout can detect early arrival. Legibility is model-specific: start-last CODI holds values (t15, t26) in a form linear probes cannot read.
+**Gotchas hit:** none in the run; the ~.70 at refresh d in the first summary was explained by the edit-type split, not a bug.
+**Caveats:** one seed per model; probes trained on natural latents of train items; chance computed over all items (recomputed over own-readable items: unchanged, <= .05).
+**Next:** Fig 5.
+
+---
+
+## 2026-11-11 — Vocabulary projection on released CODI and SIM-CODI: values become readable at the refresh where their crossings exist for depth <= 2 (CODI .11 -> .99 at d = 1, .37 -> .94 at d = 2), depth 3 partly early; own-run legibility low (CODI 0.37 / 0.169 / 0.137); chance <= .03 (codi, run_id: 20261112-060438_codi_gsm8k-released-lens-readability-by-refresh)
+
+**Goal:** t30 (pre-registered): t28b's readability-by-refresh design with Dilgren & Wiegreffe's readout (vocabulary projection), applicable to models without a decoder.
+**Mechanism / model:** gsm8k_codi: hf:zen-E/CODI-gpt2@fd641b3; gsm8k_sim: hf:internlm/SIM_COT-GPT2-CODI (grid_checkpoints/simcot_gpt2_codi).
+**Data:** qualified t26 + t27a GSM8K pairs; changed steps of B whose value is a single token (skipped multi-token: codi 39, sim 12).
+**Command:** `scripts/necessity/gsm8k_lens.py <model> mps <out>` (queue `t26/queue_night.sh`).
+**Headline results:**
+- codi: own-readable 0.37, 0.169, 0.137 (d = 1-3); B by refresh d1 0.106 0.988 1.0 1.0 1.0 1.0 1.0; d2 0.268 0.366 0.944 1.0 1.0 1.0 1.0; d3 0.0 0.448 0.483 0.931 1.0 1.0 1.0; stale A at d-1 0.681 / 0.465; chance max 0.028.
+- sim: own-readable 0.251, 0.274, 0.155 (d = 1-3); B by refresh d1 0.068 0.874 0.961 0.971 0.981 0.99 1.0; d2 0.028 0.16 0.849 0.981 1.0 1.0 1.0; d3 0.118 0.176 0.588 0.971 0.971 1.0 1.0; stale A at d-1 0.476 / 0.491; chance max 0.027.
+**Predictions:** CODI depth-1 own-readable .37 held, SIM .25 missed; switch at d held except CODI d = 2 at d-1 (.37 > .3); stale A held; chance held.
+**Interpretation:** The timing result of t28b holds with a readout that needs no trained decoder: values sit in the latents from the refresh where their crossings exist, with the stale value before. Legibility under the vocabulary projection is low and falls with depth, so presence at a crossing does not imply a readable value.
+**Gotchas hit:** chance originally computed over all items while B rates are over own-readable items; recomputed on the own-readable subset (2026-11-11): unchanged for CODI / SIM (<= .07), Coconut still ~.3.
+**Caveats:** single-token values only; one checkpoint per model.
+**Next:** Fig 5 uses CODI from this record; Coconut omitted.
+
+---
+
+## 2026-11-11 — Vocabulary projection on grid Coconut GSM8K fails its chance control (.27-.34): the readout is not interpretable for Coconut (coconut, run_id: 20261112-060438_coconut_gsm8k-grid-lens-readability-by-refresh)
+
+**Goal:** t30 (pre-registered): t28b's readability-by-refresh design with Dilgren & Wiegreffe's readout (vocabulary projection), applicable to models without a decoder.
+**Mechanism / model:** gsm8k_coconut: connordilgren grid Coconut GPT-2 GSM8K (grid_checkpoints).
+**Data:** qualified t26 + t27a GSM8K pairs; changed steps of B whose value is a single token (skipped multi-token: coconut 4).
+**Command:** `scripts/necessity/gsm8k_lens.py <model> mps <out>` (queue `t26/queue_night.sh`).
+**Headline results:**
+- own-readable 0.945, 0.807, 0.466, 0.724, 0.308 by depth; refresh-0 reads already 0.562 / 0.488; chance 0.322, 0.305, 0.267, 0.345, 0.231.
+**Predictions:** Chance <= .10 missed (.27-.34); the other Coconut predictions are not interpretable. Null result, recorded per the logging rule.
+**Interpretation:** Coconut's projected latents rank many small numbers in their top 10, so hits are often luck (another pair's value is 'read' ~30% of the time). No timing claim for Coconut from this readout; a probe or decoder would be needed.
+**Gotchas hit:** chance originally computed over all items while B rates are over own-readable items; recomputed on the own-readable subset (2026-11-11): unchanged for CODI / SIM (<= .07), Coconut still ~.3.
+**Caveats:** single-token values only; one checkpoint per model.
+**Next:** Fig 5 uses CODI from this record; Coconut omitted.

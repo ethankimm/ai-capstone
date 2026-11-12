@@ -1,0 +1,229 @@
+{
+  "run_id": "20261112-060438_coconut_gsm8k-grid-hop-count",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "gsm8k_coconut: connordilgren grid Coconut GPT-2 GSM8K (grid_checkpoints)",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 262,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "extra": {
+      "unit": "qualified twin pairs (both answered right), t26 twins (t22) + t27a long twins",
+      "gsm8k_coconut": {
+        "n_qualified_t26": 220,
+        "n_qualified_t27a": 42,
+        "F_t26": [
+          0.018,
+          0.564,
+          0.968,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "by_listed_steps": {
+          "2": {
+            "n": 172,
+            "hops_mean": 1.36,
+            "hops_hist": [
+              3,
+              108,
+              57,
+              4,
+              0,
+              0,
+              0
+            ],
+            "F": [
+              0.017,
+              0.645,
+              0.977,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "3": {
+            "n": 40,
+            "hops_mean": 1.85,
+            "hops_hist": [
+              0,
+              9,
+              28,
+              3,
+              0,
+              0,
+              0
+            ],
+            "F": [
+              0.0,
+              0.225,
+              0.925,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "4": {
+            "n": 40,
+            "hops_mean": 1.575,
+            "hops_hist": [
+              1,
+              17,
+              20,
+              2,
+              0,
+              0,
+              0
+            ],
+            "F": [
+              0.025,
+              0.45,
+              0.95,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "5": {
+            "n": 10,
+            "hops_mean": 0.7,
+            "hops_hist": [
+              4,
+              5,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "F": [
+              0.4,
+              0.9,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "by_dependency_depth": {
+          "2": {
+            "n": 178,
+            "hops_mean": 1.376,
+            "hops_hist": [
+              3,
+              110,
+              60,
+              5,
+              0,
+              0,
+              0
+            ],
+            "F": [
+              0.017,
+              0.635,
+              0.972,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "3": {
+            "n": 54,
+            "hops_mean": 1.722,
+            "hops_hist": [
+              1,
+              17,
+              32,
+              4,
+              0,
+              0,
+              0
+            ],
+            "F": [
+              0.019,
+              0.333,
+              0.926,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "4": {
+            "n": 19,
+            "hops_mean": 1.684,
+            "hops_hist": [
+              1,
+              4,
+              14,
+              0,
+              0,
+              0,
+              0
+            ],
+            "F": [
+              0.053,
+              0.263,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "5": {
+            "n": 6,
+            "hops_mean": 0.5,
+            "hops_hist": [
+              3,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "F": [
+              0.5,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "scripts": "scripts/necessity/hops.py (t26; t27a with CANDS = t26/gsm8k_long_twins.json from gsm8k_long_twins.py)",
+    "depth": "dependency depth from the gold solution (export: scratch export_depth.py -> t26/gsm8k_depth_hops.json)",
+    "prereg": "t_predictions.md t26, t27a (+ scoring 2026-11-11)"
+  },
+  "seed": 0,
+  "hardware": "MacBook M4 Pro 24 GB, MPS (fp32, batch 1 for GSM8K)",
+  "author": "Henning Lindig",
+  "notes": "t26 GSM8K hop count (coconut)",
+  "timestamp_utc": "2026-11-12T06:04:38.383841+00:00",
+  "git": {
+    "commit": "89b8b53",
+    "dirty": true
+  }
+}

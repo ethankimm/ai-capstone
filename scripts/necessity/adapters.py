@@ -63,8 +63,11 @@ class RuleChainCODI:
         self.h, self.RuleGate, self.PadInvariant, self.qpos = harness, RuleGate, PadInvariant, question_position_ids
         ck = dict(gated='codi_runs_l1to7w_startlast_gated/codi/run/checkpoint-17820', sim='codi_runs_l1to7w_startlast_sim/codi/run/checkpoint-16335',
                   simsf='codi_runs_l1to7w_sim/codi/run/checkpoint-17820',
-                  startlast='codi_runs_l1to7w_startlast/codi/run/checkpoint-17820', stab='codi_runs_l1to7w_stab/codi/run/checkpoint-17820')
+                  startlast='codi_runs_l1to7w_startlast/codi/run/checkpoint-17820', stab='codi_runs_l1to7w_stab/codi/run/checkpoint-17820',
+                  # matched no-latent references (selected checkpoints of 20261106-052644 / 20261105-024111): run with 0 latent passes
+                  startlast0='codi_runs_l1to7w_startlast/codi0/run/checkpoint-17820', stab0='codi_runs_l1to7w_stab/codi0/run/checkpoint-17820')
         path = harness.CK['lr3'] if model_key == 'relay' else str(BASE / ck[model_key])
+        if model_key.endswith('0'): self.n_latents = 0
         self.m, self.tok, _ = harness.load(path, self.n_latents, device); self.m.eval()
         self.dev = device; self.gate = model_key == 'gated'; self.body = harness.body_of(self.m)
         self.dec = torch.tensor([self.m.eot_id] + self.tok.encode('The answer is:'), device=device)
@@ -120,7 +123,9 @@ class GSM8KCODI:
     batch_size = 1
     n_latents = 6
 
-    def __init__(self, device):
+    def __init__(self, device, ckpt=None):
+        """ckpt: default released zen-E/CODI-gpt2; BASE/grid_checkpoints/simcot_gpt2_codi = released SIM-CODI (same student, plus a
+        training-only step decoder whose weights are ignored here)."""
         _offline()
         sys.path.insert(0, str(REPO / 'scripts/codi_null_audit'))
         import harness  # noqa: CODI checkout on the path
@@ -129,7 +134,7 @@ class GSM8KCODI:
         from eval_codi import build_model
         from decode_patch_codi import encode_question
         from latentreasoning.eval.metrics import extract_final_number
-        ck = str(Path.home() / '.cache/huggingface/hub/models--zen-E--CODI-gpt2/snapshots/fd641b3d3edc59e4f534b55588e906588c9e36bb')
+        ck = ckpt or str(Path.home() / '.cache/huggingface/hub/models--zen-E--CODI-gpt2/snapshots/fd641b3d3edc59e4f534b55588e906588c9e36bb')
         argv = (f"--output_dir /tmp/u --model_name_or_path gpt2 --seed 11 --model_max_length 512 --lora_r 128 --lora_alpha 32 --lora_init "
                 f"--greedy True --num_latent 6 --use_prj True --prj_dim 768 --prj_no_ln False --prj_dropout 0.0 --inf_latent_iterations 6 "
                 f"--inf_num_iterations 1 --remove_eos True --use_lora True --ckpt_dir {ck}").split()

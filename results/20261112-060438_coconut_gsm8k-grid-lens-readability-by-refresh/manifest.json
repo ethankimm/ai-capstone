@@ -1,0 +1,201 @@
+{
+  "run_id": "20261112-060438_coconut_gsm8k-grid-lens-readability-by-refresh",
+  "mechanism": "coconut",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "gsm8k_coconut: connordilgren grid Coconut GPT-2 GSM8K (grid_checkpoints)",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 690,
+    "seed": 0
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "extra": {
+      "unit": "changed steps of B with single-token values; 'correct' = read in B's own run",
+      "gsm8k_coconut": {
+        "skipped_multi_token": 4,
+        "summary": {
+          "1": {
+            "n": 273.0,
+            "own_rate": 0.945,
+            "n_own": 258.0,
+            "B": [
+              0.562,
+              0.996,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "A": [
+              0.981,
+              0.686,
+              0.523,
+              0.516,
+              0.516,
+              0.516,
+              0.516
+            ],
+            "chance": [
+              0.319,
+              0.322,
+              0.293,
+              0.3,
+              0.3,
+              0.3,
+              0.3
+            ]
+          },
+          "2": {
+            "n": 259.0,
+            "own_rate": 0.807,
+            "n_own": 209.0,
+            "B": [
+              0.488,
+              0.646,
+              0.986,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "A": [
+              0.957,
+              0.856,
+              0.517,
+              0.469,
+              0.464,
+              0.464,
+              0.464
+            ],
+            "chance": [
+              0.305,
+              0.297,
+              0.282,
+              0.286,
+              0.282,
+              0.282,
+              0.282
+            ]
+          },
+          "3": {
+            "n": 116.0,
+            "own_rate": 0.466,
+            "n_own": 54.0,
+            "B": [
+              0.574,
+              0.704,
+              0.926,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "A": [
+              0.815,
+              0.556,
+              0.537,
+              0.537,
+              0.537,
+              0.537,
+              0.537
+            ],
+            "chance": [
+              0.267,
+              0.241,
+              0.267,
+              0.267,
+              0.267,
+              0.267,
+              0.267
+            ]
+          },
+          "4": {
+            "n": 29.0,
+            "own_rate": 0.724,
+            "n_own": 21.0,
+            "B": [
+              0.762,
+              0.857,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "A": [
+              0.952,
+              0.571,
+              0.619,
+              0.667,
+              0.667,
+              0.667,
+              0.667
+            ],
+            "chance": [
+              0.345,
+              0.345,
+              0.345,
+              0.345,
+              0.345,
+              0.345,
+              0.345
+            ]
+          },
+          "5": {
+            "n": 13.0,
+            "own_rate": 0.308,
+            "n_own": 4.0,
+            "B": [
+              0.5,
+              0.75,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "A": [
+              0.75,
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "chance": [
+              0.077,
+              0.154,
+              0.154,
+              0.231,
+              0.231,
+              0.231,
+              0.231
+            ]
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "scripts": "scripts/necessity/gsm8k_lens.py",
+    "readout": "top-10 tokens of each latent input z_0..z_5 under the output head (with / without leading space)",
+    "prereg": "t_predictions.md t30 (+ scoring 2026-11-11)"
+  },
+  "seed": 0,
+  "hardware": "MacBook M4 Pro 24 GB, MPS (fp32, batch 1 for GSM8K)",
+  "author": "Henning Lindig",
+  "notes": "t30 vocabulary projection (coconut)",
+  "timestamp_utc": "2026-11-12T06:04:38.788757+00:00",
+  "git": {
+    "commit": "89b8b53",
+    "dirty": true
+  }
+}
