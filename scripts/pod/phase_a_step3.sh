@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# DEPRECATED for v2 depth2 (2026-10-14): this script is v1-only -- hard-coded v1 data dir, CODI_EPOCHS=10, CODI job without TASK
+# (trains v1 depth), v1 A-lite config, three jobs sharing one GPU, `codi_final` picks an arbitrary run. Use
+# scripts/pod/coconut_v2.sh (Coconut-stack jobs) instead; the v2 CODI job script follows after gate G2.
 # Phase A step 3 (+ step-2 follow-up) on one pod, GPT-2 small, synthetic depth task (1-12), three
 # jobs in parallel, no early stopping (step 2 showed patience 2 on the 349-example monitor set stops
 # runs far too early: depth no-CoT went 0.52 -> 0.81 monitor between epochs 10 and 25):

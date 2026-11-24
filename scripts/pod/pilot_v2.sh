@@ -8,15 +8,22 @@
 # All jobs: lr 1e-4, effective batch 128 (32 x 4), eval on best-on-monitor checkpoint, per-level test
 # eval, one RunRecord each (results/<run_id>/ under the repo on the pod).
 # Expects /workspace/ai-capstone and the data at /workspace/synthetic_data_v2.
-#   bash scripts/pod/pilot_v2.sh setup | smoke | run | queue JOB... | status
+#   bash scripts/pod/pilot_v2.sh setup | smoke | run | queue JOB... | status | manifest
+# MONITOR=valid.json (2k items) instead of the default valid_monitor.json (30/level) gives a less noisy
+# best-checkpoint pick (review 2026-10-13); both are disjoint from test.
+# Checkpoints live only under $RUNS on the pod. Before terminating the pod: `manifest`, then pull with
+# scripts/pod/pull_artifacts.sh from the laptop (rsync + sha256 check). Never delete the pod before that passes.
 set -euo pipefail
 REPO=/workspace/ai-capstone
 DATA=/workspace/synthetic_data_v2
 RUNS=/workspace/synthetic_runs
 LOGS=/workspace/logs
 HW="RunPod ${GPU_LABEL:-A40} (secure)"
+MONITOR=${MONITOR:-valid_monitor.json}
 NOCOT_EPOCHS=${NOCOT_EPOCHS:-12}
 COT_EPOCHS=${COT_EPOCHS:-3}
+FILLER_EPOCHS=${FILLER_EPOCHS:-25}
+SUF=${SLUG_SUFFIX:-}   # appended to the RunRecord slug, e.g. -25ep, so reruns are distinguishable in the index
 SLOTS=${SLOTS:-4}
 export PATH="$HOME/.local/bin:$PATH"
 mkdir -p $RUNS $LOGS
@@ -35,19 +42,26 @@ setup() {
 
 job() {  # <task>_<cot|nocot>
   local task=${1%_*} kind=${1##*_} name=pilot-$1
-  local common="--train-json $DATA/$task/train.json --val-json $DATA/$task/valid_monitor.json \
+  local common="--train-json $DATA/$task/train.json --val-json $DATA/$task/$MONITOR \
       --test-json $DATA/$task/test.json --batch-size 32 --grad-accum 4 --lr 1e-4 --early-stop-patience 0 \
-      --output-dir $RUNS/$name --verify-batched-n 32 --stage pilot --hardware \"$HW\""
+      --output-dir $RUNS/$name --verify-batched-n 32 --on-mismatch ${ON_MISMATCH:-batch1} --stage pilot --hardware \"$HW\""
+  local rc=0
   case $kind in
     cot)   eval .venv/bin/python scripts/train_synthetic.py --method explicit_cot --epochs $COT_EPOCHS \
-               $common --slug v2-$task-cot > $LOGS/$name.log 2>&1 ;;
+               $common --slug v2-$task-cot$SUF > $LOGS/$name.log 2>&1 || rc=$? ;;
     nocot) eval .venv/bin/python scripts/train_synthetic.py --method filler_tokens --compute-steps 0 \
-               --epochs $NOCOT_EPOCHS $common --slug v2-$task-nocot > $LOGS/$name.log 2>&1 ;;
+               --epochs $NOCOT_EPOCHS $common --slug v2-$task-nocot$SUF > $LOGS/$name.log 2>&1 || rc=$? ;;
+    # faithful filler (50/50 CoT/filler mix, unmasked filler loss) = the v1 filler-6/24 recipe; same stack as nocot
+    # control: filler-N trained answer-only with the filler span masked from the loss (NO CoT supervision)
+    nf6|nf24) eval .venv/bin/python scripts/train_synthetic.py --method filler_tokens \
+               --compute-steps ${kind#nf} --epochs $FILLER_EPOCHS $common --slug v2-$task-$kind$SUF > $LOGS/$name.log 2>&1 || rc=$? ;;
+    filler6|filler24) eval .venv/bin/python scripts/train_synthetic.py --method filler_tokens --faithful \
+               --compute-steps ${kind#filler} --epochs $FILLER_EPOCHS $common --slug v2-$task-$kind$SUF > $LOGS/$name.log 2>&1 || rc=$? ;;
   esac
-  echo "$(date -u +%FT%TZ) done $1 (exit $?)" >> $LOGS/jobs.done
+  echo "$(date -u +%FT%TZ) done $1 (exit $rc)" >> $LOGS/jobs.done
 }
 
-JOBS="depth2_nocot depth2_cot paircount_nocot distinct_nocot paircount_cot distinct_cot"
+JOBS=${JOBS:-"depth2_nocot depth2_cot modal_nocot modal_cot"}
 
 case "${1:-}" in
   setup) setup ;;
@@ -57,22 +71,26 @@ case "${1:-}" in
         --smoke-n 8 --verify-batched-n 8 2>&1 | tail -5 ;;
   run)
     export -f job
-    export REPO DATA RUNS LOGS HW NOCOT_EPOCHS COT_EPOCHS PATH
+    export REPO DATA RUNS LOGS HW MONITOR ON_MISMATCH NOCOT_EPOCHS COT_EPOCHS FILLER_EPOCHS SUF PATH
     nohup bash -c "echo $JOBS | tr ' ' '\n' | xargs -P $SLOTS -I{} bash -c 'job {}'" > $LOGS/pilot.log 2>&1 &
     echo launched ;;
   queue)  # bash pilot_v2.sh queue job1 job2 ...: start each job once QUEUE_MIN_FREE_MB (default 11 GB) of GPU memory is free
     shift
     export -f job
-    export REPO DATA RUNS LOGS HW NOCOT_EPOCHS COT_EPOCHS PATH
+    export REPO DATA RUNS LOGS HW MONITOR ON_MISMATCH NOCOT_EPOCHS COT_EPOCHS FILLER_EPOCHS SUF PATH
     nohup bash -c '
       for j in '"$*"'; do
         until [ $(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1) -ge ${QUEUE_MIN_FREE_MB:-11000} ]; do sleep 60; done
         echo "$(date -u +%FT%TZ) start $j"; (job $j &) ; sleep 240
       done' > $LOGS/queue.log 2>&1 &
     echo queued ;;
+  manifest)  # sha256 of every checkpoint weight file + the RunRecords, for pull_artifacts.sh to verify
+    (cd $RUNS && find . -type f \( -name '*.safetensors' -o -name '*.bin' -o -name '*.pt' \) -print0 | xargs -0 sha256sum) > $RUNS/SHA256SUMS
+    (cd $REPO && find results -type f \( -name manifest.json -o -name predictions.jsonl -o -name train_log.json -o -name notes.md \) -print0 | xargs -0 sha256sum) > $RUNS/SHA256SUMS_results
+    wc -l $RUNS/SHA256SUMS $RUNS/SHA256SUMS_results ;;
   status)
     cat $LOGS/jobs.done 2>/dev/null || echo "no jobs done yet"
     nvidia-smi --query-gpu=utilization.gpu,memory.used --format=csv,noheader
     for f in $LOGS/pilot-*.log; do echo "== $f"; tail -c 300 $f | tr '\r' '\n' | tail -2; done ;;
-  *) echo "usage: $0 setup|smoke|run|status"; exit 1 ;;
+  *) echo "usage: $0 setup|smoke|run|queue|status|manifest"; exit 1 ;;
 esac

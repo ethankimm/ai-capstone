@@ -22,6 +22,16 @@ before regressing; predictions are inverted back to raw values for the tolerance
 Reuses `run_thoughts` / `topk_token_strings` / `num_match` / `wilson_ci` from
 `decode_patch_codi.py`.
 
+Includes latent-0 (iter=0, `run_thoughts(..., include_latent0=True)`): the pre-loop
+encode-pass hidden state that feeds iteration 1, decode_patch_codi.py's own "never
+scored here before" position -- and, per that script's ANY-iteration + checked-steps
+fix, by far the single strongest-decoding slot for the first checked step (~89-91%
+top-1 hit rate). The original version of this script only ever probed iterations
+1..n_latents (the loop's own outputs), so whether a ridge/MLP probe can recover
+latent-0 was untested; it's now included in the same per-(iteration, step) sweep as
+every other position, plus a dedicated iter=0 summary (see `LATENT-0` print lines and
+`metrics.extra.iter0_*`).
+
 Run inside the CODI venv, from the CODI checkout:
 
   cd /workspace/codi && .venv/bin/python /workspace/ai-capstone/scripts/probe_codi.py \\
@@ -82,17 +92,21 @@ class ProbeArguments:
 def extract_features(model, tokenizer, examples, device, n_latents, max_step: int):
     """For each example, returns per-iteration z vectors (float32, cpu) and, for each
     step 1..max_step present, the gold value and the top-1/top-5 logit-lens strings at
-    every iteration (so logit-lens accuracy is computed on the identical example set)."""
+    every iteration (so logit-lens accuracy is computed on the identical example set).
+    `include_latent0=True` -- prepends the pre-loop encode-pass hidden state ("latent 0",
+    iter=0: the value that feeds iteration 1, never probed here before) alongside the
+    existing iter=1..n_latents outputs. Indexed by `rec["iter"]`, not position, per
+    `run_thoughts`'s own docstring warning -- iter=0 shifts every later record by one."""
     rows = []
     for ex in examples:
         q = ex.question.strip().replace("  ", " ")
-        pkv, thoughts, latent = run_thoughts(model, tokenizer, q, device, n_latents)
+        pkv, thoughts, latent = run_thoughts(model, tokenizer, q, device, n_latents, include_latent0=True)
         steps = ex.intermediate_values
-        z = {it: rec["post"].detach().float().cpu().squeeze(0).squeeze(0) for it, rec in enumerate(thoughts, start=1)}
+        z = {rec["iter"]: rec["post"].detach().float().cpu().squeeze(0).squeeze(0) for rec in thoughts}
         per_iter_topk = {}
-        for it, rec in enumerate(thoughts, start=1):
+        for rec in thoughts:
             logits = rec["logits"][0]
-            per_iter_topk[it] = {
+            per_iter_topk[rec["iter"]] = {
                 "top1": topk_token_strings(tokenizer, logits, 1)[0],
                 "top5": topk_token_strings(tokenizer, logits, 5),
             }
@@ -201,7 +215,7 @@ def main() -> None:
     print(f"eval features extracted in {time.perf_counter() - t1:.0f}s")
 
     results = []
-    for it in range(1, n_latents + 1):
+    for it in range(0, n_latents + 1):  # 0 = latent-0 (pre-loop encode-pass state), 1..n_latents = loop outputs
         for s in range(1, pa.max_step + 1):
             r = probe_one(it, s, train_rows, eval_rows, pa.ridge_lambda, pa.mlp_hidden, pa.mlp_epochs, pa.mlp_lr, pa.tol)
             if r is None:
@@ -214,6 +228,14 @@ def main() -> None:
     decodable_iters = (3, 5)
     nondec_rows = [r for r in results if r["iter"] in nondecodable_iters]
     dec_rows = [r for r in results if r["iter"] in decodable_iters]
+    # latent-0 (iter=0): the position `decode_patch_codi.py`'s ANY-iteration + checked-steps
+    # fix found to be, by a wide margin, the single strongest-decoding slot for the first
+    # checked step under the logit lens (~89-91% hit rate) -- but never probed before this
+    # script's `range(1, n_latents+1)` was widened to include it. Reported separately, not
+    # folded into `nondecodable_iters`/`decodable_iters` (that split is about the loop's own
+    # 6 outputs, iter=0 is a different value -- the pre-loop encode-pass state).
+    iter0_rows = [r for r in results if r["iter"] == 0]
+    iter0_step1_rows = [r for r in iter0_rows if r["step"] == 1]
 
     def avg(rows, key):
         return sum(r[key] for r in rows) / len(rows) if rows else None
@@ -222,6 +244,11 @@ def main() -> None:
           f"avg mlp={avg(nondec_rows, 'mlp_acc_tol')} avg logit_lens_top1={avg(nondec_rows, 'logit_lens_top1')}")
     print(f"DECODABLE iters {decodable_iters}: avg ridge={avg(dec_rows, 'ridge_acc_tol')} "
           f"avg mlp={avg(dec_rows, 'mlp_acc_tol')} avg logit_lens_top1={avg(dec_rows, 'logit_lens_top1')}")
+    print(f"LATENT-0 (iter=0), all steps: avg ridge={avg(iter0_rows, 'ridge_acc_tol')} "
+          f"avg mlp={avg(iter0_rows, 'mlp_acc_tol')} avg logit_lens_top1={avg(iter0_rows, 'logit_lens_top1')}")
+    print(f"LATENT-0 (iter=0), step=1 (the strongest logit-lens position): "
+          f"ridge={avg(iter0_step1_rows, 'ridge_acc_tol')} mlp={avg(iter0_step1_rows, 'mlp_acc_tol')} "
+          f"logit_lens_top1={avg(iter0_step1_rows, 'logit_lens_top1')}")
 
     metrics = {
         "compute_steps": n_latents,
@@ -236,6 +263,12 @@ def main() -> None:
             "decodable_avg_ridge_acc": avg(dec_rows, "ridge_acc_tol"),
             "decodable_avg_mlp_acc": avg(dec_rows, "mlp_acc_tol"),
             "decodable_avg_logit_lens_top1": avg(dec_rows, "logit_lens_top1"),
+            "iter0_avg_ridge_acc": avg(iter0_rows, "ridge_acc_tol"),
+            "iter0_avg_mlp_acc": avg(iter0_rows, "mlp_acc_tol"),
+            "iter0_avg_logit_lens_top1": avg(iter0_rows, "logit_lens_top1"),
+            "iter0_step1_ridge_acc": avg(iter0_step1_rows, "ridge_acc_tol"),
+            "iter0_step1_mlp_acc": avg(iter0_step1_rows, "mlp_acc_tol"),
+            "iter0_step1_logit_lens_top1": avg(iter0_step1_rows, "logit_lens_top1"),
             "tol": pa.tol, "ridge_lambda": pa.ridge_lambda,
             "mlp_hidden": pa.mlp_hidden, "mlp_epochs": pa.mlp_epochs, "mlp_lr": pa.mlp_lr,
             "n_trainable_params_backbone": n_params,

@@ -173,3 +173,40 @@ def test_modal_sampler_properties():
             assert all(0 <= a <= 99 and 0 <= b <= 99 for a, _, b in p.exprs)
             best_guess[v] += 1
     assert max(best_guess.values()) / sum(best_guess.values()) < 0.05  # answers spread over 0..99
+
+
+def _tv(a: Counter, b: Counter) -> float:
+    na, nb = sum(a.values()), sum(b.values())
+    return 0.5 * sum(abs(a[k] / na - b[k] / nb) for k in set(a) | set(b))
+
+
+@pytest.mark.parametrize("task", ["modal", "depth2", "paircount"])
+def test_train_test_label_parity(task):
+    """Train and test answer distributions agree (the check that would have caught distinct's d=1 starvation)."""
+    splits, _ = V.build_task(task, seed=11, train_total=3000, valid_total=200, test_per_level=60, monitor_per_level=4)
+    tr = Counter(r["answer"] for r in splits["train"])
+    te = Counter(r["answer"] for r in splits["test"])
+    assert _tv(tr, te) < 0.25, (task, _tv(tr, te))
+
+
+def test_codi_patch_accepts_every_v2_task():
+    from pathlib import Path
+    patch = (Path(__file__).resolve().parents[1] / "scripts" / "codi_synthetic.patch").read_text()
+    line = next(l for l in patch.splitlines() if l.startswith("+SYNTHETIC_TASKS"))
+    for t in TASKS:
+        assert f'"{t}"' in line, t
+    assert "CODI_SYNTHETIC_ALLOW_DROP" in patch  # long examples must raise, not vanish
+
+
+@pytest.mark.parametrize("task", ["modal", "depth2"])
+@pytest.mark.parametrize("kind", ["cot", "no_cot", "coconut_A"])
+def test_coconut_v2_configs(task, kind):
+    import yaml
+    from pathlib import Path
+    f = Path(__file__).resolve().parents[1] / "configs" / "synthetic" / f"gpt2_{task}_{kind}.yaml"
+    cfg = yaml.safe_load(f.read_text())
+    assert cfg["name"] == f"gpt2_{task}_{kind}"
+    assert cfg["train_path"] == f"/workspace/synthetic_data_v2/{task}/train.json"
+    assert cfg["val_path"] == f"/workspace/synthetic_data_v2/{task}/valid_monitor.json"  # never the v1 data
+    if kind == "coconut_A":
+        assert cfg["coconut"] is True and cfg["num_epochs"] == 7 and cfg["resume"] == 1

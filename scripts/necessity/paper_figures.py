@@ -8,6 +8,14 @@ Inputs (codi_audit_artifacts):
   t26/gsm8k_depth_hops.json                            GSM8K pairs with dependency depth (export of t26 + t27a pairs)
   t26/rcread_*.json, lens_gsm8k_codi.json, sim_parallel_b.json   readability by refresh (t29, t30, t28b)
   t15_*.json                                           RuleChain route split (record 20261108-073431)
+  t37/hops.json, t41/*.json                            RuleChain SIM-Coconut hops (t37); L7 hops + accuracy (t41)
+  ai-capstone/results/<record>/manifest.json           RuleChain Coconut hops (t33), GSM8K hops by serial distance (t42),
+                                                       hidden-path monitor cells (t34, t37)
+
+Main-paper figures: schematic, hops, depth_failure, readability, monitor. depth_failure shows the matched start-last
+models plus the relay control (and, for accuracy, the no-loop references: CODI-0 and the pause-token model); hops shows the
+released GSM8K checkpoints. depth_failure_all (every model) and hops_by_s (RuleChain by steps from the edit) go in the appendix. The GSM8K hop distribution and the route
+split are still written (fig4_*, fig6_*) but the paper no longer includes them.
 """
 import json
 import re
@@ -20,6 +28,7 @@ matplotlib.use('pdf')
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
+from matplotlib.legend import Legend  # noqa: E402
 from matplotlib.patches import FancyBboxPatch  # noqa: E402
 
 ART = Path.home() / 'Documents/Penn/CIS5980/codi_audit_artifacts'; T26 = ART / 't26'
@@ -29,11 +38,31 @@ K = 6; RNG = np.random.default_rng(0)
 
 # ---------------------------------------------------------------- style (validated categorical slots, light mode, print)
 INK, INK2, MUTED, GRID = '#0b0b0b', '#52514e', '#8a8984', '#e4e3df'
+# Colour follows the method across panels: CODI yellow, SIM-CODI orange, Coconut red, SIM-Coconut violet.
 C = dict(gated='#2a78d6', sim='#eb6834', simsf='#1baf7a', startlast='#eda100', relay='#e87ba4', stab='#008300', codi0='#8a8984',
-         gsm8k_codi='#6250d6', gsm8k_sim='#eb6834', gsm8k_coconut='#1baf7a')
-NAME = dict(gated='Rule-gated CODI', sim='SIM-CODI', simsf='SIM-CODI (start first)', startlast='CODI', relay='CODI (relay)',
-            stab='CODI (stabilised)', codi0='CODI-0 (no latents)', gsm8k_codi='CODI', gsm8k_sim='SIM-CODI', gsm8k_coconut='Coconut')
-MK = dict(gated='o', sim='s', simsf='D', startlast='^', relay='v', stab='P', codi0='x', gsm8k_codi='o', gsm8k_sim='s', gsm8k_coconut='^')
+         simcoconut='#6250d6', coconut='#e34948',
+         gsm8k_codi='#eda100', gsm8k_sim='#eb6834', gsm8k_coconut='#e34948', gsm8k_simcoconut='#6250d6',
+         gated_rule='#2a78d6', gated_start='#2a78d6', codi0_sl='#6f6e69', pause='#6f6e69', codi0_sf='#b3b2ad')
+NAME = dict(gated='Rule-gated CODI', sim='SIM-CODI', simsf='SIM-CODI (start first)', startlast='CODI (start last)', relay='CODI (relay)',
+            stab='CODI (stabilised)', codi0='CODI-0 (no latents)', simcoconut='SIM-Coconut', coconut='Coconut',
+            gsm8k_codi='CODI', gsm8k_sim='SIM-CODI', gsm8k_coconut='Coconut', gsm8k_simcoconut='SIM-Coconut',
+            gated_rule='Rule-gated CODI, rule edits', gated_start='Rule-gated CODI, start edits',
+            codi0_sl='CODI-0 (start last)', pause='Pause-token CODI (start last)', codi0_sf='CODI-0 (start first)')
+MK = dict(gated='o', sim='s', simsf='D', startlast='^', relay='v', stab='P', codi0='x', simcoconut='X', coconut='h',
+          gsm8k_codi='^', gsm8k_sim='s', gsm8k_coconut='h', gsm8k_simcoconut='X',
+          gated_rule='o', gated_start='o', codi0_sl='x', pause='+', codi0_sf='x')
+# Recipe group is the comparison the paper makes: per-step structure is drawn solid, standard recipes dashed.
+PERSTEP = ('gated', 'gated_rule', 'gated_start', 'sim', 'simsf', 'simcoconut', 'gsm8k_sim', 'gsm8k_simcoconut')
+REFS = ('codi0_sl', 'pause', 'codi0_sf')   # no loop: zero latent passes, or six positions with constant inputs
+OPEN = ('gated_start',)                    # drawn with open markers
+# The main figures carry the matched start-last models plus the relay control; the appendix versions show every model.
+MAIN = ('gated', 'sim', 'startlast', 'relay')
+ALL = ('gated', 'sim', 'simsf', 'simcoconut', 'startlast', 'relay', 'stab', 'coconut')
+GROUP = lambda m: 'per-step' if m in PERSTEP else 'ref' if m in REFS else 'standard'
+GTITLE = {'per-step': 'Per-step training (solid)', 'standard': 'Standard recipe (dashed)', 'ref': 'No loop (dotted)'}
+LS = lambda m: '-' if m in PERSTEP else (0, (1, 1.6)) if m in REFS else (0, (4, 2))
+RES = Path(__file__).resolve().parents[2] / 'results'
+manifest = lambda rec: json.load(open(RES / rec / 'manifest.json'))['metrics']['extra']
 RAMP = ['#cde2fb', '#9ec5f4', '#6da7ec', '#3987e5', '#256abf', '#184f95', '#0d366b']  # sequential blue, light -> dark
 ORD = [None, '#86b6ef', '#5598e7', '#2a78d6', '#104281']  # ordinal steps (250..650), lightest clears 2:1 on white
 plt.rcParams.update({
@@ -65,12 +94,21 @@ def end_label(ax, x, y, text, color, dy=0):
 
 # ---------------------------------------------------------------- Fig 1: the refresh procedure (schematic)
 def fig_schematic():
-    fig, ax = plt.subplots(figsize=(W, 2.35)); ax.set_axis_off(); ax.set_xlim(0, 100); ax.set_ylim(0, 40); ax.grid(False)
+    fig, ax = plt.subplots(figsize=(W, 2.65)); ax.set_axis_off(); ax.set_xlim(0, 100); ax.set_ylim(0, 45); ax.grid(False)
     colA, colB, colMix = '#d6d5d0', C['gated'], '#b7d3f6'
     rows = [(0, 'M$_0$', 0, 'A'), (1, 'M$_1$', 1, 'A'), (2, 'M$_2$', 2, 'B'), (3, 'M$_3$', 3, 'B'), (6, 'M$_6$', 6, 'B')]
-    x0, w, gap = 22, 6.2, 1.2; ys = [33, 26, 19, 12, 3]
-    ax.text(3, 38.5, 'run', fontsize=7, color=INK2); ax.text(9.5, 38.5, 'question', fontsize=7, color=INK2)
-    ax.text(x0, 38.5, 'latent inputs fed to passes 1-6', fontsize=7, color=INK2); ax.text(70.5, 38.5, 'answer', fontsize=7, color=INK2)
+    x0, w, gap = 22, 6.2, 1.2; ys = [37, 29, 21, 13, 3]
+    ax.text(3, 43, 'run', fontsize=7, color=INK2); ax.text(9.5, 43, 'question', fontsize=7, color=INK2)
+    ax.text(x0, 43, 'latent inputs fed to passes 1-6', fontsize=7, color=INK2); ax.text(70.5, 43, 'answer', fontsize=7, color=INK2)
+    # Arrows: within a run every input is fixed. The question pass's output and pass j's output (input z_j) become
+    # z_1 and z_(j+1) of the NEXT run, so each arrow goes one row down and one slot right. z_6's output is not fed on.
+    arr = dict(arrowstyle='-|>', color=MUTED, lw=.7, mutation_scale=6, shrinkA=0, shrinkB=0)
+    for r in range(3):
+        y_lo, y_hi = ys[r], ys[r + 1] + 3.2
+        ax.annotate('', xy=(x0 + .3 * w, y_hi + .2), xytext=(17.0, y_lo - .2), arrowprops=arr)
+        for j in range(K - 1):
+            xa = x0 + j * (w + gap) + .7 * w; xb = x0 + (j + 1) * (w + gap) + .3 * w
+            ax.annotate('', xy=(xb, y_hi + .2), xytext=(xa, y_lo - .2), arrowprops=arr)
     for (n, lab, nB, ans), y in zip(rows, ys):
         ax.text(3, y + 1.6, lab, fontsize=8.5, va='center')
         ax.add_patch(FancyBboxPatch((9.5, y), 9, 3.2, boxstyle='round,pad=0,rounding_size=0.6', fc='white', ec=colB, lw=1))
@@ -85,67 +123,178 @@ def fig_schematic():
         ax.add_patch(FancyBboxPatch((70.5, y), 8, 3.2, boxstyle='round,pad=0,rounding_size=0.6',
                                     fc=colB if ans == 'B' else colA, ec='white', lw=1.2))
         ax.text(74.5, y + 1.6, f"{ans}'s", fontsize=7, ha='center', va='center', color='white' if ans == 'B' else INK)
-        if n in (1, 2, 3):
-            ax.annotate('', xy=(x0 - 1.5, y + 3.0), xytext=(x0 - 1.5, y + 6.6),
-                        arrowprops=dict(arrowstyle='-|>', color=MUTED, lw=.8, mutation_scale=7))
-    ax.text(15, 9.0, '...', fontsize=10, ha='center', color=MUTED); ax.text(47, 9.0, '...', fontsize=10, ha='center', color=MUTED)
-    ax.text(x0, 30.95, 'each run is fed the latents the previous run produced (arrows)', fontsize=6.3, color=INK2, va='center')
+    ax.text(15, 9.6, '...', fontsize=10, ha='center', color=MUTED); ax.text(47, 9.6, '...', fontsize=10, ha='center', color=MUTED)
+    ax.text(84, ys[0] - 2.4, "arrows: pass j's output\nbecomes input j+1\nof the next run", fontsize=6.3, va='center', color=INK2)
     ax.annotate('hops = 2:\nfirst run whose\nanswer is B\'s', xy=(78.8, ys[2] + 1.6), xytext=(84, ys[2] + 1.6), fontsize=7, va='center',
                 arrowprops=dict(arrowstyle='-', color=INK2, lw=.6))
     ax.text(84, ys[4] + 1.6, "= B's own run\n(checked on every pair)", fontsize=6.5, va='center', color=INK2)
-    for i, (fc, t) in enumerate([(colA, "A's latents"), (colB, "exactly B's"), (colMix, "B's question, stale inputs")]):
+    for i, (fc, t) in enumerate([(colA, "A's latents"), (colB, "exactly B's"), (colMix, "made last run from a stale input")]):
         ax.add_patch(FancyBboxPatch((22 + i * 17, -0.6), 2.4, 1.8, boxstyle='round,pad=0,rounding_size=0.4', fc=fc, ec='none'))
         ax.text(25.2 + i * 17, 0.3, t, fontsize=6.5, va='center', color=INK2)
-    fig.savefig(OUT / 'fig1_refresh_schematic.pdf', bbox_inches='tight'); plt.close(fig)
+    fig.savefig(OUT / 'fig1_refresh_schematic.pdf', bbox_inches='tight')
+    fig.savefig(OUT / 'fig1_refresh_schematic.png', bbox_inches='tight', dpi=220); plt.close(fig)
 
 
-# ---------------------------------------------------------------- Fig 2: accuracy by chain length vs the matched CODI-0
-def fig_accuracy():
-    fig, axs = plt.subplots(1, 2, figsize=(W, 2.2), sharey=True)
-    groups = [('startlast0', ('gated', 'sim', 'startlast'), 'Start value last'), ('stab0', ('simsf', 'relay', 'stab'), 'Start value first')]
-    for ax, (ref, ms, ttl), pl in zip(axs, groups, 'ab'):
-        Ls = [2, 3, 4, 5, 6]
-        acc0 = load(T26 / f'ref_{ref}.json')['valid_acc']
-        ax.plot(Ls, [acc0[str(L)] for L in Ls], color=C['codi0'], marker=MK['codi0'], ls='--', lw=1.2, label=NAME['codi0'])
-        for m in ms:
-            a = load(T26 / f'{m}.json')['clean_acc']
-            ax.plot(Ls, [a[str(L)] for L in Ls], color=C[m], marker=MK[m], label=NAME[m])
-        ax.set_xticks(Ls); ax.set_xlabel('rules in the chain (L)'); ax.set_ylim(0, 1.04); title(ax, pl, ttl)
-        ax.legend(loc='center right' if pl == 'a' else 'lower left', handlelength=2.2)
-        if pl == 'a': ax.text(6, .955, 'rule-gated and SIM-CODI overlap (≥ .996)', fontsize=6.3, color=INK2, ha='right', va='top')
-    axs[0].set_ylabel('validation accuracy')
-    fig.tight_layout(w_pad=1.5); fig.savefig(OUT / 'fig2_accuracy.pdf', bbox_inches='tight'); plt.close(fig)
+# ---------------------------------------------------------------- hops: the headline figure (all models, both tasks)
+def _line(ax, m, xs, mu, ci=None):
+    kw = dict(color=C[m], marker=MK[m], ls=LS(m))
+    if m in OPEN: kw.update(mfc='white', lw=1.1)
+    if m in REFS: kw.update(lw=1.2)
+    if ci is not None:
+        ci = np.array(ci); h = ax.errorbar(xs, mu, yerr=[np.array(mu) - ci[:, 0], ci[:, 1] - np.array(mu)], capsize=0, elinewidth=.8, **kw)
+    else: h, = ax.plot(xs, mu, **kw)
+    ax._series = getattr(ax, '_series', []) + [(m, h)]
 
 
-# ---------------------------------------------------------------- Fig 3: hop count by steps from edit to answer
+def _group_legend(ax, series, group, x, y=-.27, ncol=1):
+    """One legend per recipe group, below the axis, so the solid / dashed split is named and no data is covered."""
+    hs = [(h, NAME[m]) for m, h in series if GROUP(m) == group]
+    lg = Legend(ax, *zip(*hs), loc='upper left', bbox_to_anchor=(x, y), ncol=ncol, handlelength=2.8, fontsize=6.8, title_fontsize=7,
+                   alignment='left', labelspacing=.3, columnspacing=1.2, borderaxespad=0,
+                   title=GTITLE[group])
+    lg.set_in_layout(False); ax.add_artist(lg); ax.figure._legs = getattr(ax.figure, '_legs', []) + [lg]
+
+
 def fig_hops():
-    fig, axs = plt.subplots(1, 2, figsize=(W, 2.6), sharey=True)
-    ax = axs[0]; xs = np.arange(1, 7)
+    """Main figure: released GSM8K checkpoints, mean hops by serial distance (t42). The RuleChain counts by chain length
+    are panel b of depth_failure; the RuleChain counts by steps from the edit are fig_hops_by_s (appendix)."""
+    fig, ax = plt.subplots(figsize=(W * .68, 2.5)); fig._legs = []; xs = np.arange(2, 6)
     ax.fill_between(xs, xs - 1, xs, color='#eeedea', lw=0, zorder=0)
-    ax.text(5.75, 3.45, 'one crossing\nper step', fontsize=6.3, color=INK2, ha='center', va='center')
-    for m in ('gated', 'sim', 'simsf', 'startlast', 'relay', 'stab'):
-        by = defaultdict(list)
-        for p in load(T26 / f'{m}.json')['pairs']:
-            if p['qualified']: by[p['s']].append(p['hops'])
-        ss = [s for s in sorted(by) if len(by[s]) >= 15]; mu = [np.mean(by[s]) for s in ss]; ci = np.array([boot_ci(by[s]) for s in ss])
-        ax.errorbar(ss, mu, yerr=[np.array(mu) - ci[:, 0], ci[:, 1] - np.array(mu)], color=C[m], marker=MK[m], capsize=0, elinewidth=.8,
-                    label=NAME[m])
-    ax.set_xlabel('steps from the edited rule to the answer (s)'); ax.set_ylabel('loop crossings used (mean hops)')
-    ax.set_xticks(xs); ax.set_ylim(-0.2, 6.3); title(ax, 'a', 'RuleChain (trained here)')
-    ax.legend(loc='upper left', handlelength=2.2, ncol=1)
-    ax = axs[1]; D = load(T26 / 'gsm8k_depth_hops.json')
+    ax.text(4.55, 4.75, 'one crossing\nper step', fontsize=6.3, color=INK2, ha='center', va='center')
+    G = manifest('20261114-040437_codi_gsm8k-serial-depth-reanalysis')['strict']['models']           # t42
+    for m, k in (('gsm8k_sim', 'sim'), ('gsm8k_simcoconut', 'simcoconut'), ('gsm8k_codi', 'codi'), ('gsm8k_coconut', 'coconut')):
+        h = G[k]['hops_by_serial_s']; ss = [int(s) for s in sorted(h) if h[s]['n'] >= 15]
+        _line(ax, m, ss, [h[str(s)]['mean'] for s in ss], [h[str(s)]['ci'] for s in ss])
+    ax.set_xlabel('serial distance from the edit to the answer'); ax.set_ylabel('loop crossings used (mean hops)')
+    ax.set_xticks(xs); ax.set_xlim(1.7, 5.3); ax.set_ylim(-0.25, 6.3)
+    _group_legend(ax, ax._series, 'per-step', 1.04, y=1.0); _group_legend(ax, ax._series, 'standard', 1.04, y=.6)
+    fig.tight_layout(); fig.savefig(OUT / 'hops.pdf', bbox_inches='tight', bbox_extra_artists=fig._legs); plt.close(fig)
+
+
+def fig_hops_by_s():
+    """Appendix: RuleChain, every model, mean hops by the number of steps s from the edit to the answer, for edits at every
+    position, L = 2-6. Own-answer pairs, as in every hop count of the paper: a pair counts if the model's own answers to A and
+    B differ, right or wrong (t31 for the CODI models and Coconut, t37 for SIM-Coconut). Rule-gated CODI is split by edit
+    type, because its attention mask fixes the count for rule edits at s - 1."""
+    fig, ax = plt.subplots(figsize=(W * .68, 2.7)); fig._legs = []; xs = np.arange(1, 7)
     ax.fill_between(xs, xs - 1, xs, color='#eeedea', lw=0, zorder=0)
-    for m in ('gsm8k_codi', 'gsm8k_sim', 'gsm8k_coconut'):
+    ax.text(5.2, 3.0, 'one crossing\nper step', fontsize=6.3, color=INK2, ha='center', va='center')
+    src = {m: ART / f't31/{m}.json' for m in ('gated', 'sim', 'simsf', 'startlast', 'relay', 'stab')}
+    src.update(simcoconut=ART / 't37/hops.json', coconut=ART / 't31/coconut_rc.json')
+    for m in ALL:
+        by = defaultdict(lambda: defaultdict(list))
+        for p in load(src[m])['pairs']:
+            if p['qualified']: by[m if m != 'gated' else 'gated_start' if p['edit'] == 'start' else 'gated_rule'][p['s']].append(p['hops'])
+        for key in sorted(by):
+            ss = [s for s in sorted(by[key]) if len(by[key][s]) >= 15]
+            _line(ax, key, ss, [np.mean(by[key][s]) for s in ss], [boot_ci(by[key][s]) for s in ss])
+            print(f'  hops by s {key}:', {s: (len(by[key][s]), round(float(np.mean(by[key][s])), 3)) for s in ss})
+    ax.set_xlabel('steps from the edit to the answer (s)'); ax.set_ylabel('loop crossings used (mean hops)')
+    ax.set_xticks(xs); ax.set_ylim(-0.25, 6.3)
+    _group_legend(ax, ax._series, 'per-step', 1.04, y=1.0); _group_legend(ax, ax._series, 'standard', 1.04, y=.42)
+    fig.tight_layout(); fig.savefig(OUT / 'hops_by_s.pdf', bbox_inches='tight', bbox_extra_artists=fig._legs); plt.close(fig)
+
+
+# ---------------------------------------------------------------- depth_failure: accuracy falls, the count does not rise
+# Test record of each model's selected checkpoint (500 items per level; TRAINING_PROTOCOL.md: test touched once per model).
+TEST_RECORD = dict(gated='20261107-204814_codi_v2-l1to7w-startlast-gated-depth2-codi',
+                   sim='20261107-225603_codi_v2-l1to7w-startlast-sim-depth2-codi',
+                   simsf='20261108-130905_codi_v2-l1to7w-sim-depth2-codi',
+                   simcoconut='20261104-144235_coconut_v2-depth2-pilot_k8_simcot_c1m6',
+                   startlast='20261106-083843_codi_v2-l1to7w-startlast-depth2-codi',
+                   relay='20261103-193425_codi_v2-l1to7w-depth2-codi',
+                   stab='20261105-044444_codi_v2-l1to7w-stab-depth2-codi',
+                   coconut='20261102-022150_coconut_v2-depth2-gpt2_depth2_coconut_c1m6',
+                   codi0_sl='20261106-052644_codi_v2-l1to7w-startlast-depth2-codi0',
+                   codi0_sf='20261105-024111_codi_v2-l1to7w-stab-depth2-codi0',
+                   pause='20261108-182654_codi_v2-l1to7w-startlast-pause-depth2-codi')
+test_acc = lambda m: manifest(TEST_RECORD[m])['per_level_accuracy']
+
+
+def fig_depth_failure(models=MAIN, out='depth_failure.pdf'):
+    """By chain length L = 2..7: test accuracy (a), from each model's test record, and mean hops when the start value is
+    edited (b), so that the whole chain lies between the edit and the answer. Hops use own-answer pairs throughout: CODI
+    models t31 (L2-6) + t41 (L7); Coconut t31/coconut_rc (t33), SIM-Coconut t37, both L2-6 only (no L7 audit)."""
+    fig, axs = plt.subplots(1, 2, figsize=(W, 2.4)); Ls = [2, 3, 4, 5, 6, 7]; fig._legs = []
+    for m in REFS:   # no-loop references, accuracy only (they have no crossings to count)
+        acc = test_acc(m); _line(axs[0], m, Ls, [acc[str(L)] for L in Ls])
+        print(f'  depth_failure {m}: test acc', {L: round(acc[str(L)], 3) for L in Ls})
+    axs[1].fill_between(Ls, [L - 1 for L in Ls], Ls, color='#eeedea', lw=0, zorder=0)
+    axs[1].text(6.1, 3.7, 'one crossing\nper step', fontsize=6.3, color=INK2, ha='center', va='center')
+    axs[1].axhline(K, color=MUTED, ls=':', lw=.8); axs[1].text(2.05, K + .12, 'six latents', fontsize=6.3, color=INK2, va='bottom')
+    hop_src = {m: [ART / f't31/{m}.json', ART / f't41/{m}.json'] for m in ('gated', 'sim', 'simsf', 'startlast', 'relay', 'stab')}
+    hop_src.update(simcoconut=[ART / 't37/hops.json'], coconut=[ART / 't31/coconut_rc.json'])
+    for m in models:
+        acc = test_acc(m)
         by = defaultdict(list)
-        for p in D[m]:
-            if p['depth'] is not None: by[p['depth']].append(p['hops'])
-        ss = [s for s in sorted(by) if len(by[s]) >= 15]; mu = [np.mean(by[s]) for s in ss]; ci = np.array([boot_ci(by[s]) for s in ss])
-        ax.errorbar(ss, mu, yerr=[np.array(mu) - ci[:, 0], ci[:, 1] - np.array(mu)], color=C[m], marker=MK[m], capsize=0, elinewidth=.8,
-                    label=f'{NAME[m]} (n={sum(len(by[s]) for s in ss)})')
-    ax.set_xlabel('dependency depth of the edit (steps)'); ax.set_xticks(range(2, 6)); ax.set_xlim(1.5, 5.5)
-    title(ax, 'b', 'GSM8K-Aug (released checkpoints)'); ax.legend(loc='upper left', handlelength=2.2)
-    ax.text(4.75, 4.3, 'one crossing\nper step', fontsize=6.3, color=INK2, ha='center', va='center')
-    fig.tight_layout(w_pad=1.5); fig.savefig(OUT / 'fig3_hops.pdf', bbox_inches='tight'); plt.close(fig)
+        for f in hop_src[m]:
+            for p in load(f)['pairs']:
+                if p['qualified'] and p['edit'] == 'start': by[p['level']].append(p['hops'])
+        hL = [L for L in Ls if len(by[L]) >= 15]
+        print(f'  depth_failure {m}: test acc', {L: round(acc[str(L)], 3) for L in Ls}, '| n start-edit pairs', {L: len(by[L]) for L in hL})
+        _line(axs[0], m, Ls, [acc[str(L)] for L in Ls])
+        _line(axs[1], m, hL, [np.mean(by[L]) for L in hL], [boot_ci(by[L]) for L in hL])
+    for ax in axs: ax.set_xticks(Ls); ax.set_xlabel('rules in the chain (L)')
+    axs[0].set_ylim(0, 1.04); axs[0].set_ylabel('test accuracy'); title(axs[0], 'a', 'Accuracy')
+    axs[1].set_ylim(-0.2, 7.2); axs[1].set_ylabel('mean hops, start value edited'); title(axs[1], 'b', 'Crossings used for the whole chain')
+    _group_legend(axs[0], axs[0]._series, 'per-step', 0, y=-.3); _group_legend(axs[0], axs[0]._series, 'ref', .52, y=-.3)
+    _group_legend(axs[1], axs[1]._series, 'standard', 0, y=-.3)
+    fig.tight_layout(w_pad=1.8); fig.savefig(OUT / out, bbox_inches='tight', bbox_extra_artists=fig._legs); plt.close(fig)
+
+
+def fig_hops_vs_accuracy():
+    """Appendix: the two panels of depth_failure against each other. One point per model and chain length: test accuracy
+    against mean hops when the start value is edited (same sources as depth_failure). The ends of each line carry L."""
+    fig, ax = plt.subplots(figsize=(W * .68, 2.9)); fig._legs = []
+    hop_src = {m: [ART / f't31/{m}.json', ART / f't41/{m}.json'] for m in ('gated', 'sim', 'simsf', 'startlast', 'relay', 'stab')}
+    hop_src.update(simcoconut=[ART / 't37/hops.json'], coconut=[ART / 't31/coconut_rc.json'])
+    for m in ALL:
+        acc = test_acc(m); by = defaultdict(list)
+        for f in hop_src[m]:
+            for p in load(f)['pairs']:
+                if p['qualified'] and p['edit'] == 'start': by[p['level']].append(p['hops'])
+        Ls = [L for L in range(2, 8) if len(by[L]) >= 15]; h = [float(np.mean(by[L])) for L in Ls]; a = [acc[str(L)] for L in Ls]
+        _line(ax, m, h, a)
+        for i in (0, -1):   # the three per-step CODI lines overlap at accuracy 1, so they share one label below
+            if m not in ('gated', 'sim', 'simsf'):
+                ax.annotate(f'L={Ls[i]}', (h[i], a[i]), xytext=(4, 5 if i == 0 else -8), textcoords='offset points', fontsize=5.6, color=C[m])
+    ax.annotate('L = 2', (1.85, 1.0), xytext=(0, 6), textcoords='offset points', fontsize=5.6, color=INK2, ha='center')
+    ax.annotate('L = 7', (5.95, 1.0), xytext=(0, 6), textcoords='offset points', fontsize=5.6, color=INK2, ha='center')
+    ax.set_xlabel('mean hops, start value edited'); ax.set_ylabel('test accuracy'); ax.set_ylim(-0.03, 1.1); ax.set_xlim(-0.25, 6.5)
+    _group_legend(ax, ax._series, 'per-step', 1.04, y=1.0); _group_legend(ax, ax._series, 'standard', 1.04, y=.5)
+    fig.tight_layout(); fig.savefig(OUT / 'hops_vs_accuracy.pdf', bbox_inches='tight', bbox_extra_artists=fig._legs); plt.close(fig)
+
+
+# ---------------------------------------------------------------- monitor: what the latents add over question + answer
+def fig_monitor():
+    """Branch taken at a middle rule, balanced accuracy. Baseline = question pass + own answer; with latents = best of +Z / +H.
+    Dot = mean over (level, rule) cells, thin line = range over cells."""
+    t34 = manifest('20261112-130851_codi_v2-l1to7w-hidden-path-detection')['by_model']
+    t37 = manifest('20261112-211705_coconut_v2-rulechain-simcot-coconut-hops-hidden-path')['hidden_path']
+    rows = [('gated', t34['gated']), ('sim', t34['sim']), ('simsf', t34['simsf']), ('simcoconut', t37),
+            ('startlast', t34['startlast']), ('relay', t34['relay']), ('stab', t34['stab'])]
+    fig, ax = plt.subplots(figsize=(W, 2.5)); ys = [7.3, 6.3, 5.3, 4.3, 2.4, 1.4, 0.4]; cb, cl = '#8a8984', C['gated']
+    for (m, lv), y in zip(rows, ys):
+        base, lat = [], []
+        for x in lv.values():
+            c = x['cells']
+            for r in sorted({k.split('|')[1] for k in c}):
+                base.append(c[f'QA|{r}']['all']); lat.append(max(c[f'{f}|{r}']['all'] for f in ('QAZ', 'QAH')))
+        b, l = np.mean(base), np.mean(lat)
+        ax.plot([b, l], [y, y], color='#c9c8c3', lw=2.2, zorder=1, solid_capstyle='round')
+        ax.plot([min(base), max(base)], [y - .17, y - .17], color=cb, lw=.8); ax.plot([min(lat), max(lat)], [y + .17, y + .17], color=cl, lw=.8)
+        ax.plot(b, y, 'o', ms=6.5, color=cb, mec='white', mew=.8, zorder=3, label='question + answer' if m == 'gated' else None)
+        ax.plot(l, y, 'o', ms=6.5, color=cl, mec='white', mew=.8, zorder=3, label='with latents' if m == 'gated' else None)
+        ax.text(1.035, y, f'+{l - b:.2f}'.replace('+0.', '+.'), fontsize=7.5, va='center', ha='left', color=INK)
+        print(f'  monitor {m}: base {b:.3f} [{min(base):.2f}, {max(base):.2f}]  latents {l:.3f} [{min(lat):.2f}, {max(lat):.2f}]  gain {l - b:+.3f}')
+    ax.set_yticks(ys); ax.set_yticklabels([NAME[m] for m, _ in rows]); ax.set_ylim(-.3, 8.6); ax.set_xlim(.4, 1.02)
+    ax.axvline(.5, color=MUTED, ls=':', lw=1); ax.text(.505, 3.35, 'chance', fontsize=6.5, color=INK2, va='center')
+    for yy, lab in ((8.25, 'Per-step training'), (3.35, 'Standard recipe')):
+        ax.text(-.012, yy, lab, transform=ax.get_yaxis_transform(), fontsize=7.5, fontweight='bold', color=INK, ha='right', va='center')
+    ax.text(1.035, 8.25, 'gain', fontsize=7, color=INK2, va='center', ha='left')
+    ax.set_xlabel('balanced accuracy: which branch did a middle rule take?'); ax.grid(axis='y', visible=False); ax.tick_params(axis='y', length=0)
+    ax.legend(loc='lower center', bbox_to_anchor=(.5, 1.0), ncol=2, handletextpad=.3, columnspacing=1.6)
+    fig.tight_layout(); fig.savefig(OUT / 'monitor.pdf', bbox_inches='tight'); plt.close(fig)
 
 
 # ---------------------------------------------------------------- Fig 4: GSM8K hop distribution by dependency depth
@@ -196,31 +345,68 @@ def sim_decoder_summary():
     return out
 
 
+def rc_read_summary(m, edit=None):
+    """t29 items of a RuleChain model, rescored as in rc_readability.py, optionally for one edit type ('start' / 'rule').
+    The saved items carry no edit type, so it is recovered by replaying the script's pair selection; every item is checked
+    against the replay (level, step, d and both values)."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'codi_null_audit'))
+    import rc as RC
+    vals = lambda q: RC.walk(*RC.parse(q))[0]
+    items = load(T26 / f'rcread_{m}.json')['items']; cnt = defaultdict(int); n = 0
+    for p in load(T26 / f'{m}.json')['pairs']:
+        if not (p['qualified'] and p['level'] in (2, 3, 4, 5, 6)) or cnt[(p['level'], p['edit'])] >= 60: continue
+        cnt[(p['level'], p['edit'])] += 1
+        L = p['level']; va, vb = vals(p['R']['question']), vals(p['D']['question']); i = 0 if p['edit'] == 'start' else int(p['edit'][4:])
+        for k in range(1, L):
+            if vb[k] == va[k]: continue
+            it = items[n]; n += 1
+            assert (it['L'], it['k'], it['d'], it['a'], it['b']) == (L, k, k - max(i, 1) + 1, int(va[k]), int(vb[k])), (m, n)
+            it['edit'] = 'start' if i == 0 else 'rule'
+    assert n == len(items), (m, n, len(items))
+    read = lambda it, r, v: it['pred'] is not None and v is not None and v in it['pred'][r]
+    S = {}
+    for d in sorted({it['d'] for it in items}):
+        xs = [it for it in items if it['d'] == d and edit in (None, it['edit'])]; own = [it for it in xs if read(it, K, it['b'])]
+        if len(xs) < 5: continue
+        S[d] = dict(n_own=len(own), B=[sum(read(it, r, it['b']) for it in own) / max(len(own), 1) for r in range(K + 1)],
+                    A=[sum(read(it, r, it['a']) for it in own) / max(len(own), 1) for r in range(K + 1)],
+                    chance=[sum(read(it, r, it['chance']) for it in xs) / len(xs) for r in range(K + 1)])
+    return S
+
+
 def fig_readability():
-    cols = [('gated', 'RuleChain\nrule-gated CODI', 'probe'), ('sim', 'RuleChain\nSIM-CODI', 'probe'),
-            ('relay', 'RuleChain\nCODI (relay)', 'probe'), ('gsm8k_sim', 'GSM8K\nSIM-CODI', 'decoder'), ('gsm8k_codi', 'GSM8K\nCODI', 'lens')]
-    fig, axs = plt.subplots(2, 5, figsize=(W, 3.7), sharex=True, sharey=True); NS = {}
-    for c, (m, ttl, how) in enumerate(cols):
-        if how == 'probe': S = {int(k): v for k, v in load(T26 / f'rcread_{m}.json')['summary'].items()}
+    # Rule-gated CODI is shown for rule edits only: for start edits d is one too small on most pairs (the start value usually
+    # takes one crossing to enter the first latent), which the text states in one sentence.
+    cols = [('gated', 'RuleChain\nrule-gated CODI\nrule edits', 'probe', 'rule'), ('sim', 'RuleChain\nSIM-CODI\nall edits', 'probe', None),
+            ('gsm8k_sim', 'GSM8K\nSIM-CODI\n(released)', 'decoder', None), ('gsm8k_codi', 'GSM8K\nCODI\n(released)', 'lens', None)]
+    fig, axs = plt.subplots(2, 4, figsize=(W, 3.5), sharex=True, sharey=True); NS = {}
+    for e in ('rule', 'start'):   # the numbers quoted in the text: share readable at refresh d - 1, d, d + 1
+        for m in ('gated', 'sim', 'simsf'):
+            S = rc_read_summary(m, e)
+            print(f'  readability {m} {e} edits, B at d-1 / d / d+1:', {d: [round(S[d]['B'][d + o], 2) for o in (-1, 0, 1)] for d in S})
+    for c, (m, ttl, how, edit) in enumerate(cols):
+        if how == 'probe':
+            S = rc_read_summary(m, edit); pooled = {int(k): v for k, v in load(T26 / f'rcread_{m}.json')['summary'].items()}
+            if edit is None: assert all(np.allclose(S[d]['B'], pooled[d]['B']) and np.allclose(S[d]['A'], pooled[d]['A']) for d in pooled), m
         elif how == 'lens': S = {int(k): v for k, v in load(T26 / 'lens_gsm8k_codi.json')['summary'].items()}
         else: S = sim_decoder_summary()
-        ds = [d for d in sorted(S) if S[d]['n_own'] >= 25][:4]; NS[m] = {d: S[d]['n_own'] for d in ds}
+        ds = [d for d in sorted(S) if S[d]['n_own'] >= 25][:4]; NS[(m, edit)] = {d: S[d]['n_own'] for d in ds}
         for d in ds:
             x = np.arange(K + 1) - d; keep = (x >= -3) & (x <= 2)
             for r, key in ((0, 'B'), (1, 'A')):
                 axs[r, c].plot(x[keep], np.array(S[d][key])[keep], color=ORD[d], marker='o', ms=3, lw=1.3, label=f'd = {d}')
         w = np.array([S[d]['n_own'] for d in ds], float)
         ch = max(float(np.dot(w, [S[d]['chance'][n] for d in ds]) / w.sum()) for n in range(K + 1))
-        axs[0, c].axhline(ch, color=MUTED, ls=':', lw=1); axs[0, c].text(2.1, ch + .035, f'chance {ch:.2f}', fontsize=5.8, color=INK2, ha='right')
-        axs[0, c].set_title(ttl, fontsize=7.2, loc='center'); axs[1, c].set_xlabel('refresh − d')
+        axs[0, c].axhline(ch, color=MUTED, ls=':', lw=1); axs[0, c].text(2.1, ch + .035, f'chance {ch:.2f}', fontsize=5.6, color=INK2, ha='right')
+        axs[0, c].set_title(ttl, fontsize=6.6, loc='center'); axs[1, c].set_xlabel('refresh − d')
         axs[1, c].text(2.1, .93, how, fontsize=6.2, color=INK2, ha='right')
         for r in (0, 1): axs[r, c].axvline(0, color=INK2, lw=.6, alpha=.5)
     axs[0, 0].set_ylabel("B's new value\nreadable"); axs[1, 0].set_ylabel("A's old value\nreadable")
-    for ax in axs.flat: ax.set_xticks([-3, -2, -1, 0, 1, 2]); ax.set_ylim(-0.03, 1.05)
+    for ax in axs.flat: ax.set_xticks([-3, -2, -1, 0, 1, 2]); ax.set_ylim(-0.03, 1.05); ax.tick_params(labelsize=6.5)
     h, l = axs[0, 0].get_legend_handles_labels()
     fig.legend(h, [x + (' (crossings needed)' if i == 0 else '') for i, x in enumerate(l)], loc='lower center', ncol=4,
                bbox_to_anchor=(.5, -0.03), handlelength=1.8)
-    fig.tight_layout(h_pad=.5, w_pad=.4, rect=(0, .04, 1, 1)); fig.savefig(OUT / 'fig5_readability.pdf', bbox_inches='tight'); plt.close(fig)
+    fig.tight_layout(h_pad=.5, w_pad=.4, rect=(0, .04, 1, 1)); fig.savefig(OUT / 'readability.pdf', bbox_inches='tight'); plt.close(fig)
     print('fig5 n own-readable per depth:', NS)
 
 
@@ -250,5 +436,34 @@ def fig_route_split(L='4'):
     fig.tight_layout(w_pad=.6); fig.savefig(OUT / 'fig6_route_split.pdf', bbox_inches='tight'); plt.close(fig)
 
 
-for f in (fig_schematic, fig_accuracy, fig_hops, fig_gsm8k_dist, fig_readability, fig_route_split):
+def fig_gsm8k_vs_rulechain():
+    """Main figure (Nov 24, GSM8K subsection): mean hops by steps from the edit to the answer, pairs answered right on both
+    sides. Released GSM8K CODI: edit at the start of the longest dependency path, so the distance is the item's serial depth
+    (steps_per_pass/gsm8k_steps_per_pass.json, start_of_path; unaffected by the twin-label artefact). RuleChain start-last
+    CODI and SIM-CODI: t31 pairs by s. Cells with fewer than 15 pairs are not drawn."""
+    fig, ax = plt.subplots(figsize=(W * .62, 2.5)); xs = np.arange(1, 7); std = (0, (4, 2))
+    ax.fill_between(xs, xs - 1, xs, color='#eeedea', lw=0, zorder=0)
+    ax.text(5.35, 3.3, 'one crossing\nper step', fontsize=6.3, color=INK2, ha='center', va='center')
+    for m, lab, mk, ls in (('sim', 'RuleChain SIM-CODI (per-step)', 's', '-'), ('startlast', 'RuleChain CODI, start last', '^', std)):
+        by = defaultdict(list)
+        for p in load(ART / f't31/{m}.json')['pairs']:
+            if p.get('qualified') and p.get('hops') is not None and p.get('R_right') and p.get('D_right'): by[p['s']].append(p['hops'])
+        ss = [s for s in sorted(by) if len(by[s]) >= 15]; mu = np.array([np.mean(by[s]) for s in ss]); ci = np.array([boot_ci(by[s]) for s in ss])
+        ax.errorbar(ss, mu, yerr=[mu - ci[:, 0], ci[:, 1] - mu], color=C[m], marker=mk, ls=ls, capsize=0, elinewidth=.8, label=lab)
+        print('  gsm8k_vs_rulechain', m, {s: (len(by[s]), round(float(np.mean(by[s])), 2)) for s in ss})
+    G = load(ART / 'steps_per_pass/gsm8k_steps_per_pass.json')['codi']['start_of_path']
+    ds = sorted(int(d) for d in G if G[d]['n'] >= 15); mu = np.array([G[str(d)]['hops'] for d in ds]); ci = np.array([G[str(d)]['hops_ci'] for d in ds])
+    ax.errorbar(ds, mu, yerr=[mu - ci[:, 0], ci[:, 1] - mu], color=INK, marker='o', mfc='white', ls=std, capsize=0, elinewidth=.8,
+                label='GSM8K CODI (released)')
+    print('  gsm8k_vs_rulechain gsm8k_codi', {d: (G[str(d)]['n'], round(G[str(d)]['hops'], 2)) for d in ds})
+    ax.set_xlabel('steps from the edit to the answer'); ax.set_ylabel('loop crossings used (mean hops)')
+    ax.set_xticks(xs); ax.set_xlim(.7, 6.3); ax.set_ylim(-0.25, 6.3); ax.legend(loc='upper left', fontsize=6.8, handlelength=2.8)
+    fig.tight_layout(); fig.savefig(OUT / 'gsm8k_vs_rulechain.pdf', bbox_inches='tight'); plt.close(fig)
+
+
+import os  # noqa: E402
+if os.environ.get('ONLY'):  # ONLY=<function name>: write one figure, skip the rest
+    globals()[os.environ['ONLY']](); print('wrote', os.environ['ONLY']); sys.exit()
+for f in (fig_schematic, fig_hops, fig_depth_failure, fig_monitor, fig_readability, fig_gsm8k_dist, fig_route_split):
     f(); print('wrote', f.__name__)
+fig_hops_by_s(); fig_hops_vs_accuracy(); fig_depth_failure(ALL, 'depth_failure_all.pdf'); print('wrote appendix versions (all models)')

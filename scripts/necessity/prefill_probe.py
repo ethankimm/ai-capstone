@@ -25,7 +25,8 @@ import adapters  # noqa: E402
 OUT, DEV, MODELS = sys.argv[1], sys.argv[2], sys.argv[3:]
 import os
 SMOKE = int(os.environ.get('SMOKE', '0'))  # SMOKE=1: L3 only, 300 fit items (code check)
-LEVELS = [3] if SMOKE else [3, 4, 5, 6]; LAYERS = [4, 8, 12]; NFIT = 300 if SMOKE else 2000
+LEVELS = [3] if SMOKE else [3, 4, 5, 6]; NFIT = 300 if SMOKE else 2000
+LAYERS = [int(x) for x in os.environ.get('LAYERS', '4,8,12').split(',')]  # t35: LAYERS=0,1,...,12
 sys.path.insert(0, str(adapters.REPO))
 from latentreasoning.tasks.synthetic_v2 import parse_chain_question, run_chain  # noqa: E402
 
