@@ -1,0 +1,41 @@
+{
+  "run_id": "20261124-152808_codi_prefix-substitution-entry-point",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2 (rule-gated CODI, start-last CODI; released GSM8K CODI)",
+    "checkpoint": "BASE/codi_runs_l1to7w_startlast{,_gated,_sim}/codi/run/checkpoint-* (selected checkpoints, adapters.RuleChainCODI); hf:zen-E/CODI-gpt2; BASE/grid_checkpoints/simcot_gpt2_codi (released SIM-CODI)",
+    "n_params": null
+  },
+  "dataset": {
+    "name": "rulechain-l1to7w-startlast + gsm8k-aug",
+    "split": "validation",
+    "n_examples": 1235,
+    "seed": 53
+  },
+  "metrics": {
+    "compute_steps": 6,
+    "extra": {
+      "score_file": "codi_audit_artifacts/t53/score.json",
+      "exploratory_gated_slope_e_on_pos": 0.96,
+      "exploratory_gated_e_eq_rule_plus_1": "375/375",
+      "exploratory_startlast_slope": -0.09,
+      "gsm8k_codi_entry_slope_anyuse": -2.24,
+      "gsm8k_codi_hops_slope_anyuse": 0.86
+    }
+  },
+  "hyperparams": {
+    "cap_per_cell": 25,
+    "pairs": "t31 pairs, both answered right",
+    "script": "scripts/necessity/prefix_sub.py"
+  },
+  "seed": 53,
+  "hardware": "local Apple Silicon (MPS), 25.8 GB",
+  "author": "Henning Lindig",
+  "notes": "t53: install B's first c latents and count saved refreshes; where does the edit enter the loop?",
+  "timestamp_utc": "2026-11-24T15:28:08.705453+00:00",
+  "git": {
+    "commit": "b436f1f",
+    "dirty": true
+  }
+}

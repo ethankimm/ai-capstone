@@ -12609,3 +12609,457 @@ At <bot>: v_1 .44-.52 for both SIM models; v_{L-1} at <bot> .15-.36 for start-fi
 **Gotchas hit:** chance originally computed over all items while B rates are over own-readable items; recomputed on the own-readable subset (2026-11-11): unchanged for CODI / SIM (<= .07), Coconut still ~.3.
 **Caveats:** single-token values only; one checkpoint per model.
 **Next:** Fig 5 uses CODI from this record; Coconut omitted.
+
+---
+
+## 2026-11-12 — RuleChain hop count with own-answer qualification (t31): wrong answers keep the staircase in gated / SIM-CODI; start-last CODI and the relay model cross more on wrong items, not less; stabilised CODI still ignores its latents (codi, run_id: 20261112-120347_codi_v2-l1to7w-hop-count-own-answers)
+
+**Goal:** t31 (pre-registered 2026-11-11 23:30): remove t26's selection on correct items. A pair counts if the model's own answers to recipient and donor differ, right or wrong; hops = first refresh from which the answer stays the model's own donor answer.
+**Mechanism / model:** the six RuleChain CODI models of t26 (20261112-060438_codi_v2-l1to7w-hop-count-six-models), same checkpoints.
+**Data:** valid L2-L6, the t26 minimal pairs (2,000 candidates per model, 80 recipients per level x edit cell). Qualified (own answers differ) / any-wrong: startlast 1735 / 1399, relay 1926 / 938, stab 1912 / 1078, gated 1978 / 273, sim 1966 / 311, simsf 1980 / 383.
+**Command:** `QUAL=own ../codi/.venv/bin/python scripts/necessity/hops.py <model> mps <out>` (queue `codi_audit_artifacts/t31/queue.sh`).
+**Headline results** (mean hops: all / both right / any wrong):
+- gated 2.16 / 2.23 / 1.69; sim 2.77 / 2.84 / 2.41; simsf 2.95 / 2.97 / 2.86. Wrong pairs keep the staircase (gated s - 1, sim / simsf about s in every bin).
+- startlast 1.34 / .79 / 1.47; wrong pairs at s = 4 / 5 / 6: 1.80 / 1.86 / 1.91 (n 254 / 180 / 121).
+- relay 1.15 / .88 / 1.43; wrong answers use .3-.6 more hops than right ones at s = 2-3.
+- stab .20 / .11 / .26; F_0 on wrong pairs .74 / .75 at s = 5 / 6.
+**Predictions:** both-right reproduces t26 within .10: held for gated / sim / simsf / startlast, missed for relay (.11) and stab (.20, s = 6, n = 22; the both-right bins are a smaller subsample than t26's). startlast <= 1.6 missed; its low-confidence alternative (wrong uses more hops) held. relay within +-.30 missed at s = 2-3. stab F_0 >= .80 missed at s = 5-6. gated / sim / simsf "too few wrong pairs" missed (46-104 per bin at s <= 4); all-pairs within .15 of t26 held.
+**Interpretation:** Selection on correctness did not create the staircase: gated and SIM-CODI cross once per rule on items they get wrong too. Start-last CODI and the relay model do not fail deep items by skipping crossings; their wrong answers use slightly more crossings than their right ones but stay near two, far below s.
+**Gotchas hit:** none; M_6 = donor run on every pair.
+**Caveats:** one seed per model; hops is an upper bound on serial steps; any-wrong pairs mix "recipient wrong" and "donor wrong".
+**Next:** t34 hidden-path detection and t35 layer-wise reach on the same models.
+
+---
+
+## 2026-11-12 — RuleChain Coconut hop count (t33): latents unused, mean hops .01, F_0 >= .98 in every bin (coconut, run_id: 20261112-120347_coconut_v2-rulechain-coconut-hop-count)
+
+**Goal:** t33 (pre-registered 2026-11-11 23:30): the hop count for our RuleChain Coconut, as the Coconut comparison to the six CODI models.
+**Mechanism / model:** Coconut c = 1, M = 6, start first, GPT-2 small (rulechain-checkpoints/gpt2_depth2_coconut_c1m6/checkpoint_10), one seed.
+**Data:** synthetic_data_v2/depth2 test L2-L6, minimal pairs as in t26, own-answer qualification (t31): 1,332 pairs, 1,310 with a wrong answer. Clean accuracy L2 .278, L3 .116, L4 .062, L5 .050, L6 .028.
+**Command:** `QUAL=own ../codi/.venv/bin/python scripts/necessity/hops.py coconut_rc mps <out>`.
+**Headline results:** mean hops .01; F_0 >= .98 in every s bin (the answer follows the donor question with the recipient's latents).
+**Predictions:** F_0 >= .90 in every s bin: held.
+**Interpretation:** This Coconut answers from the question pass alone; its latents carry nothing the answer reads. It gives no crossing-based monitoring point, consistent with its accuracy at or below no_thoughts (RULECHAIN_RESULTS.md).
+**Gotchas hit:** right on only 22 pairs, so right-vs-wrong splits are not meaningful.
+**Caveats:** one checkpoint at a weak operating point; a Coconut that beats no_thoughts on RuleChain might behave differently.
+**Next:** none for this checkpoint.
+
+---
+
+## 2026-11-12 — GSM8K hop count with own answers and first-token scoring (t31 + t32), released CODI and SIM-CODI: usable deep pairs grow 11-13x, hops stay near two at every depth, and answer tokens add no crossings (codi, run_id: 20261112-120347_codi_gsm8k-released-hop-count-own-answers-first-token)
+
+**Goal:** t31: remove t26's selection on correct items on GSM8K. t32: check that generated answer tokens do not carry depth, by scoring only the first answer token, teacher-forced after the answer delimiter.
+**Mechanism / model:** gsm8k_codi: hf:zen-E/CODI-gpt2@fd641b3; gsm8k_sim: hf:internlm/SIM_COT-GPT2-CODI. GPT-2 small, fp32 MPS, batch 1.
+**Data:** GSM8K-Aug test twins: t22 (1,471 candidates) and t27a long twins (>= 4 steps, 1,305). Qualified (own answers differ): codi 1243 + 1092, sim 1250 + 1148 (t26: 319 + 98, 303 + 89).
+**Command:** `QUAL=own FIRST=1 ../codi/.venv/bin/python scripts/necessity/hops.py gsm8k_codi|gsm8k_sim mps <out>`; long twins with `CANDS=t26/gsm8k_long_twins.json`.
+**Headline results:**
+- Both-right subset reproduces t26 (codi 1.47 vs 1.46, sim 1.54 vs 1.52; long twins identical).
+- Mean hops by listed steps s, all qualified: codi s = 2 / 3 / 4 1.40 / 1.73 / 2.04; long twins s = 4-8 1.80 / 1.64 / 1.77 / 1.61 / 1.10. sim 1.59 / 1.98 / 2.26; long 2.02 / 1.93 / 1.93 / 1.69 / 1.75.
+- Long twins s = 4, hop shares 0 / 1 / 2 / 3 / 4: codi any-wrong .09 / .32 / .38 / .14 / .06 (both right .01 / .32 / .45 / .22 / 0); sim any-wrong .09 / .31 / .32 / .15 / .06 (both right 0 / .20 / .59 / .19 / .01).
+- t32: teacher-forced first token starts the greedy answer on 100% of runs; first-token hops = full-answer hops on .954-.964 of pairs; first-token hops are about .1 lower in every bin.
+**Predictions:** t31 any-wrong within +-.30 of both-right at s = 2, 3: codi held (+.20 / -.30), sim missed at s = 2 (+.39). t32 agreement >= .95 held; equal on >= .90 held; by-s within +-.20 held except sim s = 6 (n 20) and codi long s = 7 (n 49).
+**Interpretation:** On GSM8K the hop count does not keep rising with depth: about two crossings at s = 4-8 whether or not the model is right. The third crossing (14-15% of s = 4 pairs) is real but rare. Answer tokens do not inflate the count; if anything the full answer needs slightly more refreshes because later digits keep attending to the stale latents.
+**Gotchas hit:** none; agreement 1.00.
+**Caveats:** released checkpoints only; s is listed steps, not dependency depth (t26 figures use depth); hops is an upper bound.
+**Next:** update the paper's GSM8K hop figure with the wrong-answer pairs.
+
+---
+
+## 2026-11-12 — GSM8K hop count with own answers and first-token scoring (t31 + t32), released Coconut: hops 1.5, falling with depth; answer tokens add no crossings (coconut, run_id: 20261112-120347_coconut_gsm8k-grid-hop-count-own-answers-first-token)
+
+**Goal:** as the CODI / SIM record of the same run (t31 own-answer qualification, t32 first answer token), for the released GSM8K Coconut.
+**Mechanism / model:** connordilgren grid Coconut GPT-2 GSM8K (grid_checkpoints), fp32 MPS, batch 1.
+**Data:** t22 twins (1,471) and t27a long twins (1,305). Qualified (own answers differ): 1238 + 1109 (t26: 220 + 42).
+**Command:** `QUAL=own FIRST=1 ../codi/.venv/bin/python scripts/necessity/hops.py gsm8k_coconut mps <out>`; long twins with `CANDS=t26/gsm8k_long_twins.json`.
+**Headline results:**
+- Both-right reproduces t26 (1.46 vs 1.45; long twins identical).
+- Mean hops by s: 1.38 / 1.56 / 1.69 at s = 2 / 3 / 4; long twins s = 4-8 1.58 / 1.44 / 1.29 / 1.34 / .90. F_0 about .2 on long twins.
+- Long twins s = 4, hop shares 0-4: any-wrong .16 / .36 / .29 / .12 / .05.
+- t32: agreement 1.00; first-token hops = full-answer hops on .960-.970 of pairs; first-token hops slightly lower.
+**Predictions:** t31 within +-.30: held at s = 2 (+.03), missed at s = 3 (-.34). t32 held except t22 s = 6 (-.21, n 23).
+**Interpretation:** Coconut uses fewer crossings than CODI / SIM and fewer as items get longer; about one long-twin pair in five needs none.
+**Gotchas hit:** none.
+**Caveats:** one released checkpoint; its vocabulary-projection readout fails chance (t30), so readability needs a probe.
+**Next:** none beyond the paper figure.
+
+---
+
+## 2026-11-12 — Hidden-path detection on six RuleChain CODI models (t34): latents reveal middle-rule branches the question pass and answer cannot in gated / SIM-CODI (+.40 to +.49 balanced accuracy); in plain, relay and stabilised CODI the question pass already carries them (codi, run_id: 20261112-130851_codi_v2-l1to7w-hidden-path-detection)
+
+**Goal:** t34 (pre-registered 2026-11-12 00:15), thread 1d: a monitorability test closer to what a monitor is for. Can a probe on the latents tell which branch a middle rule took, when a probe on the question pass plus the model's answer cannot?
+**Mechanism / model:** gated, sim, simsf, startlast, relay, stab (the t26 RuleChain CODI models, same checkpoints).
+**Data:** synthetic-depth2 L4-L6; fit on 2,000 train items per level (seed 30), score on all valid items of the level. Target: branch at rule k (gold walk), k = 2 .. L-1.
+**Command:** `../codi/.venv/bin/python scripts/necessity/hidden_path.py <model> mps <out>` (queue `codi_audit_artifacts/t34/queue2.sh`).
+**Method:** features per item from one natural run: Q = <bot> layers 4/8/12; A = own answer one-hot; Z = z_1..z_5; H = latent passes 0-4 at layer 8. Ridge to +-1, balanced accuracy. Gain = max(QAZ, QAH) - QA. Shuffled-label control on QAZ.
+**Headline results** (QA range; best latent set; mean gain):
+- gated .46-.56; H .99-1.00; +.49. sim .47-.65; .93-.99; +.40. simsf .52-.65; QAZ .98-1.00; +.40.
+- startlast .63-.92; +.03. relay .75-.94; +.02. stab .67-.95; +.01. The baseline's signal is in Q (the answer one-hot alone is ~.50).
+- Shuffled control <= .55 except one cell (gated L5 k = 3, .61).
+**Predictions:** all model-level predictions held (sim QA max .650, at the edge). Shuffled <= .56 missed in one cell. Not predicted: startlast's question pass carries the branches (.92 at L4 k = 2) though t35 reads its v_1 exactly at only .31.
+**Interpretation:** Where training routes the chain through the latents (gated, SIM-CODI), the latents are the only place a linear monitor finds the path: chance from question + answer, near-perfect from the latents. Where the question pass computes the chain (start-first stab and relay, and start-last CODI in a coarse form), the latents add nothing. So latents are worth monitoring exactly when the hop count says they are used. Exact-value probes understate what a single pass computes: branch bits are readable where exact values are not.
+**Gotchas hit:** numpy on macOS prints spurious matmul RuntimeWarnings; the smoke had the same warnings and its scores are sane.
+**Caveats:** linear probes only; gold-walk labels (on wrong items the model's path may differ; right-only scores are reported); one seed per model; branch bits are one property, not the whole path.
+**Next:** add to the paper's monitorability section (thread 1d).
+
+---
+
+## 2026-11-12 — Layer-wise single-pass reach on RuleChain (t35): exact values become readable only at layers 11-12, and at most v_1 (v_2 in stabilised CODI) in one pass (codi, run_id: 20261112-130851_codi_v2-l1to7w-layerwise-single-pass-reach)
+
+**Goal:** t35 (pre-registered 2026-11-12 00:15), thread 1b: how many RuleChain steps does one 12-layer question pass compute, measured at every layer?
+**Mechanism / model:** stab0 and startlast0 (matched CODI-0 references), stab, startlast, simsf, sim.
+**Data:** synthetic-depth2 valid L3-L6, design of t21c (prefill probe on the question pass), 2,000 fit items per level.
+**Command:** `LAYERS=0,1,...,12 ../codi/.venv/bin/python scripts/necessity/prefill_probe.py <out> mps stab0 startlast0 stab startlast simsf sim`.
+**Headline results** (best position = any rule end >= k or <bot>; max over layers; emergence = first layer >= .5):
+- stab0: v_1 .58-.64 (emerges at layer 11), v_2 .39-.48 (never), v_3 .24-.28.
+- stab: v_1 .65-.69 (layer 11), v_2 .52-.58 (layer 12), v_3 .27-.30.
+- startlast0 v_1 <= .29, startlast v_1 <= .39; sim / simsf v_1 .44-.54 (layer 11 at L3 only); v_2 <= .13 in all four.
+**Predictions:** stab0 v_1 by layer 6 missed (layer 11); stab0 v_2 emerges missed (never); v_3 never held; startlast0 v_1 by layer 12 missed; stab >= stab0 held; sim / simsf / startlast as t21c held.
+**Interpretation:** Exact intermediate values appear only in the top two layers and at most one or two steps deep, yet stab0 answers L3 at .87 and t34 reads branch bits from the question pass of startlast / stab / relay at .8-.95. One pass computes more than exact-value probes show; single-pass reach should be measured by behaviour (CODI-0 accuracy, zero-hop share) or by coarser targets, not by exact-value probes.
+**Gotchas hit:** none beyond the numpy warnings.
+**Caveats:** linear 100-way probes; one seed each.
+**Next:** reword the paper's reach argument (thread 1b) to rest on behavioural reach.
+
+---
+
+## 2026-11-12 — Released SIM-CoT Coconut on GSM8K (t36): 2.6-3.2 hops at every length, the most of any GSM8K model, but no staircase (coconut, run_id: 20261112-211705_coconut_gsm8k-released-simcot-coconut-hop-count)
+
+**Goal:** t36 (pre-registered): does step supervision give Coconut deeper latent use on GSM8K? Comparison to plain Coconut (t31).
+**Mechanism / model:** hf:internlm/SIM_COT-GPT2-Coconut @676c8a8, checkpoint_28 (base_causallm only; the step decoder is not used). 10 latents (SIM-CoT gsm_simcot.yaml: c_thought 2 x max_latent_stage 5).
+**Data:** GSM8K-Aug test twins: t22 (1,471 candidates) and long twins (1,305). Qualified (own answers differ): 1,287 + 1,111.
+**Command:** `QUAL=own FIRST=1 ../codi/.venv/bin/python scripts/necessity/hops.py gsm8k_simcoconut mps <out>` (queue `codi_audit_artifacts/t36/queue.sh`).
+**Headline results:**
+- Validity: on 200 recipients, accuracy .295 at 6 latents, .39 at 10 (plateau .38-.40 from 8 to 16); plain Coconut .325.
+- Mean hops by listed steps: t22 s = 2-5 2.05 / 2.49 / 3.10 / 2.96; long twins s = 4-8 2.61 / 2.95 / 2.57 / 3.20 / 2.00. Plain Coconut long twins 1.58 / 1.44 / 1.29 / 1.34.
+- F_0 .07 / .06 (plain Coconut ~.2). s = 4 long twins with >= 3 hops: .50.
+- First token: agreement 1.00; first-token hops = full-answer hops on .969 / .939 of pairs.
+**Predictions:** all held (above plain Coconut in every bin; no staircase; not falling with s, pooled s = 6-7 2.80 vs 2.61; F_0 <= .15; t32 checks; M_K = donor run on every pair).
+**Interpretation:** Step supervision deepens Coconut's latent use on GSM8K (about one more crossing than CODI / SIM-CODI, 1.2-1.9 more than plain Coconut) but, as with SIM-CODI, the count does not grow with length past ~3 steps.
+**Gotchas hit:** the released checkpoint needs 10 latents; at the adapter's default 6 it loses 10 points.
+**Caveats:** 10 latents vs 6 for the other GSM8K models (no model's counts approach its cap); one released checkpoint.
+**Next:** readability with SIM-CoT's own decoder (in the checkpoint, unused so far).
+
+---
+
+## 2026-11-12 — Kevin's RuleChain SIM-Coconut (t37): one crossing per step and then some (F_0 = 0, hops s + .3-.6, capped at 6 latents), latents reveal middle-rule branches (+.36 over question + answer) (coconut, run_id: 20261112-211705_coconut_v2-rulechain-simcot-coconut-hops-hidden-path)
+
+**Goal:** t37 (pre-registered): hop count and hidden-path detection for the one Coconut-stack RuleChain model whose latents beat single-pass reach.
+**Mechanism / model:** pilot_k8_simcot_c1m6/checkpoint_26 (Coconut c = 1, M = 6, SIM-CoT step loss; record 20261104-144235). Loader check: 360 / 360 logged predictions reproduced.
+**Data:** synthetic-depth2 test L2-L6 (start value first), 1,937 qualified pairs (own answers differ; 786 with a wrong answer). Hidden path: fit on depth2 train (2,000 per level), scored on test L4-L6.
+**Command:** `QUAL=own ... hops.py simcoconut_rc mps <out>`; `... hidden_path.py simcoconut_rc mps <out>` (queue `codi_audit_artifacts/t37/queue.sh`).
+**Headline results:**
+- Mean hops s = 1-6: 1.61 / 2.56 / 3.46 / 4.32 / 5.32 / 5.99; F_0 = 0 in every bin; rule-1 edits need L + 1 crossings (L4 4.54); s = 6 at the 6-latent cap.
+- Wrong pairs: same staircase (3.71 vs 3.28 both right).
+- Hidden path: question + answer .50-.70; best latent set .92-.98; mean gain +.36; shuffled <= .55.
+**Predictions:** all held (QA <= .70 at the edge, .700).
+**Interpretation:** The clearest staircase of any model: no answer changes with fewer crossings than steps. With t36 this extends "per-pass structure sets the hop count" to the Coconut stack. The cap at 6 latents matches the accuracy collapse at k = 7.
+**Gotchas hit:** checkpoint arrived as checkpoint_26.zip (a torch zip file, loads directly).
+**Caveats:** one seed; under-trained flag in the original record.
+**Next:** per-position probes (t38c, done).
+
+---
+
+## 2026-11-12 — Hop-guided reading (t38): the item's own hop count predicts when a value becomes readable in rule-gated (.99 vs .76) and relay CODI (.90 vs .39) but not in SIM-CODI; branch information sits at pass k - 1 in all four staircase models (codi, run_id: 20261112-211705_codi_v2-rulechain-hop-guided-timing-position)
+
+**Goal:** t38 (pre-registered): does the hop count tell a monitor when and where to read, beyond reading all latents?
+**Mechanism / model:** the t26 RuleChain CODI models (t38a/b, offline); gated, sim, simsf and Kevin's SIM-Coconut (t38c).
+**Data:** t38a/b: t29 readability records (t26/rcread_*.json) joined one to one to their t26 pairs. t38c: RuleChain L4-L6, as t34 / t37.
+**Command:** `python3 scripts/necessity/hop_guided.py <out>`; `PER_POS=1 ... hidden_path.py <model> mps <out>` (queue `codi_audit_artifacts/t38/queue.sh`).
+**Headline results:**
+- t38a, first-read refresh = structural d vs = hop-aligned h_k: gated .76 vs .99 (disagreements, n 707: .01 vs .99; within-cell r .96); relay .39 vs .90; sim .67 vs .32 (.66 with one more crossing, post hoc); simsf .68 vs .29 (.67).
+- t38b: the newly refreshed latent z_(n_r - 1) reads the value, where legible: gated 1.00, sim .89, simsf .90, relay .77 (unconditional .24-.61).
+- t38c: the best single position for rule k's branch is pass k - 1 in 35 of 36 cells (Spearman 1.0 at every level, all four models); gated H_(k-1) = 1.00; single position within .05 of all latents except three SIM cells.
+**Predictions:** t38a held for gated, missed for sim / simsf; t38b held; t38c held except the within-.05 check in three cells.
+**Interpretation:** Where to look: in staircase models, rule k is decided in pass k - 1, the position a one-crossing-per-step count implies, and one position carries nearly all of it. When: the item's own hop count beats chain structure where the two differ (gated start edits, relay), but in SIM models it adds nothing beyond structure.
+**Gotchas hit:** rc_readability.py stores no pair ids; the join rebuilds its pair selection and checks every (L, k, A, B).
+**Caveats:** t38b is partly built in (earlier sites were already refreshed); linear probes; one seed per model.
+**Next:** paper 5.3 / 5.6.
+
+---
+
+## 2026-11-13 — RuleChain deep chains and crossing-targeted monitoring (t40 + t41): at L7 low-crossing models keep their one or two crossings and fail; staircase models cross s - 1 times; the latents' monitor gain is not concentrated on items whose answers need more crossings (codi, run_id: 20261113-101920_codi_v2-l1to7w-deep-chain-hops-crossing-split)
+
+**Goal:** t41: do models that cross once or twice at L2-L6 cross more at L7, the deepest trained level? t40: is the latents' extra hidden-path signal (t34) concentrated on items whose answers depend on more crossings, which would let the hop count tell a monitor which items to read?
+**Mechanism / model:** the six RuleChain CODI models of t26 / t31 (gated, sim, simsf, startlast, relay, stab), same checkpoints.
+**Data:** synthetic-depth2 valid. t41: L7 minimal pairs, own-answer qualification, 80 recipients per (level, edit) cell (412-631 qualified pairs per model). t40: L4-L7, fit 2,000 train items per level (seed 30), scored on all 285-286 valid items per level; item hops = mean over the t31 (L4-L6) / t41 (L7) pairs where the item is the recipient (896-1,007 items joined).
+**Command:** `QUAL=own LEVELS=7 ../codi/.venv/bin/python scripts/necessity/hops.py <model> mps <out>`; `SAVE_ITEMS=1 LEVELS=4,5,6,7 ... hidden_path.py <model> mps <out>`; `python3 scripts/necessity/crossing_split.py <out>` (queue `codi_audit_artifacts/t39/queue.sh`).
+**Headline results:**
+- t41 L7 accuracy / hops by s: gated .98, s - 1 up to 5.45 at s = 7; sim 1.00, up to 5.92; simsf .96, up to 6.00. startlast .08, 1.3-1.6 at every s >= 2 (L6 1.45 -> L7 1.23); relay .28, 1.7-2.0 (1.50 -> 1.61); stab .19, .2-.4 (.31 -> .27).
+- t40 L4-L6 mean gain (best latent set - QA) reproduces t34: gated +.486, sim +.398, simsf +.401, startlast +.026, relay +.022, stab +.010.
+- t40 split, high-hop (>= 2) minus low-hop (<= 1.5) per-item gain: startlast +.032 [+.006, +.060] (.017 vs .051), relay +.000 [-.025, +.026], stab +.021 (22 high-hop items, not scored); gated +.045, sim -.036, simsf -.019.
+**Predictions:** t41 held except gated >= 5.5 at s = 7 (5.45). t40 reproduction held; L7 held for sim / simsf, missed for gated at rule 6 (decided in pass 5, outside the feature set). Main (<= .05 concentration) held for startlast and relay; startlast's difference is small but above zero.
+**Interpretation:** Past single-pass reach, the low-crossing models do not cross more; they keep their one or two crossings and fail at about the no-latent rate (startlast .08 vs CODI-0 .05; stab .19 at this n vs CODI-0 .24). The staircase models use every latent and hit the 6-latent cap at s = 7. The hop count does not pick out monitorable items in the low-crossing models: start-last CODI's high-hop items show about three points more latent gain, relay's none.
+**Gotchas hit:** numpy on macOS prints spurious matmul RuntimeWarnings (as in t34).
+**Caveats:** one seed per model; linear probes; gold-walk labels; L7 is in the training range but L8+ is not, so this cannot test chains beyond training; item hops are means over sampled pairs.
+**Next:** a standard-recipe CODI trained on chains past single-pass reach (L1-L12, 12 latents) would test whether standard training chains when the task requires it (needs a GPU pod).
+
+---
+
+## 2026-11-13 — GSM8K hidden-step monitor (t39): latents add +.04 to +.09 balanced accuracy on step properties over question pass + answer in all four released checkpoints, the best position moves later with the step, but the gain is not concentrated on items whose answers need more crossings (codi, run_id: 20261113-101920_codi_gsm8k-released-hidden-step-monitor-crossing-split)
+
+**Goal:** t39 (pre-registered 2026-11-13 00:14): the GSM8K analogue of t34 / t40. Does reading the latent loop tell a monitor something about the model's intermediate steps that the question pass and the answer do not, and is that signal concentrated where the hop count says the answer depends on crossings?
+**Mechanism / model:** released zen-E CODI, InternLM SIM-CODI, connordilgren Coconut (6 latents) and InternLM SIM-Coconut (10 latents), GPT-2 small, fp32 MPS, batch 1.
+**Data:** fit 2,000 GSM8K-Aug train items (seed 39), scored on all 1,319 GSM8K test items; hops joined for 823-836 test items (t31 / t36 pairs, both twin sets). Targets per step k = 1..3: op_k (step uses * or /), big_k (result >= fit median); wrong (own answer wrong).
+**Command:** `../codi/.venv/bin/python scripts/necessity/gsm8k_hidden.py <model> mps <out>`; scoring `python3 scripts/necessity/crossing_split.py <out>`.
+**Method:** Q = last question position, layers 4 / 8 / 12; A = 16 numeric features of the own answer; Z = fed-back latents; H = every latent pass at layer 8; also each position alone. Dual ridge, balanced accuracy. Gain = max(QAZ, QAH) - QA. Split: rationale length 3-4, item hops <= 1.5 vs >= 2.5, stratified by length, bootstrap CIs.
+**Headline results** (mean gain over op_2, op_3, big_2, big_3; wrong gain; high - low hop split):
+- codi +.037; wrong +.154; split -.005 [-.041, +.031] (n 224 / 58).
+- sim +.062; wrong +.064; split -.037 [-.076, +.001] (190 / 99).
+- coconut +.088; wrong +.059; split +.008 [-.063, +.068] (222 / 52).
+- simcoconut +.092; wrong -.025; split -.000 [-.051, +.051] (93 / 205).
+- Best single pass for op_1..3 / big_1..3: codi H0,H1,H3 / H0,H2,H4; sim H0,H1,H2 / H0,H1,H2; coconut H1,H4,H5 / H1,H4,H5; simcoconut H1,H2,H5 / H1,H3,H5. Shuffled control <= .53.
+**Predictions:** codi gain <= .05 held; coconut <= .05 missed (+.088); sim / simcoconut >= codi held; wrong <= .03 missed for three of four; shuffled held; main split (simcoconut >= .05) missed, and no model shows concentration; per-position monotone held (and holds for codi and coconut too).
+**Interpretation:** On GSM8K the latents carry step information a question-pass monitor misses in every model, including the low-crossing ones (+.04 CODI, +.09 Coconut), and each step's information sits at a later pass than the previous step's. But the extra signal is the same on items whose answers depend on one crossing as on items that depend on three, so the hop count does not tell a monitor which items to read; readable step content is present whether or not the answer depends on it (readable is not used; compare the idle-latent result on RuleChain).
+**Gotchas hit:** the adapters switch the HF hub to offline mode, so the data loads first. The wrong target has no confidence feature in QA, so its gain is not comparable with the earlier wrong-answer monitor (+.001 over confidence).
+**Caveats:** released checkpoints only, one each; coarse binary targets; linear probes; item hops are means over 1-3 sampled pairs; high-hop groups are small for codi and coconut (52-58 items).
+**Next:** a causal check of whether the readable step content in low-crossing models is used (patch the best-position latent between items that differ in op_k and see if the answer moves).
+
+---
+
+## 2026-11-14 — GSM8K serial depth (t42): the matched CODI gain holds through depth 3 and vanishes at depth 4+; crossings rise with serial distance, but only by +.10 to +.17 per step within an item; readability does not track depth (codi, run_id: 20261114-040437_codi_gsm8k-serial-depth-reanalysis)
+
+**Goal:** t42 (pre-registered 2026-11-14, before running): GSM8K "steps" counts calculator annotations, many of them parallel. Redo the accuracy, crossing and readability results by each item's longest dependency chain instead of its step count.
+**Mechanism / model:** offline. Kevin's matched GSM8K CODI / CODI-0 predictions (records 20261104-012327, 20261103-225715); t39 per-item outputs and t31 / t36 hop pairs for the released zen-E CODI, InternLM SIM-CODI, connordilgren Coconut and InternLM SIM-Coconut.
+**Data:** all 1,319 GSM8K-Aug test items; 2,335-2,398 qualified hop pairs per released model.
+**Command:** `MODE=strict|loose ../codi/.venv/bin/python scripts/necessity/gsm8k_depth.py codi_audit_artifacts/t42/gsm8k_depth_<mode>.json`; within-item slopes `scripts/necessity/gsm8k_depth_within.py`.
+**Method:** step j depends on step i < j when a number in j's expression equals i's result (latest such i). Strict: not when the number also appears in the question; loose: regardless (the two agree on 87.9% of items). Copy steps (`<<50=50>>`) inherit their source's depth. If no step's result equals the answer, one implicit final step is added (93 items). For hop pairs, serial distance = longest dependency path from the edited step to the answer step.
+**Headline results** (strict; loose agrees in direction everywhere):
+- Depth vs steps: median depth 2 / 3 / 3 / 4 at 2 / 3 / 4 / 5+ steps; at 5+ steps 113 of 225 items reach depth 4+.
+- Matched CODI - CODI-0 by depth: d1 +.094 [+.026, +.162], d2 +.089 [+.054, +.125], d3 +.078 [+.040, +.116], d4+ -.005 [-.045, +.035]. Teacher .35 / .52 / .47 / .44. On teacher-right items: +.16 / +.21 / +.19 / +.01.
+- Steps x depth (CODI gain): 3 steps d2 +.11, d3 +.13; 4 steps d2 -.04 (n 57), d3 +.05, d4+ +.02; 5+ steps d3 +.04, d4+ -.03. At fixed depth 3 the gain falls with length (+.13 / +.05 / +.04).
+- Released models' accuracy by depth peaks at d2 (.47-.59) and falls to .11-.27 at d4+, but at a fixed step count it does not fall with depth (e.g. 4 steps: CODI .39 / .23 / .40 at d2 / d3 / d4+).
+- Hops by serial distance 2 / 3 / 4 / 5: codi 1.42 / 1.75 / 1.91 / 1.87; sim 1.60 / 1.94 / 2.29 / 2.29; coconut 1.36 / 1.55 / 1.63 / 1.72; simcoconut 2.10 / 2.65 / 3.01 / 3.41. Within item (item-demeaned, item bootstrap): +.157 [+.084, +.230], +.120 [+.036, +.206], +.110 [+.037, +.187], +.138 [+.030, +.250] crossings per serial step (loose: +.14, +.16, +.10, +.17). Per index step, within item: +.08 to +.11.
+- Readability (latent gain over QA by the depth of step k): op_2 is read better when step 2 is independent than when it depends on step 1 (codi +.038 vs +.003, sim +.087 vs +.032, coconut +.124 vs +.051, simcoconut +.078 vs +.027); big_2 shows no such gap. Best single pass: no consistent shift between independent and serial steps.
+**Predictions:** depth < steps held. Gain falls with depth held (d4+ only); lower depth gives a larger gain within a fixed step count missed (the reverse at 3 steps). Teacher falls less with depth held (both near flat). Released accuracy falls with depth at a fixed step count missed. Hops flat across item depth (within +-.3) missed for codi (+.37), sim (+.57), simcoconut (+1.04); held for coconut (+.20). Readability no trend (|diff| < .05) missed for op_2 in sim, coconut, simcoconut; held for big targets. Position same or later when serial: not consistent.
+**Interpretation:** Step count overstated serial depth, and fixing it changes two things. (1) The latent gain survives through depth 3, not just 3 steps; it vanishes at depth 4+, but at a fixed depth it also shrinks with length, so length and depth both matter and the cells are too small to separate them cleanly. (2) GSM8K crossings are not flat: the same item needs +.10 to +.17 more crossings per extra serial step on its path, in all four models. That is about a seventh of the one crossing per step the chaining RuleChain models show, so it is a weak, partial staircase, not chaining. The across-item slopes are larger (.13-.46, simcoconut highest), so part of that pattern is harder items needing more crossings. Readability does not follow depth; the operation of an independent step is easier to read from the latents than that of a dependent one.
+**Gotchas hit:** strict undercounts when an intermediate value coincides with a question number; loose overcounts. Copy steps (`<<50=50>>`) and unannotated final sums otherwise make long items look shallow; both handled (see Method). The loose run's printed "strict = loose" line is trivially 1.0 (it compares loose with itself); the real agreement is .879.
+**Caveats:** heuristic parse of the reference rationale, not the model's own computation; one seed and one checkpoint each; d1 and several steps x depth cells are small (n 26-60); hop pairs are 1-3 per item.
+**Next:** whether the +.1-per-step within-item slope is distinguishable from the RuleChain low crossers (compute the same within-item slope on t31 / t41).
+
+---
+
+## 2026-11-14 — Latent faithfulness by continuation (t43): the metric is confounded by where the chain goes wrong; errors show up in later latents (codi, run_id: 20261114-081823_codi_rulechain-gsm8k-latent-faithfulness-continuation)
+
+**Goal:** t43 (pre-registered 2026-11-13): on wrong items, does continuing the chain from the value read at z_j reproduce the model's own answer, and only at the latents the hop count says the answer crosses?
+**Mechanism / model:** six RuleChain CODI models + Kevin's RuleChain SIM-Coconut; released GSM8K CODI and SIM-CODI. Natural runs only.
+**Data:** RuleChain valid + test L2-L7 (4,715 / 4,002 items); GSM8K test 1,319.
+**Command:** `../codi/.venv/bin/python -W ignore scripts/necessity/faithful.py <model> mps codi_audit_artifacts/t43/<model>.json` (queue `codi_audit_artifacts/t43/queue.sh`).
+**Method:** RuleChain: 100-class ridge per (latent, step) fit on train L2-L7 pooled; each latent's step = best read on correct items; continuation re-applies the remaining rules. GSM8K: numbers among top-10 vocabulary-projection tokens of z_j, re-executed through the rationale (t42 strict parse); control = next wrong item's tokens.
+**Headline results:** simsf (77 wrong): faithful .03 at z1 rising to .27 at z5-z7 (chance ~.02) while gold-tracking falls .91 -> .16. simcoconut_rc (1,146 wrong): .00 -> .11, gold-track 1.00 -> .25. gated (16 wrong): every latent holds the gold value (.94-1.00), none predicts the wrong answer. Low crossers .05-.14 vs .015-.03 chance, readability .08-.25. GSM8K CODI odd latents .07-.09 vs .01-.02 control (even latents hold no numbers); SIM-CODI .03-.06 vs <= .01. Inside vs outside the item's crossings: lower inside wherever n allows (e.g. simcoconut_rc .05 vs .25, level-mean C, post hoc).
+**Interpretation:** On a wrong item the chain goes wrong partway; latents before the error hold the gold value, whose continuation gives the gold answer, so they score as unfaithful even if used. The metric therefore measures where the error is. What survives: errors propagate through the later latents (they carry the wrong value the answer comes out with), and rule-gated CODI keeps correct latents while its answer step fails.
+**Gotchas hit:** per-item hop counts exist only for valid items (pairs were built there), so most errors had no C; level-mean C added post hoc. numpy on this Mac prints spurious matmul warnings (results finite; run with -W ignore).
+**Caveats:** pooled probes; chaining models make few errors at L2-L7 (gated 16, sim 3).
+**Next:** superseded by t43b (local consistency), t43c (ceiling) and t45 (branches).
+
+---
+
+## 2026-11-14 — Local consistency of successive latents on wrong items (t43b): crossed latents are not more consistent than later ones (codi, run_id: 20261114-081823_codi_rulechain-latent-local-consistency-wrong-items)
+
+**Goal:** t43b: fix t43's confound. On wrong items, does the value read at z_(j+1) follow from the value read at z_j (rules in between applied), and more so inside the item's crossings?
+**Mechanism / model:** same seven RuleChain models and probes as t43.
+**Data:** wrong items of valid + test L2-L7; links where at least one side differs from gold.
+**Command:** `LOCAL=1 ../codi/.venv/bin/python -W ignore scripts/necessity/faithful.py <model> mps codi_audit_artifacts/t43b/<model>.json`.
+**Headline results:** compute links (next latent reads a later step) inside vs outside C: simsf .13 vs .18 (n 238 / 77), simcoconut_rc .04 vs .10, startlast .03 vs .03, relay .03 vs .01; chance .01-.02. Copy links beyond C .47-.71 (persistence). gated 4 and sim 10 links: not scorable.
+**Interpretation:** No sign that the crossed latents carry the model's own (wrong) chain; t43c shows this is not just readout error for simsf and simcoconut_rc.
+**Gotchas hit:** copy links (same step read again) dominate the registered all-links score; split by kind added before the full run (prereg addendum).
+**Caveats:** value probes trained on correct runs; level-mean C.
+**Next:** t43c ceiling; t45 branches.
+
+---
+
+## 2026-11-14 — Readout ceiling for the local-consistency test (t43c): the t43b null is real for SIM models, readout-limited for low crossers (codi, run_id: 20261114-081823_codi_rulechain-latent-local-consistency-ceiling)
+
+**Goal:** t43c: the same link test on correctly answered items, where the true values are known, gives the consistency a faithful chain reaches given readout error.
+**Mechanism / model:** simsf, simcoconut_rc, startlast, relay.
+**Data:** correct items of valid + test L2-L7.
+**Command:** `CEIL=1 LOCAL=1 ../codi/.venv/bin/python -W ignore scripts/necessity/faithful.py <model> mps codi_audit_artifacts/t43c/<model>.json` (parallel runner `codi_audit_artifacts/t44/run_one.sh`).
+**Headline results:** compute links inside C: simsf .63, simcoconut_rc .57 (chance .01); startlast .05, relay .06. simsf by link .72 / .61 / .59 / .49 / .43 / .34 (z1->z2 .. z6->z7).
+**Interpretation:** Pre-registered rule: for simsf and simcoconut_rc the wrong-item rates (.13, .04) are far below a reachable ceiling, so their crossed latents' value readouts do not track the model's own errors. For startlast and relay the ceiling is ~.06, so per-item faithfulness at their crossings is untested.
+**Gotchas hit:** none.
+**Caveats:** value readouts only; branch readouts are tested in t45.
+**Next:** t45.
+
+---
+
+## 2026-11-14 — Crossing-aware monitor vs all latents, pooled probes (t44): reading only the crossed latents loses almost everywhere (codi, run_id: 20261114-081823_codi_crossing-aware-monitor-pooled)
+
+**Goal:** t44: does a monitor reading only the latents an item's answer crosses beat one reading all latents (gold steps T1, own answer on wrong items T2, wrong flag T3)?
+**Mechanism / model:** seven RuleChain models, four released GSM8K models.
+**Data:** test items with measured crossings (RuleChain valid recipients of hop pairs; GSM8K test items in t31 / t36 pairs).
+**Command:** `../codi/.venv/bin/python -W ignore scripts/necessity/monitor_select.py <model> mps codi_audit_artifacts/t44/<model>.json`.
+**Headline results:** T1 CROSS - ALL: gated -.11, sim -.06, simsf -.09, startlast -.02, relay -.03, stab -.04, simcoconut_rc -.11, gsm8k codi -.03, sim -.03, coconut -.07, simcoconut -.05. CROSS - random prefix of the same size: +.03 to +.06 in chaining models. T2 up to -.33 (gsm8k_simcoconut; later latents hold the answer). T3 gsm8k_codi -.10. DEPTH monitor (no minimal pairs) ~ CROSS.
+**Interpretation:** Biased against CROSS: each prefix probe was fit on items of every length, where a latent's role differs. Superseded by t44b.
+**Gotchas hit:** GSM8K data must load before the adapters (offline mode); fixed after the smoke test.
+**Caveats:** chaining models' measured-C items are all answered right, so T2 / T3 are empty there.
+**Next:** t44b matched fit.
+
+---
+
+## 2026-11-14 — Crossing-aware monitor, matched fit (t44b): crossed latents hold all the gold-step signal in chaining models; reading fewer latents never monitors better (codi, run_id: 20261114-081823_codi_crossing-aware-monitor-matched-fit)
+
+**Goal:** t44b: the fair version of t44. Probes fit only on train items with the same crossing count (RuleChain: level-mean hops; GSM8K: mean hops at the item's serial depth); CROSS_m and ALL_m use the same training items.
+**Mechanism / model:** seven RuleChain models, four GSM8K models.
+**Data:** all eval items (RuleChain valid + test L2-L7; GSM8K test 1,319).
+**Command:** `../codi/.venv/bin/python -W ignore scripts/necessity/monitor_match.py <model> mps codi_audit_artifacts/t44b/<model>.json`.
+**Headline results:** T1 CROSS_m - ALL_m: gated +.001, sim .000, simsf -.009, simcoconut_rc -.016; startlast -.002, relay -.020, stab -.039; gsm8k codi -.032, sim -.032, coconut -.065, simcoconut -.050. T2: simsf -.08, gsm8k -.03 to -.28. T3: gsm8k codi -.05, sim -.09; coconut / simcoconut +.02 / +.03 where ALL_m is at chance (.50).
+**Interpretation:** In chaining models the crossed latents carry all the linearly readable step information once probes are fit per crossing group (matches t38c). Restricting a monitor to them never improves it; on GSM8K, and for predicting the model's own answer, the latents beyond the crossings add signal.
+**Gotchas hit:** gsm8k_simcoconut depth groups put 1 train item in c = 1 (nearest-group fallback used).
+**Caveats:** linear probes; group crossings, not per-item.
+**Next:** none planned; write up.
+
+---
+
+## 2026-11-14 — Branch faithfulness on wrong items (t45): SIM-Coconut's latent branches reproduce its own errors, and only when read inside the crossings (codi, run_id: 20261114-081824_codi_rulechain-branch-faithfulness-wrong-items)
+
+**Goal:** t45: on wrong items, does replaying the chain with each rule's branch forced to the one read from the latents reproduce the model's own answer, and does that hold for latents inside the crossings rather than beyond?
+**Mechanism / model:** seven RuleChain models.
+**Data:** wrong items of valid + test L2-L7; scored on branch-explainable errors (some branch pattern gives the model's answer).
+**Command:** `../codi/.venv/bin/python -W ignore scripts/necessity/branch_faith.py <model> mps codi_audit_artifacts/t45/<model>.json`.
+**Headline results:** simcoconut_rc: .42 [.34, .50] of 163 explainable L2-L6 errors vs .056 chance; IN .42 vs OUT .10; by level .75 / .79 / .46 / .57 / .19 (L2-L6, chance .25 / .13 / .07 / .04 / .02). simsf .03 (n 34, chance .02). gated .09 (IN .27, n 11). startlast .04, relay .03, stab .02 (chance .02-.03). Gold branches always give the gold answer.
+**Interpretation:** In Kevin's SIM-Coconut the branch decisions read from the crossed latents are the ones the model's wrong answers follow (.42 vs .056 chance). The IN vs OUT contrast is confounded by readability: on correct items the best IN latent reads branches at .97 and the best OUT latent at .68 (simsf .88 / .64, gated .81 / .58), so it does not show that faithfulness is specific to the crossings (post hoc check). Not used in the paper. SIM-CODI start-first's latents report the gold path on its errors (1.3 flipped rules on average), and the low-crossing models are at chance.
+**Gotchas hit:** SIM-Coconut's 383 L7 errors are not scorable (rule 7 lies past its six latents; too few correct L7 items to pick a latent); a pooled-level fallback for latent choice was added before the full run.
+**Caveats:** one model carries the positive result; per-latent choice is made on correct items of the same model; branch-explainable errors are about half of all errors.
+**Next:** an intervention (set a latent's branch and see if the answer follows) would turn this into a causal claim.
+
+---
+
+## 2026-11-16 — Hop count on Liang & Pan's released polynomial-iteration CODI (t46): where the model computes (k = 3, 4) hops track serial distance, about one crossing per step up to three; beyond the last ~3-4 inputs the chain does not extend, so pooled hops stay near 1 (codi, run_id: 20261116-043110_codi_liang-pan-polynomial-hop-count)
+
+**Goal:** t46 (pre-registered 2026-11-15, handoff `HANDOFF_LIANG_PAN_HOPS_2026-11-15.md`): an independent, depth-controlled replication of RQ1 on someone else's task, models and training code. How many loop crossings does the answer need on Liang & Pan's (arXiv 2602.00449v2) released CODI models, and does the count grow with the number of serial steps between the edited input and the answer?
+**Mechanism / model:** their released CODI (GPT-2 style 3 layers, 2 heads, d 128, prj 256 + LN, 6 latents, trained from scratch on lengths 1..N), `totalseq_{10,8}_mod{50,41}`, `pytorch_model.bin`. Their repo is cloned at `../latent-cot-thinking` (commit 815fe40, no license, imported by path only). Adapter `adapters.PolyCODI`.
+**Data:** their shipped test split (`data/polynomial_data/seq_N/num_5000/mod_m/codi/test_k.npy`), k = 2..N, 80 items per k (seeded shuffle), every edit position i = 1..k on the same items. All m - 2 replacement values are run per (item, i). A is drawn uniformly among the replacements that change the model's answer. Pairs: 3606 / 4199 / 2392 / 2738 (poly_10_50 / 10_41 / 8_50 / 8_41), all qualified (QUAL=own), and M_6 == B's run on every pair.
+**Command:** `GATE=1 ../codi/.venv/bin/python scripts/necessity/hops_poly.py poly_<N>_<m> cpu <json>` (gate 2), then the same without GATE (full run). Gate 1: their `test.py`, run through a CPU wrapper (`torch.load` map_location, `--bf16` dropped, unused matplotlib shimmed) with `--ckpt_dir` pointing at a scratch symlink, so their `test_results.csv` is untouched.
+**Headline results:**
+- Gate 1: their `test.py` reproduces `test_results.csv` to < 1e-7 at every length, all four models. Gate 2: the adapter equals their `CODI.forward` on the test.py batch, 200/200 per length, all four.
+- Mean hops [95% CI] by s, poly_10_50: .03 [.01,.06] / 2.03 / 2.53 [2.40,2.65] / 2.01 / .62 / .49 / .36 / .43 / .65 (s = 1..9). Pooled within-item slope -.07 [-.09,-.05]. poly_8_50: .03 / 2.34 / 2.26 / .83 / .19 / .30 / .16, slope -.07.
+- By cell, poly_10_50: k = 3 (acc 1.00) x_1 / x_2 / x_3 = 1.83 / 1.87 / .00 hops (s = 2, 2, 1); k = 4 (acc .48) 3.08 / 2.96 / 1.82 / .03 (s = 3, 3, 2, 1). Post hoc within-item slope at k = 3, 4: +1.54 [1.44,1.64] (poly_10_50), +1.28 [1.15,1.43] (poly_8_50), +.82 / +.72 (mod 41). Both-right subset (poly_10_50): s = 2 1.94 (n 251), s = 3 3.08 (n 97).
+- Long items, mod 50: inputs more than ~4 steps back are mostly ignored. At s >= 5, .09-.29 of replacements change the model's answer, against .42-.70 for the gold answer, and 33-58% of (item, i) cells have no answer-changing replacement. The edits that do change it take about .5 hops. The last 4 inputs at k >= 5 take about 2 hops for s = 2-4 (saturated, not s).
+- Mod 41 (accuracy at chance from k = 4): the model still reacts to early inputs (.66 / .74 of early replacements change its answer). Hops are .1-2.0 by s (max 1.97 at s = 9, N = 10), pooled slope +.21 (N = 10) and +.09 (N = 8).
+- Accuracy by k (= their table): mod 50 1.00 to k = 3, then .48 / .34 / .27 / .29 / .28 / .28 / .29 (N = 10). Mod 41 .02-.03 from k = 4. Hops by k, poly_10_50: 0 / 1.22 / 1.94 / 1.68 / 1.20 / 1.32 / 1.18 / 1.12 / 1.11 (k = 2..10).
+- Share of M_1 answers that are neither A's nor B's: .16 / .15 / .14 / .05.
+**Predictions (t46 scoring):** P1 (mod 50 hops <= 2.0 at every s) missed: 2.0-2.5 at s = 2-4 (N = 10) and 2.3 at s = 2-3 (N = 8). P2 (pooled slope < .25) held, but only because ignored early inputs set the slope; the post hoc k = 3, 4 slope is +1.3 to +1.5. P3 (s = 1 <= .3) held (.03). P4 (mod 41: fewer than half of early edits change the answer) missed (.66 / .74); its hops clause held. P5 (hops do not rise with k where accuracy falls) missed for poly_10_50 (k = 4 +.72 over k = 3) and held for the other three; from k = 5 on hops fall in all four.
+**Interpretation:** On a depth-controlled task trained by others, standard CODI does chain where it computes. The last input goes straight to the answer position (about 0 hops, as Liang & Pan describe), and each earlier serial step adds about one loop crossing, up to about three at k = 4. The chain does not extend further. For longer sequences the mod-50 model mostly drops inputs more than ~4 steps back, and both accuracy and the count fall. That matches Liang & Pan's "rollout stops at two to three hops". It contradicts the paper's "standard CODI uses zero to two crossings" as a general statement: these models use up to three, one per step, while they still have three unused latent passes. A sentence the paper could use: "On Liang & Pan's released polynomial-iteration CODI, the hop count tracks serial distance where the model computes (within-item slope +1.3 to +1.5 crossings per step at k = 3, 4) but saturates at about three crossings; beyond that the model ignores early inputs rather than extend the chain, so pooled over lengths the count stays near one."
+**Gotchas hit:** (1) The handoff's "run without padding" is wrong for these models. Training and test.py collate all lengths in one batch, so every question is left-padded to the length-N width and ends at absolute position N + 1. Unpadded short questions score 0 at k = 1. The adapter left-pads (masked PAD), one k per batch. (2) Their `test.py` writes `test_results.csv` into `--ckpt_dir`, so gate 1 used a scratch directory. (3) `test.py` needs CUDA (`torch.load` without map_location) and rejects `--bf16` on CPU. The weights are fp32 and the tiny model is built `from_config`, so dropping it changes nothing (gate 1 is exact). (4) `hops.py` runs at import time, so `hops_poly.py` carries copies of `nat_run` / `hop_runs`.
+**Caveats:** One seed per model (theirs). The count is an upper bound on serial steps (copy crossings count). No zero-latent reference exists, so nothing is claimed about single-pass reach. Train student accuracy is 1.00 at every length (their CSV and our gate 1): the k >= 4 test failure is a failure to generalise from 5000 memorisable training items, not a capacity limit. The hop count on training items was not measured. A and B are the test item and a single-input edit (exchangeable up to the "answer changes" selection). The s convention follows RuleChain: x_1 and x_2 share s = k - 1.
+**Next:** optional items in the handoff (need the user's go): a zero-latent reference trained with their recipe; readability by refresh at k = 3, 4; hop count on training items at k >= 4 (memorised: chain or lookup?).
+
+---
+
+## 2026-11-18 — Released Llama-3.2-1B CODI on GSM8K (t47): accuracy reproduces (.555 vs .556); it chains on items it solves but needs fewer crossings than GPT-2 CODI at the same depth, about 1.2-1.6 steps per pass against 1.0-1.3 (codi, run_id: 20261118-035249_codi_gsm8k-released-llama1b-hop-count)
+
+**Goal:** t47 (pre-registered 2026-11-17 14:20 PST in `scripts/codi_null_audit/prereg/t_predictions.md`): does the hop-count picture of the released GPT-2 GSM8K checkpoints hold at a larger, deeper backbone? How many loop crossings does the released Llama-3.2-1B CODI need, and how many steps does each pass carry?
+**Mechanism / model:** `codi`, hf:zen-E/CODI-llama3.2-1b-Instruct (snapshot b2c88ba), through `adapters.GSM8KCODILlama` with the arguments of `codi/scripts/test_llama1b.sh` (LoRA r128/a32 on q,k,v,o,gate,up,down; projection 2048 + LayerNorm; 6 latents; remove_eos; greedy). Meta's base repo is gated, so config and tokenizer come from the ungated mirror unsloth/Llama-3.2-1B-Instruct with Meta's tokenizer settings restored (`adapters._llama_base`). The CODI checkpoint loads with 0 missing keys (4 unexpected: an unused `dynamic_cls` head), so every weight is the release's. fp32 on MPS (the release was evaluated in bf16).
+**Data:** GSM8K-Aug test (1,319) for accuracy; the same hop pairs as the GPT-2 runs (t31): t22 twins (1,471) and t26 long twins (1,305), QUAL=own. Qualified 1,315 + 1,142.
+**Command:** gate `../codi/.venv/bin/python scripts/necessity/gsm8k_llama_acc.py mps ../codi_audit_artifacts/t47/gsm8k_llama_acc.json`; hops `QUAL=own FIRST=0 ../codi/.venv/bin/python scripts/necessity/hops.py gsm8k_llama mps ../codi_audit_artifacts/t47/gsm8k_llama.json` and the same with `CANDS=../codi_audit_artifacts/t26/gsm8k_long_twins.json` into `long_gsm8k_llama.json`; analysis `scripts/necessity/gsm8k_steps_per_pass.py ../codi_audit_artifacts/t47/steps_per_pass_with_llama.json` (picks up the t47 files) then `scripts/necessity/gsm8k_llama_compare.py <that> ../codi_audit_artifacts/t47/gsm8k_llama_compare.json`; record `scripts/necessity/record_t47.py`.
+**Headline results:**
+- Accuracy .555 (published .556). By item serial depth (strict) d1 / d2 / d3 / d4+: .556 / .671 / .509 / .343; GPT-2 CODI .393 / .581 / .321 / .239.
+- M_6 equals the donor's own run on 2,457 of 2,457 pairs.
+- Crossings, correct pairs with the edit at the start of the item's longest path, depth 2 / 3 / 4: .91 [.84, .99] / 1.46 [1.38, 1.56] / 1.74 [1.57, 1.91] (n 236 / 157 / 54). GPT-2 CODI 1.07 / 1.94 / 2.39, SIM-CODI 1.07 / 1.98 / 2.48, SIM-Coconut 1.43 / 2.43 / 3.29. Steps per pass: Llama 1.15 / 1.29 / 1.59, GPT-2 CODI 1.01 / 1.05 / 1.29.
+- All qualified on-path pairs by serial distance 2 / 3 / 4 / 5: 1.13 / 1.41 / 1.48 / 1.29 (GPT-2 CODI 1.42 / 1.75 / 1.91 / 1.87).
+- Within-item slope of crossings on serial distance: +.002 [-.060, +.062] (336 items); correct pairs +.043 [-.041, +.133] (106 items). GPT-2 CODI +.157 / +.162.
+- Share of correct pairs with hops >= s - 1: .49 at s = 3, .04 at s = 4 (GPT-2 CODI .86 at s = 3). Hops 0 on .11 of correct s = 2 pairs.
+**Predictions (t47 scoring):** P1 accuracy in [.526, .586] held (.555). P2 M_6 = donor held (2,457 / 2,457). P3 hops <= 2.5 at every serial distance held (max 1.48). P4 within-item slope < .35 held (+.002). P5 correct start-of-path crossings at depth 3 <= GPT-2's 1.94 held (1.46).
+**Interpretation:** At 16 layers and 1B parameters, CODI still chains on GSM8K items it solves: the count rises with item depth (.91 to 1.74). It needs about half a crossing less than GPT-2 CODI at depth 3 and two thirds less at depth 4, so each pass carries more serial work (1.2-1.6 steps against 1.0-1.3), and two dependent steps often share a pass (only .49 of correct s = 3 pairs use s - 1 crossings). Within an item the count does not depend on how far the edit is from the answer (slope ~0); it tracks the item's depth, as on GPT-2's correct pairs but more cleanly. A deeper backbone does more per pass and does not extend the loop: the larger model does not cross more.
+**Gotchas hit:** (1) The mirror's tokenizer_config names a slow PreTrainedTokenizer, so CODI's `AutoTokenizer(use_fast=False)` returned `False`; the mirror also sets a pad token Meta's repo does not. `_llama_base` builds a local base folder (symlinked weights) with Meta's settings. (2) Llama-3 splits " 18" into " " + "18", so the GPT-2 first-token prefix of FIRST=1 does not carry over; run with FIRST=0 (the main count uses the greedy answer). (3) Two fp32 runs at once used 11-12 GB each and pushed the 25.8 GB Mac into swap, and the laptop slept once (17:31-17:37); one run was paused with SIGSTOP until the other finished and `caffeinate` was started. Throughput 4.6-5.2 s / pair alone, ~18 s / pair while swapping. Results unaffected (deterministic greedy runs).
+**Caveats:** one released checkpoint; fp32 rather than the bf16 of the release's own evaluation (accuracy matches); the depth of an item is a heuristic parse of the reference solution, not the model's route; the count is an upper bound (copy crossings count); correct pairs at depth 4 are few (n 54).
+**Next:** readability by refresh on Llama (vocabulary projection of the latents; values below 1,000 are single tokens in Llama-3) to check that values arrive at their crossing, as on GPT-2; a layer-wise readout within a pass to see two dependent steps in one pass directly.
+
+**Correction (2026-11-17 20:59 PST):** "pre-registered 2026-11-17 14:20 PST" above is wrong; the predictions were written about 14:16, after the smoke and before the full runs started at 14:17. See the correction block after t48 in the prereg file.
+
+---
+
+## 2026-11-18 — GSM8K readability by refresh with the standard logit lens (t48): far more values are legible than t30's readout showed, and in Llama nearly every value is readable within one or two refreshes whatever its depth, against about half one refresh early in GPT-2 CODI (codi, run_id: 20261118-052938_codi_gsm8k-readability-logit-lens-llama-vs-gpt2)
+
+**Goal:** t48 (pre-registered in `scripts/codi_null_audit/prereg/t_predictions.md`; the header time is wrong, see the correction block after it: written 20:46:56, runs started 20:47). Readability by refresh for the released Llama-3.2-1B CODI, and the same readout on GPT-2 CODI as a matched reference: are values readable once their loop crossings exist, and does Llama, which needs fewer crossings per step (t47), show values earlier?
+**Mechanism / model:** `codi`; hf:zen-E/CODI-llama3.2-1b-Instruct (adapters.GSM8KCODILlama, as t47) and hf:zen-E/CODI-gpt2.
+**Data:** Llama: t47 qualified pairs answered right on both questions (680 pairs). GPT-2: t30's pairs (t26 + long twins, QUAL=gold, 417 pairs). Changed steps of B with single-token values (Llama-3: below 1,000; skipped 54 / 39 multi-token).
+**Command:** `../codi/.venv/bin/python scripts/necessity/gsm8k_lens.py gsm8k_llama mps ../codi_audit_artifacts/t48/gsm8k_llama_lens_h.json` (READ=h is the default for Llama) and `READ=h ... gsm8k_lens.py gsm8k_codi mps ../codi_audit_artifacts/t48/gsm8k_codi_lens_h.json`; record `scripts/necessity/record_t48.py`.
+**Method change:** t30 read the fed-back latent inputs z with the LM head (READ=z). On Llama that reads nothing (smoke: 0 of 15 values; diagnostic: the projected latents map to unrelated tokens such as "uentes", "/show"). READ=h reads the output hidden state of each pass before CODI's projection with the LM head (HF `hidden_states[-1]`, after the final norm), the standard logit lens, at the same positions (z_s = prj(h_{s-1})).
+**Headline results:**
+- Own-readable rate d = 1 / 2 / 3 / 4: Llama .90 / .60 / .37 / .39; GPT-2 CODI .87 / .53 / .42 / .26. t30's READ=z on GPT-2 CODI: .37 / .17 / .14.
+- B readable by refresh 0, 1, 2, 3 (own-readable subset): Llama d2 .31 .92 1.00; d3 .31 .74 .98 1.00; d4 .49 .92 .98 1.00. GPT-2 d2 .30 .60 .98; d3 .30 .52 .73 1.00; d4 .20 .20 .75 .95. d1: .33 / .34 at refresh 0, .98 / .99 at refresh 1.
+- Refresh-0 level (B's value read in A's own latents) about .30 at every depth for both models; cross-item chance .08-.19 (Llama), .04-.14 (GPT-2).
+- Relative arrival one refresh early, (B[d-1] - B[0]) / (1 - B[0]): d2 Llama .88 vs GPT-2 .43; d3 .97 vs .61.
+**Predictions (t48 scoring):** P1 held (.90 / .87). P2 missed on refresh 0 (.33 / .34 > .25), held on refresh 1. P3 held (Llama earlier at d = 2 and 3). P4 missed (chance up to .19 / .14; stale A below .3 at Llama d4 and GPT-2 d3).
+**Interpretation:** (1) Legibility is a property of the readout: the standard logit lens reads two to three times more values than t30's readout, so "values are hard to read" should not be claimed from t30. (2) Values do not wait for one crossing per step: in GPT-2 CODI about half arrive one refresh early at depth 2-3, and in Llama nearly all values at depth 2-4 are readable within one or two refreshes. This is the readout's view of what t47 shows causally: Llama packs about 1.2-1.6 serial steps into a pass, GPT-2 CODI about 1.0-1.3. The clean RuleChain result (no value early) does not carry over to GSM8K.
+**Gotchas hit:** READ=z does not transfer to Llama (see Method change). The Mac slept 20:26-20:42 during the smoke; `caffeinate -ims -t 10800` was running for the full runs.
+**Caveats:** READ=h has a pair-specific false-positive level of about .30 at refresh 0 (A and B share most numbers and the lens spreads probability over many numbers), so early-arrival rates are read against refresh 0, not against zero. Readout of the reference solution's values only; the model may compute other values. Correlational; one checkpoint each; depth 4-5 cells small (n 126 / 78 at d4; d5 below 25).
+**Next:** a layer-wise logit lens inside a single pass to see two dependent values appear in one pass directly; update the paper's GSM8K readability paragraph (readout dependence; early arrival).
+
+---
+
+## 2026-11-18 — SIM-CODI Llama-3.2-1B on GSM8K (t49): with SIM-CoT's step loss the 16-layer model chains one step per pass, like the GPT-2 checkpoints, while plain CODI on the same backbone packs 1.3-1.6 steps into a pass; readability timing agrees (codi, run_id: 20261118-110215_codi_gsm8k-released-simcodi-llama1b-hop-count-readability)
+
+**Goal:** t49 (pre-registered in `scripts/codi_null_audit/prereg/t_predictions.md`, 2026-11-17 22:15 PST, before the full runs). Within-recipe depth series for SIM-CODI (GPT-2 12 layers -> Llama 1B 16 layers -> 3B 28 layers in t50): does a deeper backbone carry more serial steps per pass, as plain CODI 1B does (t47)?
+**Mechanism / model:** `codi`; hf:internlm/SIM_COT-LLaMA3-CODI-1B through adapters.GSM8KCODILlama (LoRA r128/a32, projection 2048, 6 latents, greedy, fp32). 0 missing keys; the 147 unexpected keys are SIM-CoT's training-only step decoder.
+**Data:** GSM8K-Aug test, 1,319 items (accuracy). Hop count: t22 twins (1,471 candidates, 1,313 qualified) + t26 long twins (1,305, 1,166 qualified), QUAL=own, FIRST=0. Readability: qualified pairs answered right on both, READ=h (t48), single-token values (87 multi-token skipped).
+**Command:** `codi_audit_artifacts/t49/run_chain.sh` (gsm8k_llama_acc.py with CKPT_REPO=internlm/SIM_COT-LLaMA3-CODI-1B; hops.py gsm8k_simllama1b on both pair sets; gsm8k_lens.py gsm8k_simllama1b), then `gsm8k_steps_per_pass.py ../codi_audit_artifacts/t49/steps_per_pass_with_simllama1b.json`, `gsm8k_llama_compare.py ... t49/gsm8k_llama_compare.json`; record `scripts/necessity/record_t49.py`.
+**Headline results:**
+- Accuracy .557 (published .561). By strict item depth d1/d2/d3/d4+: .521/.694/.486/.363; Llama CODI 1B .556/.671/.509/.343; GPT-2 CODI .393/.581/.321/.239.
+- M_6 = donor's own run on 1,313/1,313 and 1,166/1,166 pairs.
+- Correct start-of-path crossings at depth 2/3/4: 1.00 [.95, 1.05] (n 230) / 1.93 [1.85, 2.01] (167) / 2.59 [2.45, 2.72] (64). Steps per pass 1.04/1.07/1.15. Llama CODI 1B: .91/1.46/1.74 (1.15/1.29/1.59). GPT-2 SIM-CODI: 1.07/1.98/2.48 (1.02/1.03/1.23). GPT-2 CODI: 1.07/1.94/2.39.
+- Within-item slope +.103 [+.020, +.191] (all), +.108 (correct); Llama CODI 1B +.002, GPT-2 CODI +.157.
+- READ=h, own-readable values readable by refresh 0/1/2/3: d2 .31/.58/.98; d3 .24/.43/.71/.98; d4 .11/.25/.67/1.00. GPT-2 CODI (t48) d2 .30/.60/.98, d3 .30/.52/.73/1.00; Llama CODI 1B d2 .31/.92/1.00, d3 .31/.74/.98.
+**Predictions (t49 scoring):** P1 held (.557 in [.531, .591]). P2 held. P3 held on the letter (1.93 < 1.98) but the CIs overlap: equal to GPT-2 SIM-CODI, not below. P4 missed (depth 3 +.47, depth 4 +.85 over Llama CODI 1B; depth 2 within). P5 held (+.10). P6 missed narrowly (.58 / .71 vs .60 / .73: equal to GPT-2 CODI, not above).
+**Interpretation:** At the same backbone and the same accuracy, the training objective sets how many serial steps go into one pass. Plain CODI 1B packs 1.3-1.6 steps into a pass at depth 3-4. SIM-CoT, which trains each latent to decode one reasoning step, brings the 16-layer model back to about one step per crossing, matching the 12-layer GPT-2 checkpoints on both the causal hop count and the readout timing. So "deeper backbone, fewer crossings per step" (t47) is not a property of the backbone alone; under step supervision it does not appear at 16 layers. The two 1B models reach the same accuracy by depth with different loop use, so crossing count is not what limits accuracy here. t50 (3B) tests whether 28 layers change this within SIM-CoT.
+**Gotchas hit:** the Mac slept during earlier runs; this chain ran under `caffeinate -ims`. Llama-3 splits " 18" into " " + "18", so FIRST=0 (as t47).
+**Caveats:** One checkpoint per recipe; GPT-2 and Llama checkpoints come from different training runs (SIM-CoT's and CODI's authors), so recipe and code-base differences beyond the step loss are not controlled. Depth-4 cells n 31-64. READ=h has a ~.30 refresh-0 false-positive level (t48), so readability timing is read against refresh 0. QUAL=own pairs; correct-pair subsets are the cleaner comparison.
+**Next:** t50 (SIM-CODI 3B, bf16, with a bf16 1B control); update the GSM8K Chaining doc's scaling section and the paper's GSM8K paragraph (step supervision, not backbone depth, sets steps per pass at 1B).
+
+---
+
+## 2026-11-23 — Prefix substitution (t53): in rule-gated CODI the edit enters the loop exactly one pass after the edited rule; in start-last CODI it enters at a fixed point (~latent 4) wherever the rule sits; in released GSM8K CODI later edits enter later (codi, t53)
+
+**Goal:** t53 (pre-registered 2026-11-23 19:01 +07, P2 corrected 19:02 before any output): are A's and B's latents before the edited step really the same, and where does the edit enter the loop? Tests whether the flat GSM8K within-item slope came from early latents already carrying the edit.
+**Method:** for each pair answered right on both sides, d_j = ||z_j(A) - z_j(B)|| normalised by the distance to an unrelated item; for c = 0..K a run with B's first c natural latents and A's for the rest, refreshed as in hops.py; S_c = h_0 - h_c refreshes saved; entry e = smallest c with S_c > 0.
+**Data:** t31 pairs: rule-gated and start-last CODI (RuleChain valid L2-L6, CAP 25 per cell), released GSM8K CODI (414 pairs). The GSM8K SIM-CODI run was stopped at pair 241 by team decision (no output).
+**Command:** `../codi/.venv/bin/python scripts/necessity/prefix_sub.py <model> mps ../codi_audit_artifacts/t53/<model>.json`; scoring `scripts/necessity/prefix_sub_score.py ../codi_audit_artifacts/t53/score.json`.
+**Results:** checks pass on every pair (h_0 = t31, own answers, c = K run = B). Rule-gated: latents before the carrier identical to A's (.00), carrier .75 (P2 held); on pairs with h_0 >= 1 the entry is exactly rule + 1 on 375 / 375 rule edits, within-level slope .96. Start-last CODI: late-rule edits mostly h_0 = 0 (latents ~ A's, .01-.08); pairs with h_0 >= 1 enter at latent 3.9-4.3 at every position (slope -.09). GSM8K CODI: entry slope +.56 per gold step index; on the any-use distance -2.2 passes per step and hops +.86 per step (11-13 items); latents before a late edit at .05 of the reference; edit-specific information only in z_0, z_2, z_4.
+**Predictions:** P0 held; P1, P3 missed as scored (coding flaw: h_0 = 0 pairs coded e = K + 1); P2 held; P4-P6 missed in the direction of chaining.
+**Interpretation:** the method recovers a moving entry point when the chain is forced (rule gate); the standard RuleChain model gathers the edit at one point in the loop; the released GSM8K model's entry moves with the edit, consistent with short genuine chains once distance is measured from every step that uses the edited number (t54).
+**Caveats:** exploratory restriction to h_0 >= 1 chosen after seeing the coding flaw; GSM8K any-use cells are small; one released checkpoint.
+
+---
+
+## 2026-11-23 — The model's own CoT route (t54): within-item hop slope +.88 on the model's route; the flat +.16 slope reported since t42 is mostly a twin-pair labelling artefact (codi, t54)
+
+**Goal:** t54 (pre-registered 2026-11-23 19:53 +07): measure serial distance on the route the model itself writes (the released CODI checkpoints share weights with their CoT teacher), to test whether the flat within-item slope comes from gold-route mismatch.
+**Command:** `../codi/.venv/bin/python scripts/necessity/cot_route.py <codi|sim> cpu ../codi_audit_artifacts/t54/<m>.json`; scoring `scripts/necessity/cot_route_score.py ../codi_audit_artifacts/t54/score.json`; post hoc `scripts/necessity/gsm8k_anyuse_distance.py`.
+**Results:** parse 1.00; teacher accuracy .462 (CODI) / .470 (SIM-CODI); model-route depth equals gold depth on .60 / .61 of items. Within-item slope on model-route distance +.88 [+.63, +1.18] (CODI, 15 items) and +.87 (SIM-CODI, 11 items) against +.16 / +.03 on the labelled distance for the same pairs. Start-of-path crossings by model-route depth 2 / 3 / 4: CODI 1.08 / 1.95 / 2.43.
+**Post hoc (labelled as such in the prereg):** the t22 twin pairs carry the distance of one gold step, but the edited number often feeds several gold steps (about 20% of correct pairs). Measured from any gold step using the edited number, the within-item slope on correct pairs is +.84 [+.59, +1.26] (CODI, 13 items) and +1.00 (SIM-CODI, 8 items); on all qualified CODI pairs +.36 against +.16. Coconut +.30 and SIM-Coconut +.40 on all pairs (computed 2026-11-24).
+**Predictions:** P0, P1, P3 held; P2 missed (slope +.88, not flat); P4 mixed (tiny cells).
+**Interpretation:** on GSM8K problems it solves, released CODI chains about one crossing per serial step through depth 3; the earlier "count follows item depth, not edit position" was a labelling error. The paper's GSM8K text was rewritten on 2026-11-24 accordingly.
+**Caveats:** few items with edits at genuinely different distances; the written route is a proxy for the latent route.
+
+---
+
+## 2026-11-24 — Epoch sweep (t55): start-last CODI's accuracy doubles from epoch 8 to 12 while crossings per pair stay ~1.5; the 40-epoch round-1 CODI uses ~1 crossing at every distance (codi, t55)
+
+**Goal:** t55 (pre-registered 2026-11-23 20:52 +07): is the standard RuleChain null an artefact of the 12-epoch budget (the recipe is 40)?
+**Command:** `CODI_CKPT=<checkpoint> QUAL=own ../codi/.venv/bin/python scripts/necessity/hops.py startlast mps ../codi_audit_artifacts/t55/<tag>.json` (round 1: model key stab); scoring `scripts/necessity/epoch_hops_score.py ../codi_audit_artifacts/t55/score.json`.
+**Results:** epoch-12 run reproduces t31 on 2000 / 2000 pairs. Correct pairs, mean hops at s = 3-4: 1.14 (n 7) / 1.60 (10) / 1.52 (31) / 1.47 (51) at epochs 6 / 8 / 10 / 12, while valid accuracy at L3 rises .14 / .24 / .41 / .52. Round-1 40-epoch start-first CODI: 1.05 / 1.12 / 1.14 / 1.31 / 1.25 at s = 2-6, flat.
+**Predictions:** P0 held; P1 missed (cell size at epoch 6; no rise from epoch 8 on); P2 missed (slope not comparable across epochs); P3 missed in level (~1 crossing, not ~0), direction held.
+**Interpretation:** within the epochs we have, more training buys accuracy without longer chains; the 40-epoch start-first run behaves like a copy (near-identical latents). A 40-epoch start-last run remains the clean test.
+**Caveats:** start-last only to epoch 12; round 1 is start-first at lr 3e-3; the queue paused overnight (Mac asleep), results unaffected.
+
+---
+
+## 2026-11-24 — Distribution shift (t56): every model's accuracy collapses under reworded rules, held-out constants and unseen numbers, but the crossing pattern survives every shift; rule-gated CODI solves L8 with 8 passes, SIM-CODI does not (codi, t56)
+
+**Goal:** t56 (pre-registered 2026-11-24 13:3x +07; scope change and wide-set addendum before the affected outputs): advisor feedback asked for validity of RuleChain and the hop count under inference-time shift.
+**Sets (validity_sets.py, 300 items per level L2-L7, filters applied, none in train):** orig (canonical test), rw (reworded rules), hc (all constants outside training ranges), hc1 (one held-out rule), sv (start 100-115), l8 (L = 8 at K = 6 / 7 / 8), wide (values 0-115, readout extended to 0-115).
+**Command:** `../codi/.venv/bin/python scripts/necessity/validity.py <model> mps <sets|wide> ../codi_audit_artifacts/t56/<model>_<mode>.json`; scoring `scripts/necessity/validity_score.py ../codi_audit_artifacts/t56/score_t56_t57.json`.
+**Results:** rule-gated accuracy rw .26-.04, hc .44-.12, sv .00-.06, wide ~.04; SIM-CODI rw .23-.02, hc .33-.05; hc1 flat in L for the chaining models (.68-.76 / .60-.66), falling for start-last (.66 -> .06). Start-edit hops of the chaining models >= L - 1 in every L2-L6 cell of every shifted set; start-last <= 2.07 everywhere. Rule-gated rule edits exact at L2-L6 on 800/800, 551/562, 695/696, 767/768, 578/578; at L7 every edit gives L - i - 1 (6 latents, 7 rules). L8: rule-gated .00 / .28 / .76 at K = 6 / 7 / 8; SIM-CODI .00 / .06 / .02 although its count reaches 7.89.
+**Predictions:** P0, P1, P3, P4 held; P2 missed as scored (L7 formula); P5 held for rule-gated and start-last, missed for SIM-CODI; W0-W3 held.
+**Interpretation:** the serial structure measured by the hop count is robust to input shift; per-step accuracy is template- and range-bound. Errors under one unfamiliar rule stay at that rule.
+**Caveats:** single seeds; shifted sets test generalisation the models were never trained for.
+
+---
+
+## 2026-11-24 — Hop-count robustness (t57): the count survives swapping A and B, a margin threshold, edit size and an unrelated donor for the chaining models; for start-last CODI it is noisier but every disagreement is downward (codi, t57)
+
+**Goal:** t57 (pre-registered with t56): is the count itself robust to how it is measured?
+**Command:** `../codi/.venv/bin/python scripts/necessity/validity.py <model> mps robust ../codi_audit_artifacts/t56/<model>_robust.json`; scoring as t56. The rule-gated run was paused 14:38-19:03 (SIGSTOP, battery), results unaffected.
+**Results:** repro equals t31 on 1.00 of pairs. Swap within 1: 1.00 / 1.00 / .857; means identical (2.16 / 2.77 / 1.34). Margin hop equals argmax hop on .984 / .975 / .657, and where it differs it is always lower. Onset earlier, never later, for s > 1 (111 / 576 / 584 pairs). Start-last half hop 1.04-1.19 at every s. Large minus small edits +.01 / +.10 / +.28. Unrelated donor within .10 of the start-edit count (chaining models); start-last <= 1.96.
+**Predictions:** P0 held; P1 missed for start-last and on the strict equality bar for rule-gated (.938); P2 held for the chaining models' margin agreement, missed for start-last and for SIM-CODI's onset; P3 held for the chaining models, missed for start-last; P4 held.
+**Interpretation:** the argmax count is an upper bound, as the paper states; by the margin measure start-last CODI uses about one crossing. SIM-CODI's onset one refresh before the flip fits its count lying one above the rule gate's.
+**Caveats:** single seeds; post hoc reading of the disagreement direction.
