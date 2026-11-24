@@ -1,0 +1,1378 @@
+{
+  "run_id": "20261114-081823_codi_crossing-aware-monitor-matched-fit",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "t26 RuleChain CODI models (gated, sim, simsf, startlast, relay, stab) + pilot_k8_simcot_c1m6/checkpoint_26 (simcoconut_rc); GSM8K: hf:zen-E/CODI-gpt2@fd641b3, hf:internlm/SIM_COT-GPT2-CODI, connordilgren grid Coconut, hf:internlm/SIM_COT-GPT2-Coconut@676c8a8 checkpoint_28",
+    "n_params": 144503808
+  },
+  "dataset": {
+    "name": "synthetic-depth2+gsm8k-aug",
+    "split": "test",
+    "n_examples": 132,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "compute_steps": 6,
+    "extra": {
+      "gated": {
+        "n_test": 4714,
+        "n_wrong": 16,
+        "scores": {
+          "T1": {
+            "CROSS_m": 0.736,
+            "ALL_m": 0.735,
+            "ALL_p": 0.769,
+            "on_measured": {
+              "CROSS_meas": 0.616,
+              "CROSS_m": 0.734,
+              "ALL_m": 0.737
+            }
+          },
+          "T2": {
+            "CROSS_m": 0.062,
+            "ALL_m": 0.062,
+            "ALL_p": 0.0,
+            "on_measured": {
+              "CROSS_meas": NaN,
+              "CROSS_m": NaN,
+              "ALL_m": NaN
+            }
+          },
+          "T3": {
+            "CROSS_m": 0.5,
+            "ALL_m": 0.5,
+            "ALL_p": 0.5,
+            "on_measured": {
+              "CROSS_meas": 0.5,
+              "CROSS_m": 0.5,
+              "ALL_m": 0.5
+            }
+          }
+        },
+        "diffs": {
+          "T1:CROSS_m-ALL_m": {
+            "diff": 0.001,
+            "ci": [
+              -0.007,
+              0.007
+            ]
+          },
+          "T1:ALL_m-ALL_p": {
+            "diff": -0.034,
+            "ci": [
+              -0.04,
+              -0.028
+            ]
+          },
+          "T1:CROSS_m-ALL_p": {
+            "diff": -0.033,
+            "ci": [
+              -0.04,
+              -0.024
+            ]
+          },
+          "T1:CROSS_meas-ALL_m": {
+            "diff": -0.121,
+            "ci": [
+              -0.136,
+              -0.105
+            ]
+          },
+          "T2:CROSS_m-ALL_m": {
+            "diff": 0.0,
+            "ci": [
+              -0.154,
+              0.167
+            ]
+          },
+          "T2:ALL_m-ALL_p": {
+            "diff": 0.062,
+            "ci": [
+              0.0,
+              0.2
+            ]
+          },
+          "T2:CROSS_m-ALL_p": {
+            "diff": 0.062,
+            "ci": [
+              0.0,
+              0.214
+            ]
+          },
+          "T2:CROSS_meas-ALL_m": {
+            "diff": NaN,
+            "ci": [
+              -0.306,
+              0.294
+            ]
+          },
+          "T3:CROSS_m-ALL_m": {
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "T3:ALL_m-ALL_p": {
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "T3:CROSS_m-ALL_p": {
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "T3:CROSS_meas-ALL_m": {
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "sim": {
+        "n_test": 4714,
+        "n_wrong": 3,
+        "scores": {
+          "T1": {
+            "CROSS_m": 0.828,
+            "ALL_m": 0.828,
+            "ALL_p": 0.831,
+            "on_measured": {
+              "CROSS_meas": 0.735,
+              "CROSS_m": 0.824,
+              "ALL_m": 0.825
+            }
+          },
+          "T2": {
+            "CROSS_m": NaN,
+            "ALL_m": NaN,
+            "ALL_p": NaN,
+            "on_measured": {
+              "CROSS_meas": NaN,
+              "CROSS_m": NaN,
+              "ALL_m": NaN
+            }
+          },
+          "T3": {
+            "CROSS_m": 0.5,
+            "ALL_m": 0.5,
+            "ALL_p": 0.5,
+            "on_measured": {
+              "CROSS_meas": 0.5,
+              "CROSS_m": 0.5,
+              "ALL_m": 0.5
+            }
+          }
+        },
+        "diffs": {
+          "T1:CROSS_m-ALL_m": {
+            "diff": -0.0,
+            "ci": [
+              -0.005,
+              0.005
+            ]
+          },
+          "T1:ALL_m-ALL_p": {
+            "diff": -0.003,
+            "ci": [
+              -0.008,
+              0.002
+            ]
+          },
+          "T1:CROSS_m-ALL_p": {
+            "diff": -0.003,
+            "ci": [
+              -0.008,
+              0.002
+            ]
+          },
+          "T1:CROSS_meas-ALL_m": {
+            "diff": -0.09,
+            "ci": [
+              -0.105,
+              -0.075
+            ]
+          },
+          "T2:CROSS_m-ALL_m": {
+            "diff": NaN,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "T2:ALL_m-ALL_p": {
+            "diff": NaN,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "T2:CROSS_m-ALL_p": {
+            "diff": NaN,
+            "ci": [
+              NaN,
+              NaN
+            ]
+          },
+          "T2:CROSS_meas-ALL_m": {
+            "diff": NaN,
+            "ci": [
+              NaN,
+              NaN
+            ]
+          },
+          "T3:CROSS_m-ALL_m": {
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "T3:ALL_m-ALL_p": {
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "T3:CROSS_m-ALL_p": {
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "T3:CROSS_meas-ALL_m": {
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "simsf": {
+        "n_test": 4714,
+        "n_wrong": 77,
+        "scores": {
+          "T1": {
+            "CROSS_m": 0.871,
+            "ALL_m": 0.88,
+            "ALL_p": 0.888,
+            "on_measured": {
+              "CROSS_meas": 0.76,
+              "CROSS_m": 0.861,
+              "ALL_m": 0.873
+            }
+          },
+          "T2": {
+            "CROSS_m": 0.026,
+            "ALL_m": 0.104,
+            "ALL_p": 0.143,
+            "on_measured": {
+              "CROSS_meas": 0.0,
+              "CROSS_m": 0.0,
+              "ALL_m": 0.115
+            }
+          },
+          "T3": {
+            "CROSS_m": 0.512,
+            "ALL_m": 0.556,
+            "ALL_p": 0.5,
+            "on_measured": {
+              "CROSS_meas": 0.499,
+              "CROSS_m": 0.518,
+              "ALL_m": 0.574
+            }
+          }
+        },
+        "diffs": {
+          "T1:CROSS_m-ALL_m": {
+            "diff": -0.009,
+            "ci": [
+              -0.013,
+              -0.005
+            ]
+          },
+          "T1:ALL_m-ALL_p": {
+            "diff": -0.008,
+            "ci": [
+              -0.012,
+              -0.005
+            ]
+          },
+          "T1:CROSS_m-ALL_p": {
+            "diff": -0.017,
+            "ci": [
+              -0.022,
+              -0.013
+            ]
+          },
+          "T1:CROSS_meas-ALL_m": {
+            "diff": -0.113,
+            "ci": [
+              -0.126,
+              -0.099
+            ]
+          },
+          "T2:CROSS_m-ALL_m": {
+            "diff": -0.078,
+            "ci": [
+              -0.147,
+              -0.026
+            ]
+          },
+          "T2:ALL_m-ALL_p": {
+            "diff": -0.039,
+            "ci": [
+              -0.097,
+              0.022
+            ]
+          },
+          "T2:CROSS_m-ALL_p": {
+            "diff": -0.117,
+            "ci": [
+              -0.194,
+              -0.051
+            ]
+          },
+          "T2:CROSS_meas-ALL_m": {
+            "diff": -0.115,
+            "ci": [
+              -0.25,
+              0.0
+            ]
+          },
+          "T3:CROSS_m-ALL_m": {
+            "diff": -0.044,
+            "ci": [
+              -0.077,
+              -0.017
+            ]
+          },
+          "T3:ALL_m-ALL_p": {
+            "diff": 0.056,
+            "ci": [
+              0.021,
+              0.096
+            ]
+          },
+          "T3:CROSS_m-ALL_p": {
+            "diff": 0.012,
+            "ci": [
+              -0.001,
+              0.03
+            ]
+          },
+          "T3:CROSS_meas-ALL_m": {
+            "diff": -0.075,
+            "ci": [
+              -0.153,
+              -0.017
+            ]
+          }
+        }
+      },
+      "startlast": {
+        "n_test": 4714,
+        "n_wrong": 3024,
+        "scores": {
+          "T1": {
+            "CROSS_m": 0.595,
+            "ALL_m": 0.597,
+            "ALL_p": 0.602,
+            "on_measured": {
+              "CROSS_meas": 0.556,
+              "CROSS_m": 0.591,
+              "ALL_m": 0.605
+            }
+          },
+          "T2": {
+            "CROSS_m": 0.046,
+            "ALL_m": 0.053,
+            "ALL_p": 0.053,
+            "on_measured": {
+              "CROSS_meas": 0.029,
+              "CROSS_m": 0.032,
+              "ALL_m": 0.04
+            }
+          },
+          "T3": {
+            "CROSS_m": 0.783,
+            "ALL_m": 0.787,
+            "ALL_p": 0.789,
+            "on_measured": {
+              "CROSS_meas": 0.643,
+              "CROSS_m": 0.777,
+              "ALL_m": 0.781
+            }
+          }
+        },
+        "diffs": {
+          "T1:CROSS_m-ALL_m": {
+            "diff": -0.002,
+            "ci": [
+              -0.009,
+              0.005
+            ]
+          },
+          "T1:ALL_m-ALL_p": {
+            "diff": -0.005,
+            "ci": [
+              -0.008,
+              -0.002
+            ]
+          },
+          "T1:CROSS_m-ALL_p": {
+            "diff": -0.007,
+            "ci": [
+              -0.015,
+              0.001
+            ]
+          },
+          "T1:CROSS_meas-ALL_m": {
+            "diff": -0.049,
+            "ci": [
+              -0.064,
+              -0.034
+            ]
+          },
+          "T2:CROSS_m-ALL_m": {
+            "diff": -0.006,
+            "ci": [
+              -0.014,
+              0.001
+            ]
+          },
+          "T2:ALL_m-ALL_p": {
+            "diff": -0.0,
+            "ci": [
+              -0.007,
+              0.007
+            ]
+          },
+          "T2:CROSS_m-ALL_p": {
+            "diff": -0.007,
+            "ci": [
+              -0.014,
+              0.0
+            ]
+          },
+          "T2:CROSS_meas-ALL_m": {
+            "diff": -0.012,
+            "ci": [
+              -0.026,
+              0.001
+            ]
+          },
+          "T3:CROSS_m-ALL_m": {
+            "diff": -0.005,
+            "ci": [
+              -0.013,
+              0.004
+            ]
+          },
+          "T3:ALL_m-ALL_p": {
+            "diff": -0.002,
+            "ci": [
+              -0.008,
+              0.004
+            ]
+          },
+          "T3:CROSS_m-ALL_p": {
+            "diff": -0.007,
+            "ci": [
+              -0.016,
+              0.002
+            ]
+          },
+          "T3:CROSS_meas-ALL_m": {
+            "diff": -0.138,
+            "ci": [
+              -0.163,
+              -0.112
+            ]
+          }
+        }
+      },
+      "relay": {
+        "n_test": 4714,
+        "n_wrong": 1393,
+        "scores": {
+          "T1": {
+            "CROSS_m": 0.603,
+            "ALL_m": 0.624,
+            "ALL_p": 0.612,
+            "on_measured": {
+              "CROSS_meas": 0.582,
+              "CROSS_m": 0.603,
+              "ALL_m": 0.616
+            }
+          },
+          "T2": {
+            "CROSS_m": 0.058,
+            "ALL_m": 0.061,
+            "ALL_p": 0.068,
+            "on_measured": {
+              "CROSS_meas": 0.028,
+              "CROSS_m": 0.032,
+              "ALL_m": 0.049
+            }
+          },
+          "T3": {
+            "CROSS_m": 0.762,
+            "ALL_m": 0.762,
+            "ALL_p": 0.74,
+            "on_measured": {
+              "CROSS_meas": 0.636,
+              "CROSS_m": 0.745,
+              "ALL_m": 0.744
+            }
+          }
+        },
+        "diffs": {
+          "T1:CROSS_m-ALL_m": {
+            "diff": -0.02,
+            "ci": [
+              -0.027,
+              -0.012
+            ]
+          },
+          "T1:ALL_m-ALL_p": {
+            "diff": 0.011,
+            "ci": [
+              0.006,
+              0.018
+            ]
+          },
+          "T1:CROSS_m-ALL_p": {
+            "diff": -0.009,
+            "ci": [
+              -0.016,
+              0.0
+            ]
+          },
+          "T1:CROSS_meas-ALL_m": {
+            "diff": -0.034,
+            "ci": [
+              -0.048,
+              -0.018
+            ]
+          },
+          "T2:CROSS_m-ALL_m": {
+            "diff": -0.003,
+            "ci": [
+              -0.013,
+              0.007
+            ]
+          },
+          "T2:ALL_m-ALL_p": {
+            "diff": -0.007,
+            "ci": [
+              -0.018,
+              0.004
+            ]
+          },
+          "T2:CROSS_m-ALL_p": {
+            "diff": -0.01,
+            "ci": [
+              -0.023,
+              0.002
+            ]
+          },
+          "T2:CROSS_meas-ALL_m": {
+            "diff": -0.021,
+            "ci": [
+              -0.042,
+              -0.002
+            ]
+          },
+          "T3:CROSS_m-ALL_m": {
+            "diff": 0.0,
+            "ci": [
+              -0.009,
+              0.008
+            ]
+          },
+          "T3:ALL_m-ALL_p": {
+            "diff": 0.022,
+            "ci": [
+              0.011,
+              0.033
+            ]
+          },
+          "T3:CROSS_m-ALL_p": {
+            "diff": 0.022,
+            "ci": [
+              0.012,
+              0.03
+            ]
+          },
+          "T3:CROSS_meas-ALL_m": {
+            "diff": -0.108,
+            "ci": [
+              -0.131,
+              -0.086
+            ]
+          }
+        }
+      },
+      "stab": {
+        "n_test": 4714,
+        "n_wrong": 1697,
+        "scores": {
+          "T1": {
+            "CROSS_m": 0.535,
+            "ALL_m": 0.574,
+            "ALL_p": 0.574,
+            "on_measured": {
+              "CROSS_meas": 0.536,
+              "CROSS_m": 0.538,
+              "ALL_m": 0.574
+            }
+          },
+          "T2": {
+            "CROSS_m": 0.048,
+            "ALL_m": 0.074,
+            "ALL_p": 0.074,
+            "on_measured": {
+              "CROSS_meas": 0.045,
+              "CROSS_m": 0.049,
+              "ALL_m": 0.061
+            }
+          },
+          "T3": {
+            "CROSS_m": 0.726,
+            "ALL_m": 0.729,
+            "ALL_p": 0.729,
+            "on_measured": {
+              "CROSS_meas": 0.728,
+              "CROSS_m": 0.726,
+              "ALL_m": 0.725
+            }
+          }
+        },
+        "diffs": {
+          "T1:CROSS_m-ALL_m": {
+            "diff": -0.039,
+            "ci": [
+              -0.047,
+              -0.03
+            ]
+          },
+          "T1:ALL_m-ALL_p": {
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "T1:CROSS_m-ALL_p": {
+            "diff": -0.039,
+            "ci": [
+              -0.047,
+              -0.031
+            ]
+          },
+          "T1:CROSS_meas-ALL_m": {
+            "diff": -0.038,
+            "ci": [
+              -0.052,
+              -0.023
+            ]
+          },
+          "T2:CROSS_m-ALL_m": {
+            "diff": -0.026,
+            "ci": [
+              -0.04,
+              -0.013
+            ]
+          },
+          "T2:ALL_m-ALL_p": {
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "T2:CROSS_m-ALL_p": {
+            "diff": -0.026,
+            "ci": [
+              -0.039,
+              -0.014
+            ]
+          },
+          "T2:CROSS_meas-ALL_m": {
+            "diff": -0.016,
+            "ci": [
+              -0.039,
+              0.006
+            ]
+          },
+          "T3:CROSS_m-ALL_m": {
+            "diff": -0.003,
+            "ci": [
+              -0.012,
+              0.007
+            ]
+          },
+          "T3:ALL_m-ALL_p": {
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "T3:CROSS_m-ALL_p": {
+            "diff": -0.003,
+            "ci": [
+              -0.013,
+              0.008
+            ]
+          },
+          "T3:CROSS_meas-ALL_m": {
+            "diff": 0.002,
+            "ci": [
+              -0.015,
+              0.019
+            ]
+          }
+        }
+      },
+      "simcoconut_rc": {
+        "n_test": 4002,
+        "n_wrong": 1146,
+        "scores": {
+          "T1": {
+            "CROSS_m": 0.833,
+            "ALL_m": 0.849,
+            "ALL_p": 0.87,
+            "on_measured": {
+              "CROSS_meas": 0.72,
+              "CROSS_m": 0.829,
+              "ALL_m": 0.845
+            }
+          },
+          "T2": {
+            "CROSS_m": 0.101,
+            "ALL_m": 0.165,
+            "ALL_p": 0.222,
+            "on_measured": {
+              "CROSS_meas": 0.03,
+              "CROSS_m": 0.039,
+              "ALL_m": 0.108
+            }
+          },
+          "T3": {
+            "CROSS_m": 0.785,
+            "ALL_m": 0.797,
+            "ALL_p": 0.814,
+            "on_measured": {
+              "CROSS_meas": 0.557,
+              "CROSS_m": 0.582,
+              "ALL_m": 0.587
+            }
+          }
+        },
+        "diffs": {
+          "T1:CROSS_m-ALL_m": {
+            "diff": -0.016,
+            "ci": [
+              -0.02,
+              -0.01
+            ]
+          },
+          "T1:ALL_m-ALL_p": {
+            "diff": -0.021,
+            "ci": [
+              -0.025,
+              -0.016
+            ]
+          },
+          "T1:CROSS_m-ALL_p": {
+            "diff": -0.037,
+            "ci": [
+              -0.043,
+              -0.031
+            ]
+          },
+          "T1:CROSS_meas-ALL_m": {
+            "diff": -0.125,
+            "ci": [
+              -0.141,
+              -0.109
+            ]
+          },
+          "T2:CROSS_m-ALL_m": {
+            "diff": -0.064,
+            "ci": [
+              -0.079,
+              -0.047
+            ]
+          },
+          "T2:ALL_m-ALL_p": {
+            "diff": -0.057,
+            "ci": [
+              -0.078,
+              -0.031
+            ]
+          },
+          "T2:CROSS_m-ALL_p": {
+            "diff": -0.12,
+            "ci": [
+              -0.147,
+              -0.094
+            ]
+          },
+          "T2:CROSS_meas-ALL_m": {
+            "diff": -0.078,
+            "ci": [
+              -0.12,
+              -0.04
+            ]
+          },
+          "T3:CROSS_m-ALL_m": {
+            "diff": -0.012,
+            "ci": [
+              -0.022,
+              -0.004
+            ]
+          },
+          "T3:ALL_m-ALL_p": {
+            "diff": -0.017,
+            "ci": [
+              -0.026,
+              -0.008
+            ]
+          },
+          "T3:CROSS_m-ALL_p": {
+            "diff": -0.029,
+            "ci": [
+              -0.04,
+              -0.018
+            ]
+          },
+          "T3:CROSS_meas-ALL_m": {
+            "diff": -0.03,
+            "ci": [
+              -0.061,
+              0.002
+            ]
+          }
+        }
+      },
+      "gsm8k_codi": {
+        "n_test": 1319,
+        "n_wrong": 759,
+        "scores": {
+          "T1": {
+            "CROSS_m": 0.738,
+            "ALL_m": 0.77,
+            "ALL_p": 0.771,
+            "on_measured": {
+              "CROSS_meas": 0.737,
+              "CROSS_m": 0.739,
+              "ALL_m": 0.78
+            }
+          },
+          "T2": {
+            "CROSS_m": 0.416,
+            "ALL_m": 0.477,
+            "ALL_p": 0.461,
+            "on_measured": {
+              "CROSS_meas": 0.427,
+              "CROSS_m": 0.407,
+              "ALL_m": 0.473
+            }
+          },
+          "T3": {
+            "CROSS_m": 0.683,
+            "ALL_m": 0.736,
+            "ALL_p": 0.757,
+            "on_measured": {
+              "CROSS_meas": 0.665,
+              "CROSS_m": 0.7,
+              "ALL_m": 0.754
+            }
+          }
+        },
+        "diffs": {
+          "T1:CROSS_m-ALL_m": {
+            "diff": -0.032,
+            "ci": [
+              -0.041,
+              -0.022
+            ]
+          },
+          "T1:ALL_m-ALL_p": {
+            "diff": -0.001,
+            "ci": [
+              -0.009,
+              0.006
+            ]
+          },
+          "T1:CROSS_m-ALL_p": {
+            "diff": -0.033,
+            "ci": [
+              -0.044,
+              -0.023
+            ]
+          },
+          "T1:CROSS_meas-ALL_m": {
+            "diff": -0.044,
+            "ci": [
+              -0.056,
+              -0.031
+            ]
+          },
+          "T2:CROSS_m-ALL_m": {
+            "diff": -0.061,
+            "ci": [
+              -0.099,
+              -0.025
+            ]
+          },
+          "T2:ALL_m-ALL_p": {
+            "diff": 0.016,
+            "ci": [
+              -0.011,
+              0.045
+            ]
+          },
+          "T2:CROSS_m-ALL_p": {
+            "diff": -0.045,
+            "ci": [
+              -0.081,
+              -0.005
+            ]
+          },
+          "T2:CROSS_meas-ALL_m": {
+            "diff": -0.046,
+            "ci": [
+              -0.097,
+              0.005
+            ]
+          },
+          "T3:CROSS_m-ALL_m": {
+            "diff": -0.054,
+            "ci": [
+              -0.075,
+              -0.031
+            ]
+          },
+          "T3:ALL_m-ALL_p": {
+            "diff": -0.021,
+            "ci": [
+              -0.04,
+              -0.002
+            ]
+          },
+          "T3:CROSS_m-ALL_p": {
+            "diff": -0.075,
+            "ci": [
+              -0.098,
+              -0.051
+            ]
+          },
+          "T3:CROSS_meas-ALL_m": {
+            "diff": -0.088,
+            "ci": [
+              -0.12,
+              -0.055
+            ]
+          }
+        }
+      },
+      "gsm8k_sim": {
+        "n_test": 1319,
+        "n_wrong": 800,
+        "scores": {
+          "T1": {
+            "CROSS_m": 0.764,
+            "ALL_m": 0.797,
+            "ALL_p": 0.805,
+            "on_measured": {
+              "CROSS_meas": 0.773,
+              "CROSS_m": 0.775,
+              "ALL_m": 0.818
+            }
+          },
+          "T2": {
+            "CROSS_m": 0.427,
+            "ALL_m": 0.459,
+            "ALL_p": 0.455,
+            "on_measured": {
+              "CROSS_meas": 0.447,
+              "CROSS_m": 0.442,
+              "ALL_m": 0.469
+            }
+          },
+          "T3": {
+            "CROSS_m": 0.67,
+            "ALL_m": 0.756,
+            "ALL_p": 0.753,
+            "on_measured": {
+              "CROSS_meas": 0.651,
+              "CROSS_m": 0.661,
+              "ALL_m": 0.75
+            }
+          }
+        },
+        "diffs": {
+          "T1:CROSS_m-ALL_m": {
+            "diff": -0.032,
+            "ci": [
+              -0.042,
+              -0.023
+            ]
+          },
+          "T1:ALL_m-ALL_p": {
+            "diff": -0.008,
+            "ci": [
+              -0.014,
+              -0.002
+            ]
+          },
+          "T1:CROSS_m-ALL_p": {
+            "diff": -0.04,
+            "ci": [
+              -0.05,
+              -0.03
+            ]
+          },
+          "T1:CROSS_meas-ALL_m": {
+            "diff": -0.046,
+            "ci": [
+              -0.057,
+              -0.035
+            ]
+          },
+          "T2:CROSS_m-ALL_m": {
+            "diff": -0.031,
+            "ci": [
+              -0.061,
+              -0.001
+            ]
+          },
+          "T2:ALL_m-ALL_p": {
+            "diff": 0.004,
+            "ci": [
+              -0.03,
+              0.035
+            ]
+          },
+          "T2:CROSS_m-ALL_p": {
+            "diff": -0.028,
+            "ci": [
+              -0.061,
+              0.006
+            ]
+          },
+          "T2:CROSS_meas-ALL_m": {
+            "diff": -0.023,
+            "ci": [
+              -0.069,
+              0.019
+            ]
+          },
+          "T3:CROSS_m-ALL_m": {
+            "diff": -0.086,
+            "ci": [
+              -0.108,
+              -0.062
+            ]
+          },
+          "T3:ALL_m-ALL_p": {
+            "diff": 0.003,
+            "ci": [
+              -0.01,
+              0.016
+            ]
+          },
+          "T3:CROSS_m-ALL_p": {
+            "diff": -0.083,
+            "ci": [
+              -0.105,
+              -0.059
+            ]
+          },
+          "T3:CROSS_meas-ALL_m": {
+            "diff": -0.099,
+            "ci": [
+              -0.129,
+              -0.069
+            ]
+          }
+        }
+      },
+      "gsm8k_coconut": {
+        "n_test": 1319,
+        "n_wrong": 882,
+        "scores": {
+          "T1": {
+            "CROSS_m": 0.74,
+            "ALL_m": 0.805,
+            "ALL_p": 0.817,
+            "on_measured": {
+              "CROSS_meas": 0.755,
+              "CROSS_m": 0.754,
+              "ALL_m": 0.819
+            }
+          },
+          "T2": {
+            "CROSS_m": 0.425,
+            "ALL_m": 0.607,
+            "ALL_p": 0.649,
+            "on_measured": {
+              "CROSS_meas": 0.425,
+              "CROSS_m": 0.421,
+              "ALL_m": 0.613
+            }
+          },
+          "T3": {
+            "CROSS_m": 0.533,
+            "ALL_m": 0.502,
+            "ALL_p": 0.57,
+            "on_measured": {
+              "CROSS_meas": 0.504,
+              "CROSS_m": 0.545,
+              "ALL_m": 0.501
+            }
+          }
+        },
+        "diffs": {
+          "T1:CROSS_m-ALL_m": {
+            "diff": -0.065,
+            "ci": [
+              -0.077,
+              -0.054
+            ]
+          },
+          "T1:ALL_m-ALL_p": {
+            "diff": -0.011,
+            "ci": [
+              -0.019,
+              -0.005
+            ]
+          },
+          "T1:CROSS_m-ALL_p": {
+            "diff": -0.076,
+            "ci": [
+              -0.087,
+              -0.065
+            ]
+          },
+          "T1:CROSS_meas-ALL_m": {
+            "diff": -0.064,
+            "ci": [
+              -0.077,
+              -0.049
+            ]
+          },
+          "T2:CROSS_m-ALL_m": {
+            "diff": -0.183,
+            "ci": [
+              -0.215,
+              -0.152
+            ]
+          },
+          "T2:ALL_m-ALL_p": {
+            "diff": -0.042,
+            "ci": [
+              -0.065,
+              -0.02
+            ]
+          },
+          "T2:CROSS_m-ALL_p": {
+            "diff": -0.225,
+            "ci": [
+              -0.261,
+              -0.189
+            ]
+          },
+          "T2:CROSS_meas-ALL_m": {
+            "diff": -0.188,
+            "ci": [
+              -0.232,
+              -0.148
+            ]
+          },
+          "T3:CROSS_m-ALL_m": {
+            "diff": 0.031,
+            "ci": [
+              0.015,
+              0.047
+            ]
+          },
+          "T3:ALL_m-ALL_p": {
+            "diff": -0.068,
+            "ci": [
+              -0.081,
+              -0.055
+            ]
+          },
+          "T3:CROSS_m-ALL_p": {
+            "diff": -0.036,
+            "ci": [
+              -0.057,
+              -0.017
+            ]
+          },
+          "T3:CROSS_meas-ALL_m": {
+            "diff": 0.003,
+            "ci": [
+              -0.018,
+              0.023
+            ]
+          }
+        }
+      },
+      "gsm8k_simcoconut": {
+        "n_test": 1319,
+        "n_wrong": 730,
+        "scores": {
+          "T1": {
+            "CROSS_m": 0.777,
+            "ALL_m": 0.827,
+            "ALL_p": 0.829,
+            "on_measured": {
+              "CROSS_meas": 0.712,
+              "CROSS_m": 0.79,
+              "ALL_m": 0.841
+            }
+          },
+          "T2": {
+            "CROSS_m": 0.438,
+            "ALL_m": 0.721,
+            "ALL_p": 0.756,
+            "on_measured": {
+              "CROSS_meas": 0.396,
+              "CROSS_m": 0.439,
+              "ALL_m": 0.751
+            }
+          },
+          "T3": {
+            "CROSS_m": 0.53,
+            "ALL_m": 0.51,
+            "ALL_p": 0.511,
+            "on_measured": {
+              "CROSS_meas": 0.446,
+              "CROSS_m": 0.526,
+              "ALL_m": 0.507
+            }
+          }
+        },
+        "diffs": {
+          "T1:CROSS_m-ALL_m": {
+            "diff": -0.05,
+            "ci": [
+              -0.06,
+              -0.041
+            ]
+          },
+          "T1:ALL_m-ALL_p": {
+            "diff": -0.001,
+            "ci": [
+              -0.007,
+              0.005
+            ]
+          },
+          "T1:CROSS_m-ALL_p": {
+            "diff": -0.052,
+            "ci": [
+              -0.061,
+              -0.041
+            ]
+          },
+          "T1:CROSS_meas-ALL_m": {
+            "diff": -0.128,
+            "ci": [
+              -0.147,
+              -0.11
+            ]
+          },
+          "T2:CROSS_m-ALL_m": {
+            "diff": -0.282,
+            "ci": [
+              -0.317,
+              -0.245
+            ]
+          },
+          "T2:ALL_m-ALL_p": {
+            "diff": -0.036,
+            "ci": [
+              -0.057,
+              -0.013
+            ]
+          },
+          "T2:CROSS_m-ALL_p": {
+            "diff": -0.318,
+            "ci": [
+              -0.354,
+              -0.28
+            ]
+          },
+          "T2:CROSS_meas-ALL_m": {
+            "diff": -0.355,
+            "ci": [
+              -0.405,
+              -0.294
+            ]
+          },
+          "T3:CROSS_m-ALL_m": {
+            "diff": 0.02,
+            "ci": [
+              0.008,
+              0.032
+            ]
+          },
+          "T3:ALL_m-ALL_p": {
+            "diff": -0.001,
+            "ci": [
+              -0.012,
+              0.009
+            ]
+          },
+          "T3:CROSS_m-ALL_p": {
+            "diff": 0.019,
+            "ci": [
+              0.004,
+              0.034
+            ]
+          },
+          "T3:CROSS_meas-ALL_m": {
+            "diff": -0.061,
+            "ci": [
+              -0.09,
+              -0.026
+            ]
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "scripts/necessity/monitor_match.py",
+    "prereg": "t_predictions.md t44b",
+    "outputs": "codi_audit_artifacts/t44b/"
+  },
+  "seed": 0,
+  "hardware": "MacBook M4 Pro 24 GB, MPS (fp32)",
+  "author": "Henning Lindig",
+  "notes": "t44b crossing-aware vs all-latent monitor, probes fit per crossing group",
+  "timestamp_utc": "2026-11-14T08:18:23.965108+00:00",
+  "git": {
+    "commit": "b436f1f",
+    "dirty": true
+  }
+}

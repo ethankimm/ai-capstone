@@ -1,0 +1,77 @@
+{
+  "run_id": "20261118-035249_codi_gsm8k-released-llama1b-hop-count",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "llama-3.2-1b-instruct (LoRA r128/a32, projection 2048)",
+    "checkpoint": "hf:zen-E/CODI-llama3.2-1b-Instruct@b2c88ba; base config/tokenizer hf:unsloth/Llama-3.2-1B-Instruct with Meta tokenizer settings (adapters._llama_base)",
+    "n_params": 1334394880
+  },
+  "dataset": {
+    "name": "gsm8k-aug",
+    "split": "test",
+    "n_examples": 1319,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.5549658832448825,
+    "compute_steps": 6,
+    "extra": {
+      "published_accuracy": 0.556,
+      "acc_by_depth_strict": {
+        "1": 0.5555555555555556,
+        "2": 0.6708407871198568,
+        "3": 0.5094339622641509,
+        "4+": 0.34328358208955223
+      },
+      "hop_pairs_qualified": {
+        "t22": 1315,
+        "t26_long": 1142
+      },
+      "mk_matches_donor": "2457/2457",
+      "hops_by_serial_distance_all": {
+        "2": 1.1320754716981132,
+        "3": 1.408684546615581,
+        "4": 1.4790996784565917,
+        "5": 1.2941176470588236
+      },
+      "hops_start_of_path_correct": {
+        "2": 0.9110169491525424,
+        "3": 1.464968152866242,
+        "4": 1.7407407407407407
+      },
+      "steps_per_pass_start_of_path_correct": {
+        "2": 1.145278450363196,
+        "3": 1.2945859872611465,
+        "4": 1.5925925925925921
+      },
+      "within_item_slope_all": 0.001876880802446179,
+      "within_item_slope_correct": 0.042596284356973185,
+      "gpt2_codi_reference": {
+        "hops_start_of_path_correct": {
+          "2": 1.0650887573964498,
+          "3": 1.9375,
+          "4": 2.388888888888889
+        },
+        "within_item_slope_all": 0.1571327663293033
+      }
+    }
+  },
+  "hyperparams": {
+    "num_latent": 6,
+    "greedy": true,
+    "qual": "own",
+    "first": 0,
+    "dtype": "fp32",
+    "pair_sets": "t22 twins (1,471) + t26 long twins (1,305)"
+  },
+  "seed": 0,
+  "hardware": "local Apple Silicon (MPS), 25.8 GB",
+  "author": "Henning Lindig",
+  "notes": "t47: hop count, steps per pass and accuracy of the released Llama-3.2-1B CODI on GSM8K, against the released GPT-2 checkpoints",
+  "timestamp_utc": "2026-11-18T03:52:49.553380+00:00",
+  "git": {
+    "commit": "b436f1f",
+    "dirty": true
+  }
+}

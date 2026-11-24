@@ -1,0 +1,528 @@
+{
+  "run_id": "20261114-081824_codi_rulechain-branch-faithfulness-wrong-items",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "t26 RuleChain CODI models (gated, sim, simsf, startlast, relay, stab) + pilot_k8_simcot_c1m6/checkpoint_26 (simcoconut_rc)",
+    "n_params": 144503808
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 7356,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "compute_steps": 6,
+    "extra": {
+      "gated": {
+        "acc": {
+          "2": 0.999,
+          "3": 1.0,
+          "4": 1.0,
+          "5": 1.0,
+          "6": 1.0,
+          "7": 0.981
+        },
+        "summary": {
+          "n_wrong": 16,
+          "n_explainable": 11,
+          "gold_check": 1.0,
+          "chance": 0.013,
+          "ALL": {
+            "rate": 0.091,
+            "n": 11,
+            "ci": [
+              0.0,
+              0.273
+            ]
+          },
+          "ALL_chance": 0.013,
+          "ALL_flips_mean": 1.455,
+          "IN": {
+            "rate": 0.273,
+            "n": 11,
+            "ci": [
+              0.0,
+              0.545
+            ]
+          },
+          "IN_chance": 0.013,
+          "IN_flips_mean": 1.909,
+          "OUT": {
+            "rate": 0.0,
+            "n": 11,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "OUT_chance": 0.013,
+          "OUT_flips_mean": 3.0,
+          "by_level": {
+            "2": {
+              "n": 0,
+              "ALL": null
+            },
+            "3": {
+              "n": 0,
+              "ALL": null
+            },
+            "4": {
+              "n": 0,
+              "ALL": null
+            },
+            "5": {
+              "n": 0,
+              "ALL": null
+            },
+            "6": {
+              "n": 0,
+              "ALL": null
+            },
+            "7": {
+              "n": 11,
+              "ALL": 0.091
+            }
+          }
+        }
+      },
+      "sim": {
+        "acc": {
+          "2": 1.0,
+          "3": 1.0,
+          "4": 1.0,
+          "5": 1.0,
+          "6": 0.999,
+          "7": 0.997
+        },
+        "summary": {
+          "n_wrong": 3,
+          "n_explainable": 3,
+          "gold_check": 1.0,
+          "chance": 0.01,
+          "ALL": {
+            "rate": 0.0,
+            "n": 3,
+            "ci": null
+          },
+          "ALL_chance": 0.01,
+          "ALL_flips_mean": 1.667,
+          "IN": {
+            "rate": 0.0,
+            "n": 3,
+            "ci": null
+          },
+          "IN_chance": 0.01,
+          "IN_flips_mean": 1.667,
+          "OUT": {
+            "rate": 0.0,
+            "n": 3,
+            "ci": null
+          },
+          "OUT_chance": 0.01,
+          "OUT_flips_mean": 3.667,
+          "by_level": {
+            "2": {
+              "n": 0,
+              "ALL": null
+            },
+            "3": {
+              "n": 0,
+              "ALL": null
+            },
+            "4": {
+              "n": 0,
+              "ALL": null
+            },
+            "5": {
+              "n": 0,
+              "ALL": null
+            },
+            "6": {
+              "n": 1,
+              "ALL": 0.0
+            },
+            "7": {
+              "n": 2,
+              "ALL": 0.0
+            }
+          }
+        }
+      },
+      "simsf": {
+        "acc": {
+          "2": 0.992,
+          "3": 0.997,
+          "4": 0.995,
+          "5": 0.991,
+          "6": 0.975,
+          "7": 0.952
+        },
+        "summary": {
+          "n_wrong": 77,
+          "n_explainable": 34,
+          "gold_check": 1.0,
+          "chance": 0.018,
+          "ALL": {
+            "rate": 0.029,
+            "n": 34,
+            "ci": [
+              0.0,
+              0.088
+            ]
+          },
+          "ALL_chance": 0.018,
+          "ALL_flips_mean": 1.324,
+          "IN": {
+            "rate": 0.029,
+            "n": 34,
+            "ci": [
+              0.0,
+              0.088
+            ]
+          },
+          "IN_chance": 0.018,
+          "IN_flips_mean": 1.294,
+          "OUT": {
+            "rate": 0.0,
+            "n": 34,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "OUT_chance": 0.018,
+          "OUT_flips_mean": 2.412,
+          "by_level": {
+            "2": {
+              "n": 0,
+              "ALL": null
+            },
+            "3": {
+              "n": 0,
+              "ALL": null
+            },
+            "4": {
+              "n": 0,
+              "ALL": null
+            },
+            "5": {
+              "n": 1,
+              "ALL": 0.0
+            },
+            "6": {
+              "n": 6,
+              "ALL": 0.0
+            },
+            "7": {
+              "n": 27,
+              "ALL": 0.037
+            }
+          }
+        }
+      },
+      "startlast": {
+        "acc": {
+          "2": 0.997,
+          "3": 0.492,
+          "4": 0.314,
+          "5": 0.151,
+          "6": 0.118,
+          "7": 0.076
+        },
+        "summary": {
+          "n_wrong": 3024,
+          "n_explainable": 876,
+          "gold_check": 1.0,
+          "chance": 0.025,
+          "ALL": {
+            "rate": 0.037,
+            "n": 876,
+            "ci": [
+              0.024,
+              0.049
+            ]
+          },
+          "ALL_chance": 0.025,
+          "ALL_flips_mean": 2.429,
+          "IN": {
+            "rate": 0.039,
+            "n": 876,
+            "ci": [
+              0.026,
+              0.053
+            ]
+          },
+          "IN_chance": 0.025,
+          "IN_flips_mean": 2.378,
+          "OUT": {
+            "rate": 0.029,
+            "n": 876,
+            "ci": [
+              0.018,
+              0.041
+            ]
+          },
+          "OUT_chance": 0.025,
+          "OUT_flips_mean": 2.516,
+          "by_level": {
+            "2": {
+              "n": 0,
+              "ALL": null
+            },
+            "3": {
+              "n": 16,
+              "ALL": 0.0
+            },
+            "4": {
+              "n": 65,
+              "ALL": 0.169
+            },
+            "5": {
+              "n": 149,
+              "ALL": 0.027
+            },
+            "6": {
+              "n": 230,
+              "ALL": 0.043
+            },
+            "7": {
+              "n": 416,
+              "ALL": 0.017
+            }
+          }
+        }
+      },
+      "relay": {
+        "acc": {
+          "2": 0.999,
+          "3": 0.994,
+          "4": 0.869,
+          "5": 0.659,
+          "6": 0.431,
+          "7": 0.275
+        },
+        "summary": {
+          "n_wrong": 1393,
+          "n_explainable": 595,
+          "gold_check": 1.0,
+          "chance": 0.02,
+          "ALL": {
+            "rate": 0.027,
+            "n": 595,
+            "ci": [
+              0.015,
+              0.04
+            ]
+          },
+          "ALL_chance": 0.02,
+          "ALL_flips_mean": 2.613,
+          "IN": {
+            "rate": 0.025,
+            "n": 595,
+            "ci": [
+              0.013,
+              0.039
+            ]
+          },
+          "IN_chance": 0.02,
+          "IN_flips_mean": 2.617,
+          "OUT": {
+            "rate": 0.018,
+            "n": 595,
+            "ci": [
+              0.008,
+              0.03
+            ]
+          },
+          "OUT_chance": 0.02,
+          "OUT_flips_mean": 2.721,
+          "by_level": {
+            "2": {
+              "n": 0,
+              "ALL": null
+            },
+            "3": {
+              "n": 4,
+              "ALL": 0.0
+            },
+            "4": {
+              "n": 16,
+              "ALL": 0.188
+            },
+            "5": {
+              "n": 63,
+              "ALL": 0.063
+            },
+            "6": {
+              "n": 184,
+              "ALL": 0.016
+            },
+            "7": {
+              "n": 328,
+              "ALL": 0.018
+            }
+          }
+        }
+      },
+      "stab": {
+        "acc": {
+          "2": 0.994,
+          "3": 0.872,
+          "4": 0.744,
+          "5": 0.602,
+          "6": 0.409,
+          "7": 0.219
+        },
+        "summary": {
+          "n_wrong": 1697,
+          "n_explainable": 693,
+          "gold_check": 1.0,
+          "chance": 0.023,
+          "ALL": {
+            "rate": 0.025,
+            "n": 693,
+            "ci": [
+              0.014,
+              0.038
+            ]
+          },
+          "ALL_chance": 0.023,
+          "ALL_flips_mean": 2.6,
+          "IN": {
+            "rate": null,
+            "n": 0,
+            "ci": null
+          },
+          "IN_chance": null,
+          "IN_flips_mean": null,
+          "OUT": {
+            "rate": 0.025,
+            "n": 693,
+            "ci": [
+              0.014,
+              0.038
+            ]
+          },
+          "OUT_chance": 0.023,
+          "OUT_flips_mean": 2.6,
+          "by_level": {
+            "2": {
+              "n": 1,
+              "ALL": 0.0
+            },
+            "3": {
+              "n": 7,
+              "ALL": 0.429
+            },
+            "4": {
+              "n": 39,
+              "ALL": 0.026
+            },
+            "5": {
+              "n": 90,
+              "ALL": 0.067
+            },
+            "6": {
+              "n": 189,
+              "ALL": 0.011
+            },
+            "7": {
+              "n": 367,
+              "ALL": 0.014
+            }
+          }
+        }
+      },
+      "simcoconut_rc": {
+        "acc": {
+          "2": 0.976,
+          "3": 0.939,
+          "4": 0.871,
+          "5": 0.793,
+          "6": 0.691,
+          "7": 0.012
+        },
+        "summary": {
+          "n_wrong": 1146,
+          "n_explainable": 546,
+          "gold_check": 1.0,
+          "chance": 0.026,
+          "ALL": {
+            "rate": 0.423,
+            "n": 163,
+            "ci": [
+              0.344,
+              0.503
+            ]
+          },
+          "ALL_chance": 0.056,
+          "ALL_flips_mean": 1.092,
+          "IN": {
+            "rate": 0.423,
+            "n": 163,
+            "ci": [
+              0.344,
+              0.503
+            ]
+          },
+          "IN_chance": 0.056,
+          "IN_flips_mean": 1.092,
+          "OUT": {
+            "rate": 0.098,
+            "n": 163,
+            "ci": [
+              0.055,
+              0.147
+            ]
+          },
+          "OUT_chance": 0.056,
+          "OUT_flips_mean": 2.239,
+          "by_level": {
+            "2": {
+              "n": 8,
+              "ALL": 0.75
+            },
+            "3": {
+              "n": 19,
+              "ALL": 0.789
+            },
+            "4": {
+              "n": 22,
+              "ALL": 0.455
+            },
+            "5": {
+              "n": 44,
+              "ALL": 0.568
+            },
+            "6": {
+              "n": 70,
+              "ALL": 0.186
+            },
+            "7": {
+              "n": 383,
+              "ALL": null
+            }
+          }
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "scripts/necessity/branch_faith.py",
+    "prereg": "t_predictions.md t45",
+    "outputs": "codi_audit_artifacts/t45/"
+  },
+  "seed": 0,
+  "hardware": "MacBook M4 Pro 24 GB, MPS (fp32)",
+  "author": "Henning Lindig",
+  "notes": "t45 branch faithfulness on wrong items",
+  "timestamp_utc": "2026-11-14T08:18:24.024943+00:00",
+  "git": {
+    "commit": "b436f1f",
+    "dirty": true
+  }
+}

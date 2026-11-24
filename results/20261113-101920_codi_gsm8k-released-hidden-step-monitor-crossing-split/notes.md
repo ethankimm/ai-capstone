@@ -1,0 +1,18 @@
+## 2026-11-13 — GSM8K hidden-step monitor (t39): latents add +.04 to +.09 balanced accuracy on step properties over question pass + answer in all four released checkpoints, the best position moves later with the step, but the gain is not concentrated on items whose answers need more crossings (codi, run_id: 20261113-101920_codi_gsm8k-released-hidden-step-monitor-crossing-split)
+
+**Goal:** t39 (pre-registered 2026-11-13 00:14): the GSM8K analogue of t34 / t40. Does reading the latent loop tell a monitor something about the model's intermediate steps that the question pass and the answer do not, and is that signal concentrated where the hop count says the answer depends on crossings?
+**Mechanism / model:** released zen-E CODI, InternLM SIM-CODI, connordilgren Coconut (6 latents) and InternLM SIM-Coconut (10 latents), GPT-2 small, fp32 MPS, batch 1.
+**Data:** fit 2,000 GSM8K-Aug train items (seed 39), scored on all 1,319 GSM8K test items; hops joined for 823-836 test items (t31 / t36 pairs, both twin sets). Targets per step k = 1..3: op_k (step uses * or /), big_k (result >= fit median); wrong (own answer wrong).
+**Command:** `../codi/.venv/bin/python scripts/necessity/gsm8k_hidden.py <model> mps <out>`; scoring `python3 scripts/necessity/crossing_split.py <out>`.
+**Method:** Q = last question position, layers 4 / 8 / 12; A = 16 numeric features of the own answer; Z = fed-back latents; H = every latent pass at layer 8; also each position alone. Dual ridge, balanced accuracy. Gain = max(QAZ, QAH) - QA. Split: rationale length 3-4, item hops <= 1.5 vs >= 2.5, stratified by length, bootstrap CIs.
+**Headline results** (mean gain over op_2, op_3, big_2, big_3; wrong gain; high - low hop split):
+- codi +.037; wrong +.154; split -.005 [-.041, +.031] (n 224 / 58).
+- sim +.062; wrong +.064; split -.037 [-.076, +.001] (190 / 99).
+- coconut +.088; wrong +.059; split +.008 [-.063, +.068] (222 / 52).
+- simcoconut +.092; wrong -.025; split -.000 [-.051, +.051] (93 / 205).
+- Best single pass for op_1..3 / big_1..3: codi H0,H1,H3 / H0,H2,H4; sim H0,H1,H2 / H0,H1,H2; coconut H1,H4,H5 / H1,H4,H5; simcoconut H1,H2,H5 / H1,H3,H5. Shuffled control <= .53.
+**Predictions:** codi gain <= .05 held; coconut <= .05 missed (+.088); sim / simcoconut >= codi held; wrong <= .03 missed for three of four; shuffled held; main split (simcoconut >= .05) missed, and no model shows concentration; per-position monotone held (and holds for codi and coconut too).
+**Interpretation:** On GSM8K the latents carry step information a question-pass monitor misses in every model, including the low-crossing ones (+.04 CODI, +.09 Coconut), and each step's information sits at a later pass than the previous step's. But the extra signal is the same on items whose answers depend on one crossing as on items that depend on three, so the hop count does not tell a monitor which items to read; readable step content is present whether or not the answer depends on it (readable is not used; compare the idle-latent result on RuleChain).
+**Gotchas hit:** the adapters switch the HF hub to offline mode, so the data loads first. The wrong target has no confidence feature in QA, so its gain is not comparable with the earlier wrong-answer monitor (+.001 over confidence).
+**Caveats:** released checkpoints only, one each; coarse binary targets; linear probes; item hops are means over 1-3 sampled pairs; high-hop groups are small for codi and coconut (52-58 items).
+**Next:** a causal check of whether the readable step content in low-crossing models is used (patch the best-position latent between items that differ in op_k and see if the answer moves).

@@ -1,0 +1,536 @@
+{
+  "run_id": "20261114-081823_codi_rulechain-latent-local-consistency-wrong-items",
+  "mechanism": "codi",
+  "stage": "full_run",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "t26 RuleChain CODI models (gated, sim, simsf, startlast, relay, stab) + pilot_k8_simcot_c1m6/checkpoint_26 (simcoconut_rc)",
+    "n_params": 144503808
+  },
+  "dataset": {
+    "name": "synthetic-depth2",
+    "split": "test",
+    "n_examples": 42,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": null,
+    "compute_steps": 6,
+    "extra": {
+      "gated": {
+        "n_links": 96,
+        "n_nontrivial": 4,
+        "CL": {
+          "2": 1.725,
+          "3": 2.775,
+          "4": 3.75,
+          "5": 4.838,
+          "6": 5.812,
+          "7": 5.875
+        },
+        "inside_C": {
+          "cons": {
+            "rate": null,
+            "n": 0,
+            "ci": null
+          },
+          "chance": NaN
+        },
+        "outside_C": {
+          "cons": {
+            "rate": 0.0,
+            "n": 4,
+            "ci": null
+          },
+          "chance": 0.01
+        },
+        "compute_inside_C": {
+          "cons": {
+            "rate": null,
+            "n": 0,
+            "ci": null
+          },
+          "chance": NaN
+        },
+        "compute_outside_C": {
+          "cons": {
+            "rate": 0.0,
+            "n": 1,
+            "ci": null
+          },
+          "chance": 0.01
+        },
+        "copy_inside_C": {
+          "cons": {
+            "rate": null,
+            "n": 0,
+            "ci": null
+          },
+          "chance": NaN
+        },
+        "copy_outside_C": {
+          "cons": {
+            "rate": 0.0,
+            "n": 3,
+            "ci": null
+          },
+          "chance": 0.01
+        }
+      },
+      "sim": {
+        "n_links": 18,
+        "n_nontrivial": 10,
+        "CL": {
+          "2": 1.9,
+          "3": 2.962,
+          "4": 3.938,
+          "5": 4.963,
+          "6": 5.975,
+          "7": 5.975
+        },
+        "inside_C": {
+          "cons": {
+            "rate": 0.0,
+            "n": 7,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "chance": 0.011
+        },
+        "outside_C": {
+          "cons": {
+            "rate": 0.0,
+            "n": 3,
+            "ci": null
+          },
+          "chance": 0.017
+        },
+        "compute_inside_C": {
+          "cons": {
+            "rate": 0.0,
+            "n": 7,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "chance": 0.011
+        },
+        "compute_outside_C": {
+          "cons": {
+            "rate": 0.0,
+            "n": 2,
+            "ci": null
+          },
+          "chance": 0.02
+        },
+        "copy_inside_C": {
+          "cons": {
+            "rate": null,
+            "n": 0,
+            "ci": null
+          },
+          "chance": NaN
+        },
+        "copy_outside_C": {
+          "cons": {
+            "rate": 0.0,
+            "n": 1,
+            "ci": null
+          },
+          "chance": 0.01
+        }
+      },
+      "simsf": {
+        "n_links": 462,
+        "n_nontrivial": 352,
+        "CL": {
+          "2": 2.0,
+          "3": 3.013,
+          "4": 4.013,
+          "5": 5.013,
+          "6": 6.0,
+          "7": 6.0
+        },
+        "inside_C": {
+          "cons": {
+            "rate": 0.134,
+            "n": 238,
+            "ci": [
+              0.092,
+              0.181
+            ]
+          },
+          "chance": 0.013
+        },
+        "outside_C": {
+          "cons": {
+            "rate": 0.175,
+            "n": 114,
+            "ci": [
+              0.105,
+              0.254
+            ]
+          },
+          "chance": 0.013
+        },
+        "compute_inside_C": {
+          "cons": {
+            "rate": 0.134,
+            "n": 238,
+            "ci": [
+              0.092,
+              0.181
+            ]
+          },
+          "chance": 0.013
+        },
+        "compute_outside_C": {
+          "cons": {
+            "rate": 0.182,
+            "n": 77,
+            "ci": [
+              0.091,
+              0.273
+            ]
+          },
+          "chance": 0.014
+        },
+        "copy_inside_C": {
+          "cons": {
+            "rate": null,
+            "n": 0,
+            "ci": null
+          },
+          "chance": NaN
+        },
+        "copy_outside_C": {
+          "cons": {
+            "rate": 0.162,
+            "n": 37,
+            "ci": [
+              0.054,
+              0.27
+            ]
+          },
+          "chance": 0.01
+        }
+      },
+      "startlast": {
+        "n_links": 18144,
+        "n_nontrivial": 17556,
+        "CL": {
+          "2": 1.0,
+          "3": 2.039,
+          "4": 1.917,
+          "5": 1.797,
+          "6": 2.212,
+          "7": 1.5
+        },
+        "inside_C": {
+          "cons": {
+            "rate": 0.038,
+            "n": 3000,
+            "ci": [
+              0.031,
+              0.045
+            ]
+          },
+          "chance": 0.016
+        },
+        "outside_C": {
+          "cons": {
+            "rate": 0.575,
+            "n": 14556,
+            "ci": [
+              0.568,
+              0.583
+            ]
+          },
+          "chance": 0.011
+        },
+        "compute_inside_C": {
+          "cons": {
+            "rate": 0.026,
+            "n": 2314,
+            "ci": [
+              0.021,
+              0.033
+            ]
+          },
+          "chance": 0.018
+        },
+        "compute_outside_C": {
+          "cons": {
+            "rate": 0.027,
+            "n": 1416,
+            "ci": [
+              0.019,
+              0.035
+            ]
+          },
+          "chance": 0.019
+        },
+        "copy_inside_C": {
+          "cons": {
+            "rate": 0.077,
+            "n": 686,
+            "ci": [
+              0.057,
+              0.098
+            ]
+          },
+          "chance": 0.01
+        },
+        "copy_outside_C": {
+          "cons": {
+            "rate": 0.634,
+            "n": 13140,
+            "ci": [
+              0.627,
+              0.643
+            ]
+          },
+          "chance": 0.01
+        }
+      },
+      "relay": {
+        "n_links": 8358,
+        "n_nontrivial": 7762,
+        "CL": {
+          "2": 1.0,
+          "3": 1.0,
+          "4": 1.2,
+          "5": 1.513,
+          "6": 1.7,
+          "7": 1.986
+        },
+        "inside_C": {
+          "cons": {
+            "rate": 0.027,
+            "n": 1276,
+            "ci": [
+              0.018,
+              0.036
+            ]
+          },
+          "chance": 0.023
+        },
+        "outside_C": {
+          "cons": {
+            "rate": 0.704,
+            "n": 6486,
+            "ci": [
+              0.693,
+              0.715
+            ]
+          },
+          "chance": 0.01
+        },
+        "compute_inside_C": {
+          "cons": {
+            "rate": 0.027,
+            "n": 1276,
+            "ci": [
+              0.018,
+              0.036
+            ]
+          },
+          "chance": 0.023
+        },
+        "compute_outside_C": {
+          "cons": {
+            "rate": 0.01,
+            "n": 99,
+            "ci": [
+              0.0,
+              0.03
+            ]
+          },
+          "chance": 0.015
+        },
+        "copy_inside_C": {
+          "cons": {
+            "rate": null,
+            "n": 0,
+            "ci": null
+          },
+          "chance": NaN
+        },
+        "copy_outside_C": {
+          "cons": {
+            "rate": 0.715,
+            "n": 6387,
+            "ci": [
+              0.703,
+              0.726
+            ]
+          },
+          "chance": 0.01
+        }
+      },
+      "stab": {
+        "n_links": 10182,
+        "n_nontrivial": 9702,
+        "CL": {
+          "2": 0.0,
+          "3": 0.025,
+          "4": 0.165,
+          "5": 0.269,
+          "6": 0.338,
+          "7": 0.357
+        },
+        "inside_C": {
+          "cons": {
+            "rate": null,
+            "n": 0,
+            "ci": null
+          },
+          "chance": NaN
+        },
+        "outside_C": {
+          "cons": {
+            "rate": 0.588,
+            "n": 9702,
+            "ci": [
+              0.578,
+              0.597
+            ]
+          },
+          "chance": 0.01
+        },
+        "compute_inside_C": {
+          "cons": {
+            "rate": null,
+            "n": 0,
+            "ci": null
+          },
+          "chance": NaN
+        },
+        "compute_outside_C": {
+          "cons": {
+            "rate": 0.0,
+            "n": 15,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "chance": 0.017
+        },
+        "copy_inside_C": {
+          "cons": {
+            "rate": null,
+            "n": 0,
+            "ci": null
+          },
+          "chance": NaN
+        },
+        "copy_outside_C": {
+          "cons": {
+            "rate": 0.589,
+            "n": 9687,
+            "ci": [
+              0.579,
+              0.599
+            ]
+          },
+          "chance": 0.01
+        }
+      },
+      "simcoconut_rc": {
+        "n_links": 6876,
+        "n_nontrivial": 3892,
+        "CL": {
+          "2": 2.725,
+          "3": 3.538,
+          "4": 4.338,
+          "5": 5.455,
+          "6": 5.987
+        },
+        "inside_C": {
+          "cons": {
+            "rate": 0.052,
+            "n": 2537,
+            "ci": [
+              0.044,
+              0.061
+            ]
+          },
+          "chance": 0.013
+        },
+        "outside_C": {
+          "cons": {
+            "rate": 0.153,
+            "n": 1355,
+            "ci": [
+              0.134,
+              0.173
+            ]
+          },
+          "chance": 0.014
+        },
+        "compute_inside_C": {
+          "cons": {
+            "rate": 0.04,
+            "n": 1935,
+            "ci": [
+              0.032,
+              0.049
+            ]
+          },
+          "chance": 0.014
+        },
+        "compute_outside_C": {
+          "cons": {
+            "rate": 0.098,
+            "n": 1154,
+            "ci": [
+              0.081,
+              0.116
+            ]
+          },
+          "chance": 0.014
+        },
+        "copy_inside_C": {
+          "cons": {
+            "rate": 0.09,
+            "n": 602,
+            "ci": [
+              0.066,
+              0.115
+            ]
+          },
+          "chance": 0.01
+        },
+        "copy_outside_C": {
+          "cons": {
+            "rate": 0.468,
+            "n": 201,
+            "ci": [
+              0.403,
+              0.542
+            ]
+          },
+          "chance": 0.01
+        }
+      }
+    }
+  },
+  "hyperparams": {
+    "script": "scripts/necessity/faithful.py LOCAL=1",
+    "prereg": "t_predictions.md t43b",
+    "outputs": "codi_audit_artifacts/t43b/"
+  },
+  "seed": 0,
+  "hardware": "MacBook M4 Pro 24 GB, MPS (fp32)",
+  "author": "Henning Lindig",
+  "notes": "t43b local consistency of successive latents on wrong items",
+  "timestamp_utc": "2026-11-14T08:18:23.720088+00:00",
+  "git": {
+    "commit": "b436f1f",
+    "dirty": true
+  }
+}

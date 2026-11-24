@@ -1,0 +1,11 @@
+## 2026-11-14 — Branch faithfulness on wrong items (t45): SIM-Coconut's latent branches reproduce its own errors, and only when read inside the crossings (codi, run_id: 20261114-081824_codi_rulechain-branch-faithfulness-wrong-items)
+
+**Goal:** t45: on wrong items, does replaying the chain with each rule's branch forced to the one read from the latents reproduce the model's own answer, and does that hold for latents inside the crossings rather than beyond?
+**Mechanism / model:** seven RuleChain models.
+**Data:** wrong items of valid + test L2-L7; scored on branch-explainable errors (some branch pattern gives the model's answer).
+**Command:** `../codi/.venv/bin/python -W ignore scripts/necessity/branch_faith.py <model> mps codi_audit_artifacts/t45/<model>.json`.
+**Headline results:** simcoconut_rc: .42 [.34, .50] of 163 explainable L2-L6 errors vs .056 chance; IN .42 vs OUT .10; by level .75 / .79 / .46 / .57 / .19 (L2-L6, chance .25 / .13 / .07 / .04 / .02). simsf .03 (n 34, chance .02). gated .09 (IN .27, n 11). startlast .04, relay .03, stab .02 (chance .02-.03). Gold branches always give the gold answer.
+**Interpretation:** In Kevin's SIM-Coconut the branch decisions read from the crossed latents are the ones the model's wrong answers follow (.42 vs .056 chance). The IN vs OUT contrast is confounded by readability: on correct items the best IN latent reads branches at .97 and the best OUT latent at .68 (simsf .88 / .64, gated .81 / .58), so it does not show that faithfulness is specific to the crossings (post hoc check). Not used in the paper. SIM-CODI start-first's latents report the gold path on its errors (1.3 flipped rules on average), and the low-crossing models are at chance.
+**Gotchas hit:** SIM-Coconut's 383 L7 errors are not scorable (rule 7 lies past its six latents; too few correct L7 items to pick a latent); a pooled-level fallback for latent choice was added before the full run.
+**Caveats:** one model carries the positive result; per-latent choice is made on correct items of the same model; branch-explainable errors are about half of all errors.
+**Next:** an intervention (set a latent's branch and see if the answer follows) would turn this into a causal claim.
