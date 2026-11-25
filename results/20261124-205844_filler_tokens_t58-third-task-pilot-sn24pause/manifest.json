@@ -1,0 +1,70 @@
+{
+  "run_id": "20261124-205844_filler_tokens_t58-third-task-pilot-sn24pause",
+  "mechanism": "filler_tokens",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "not saved (pilot)",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "t58-sn24pause",
+    "split": "test",
+    "n_examples": 2400,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.2562,
+    "compute_steps": 6,
+    "extra": {
+      "test_by_k": {
+        "1": 1.0,
+        "2": 1.0,
+        "3": 0.007,
+        "4": 0.017,
+        "5": 0.013,
+        "6": 0.003,
+        "7": 0.007,
+        "8": 0.003
+      },
+      "train_by_k": {
+        "1": 1.0,
+        "2": 1.0,
+        "3": 0.037,
+        "4": 0.01,
+        "5": 0.013,
+        "6": 0.02,
+        "7": 0.017,
+        "8": 0.003
+      },
+      "test_path_by_k": null,
+      "chance": 0.008333333333333333,
+      "reach": 2.5,
+      "gate_passed": true,
+      "epochs_run": 5
+    }
+  },
+  "hyperparams": {
+    "lr": 5e-05,
+    "batch_size": 16,
+    "weight_decay": 0.01,
+    "warmup_steps": 200,
+    "schedule": "linear decay",
+    "n_per_k": 4000,
+    "ks": "1-8",
+    "test_per_k": 300,
+    "loss": "cross-entropy on the answer token(s) at the last prompt position(s)",
+    "script": "scripts/necessity/third_task_pilot.py",
+    "epochs": 5,
+    "task": "sn24pause"
+  },
+  "seed": 0,
+  "hardware": "local Apple Silicon M4 Pro (MPS), 24 GB",
+  "author": "Henning Lindig",
+  "notes": "t58 pilot sn24pause: single-pass reach of GPT-2 fine-tuned on a candidate third task",
+  "timestamp_utc": "2026-11-24T20:58:44.403029+00:00",
+  "git": {
+    "commit": "9670005",
+    "dirty": true
+  }
+}

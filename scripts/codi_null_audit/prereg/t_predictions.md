@@ -1187,3 +1187,90 @@ Exploratory (post hoc, pairs with h_0 >= 1): rule-gated within-level slope of e 
 edits; start-last slope -.09 (mean e 3.9-4.3 at every position, n 129). GSM8K CODI on the any-use distance: entry -2.2 passes per step
 [-3.4, -1.7] (11 items), hops +.86 per step [+.60, +1.30] (13 items); edit-specific information in z_0, z_2, z_4 (~.8 of reference)
 and barely in z_1, z_3 (.15-.20).
+
+### t58 follow-ups (sn24, brewcot), written 2026-11-25 00:14:34 +0700 (from `date`) before any sn24 / brewcot output beyond CPU smoke runs (12 items per k, 1 epoch)
+Seen before writing: sn final result (failed the gate, reach ~3.9); brew epochs 0-1 at chance at every k (k = 1 test .11 / .107), brew
+not yet finished. Same script (modes added; the sn / brew data were checked to be byte-identical to the version that ran them).
+Order of the overnight queue: sn24, brewcot (3 epochs), then the pre-registered brew 10-epoch rerun if brew's final accuracy at k = 1
+is < .90.
+sn24: the sn task with 24 random distinct generators of S5 (seed 't58-gens24'), the same 120 single-token labels, 4000 items per k,
+5 epochs; test sequences are held out of training wherever 24^k >= 3000 (k >= 3; checked: 0 of 300 test sequences in training at
+k = 3-4, all in training at k = 1-2). Reason: sn's reach ~3.9 was inflated by memorisation (216 sequences at k = 3); 24 generators
+remove that from k = 3 on while keeping the published task family. Same gate and reach metric as t58. Decision addendum: if sn24
+passes it becomes the preferred third task (published lineage) over brew; if neither passes, no third task from t58.
+- P1 (sn24): accuracy at k = 1 >= .90 and 2.0 <= reach <= 3.5: sn24 PASSES.
+- P2 (sn24): test accuracy at k = 3 <= .70.
+- P3 (sn24, exploratory): train minus test accuracy >= .10 at k = 3 or 4 (training sequences memorised).
+brewcot (exploratory, no gate): the brew items (same seeds) with chain of thought: targets are the colours after each stir, teacher-
+forced loss on all k tokens; test decodes k colours greedily, restricted to colours; final-answer accuracy and full-path accuracy
+reported; 3 epochs; train subset 100 per k. Question: is the per-step in-context lookup learnable by GPT-2 at this budget at all?
+- P4 (brewcot): final-answer test accuracy >= .90 at k = 1 and >= .50 at k = 8 after 3 epochs.
+Reading fixed now: if P4 holds while no-CoT brew stays below .90 at k = 1, the step is learnable and brew's single-pass reach at this
+budget is ~0-1 (a deep task, not an unusable one); if brewcot also stays near chance at k = 1, GPT-2 does not learn the in-context
+lookup at this budget and brew is unusable regardless of the 10-epoch rerun.
+
+### t58 deviation, written 2026-11-25 00:30:55 +0700 (from `date`) before any sn24 / brewcot output
+The 5-epoch brew run is stopped after epoch 2 (of 0-4) to free the GPU: test and train accuracy at chance at every k, k = 1
+included (epoch 0 / 1 / 2 test k = 1: .110 / .107 / .103; train .107 / .117 / .127). No brew.json is written (the script saves at
+the end); the scored numbers are the epoch-2 log line. Under the t58 rule brew is INCONCLUSIVE (acc(k = 1) < .90). The rule's
+10-epoch rerun is made CONDITIONAL on brewcot: it runs only if brewcot's final test accuracy at k = 1 is >= .90 (the lookup is
+learnable at all); otherwise brew is dropped as unusable at this budget without the rerun. Reason: GPU time; a model that does not
+fit the training set at k = 1 after ~6000 steps is unlikely to be rescued by more epochs unless the single step is learnable.
+
+### t58 sn24 follow-ups (sn24cot, sn24pause, sn24s2), written 2026-11-25 00:36:08 +0700 (from `date`) before reading any sn24 output
+Seen before writing: nothing from sn24 (running since 00:31); CPU smoke runs of the new modes only (12 items per k, 1 epoch).
+Scorer scripts/necessity/third_task_score.py implements the t58 gate (checked: reproduces sn reach 3.87, fail).
+Run only if sn24 PASSES the gate (Henning, 00:3x Nov 25: "if sn24 is positive and brewcot is negative, run sn follow-ups"), after the
+current queue (queue3) ends; all 4000 items per k, 5 epochs, same hyperparameters. The sn24 data are unchanged by the new modes
+(hash checked).
+  sn24cot   sn24 items with chain of thought: target = label of the running product after each generator (k tokens), greedy decode
+            restricted to the 120 labels; final-answer and full-path accuracy. Question: can a CoT teacher (needed for CODI) do it?
+  sn24pause sn24 items with 6 pause tokens (' .') after the prompt, answer read after them: the matched no-loop control (K = 6).
+  sn24s2    sn24 with a second data seed (new items and order; same generators).
+- P5 (sn24cot): final-answer test accuracy >= .90 at every k = 1-8.
+- P6 (sn24pause): reach within 0.5 of sn24's reach.
+- P7 (sn24s2): reach within 0.5 of sn24's reach and the same gate verdict.
+
+### t58 sn24 scoring, 2026-11-25 00:52:31 +0700 (from `date`; JSON ../codi_audit_artifacts/t58/sn24.json; scorer third_task_score.py)
+Final-epoch (4) test accuracy k = 1-8: 1.00 / .993 / .003 / .013 / .003 / .003 / .017 / .017 (chance .008); train 1.00 / 1.00 / .020 /
+.027 / .020 / .013 / .013 / .007. Reach 2.49.
+- P1 held: accuracy at k = 1 1.00 and reach 2.49 in [2.0, 3.5]: sn24 PASSES the gate (and is the preferred third task per the
+  addendum; the sn24 follow-ups in queue4 will run).
+- P2 held: test accuracy at k = 3 .003 <= .70.
+- P3 MISSED: train minus test .017 (k = 3) and .014 (k = 4); the model fits neither training nor test sequences at k >= 3.
+Reading (post hoc): the curve is a cliff between k = 2 and k = 3. Every k = 2 test sequence also appears in training (576 pairs), so
+the .99 at k = 2 may be a memorised pair table rather than two composed steps; at k >= 3, where test sequences are held out, the
+model is at chance even on its training items. So the single-pass reach of 2.49 is an upper bound on composition. sn24cot (can the
+task be done step by step) decides whether sn24 is usable for a CODI hop-count study.
+
+### t58 brewcot scoring and brew decision, 2026-11-25 02:49:11 +0700 (from `date`; JSON ../codi_audit_artifacts/t58/brewcot.json)
+Final-epoch (2) test final-answer accuracy k = 1-8: .397 / .240 / .153 / .107 / .153 / .140 / .157 / .133 (chance .10); full-path
+accuracy .397 / .223 / .097 / .047 / .047 / .017 / .037 / .027; train .38 / .24 / .20 / .22 / .11 / .16 / .15 / .18. Epochs 0 / 1 / 2
+at k = 1: .417 / .383 / .397 (plateau from the first epoch).
+- P4 MISSED: k = 1 .397 < .90 and k = 8 .133 < .50.
+Decision (per the 00:30:55 deviation): brewcot k = 1 < .90, so brew is DROPPED as unusable at this budget without the 10-epoch rerun.
+With per-step supervision GPT-2 learns part of the in-context lookup (k = 1 .40 vs no-CoT brew .10-.13) but plateaus there.
+Post hoc guess, NOT tested (no checkpoint saved): .40 at k = 1 fits finding the start colour's row and choosing among its three
+ingredient outputs near chance. Outcome of t58: sn24 is the third-task candidate; brew and sn are out.
+(queue.log's "QUEUE2 DONE" line at 02:48 was written by queue3.sh, a copied label.)
+
+### t58 sn24cot scoring, 2026-11-25 03:14:00 +0700 (from `date`; JSON ../codi_audit_artifacts/t58/sn24cot.json)
+Final-epoch (4) test final-answer accuracy k = 1-8: 1.00 / 1.00 / 1.00 / 1.00 / 1.00 / 1.00 / 1.00 / .997; full path 1.0 / 1.0 / 1.0 / 1.0 / 1.0 / 1.0 / 1.0 / 0.997;
+train 1.00 at every k. Epoch trajectory at k = 8: .007 / .043 / .737 / .973 / .997.
+- P5 held: >= .90 at every k = 1-8.
+Reading: a GPT-2 CoT teacher solves sn24 at every length while the same model without CoT is at chance from k = 3 (sn24): the
+task is learnable step by step, and one pass reaches about 2 steps (an upper bound, see sn24). sn24 meets both preconditions for a
+CODI hop-count study (a working teacher; single-pass reach close to RuleChain start-last CODI-0's ~2.6).
+
+### t58 sn24pause scoring, 2026-11-25 03:37:24 +0700 (from `date`; JSON ../codi_audit_artifacts/t58/sn24pause.json)
+Final-epoch (4) test k = 1-8: 1.00 / 1.00 / .007 / .017 / .013 / .003 / .007 / .003; train 1.00 / 1.00 / .037 / .010 / .013 / .020 /
+.017 / .003. Reach 2.5 (sn24 2.49).
+- P6 held: |2.5 - 2.49| <= 0.5. Six pause tokens add no single-pass reach on sn24 (as pause tokens on RuleChain).
+
+### t58 sn24s2 scoring, 2026-11-25 03:57:50 +0700 (from `date`; JSON ../codi_audit_artifacts/t58/sn24s2.json)
+Final-epoch (4) test k = 1-8: 1.00 / 1.00 / .007 / .013 / .007 / .013 / .007 / .023; train 1.00 / 1.00 / .040 / .017 / .013 / .013 /
+.020 / .017. Reach 2.5 (sn24 2.49); passes the gate.
+- P7 held: |2.5 - 2.49| <= 0.5 and the same gate verdict (PASS).
+Summary of t58 (all scored): sn fails (reach 3.87, memorisation), brew and brewcot unusable (k = 1 at chance / .40), sn24 passes
+(reach 2.49; pause 2.50; second seed 2.5), sn24cot solves every k (>= .997). The cliff is always between k = 2 (all test pairs seen in
+training) and k = 3 (held out), so sn24's single-pass reach is ~2 as an upper bound on composition.

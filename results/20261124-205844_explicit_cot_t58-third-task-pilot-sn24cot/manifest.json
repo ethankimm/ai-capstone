@@ -1,0 +1,79 @@
+{
+  "run_id": "20261124-205844_explicit_cot_t58-third-task-pilot-sn24cot",
+  "mechanism": "explicit_cot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "not saved (pilot)",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "t58-sn24cot",
+    "split": "test",
+    "n_examples": 2400,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.9996,
+    "compute_steps": 0,
+    "extra": {
+      "test_by_k": {
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 0.997
+      },
+      "train_by_k": {
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0
+      },
+      "test_path_by_k": {
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 0.997
+      },
+      "chance": 0.008333333333333333,
+      "reach": ">8",
+      "gate_passed": false,
+      "epochs_run": 5
+    }
+  },
+  "hyperparams": {
+    "lr": 5e-05,
+    "batch_size": 16,
+    "weight_decay": 0.01,
+    "warmup_steps": 200,
+    "schedule": "linear decay",
+    "n_per_k": 4000,
+    "ks": "1-8",
+    "test_per_k": 300,
+    "loss": "cross-entropy on the answer token(s) at the last prompt position(s)",
+    "script": "scripts/necessity/third_task_pilot.py",
+    "epochs": 5,
+    "task": "sn24cot"
+  },
+  "seed": 0,
+  "hardware": "local Apple Silicon M4 Pro (MPS), 24 GB",
+  "author": "Henning Lindig",
+  "notes": "t58 pilot sn24cot: single-pass reach of GPT-2 fine-tuned on a candidate third task",
+  "timestamp_utc": "2026-11-24T20:58:44.367377+00:00",
+  "git": {
+    "commit": "9670005",
+    "dirty": true
+  }
+}

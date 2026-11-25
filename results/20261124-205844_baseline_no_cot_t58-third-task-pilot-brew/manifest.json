@@ -1,0 +1,70 @@
+{
+  "run_id": "20261124-205844_baseline_no_cot_t58-third-task-pilot-brew",
+  "mechanism": "baseline_no_cot",
+  "stage": "pilot",
+  "model": {
+    "backbone": "gpt2",
+    "checkpoint": "not saved (pilot)",
+    "n_params": 124439808
+  },
+  "dataset": {
+    "name": "t58-brew",
+    "split": "test",
+    "n_examples": 2400,
+    "seed": 0
+  },
+  "metrics": {
+    "final_answer_accuracy": 0.1115,
+    "compute_steps": 0,
+    "extra": {
+      "test_by_k": {
+        "1": 0.103,
+        "2": 0.11,
+        "3": 0.1,
+        "4": 0.11,
+        "5": 0.153,
+        "6": 0.103,
+        "7": 0.113,
+        "8": 0.1
+      },
+      "train_by_k": {
+        "1": 0.127,
+        "2": 0.14,
+        "3": 0.123,
+        "4": 0.13,
+        "5": 0.093,
+        "6": 0.103,
+        "7": 0.107,
+        "8": 0.117
+      },
+      "test_path_by_k": null,
+      "chance": 0.1,
+      "reach": null,
+      "gate_passed": null,
+      "epochs_run": 3
+    }
+  },
+  "hyperparams": {
+    "lr": 5e-05,
+    "batch_size": 16,
+    "weight_decay": 0.01,
+    "warmup_steps": 200,
+    "schedule": "linear decay",
+    "n_per_k": 4000,
+    "ks": "1-8",
+    "test_per_k": 300,
+    "loss": "cross-entropy on the answer token(s) at the last prompt position(s)",
+    "script": "scripts/necessity/third_task_pilot.py",
+    "epochs": 5,
+    "task": "brew"
+  },
+  "seed": 0,
+  "hardware": "local Apple Silicon M4 Pro (MPS), 24 GB",
+  "author": "Henning Lindig",
+  "notes": "t58 pilot brew: single-pass reach of GPT-2 fine-tuned on a candidate third task",
+  "timestamp_utc": "2026-11-24T20:58:44.259099+00:00",
+  "git": {
+    "commit": "9670005",
+    "dirty": true
+  }
+}
